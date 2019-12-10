@@ -3,7 +3,7 @@
 #include "Foo.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
-using namespace Library;
+
 
 namespace UnitTestLibraryDesktop
 {
@@ -26,6 +26,19 @@ namespace UnitTestLibraryDesktop
 			const int data = 10;
 			const Foo f(data);
 			Assert::AreEqual(data, f.Data());
+		}
+
+		TEST_METHOD(Operators)
+		{
+			Foo f1 = Foo(10);
+			Foo f2 = Foo(10);
+			Foo f3 = Foo(20);
+
+			Assert::IsTrue(f1 == f2);
+			Assert::IsFalse(f1 != f2);
+
+			Assert::IsFalse(f1 == f3);
+			Assert::IsTrue(f1 != f3);
 		}
 	};
 }

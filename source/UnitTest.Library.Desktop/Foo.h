@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Library
+namespace UnitTestLibraryDesktop
 {
 	class Foo
 	{
@@ -9,6 +9,9 @@ namespace Library
 		int Data() const;
 
 		Foo(int data = 0);
+
+		bool operator==(const Foo& rhs);
+		bool operator!=(const Foo& rhs);
 
 	private:
 		int mData;
