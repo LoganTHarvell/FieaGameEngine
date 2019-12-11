@@ -14,7 +14,7 @@ namespace UnitTestLibraryDesktop
 	{
 	public:
 		
-		TEST_METHOD(IsEmpty)
+		TEST_METHOD(SizeAndIsEmpty)
 		{
 			size_t size = 0;
 
@@ -150,6 +150,10 @@ namespace UnitTestLibraryDesktop
 			doubleList.PopFront();
 			fooList.PopFront();
 
+			Assert::IsTrue(intList.Front() == 20);
+			Assert::IsTrue(doubleList.Front() == 20);
+			Assert::IsTrue(fooList.Front() == Foo(20));
+
 			size_t size = 2;
 			Assert::AreEqual(intList.Size(), size);
 			Assert::AreEqual(doubleList.Size(), size);
@@ -158,6 +162,10 @@ namespace UnitTestLibraryDesktop
 			intList.PopFront();
 			doubleList.PopFront();
 			fooList.PopFront();
+
+			Assert::IsTrue(intList.Front() == 10);
+			Assert::IsTrue(doubleList.Front() == 10);
+			Assert::IsTrue(fooList.Front() == Foo(10));
 
 			size = 1;
 			Assert::AreEqual(intList.Size(), size);
@@ -296,6 +304,10 @@ namespace UnitTestLibraryDesktop
 			doubleList.PopBack();
 			fooList.PopBack();
 
+			Assert::IsTrue(intList.Back() == 20);
+			Assert::IsTrue(doubleList.Back() == 20);
+			Assert::IsTrue(fooList.Back() == Foo(20));
+
 			size_t size = 2;
 			Assert::AreEqual(intList.Size(), size);
 			Assert::AreEqual(doubleList.Size(), size);
@@ -304,6 +316,10 @@ namespace UnitTestLibraryDesktop
 			intList.PopBack();
 			doubleList.PopBack();
 			fooList.PopBack();
+
+			Assert::IsTrue(intList.Back() == 10);
+			Assert::IsTrue(doubleList.Back() == 10);
+			Assert::IsTrue(fooList.Back() == Foo(10));
 
 			size = 1;
 			Assert::AreEqual(intList.Size(), size);
@@ -338,11 +354,39 @@ namespace UnitTestLibraryDesktop
 
 		TEST_METHOD(Clear)
 		{
+			SList<int> intList;
+			intList.Clear();
+			Assert::IsTrue(intList.IsEmpty());
+
+			size_t zeroSize = 0;
+			Assert::AreEqual(intList.Size(), zeroSize);
+
+			intList.PushBack(10);
+			intList.PushBack(20);
+			intList.PushBack(30);
+
+			intList.Clear();
+			Assert::IsTrue(intList.IsEmpty());
+			Assert::AreEqual(intList.Size(), zeroSize);
+
+			SList<double> doubleList;
+			doubleList.Clear();
+			Assert::IsTrue(doubleList.IsEmpty());
+
+			Assert::AreEqual(doubleList.Size(), zeroSize);
+
+			doubleList.PushBack(10);
+			doubleList.PushBack(20);
+			doubleList.PushBack(30);
+
+			doubleList.Clear();
+			Assert::IsTrue(doubleList.IsEmpty());
+			Assert::AreEqual(doubleList.Size(), zeroSize);
+
 			SList<Foo> fooList;
 			fooList.Clear();
 			Assert::IsTrue(fooList.IsEmpty());
 
-			size_t zeroSize = 0;
 			Assert::AreEqual(fooList.Size(), zeroSize);
 
 			fooList.PushBack(Foo(10));
@@ -372,14 +416,64 @@ namespace UnitTestLibraryDesktop
 			fooList.PushBack(Foo(30));
 
 			{
+				SList<int> listCopy(intList);
+				Assert::IsTrue(listCopy == intList);
+			}
+
+			{
+				SList<double> listCopy(doubleList);
+				Assert::IsTrue(listCopy == doubleList);
+			}
+
+			{
 				SList<Foo> listCopy(fooList);
 				Assert::IsTrue(listCopy == fooList);
+			}
+
+			{
+				SList<int> listCopy;
+				listCopy.PushBack(40);
+
+				Assert::IsFalse(listCopy == intList);
+
+				listCopy.PushBack(50);
+				listCopy.PushBack(60);
+
+				Assert::IsFalse(listCopy == intList);
+				
+				listCopy.Clear();
+
+				listCopy = intList;
+				Assert::IsTrue(listCopy == intList);
+			}
+
+			{
+				SList<double> listCopy;
+				listCopy.PushBack(40);
+
+				Assert::IsFalse(listCopy == doubleList);
+
+				listCopy.PushBack(50);
+				listCopy.PushBack(60);
+
+				Assert::IsFalse(listCopy == doubleList);
+
+				listCopy.Clear();
+
+				listCopy = doubleList;
+				Assert::IsTrue(listCopy == doubleList);
 			}
 
 			{
 				SList<Foo> listCopy;
 				listCopy.PushBack(Foo(40));
 				Assert::IsFalse(listCopy == fooList);
+
+				fooList.PushBack(Foo(50));
+				fooList.PushBack(Foo(60));
+
+				Assert::IsFalse(listCopy == fooList);
+
 				listCopy.Clear();
 
 				listCopy = fooList;

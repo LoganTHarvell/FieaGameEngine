@@ -73,15 +73,15 @@ namespace Library
 	}
 
 	template<typename T>
-	inline bool SList<T>::IsEmpty() const
-	{
-		return mSize == 0;
-	}
-
-	template<typename T>
 	inline size_t SList<T>::Size() const
 	{
 		return mSize;
+	}
+
+	template<typename T>
+	inline bool SList<T>::IsEmpty() const
+	{
+		return mSize == 0;
 	}
 
 	template<typename T>
