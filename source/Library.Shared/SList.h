@@ -28,27 +28,27 @@ namespace Library
 		SList() = default;
 
 		/// <summary>
-		/// Copy constructor: 
+		/// Copy constructor.
 		/// Takes in a list as a parameters, then copies the data values into the newly constructed list.
 		/// </summary>
-		/// <param name="list">The list to be copied.</param>
+		/// <param name="list">List to be copied.</param>
 		SList(const SList& list);
 
 		/// <summary>
-		/// Class destructor: clears all existing node references.
+		/// Class destructor. Clears all existing node references.
 		/// </summary>
 		~SList();
 
 		/// <summary>
-		/// Assignment operator:
+		/// Assignment operator.
 		/// Copies the data values from the right hand side (rhs) value to the left hand side.
 		/// </summary>
-		/// <param name="rhs">The list on the right hand side to be copied to the list on the left.</param>
-		/// <returns>The modified list.</returns>
+		/// <param name="rhs">List whose values are copied.</param>
+		/// <returns>Modified list with copied values.</returns>
 		SList& operator=(const SList& rhs);
 
 		/// <summary>
-		/// Equals operator: 
+		/// Equals operator. 
 		/// Checks if the size of the list and the data values are equal to the size and values of the right hand side (rhs) list.
 		/// </summary>
 		/// <param name="rhs">The list on the right hand side to be compared to the left.</param>
@@ -58,7 +58,7 @@ namespace Library
 		/// <summary>
 		/// Getter method for the number of elements in the list.
 		/// </summary>
-		/// <returns>The number of elements in the list.</returns>
+		/// <returns>Number of elements in the list.</returns>
 		size_t Size() const;
 
 		/// <summary>
