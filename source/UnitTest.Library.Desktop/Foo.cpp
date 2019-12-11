@@ -1,30 +1,67 @@
 #include "pch.h"
 #include "Foo.h"
 
-namespace UnitTestLibraryDesktop
+namespace UnitTests
 {
+	Foo::Foo(int data) :
+		mData(std::make_unique<int>(data))
+	{
+	}
+
+	Foo::Foo(const Foo& rhs) :
+		mData(std::make_unique<int>(*rhs.mData))
+	{
+	}
+
+	Foo::Foo(Foo&& rhs) noexcept :
+		mData(std::move(rhs.mData))
+	{
+		rhs.mData = nullptr;
+	}
+
+	Foo& Foo::operator=(const Foo& rhs)
+	{
+		if (this != &rhs)
+		{
+			*mData = *rhs.mData;
+		}
+
+		return *this;
+	}
+
+	Foo& Foo::operator=(Foo&& rhs) noexcept
+	{
+		if (this != &rhs)
+		{
+			mData = std::move(rhs.mData);
+			rhs.mData = nullptr;
+		}
+
+		return *this;
+	}
+
+	bool Foo::operator==(const Foo& rhs) const noexcept
+	{
+		return *mData == *rhs.mData;
+	}
+
+	bool Foo::operator!=(const Foo& rhs) const noexcept
+	{
+		return !operator==(rhs);
+	}
+
 	int& Foo::Data()
 	{
-		return mData;
+		return *mData;
 	}
 
 	int Foo::Data() const
 	{
-		return mData;
+		return *mData;
 	}
-
-	Foo::Foo(int data)
+	
+	void Foo::SetData(int data)
 	{
-		mData = data;
-	}
-
-	bool Foo::operator==(const Foo& rhs)
-	{
-		return mData == rhs.mData;
-	}
-
-	bool Foo::operator!=(const Foo& rhs)
-	{
-		return mData != rhs.mData;
+		*mData = data;
 	}
 }

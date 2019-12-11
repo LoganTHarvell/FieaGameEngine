@@ -1,8 +1,5 @@
 #include "SList.h"
 
-#include <exception>
-
-
 namespace Library
 {
 #pragma region Node
@@ -14,16 +11,60 @@ namespace Library
 #pragma endregion Node
 
 	template<typename T>
-	inline SList<T>::SList(const SList& list)
+	inline SList<T>::SList(const SList& rhs)
 	{
-		Clear();
-
-		std::shared_ptr<Node> currentNode = list.mFront;
+		std::shared_ptr<Node> currentNode = rhs.mFront;
 		while (currentNode != nullptr)
 		{
 			PushBack(currentNode->Data);
 			currentNode = currentNode->Next;
 		}
+	}
+
+	template<typename T>
+	inline SList<T>::SList(SList&& rhs) :
+		mSize(rhs.mSize), mFront(rhs.mFront), mBack(rhs.mBack)
+	{
+		rhs.Size = 0;
+		rhs.mFront = nullptr;
+		rhs.mBack = nullptr;
+	}
+
+	template<typename T>
+	inline SList<T>& SList<T>::operator=(const SList<T>& rhs)
+	{
+		if (this != &rhs)
+		{
+			Clear();
+
+			std::shared_ptr<Node> currentNode = rhs.mFront;
+			while (currentNode != nullptr)
+			{
+				PushBack(currentNode->Data);
+				currentNode = currentNode->Next;
+			}
+		}
+
+		return *this;
+	}
+
+	template<typename T>
+	inline SList<T>& SList<T>::operator=(SList&& rhs)
+	{
+		if (this != &rhs)
+		{
+			Clear();
+
+			mSize = rhs.mSize;
+			mFront = rhs.mFront;
+			mBack = rhs.mBack;
+
+			rhs.mSize = 0;
+			rhs.mFront = nullptr;
+			rhs.mBack = nullptr;
+		}
+
+		return *this;
 	}
 
 	template<typename T>
@@ -32,23 +73,9 @@ namespace Library
 		Clear();
 	}
 
-	template<typename T>
-	inline SList<T>& SList<T>::operator=(const SList<T>& rhs)
-	{
-		Clear();
-
-		std::shared_ptr<Node> currentNode = rhs.mFront;
-		while (currentNode != nullptr)
-		{
-			PushBack(currentNode->Data);
-			currentNode = currentNode->Next;
-		}
-
-		return *this;
-	}
 
 	template<typename T>
-	inline bool SList<T>::operator==(const SList& rhs) const
+	inline bool SList<T>::operator==(const SList& rhs) const noexcept
 	{
 		if (mSize != rhs.mSize) return false;
 
@@ -73,6 +100,31 @@ namespace Library
 	}
 
 	template<typename T>
+	inline bool SList<T>::operator!=(const SList& rhs) const noexcept
+	{
+		if (mSize != rhs.mSize) return true;
+
+		bool isNotEqual = false;
+
+		std::shared_ptr<Node> currentNode = mFront;
+		std::shared_ptr<Node> rhsCurrentNode = rhs.mFront;
+
+		while (currentNode != nullptr)
+		{
+			if (currentNode->Data != rhsCurrentNode->Data)
+			{
+				isNotEqual = true;
+				break;
+			}
+
+			currentNode = currentNode->Next;
+			rhsCurrentNode = rhsCurrentNode->Next;
+		}
+
+		return isNotEqual;
+	}
+
+	template<typename T>
 	inline size_t SList<T>::Size() const
 	{
 		return mSize;
@@ -89,7 +141,7 @@ namespace Library
 	{
 		if (IsEmpty())
 		{
-			throw std::exception("List is empty.");
+			throw std::runtime_error("List is empty.");
 		}
 
 		return mFront->Data;
@@ -100,7 +152,7 @@ namespace Library
 	{
 		if (IsEmpty())
 		{
-			throw std::exception("List is empty.");
+			throw std::runtime_error("List is empty.");
 		}
 
 		return mFront->Data;
@@ -139,7 +191,7 @@ namespace Library
 	{
 		if (IsEmpty())
 		{
-			throw std::exception("List is empty.");
+			throw std::runtime_error("List is empty.");
 		}
 
 		return mBack->Data;
@@ -150,7 +202,7 @@ namespace Library
 	{
 		if (IsEmpty())
 		{
-			throw std::exception("List is empty.");
+			throw std::runtime_error("List is empty.");
 		}
 
 		return mBack->Data;

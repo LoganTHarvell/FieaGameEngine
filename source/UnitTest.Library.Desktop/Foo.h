@@ -1,19 +1,28 @@
 #pragma once
 
-namespace UnitTestLibraryDesktop
+#include <memory>
+
+namespace UnitTests
 {
 	class Foo
 	{
 	public:
+		explicit Foo(int data = 0);
+		Foo(const Foo& rhs);
+		Foo(Foo&& rhs) noexcept;
+		Foo& operator=(const Foo& rhs);
+		Foo& operator=(Foo&& rhs) noexcept;
+		~Foo() = default;
+
+
+		bool operator==(const Foo& rhs) const noexcept;
+		bool operator!=(const Foo& rhs) const noexcept;
+
 		int& Data();
 		int Data() const;
-
-		Foo(int data = 0);
-
-		bool operator==(const Foo& rhs);
-		bool operator!=(const Foo& rhs);
+		void SetData(int data);
 
 	private:
-		int mData;
+		std::unique_ptr<int> mData;
 	};
 }

@@ -1,8 +1,7 @@
 #pragma once
 
-
 #include <memory>
-
+#include <stdexcept>
 
 namespace Library
 {
@@ -13,6 +12,9 @@ namespace Library
 	class SList
 	{
 	private:
+		/// <summary>
+		/// Represents an element in a list.
+		/// </summary>
 		struct Node final
 		{
 			T Data;
@@ -29,15 +31,17 @@ namespace Library
 
 		/// <summary>
 		/// Copy constructor.
-		/// Takes in a list as a parameters, then copies the data values into the newly constructed list.
+		/// Takes in a list as a parameters, then copies the data values to the constructed list.
 		/// </summary>
-		/// <param name="list">List to be copied.</param>
-		SList(const SList& list);
+		/// <param name="rhs">List to be copied.</param>
+		SList(const SList& rhs);
 
 		/// <summary>
-		/// Class destructor. Clears all existing node references.
+		/// Move constructor.
+		/// Takes a list as a parameter and moves the data to the constructed list.
 		/// </summary>
-		~SList();
+		/// <param name="rhs"></param>
+		SList(SList&& rhs);
 
 		/// <summary>
 		/// Assignment operator.
@@ -48,12 +52,33 @@ namespace Library
 		SList& operator=(const SList& rhs);
 
 		/// <summary>
+		/// Assignment operator.
+		/// Copies the data values from the right hand side (rhs) value to the left hand side.
+		/// </summary>
+		/// <param name="rhs">List whose values are copied.</param>
+		/// <returns>Modified list with copied values.</returns>
+		SList& operator=(SList&& rhs);
+
+		/// <summary>
+		/// Class destructor. Clears all existing node references.
+		/// </summary>
+		~SList();
+
+		/// <summary>
 		/// Equals operator. 
 		/// Checks if the size of the list and the data values are equal to the size and values of the right hand side (rhs) list.
 		/// </summary>
 		/// <param name="rhs">The list on the right hand side to be compared to the left.</param>
 		/// <returns>True when lists are equivalent, otherwise false.</returns>
-		bool operator==(const SList& rhs) const;
+		bool operator==(const SList& rhs) const noexcept;
+
+		/// <summary>
+		/// Not equal operator. 
+		/// Checks if the size of the list and the data values are equal to the size and values of the right hand side (rhs) list.
+		/// </summary>
+		/// <param name="rhs">The list on the right hand side to be compared to the left.</param>
+		/// <returns>True when lists are not equivalent, otherwise false.</returns>
+		bool operator!=(const SList& rhs) const noexcept;
 
 		/// <summary>
 		/// Getter method for the number of elements in the list.
@@ -119,9 +144,20 @@ namespace Library
 		void Clear();
 
 	private:
-		size_t mSize = 0;
-		std::shared_ptr<Node> mFront = nullptr;
-		std::shared_ptr<Node> mBack = nullptr;
+		/// <summary>
+		/// Number of elements in the list.
+		/// </summary>
+		size_t mSize{ 0 };
+
+		/// <summary>
+		/// First element in the list.
+		/// </summary>
+		std::shared_ptr<Node> mFront{ nullptr };
+
+		/// <summary>
+		/// Last element in the list.
+		/// </summary>
+		std::shared_ptr<Node> mBack{ nullptr };
 	};
 }
 

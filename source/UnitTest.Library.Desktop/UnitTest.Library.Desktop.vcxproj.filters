@@ -1,13 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="FooTests.cpp" />
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="SListTests.cpp" />
-    <ClCompile Include="Foo.cpp" />
+    <ClCompile Include="Foo.cpp">
+      <Filter>Support Code</Filter>
+    </ClCompile>
+    <ClCompile Include="FooTest.cpp" />
+    <ClCompile Include="SListTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
-    <ClInclude Include="Foo.h" />
+    <ClInclude Include="Foo.h">
+      <Filter>Support Code</Filter>
+    </ClInclude>
+    <ClInclude Include="ToStringSpecialization.h">
+      <Filter>Support Code</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Support Code">
+      <UniqueIdentifier>{cb92ebec-90e8-4542-8efe-4690f20fc191}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>
