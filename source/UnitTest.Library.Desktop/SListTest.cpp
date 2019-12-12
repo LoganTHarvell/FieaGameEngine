@@ -276,50 +276,83 @@ namespace UnitTestLibraryDesktop
 			SList<double> doubleList;
 			SList<Foo> fooList;
 
+			const SList<int> emptyConstIntList;
+			const SList<double> emptyConstDoubleList;
+			const SList<Foo> emptyConstFooList;
+
 			// Empty list exception when calling Front
 			Assert::ExpectException<std::runtime_error>([&intList] { intList.Front(); });
 			Assert::ExpectException<std::runtime_error>([&doubleList] { doubleList.Front(); });
 			Assert::ExpectException<std::runtime_error>([&fooList] { fooList.Front(); });
+			Assert::ExpectException<std::runtime_error>([&emptyConstIntList] { emptyConstIntList.Front(); });
+			Assert::ExpectException<std::runtime_error>([&emptyConstDoubleList] { emptyConstDoubleList.Front(); });
+			Assert::ExpectException<std::runtime_error>([&emptyConstFooList] { emptyConstFooList.Front(); });
 
 			intList.PushFront(10);
 			doubleList.PushFront(10);
 			fooList.PushFront(Foo(10));
 
+			const SList<int> filledConstIntList1 = intList;
+			const SList<double> filledConstDoubleList1 = doubleList;
+			const SList<Foo> filledConstFooList1 = fooList;
+
 			// Data was set correctly
 			Assert::AreEqual(intList.Front(), 10);
 			Assert::AreEqual(doubleList.Front(), 10.0);
 			Assert::AreEqual(fooList.Front(), Foo(10));
+			Assert::AreEqual(filledConstIntList1.Front(), 10);
+			Assert::AreEqual(filledConstDoubleList1.Front(), 10.0);
+			Assert::AreEqual(filledConstFooList1.Front(), Foo(10));
 
 			// First data value sets front and back references
 			Assert::AreEqual(intList.Front(), intList.Back());
 			Assert::AreEqual(doubleList.Front(), doubleList.Back());
 			Assert::AreEqual(fooList.Front(), fooList.Back());
+			Assert::AreEqual(filledConstIntList1.Front(), intList.Back());
+			Assert::AreEqual(filledConstDoubleList1.Front(), doubleList.Back());
+			Assert::AreEqual(filledConstFooList1.Front(), fooList.Back());
 
 			// Non-empty
 			Assert::IsFalse(intList.IsEmpty());
 			Assert::IsFalse(doubleList.IsEmpty());
 			Assert::IsFalse(fooList.IsEmpty());
+			Assert::IsFalse(filledConstIntList1.IsEmpty());
+			Assert::IsFalse(filledConstDoubleList1.IsEmpty());
+			Assert::IsFalse(filledConstFooList1.IsEmpty());
 
 			// Size of 1
 			size_t size = 1;
 			Assert::AreEqual(intList.Size(), size);
 			Assert::AreEqual(doubleList.Size(), size);
 			Assert::AreEqual(fooList.Size(), size);
+			Assert::AreEqual(filledConstIntList1.Size(), size);
+			Assert::AreEqual(filledConstDoubleList1.Size(), size);
+			Assert::AreEqual(filledConstFooList1.Size(), size);
 
 			intList.PushFront(20);
 			doubleList.PushFront(20);
 			fooList.PushFront(Foo(20));
 
+			const SList<int> filledConstIntList2 = intList;
+			const SList<double> filledConstDoubleList2 = doubleList;
+			const SList<Foo> filledConstFooList2 = fooList;
+
 			// Data was set correctly
 			Assert::AreEqual(intList.Front(), 20);
 			Assert::AreEqual(doubleList.Front(), 20.0);
 			Assert::AreEqual(fooList.Front(), Foo(20));
+			Assert::AreEqual(filledConstIntList2.Front(), 20);
+			Assert::AreEqual(filledConstDoubleList2.Front(), 20.0);
+			Assert::AreEqual(filledConstFooList2.Front(), Foo(20));
 
 			// Size of 2
 			size = 2;
 			Assert::AreEqual(intList.Size(), size);
 			Assert::AreEqual(doubleList.Size(), size);
 			Assert::AreEqual(fooList.Size(), size);
+			Assert::AreEqual(filledConstIntList2.Size(), size);
+			Assert::AreEqual(filledConstDoubleList2.Size(), size);
+			Assert::AreEqual(filledConstFooList2.Size(), size);
 		}
 
 		TEST_METHOD(PopFront)
@@ -412,50 +445,83 @@ namespace UnitTestLibraryDesktop
 			SList<double> doubleList;
 			SList<Foo> fooList;
 
+			const SList<int> emptyConstIntList;
+			const SList<double> emptyConstDoubleList;
+			const SList<Foo> emptyConstFooList;
+
 			// Empty list exception when calling Back
 			Assert::ExpectException<std::runtime_error>([&intList] { intList.Back(); });
 			Assert::ExpectException<std::runtime_error>([&doubleList] { doubleList.Back(); });
 			Assert::ExpectException<std::runtime_error>([&fooList] { fooList.Back(); });
+			Assert::ExpectException<std::runtime_error>([&emptyConstIntList] { emptyConstIntList.Back(); });
+			Assert::ExpectException<std::runtime_error>([&emptyConstDoubleList] { emptyConstDoubleList.Back(); });
+			Assert::ExpectException<std::runtime_error>([&emptyConstFooList] { emptyConstFooList.Back(); });
 
 			intList.PushBack(10);
 			doubleList.PushBack(10);
 			fooList.PushBack(Foo(10));
 
+			const SList<int> filledConstIntList1 = intList;
+			const SList<double> filledConstDoubleList1 = doubleList;
+			const SList<Foo> filledConstFooList1 = fooList;
+
 			// Data was set correctly
 			Assert::AreEqual(intList.Back(), 10);
 			Assert::AreEqual(doubleList.Back(), 10.0);
 			Assert::AreEqual(fooList.Back(), Foo(10));
+			Assert::AreEqual(filledConstIntList1.Back(), 10);
+			Assert::AreEqual(filledConstDoubleList1.Back(), 10.0);
+			Assert::AreEqual(filledConstFooList1.Back(), Foo(10));
 
 			// First data value sets front and back references
-			Assert::AreEqual(intList.Back(), intList.Back());
-			Assert::AreEqual(doubleList.Back(), doubleList.Back());
+			Assert::AreEqual(intList.Back(), intList.Front());
+			Assert::AreEqual(doubleList.Back(), doubleList.Front());
 			Assert::AreEqual(fooList.Back(), fooList.Front());
+			Assert::AreEqual(filledConstIntList1.Back(), intList.Front());
+			Assert::AreEqual(filledConstDoubleList1.Back(), doubleList.Front());
+			Assert::AreEqual(filledConstFooList1.Back(), fooList.Front());
 
 			// Non-empty
 			Assert::IsFalse(intList.IsEmpty());
 			Assert::IsFalse(doubleList.IsEmpty());
 			Assert::IsFalse(fooList.IsEmpty());
+			Assert::IsFalse(filledConstIntList1.IsEmpty());
+			Assert::IsFalse(filledConstDoubleList1.IsEmpty());
+			Assert::IsFalse(filledConstFooList1.IsEmpty());
 
 			// Size of 1
 			size_t size = 1;
 			Assert::AreEqual(intList.Size(), size);
 			Assert::AreEqual(doubleList.Size(), size);
 			Assert::AreEqual(fooList.Size(), size);
+			Assert::AreEqual(filledConstIntList1.Size(), size);
+			Assert::AreEqual(filledConstDoubleList1.Size(), size);
+			Assert::AreEqual(filledConstFooList1.Size(), size);
 
 			intList.PushBack(20);
 			doubleList.PushBack(20);
 			fooList.PushBack(Foo(20));
 
+			const SList<int> filledConstIntList2 = intList;
+			const SList<double> filledConstDoubleList2 = doubleList;
+			const SList<Foo> filledConstFooList2 = fooList;
+
 			// Data was set correctly
 			Assert::AreEqual(intList.Back(), 20);
 			Assert::AreEqual(doubleList.Back(), 20.0);
 			Assert::AreEqual(fooList.Back(), Foo(20));
+			Assert::AreEqual(filledConstIntList2.Back(), 20);
+			Assert::AreEqual(filledConstDoubleList2.Back(), 20.0);
+			Assert::AreEqual(filledConstFooList2.Back(), Foo(20));
 
 			// Size of 2
 			size = 2;
 			Assert::AreEqual(intList.Size(), size);
 			Assert::AreEqual(doubleList.Size(), size);
 			Assert::AreEqual(fooList.Size(), size);
+			Assert::AreEqual(filledConstIntList2.Size(), size);
+			Assert::AreEqual(filledConstDoubleList2.Size(), size);
+			Assert::AreEqual(filledConstFooList2.Size(), size);
 		}
 
 		TEST_METHOD(PopBack)
