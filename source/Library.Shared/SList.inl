@@ -211,14 +211,16 @@ namespace Library
 	template<typename T>
 	inline void SList<T>::PushBack(const T& data)
 	{
+		std::shared_ptr<Node> newNode = std::make_shared<Node>(data);
+
 		if (IsEmpty())
 		{
-			mBack = std::make_shared<Node>(data);
+			mBack = newNode;
 			mFront = mBack;
 		}
 		else
 		{
-			mBack->Next = std::make_shared<Node>(data);
+			mBack->Next = newNode;
 			mBack = mBack->Next;
 		}
 

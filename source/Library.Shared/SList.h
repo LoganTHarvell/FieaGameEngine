@@ -96,12 +96,14 @@ namespace Library
 		/// Getter method for the first data value in the list.
 		/// </summary>
 		/// <returns>Reference to the first data value in the list.</returns>
+		/// <exception cref="runtime_error">Thrown when called on an empty list.</exception>
 		T& Front();
 
 		/// <summary>
 		/// Getter method for the first data value in the list, as a constant.
 		/// </summary>
 		/// <returns>Reference to the first data value in the list, as a constant.</returns>
+		/// <exception cref="runtime_error">Thrown when called on an empty list.</exception>
 		const T& Front() const;
 
 		/// <summary>
@@ -119,12 +121,14 @@ namespace Library
 		/// Getter method for the last data value in the list.
 		/// </summary>
 		/// <returns>Reference to the first data value in the list.</returns>
+		/// <exception cref="runtime_error">Thrown when called on an empty list.</exception>
 		T& Back();
 
 		/// <summary>
 		/// Getter method for the lase data value in the list, as a constant.
 		/// </summary>
 		/// <returns>Reference to the last data value in the list, as a constant.</returns>
+		/// <exception cref="runtime_error">Thrown when called on an empty list.</exception>
 		const T& Back() const;
 
 		/// <summary>
