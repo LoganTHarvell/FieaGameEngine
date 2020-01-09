@@ -27,15 +27,23 @@ namespace Library
 
 	public:
 #pragma region Iterator
-		// TODO: Add Documentation
+		/// <summary>
+		/// Class for traversing the list and retrieving values, which can then be manipulated.
+		/// </summary>
 		class Iterator final
 		{
 			friend SList;
 
 		private:
+			/// <summary>
+			/// Specialized constructor for creating an iterator for a list at a given node.
+			/// </summary>
+			/// <param name="list">Source list for the iterator's values.</param>
+			/// <param name="node">Current element of the list referenced by the iterator.</param>
 			Iterator(const SList<T>* list, std::shared_ptr<Node> node=nullptr);
 
 		public:
+			/* Defaults */
 			Iterator() = default;
 			Iterator(const Iterator& rhs) = default;
 			Iterator& operator=(const Iterator& rhs) = default;
@@ -44,31 +52,80 @@ namespace Library
 			~Iterator() = default;
 
 		public:
-			T& operator*();
+			/// <summary>
+			/// Dereference operator.
+			/// </summary>
+			/// <returns>Value of the current element of the list.</returns>
+			/// <exception cref="runtime_error">Attempted to access an iterator with no associated value.</exception>
+			T& operator*() const;
+
+			/// <summary>
+			/// Equal operator.
+			/// </summary>
+			/// <param name="rhs">Right hand side iterator to be compared against for equality.</param>
+			/// <returns>True when the rhs owner list and element are equal to the left, false otherwise.</returns>
 			bool operator==(const Iterator& rhs) const noexcept;
+
+			/// <summary>
+			/// Not equal operator.
+			/// </summary>
+			/// <param name="rhs">Right hand side iterator to be compared against for equality.</param>
+			/// <returns>True when the rhs owner list and element are inequal to the left, false otherwise.</returns>
 			bool operator!=(const Iterator& rhs) const noexcept;
+
+			/// <summary>
+			/// Pre-increment operator.
+			/// </summary>
+			/// <returns>Reference to the next iterator.</returns>
+			/// <exception cref="runtime_error">Cannot increment past the end of the list, including when empty.</exception>
 			Iterator& operator++();
+
+			/// <summary>
+			/// Post-increment operator.
+			/// </summary>
+			/// <returns>A copy of the iterator before it was incremented.</returns>
+			/// <exception cref="runtime_error">Cannot increment past the end of the list, including when empty.</exception>
 			Iterator operator++(int);
 
 		private:
+			/// <summary>
+			/// Owner list that is able to be traversed by the iterator instance.
+			/// </summary>
 			const SList* mOwner{ nullptr };
+
+			/// <summary>
+			/// Node reference that contains the current element referenced by the iterator instance.
+			/// </summary>
 			std::shared_ptr<Node> mNode{ nullptr };
 		};
 #pragma endregion Iterator
 
 #pragma region ConstIterator
+		/// <summary>
+		/// Class for traversing the list and reading values, may not manipulate the list.
+		/// </summary>
 		class ConstIterator final
 		{
 			friend SList;
 			friend Iterator;
 
 		public:
+			/// <summary>
+			/// Specialized copy constructor that enables the construction of a ConstIterator from a non-const Itrerator.
+			/// </summary>
+			/// <param name="iterator"></param>
 			ConstIterator(const Iterator& iterator);
 
 		private:
+			/// <summary>
+			/// Specialized constructor for creating an iterator for a list at a given node.
+			/// </summary>
+			/// <param name="list">Source list for the iterator's values.</param>
+			/// <param name="node">Current element of the list referenced by the iterator, defaulted to a nullptr value.</param>
 			ConstIterator(const SList* list, std::shared_ptr<Node> node = nullptr);
 
 		public:
+			/* Defaults */
 			ConstIterator() = default;
 			ConstIterator(const ConstIterator&) = default;
 			ConstIterator& operator=(const ConstIterator&) = default;
@@ -77,14 +134,50 @@ namespace Library
 			~ConstIterator() = default;
 
 		public:
-			const T& operator*();
+			/// <summary>
+			/// Dereference operator.
+			/// </summary>
+			/// <returns>Value of the current element of the list.</returns>
+			/// <exception cref="runtime_error">Attempted to access an iterator with no associated value.</exception>
+			const T& operator*() const;
+
+			/// <summary>
+			/// Equal operator.
+			/// </summary>
+			/// <param name="rhs">Right hand side iterator to be compared against for equality.</param>
+			/// <returns>True when the rhs owner list and element are equal to the left, false otherwise.</returns>
 			bool operator==(const ConstIterator& rhs) const noexcept;
+
+			/// <summary>
+			/// Equal operator.
+			/// </summary>
+			/// <param name="rhs">Right hand side iterator to be compared against for equality.</param>
+			/// <returns>True when the rhs owner list and element are inequal to the left, false otherwise.</returns>
 			bool operator!=(const ConstIterator& rhs) const noexcept;
+
+			/// <summary>
+			/// Pre-increment operator.
+			/// </summary>
+			/// <returns>Reference to the next iterator.</returns>
+			/// <exception cref="runtime_error">Cannot increment past the end of the list, including when empty.</exception>
 			ConstIterator& operator++();
+
+			/// <summary>
+			/// Post-increment operator.
+			/// </summary>
+			/// <returns>A copy of the iterator before it was incremented.</returns>
+			/// <exception cref="runtime_error">Cannot increment past the end of the list, including when empty.</exception>
 			ConstIterator operator++(int);
 
 		private:
+			/// <summary>
+			/// Owner list that is able to be traversed by the iterator instance.
+			/// </summary>
 			const SList* mOwner{ nullptr };
+
+			/// <summary>
+			/// Node reference that contains the current element referenced by the iterator instance.
+			/// </summary>
 			std::shared_ptr<Node> mNode{ nullptr };
 		};
 #pragma endregion ConstIterator
@@ -158,9 +251,22 @@ namespace Library
 		/// <returns>True if the list contains no elements, otherwise false.</returns>
 		bool IsEmpty() const;
 
-		// TODO: Add Documentation
+		/// <summary>
+		/// Gets an iterator pointing to the first element in the list, values are mutable.
+		/// </summary>
+		/// <returns>Iterator to the first element in the list.</returns>
 		Iterator begin();
+
+		/// <summary>
+		/// Gets an iterator pointing to the first element in the list, values are immutable.
+		/// </summary>
+		/// <returns>Constant value iterator to the first element in the list.</returns>
 		ConstIterator begin() const;
+
+		/// <summary>
+		/// Gets an iterator pointing to the first element in the list, values are immutable.
+		/// </summary>
+		/// <returns>Constant value iterator to the first element in the list.</returns>
 		ConstIterator cbegin() const;
 
 		/// <summary>
@@ -181,7 +287,8 @@ namespace Library
 		/// Adds an element with the passed in data to the front of the list.
 		/// </summary>
 		/// <param name="data">A data value to be added to the front of the list.</param>
-		void PushFront(const T& data);
+		/// <returns>Iterator pointing to the newly added node.</returns>
+		Iterator PushFront(const T& data);
 
 		/// <summary>
 		/// Removes the first element from the list.
@@ -206,21 +313,50 @@ namespace Library
 		/// Adds an element with the passed in data to the back of the list.
 		/// </summary>
 		/// <param name="data">A data value to be added to the back of the list.</param>
-		void PushBack(const T& data);
+		/// <returns>Iterator pointing to the newly added node.</returns>
+		Iterator PushBack(const T& data);
 
 		/// <summary>
 		/// Removes the last element from the list.
 		/// </summary>
 		void PopBack();
 
-		// TODO: Add Documentation
+		/// <summary>
+		/// Gets an iterator pointing past the last element in the list, value is mutable.
+		/// </summary>
+		/// <returns>Iterator to the last element in the list.</returns>	
 		Iterator end();
+
+		/// <summary>
+		/// Gets an iterator pointing past the last element in the list, value is immutable.
+		/// </summary>
+		/// <returns>Constant value iterator to the last element in the list.</returns>	
 		ConstIterator end() const;
+
+		/// <summary>
+		/// Gets an iterator pointing past the last element in the list, value is immutable.
+		/// </summary>
+		/// <returns>Constant value iterator to the last element in the list.</returns>	
 		ConstIterator cend() const;
+
 
 		Iterator Find(const T& value);
 		ConstIterator Find(const T& value) const;
-		Iterator InsertAfter(const T& data, const Iterator& iterator);
+
+		/// <summary>
+		/// Inserts a new element in the list in between a given iterator and the following element.
+		/// </summary>
+		/// <param name="iterator">An iterator used to insert a new element in the following position.</param>
+		/// <param name="data">A value to be used to create a new node.</param>
+		/// <returns>An iterator referencing the new node.</returns>
+		/// <exception cref=""></exception>
+		Iterator InsertAfter(const Iterator& iterator, const T& data);
+
+		/// <summary>
+		/// Removes a single element from the list given the corresponding iterator.
+		/// </summary>
+		/// <param name="iterator">An iterator referencing the element in the list to be removed.</param>
+		/// <returns>True on successful remove, false otherwise.</returns>
 		bool Remove(const Iterator& iterator);
 
 		/// <summary>

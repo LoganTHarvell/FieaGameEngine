@@ -490,9 +490,17 @@ namespace UnitTestLibraryDesktop
 			SList<double>::Iterator doubleIterator = doubleList.begin();
 			SList<Foo>::Iterator fooIterator = fooList.begin();
 
+			SList<int>::ConstIterator constIntIterator = intList.cbegin();
+			SList<double>::ConstIterator constDoubleIterator = doubleList.cbegin();
+			SList<Foo>::ConstIterator constFooIterator = fooList.cbegin();
+
 			Assert::AreEqual(*intIterator, 10);
 			Assert::AreEqual(*doubleIterator, 10.0);
 			Assert::AreEqual(*fooIterator, Foo(10));
+
+			Assert::AreEqual(*constIntIterator, 10);
+			Assert::AreEqual(*constDoubleIterator, 10.0);
+			Assert::AreEqual(*constFooIterator, Foo(10));
 
 			SList<int>::Iterator prevIntIterator = intIterator++;
 			SList<double>::Iterator prevDoubleIterator = doubleIterator++;
@@ -506,21 +514,49 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(*doubleIterator, 20.0);
 			Assert::AreEqual(*fooIterator, Foo(20));
 
+			SList<int>::ConstIterator prevConstIntIterator = constIntIterator++;
+			SList<double>::ConstIterator prevConstDoubleIterator = constDoubleIterator++;
+			SList<Foo>::ConstIterator prevConstFooIterator = constFooIterator++;
+
+			Assert::AreEqual(*prevConstIntIterator, 10);
+			Assert::AreEqual(*prevConstDoubleIterator, 10.0);
+			Assert::AreEqual(*prevConstFooIterator, Foo(10));
+
+			Assert::AreEqual(*constIntIterator, 20);
+			Assert::AreEqual(*constDoubleIterator, 20.0);
+			Assert::AreEqual(*constFooIterator, Foo(20));
+
 			++intIterator;
 			++doubleIterator;
 			++fooIterator;
+
+			++constIntIterator;
+			++constDoubleIterator;
+			++constFooIterator;
 
 			Assert::AreEqual(*intIterator, 30);
 			Assert::AreEqual(*doubleIterator, 30.0);
 			Assert::AreEqual(*fooIterator, Foo(30));
 
+			Assert::AreEqual(*constIntIterator, 30);
+			Assert::AreEqual(*constDoubleIterator, 30.0);
+			Assert::AreEqual(*constFooIterator, Foo(30));
+
 			++intIterator;
 			++doubleIterator;
 			++fooIterator;
 
+			++constIntIterator;
+			++constDoubleIterator;
+			++constFooIterator;
+
 			Assert::ExpectException<std::runtime_error>([&intIterator] { ++intIterator; });
 			Assert::ExpectException<std::runtime_error>([&doubleIterator] { ++doubleIterator; });
 			Assert::ExpectException<std::runtime_error>([&fooIterator] { ++fooIterator; });
+		
+			Assert::ExpectException<std::runtime_error>([&constIntIterator] { ++constIntIterator; });
+			Assert::ExpectException<std::runtime_error>([&constDoubleIterator] { ++constDoubleIterator; });
+			Assert::ExpectException<std::runtime_error>([&constFooIterator] { ++constFooIterator; });
 		}
 
 
@@ -859,6 +895,213 @@ namespace UnitTestLibraryDesktop
 			// Emptiness does not change when called on empty list
 			Assert::IsTrue(intList.IsEmpty());
 			Assert::IsTrue(doubleList.IsEmpty());
+			Assert::IsTrue(fooList.IsEmpty());
+		}
+
+		TEST_METHOD(Find)
+		{
+			SList<int> intList;
+			SList<double> doubleList;
+			SList<Foo> fooList;
+
+			intList.PushBack(10);
+			doubleList.PushBack(10);
+			fooList.PushBack(Foo(10));
+
+			SList<int>::Iterator intIterator = intList.PushBack(20);
+			SList<double>::Iterator doubleIterator = doubleList.PushBack(20);
+			SList<Foo>::Iterator fooIterator = fooList.PushBack(Foo(20));
+
+			intList.PushBack(30);
+			doubleList.PushBack(30);
+			fooList.PushBack(Foo(30));
+
+			Assert::AreEqual(intList.begin(), intList.Find(10));
+			Assert::AreEqual(doubleList.begin(), doubleList.Find(10));
+			Assert::AreEqual(fooList.begin(), fooList.Find(Foo(10)));
+
+			Assert::AreEqual(intIterator++, intList.Find(20));
+			Assert::AreEqual(doubleIterator++, doubleList.Find(20));
+			Assert::AreEqual(fooIterator++, fooList.Find(Foo(20)));
+
+			Assert::AreEqual(intIterator, intList.Find(30));
+			Assert::AreEqual(doubleIterator, doubleList.Find(30));
+			Assert::AreEqual(fooIterator, fooList.Find(Foo(30)));
+
+			Assert::AreEqual(SList<int>::Iterator(), intList.Find(40));
+			Assert::AreEqual(SList<double>::Iterator(), doubleList.Find(40));
+			Assert::AreEqual(SList<Foo>::Iterator(), fooList.Find(Foo(40)));
+
+			const SList<int> constIntList = intList;
+			const SList<double> constDoubleList = doubleList;
+			const SList<Foo> constFooList = fooList;
+
+			SList<int>::ConstIterator constIntIterator = constIntList.begin();
+			SList<double>::ConstIterator constDoubleIterator = constDoubleList.begin();
+			SList<Foo>::ConstIterator constFooIterator = constFooList.begin();
+
+			Assert::AreEqual(constIntIterator++, constIntList.Find(10));
+			Assert::AreEqual(constDoubleIterator++, constDoubleList.Find(10));
+			Assert::AreEqual(constFooIterator++, constFooList.Find(Foo(10)));
+
+			Assert::AreEqual(constIntIterator++, constIntList.Find(20));
+			Assert::AreEqual(constDoubleIterator++, constDoubleList.Find(20));
+			Assert::AreEqual(constFooIterator++, constFooList.Find(Foo(20)));
+
+			Assert::AreEqual(constIntIterator, constIntList.Find(30));
+			Assert::AreEqual(constDoubleIterator, constDoubleList.Find(30));
+			Assert::AreEqual(constFooIterator, constFooList.Find(Foo(30)));
+
+			Assert::AreEqual(SList<int>::ConstIterator(), constIntList.Find(40));
+			Assert::AreEqual(SList<double>::ConstIterator(), constDoubleList.Find(40));
+			Assert::AreEqual(SList<Foo>::ConstIterator(), constFooList.Find(Foo(40)));
+		}
+
+		TEST_METHOD(InsertAfter)
+		{
+			SList<int> intList;
+			SList<double> doubleList;
+			SList<Foo> fooList;
+
+			Assert::ExpectException<std::runtime_error>([&intList] { intList.InsertAfter(SList<int>::Iterator(), 10); });
+			Assert::ExpectException<std::runtime_error>([&doubleList] { doubleList.InsertAfter(SList<double>::Iterator(), 10); });
+			Assert::ExpectException<std::runtime_error>([&fooList] { fooList.InsertAfter(SList<Foo>::Iterator(), Foo(10)); });
+
+			SList<int>::Iterator intIterator = intList.InsertAfter(intList.begin(), 10);
+			SList<double>::Iterator doubleIterator = doubleList.InsertAfter(doubleList.begin(), 10);
+			SList<Foo>::Iterator fooIterator = fooList.InsertAfter(fooList.begin(), Foo(10));
+
+			Assert::AreEqual(*intIterator, 10);
+			Assert::AreEqual(*doubleIterator, 10.0);
+			Assert::AreEqual(*fooIterator, Foo(10));
+
+			intIterator = intList.InsertAfter(intIterator, 20);
+			doubleIterator = doubleList.InsertAfter(doubleIterator, 20);
+			fooIterator = fooList.InsertAfter(fooIterator, Foo(20));
+
+			intIterator = intList.begin();
+			doubleIterator = doubleList.begin();
+			fooIterator = fooList.begin();
+
+			intIterator = intList.InsertAfter(intIterator, 30);
+			doubleIterator = doubleList.InsertAfter(doubleIterator, 30);
+			fooIterator = fooList.InsertAfter(fooIterator, Foo(30));
+
+			Assert::AreEqual(*intIterator, 30);
+			Assert::AreEqual(*doubleIterator, 30.0);
+			Assert::AreEqual(*fooIterator, Foo(30));
+
+			++intIterator;
+			++doubleIterator;
+			++fooIterator;
+
+			Assert::AreEqual(*intIterator, 20);
+			Assert::AreEqual(*doubleIterator, 20.0);
+			Assert::AreEqual(*fooIterator, Foo(20));
+
+			++intIterator;
+			++doubleIterator;
+			++fooIterator;
+
+			Assert::AreEqual(intIterator, intList.end());
+			Assert::AreEqual(doubleIterator, doubleList.end());
+			Assert::AreEqual(fooIterator, fooList.end());
+
+			intIterator = intList.begin();
+			doubleIterator = doubleList.begin();
+			fooIterator = fooList.begin();
+
+			Assert::AreEqual(*intIterator, 10);
+			Assert::AreEqual(*doubleIterator, 10.0);
+			Assert::AreEqual(*fooIterator, Foo(10));
+		}
+
+		TEST_METHOD(Remove)
+		{
+			/* Integer Data */
+
+			SList<int> intList;
+
+			SList<int>::Iterator intIterator;
+			intList.Remove(intIterator);
+
+			intIterator = intList.PushBack(10);
+			intList.PushBack(20);
+			intList.Remove(intIterator);
+			
+			intIterator = intList.begin();
+			Assert::AreEqual(*intIterator, 20);
+
+			intList.PushBack(30);
+			intIterator = intList.PushBack(40);
+			intList.PushBack(50);
+			intList.Remove(intList.end());
+			intList.Remove(intIterator);
+
+			intIterator = intList.begin();
+			Assert::AreEqual(*intIterator, 20);
+
+			intList.Remove(intList.begin());
+			intList.Remove(intList.begin());
+
+			Assert::IsTrue(intList.IsEmpty());
+
+
+			/* Double Data */
+
+			SList<double> doubleList;
+
+			SList<double>::Iterator doubleIterator;
+			doubleList.Remove(doubleIterator);
+
+			doubleIterator = doubleList.PushBack(10);
+			doubleList.PushBack(20);
+			doubleList.Remove(doubleIterator);
+
+			doubleIterator = doubleList.begin();
+			Assert::AreEqual(*doubleIterator, 20.0);
+
+			doubleList.PushBack(30);
+			doubleIterator = doubleList.PushBack(40);
+			doubleList.PushBack(50);
+			doubleList.Remove(doubleList.end());
+			doubleList.Remove(doubleIterator);
+
+			doubleIterator = doubleList.begin();
+			Assert::AreEqual(*doubleIterator, 20.0);
+
+			doubleList.Remove(doubleList.begin());
+			doubleList.Remove(doubleList.begin());
+
+			Assert::IsTrue(doubleList.IsEmpty());
+
+
+			/* Foo Data */
+	
+			SList<Foo> fooList;
+
+			SList<Foo>::Iterator fooIterator;
+			fooList.Remove(fooIterator);
+
+			fooIterator = fooList.PushBack(Foo(10));
+			fooList.PushBack(Foo(20));
+			fooList.Remove(fooIterator);
+
+			fooIterator = fooList.begin();
+			Assert::AreEqual(*fooIterator, Foo(20));
+
+			fooList.PushBack(Foo(30));
+			fooIterator = fooList.PushBack(Foo(40));
+			fooList.PushBack(Foo(50));
+			fooList.Remove(fooList.end());
+			fooList.Remove(fooIterator);
+
+			fooIterator = fooList.begin();
+			Assert::AreEqual(*fooIterator, Foo(20));
+
+			fooList.Remove(fooList.begin());
+			fooList.Remove(fooList.begin());
+
 			Assert::IsTrue(fooList.IsEmpty());
 		}
 

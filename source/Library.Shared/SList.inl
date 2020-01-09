@@ -18,7 +18,7 @@ namespace Library
 	}
 
 	template<typename T>
-	inline T& SList<T>::Iterator::operator*()
+	inline T& SList<T>::Iterator::operator*() const
 	{
 		if (mNode == nullptr)
 		{
@@ -76,7 +76,7 @@ namespace Library
 	}
 
 	template<typename T>
-	inline const T& SList<T>::ConstIterator::operator*()
+	inline const T& SList<T>::ConstIterator::operator*() const
 	{
 		if (mNode == nullptr)
 		{
@@ -276,7 +276,7 @@ namespace Library
 	}
 
 	template<typename T>
-	inline void SList<T>::PushFront(const T& data)
+	inline typename SList<T>::Iterator SList<T>::PushFront(const T& data)
 	{
 		mFront = std::make_shared<Node>(data, mFront);
 		
@@ -286,6 +286,8 @@ namespace Library
 		}
 
 		mSize++;
+		
+		return Iterator(this, mFront);
 	}
 
 	template<typename T>
@@ -326,7 +328,7 @@ namespace Library
 	}
 
 	template<typename T>
-	inline void SList<T>::PushBack(const T& data)
+	inline typename SList<T>::Iterator SList<T>::PushBack(const T& data)
 	{
 		std::shared_ptr<Node> newNode = std::make_shared<Node>(data);
 
@@ -342,6 +344,8 @@ namespace Library
 		}
 
 		mSize++;
+
+		return Iterator(this, mBack);
 	}
 
 	template<typename T>
@@ -392,7 +396,35 @@ namespace Library
 	}
 
 	template<typename T>
-	inline typename SList<T>::Iterator SList<T>::InsertAfter(const T& data, const Iterator& iterator)
+	inline typename SList<T>::Iterator SList<T>::Find(const T& value)
+	{
+		for (auto it = begin(); it != end(); ++it)
+		{
+			if (*it == value)
+			{
+				return it;
+			}
+		}
+
+		return Iterator();
+	}
+
+	template<typename T>
+	inline typename SList<T>::ConstIterator SList<T>::Find(const T& value) const
+	{
+		for (auto it = begin(); it != end(); ++it)
+		{
+			if (*it == value)
+			{
+				return ConstIterator(it);
+			}
+		}
+
+		return ConstIterator();
+	}
+
+	template<typename T>
+	inline typename SList<T>::Iterator SList<T>::InsertAfter(const Iterator& iterator, const T& data)
 	{
 		if (this != iterator.mOwner)
 		{
@@ -401,15 +433,54 @@ namespace Library
 
 		if (iterator == end())
 		{
-			PushBack(data);
-			return end();
+			return PushBack(data);
 		}
 		
 		std::shared_ptr<Node> newNode = std::make_shared<Node>(data);
 		newNode->Next = iterator.mNode->Next;
 		iterator.mNode->Next = newNode;
 
-		return ++iterator;
+		return Iterator(this, newNode);
+	}
+
+	template<typename T>
+	inline bool SList<T>::Remove(const Iterator& iterator)
+	{
+		bool isRemoved = false;
+
+		if (iterator == end())
+		{
+			PopBack();
+			isRemoved = true;
+		}
+		else if (iterator.mOwner == this)
+		{
+			if (iterator == begin())
+			{
+				PopFront();
+			}
+			else
+			{
+				SList<T>::Iterator prevIt = begin();
+
+				for (auto it = ++begin(); it != end(); ++it)
+				{
+					if (it == iterator)
+					{
+						prevIt.mNode = it.mNode->Next;
+						break;
+					}
+
+					++prevIt;
+				}
+				
+				--mSize;
+			}
+
+			isRemoved = true;
+		}
+
+		return isRemoved;
 	}
 
 	template<typename T>
