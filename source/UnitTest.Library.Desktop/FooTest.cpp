@@ -1,9 +1,5 @@
 #include "pch.h"
 
-#include <crtdbg.h>
-
-#include "CppUnitTest.h"
-
 #include "ToStringSpecialization.h"
 #include "Foo.h"
 

@@ -12,6 +12,7 @@ namespace Library
 	class SList
 	{
 	private:
+#pragma region Node
 		/// <summary>
 		/// Represents an element in a list.
 		/// </summary>
@@ -22,6 +23,71 @@ namespace Library
 		
 			Node(const T& data, std::shared_ptr<Node> next = nullptr);
 		};
+#pragma endregion Node
+
+	public:
+#pragma region Iterator
+		// TODO: Add Documentation
+		class Iterator final
+		{
+			friend SList;
+
+		private:
+			Iterator(const SList<T>* list, std::shared_ptr<Node> node=nullptr);
+
+		public:
+			Iterator() = default;
+			Iterator(const Iterator& rhs) = default;
+			Iterator& operator=(const Iterator& rhs) = default;
+			Iterator(Iterator&& rhs) = default;
+			Iterator& operator=(Iterator&& rhs) = default;
+			~Iterator() = default;
+
+		public:
+			T& operator*();
+			bool operator==(const Iterator& rhs) const noexcept;
+			bool operator!=(const Iterator& rhs) const noexcept;
+			Iterator& operator++();
+			Iterator operator++(int);
+
+		private:
+			const SList* mOwner{ nullptr };
+			std::shared_ptr<Node> mNode{ nullptr };
+		};
+#pragma endregion Iterator
+
+#pragma region ConstIterator
+		class ConstIterator final
+		{
+			friend SList;
+			friend Iterator;
+
+		public:
+			ConstIterator(const Iterator& iterator);
+
+		private:
+			ConstIterator(const SList* list, std::shared_ptr<Node> node = nullptr);
+
+		public:
+			ConstIterator() = default;
+			ConstIterator(const ConstIterator&) = default;
+			ConstIterator& operator=(const ConstIterator&) = default;
+			ConstIterator(ConstIterator&&) = default;
+			ConstIterator& operator=(ConstIterator&&) = default;
+			~ConstIterator() = default;
+
+		public:
+			const T& operator*();
+			bool operator==(const ConstIterator& rhs) const noexcept;
+			bool operator!=(const ConstIterator& rhs) const noexcept;
+			ConstIterator& operator++();
+			ConstIterator operator++(int);
+
+		private:
+			const SList* mOwner{ nullptr };
+			std::shared_ptr<Node> mNode{ nullptr };
+		};
+#pragma endregion ConstIterator
 
 	public:
 		/// <summary>
@@ -92,6 +158,11 @@ namespace Library
 		/// <returns>True if the list contains no elements, otherwise false.</returns>
 		bool IsEmpty() const;
 
+		// TODO: Add Documentation
+		Iterator begin();
+		ConstIterator begin() const;
+		ConstIterator cbegin() const;
+
 		/// <summary>
 		/// Getter method for the first data value in the list.
 		/// </summary>
@@ -141,6 +212,16 @@ namespace Library
 		/// Removes the last element from the list.
 		/// </summary>
 		void PopBack();
+
+		// TODO: Add Documentation
+		Iterator end();
+		ConstIterator end() const;
+		ConstIterator cend() const;
+
+		Iterator Find(const T& value);
+		ConstIterator Find(const T& value) const;
+		Iterator InsertAfter(const T& data, const Iterator& iterator);
+		bool Remove(const Iterator& iterator);
 
 		/// <summary>
 		/// Removes all elements from the list and resets the size to zero.

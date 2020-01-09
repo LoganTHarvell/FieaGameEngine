@@ -10,6 +10,117 @@ namespace Library
 	}
 #pragma endregion Node
 
+#pragma region Iterator
+	template<typename T>
+	inline SList<T>::Iterator::Iterator(const SList<T>* list, std::shared_ptr<Node> node) :
+		mOwner(list), mNode(node)
+	{
+	}
+
+	template<typename T>
+	inline T& SList<T>::Iterator::operator*()
+	{
+		if (mNode == nullptr)
+		{
+			throw std::runtime_error("Iterator has no associated node.");
+		}
+
+		return mNode->Data;
+	}
+
+	template<typename T>
+	inline bool SList<T>::Iterator::operator==(const Iterator& rhs) const noexcept
+	{
+		return !operator!=(rhs);
+	}
+
+	template<typename T>
+	inline bool SList<T>::Iterator::operator!=(const Iterator& rhs) const noexcept
+	{
+		return (mOwner != rhs.mOwner || mNode != rhs.mNode);
+	}
+
+	template<typename T>
+	inline typename SList<T>::Iterator& SList<T>::Iterator::operator++()
+	{
+		if (mNode == nullptr)
+		{
+			throw std::runtime_error("Cannot go past the end of list.");
+		}
+
+		mNode = mNode->Next;
+
+		return *this;
+	}
+
+	template<typename T>
+	inline typename SList<T>::Iterator SList<T>::Iterator::operator++(int)
+	{
+		Iterator it = Iterator(*this);
+		++(*this);
+		return it;
+	}
+#pragma endregion Iterator
+
+#pragma region ConstIterator
+	template<typename T>
+	inline SList<T>::ConstIterator::ConstIterator(const Iterator& rhs) :
+		mOwner(rhs.mOwner), mNode(rhs.mNode)
+	{
+	}
+
+	template<typename T>
+	inline SList<T>::ConstIterator::ConstIterator(const SList* list, std::shared_ptr<Node> node) :
+		mOwner(list), mNode(node)
+	{
+	}
+
+	template<typename T>
+	inline const T& SList<T>::ConstIterator::operator*()
+	{
+		if (mNode == nullptr)
+		{
+			throw std::runtime_error("ConstIterator has no associated node.");
+		}
+
+		return mNode->Data;
+	}
+
+	template<typename T>
+	inline bool SList<T>::ConstIterator::operator==(const ConstIterator& rhs) const noexcept
+	{
+		return !operator!=(rhs);
+	}
+
+	template<typename T>
+	inline bool SList<T>::ConstIterator::operator!=(const ConstIterator& rhs) const noexcept
+	{
+		return (mOwner != rhs.mOwner || mNode != rhs.mNode);
+	}
+
+	template<typename T>
+	inline typename SList<T>::ConstIterator& SList<T>::ConstIterator::operator++()
+	{
+		if (mNode == nullptr)
+		{
+			throw std::runtime_error("Cannot go past the end of list.");
+		}
+
+		mNode = mNode->Next;
+
+		return *this;
+	}
+
+	template<typename T>
+	inline typename SList<T>::ConstIterator SList<T>::ConstIterator::operator++(int)
+	{
+		ConstIterator it = ConstIterator(*this);
+		++(*this);
+		return it;
+	}
+#pragma endregion ConstIterator
+
+#pragma region SList
 	template<typename T>
 	inline SList<T>::SList(const SList& rhs)
 	{
@@ -73,11 +184,18 @@ namespace Library
 		Clear();
 	}
 
-
 	template<typename T>
 	inline bool SList<T>::operator==(const SList& rhs) const noexcept
 	{
-		if (mSize != rhs.mSize) return false;
+		if (this == &rhs)
+		{
+			return true;
+		}
+		
+		if (mSize != rhs.mSize)
+		{
+			return false;
+		}
 
 		bool isEqual = true;
 
@@ -102,26 +220,7 @@ namespace Library
 	template<typename T>
 	inline bool SList<T>::operator!=(const SList& rhs) const noexcept
 	{
-		if (mSize != rhs.mSize) return true;
-
-		bool isNotEqual = false;
-
-		std::shared_ptr<Node> currentNode = mFront;
-		std::shared_ptr<Node> rhsCurrentNode = rhs.mFront;
-
-		while (currentNode != nullptr)
-		{
-			if (currentNode->Data != rhsCurrentNode->Data)
-			{
-				isNotEqual = true;
-				break;
-			}
-
-			currentNode = currentNode->Next;
-			rhsCurrentNode = rhsCurrentNode->Next;
-		}
-
-		return isNotEqual;
+		return !(operator==(rhs));
 	}
 
 	template<typename T>
@@ -134,6 +233,24 @@ namespace Library
 	inline bool SList<T>::IsEmpty() const
 	{
 		return mSize == 0;
+	}
+
+	template<typename T>
+	inline typename SList<T>::Iterator SList<T>::begin()
+	{
+		return Iterator(this, mFront);
+	}
+
+	template<typename T>
+	inline typename SList<T>::ConstIterator SList<T>::begin() const
+	{
+		return ConstIterator(this, mFront);
+	}
+
+	template<typename T>
+	inline typename SList<T>::ConstIterator SList<T>::cbegin() const
+	{
+		return ConstIterator(this, mFront);
 	}
 
 	template<typename T>
@@ -257,6 +374,45 @@ namespace Library
 	}
 
 	template<typename T>
+	inline typename SList<T>::Iterator SList<T>::end()
+	{
+		return Iterator(this, nullptr);
+	}
+
+	template<typename T>
+	inline typename SList<T>::ConstIterator SList<T>::end() const
+	{
+		return ConstIterator(this, nullptr);
+	}
+
+	template<typename T>
+	inline typename SList<T>::ConstIterator SList<T>::cend() const
+	{
+		return ConstIterator(this, nullptr);
+	}
+
+	template<typename T>
+	inline typename SList<T>::Iterator SList<T>::InsertAfter(const T& data, const Iterator& iterator)
+	{
+		if (this != iterator.mOwner)
+		{
+			throw std::runtime_error("Iterator is not owned by the list.");
+		}
+
+		if (iterator == end())
+		{
+			PushBack(data);
+			return end();
+		}
+		
+		std::shared_ptr<Node> newNode = std::make_shared<Node>(data);
+		newNode->Next = iterator.mNode->Next;
+		iterator.mNode->Next = newNode;
+
+		return ++iterator;
+	}
+
+	template<typename T>
 	inline void SList<T>::Clear()
 	{
 		mSize = 0;
@@ -264,3 +420,4 @@ namespace Library
 		mBack = nullptr;
 	}
 }
+#pragma endregion SList

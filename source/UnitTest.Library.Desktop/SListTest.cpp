@@ -1,9 +1,5 @@
 #include "pch.h"
 
-#include <crtdbg.h>
-
-#include "CppUnitTest.h"
-
 #include "ToStringSpecialization.h"
 #include "Foo.h"
 #include "SList.h"
@@ -50,6 +46,10 @@ namespace UnitTestLibraryDesktop
 			SList<int> intList1;
 			SList<int> intList2;
 
+
+			// Equality with self
+			Assert::AreEqual(intList1, intList1);
+
 			// Equality when empty
 			Assert::AreEqual(intList1, intList2);
 			const SList<int> emptyConstIntList;
@@ -80,6 +80,9 @@ namespace UnitTestLibraryDesktop
 
 			SList<double> doubleList1;
 			SList<double> doubleList2;
+
+			// Equality with self
+			Assert::AreEqual(doubleList1, doubleList1);
 
 			// Equality when empty
 			Assert::AreEqual(doubleList1, doubleList2);
@@ -112,6 +115,9 @@ namespace UnitTestLibraryDesktop
 			SList<Foo> fooList1;
 			SList<Foo> fooList2;
 			
+			// Equality with self
+			Assert::AreEqual(fooList1, fooList1);
+
 			// Equality when empty
 			Assert::AreEqual(fooList1, fooList2);
 			const SList<Foo> emptyConstFooList = fooList1;
@@ -269,6 +275,254 @@ namespace UnitTestLibraryDesktop
 			const SList<Foo> filledConstFooList = fooList;
 			Assert::IsTrue(!filledConstFooList.IsEmpty());
 		}
+
+		TEST_METHOD(IteratorDereference)
+		{
+			SList<int> intList;
+			SList<double> doubleList;
+			SList<Foo> fooList;
+
+			Assert::ExpectException<std::runtime_error>([&intList] { *(intList.begin()); });
+			Assert::ExpectException<std::runtime_error>([&doubleList] { *(doubleList.begin()); });
+			Assert::ExpectException<std::runtime_error>([&fooList] { *(fooList.begin()); });
+
+			Assert::ExpectException<std::runtime_error>([&intList] { *(intList.cbegin()); });
+			Assert::ExpectException<std::runtime_error>([&doubleList] { *(doubleList.cbegin()); });
+			Assert::ExpectException<std::runtime_error>([&fooList] { *(fooList.cbegin()); });
+
+			intList.PushBack(10);
+			doubleList.PushBack(10);
+			fooList.PushBack(Foo(10));
+
+			Assert::AreEqual(*intList.begin(), 10);
+			Assert::AreEqual(*doubleList.begin(), 10.0);
+			Assert::AreEqual(*fooList.begin(), Foo(10));
+
+			Assert::AreEqual(*intList.cbegin(), 10);
+			Assert::AreEqual(*doubleList.cbegin(), 10.0);
+			Assert::AreEqual(*fooList.cbegin(), Foo(10));
+		}
+
+		TEST_METHOD(Begin)
+		{
+			SList<int> intList;
+			SList<double> doubleList;
+			SList<Foo> fooList;
+
+			Assert::ExpectException<std::runtime_error>([&intList] { *(intList.begin()); });
+			Assert::ExpectException<std::runtime_error>([&doubleList] { *(doubleList.begin()); });
+			Assert::ExpectException<std::runtime_error>([&fooList] { *(fooList.begin()); });
+
+			const SList<int> emptyIntListCopy = intList;
+			const SList<double> emptyDoubleListCopy = doubleList;
+			const SList<Foo> emptyFooListCopy = fooList;
+
+			Assert::ExpectException<std::runtime_error>([&emptyIntListCopy] { *(emptyIntListCopy.begin()); });
+			Assert::ExpectException<std::runtime_error>([&emptyDoubleListCopy] { *(emptyDoubleListCopy.begin()); });
+			Assert::ExpectException<std::runtime_error>([&emptyFooListCopy] { *(emptyFooListCopy.begin()); });
+
+			Assert::ExpectException<std::runtime_error>([&intList] { *(intList.cbegin()); });
+			Assert::ExpectException<std::runtime_error>([&doubleList] { *(doubleList.cbegin()); });
+			Assert::ExpectException<std::runtime_error>([&fooList] { *(fooList.cbegin()); });
+
+			intList.PushBack(10);
+			doubleList.PushBack(10);
+			fooList.PushBack(Foo(10));
+
+			Assert::AreEqual(*intList.begin(), 10);
+			Assert::AreEqual(*doubleList.begin(), 10.0);
+			Assert::AreEqual(*fooList.begin(), Foo(10));
+
+			const SList<int> filledIntListCopy = intList;
+			const SList<double> filledDoubleListCopy = doubleList;
+			const SList<Foo> filledFooListCopy = fooList;
+
+			Assert::AreEqual(*filledIntListCopy.begin(), 10);
+			Assert::AreEqual(*filledDoubleListCopy.begin(), 10.0);
+			Assert::AreEqual(*filledFooListCopy.begin(), Foo(10));
+			
+			Assert::AreEqual(*intList.cbegin(), 10);
+			Assert::AreEqual(*doubleList.cbegin(), 10.0);
+			Assert::AreEqual(*fooList.cbegin(), Foo(10));
+		}
+
+		TEST_METHOD(End)
+		{
+			SList<int> intList;
+			SList<double> doubleList;
+			SList<Foo> fooList;
+
+			Assert::ExpectException<std::runtime_error>([&intList] { *(intList.end()); });
+			Assert::ExpectException<std::runtime_error>([&doubleList] { *(doubleList.end()); });
+			Assert::ExpectException<std::runtime_error>([&fooList] { *(fooList.end()); });
+
+			const SList<int> emptyIntListCopy = intList;
+			const SList<double> emptyDoubleListCopy = doubleList;
+			const SList<Foo> emptyFooListCopy = fooList;
+
+			Assert::ExpectException<std::runtime_error>([&emptyIntListCopy] { *(emptyIntListCopy.end()); });
+			Assert::ExpectException<std::runtime_error>([&emptyDoubleListCopy] { *(emptyDoubleListCopy.end()); });
+			Assert::ExpectException<std::runtime_error>([&emptyFooListCopy] { *(emptyFooListCopy.end()); });
+
+			Assert::ExpectException<std::runtime_error>([&intList] { *(intList.cend()); });
+			Assert::ExpectException<std::runtime_error>([&doubleList] { *(doubleList.cend()); });
+			Assert::ExpectException<std::runtime_error>([&fooList] { *(fooList.cend()); });
+
+			intList.PushBack(10);
+			doubleList.PushBack(10);
+			fooList.PushBack(Foo(10));
+
+			Assert::ExpectException<std::runtime_error>([&intList] { *(intList.end()); });
+			Assert::ExpectException<std::runtime_error>([&intList] { *(intList.end()); });
+			Assert::ExpectException<std::runtime_error>([&intList] { *(intList.end()); });
+
+			const SList<int> filledIntListCopy = intList;
+			const SList<double> filledDoubleListCopy = doubleList;
+			const SList<Foo> filledFooListCopy = fooList;
+
+			Assert::ExpectException<std::runtime_error>([&filledIntListCopy] { *(filledIntListCopy.end()); });
+			Assert::ExpectException<std::runtime_error>([&filledDoubleListCopy] { *(filledDoubleListCopy.end()); });
+			Assert::ExpectException<std::runtime_error>([&filledFooListCopy] { *(filledFooListCopy.end()); });
+
+			Assert::ExpectException<std::runtime_error>([&intList] { *(intList.cend()); });
+			Assert::ExpectException<std::runtime_error>([&doubleList] { *(doubleList.cend()); });
+			Assert::ExpectException<std::runtime_error>([&fooList] { *(fooList.cend()); });
+
+			SList<int>::Iterator intIterator = intList.begin();
+			SList<double>::Iterator doubleIterator = doubleList.begin();
+			SList<Foo>::Iterator fooIterator = fooList.begin();
+
+			SList<int>::ConstIterator constIntIterator = intList.cbegin();
+			SList<double>::ConstIterator constDoubleIterator = doubleList.cbegin();
+			SList<Foo>::ConstIterator constFooIterator = fooList.cbegin();
+
+			++intIterator;
+			++doubleIterator;
+			++fooIterator;
+
+			++constIntIterator;
+			++constDoubleIterator;
+			++constFooIterator;
+
+			Assert::AreEqual(intIterator, intList.end());
+			Assert::AreEqual(doubleIterator, doubleList.end());
+			Assert::AreEqual(fooIterator, fooList.end());
+
+			Assert::AreEqual(constIntIterator, intList.cend());
+			Assert::AreEqual(constDoubleIterator, doubleList.cend());
+			Assert::AreEqual(constFooIterator, fooList.cend());
+		}
+
+		TEST_METHOD(IteratorEquality)
+		{
+			SList<int> intList;
+			SList<double> doubleList;
+			SList<Foo> fooList;
+
+			Assert::AreEqual(intList.begin(), intList.end());
+			Assert::AreEqual(doubleList.begin(), doubleList.end());
+			Assert::AreEqual(fooList.begin(), fooList.end());
+
+			Assert::AreEqual(intList.cbegin(), intList.cend());
+			Assert::AreEqual(doubleList.cbegin(), doubleList.cend());
+			Assert::AreEqual(fooList.cbegin(), fooList.cend());
+
+			intList.PushBack(10);
+			doubleList.PushBack(10);
+			fooList.PushBack(Foo(10));
+
+			intList.PushBack(10);
+			doubleList.PushBack(10);
+			fooList.PushBack(Foo(10));
+
+			SList<int>::Iterator intIterator = intList.begin();
+			SList<double>::Iterator doubleIterator = doubleList.begin();
+			SList<Foo>::Iterator fooIterator = fooList.begin();
+
+			SList<int>::ConstIterator constIntIterator = intList.cbegin();
+			SList<double>::ConstIterator constDoubleIterator = doubleList.cbegin();
+			SList<Foo>::ConstIterator constFooIterator = fooList.cbegin();
+
+			Assert::AreEqual(intIterator, intList.begin());
+			Assert::AreEqual(doubleIterator, doubleList.begin());
+			Assert::AreEqual(fooIterator, fooList.begin());
+
+			Assert::AreEqual(constIntIterator, intList.cbegin());
+			Assert::AreEqual(constDoubleIterator, doubleList.cbegin());
+			Assert::AreEqual(constFooIterator, fooList.cbegin());
+
+			SList<int>::Iterator prevIntIterator = intIterator++;
+			SList<double>::Iterator prevDoubleIterator = doubleIterator++;
+			SList<Foo>::Iterator prevFooIterator = fooIterator++;
+
+			SList<int>::ConstIterator prevConstIntIterator = constIntIterator++;
+			SList<double>::ConstIterator prevConstDoubleIterator = constDoubleIterator++;
+			SList<Foo>::ConstIterator prevConstFooIterator = constFooIterator++;
+
+			Assert::IsTrue(intIterator != prevIntIterator);
+			Assert::IsTrue(doubleIterator != prevDoubleIterator);
+			Assert::IsTrue(fooIterator != prevFooIterator);
+
+			Assert::IsTrue(constIntIterator != prevConstIntIterator);
+			Assert::IsTrue(constDoubleIterator != prevConstDoubleIterator);
+			Assert::IsTrue(constFooIterator != prevConstFooIterator);
+		}
+
+		TEST_METHOD(IteratorIncrementOperators)
+		{
+			SList<int> intList;
+			SList<double> doubleList;
+			SList<Foo> fooList;
+
+			intList.PushBack(10);
+			doubleList.PushBack(10);
+			fooList.PushBack(Foo(10));
+
+			intList.PushBack(20);
+			doubleList.PushBack(20);
+			fooList.PushBack(Foo(20));
+
+			intList.PushBack(30);
+			doubleList.PushBack(30);
+			fooList.PushBack(Foo(30));
+
+			SList<int>::Iterator intIterator = intList.begin();
+			SList<double>::Iterator doubleIterator = doubleList.begin();
+			SList<Foo>::Iterator fooIterator = fooList.begin();
+
+			Assert::AreEqual(*intIterator, 10);
+			Assert::AreEqual(*doubleIterator, 10.0);
+			Assert::AreEqual(*fooIterator, Foo(10));
+
+			SList<int>::Iterator prevIntIterator = intIterator++;
+			SList<double>::Iterator prevDoubleIterator = doubleIterator++;
+			SList<Foo>::Iterator prevFooIterator = fooIterator++;
+
+			Assert::AreEqual(*prevIntIterator, 10);
+			Assert::AreEqual(*prevDoubleIterator, 10.0);
+			Assert::AreEqual(*prevFooIterator, Foo(10));
+
+			Assert::AreEqual(*intIterator, 20);
+			Assert::AreEqual(*doubleIterator, 20.0);
+			Assert::AreEqual(*fooIterator, Foo(20));
+
+			++intIterator;
+			++doubleIterator;
+			++fooIterator;
+
+			Assert::AreEqual(*intIterator, 30);
+			Assert::AreEqual(*doubleIterator, 30.0);
+			Assert::AreEqual(*fooIterator, Foo(30));
+
+			++intIterator;
+			++doubleIterator;
+			++fooIterator;
+
+			Assert::ExpectException<std::runtime_error>([&intIterator] { ++intIterator; });
+			Assert::ExpectException<std::runtime_error>([&doubleIterator] { ++doubleIterator; });
+			Assert::ExpectException<std::runtime_error>([&fooIterator] { ++fooIterator; });
+		}
+
 
 		TEST_METHOD(PushFront)
 		{
