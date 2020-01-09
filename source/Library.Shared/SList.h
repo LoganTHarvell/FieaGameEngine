@@ -339,8 +339,18 @@ namespace Library
 		/// <returns>Constant value iterator to the last element in the list.</returns>	
 		ConstIterator cend() const;
 
-
+		/// <summary>
+		/// Searches the list for a given value and returns an iterator.
+		/// </summary>
+		/// <param name="value">A value to search for in the list.</param>
+		/// <returns>An iterator referencing the value, if found. Otherwise it returns an empty iterator.</returns>
 		Iterator Find(const T& value);
+		
+		/// <summary>
+		/// Searches the list for a given value and returns an iterator.
+		/// </summary>
+		/// <param name="value">A value to search for in the list.</param>
+		/// <returns>An const value iterator referencing the value, if found. Otherwise it returns an empty iterator.</returns>
 		ConstIterator Find(const T& value) const;
 
 		/// <summary>

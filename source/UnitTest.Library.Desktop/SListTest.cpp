@@ -39,6 +39,50 @@ namespace UnitTestLibraryDesktop
 #endif
 		}
 
+		TEST_METHOD(Copy)
+		{
+			/* Integer Data */
+
+			SList<int> intList;
+			intList.PushBack(10);
+			intList.PushBack(20);
+			intList.PushBack(30);
+
+			// Validates copies are equal to source
+			SList<int> intListCopy(intList);
+			Assert::AreEqual(intListCopy, intList);
+			intListCopy = intList;
+			Assert::AreEqual(intListCopy, intList);
+
+
+			/* Double Data */
+
+			SList<double> doubleList;
+			doubleList.PushBack(10);
+			doubleList.PushBack(20);
+			doubleList.PushBack(30);
+
+			// Validates copies are equal to source		
+			SList<double> doubleListCopy(doubleList);
+			Assert::AreEqual(doubleListCopy, doubleList);
+			doubleListCopy = doubleList;
+			Assert::AreEqual(doubleListCopy, doubleList);
+
+
+			/* Foo Data */
+
+			SList<Foo> fooList;
+			fooList.PushBack(Foo(10));
+			fooList.PushBack(Foo(20));
+			fooList.PushBack(Foo(30));
+
+			// Validates copies are equal to source
+			SList<Foo> fooListCopy(fooList);
+			Assert::AreEqual(fooListCopy, fooList);
+			fooListCopy = fooList;
+			Assert::AreEqual(fooListCopy, fooList);
+		}
+
 		TEST_METHOD(EqualityOperators)
 		{
 			/* Integer Data */
@@ -1165,49 +1209,6 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(fooList.Size(), sizeZero);
 		}
 
-		TEST_METHOD(Copy)
-		{
-			/* Integer Data */
-
-			SList<int> intList;
-			intList.PushBack(10);
-			intList.PushBack(20);
-			intList.PushBack(30);
-
-			// Validates copies are equal to source
-			SList<int> intListCopy(intList);
-			Assert::AreEqual(intListCopy, intList);
-			intListCopy = intList;
-			Assert::AreEqual(intListCopy, intList);
-			
-
-			/* Double Data */
-
-			SList<double> doubleList;
-			doubleList.PushBack(10);
-			doubleList.PushBack(20);
-			doubleList.PushBack(30);
-
-			// Validates copies are equal to source		
-			SList<double> doubleListCopy(doubleList);
-			Assert::AreEqual(doubleListCopy, doubleList);
-			doubleListCopy = doubleList;
-			Assert::AreEqual(doubleListCopy, doubleList);
-			
-
-			/* Foo Data */
-
-			SList<Foo> fooList;
-			fooList.PushBack(Foo(10));
-			fooList.PushBack(Foo(20));
-			fooList.PushBack(Foo(30));
-
-			// Validates copies are equal to source
-			SList<Foo> fooListCopy(fooList);
-			Assert::AreEqual(fooListCopy, fooList);
-			fooListCopy = fooList;
-			Assert::AreEqual(fooListCopy, fooList);
-		}
 	
 	private:
 		static _CrtMemState sStartMemState;
