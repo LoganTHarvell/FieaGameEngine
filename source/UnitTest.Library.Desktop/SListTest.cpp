@@ -39,6 +39,25 @@ namespace UnitTestLibraryDesktop
 #endif
 		}
 
+		TEST_METHOD(IteratorInitialization)
+		{
+			SList<int> intList;
+			SList<double> doubleList;
+			SList<Foo> fooList;
+
+			SList<int>::Iterator intIterator = intList.begin();
+			SList<double>::Iterator doubleIterator = doubleList.begin();
+			SList<Foo>::Iterator fooIterator = fooList.begin();
+			
+			intList.PushBack(10);
+			doubleList.PushBack(10);
+			fooList.PushBack(Foo(10));
+
+			SList<int>::ConstIterator constTntIterator = SList<int>::ConstIterator(intList.begin());
+			SList<double>::ConstIterator constDoubleIterator = SList<double>::ConstIterator(doubleList.begin());
+			SList<Foo>::ConstIterator constFooIterator = SList<Foo>::ConstIterator(fooList.begin());
+		}
+
 		TEST_METHOD(Copy)
 		{
 			/* Integer Data */
@@ -81,6 +100,80 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(fooListCopy, fooList);
 			fooListCopy = fooList;
 			Assert::AreEqual(fooListCopy, fooList);
+		}
+
+		TEST_METHOD(MoveOperators)
+		{
+			/* Integer Data */
+
+			SList<int> intList;
+			intList.PushBack(10);
+			intList.PushBack(20);
+			intList.PushBack(30);
+
+			// Validates copies are equal to source
+			SList<int> intListCopy = intList;
+			intList = std::move(intList);
+			Assert::AreEqual(intListCopy, intList);
+
+			// Validates moved element is equal to copy
+			SList<int> intListMoved = std::move(intList);
+			Assert::AreEqual(intListMoved, intListCopy);
+
+			intList.PushBack(10);
+			intList.PushBack(20);
+
+			intListCopy = intList;
+			intListMoved = std::move(intList);
+			Assert::AreEqual(intListMoved, intListCopy);
+
+
+			/* Double Data */
+
+			SList<double> doubleList;
+			doubleList.PushBack(10);
+			doubleList.PushBack(20);
+			doubleList.PushBack(30);
+
+			// Validates copies are equal to source
+			SList<double> doubleListCopy = doubleList;
+			doubleList = std::move(doubleList);
+			Assert::AreEqual(doubleListCopy, doubleList);
+
+			// Validates moved element is equal to copy
+			SList<double> doubleListMoved = std::move(doubleList);
+			Assert::AreEqual(doubleListMoved, doubleListCopy);
+
+			doubleList.PushBack(10);
+			doubleList.PushBack(20);
+
+			doubleListCopy = doubleList;
+			doubleListMoved = std::move(doubleList);
+			Assert::AreEqual(doubleListMoved, doubleListCopy);
+
+
+			/* Foo Data */
+
+			SList<Foo> fooList;
+			fooList.PushBack(Foo(10));
+			fooList.PushBack(Foo(20));
+			fooList.PushBack(Foo(30));
+
+			// Validates copies are equal to source
+			SList<Foo> fooListCopy = fooList;
+			fooList = std::move(fooList);
+			Assert::AreEqual(fooListCopy, fooList);
+
+			// Validates moved element is equal to copy
+			SList<Foo> fooListMoved = std::move(fooList);
+			Assert::AreEqual(fooListMoved, fooListCopy);
+
+			fooList.PushBack(Foo(10));
+			fooList.PushBack(Foo(20));
+
+			fooListCopy = fooList;
+			fooListMoved = std::move(fooList);
+			Assert::AreEqual(fooListMoved, fooListCopy);
 		}
 
 		TEST_METHOD(EqualityOperators)
@@ -979,7 +1072,7 @@ namespace UnitTestLibraryDesktop
 			const SList<int> constIntList = intList;
 			const SList<double> constDoubleList = doubleList;
 			const SList<Foo> constFooList = fooList;
-
+			
 			SList<int>::ConstIterator constIntIterator = constIntList.begin();
 			SList<double>::ConstIterator constDoubleIterator = constDoubleList.begin();
 			SList<Foo>::ConstIterator constFooIterator = constFooList.begin();

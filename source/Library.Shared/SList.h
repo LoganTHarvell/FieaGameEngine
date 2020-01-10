@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <stdexcept>
+#include <algorithm>
 
 namespace Library
 {
@@ -199,7 +200,7 @@ namespace Library
 		/// Move constructor.
 		/// Takes a list as a parameter and moves the data to the constructed list.
 		/// </summary>
-		/// <param name="rhs"></param>
+		/// <param name="rhs">List to be moved.</param>
 		SList(SList&& rhs);
 
 		/// <summary>
@@ -359,7 +360,7 @@ namespace Library
 		/// <param name="iterator">An iterator used to insert a new element in the following position.</param>
 		/// <param name="data">A value to be used to create a new node.</param>
 		/// <returns>An iterator referencing the new node.</returns>
-		/// <exception cref=""></exception>
+		/// <exception cref="runtime_error">Iterator is not owned by the list.</exception>
 		Iterator InsertAfter(const Iterator& iterator, const T& data);
 
 		/// <summary>

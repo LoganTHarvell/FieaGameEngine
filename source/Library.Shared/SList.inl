@@ -136,7 +136,7 @@ namespace Library
 	inline SList<T>::SList(SList&& rhs) :
 		mSize(rhs.mSize), mFront(rhs.mFront), mBack(rhs.mBack)
 	{
-		rhs.Size = 0;
+		rhs.mSize = 0;
 		rhs.mFront = nullptr;
 		rhs.mBack = nullptr;
 	}

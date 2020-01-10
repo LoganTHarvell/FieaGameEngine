@@ -5,3 +5,4 @@
 #include <string>
 #include <memory>
 #include <stdexcept>
+#include <algorithm>
