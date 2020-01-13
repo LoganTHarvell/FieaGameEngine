@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <initializer_list>
 #include <stdexcept>
 #include <algorithm>
 
@@ -41,7 +42,7 @@ namespace Library
 			/// </summary>
 			/// <param name="list">Source list for the iterator's values.</param>
 			/// <param name="node">Current element of the list referenced by the iterator.</param>
-			Iterator(const SList<T>* list, std::shared_ptr<Node> node=nullptr);
+			Iterator(const SList<T>& list, std::shared_ptr<Node> node=nullptr);
 
 		public:
 			/* Defaults */
@@ -123,7 +124,7 @@ namespace Library
 			/// </summary>
 			/// <param name="list">Source list for the iterator's values.</param>
 			/// <param name="node">Current element of the list referenced by the iterator, defaulted to a nullptr value.</param>
-			ConstIterator(const SList* list, std::shared_ptr<Node> node = nullptr);
+			ConstIterator(const SList& list, std::shared_ptr<Node> node = nullptr);
 
 		public:
 			/* Defaults */
@@ -190,6 +191,12 @@ namespace Library
 		SList() = default;
 
 		/// <summary>
+		/// Initializer list constructor.
+		/// </summary>
+		/// <param name="list">Value list for initializing a new SList.</param>
+		SList(const std::initializer_list<T> rhs);
+
+		/// <summary>
 		/// Copy constructor.
 		/// Takes in a list as a parameters, then copies the data values to the constructed list.
 		/// </summary>
@@ -202,6 +209,12 @@ namespace Library
 		/// </summary>
 		/// <param name="rhs">List to be moved.</param>
 		SList(SList&& rhs);
+
+		/// <summary>
+		/// Assignment to initializer list constructor.
+		/// </summary>
+		/// <param name="list">Value list for initializing a new SList.</param>
+		SList& operator=(const std::initializer_list<T> rhs);
 
 		/// <summary>
 		/// Assignment operator.

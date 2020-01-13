@@ -12,8 +12,8 @@ namespace Library
 
 #pragma region Iterator
 	template<typename T>
-	inline SList<T>::Iterator::Iterator(const SList<T>* list, std::shared_ptr<Node> node) :
-		mOwner(list), mNode(node)
+	inline SList<T>::Iterator::Iterator(const SList<T>& list, std::shared_ptr<Node> node) :
+		mOwner(&list), mNode(node)
 	{
 	}
 
@@ -31,7 +31,7 @@ namespace Library
 	template<typename T>
 	inline bool SList<T>::Iterator::operator==(const Iterator& rhs) const noexcept
 	{
-		return !operator!=(rhs);
+		return !(operator!=(rhs));
 	}
 
 	template<typename T>
@@ -70,8 +70,8 @@ namespace Library
 	}
 
 	template<typename T>
-	inline SList<T>::ConstIterator::ConstIterator(const SList* list, std::shared_ptr<Node> node) :
-		mOwner(list), mNode(node)
+	inline SList<T>::ConstIterator::ConstIterator(const SList& list, std::shared_ptr<Node> node) :
+		mOwner(&list), mNode(node)
 	{
 	}
 
@@ -122,13 +122,20 @@ namespace Library
 
 #pragma region SList
 	template<typename T>
+	inline SList<T>::SList(const std::initializer_list<T> list)
+	{
+		for (const auto& value : list)
+		{
+			PushBack(value);
+		}
+	}
+
+	template<typename T>
 	inline SList<T>::SList(const SList& rhs)
 	{
-		std::shared_ptr<Node> currentNode = rhs.mFront;
-		while (currentNode != nullptr)
+		for (const auto& value : rhs)
 		{
-			PushBack(currentNode->Data);
-			currentNode = currentNode->Next;
+			PushBack(value);
 		}
 	}
 
@@ -142,17 +149,31 @@ namespace Library
 	}
 
 	template<typename T>
+	inline SList<T>& SList<T>::operator=(const std::initializer_list<T> rhs)
+	{
+		if (this != &rhs)
+		{
+			Clear();
+
+			for (const auto& value : rhs)
+			{
+				PushBack(value);
+			}
+		}
+
+		return *this;
+	}
+
+	template<typename T>
 	inline SList<T>& SList<T>::operator=(const SList<T>& rhs)
 	{
 		if (this != &rhs)
 		{
 			Clear();
 
-			std::shared_ptr<Node> currentNode = rhs.mFront;
-			while (currentNode != nullptr)
+			for (const auto& value : rhs)
 			{
-				PushBack(currentNode->Data);
-				currentNode = currentNode->Next;
+				PushBack(value);
 			}
 		}
 
@@ -238,19 +259,19 @@ namespace Library
 	template<typename T>
 	inline typename SList<T>::Iterator SList<T>::begin()
 	{
-		return Iterator(this, mFront);
+		return Iterator(*this, mFront);
 	}
 
 	template<typename T>
 	inline typename SList<T>::ConstIterator SList<T>::begin() const
 	{
-		return ConstIterator(this, mFront);
+		return ConstIterator(*this, mFront);
 	}
 
 	template<typename T>
 	inline typename SList<T>::ConstIterator SList<T>::cbegin() const
 	{
-		return ConstIterator(this, mFront);
+		return ConstIterator(*this, mFront);
 	}
 
 	template<typename T>
@@ -287,7 +308,7 @@ namespace Library
 
 		mSize++;
 		
-		return Iterator(this, mFront);
+		return Iterator(*this, mFront);
 	}
 
 	template<typename T>
@@ -345,7 +366,7 @@ namespace Library
 
 		mSize++;
 
-		return Iterator(this, mBack);
+		return Iterator(*this, mBack);
 	}
 
 	template<typename T>
@@ -380,19 +401,19 @@ namespace Library
 	template<typename T>
 	inline typename SList<T>::Iterator SList<T>::end()
 	{
-		return Iterator(this, nullptr);
+		return Iterator(*this, nullptr);
 	}
 
 	template<typename T>
 	inline typename SList<T>::ConstIterator SList<T>::end() const
 	{
-		return ConstIterator(this, nullptr);
+		return ConstIterator(*this, nullptr);
 	}
 
 	template<typename T>
 	inline typename SList<T>::ConstIterator SList<T>::cend() const
 	{
-		return ConstIterator(this, nullptr);
+		return ConstIterator(*this, nullptr);
 	}
 
 	template<typename T>
@@ -440,40 +461,37 @@ namespace Library
 		newNode->Next = iterator.mNode->Next;
 		iterator.mNode->Next = newNode;
 
-		return Iterator(this, newNode);
+		return Iterator(*this, newNode);
 	}
 
 	template<typename T>
 	inline bool SList<T>::Remove(const Iterator& iterator)
 	{
+		if (iterator.mOwner != this)
+		{
+			throw std::runtime_error("Iterator not associated with this list.");
+		}
+
 		bool isRemoved = false;
 
-		if (iterator == end())
+		if (iterator != end())
 		{
-			PopBack();
-			isRemoved = true;
-		}
-		else if (iterator.mOwner == this)
-		{
-			if (iterator == begin())
+			if (iterator.mNode == mBack)
 			{
-				PopFront();
+				PopBack();
 			}
 			else
 			{
-				SList<T>::Iterator prevIt = begin();
+				std::shared_ptr<Node> next = iterator.mNode->Next;
+				iterator.mNode->Data.~T();
+				new(&iterator.mNode->Data)T(std::move(next->Data));
+				iterator.mNode->Next = next->Next;
 
-				for (auto it = ++begin(); it != end(); ++it)
+				if (iterator.mNode->Next == nullptr)
 				{
-					if (it == iterator)
-					{
-						prevIt.mNode = it.mNode->Next;
-						break;
-					}
-
-					++prevIt;
+					mBack = iterator.mNode;
 				}
-				
+
 				--mSize;
 			}
 

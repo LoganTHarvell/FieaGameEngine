@@ -1160,7 +1160,7 @@ namespace UnitTestLibraryDesktop
 			SList<int> intList;
 
 			SList<int>::Iterator intIterator;
-			intList.Remove(intIterator);
+			Assert::ExpectException<std::runtime_error>([&intList] { intList.Front(); });
 
 			intIterator = intList.PushBack(10);
 			intList.PushBack(20);
@@ -1171,8 +1171,8 @@ namespace UnitTestLibraryDesktop
 
 			intList.PushBack(30);
 			intIterator = intList.PushBack(40);
-			intList.PushBack(50);
-			intList.Remove(intList.end());
+			SList<int>::Iterator intIteratorLast = intList.PushBack(50);
+			intList.Remove(intIteratorLast);
 			intList.Remove(intIterator);
 
 			intIterator = intList.begin();
@@ -1189,7 +1189,7 @@ namespace UnitTestLibraryDesktop
 			SList<double> doubleList;
 
 			SList<double>::Iterator doubleIterator;
-			doubleList.Remove(doubleIterator);
+			Assert::ExpectException<std::runtime_error>([&doubleList] { doubleList.Front(); });
 
 			doubleIterator = doubleList.PushBack(10);
 			doubleList.PushBack(20);
@@ -1200,8 +1200,8 @@ namespace UnitTestLibraryDesktop
 
 			doubleList.PushBack(30);
 			doubleIterator = doubleList.PushBack(40);
-			doubleList.PushBack(50);
-			doubleList.Remove(doubleList.end());
+			SList<double>::Iterator doubleIteratorLast =  doubleList.PushBack(50);
+			doubleList.Remove(doubleIteratorLast);
 			doubleList.Remove(doubleIterator);
 
 			doubleIterator = doubleList.begin();
@@ -1217,9 +1217,9 @@ namespace UnitTestLibraryDesktop
 	
 			SList<Foo> fooList;
 
-			SList<Foo>::Iterator fooIterator;
-			fooList.Remove(fooIterator);
-
+			SList<Foo>::Iterator fooIterator;;
+			Assert::ExpectException<std::runtime_error>([&fooList] { fooList.Front(); });
+		
 			fooIterator = fooList.PushBack(Foo(10));
 			fooList.PushBack(Foo(20));
 			fooList.Remove(fooIterator);
@@ -1229,8 +1229,8 @@ namespace UnitTestLibraryDesktop
 
 			fooList.PushBack(Foo(30));
 			fooIterator = fooList.PushBack(Foo(40));
-			fooList.PushBack(Foo(50));
-			fooList.Remove(fooList.end());
+			SList<Foo>::Iterator fooIteratorLast = fooList.PushBack(Foo(50));
+			fooList.Remove(fooIteratorLast);
 			fooList.Remove(fooIterator);
 
 			fooIterator = fooList.begin();
