@@ -3,7 +3,6 @@
 #include <memory>
 #include <initializer_list>
 #include <stdexcept>
-#include <algorithm>
 
 namespace Library
 {
