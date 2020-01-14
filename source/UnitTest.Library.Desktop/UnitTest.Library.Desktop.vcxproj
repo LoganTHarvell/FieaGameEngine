@@ -162,6 +162,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Bar.cpp" />
     <ClCompile Include="Foo.cpp" />
     <ClCompile Include="FooTest.cpp" />
     <ClCompile Include="pch.cpp">
@@ -178,6 +179,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bar.h" />
     <ClInclude Include="Foo.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="ToStringSpecialization.h" />

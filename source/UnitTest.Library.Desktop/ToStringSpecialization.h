@@ -3,6 +3,7 @@
 #include "CppUnitTest.h"
 
 #include "Foo.h"
+#include "Bar.h"
 #include "SList.h"
 
 using namespace UnitTests;
@@ -26,6 +27,24 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 
 	template<>
 	inline std::wstring ToString<Foo>(Foo* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<Bar>(const Bar& t)
+	{
+		RETURN_WIDE_STRING(t.Data());
+	}
+
+	template<>
+	inline std::wstring ToString<Bar>(const Bar* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<Bar>(Bar* t)
 	{
 		RETURN_WIDE_STRING(t);
 	}
@@ -80,6 +99,24 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 
 	template<>
 	inline std::wstring ToString<SList<Foo>>(SList<Foo>* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<SList<Bar>>(const SList<Bar>& t)
+	{
+		RETURN_WIDE_STRING(t.Size());
+	}
+
+	template<>
+	inline std::wstring ToString<SList<Bar>>(const SList<Bar>* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<SList<Bar>>(SList<Bar>* t)
 	{
 		RETURN_WIDE_STRING(t);
 	}
@@ -160,6 +197,31 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 	}
 
 	template<>
+	inline std::wstring ToString<SList<Bar>::Iterator>(const SList<Bar>::Iterator& t)
+	{
+		try
+		{
+			return ToString(*t);
+		}
+		catch (const std::exception&)
+		{
+			return L"end()"s;
+		}
+	}
+
+	template<>
+	inline std::wstring ToString<SList<Bar>::Iterator>(const SList<Bar>::Iterator* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<SList<Bar>::Iterator>(SList<Bar>::Iterator* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
 	inline std::wstring ToString<SList<int>::ConstIterator>(const SList<int>::ConstIterator& t)
 	{
 		try
@@ -230,6 +292,31 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 
 	template<>
 	inline std::wstring ToString<SList<Foo>::ConstIterator>(SList<Foo>::ConstIterator* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}	
+	
+	template<>
+	inline std::wstring ToString<SList<Bar>::ConstIterator>(const SList<Bar>::ConstIterator& t)
+	{
+		try
+		{
+			return ToString(*t);
+		}
+		catch (const std::exception&)
+		{
+			return L"end()"s;
+		}
+	}
+
+	template<>
+	inline std::wstring ToString<SList<Bar>::ConstIterator>(const SList<Bar>::ConstIterator* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<SList<Bar>::ConstIterator>(SList<Bar>::ConstIterator* t)
 	{
 		RETURN_WIDE_STRING(t);
 	}

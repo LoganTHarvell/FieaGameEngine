@@ -3,6 +3,7 @@
 // Standard
 #include <cstdint>
 #include <string>
+#include <functional>
 #include <crtdbg.h>
 
 // Microsoft Native Unit Testing

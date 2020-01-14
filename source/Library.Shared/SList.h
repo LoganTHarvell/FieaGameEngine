@@ -3,6 +3,7 @@
 #include <memory>
 #include <initializer_list>
 #include <stdexcept>
+#include <functional>
 
 namespace Library
 {
@@ -123,7 +124,7 @@ namespace Library
 			/// </summary>
 			/// <param name="list">Source list for the iterator's values.</param>
 			/// <param name="node">Current element of the list referenced by the iterator, defaulted to a nullptr value.</param>
-			ConstIterator(const SList& list, std::shared_ptr<Node> node = nullptr);
+			ConstIterator(const SList& list, std::shared_ptr<Node> node=nullptr);
 
 		public:
 			/* Defaults */
@@ -355,16 +356,18 @@ namespace Library
 		/// <summary>
 		/// Searches the list for a given value and returns an iterator.
 		/// </summary>
-		/// <param name="value">A value to search for in the list.</param>
+		/// <param name="value">Value to search for in the list.</param>
+		/// <param name="equal">Equality functor for comparing the search value to elements in the list.</param>
 		/// <returns>An iterator referencing the value, if found. Otherwise it returns an empty iterator.</returns>
-		Iterator Find(const T& value);
+		Iterator Find(const T& value, std::function<bool(T, T)> equal=[](T a, T b) { return a == b; });
 		
 		/// <summary>
 		/// Searches the list for a given value and returns an iterator.
 		/// </summary>
-		/// <param name="value">A value to search for in the list.</param>
+		/// <param name="value">Value to search for in the list.</param>
+		/// <param name="equal">Equality functor for comparing the search value to elements in the list.</param>
 		/// <returns>An const value iterator referencing the value, if found. Otherwise it returns an empty iterator.</returns>
-		ConstIterator Find(const T& value) const;
+		ConstIterator Find(const T& value, std::function<bool(T, T)> equal=[](T a, T b) { return a == b; }) const;
 
 		/// <summary>
 		/// Inserts a new element in the list in between a given iterator and the following element.
@@ -372,14 +375,24 @@ namespace Library
 		/// <param name="iterator">An iterator used to insert a new element in the following position.</param>
 		/// <param name="data">A value to be used to create a new node.</param>
 		/// <returns>An iterator referencing the new node.</returns>
-		/// <exception cref="runtime_error">Iterator is not owned by the list.</exception>
+		/// <exception cref="runtime_error">Iterator not associated with this list.</exception>
 		Iterator InsertAfter(const Iterator& iterator, const T& data);
+
+		/// <summary>
+		/// Removes a single element from the list given the corresponding iterator.
+		/// </summary>
+		/// <param name="vale">Value to be searched for in the list to be removed.</param>
+		/// <param name="equal">Equality functor for comparing the search value to elements in the list.</param>
+		/// <returns>True on successful remove, false otherwise.</returns>
+		/// <exception cref="runtime_error">Iterator not associated with this list.</exception>
+		bool Remove(const T& value, std::function<bool(T, T)> equal=[](T a, T b) { return a == b; });
 
 		/// <summary>
 		/// Removes a single element from the list given the corresponding iterator.
 		/// </summary>
 		/// <param name="iterator">An iterator referencing the element in the list to be removed.</param>
 		/// <returns>True on successful remove, false otherwise.</returns>
+		/// <exception cref="runtime_error">Iterator not associated with this list.</exception>
 		bool Remove(const Iterator& iterator);
 
 		/// <summary>

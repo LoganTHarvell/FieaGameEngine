@@ -2,6 +2,7 @@
 
 #include "ToStringSpecialization.h"
 #include "Foo.h"
+#include "Bar.h"
 #include "SList.h"
 
 
@@ -990,58 +991,74 @@ namespace UnitTestLibraryDesktop
 			SList<int> intList;
 			SList<double> doubleList;
 			SList<Foo> fooList;
+			SList<Bar> barList;
+
+			std::function<bool(Bar a, Bar b)> barEqual = [](Bar a, Bar b) { return a.Data() == b.Data(); };
 
 			intList.PushBack(10);
 			doubleList.PushBack(10);
 			fooList.PushBack(Foo(10));
+			barList.PushBack(Bar(10));
 
 			SList<int>::Iterator intIterator = intList.PushBack(20);
 			SList<double>::Iterator doubleIterator = doubleList.PushBack(20);
 			SList<Foo>::Iterator fooIterator = fooList.PushBack(Foo(20));
+			SList<Bar>::Iterator barIterator = barList.PushBack(Bar(20));
 
 			intList.PushBack(30);
 			doubleList.PushBack(30);
 			fooList.PushBack(Foo(30));
+			barList.PushBack(Bar(30));
 
 			Assert::AreEqual(intList.begin(), intList.Find(10));
 			Assert::AreEqual(doubleList.begin(), doubleList.Find(10));
 			Assert::AreEqual(fooList.begin(), fooList.Find(Foo(10)));
+			Assert::AreEqual(barList.begin(), barList.Find(Bar(10), barEqual));
 
 			Assert::AreEqual(intIterator++, intList.Find(20));
 			Assert::AreEqual(doubleIterator++, doubleList.Find(20));
 			Assert::AreEqual(fooIterator++, fooList.Find(Foo(20)));
+			Assert::AreEqual(barIterator++, barList.Find(Bar(20), barEqual));
 
 			Assert::AreEqual(intIterator, intList.Find(30));
 			Assert::AreEqual(doubleIterator, doubleList.Find(30));
 			Assert::AreEqual(fooIterator, fooList.Find(Foo(30)));
+			Assert::AreEqual(barIterator, barList.Find(Bar(30), barEqual));
 
 			Assert::AreEqual(SList<int>::Iterator(), intList.Find(40));
 			Assert::AreEqual(SList<double>::Iterator(), doubleList.Find(40));
 			Assert::AreEqual(SList<Foo>::Iterator(), fooList.Find(Foo(40)));
+			Assert::AreEqual(SList<Bar>::Iterator(), barList.Find(Bar(40), barEqual));
 
 			const SList<int> constIntList = intList;
 			const SList<double> constDoubleList = doubleList;
 			const SList<Foo> constFooList = fooList;
+			const SList<Bar> constBarList = barList;
 			
 			SList<int>::ConstIterator constIntIterator = constIntList.begin();
 			SList<double>::ConstIterator constDoubleIterator = constDoubleList.begin();
 			SList<Foo>::ConstIterator constFooIterator = constFooList.begin();
+			SList<Bar>::ConstIterator constBarIterator = constBarList.begin();
 
 			Assert::AreEqual(constIntIterator++, constIntList.Find(10));
 			Assert::AreEqual(constDoubleIterator++, constDoubleList.Find(10));
 			Assert::AreEqual(constFooIterator++, constFooList.Find(Foo(10)));
+			Assert::AreEqual(constBarIterator++, constBarList.Find(Bar(10), barEqual));
 
 			Assert::AreEqual(constIntIterator++, constIntList.Find(20));
 			Assert::AreEqual(constDoubleIterator++, constDoubleList.Find(20));
 			Assert::AreEqual(constFooIterator++, constFooList.Find(Foo(20)));
+			Assert::AreEqual(constBarIterator++, constBarList.Find(Bar(20), barEqual));
 
 			Assert::AreEqual(constIntIterator, constIntList.Find(30));
 			Assert::AreEqual(constDoubleIterator, constDoubleList.Find(30));
 			Assert::AreEqual(constFooIterator, constFooList.Find(Foo(30)));
+			Assert::AreEqual(constBarIterator, constBarList.Find(Bar(30), barEqual));
 
 			Assert::AreEqual(SList<int>::ConstIterator(), constIntList.Find(40));
 			Assert::AreEqual(SList<double>::ConstIterator(), constDoubleList.Find(40));
 			Assert::AreEqual(SList<Foo>::ConstIterator(), constFooList.Find(Foo(40)));
+			Assert::AreEqual(SList<Bar>::ConstIterator(), constBarList.Find(Bar(40), barEqual));
 		}
 
 		TEST_METHOD(InsertAfter)
@@ -1120,8 +1137,8 @@ namespace UnitTestLibraryDesktop
 
 			intList.PushBack(30);
 			intIterator = intList.PushBack(40);
-			SList<int>::Iterator intIteratorLast = intList.PushBack(50);
-			intList.Remove(intIteratorLast);
+			intList.PushBack(50);
+			intList.Remove(50);
 			intList.Remove(intIterator);
 
 			intIterator = intList.begin();
@@ -1148,8 +1165,8 @@ namespace UnitTestLibraryDesktop
 
 			doubleList.PushBack(30);
 			doubleIterator = doubleList.PushBack(40);
-			SList<double>::Iterator doubleIteratorLast =  doubleList.PushBack(50);
-			doubleList.Remove(doubleIteratorLast);
+			doubleList.PushBack(50);
+			doubleList.Remove(50);
 			doubleList.Remove(doubleIterator);
 
 			doubleIterator = doubleList.begin();
@@ -1176,8 +1193,8 @@ namespace UnitTestLibraryDesktop
 
 			fooList.PushBack(Foo(30));
 			fooIterator = fooList.PushBack(Foo(40));
-			SList<Foo>::Iterator fooIteratorLast = fooList.PushBack(Foo(50));
-			fooList.Remove(fooIteratorLast);
+			fooList.PushBack(Foo(50));
+			fooList.Remove(Foo(50));
 			fooList.Remove(fooIterator);
 
 			fooIterator = fooList.begin();

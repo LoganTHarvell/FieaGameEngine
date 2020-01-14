@@ -414,11 +414,11 @@ namespace Library
 	}
 
 	template<typename T>
-	inline typename SList<T>::Iterator SList<T>::Find(const T& value)
+	inline typename SList<T>::Iterator SList<T>::Find(const T& value, std::function<bool(T, T)> equal)
 	{
 		for (auto it = begin(); it != end(); ++it)
 		{
-			if (*it == value)
+			if (equal(*it, value))
 			{
 				return it;
 			}
@@ -428,11 +428,11 @@ namespace Library
 	}
 
 	template<typename T>
-	inline typename SList<T>::ConstIterator SList<T>::Find(const T& value) const
+	inline typename SList<T>::ConstIterator SList<T>::Find(const T& value, std::function<bool(T, T)> equal) const
 	{
 		for (auto it = begin(); it != end(); ++it)
 		{
-			if (*it == value)
+			if (equal(*it, value))
 			{
 				return ConstIterator(it);
 			}
@@ -446,7 +446,7 @@ namespace Library
 	{
 		if (this != iterator.mOwner)
 		{
-			throw std::runtime_error("Iterator is not owned by the list.");
+			throw std::runtime_error("Iterator not associated with this list.");
 		}
 
 		if (iterator == end())
@@ -459,6 +459,21 @@ namespace Library
 		iterator.mNode->Next = newNode;
 
 		return Iterator(*this, newNode);
+	}
+
+	template<typename T>
+	inline bool SList<T>::Remove(const T& value, std::function<bool(T, T)> equal)
+	{
+		SList<T>::Iterator it = Find(value, equal);
+
+		bool isRemoved = false;
+
+		if (it != Iterator())
+		{
+			isRemoved = Remove(it);
+		}
+
+		return isRemoved;
 	}
 
 	template<typename T>
