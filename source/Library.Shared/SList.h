@@ -4,6 +4,7 @@
 #include <initializer_list>
 #include <stdexcept>
 #include <functional>
+#include <algorithm>
 
 namespace Library
 {
@@ -35,6 +36,7 @@ namespace Library
 		class Iterator final
 		{
 			friend SList;
+			friend class ConstIterator;
 
 		private:
 			/// <summary>
@@ -45,6 +47,14 @@ namespace Library
 			Iterator(const SList<T>& list, std::shared_ptr<Node> node=nullptr);
 
 		public:
+			/* Iterator Traits */
+			using size_type = std::size_t;
+			using difference_type = std::ptrdiff_t;
+			using value_type = T;
+			using pointer = T*;
+			using reference = T&;
+			using iterator_category = std::forward_iterator_tag;
+
 			/* Defaults */
 			Iterator() = default;
 			Iterator(const Iterator& rhs) = default;
@@ -109,7 +119,6 @@ namespace Library
 		class ConstIterator final
 		{
 			friend SList;
-			friend Iterator;
 
 		public:
 			/// <summary>
@@ -127,6 +136,14 @@ namespace Library
 			ConstIterator(const SList& list, std::shared_ptr<Node> node=nullptr);
 
 		public:
+			/* Iterator Traits */
+			using size_type = std::size_t;
+			using difference_type = std::ptrdiff_t;
+			using value_type = T;
+			using pointer = const T*;
+			using reference = const T&;
+			using iterator_category = std::forward_iterator_tag;
+
 			/* Defaults */
 			ConstIterator() = default;
 			ConstIterator(const ConstIterator&) = default;
@@ -185,6 +202,9 @@ namespace Library
 #pragma endregion ConstIterator
 
 	public:
+		/* Iterator Traits */
+		using value_type = T;
+
 		/// <summary>
 		/// Default constructor.
 		/// </summary>

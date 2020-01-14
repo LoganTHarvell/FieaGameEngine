@@ -215,24 +215,7 @@ namespace Library
 			return false;
 		}
 
-		bool isEqual = true;
-
-		std::shared_ptr<Node> currentNode = mFront;
-		std::shared_ptr<Node> rhsCurrentNode = rhs.mFront;
-
-		while (currentNode != nullptr)
-		{
-			if (currentNode->Data != rhsCurrentNode->Data)
-			{
-				isEqual = false;
-				break;
-			}
-
-			currentNode = currentNode->Next;
-			rhsCurrentNode = rhsCurrentNode->Next;
-		}
-
-		return isEqual;
+		return std::equal(begin(), end(), rhs.begin());
 	}
 
 	template<typename T>
