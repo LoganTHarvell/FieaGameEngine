@@ -140,7 +140,7 @@ namespace Library
 	}
 
 	template<typename T>
-	inline SList<T>::SList(SList&& rhs) :
+	inline SList<T>::SList(SList&& rhs) noexcept :
 		mSize(rhs.mSize), mFront(rhs.mFront), mBack(rhs.mBack)
 	{
 		rhs.mSize = 0;
@@ -151,14 +151,11 @@ namespace Library
 	template<typename T>
 	inline SList<T>& SList<T>::operator=(const std::initializer_list<T> rhs)
 	{
-		if (this != &rhs)
-		{
-			Clear();
+		Clear();
 
-			for (const auto& value : rhs)
-			{
-				PushBack(value);
-			}
+		for (const auto& value : rhs)
+		{
+			PushBack(value);
 		}
 
 		return *this;
@@ -181,7 +178,7 @@ namespace Library
 	}
 
 	template<typename T>
-	inline SList<T>& SList<T>::operator=(SList&& rhs)
+	inline SList<T>& SList<T>::operator=(SList&& rhs) noexcept
 	{
 		if (this != &rhs)
 		{

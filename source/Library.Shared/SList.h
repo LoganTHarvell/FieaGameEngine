@@ -207,7 +207,7 @@ namespace Library
 		/// Takes a list as a parameter and moves the data to the constructed list.
 		/// </summary>
 		/// <param name="rhs">List to be moved.</param>
-		SList(SList&& rhs);
+		SList(SList&& rhs) noexcept;
 
 		/// <summary>
 		/// Assignment to initializer list constructor.
@@ -229,7 +229,7 @@ namespace Library
 		/// </summary>
 		/// <param name="rhs">List whose values are copied.</param>
 		/// <returns>Modified list with copied values.</returns>
-		SList& operator=(SList&& rhs);
+		SList& operator=(SList&& rhs) noexcept;
 
 		/// <summary>
 		/// Class destructor. Clears all existing node references.

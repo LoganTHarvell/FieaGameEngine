@@ -58,44 +58,53 @@ namespace UnitTestLibraryDesktop
 			SList<Foo>::ConstIterator constFooIterator = SList<Foo>::ConstIterator(fooList.begin());
 		}
 
+		TEST_METHOD(SListInitialization)
+		{
+			SList<int> intListEmpty;
+			SList<double> doubleListEmpty;
+			SList<Foo> fooListEmpty;
+
+			Assert::AreEqual(intListEmpty.Size(), 0_z);
+			Assert::AreEqual(doubleListEmpty.Size(), 0_z);
+			Assert::AreEqual(fooListEmpty.Size(), 0_z);
+
+			SList<int> intListFilled = { 10, 20, 30 };
+			SList<double> doubleListFilled = { 10, 20, 30 };
+			SList<Foo> fooListFilled = { Foo(10), Foo(20), Foo(30) };
+
+			Assert::AreEqual(intListFilled.Size(), 3_z);
+			Assert::AreEqual(doubleListFilled.Size(), 3_z);
+			Assert::AreEqual(fooListFilled.Size(), 3_z);
+
+			intListFilled = { 0 };
+			doubleListFilled = { 0 };
+			fooListFilled = { Foo(0) };
+
+			Assert::AreEqual(intListFilled.Front(), 0);
+			Assert::AreEqual(doubleListFilled.Front(), 0.0);
+			Assert::AreEqual(fooListFilled.Front(), Foo(0));
+
+			Assert::AreEqual(intListFilled.Size(), 1_z);
+			Assert::AreEqual(doubleListFilled.Size(), 1_z);
+			Assert::AreEqual(fooListFilled.Size(), 1_z);
+		}
+
 		TEST_METHOD(Copy)
 		{
-			/* Integer Data */
+			SList<int> intList = { 10, 20, 30 };
+			SList<double> doubleList = { 10, 20, 30 };
+			SList<Foo> fooList = { Foo(10), Foo(20), Foo(30) };
 
-			SList<int> intList;
-			intList.PushBack(10);
-			intList.PushBack(20);
-			intList.PushBack(30);
-
-			// Validates copies are equal to source
 			SList<int> intListCopy(intList);
 			Assert::AreEqual(intListCopy, intList);
 			intListCopy = intList;
 			Assert::AreEqual(intListCopy, intList);
 
-
-			/* Double Data */
-
-			SList<double> doubleList;
-			doubleList.PushBack(10);
-			doubleList.PushBack(20);
-			doubleList.PushBack(30);
-
-			// Validates copies are equal to source		
 			SList<double> doubleListCopy(doubleList);
 			Assert::AreEqual(doubleListCopy, doubleList);
 			doubleListCopy = doubleList;
 			Assert::AreEqual(doubleListCopy, doubleList);
 
-
-			/* Foo Data */
-
-			SList<Foo> fooList;
-			fooList.PushBack(Foo(10));
-			fooList.PushBack(Foo(20));
-			fooList.PushBack(Foo(30));
-
-			// Validates copies are equal to source
 			SList<Foo> fooListCopy(fooList);
 			Assert::AreEqual(fooListCopy, fooList);
 			fooListCopy = fooList;
@@ -284,82 +293,71 @@ namespace UnitTestLibraryDesktop
 
 		TEST_METHOD(Size)
 		{
-			size_t size;
-
 			/* Integer Data */
 
 			// Size is zero
-			size = 0;
 			SList<int> intList;
-			Assert::AreEqual(intList.Size(), size);
+			Assert::AreEqual(intList.Size(), 0_z);
 
 			const SList<int> emptyConstIntList = intList;
-			Assert::AreEqual(emptyConstIntList.Size(), size);
+			Assert::AreEqual(emptyConstIntList.Size(), 0_z);
 
 			// Size increased
-			size++;
 			intList.PushBack(10);
-			Assert::AreEqual(intList.Size(), size);
+			Assert::AreEqual(intList.Size(), 1_z);
 
 			const SList<int> filledConstIntList = intList;
-			Assert::AreEqual(filledConstIntList.Size(), size);
+			Assert::AreEqual(filledConstIntList.Size(), 1_z);
 
 			// Size decreased
-			size--;
 			intList.PopBack();
-			Assert::AreEqual(intList.Size(), size);
+			Assert::AreEqual(intList.Size(), 0_z);
 			const SList<int> decreasedConstIntList = intList;
-			Assert::AreEqual(decreasedConstIntList.Size(), size);
+			Assert::AreEqual(decreasedConstIntList.Size(), 0_z);
 
 
 			/* Double Data */
 
 			// Size is zero
-			size = 0;
 			SList<double> doubleList;
-			Assert::AreEqual(doubleList.Size(), size);
+			Assert::AreEqual(doubleList.Size(), 0_z);
 
 			const SList<double> emptyConstDoubleList = doubleList;
-			Assert::AreEqual(emptyConstDoubleList.Size(), size);
+			Assert::AreEqual(emptyConstDoubleList.Size(), 0_z);
 
 			// Size increased
-			size++;
 			doubleList.PushBack(10);
-			Assert::AreEqual(doubleList.Size(), size);
+			Assert::AreEqual(doubleList.Size(), 1_z);
 
 			const SList<double> filledConstDoubleList = doubleList;
-			Assert::AreEqual(filledConstDoubleList.Size(), size);
+			Assert::AreEqual(filledConstDoubleList.Size(), 1_z);
 
 			// Size decreased
-			size--;
 			doubleList.PopBack();
-			Assert::AreEqual(doubleList.Size(), size);
+			Assert::AreEqual(doubleList.Size(), 0_z);
 			const SList<double> decreasedConstDoubleList = doubleList;
-			Assert::AreEqual(decreasedConstDoubleList.Size(), size);
+			Assert::AreEqual(decreasedConstDoubleList.Size(), 0_z);
 
 
 			/* Foo Data */
 
 			// Size is zero
-			size = 0;
 			SList<Foo> fooList;
-			Assert::AreEqual(fooList.Size(), size);
+			Assert::AreEqual(fooList.Size(), 0_z);
 			const SList<Foo> emptyConstFooList = fooList;
-			Assert::AreEqual(emptyConstFooList.Size(), size);
+			Assert::AreEqual(emptyConstFooList.Size(), 0_z);
 
 			// Size increased
-			size++;
 			fooList.PushBack(Foo(10));
-			Assert::AreEqual(fooList.Size(), size);
+			Assert::AreEqual(fooList.Size(), 1_z);
 			const SList<Foo> filledConstFooList = fooList;
-			Assert::AreEqual(filledConstFooList.Size(), size);
+			Assert::AreEqual(filledConstFooList.Size(), 1_z);
 
 			// Size decreased
-			size--;
 			fooList.PopBack();
-			Assert::AreEqual(fooList.Size(), size);
+			Assert::AreEqual(fooList.Size(), 0_z);
 			const SList<Foo> decreasedConstFooList = fooList;
-			Assert::AreEqual(decreasedConstFooList.Size(), size);
+			Assert::AreEqual(decreasedConstFooList.Size(), 0_z);
 		}
 
 		TEST_METHOD(IsEmpty)
@@ -607,21 +605,9 @@ namespace UnitTestLibraryDesktop
 
 		TEST_METHOD(IteratorIncrementOperators)
 		{
-			SList<int> intList;
-			SList<double> doubleList;
-			SList<Foo> fooList;
-
-			intList.PushBack(10);
-			doubleList.PushBack(10);
-			fooList.PushBack(Foo(10));
-
-			intList.PushBack(20);
-			doubleList.PushBack(20);
-			fooList.PushBack(Foo(20));
-
-			intList.PushBack(30);
-			doubleList.PushBack(30);
-			fooList.PushBack(Foo(30));
+			SList<int> intList = { 10, 20, 30 };
+			SList<double> doubleList = { 10, 20, 30 };
+			SList<Foo> fooList = { Foo(10), Foo(20), Foo(30) };
 
 			SList<int>::Iterator intIterator = intList.begin();
 			SList<double>::Iterator doubleIterator = doubleList.begin();
@@ -748,13 +734,12 @@ namespace UnitTestLibraryDesktop
 			Assert::IsFalse(filledConstFooList1.IsEmpty());
 
 			// Size of 1
-			size_t size = 1;
-			Assert::AreEqual(intList.Size(), size);
-			Assert::AreEqual(doubleList.Size(), size);
-			Assert::AreEqual(fooList.Size(), size);
-			Assert::AreEqual(filledConstIntList1.Size(), size);
-			Assert::AreEqual(filledConstDoubleList1.Size(), size);
-			Assert::AreEqual(filledConstFooList1.Size(), size);
+			Assert::AreEqual(intList.Size(), 1_z);
+			Assert::AreEqual(doubleList.Size(), 1_z);
+			Assert::AreEqual(fooList.Size(), 1_z);
+			Assert::AreEqual(filledConstIntList1.Size(), 1_z);
+			Assert::AreEqual(filledConstDoubleList1.Size(), 1_z);
+			Assert::AreEqual(filledConstFooList1.Size(), 1_z);
 
 			intList.PushFront(20);
 			doubleList.PushFront(20);
@@ -773,32 +758,19 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(filledConstFooList2.Front(), Foo(20));
 
 			// Size of 2
-			size = 2;
-			Assert::AreEqual(intList.Size(), size);
-			Assert::AreEqual(doubleList.Size(), size);
-			Assert::AreEqual(fooList.Size(), size);
-			Assert::AreEqual(filledConstIntList2.Size(), size);
-			Assert::AreEqual(filledConstDoubleList2.Size(), size);
-			Assert::AreEqual(filledConstFooList2.Size(), size);
+			Assert::AreEqual(intList.Size(), 2_z);
+			Assert::AreEqual(doubleList.Size(), 2_z);
+			Assert::AreEqual(fooList.Size(), 2_z);
+			Assert::AreEqual(filledConstIntList2.Size(), 2_z);
+			Assert::AreEqual(filledConstDoubleList2.Size(), 2_z);
+			Assert::AreEqual(filledConstFooList2.Size(), 2_z);
 		}
 
 		TEST_METHOD(PopFront)
 		{
-			SList<int> intList;
-			SList<double> doubleList;
-			SList<Foo> fooList;
-
-			intList.PushFront(10);
-			doubleList.PushFront(10);
-			fooList.PushFront(Foo(10));
-
-			intList.PushFront(20);
-			doubleList.PushFront(20);
-			fooList.PushFront(Foo(20));
-
-			intList.PushFront(30);
-			doubleList.PushFront(30);
-			fooList.PushFront(Foo(30));
+			SList<int> intList = { 10, 20, 30 };
+			SList<double> doubleList = { 10, 20, 30 };
+			SList<Foo> fooList = { Foo(10), Foo(20), Foo(30) };
 
 			intList.PopFront();
 			doubleList.PopFront();
@@ -810,25 +782,23 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(fooList.Front(), Foo(20));
 
 			// Size is reduced correctly with more than 2 elements
-			size_t size = 2;
-			Assert::AreEqual(intList.Size(), size);
-			Assert::AreEqual(doubleList.Size(), size);
-			Assert::AreEqual(fooList.Size(), size);
+			Assert::AreEqual(intList.Size(), 2_z);
+			Assert::AreEqual(doubleList.Size(), 2_z);
+			Assert::AreEqual(fooList.Size(), 2_z);
 
 			intList.PopFront();
 			doubleList.PopFront();
 			fooList.PopFront();
 
 			// Front is set correctly with 1 element remaining
-			Assert::AreEqual(intList.Front(), 10);
-			Assert::AreEqual(doubleList.Front(), 10.0);
-			Assert::AreEqual(fooList.Front(), Foo(10));
+			Assert::AreEqual(intList.Front(), 30);
+			Assert::AreEqual(doubleList.Front(), 30.0);
+			Assert::AreEqual(fooList.Front(), Foo(30));
 
 			// Size is reduced correctly with 1 element remaining
-			size = 1;
-			Assert::AreEqual(intList.Size(), size);
-			Assert::AreEqual(doubleList.Size(), size);
-			Assert::AreEqual(fooList.Size(), size);
+			Assert::AreEqual(intList.Size(), 1_z);
+			Assert::AreEqual(doubleList.Size(), 1_z);
+			Assert::AreEqual(fooList.Size(), 1_z);
 
 			// Back is set correctly with 1 element remaining
 			Assert::AreEqual(intList.Front(), intList.Back());
@@ -840,10 +810,9 @@ namespace UnitTestLibraryDesktop
 			fooList.PopFront();
 
 			// Size is reduced correctly with no elements remaining
-			size = 0;
-			Assert::AreEqual(intList.Size(), size);
-			Assert::AreEqual(doubleList.Size(), size);
-			Assert::AreEqual(fooList.Size(), size);
+			Assert::AreEqual(intList.Size(), 0_z);
+			Assert::AreEqual(doubleList.Size(), 0_z);
+			Assert::AreEqual(fooList.Size(), 0_z);
 
 			// Now empty
 			Assert::IsTrue(intList.IsEmpty());
@@ -855,10 +824,9 @@ namespace UnitTestLibraryDesktop
 			fooList.PopFront();
 
 			// Size does not change when called on empty list
-			size = 0;
-			Assert::AreEqual(intList.Size(), size);
-			Assert::AreEqual(doubleList.Size(), size);
-			Assert::AreEqual(fooList.Size(), size);
+			Assert::AreEqual(intList.Size(), 0_z);
+			Assert::AreEqual(doubleList.Size(), 0_z);
+			Assert::AreEqual(fooList.Size(), 0_z);
 
 			// Emptiness does not change when called on empty list
 			Assert::IsTrue(intList.IsEmpty());
@@ -917,13 +885,12 @@ namespace UnitTestLibraryDesktop
 			Assert::IsFalse(filledConstFooList1.IsEmpty());
 
 			// Size of 1
-			size_t size = 1;
-			Assert::AreEqual(intList.Size(), size);
-			Assert::AreEqual(doubleList.Size(), size);
-			Assert::AreEqual(fooList.Size(), size);
-			Assert::AreEqual(filledConstIntList1.Size(), size);
-			Assert::AreEqual(filledConstDoubleList1.Size(), size);
-			Assert::AreEqual(filledConstFooList1.Size(), size);
+			Assert::AreEqual(intList.Size(), 1_z);
+			Assert::AreEqual(doubleList.Size(), 1_z);
+			Assert::AreEqual(fooList.Size(), 1_z);
+			Assert::AreEqual(filledConstIntList1.Size(), 1_z);
+			Assert::AreEqual(filledConstDoubleList1.Size(), 1_z);
+			Assert::AreEqual(filledConstFooList1.Size(), 1_z);
 
 			intList.PushBack(20);
 			doubleList.PushBack(20);
@@ -942,32 +909,19 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(filledConstFooList2.Back(), Foo(20));
 
 			// Size of 2
-			size = 2;
-			Assert::AreEqual(intList.Size(), size);
-			Assert::AreEqual(doubleList.Size(), size);
-			Assert::AreEqual(fooList.Size(), size);
-			Assert::AreEqual(filledConstIntList2.Size(), size);
-			Assert::AreEqual(filledConstDoubleList2.Size(), size);
-			Assert::AreEqual(filledConstFooList2.Size(), size);
+			Assert::AreEqual(intList.Size(), 2_z);
+			Assert::AreEqual(doubleList.Size(), 2_z);
+			Assert::AreEqual(fooList.Size(), 2_z);
+			Assert::AreEqual(filledConstIntList2.Size(), 2_z);
+			Assert::AreEqual(filledConstDoubleList2.Size(), 2_z);
+			Assert::AreEqual(filledConstFooList2.Size(), 2_z);
 		}
 
 		TEST_METHOD(PopBack)
 		{
-			SList<int> intList;
-			SList<double> doubleList;
-			SList<Foo> fooList;
-
-			intList.PushBack(10);
-			doubleList.PushBack(10);
-			fooList.PushBack(Foo(10));
-
-			intList.PushBack(20);
-			doubleList.PushBack(20);
-			fooList.PushBack(Foo(20));
-
-			intList.PushBack(30);
-			doubleList.PushBack(30);
-			fooList.PushBack(Foo(30));
+			SList<int> intList = { 10, 20, 30 };
+			SList<double> doubleList = { 10, 20, 30 };
+			SList<Foo> fooList = { Foo(10), Foo(20), Foo(30) };
 
 			intList.PopBack();
 			doubleList.PopBack();
@@ -979,10 +933,9 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(fooList.Back(), Foo(20));
 
 			// Size is reduced correctly with more than 2 elements
-			size_t size = 2;
-			Assert::AreEqual(intList.Size(), size);
-			Assert::AreEqual(doubleList.Size(), size);
-			Assert::AreEqual(fooList.Size(), size);
+			Assert::AreEqual(intList.Size(), 2_z);
+			Assert::AreEqual(doubleList.Size(), 2_z);
+			Assert::AreEqual(fooList.Size(), 2_z);
 
 			intList.PopBack();
 			doubleList.PopBack();
@@ -994,10 +947,9 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(fooList.Back(), Foo(10));
 
 			// Size is reduced correctly with 1 element remaining
-			size = 1;
-			Assert::AreEqual(intList.Size(), size);
-			Assert::AreEqual(doubleList.Size(), size);
-			Assert::AreEqual(fooList.Size(), size);
+			Assert::AreEqual(intList.Size(), 1_z);
+			Assert::AreEqual(doubleList.Size(), 1_z);
+			Assert::AreEqual(fooList.Size(), 1_z);
 
 			// Back is set correctly with 1 element remaining
 			Assert::AreEqual(intList.Back(), intList.Back());
@@ -1009,10 +961,9 @@ namespace UnitTestLibraryDesktop
 			fooList.PopBack();
 
 			// Size is reduced correctly with no elements remaining
-			size = 0;
-			Assert::AreEqual(intList.Size(), size);
-			Assert::AreEqual(doubleList.Size(), size);
-			Assert::AreEqual(fooList.Size(), size);
+			Assert::AreEqual(intList.Size(), 0_z);
+			Assert::AreEqual(doubleList.Size(), 0_z);
+			Assert::AreEqual(fooList.Size(), 0_z);
 
 			// Now empty
 			Assert::IsTrue(intList.IsEmpty());
@@ -1024,10 +975,9 @@ namespace UnitTestLibraryDesktop
 			fooList.PopBack();
 
 			// Size does not change when called on empty list
-			size = 0;
-			Assert::AreEqual(intList.Size(), size);
-			Assert::AreEqual(doubleList.Size(), size);
-			Assert::AreEqual(fooList.Size(), size);
+			Assert::AreEqual(intList.Size(), 0_z);
+			Assert::AreEqual(doubleList.Size(), 0_z);
+			Assert::AreEqual(fooList.Size(), 0_z);
 
 			// Emptiness does not change when called on empty list
 			Assert::IsTrue(intList.IsEmpty());
@@ -1159,10 +1109,9 @@ namespace UnitTestLibraryDesktop
 
 			SList<int> intList;
 
-			SList<int>::Iterator intIterator;
-			Assert::ExpectException<std::runtime_error>([&intList] { intList.Front(); });
+			Assert::ExpectException<std::runtime_error>([&intList] { intList.Remove(SList<int>::Iterator()); });
 
-			intIterator = intList.PushBack(10);
+			SList<int>::Iterator intIterator = intList.PushBack(10);
 			intList.PushBack(20);
 			intList.Remove(intIterator);
 			
@@ -1188,10 +1137,9 @@ namespace UnitTestLibraryDesktop
 
 			SList<double> doubleList;
 
-			SList<double>::Iterator doubleIterator;
-			Assert::ExpectException<std::runtime_error>([&doubleList] { doubleList.Front(); });
+			Assert::ExpectException<std::runtime_error>([&doubleList] { doubleList.Remove(SList<double>::Iterator()); });
 
-			doubleIterator = doubleList.PushBack(10);
+			SList<double>::Iterator doubleIterator = doubleList.PushBack(10);
 			doubleList.PushBack(20);
 			doubleList.Remove(doubleIterator);
 
@@ -1217,10 +1165,9 @@ namespace UnitTestLibraryDesktop
 	
 			SList<Foo> fooList;
 
-			SList<Foo>::Iterator fooIterator;;
-			Assert::ExpectException<std::runtime_error>([&fooList] { fooList.Front(); });
+			Assert::ExpectException<std::runtime_error>([&fooList] { fooList.Remove(SList<Foo>::Iterator()); });
 		
-			fooIterator = fooList.PushBack(Foo(10));
+			SList<Foo>::Iterator fooIterator = fooList.PushBack(Foo(10));
 			fooList.PushBack(Foo(20));
 			fooList.Remove(fooIterator);
 
@@ -1247,21 +1194,18 @@ namespace UnitTestLibraryDesktop
 			/* Integer Data */
 
 			SList<int> intList;
-			size_t sizeZero = 0;
 		
 			// Clearing an empty list does not change emptiness or size
 			intList.Clear();
 			Assert::IsTrue(intList.IsEmpty());
-			Assert::AreEqual(intList.Size(), sizeZero);
+			Assert::AreEqual(intList.Size(), 0_z);
 
-			intList.PushBack(10);
-			intList.PushBack(20);
-			intList.PushBack(30);
+			intList = { 10, 20, 30 };
 
 			// Clearing a filled lists empties correctly and sets size to zero
 			intList.Clear();
 			Assert::IsTrue(intList.IsEmpty());
-			Assert::AreEqual(intList.Size(), sizeZero);
+			Assert::AreEqual(intList.Size(), 0_z);
 
 
 			/* Double Data */
@@ -1271,16 +1215,14 @@ namespace UnitTestLibraryDesktop
 			// Clearing an empty list does not change emptiness or size
 			doubleList.Clear();
 			Assert::IsTrue(doubleList.IsEmpty());
-			Assert::AreEqual(doubleList.Size(), sizeZero);
+			Assert::AreEqual(doubleList.Size(), 0_z);
 
-			doubleList.PushBack(10);
-			doubleList.PushBack(20);
-			doubleList.PushBack(30);
+			doubleList = { 10, 20, 30 };
 
 			// Clearing a filled lists empties correctly and sets size to zero
 			doubleList.Clear();
 			Assert::IsTrue(doubleList.IsEmpty());
-			Assert::AreEqual(doubleList.Size(), sizeZero);
+			Assert::AreEqual(doubleList.Size(), 0_z);
 			
 
 			/* Foo Data */
@@ -1290,16 +1232,14 @@ namespace UnitTestLibraryDesktop
 			// Clearing an empty list does not change emptiness or size
 			fooList.Clear();
 			Assert::IsTrue(fooList.IsEmpty());
-			Assert::AreEqual(fooList.Size(), sizeZero);
+			Assert::AreEqual(fooList.Size(), 0_z);
 
-			fooList.PushBack(Foo(10));
-			fooList.PushBack(Foo(20));
-			fooList.PushBack(Foo(30));
+			fooList = { Foo(10), Foo(20), Foo(30) };
 
 			// Clearing a filled lists empties correctly and sets size to zero
 			fooList.Clear();
 			Assert::IsTrue(fooList.IsEmpty());
-			Assert::AreEqual(fooList.Size(), sizeZero);
+			Assert::AreEqual(fooList.Size(), 0_z);
 		}
 
 	
