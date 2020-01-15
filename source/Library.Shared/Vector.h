@@ -213,14 +213,15 @@ namespace Library
 		};
 
 	public:
-#pragma region Constructors
+#pragma region Constructor and Destructor
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
 		Vector(const size_t capacity=0);
 
 		/// <summary>
-		/// Class destructor. Clears all existing node references.
+		/// Destructor. 
+		/// Clears all existing node references.
 		/// </summary>
 		~Vector();
 
@@ -243,9 +244,9 @@ namespace Library
 		/// </summary>
 		/// <param name="rhs">Value list for intializing a new vector.</param>
 		Vector(const std::initializer_list<T> rhs);
-#pragma endregion Constructors
+#pragma endregion Constructors and Destructor
 
-#pragma region AssignmentOperators
+#pragma region Assignment Operators
 		/// <summary>
 		/// Copy assignment operator.
 		/// Copies the data values from the right hand side (rhs) value to the left hand side.
@@ -267,9 +268,9 @@ namespace Library
 		/// </summary>
 		/// <param name="vector">Value vector for initializing a new Vector.</param>
 		Vector& operator=(const std::initializer_list<T> rhs);
-#pragma endregion AssignmentOperators
+#pragma endregion Assignment Operators
 
-#pragma region BooleanOperators
+#pragma region Boolean Operators
 		/// <summary>
 		/// Equals operator. 
 		/// Checks if the size of the vector and the data values are equal to the size and values of the right hand side (rhs) vector.
@@ -285,9 +286,9 @@ namespace Library
 		/// <param name="rhs">The vector on the right hand side to be compared to the left.</param>
 		/// <returns>True when lists are not equivalent, otherwise false.</returns>
 		bool operator!=(const Vector& rhs) const noexcept;
-#pragma endregion BooleanOperators
+#pragma endregion Boolean Operators
 
-#pragma region IteratorAccessors
+#pragma region Iterator Accessors
 		/// <summary>
 		/// Gets an iterator pointing to the first element in the vector, values are mutable.
 		/// </summary>
@@ -339,10 +340,9 @@ namespace Library
 		/// <param name="equal">Equality functor for comparing the search value to elements in the vector.</param>
 		/// <returns>An const value iterator referencing the value, if found. Otherwise it returns an empty iterator.</returns>
 		ConstIterator Find(const T& value, std::function<bool(T, T)> equal=[](T a, T b) { return a == b; }) const;
-#pragma endregion IteratorAccessors
+#pragma endregion Iterator Accessors
 
-
-#pragma region SizeCapacity
+#pragma region Size and Capacity
 		/// <summary>
 		/// Getter method for the number of elements in the vector.
 		/// </summary>
@@ -367,9 +367,9 @@ namespace Library
 		/// <param name="capacity">Max number of elements for which to allocate memory.</param>
 		/// <exception cref="runtime_error">Insufficient memory."</exception>
 		void Reserve(const size_t capacity);
-#pragma endregion SizeCapacity
+#pragma endregion Size and Capacity
 
-#pragma region ElementAccessors
+#pragma region Element Accessors
 		/// <summary>
 		/// Retrieves a value reference for the element at the specified index.
 		/// </summary>
@@ -431,7 +431,7 @@ namespace Library
 		/// <returns>Reference to the last data value in the vector, as a constant.</returns>
 		/// <exception cref="runtime_error">Thrown when called on an empty vector.</exception>
 		const T& Back() const;
-#pragma endregion ElementAccessors
+#pragma endregion Element Accessors
 
 #pragma region Modifiers
 		/// <summary>

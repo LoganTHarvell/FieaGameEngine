@@ -14,6 +14,10 @@ namespace Library
 	template <typename T>
 	class SList
 	{
+	public:
+		/* Iterator Traits */
+		using value_type = T;
+
 	private:
 #pragma region Node
 		/// <summary>
@@ -204,19 +208,17 @@ namespace Library
 #pragma endregion ConstIterator
 
 	public:
-		/* Iterator Traits */
-		using value_type = T;
-
+#pragma region Constructors and Destructor
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
 		SList() = default;
 
 		/// <summary>
-		/// Initializer list constructor.
+		/// Destructor. 
+		/// Clears all existing node references.
 		/// </summary>
-		/// <param name="list">Value list for initializing a new SList.</param>
-		SList(const std::initializer_list<T> rhs);
+		~SList();
 
 		/// <summary>
 		/// Copy constructor.
@@ -233,13 +235,15 @@ namespace Library
 		SList(SList&& rhs) noexcept;
 
 		/// <summary>
-		/// Assignment to initializer list constructor.
+		/// Initializer list constructor.
 		/// </summary>
 		/// <param name="list">Value list for initializing a new SList.</param>
-		SList& operator=(const std::initializer_list<T> rhs);
+		SList(const std::initializer_list<T> rhs);
+#pragma endregion Constructors and Destructor
 
+#pragma region Assignment Operators
 		/// <summary>
-		/// Assignment operator.
+		/// Copy assignment operator.
 		/// Copies the data values from the right hand side (rhs) value to the left hand side.
 		/// </summary>
 		/// <param name="rhs">List whose values are copied.</param>
@@ -247,7 +251,7 @@ namespace Library
 		SList& operator=(const SList& rhs);
 
 		/// <summary>
-		/// Assignment operator.
+		/// Move assignment operator.
 		/// Copies the data values from the right hand side (rhs) value to the left hand side.
 		/// </summary>
 		/// <param name="rhs">List whose values are copied.</param>
@@ -255,10 +259,13 @@ namespace Library
 		SList& operator=(SList&& rhs) noexcept;
 
 		/// <summary>
-		/// Class destructor. Clears all existing node references.
+		/// Initializer list assignment operator.
 		/// </summary>
-		~SList();
+		/// <param name="list">Value list for initializing a new SList.</param>
+		SList& operator=(const std::initializer_list<T> rhs);
+#pragma endregion Assignment Operators
 
+#pragma region Boolean Operators
 		/// <summary>
 		/// Equals operator. 
 		/// Checks if the size of the list and the data values are equal to the size and values of the right hand side (rhs) list.
@@ -274,19 +281,9 @@ namespace Library
 		/// <param name="rhs">The list on the right hand side to be compared to the left.</param>
 		/// <returns>True when lists are not equivalent, otherwise false.</returns>
 		bool operator!=(const SList& rhs) const noexcept;
+#pragma endregion Boolean Operators
 
-		/// <summary>
-		/// Getter method for the number of elements in the list.
-		/// </summary>
-		/// <returns>Number of elements in the list.</returns>
-		size_t Size() const;
-
-		/// <summary>
-		/// Checks if the size of the list is greater than zero, indicating the list is non-empty.
-		/// </summary>
-		/// <returns>True if the list contains no elements, otherwise false.</returns>
-		bool IsEmpty() const;
-
+#pragma region Iterator Accessors
 		/// <summary>
 		/// Gets an iterator pointing to the first element in the list, values are mutable.
 		/// </summary>
@@ -304,56 +301,6 @@ namespace Library
 		/// </summary>
 		/// <returns>Constant value iterator to the first element in the list.</returns>
 		ConstIterator cbegin() const;
-
-		/// <summary>
-		/// Getter method for the first data value in the list.
-		/// </summary>
-		/// <returns>Reference to the first data value in the list.</returns>
-		/// <exception cref="runtime_error">Thrown when called on an empty list.</exception>
-		T& Front();
-
-		/// <summary>
-		/// Getter method for the first data value in the list, as a constant.
-		/// </summary>
-		/// <returns>Reference to the first data value in the list, as a constant.</returns>
-		/// <exception cref="runtime_error">Thrown when called on an empty list.</exception>
-		const T& Front() const;
-
-		/// <summary>
-		/// Adds an element with the passed in data to the front of the list.
-		/// </summary>
-		/// <param name="data">A data value to be added to the front of the list.</param>
-		void PushFront(const T& data);
-
-		/// <summary>
-		/// Removes the first element from the list.
-		/// </summary>
-		void PopFront();
-
-		/// <summary>
-		/// Getter method for the last data value in the list.
-		/// </summary>
-		/// <returns>Reference to the first data value in the list.</returns>
-		/// <exception cref="runtime_error">Thrown when called on an empty list.</exception>
-		T& Back();
-
-		/// <summary>
-		/// Getter method for the lase data value in the list, as a constant.
-		/// </summary>
-		/// <returns>Reference to the last data value in the list, as a constant.</returns>
-		/// <exception cref="runtime_error">Thrown when called on an empty list.</exception>
-		const T& Back() const;
-
-		/// <summary>
-		/// Adds an element with the passed in data to the back of the list.
-		/// </summary>
-		/// <param name="data">A data value to be added to the back of the list.</param>
-		void PushBack(const T& data);
-
-		/// <summary>
-		/// Removes the last element from the list.
-		/// </summary>
-		void PopBack();
 
 		/// <summary>
 		/// Gets an iterator pointing past the last element in the list, value is mutable.
@@ -379,15 +326,73 @@ namespace Library
 		/// <param name="value">Value to search for in the list.</param>
 		/// <param name="equal">Equality functor for comparing the search value to elements in the list.</param>
 		/// <returns>An iterator referencing the value, if found. Otherwise it returns an empty iterator.</returns>
-		Iterator Find(const T& value, std::function<bool(T, T)> equal=[](T a, T b) { return a == b; });
-		
+		Iterator Find(const T& value, std::function<bool(T, T)> equal = [](T a, T b) { return a == b; });
+
 		/// <summary>
 		/// Searches the list for a given value and returns an iterator.
 		/// </summary>
 		/// <param name="value">Value to search for in the list.</param>
 		/// <param name="equal">Equality functor for comparing the search value to elements in the list.</param>
 		/// <returns>An const value iterator referencing the value, if found. Otherwise it returns an empty iterator.</returns>
-		ConstIterator Find(const T& value, std::function<bool(T, T)> equal=[](T a, T b) { return a == b; }) const;
+		ConstIterator Find(const T& value, std::function<bool(T, T)> equal = [](T a, T b) { return a == b; }) const;
+#pragma endregion Iterator Accessors
+
+#pragma region Size and Capacity
+		/// <summary>
+		/// Getter method for the number of elements in the list.
+		/// </summary>
+		/// <returns>Number of elements in the list.</returns>
+		size_t Size() const;
+
+		/// <summary>
+		/// Checks if the size of the list is greater than zero, indicating the list is non-empty.
+		/// </summary>
+		/// <returns>True if the list contains no elements, otherwise false.</returns>
+		bool IsEmpty() const;
+#pragma endregion Size and Capacity
+
+#pragma region Element Accessors
+		/// <summary>
+		/// Getter method for the first data value in the list.
+		/// </summary>
+		/// <returns>Reference to the first data value in the list.</returns>
+		/// <exception cref="runtime_error">Thrown when called on an empty list.</exception>
+		T& Front();
+
+		/// <summary>
+		/// Getter method for the first data value in the list, as a constant.
+		/// </summary>
+		/// <returns>Reference to the first data value in the list, as a constant.</returns>
+		/// <exception cref="runtime_error">Thrown when called on an empty list.</exception>
+		const T& Front() const;
+
+		/// <summary>
+		/// Getter method for the last data value in the list.
+		/// </summary>
+		/// <returns>Reference to the first data value in the list.</returns>
+		/// <exception cref="runtime_error">Thrown when called on an empty list.</exception>
+		T& Back();
+
+		/// <summary>
+		/// Getter method for the lase data value in the list, as a constant.
+		/// </summary>
+		/// <returns>Reference to the last data value in the list, as a constant.</returns>
+		/// <exception cref="runtime_error">Thrown when called on an empty list.</exception>
+		const T& Back() const;
+#pragma endregion Element Accessors
+
+#pragma region Modifiers
+		/// <summary>
+		/// Adds an element with the passed in data to the front of the list.
+		/// </summary>
+		/// <param name="data">A data value to be added to the front of the list.</param>
+		void PushFront(const T& data);
+
+		/// <summary>
+		/// Adds an element with the passed in data to the back of the list.
+		/// </summary>
+		/// <param name="data">A data value to be added to the back of the list.</param>
+		void PushBack(const T& data);
 
 		/// <summary>
 		/// Inserts a new element in the list in between a given iterator and the following element.
@@ -397,6 +402,16 @@ namespace Library
 		/// <returns>An iterator referencing the new node.</returns>
 		/// <exception cref="runtime_error">Iterator not associated with this list.</exception>
 		Iterator InsertAfter(const Iterator& iterator, const T& data);
+
+		/// <summary>
+		/// Removes the first element from the list.
+		/// </summary>
+		void PopFront();
+
+		/// <summary>
+		/// Removes the last element from the list.
+		/// </summary>
+		void PopBack();
 
 		/// <summary>
 		/// Removes a single element from the list given the corresponding iterator.
@@ -419,6 +434,7 @@ namespace Library
 		/// Removes all elements from the list and resets the size to zero.
 		/// </summary>
 		void Clear();
+#pragma endregion Modifiers
 
 	private:
 		/// <summary>

@@ -121,13 +121,12 @@ namespace Library
 #pragma endregion ConstIterator
 
 #pragma region SList
+
+#pragma region Constructors and Destructor
 	template<typename T>
-	inline SList<T>::SList(const std::initializer_list<T> rhs)
+	inline SList<T>::~SList()
 	{
-		for (const auto& value : rhs)
-		{
-			PushBack(value);
-		}
+		Clear();
 	}
 
 	template<typename T>
@@ -148,6 +147,17 @@ namespace Library
 		rhs.mBack = nullptr;
 	}
 
+	template<typename T>
+	inline SList<T>::SList(const std::initializer_list<T> rhs)
+	{
+		for (const auto& value : rhs)
+		{
+			PushBack(value);
+		}
+	}
+#pragma endregion Constructors and Destructor
+
+#pragma region Assignment Operators
 	template<typename T>
 	inline SList<T>& SList<T>::operator=(const std::initializer_list<T> rhs)
 	{
@@ -195,13 +205,9 @@ namespace Library
 
 		return *this;
 	}
+#pragma endregion Assignment Operators
 
-	template<typename T>
-	inline SList<T>::~SList()
-	{
-		Clear();
-	}
-
+#pragma region Boolean Operators
 	template<typename T>
 	inline bool SList<T>::operator==(const SList& rhs) const noexcept
 	{
@@ -223,19 +229,9 @@ namespace Library
 	{
 		return !(operator==(rhs));
 	}
+#pragma endregion Boolean Operators
 
-	template<typename T>
-	inline size_t SList<T>::Size() const
-	{
-		return mSize;
-	}
-
-	template<typename T>
-	inline bool SList<T>::IsEmpty() const
-	{
-		return mSize == 0;
-	}
-
+#pragma region Iterator Accessors
 	template<typename T>
 	inline typename SList<T>::Iterator SList<T>::begin()
 	{
@@ -252,126 +248,6 @@ namespace Library
 	inline typename SList<T>::ConstIterator SList<T>::cbegin() const
 	{
 		return ConstIterator(*this, mFront);
-	}
-
-	template<typename T>
-	inline T& SList<T>::Front()
-	{
-		if (mSize == 0)
-		{
-			throw std::runtime_error("List is empty.");
-		}
-
-		return mFront->Data;
-	}
-
-	template<typename T>
-	inline const T& SList<T>::Front() const
-	{
-		if (mSize == 0)
-		{
-			throw std::runtime_error("List is empty.");
-		}
-
-		return mFront->Data;
-	}
-
-	template<typename T>
-	inline void SList<T>::PushFront(const T& data)
-	{
-		mFront = std::make_shared<Node>(data, mFront);
-		
-		if (mSize == 0)
-		{
-			mBack = mFront;
-		}
-
-		mSize++;
-	}
-
-	template<typename T>
-	inline void SList<T>::PopFront()
-	{
-		if (mSize > 0)
-		{
-			mFront = mFront->Next;
-			mSize--;
-		
-			if (mSize <= 1)
-			{
-				mBack = mFront;
-			}
-		}
-	}
-
-	template<typename T>
-	inline T& SList<T>::Back()
-	{
-		if (mSize == 0)
-		{
-			throw std::runtime_error("List is empty.");
-		}
-
-		return mBack->Data;
-	}
-	
-	template<typename T>
-	inline const T& SList<T>::Back() const
-	{
-		if (mSize == 0)
-		{
-			throw std::runtime_error("List is empty.");
-		}
-
-		return mBack->Data;
-	}
-
-	template<typename T>
-	inline void SList<T>::PushBack(const T& data)
-	{
-		std::shared_ptr<Node> newNode = std::make_shared<Node>(data);
-
-		if (mSize == 0)
-		{
-			mBack = newNode;
-			mFront = mBack;
-		}
-		else
-		{
-			mBack->Next = newNode;
-			mBack = mBack->Next;
-		}
-
-		mSize++;
-	}
-
-	template<typename T>
-	inline void SList<T>::PopBack()
-	{
-		if (mSize > 1)
-		{
-			std::shared_ptr<Node> newBack = mFront;
-
-			while (newBack->Next != mBack)
-			{
-				newBack = newBack->Next;
-			}
-
-			newBack->Next = nullptr;
-			mBack = newBack;
-			mSize--;
-			
-			if (mSize == 1)
-			{
-				mFront = mBack;
-			}
-		}
-		else if (mSize == 1)
-		{
-			mFront = nullptr;
-			mBack = nullptr;
-			mSize = 0;
-		}
 	}
 
 	template<typename T>
@@ -419,6 +295,100 @@ namespace Library
 
 		return ConstIterator();
 	}
+#pragma endregion Iterator Accessors
+
+#pragma region Size
+	template<typename T>
+	inline size_t SList<T>::Size() const
+	{
+		return mSize;
+	}
+
+	template<typename T>
+	inline bool SList<T>::IsEmpty() const
+	{
+		return mSize == 0;
+	}
+#pragma endregion Size
+
+#pragma region Element Accessors
+	template<typename T>
+	inline T& SList<T>::Front()
+	{
+		if (mSize == 0)
+		{
+			throw std::runtime_error("List is empty.");
+		}
+
+		return mFront->Data;
+	}
+
+	template<typename T>
+	inline const T& SList<T>::Front() const
+	{
+		if (mSize == 0)
+		{
+			throw std::runtime_error("List is empty.");
+		}
+
+		return mFront->Data;
+	}
+
+	template<typename T>
+	inline T& SList<T>::Back()
+	{
+		if (mSize == 0)
+		{
+			throw std::runtime_error("List is empty.");
+		}
+
+		return mBack->Data;
+	}
+	
+	template<typename T>
+	inline const T& SList<T>::Back() const
+	{
+		if (mSize == 0)
+		{
+			throw std::runtime_error("List is empty.");
+		}
+
+		return mBack->Data;
+	}
+#pragma endregion Element Accessors
+
+#pragma region Modifiers
+	template<typename T>
+	inline void SList<T>::PushFront(const T& data)
+	{
+		mFront = std::make_shared<Node>(data, mFront);
+
+		if (mSize == 0)
+		{
+			mBack = mFront;
+		}
+
+		mSize++;
+	}
+
+	template<typename T>
+	inline void SList<T>::PushBack(const T& data)
+	{
+		std::shared_ptr<Node> newNode = std::make_shared<Node>(data);
+
+		if (mSize == 0)
+		{
+			mBack = newNode;
+			mFront = mBack;
+		}
+		else
+		{
+			mBack->Next = newNode;
+			mBack = mBack->Next;
+		}
+
+		mSize++;
+	}
 
 	template<typename T>
 	inline typename SList<T>::Iterator SList<T>::InsertAfter(const Iterator& iterator, const T& data)
@@ -433,12 +403,56 @@ namespace Library
 			PushBack(data);
 			return Iterator(*this, mBack);
 		}
-		
+
 		std::shared_ptr<Node> newNode = std::make_shared<Node>(data);
 		newNode->Next = iterator.mNode->Next;
 		iterator.mNode->Next = newNode;
 
 		return Iterator(*this, newNode);
+	}
+
+	template<typename T>
+	inline void SList<T>::PopFront()
+	{
+		if (mSize > 0)
+		{
+			mFront = mFront->Next;
+			mSize--;
+
+			if (mSize <= 1)
+			{
+				mBack = mFront;
+			}
+		}
+	}
+
+	template<typename T>
+	inline void SList<T>::PopBack()
+	{
+		if (mSize > 1)
+		{
+			std::shared_ptr<Node> newBack = mFront;
+
+			while (newBack->Next != mBack)
+			{
+				newBack = newBack->Next;
+			}
+
+			newBack->Next = nullptr;
+			mBack = newBack;
+			mSize--;
+			
+			if (mSize == 1)
+			{
+				mFront = mBack;
+			}
+		}
+		else if (mSize == 1)
+		{
+			mFront = nullptr;
+			mBack = nullptr;
+			mSize = 0;
+		}
 	}
 
 	template<typename T>
@@ -501,4 +515,6 @@ namespace Library
 		mBack = nullptr;
 	}
 }
+#pragma endregion Modifiers
+
 #pragma endregion SList
