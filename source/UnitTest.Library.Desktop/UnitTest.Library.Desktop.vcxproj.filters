@@ -10,6 +10,7 @@
     <ClCompile Include="Bar.cpp">
       <Filter>Support Code</Filter>
     </ClCompile>
+    <ClCompile Include="VectorTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
