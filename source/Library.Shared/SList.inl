@@ -277,7 +277,7 @@ namespace Library
 	}
 
 	template<typename T>
-	inline typename SList<T>::Iterator SList<T>::PushFront(const T& data)
+	inline void SList<T>::PushFront(const T& data)
 	{
 		mFront = std::make_shared<Node>(data, mFront);
 		
@@ -287,8 +287,6 @@ namespace Library
 		}
 
 		mSize++;
-		
-		return Iterator(*this, mFront);
 	}
 
 	template<typename T>
@@ -329,7 +327,7 @@ namespace Library
 	}
 
 	template<typename T>
-	inline typename SList<T>::Iterator SList<T>::PushBack(const T& data)
+	inline void SList<T>::PushBack(const T& data)
 	{
 		std::shared_ptr<Node> newNode = std::make_shared<Node>(data);
 
@@ -345,8 +343,6 @@ namespace Library
 		}
 
 		mSize++;
-
-		return Iterator(*this, mBack);
 	}
 
 	template<typename T>
@@ -434,7 +430,8 @@ namespace Library
 
 		if (iterator == end())
 		{
-			return PushBack(data);
+			PushBack(data);
+			return Iterator(*this, mBack);
 		}
 		
 		std::shared_ptr<Node> newNode = std::make_shared<Node>(data);

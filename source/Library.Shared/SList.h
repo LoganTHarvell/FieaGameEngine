@@ -321,8 +321,7 @@ namespace Library
 		/// Adds an element with the passed in data to the front of the list.
 		/// </summary>
 		/// <param name="data">A data value to be added to the front of the list.</param>
-		/// <returns>Iterator pointing to the newly added node.</returns>
-		Iterator PushFront(const T& data);
+		void PushFront(const T& data);
 
 		/// <summary>
 		/// Removes the first element from the list.
@@ -347,8 +346,7 @@ namespace Library
 		/// Adds an element with the passed in data to the back of the list.
 		/// </summary>
 		/// <param name="data">A data value to be added to the back of the list.</param>
-		/// <returns>Iterator pointing to the newly added node.</returns>
-		Iterator PushBack(const T& data);
+		void PushBack(const T& data);
 
 		/// <summary>
 		/// Removes the last element from the list.

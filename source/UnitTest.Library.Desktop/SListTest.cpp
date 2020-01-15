@@ -1000,20 +1000,26 @@ namespace UnitTestLibraryDesktop
 			fooList.PushBack(Foo(10));
 			barList.PushBack(Bar(10));
 
-			SList<int>::Iterator intIterator = intList.PushBack(20);
-			SList<double>::Iterator doubleIterator = doubleList.PushBack(20);
-			SList<Foo>::Iterator fooIterator = fooList.PushBack(Foo(20));
-			SList<Bar>::Iterator barIterator = barList.PushBack(Bar(20));
+			intList.PushBack(20);
+			doubleList.PushBack(20);
+			fooList.PushBack(Foo(20));
+			barList.PushBack(Bar(20));
 
 			intList.PushBack(30);
 			doubleList.PushBack(30);
 			fooList.PushBack(Foo(30));
 			barList.PushBack(Bar(30));
 
-			Assert::AreEqual(intList.begin(), intList.Find(10));
-			Assert::AreEqual(doubleList.begin(), doubleList.Find(10));
-			Assert::AreEqual(fooList.begin(), fooList.Find(Foo(10)));
-			Assert::AreEqual(barList.begin(), barList.Find(Bar(10), barEqual));
+
+			SList<int>::Iterator intIterator = intList.begin();
+			SList<double>::Iterator doubleIterator = doubleList.begin();
+			SList<Foo>::Iterator fooIterator = fooList.begin();
+			SList<Bar>::Iterator barIterator = barList.begin();
+
+			Assert::AreEqual(intIterator++, intList.Find(10));
+			Assert::AreEqual(doubleIterator++, doubleList.Find(10));
+			Assert::AreEqual(fooIterator++, fooList.Find(Foo(10)));
+			Assert::AreEqual(barIterator++, barList.Find(Bar(10), barEqual));
 
 			Assert::AreEqual(intIterator++, intList.Find(20));
 			Assert::AreEqual(doubleIterator++, doubleList.Find(20));
@@ -1128,18 +1134,18 @@ namespace UnitTestLibraryDesktop
 
 			Assert::ExpectException<std::runtime_error>([&intList] { intList.Remove(SList<int>::Iterator()); });
 
-			SList<int>::Iterator intIterator = intList.PushBack(10);
+			intList.PushBack(10);
 			intList.PushBack(20);
-			intList.Remove(intIterator);
+			intList.Remove(intList.begin());
 			
-			intIterator = intList.begin();
+			SList<int>::Iterator intIterator = intList.begin();
 			Assert::AreEqual(*intIterator, 20);
 
 			intList.PushBack(30);
-			intIterator = intList.PushBack(40);
+			intList.PushBack(40);
 			intList.PushBack(50);
+			intList.Remove(40);
 			intList.Remove(50);
-			intList.Remove(intIterator);
 
 			intIterator = intList.begin();
 			Assert::AreEqual(*intIterator, 20);
@@ -1156,18 +1162,18 @@ namespace UnitTestLibraryDesktop
 
 			Assert::ExpectException<std::runtime_error>([&doubleList] { doubleList.Remove(SList<double>::Iterator()); });
 
-			SList<double>::Iterator doubleIterator = doubleList.PushBack(10);
+			doubleList.PushBack(10);
 			doubleList.PushBack(20);
-			doubleList.Remove(doubleIterator);
+			doubleList.Remove(doubleList.begin());
 
-			doubleIterator = doubleList.begin();
+			SList<double>::Iterator doubleIterator = doubleList.begin();
 			Assert::AreEqual(*doubleIterator, 20.0);
 
 			doubleList.PushBack(30);
-			doubleIterator = doubleList.PushBack(40);
+			doubleList.PushBack(40);
 			doubleList.PushBack(50);
+			doubleList.Remove(40);
 			doubleList.Remove(50);
-			doubleList.Remove(doubleIterator);
 
 			doubleIterator = doubleList.begin();
 			Assert::AreEqual(*doubleIterator, 20.0);
@@ -1183,19 +1189,19 @@ namespace UnitTestLibraryDesktop
 			SList<Foo> fooList;
 
 			Assert::ExpectException<std::runtime_error>([&fooList] { fooList.Remove(SList<Foo>::Iterator()); });
-		
-			SList<Foo>::Iterator fooIterator = fooList.PushBack(Foo(10));
-			fooList.PushBack(Foo(20));
-			fooList.Remove(fooIterator);
 
-			fooIterator = fooList.begin();
+			fooList.PushBack(Foo(10));
+			fooList.PushBack(Foo(20));
+			fooList.Remove(fooList.begin());
+
+			SList<Foo>::Iterator fooIterator = fooList.begin();
 			Assert::AreEqual(*fooIterator, Foo(20));
 
 			fooList.PushBack(Foo(30));
-			fooIterator = fooList.PushBack(Foo(40));
+			fooList.PushBack(Foo(40));
 			fooList.PushBack(Foo(50));
+			fooList.Remove(Foo(40));
 			fooList.Remove(Foo(50));
-			fooList.Remove(fooIterator);
 
 			fooIterator = fooList.begin();
 			Assert::AreEqual(*fooIterator, Foo(20));
