@@ -122,9 +122,9 @@ namespace Library
 
 #pragma region SList
 	template<typename T>
-	inline SList<T>::SList(const std::initializer_list<T> list)
+	inline SList<T>::SList(const std::initializer_list<T> rhs)
 	{
-		for (const auto& value : list)
+		for (const auto& value : rhs)
 		{
 			PushBack(value);
 		}
@@ -257,7 +257,7 @@ namespace Library
 	template<typename T>
 	inline T& SList<T>::Front()
 	{
-		if (IsEmpty())
+		if (mSize == 0)
 		{
 			throw std::runtime_error("List is empty.");
 		}
@@ -268,7 +268,7 @@ namespace Library
 	template<typename T>
 	inline const T& SList<T>::Front() const
 	{
-		if (IsEmpty())
+		if (mSize == 0)
 		{
 			throw std::runtime_error("List is empty.");
 		}
@@ -281,7 +281,7 @@ namespace Library
 	{
 		mFront = std::make_shared<Node>(data, mFront);
 		
-		if (IsEmpty())
+		if (mSize == 0)
 		{
 			mBack = mFront;
 		}
@@ -292,7 +292,7 @@ namespace Library
 	template<typename T>
 	inline void SList<T>::PopFront()
 	{
-		if (!IsEmpty())
+		if (mSize > 0)
 		{
 			mFront = mFront->Next;
 			mSize--;
@@ -307,7 +307,7 @@ namespace Library
 	template<typename T>
 	inline T& SList<T>::Back()
 	{
-		if (IsEmpty())
+		if (mSize == 0)
 		{
 			throw std::runtime_error("List is empty.");
 		}
@@ -318,7 +318,7 @@ namespace Library
 	template<typename T>
 	inline const T& SList<T>::Back() const
 	{
-		if (IsEmpty())
+		if (mSize == 0)
 		{
 			throw std::runtime_error("List is empty.");
 		}
@@ -331,7 +331,7 @@ namespace Library
 	{
 		std::shared_ptr<Node> newNode = std::make_shared<Node>(data);
 
-		if (IsEmpty())
+		if (mSize == 0)
 		{
 			mBack = newNode;
 			mFront = mBack;
