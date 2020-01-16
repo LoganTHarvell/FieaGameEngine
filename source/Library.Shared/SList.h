@@ -51,15 +51,6 @@ namespace Library
 			using reference = const T&;
 			using iterator_category = std::forward_iterator_tag;
 
-		private:
-			/// <summary>
-			/// Specialized constructor for creating an iterator for a list at a given node.
-			/// </summary>
-			/// <param name="list">Source list for the iterator's values.</param>
-			/// <param name="node">Current element of the list referenced by the iterator.</param>
-			Iterator(const SList<T>& list, std::shared_ptr<Node> node=nullptr);
-
-		public:
 			/* Defaults */
 			Iterator() = default;
 			Iterator(const Iterator& rhs) = default;
@@ -67,6 +58,13 @@ namespace Library
 			Iterator(Iterator&& rhs) = default;
 			Iterator& operator=(Iterator&& rhs) = default;
 			~Iterator() = default;
+
+			/// <summary>
+			/// Specialized constructor for creating an iterator for a list at a given node.
+			/// </summary>
+			/// <param name="list">Source list for the iterator's values.</param>
+			/// <param name="node">Current element of the list referenced by the iterator.</param>
+			Iterator(const SList<T>& owner, std::shared_ptr<Node> node = nullptr);
 
 		public:
 			/// <summary>
@@ -94,14 +92,13 @@ namespace Library
 			/// Pre-increment operator.
 			/// </summary>
 			/// <returns>Reference to the next iterator.</returns>
-			/// <exception cref="runtime_error">Cannot increment past the end of the list, including when empty.</exception>
+			/// <exception cref="runtime_error">Invalid iterator.</exception>
 			Iterator& operator++();
 
 			/// <summary>
 			/// Post-increment operator.
 			/// </summary>
 			/// <returns>A copy of the iterator before it was incremented.</returns>
-			/// <exception cref="runtime_error">Cannot increment past the end of the list, including when empty.</exception>
 			Iterator operator++(int);
 
 		private:
@@ -135,6 +132,14 @@ namespace Library
 			using iterator_category = std::forward_iterator_tag;
 
 		public:
+			/* Defaults */
+			ConstIterator() = default;
+			ConstIterator(const ConstIterator&) = default;
+			ConstIterator& operator=(const ConstIterator&) = default;
+			ConstIterator(ConstIterator&&) = default;
+			ConstIterator& operator=(ConstIterator&&) = default;
+			~ConstIterator() = default;
+
 			/// <summary>
 			/// Specialized copy constructor that enables the construction of a ConstIterator from a non-const Itrerator.
 			/// </summary>
@@ -147,16 +152,7 @@ namespace Library
 			/// </summary>
 			/// <param name="list">Source list for the iterator's values.</param>
 			/// <param name="node">Current element of the list referenced by the iterator, defaulted to a nullptr value.</param>
-			ConstIterator(const SList& list, std::shared_ptr<Node> node=nullptr);
-
-		public:
-			/* Defaults */
-			ConstIterator() = default;
-			ConstIterator(const ConstIterator&) = default;
-			ConstIterator& operator=(const ConstIterator&) = default;
-			ConstIterator(ConstIterator&&) = default;
-			ConstIterator& operator=(ConstIterator&&) = default;
-			~ConstIterator() = default;
+			ConstIterator(const SList& owner, std::shared_ptr<Node> node=nullptr);
 
 		public:
 			/// <summary>
@@ -184,14 +180,13 @@ namespace Library
 			/// Pre-increment operator.
 			/// </summary>
 			/// <returns>Reference to the next iterator.</returns>
-			/// <exception cref="runtime_error">Cannot increment past the end of the list, including when empty.</exception>
+			/// <exception cref="runtime_error">Invalid iterator.</exception>
 			ConstIterator& operator++();
 
 			/// <summary>
 			/// Post-increment operator.
 			/// </summary>
 			/// <returns>A copy of the iterator before it was incremented.</returns>
-			/// <exception cref="runtime_error">Cannot increment past the end of the list, including when empty.</exception>
 			ConstIterator operator++(int);
 
 		private:
@@ -397,11 +392,11 @@ namespace Library
 		/// <summary>
 		/// Inserts a new element in the list in between a given iterator and the following element.
 		/// </summary>
-		/// <param name="iterator">An iterator used to insert a new element in the following position.</param>
+		/// <param name="it">An iterator used to insert a new element in the following position.</param>
 		/// <param name="data">A value to be used to create a new node.</param>
 		/// <returns>An iterator referencing the new node.</returns>
-		/// <exception cref="runtime_error">Iterator not associated with this list.</exception>
-		Iterator InsertAfter(const Iterator& iterator, const T& data);
+		/// <exception cref="runtime_error">Invalid iterator.</exception>
+		Iterator InsertAfter(const Iterator& it, const T& data);
 
 		/// <summary>
 		/// Removes the first element from the list.
@@ -419,16 +414,15 @@ namespace Library
 		/// <param name="vale">Value to be searched for in the list to be removed.</param>
 		/// <param name="equal">Equality functor for comparing the search value to elements in the list.</param>
 		/// <returns>True on successful remove, false otherwise.</returns>
-		/// <exception cref="runtime_error">Iterator not associated with this list.</exception>
 		bool Remove(const T& value, std::function<bool(T, T)> equal=[](T a, T b) { return a == b; });
 
 		/// <summary>
 		/// Removes a single element from the list given the corresponding iterator.
 		/// </summary>
-		/// <param name="iterator">An iterator referencing the element in the list to be removed.</param>
+		/// <param name="it">An iterator referencing the element in the list to be removed.</param>
 		/// <returns>True on successful remove, false otherwise.</returns>
-		/// <exception cref="runtime_error">Iterator not associated with this list.</exception>
-		bool Remove(const Iterator& iterator);
+		/// <exception cref="runtime_error">Invalid iterator.</exception>
+		bool Remove(const Iterator& it);
 
 		/// <summary>
 		/// Removes all elements from the list and resets the size to zero.

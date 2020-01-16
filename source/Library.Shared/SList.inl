@@ -12,8 +12,8 @@ namespace Library
 
 #pragma region Iterator
 	template<typename T>
-	inline SList<T>::Iterator::Iterator(const SList<T>& list, std::shared_ptr<Node> node) :
-		mOwner(&list), mNode(node)
+	inline SList<T>::Iterator::Iterator(const SList<T>& owner, std::shared_ptr<Node> node) :
+		mOwner(&owner), mNode(node)
 	{
 	}
 
@@ -45,7 +45,7 @@ namespace Library
 	{
 		if (mNode == nullptr)
 		{
-			throw std::runtime_error("Cannot go past the end of list.");
+			throw std::runtime_error("Invalid iterator.");
 		}
 
 		mNode = mNode->Next;
@@ -70,8 +70,8 @@ namespace Library
 	}
 
 	template<typename T>
-	inline SList<T>::ConstIterator::ConstIterator(const SList& list, std::shared_ptr<Node> node) :
-		mOwner(&list), mNode(node)
+	inline SList<T>::ConstIterator::ConstIterator(const SList& owner, std::shared_ptr<Node> node) :
+		mOwner(&owner), mNode(node)
 	{
 	}
 
@@ -103,7 +103,7 @@ namespace Library
 	{
 		if (mNode == nullptr)
 		{
-			throw std::runtime_error("Cannot go past the end of list.");
+			throw std::runtime_error("Invalid iterator.");
 		}
 
 		mNode = mNode->Next;
@@ -391,22 +391,22 @@ namespace Library
 	}
 
 	template<typename T>
-	inline typename SList<T>::Iterator SList<T>::InsertAfter(const Iterator& iterator, const T& data)
+	inline typename SList<T>::Iterator SList<T>::InsertAfter(const Iterator& it, const T& data)
 	{
-		if (this != iterator.mOwner)
+		if (this != it.mOwner)
 		{
-			throw std::runtime_error("Iterator not associated with this list.");
+			throw std::runtime_error("Invalid iterator.");
 		}
 
-		if (iterator == end())
+		if (it == end())
 		{
 			PushBack(data);
 			return Iterator(*this, mBack);
 		}
 
 		std::shared_ptr<Node> newNode = std::make_shared<Node>(data);
-		newNode->Next = iterator.mNode->Next;
-		iterator.mNode->Next = newNode;
+		newNode->Next = it.mNode->Next;
+		it.mNode->Next = newNode;
 
 		return Iterator(*this, newNode);
 	}
@@ -458,44 +458,35 @@ namespace Library
 	template<typename T>
 	inline bool SList<T>::Remove(const T& value, std::function<bool(T, T)> equal)
 	{
-		SList<T>::Iterator it = Find(value, equal);
-
-		bool isRemoved = false;
-
-		if (it != Iterator())
-		{
-			isRemoved = Remove(it);
-		}
-
-		return isRemoved;
+		 return Remove(Find(value, equal));
 	}
 
 	template<typename T>
-	inline bool SList<T>::Remove(const Iterator& iterator)
+	inline bool SList<T>::Remove(const Iterator& it)
 	{
-		if (iterator.mOwner != this)
+		if (it.mOwner != this)
 		{
-			throw std::runtime_error("Iterator not associated with this list.");
+			throw std::runtime_error("Invalid iterator.");
 		}
 
 		bool isRemoved = false;
 
-		if (iterator != end())
+		if (it != end())
 		{
-			if (iterator.mNode == mBack)
+			if (it.mNode == mBack)
 			{
 				PopBack();
 			}
 			else
 			{
-				std::shared_ptr<Node> next = iterator.mNode->Next;
-				iterator.mNode->Data.~T();
-				new(&iterator.mNode->Data)T(std::move(next->Data));
-				iterator.mNode->Next = next->Next;
+				std::shared_ptr<Node> next = it.mNode->Next;
+				it.mNode->Data.~T();
+				new(&it.mNode->Data)T(std::move(next->Data));
+				it.mNode->Next = next->Next;
 
-				if (iterator.mNode->Next == nullptr)
+				if (it.mNode->Next == nullptr)
 				{
-					mBack = iterator.mNode;
+					mBack = it.mNode;
 				}
 
 				--mSize;

@@ -18,9 +18,7 @@ namespace Library
 		/* Iterator Traits */
 		using value_type = T;
 
-	private:
-		/* Helper Data Structures/Functors */
-
+	public:
 #pragma region Iterator
 		/// <summary>
 		/// Class for traversing the vector and retrieving values, which can then be manipulated.
@@ -39,14 +37,6 @@ namespace Library
 			using reference = T&;
 			using iterator_category = std::forward_iterator_tag;
 
-		private:
-			/// <summary>
-			/// Specialized constructor for creating an iterator for a vector at a given node.
-			/// </summary>
-			/// <param name="vector">Source vector for the iterator's values.</param>
-			/// <param name="node">Current element of the vector referenced by the iterator.</param>
-			Iterator(const Vector<T>& vector, size_t index=0);
-
 		public:
 			/* Defaults */
 			Iterator() = default;
@@ -56,12 +46,20 @@ namespace Library
 			Iterator& operator=(Iterator&& rhs) = default;
 			~Iterator() = default;
 
+		private:
+			/// <summary>
+			/// Specialized constructor for creating an iterator for a vector at a given index.
+			/// </summary>
+			/// <param name="vector">Source vector for the iterator's values.</param>
+			/// <param name="index">Current element of the vector referenced by the iterator.</param>
+			Iterator(const Vector<T>& vector, const size_t index=0);
+
 		public:
 			/// <summary>
 			/// Dereference operator.
 			/// </summary>
 			/// <returns>Value of the current element of the vector.</returns>
-			/// <exception cref="runtime_error">Attempted to access an iterator with no associated value.</exception>
+			/// <exception cref="runtime_error">Iterator invalid.</exception>
 			T& operator*() const;
 
 			/// <summary>
@@ -82,15 +80,57 @@ namespace Library
 			/// Pre-increment operator.
 			/// </summary>
 			/// <returns>Reference to the next iterator.</returns>
-			/// <exception cref="runtime_error">Cannot increment past the end of the vector, including when empty.</exception>
+			/// <exception cref="runtime_error">Iterator invalid or out of bounds.</exception>
 			Iterator& operator++();
 
 			/// <summary>
 			/// Post-increment operator.
 			/// </summary>
 			/// <returns>A copy of the iterator before it was incremented.</returns>
-			/// <exception cref="runtime_error">Cannot increment past the end of the vector, including when empty.</exception>
 			Iterator operator++(int);
+
+			/// <summary>
+			/// Addition assignment operator.
+			/// </summary>
+			/// <param name="rhs">A value to offset the iterator.</param>
+			/// <returns>Reference to the iterator with the given offset.</returns>
+			/// <exception cref="runtime_error">Iterator invalid or out of bounds.</exception>
+			Iterator& operator+=(const size_t rhs);
+
+			/// <summary>
+			/// Addition operator.
+			/// </summary>
+			/// <param name="rhs">A value to offset the iterator.</param>
+			/// <returns>An iterator at the given offset from this iterator.</returns>
+			Iterator operator+(const size_t rhs);
+
+			/// <summary>
+			/// Pre-decrement operator.
+			/// </summary>
+			/// <returns>Reference to the next iterator.</returns>
+			/// <exception cref="runtime_error">Iterator invalid out of bounds.</exception>
+			Iterator& operator--();
+
+			/// <summary>
+			/// Post-decrement operator.
+			/// </summary>
+			/// <returns>A copy of the iterator before it was decremented.</returns>
+			Iterator operator--(int);
+
+			/// <summary>
+			/// Subtraction assignment operator.
+			/// </summary>
+			/// <param name="rhs">A value to offset the iterator.</param>
+			/// <returns>Reference to the iterator with the given offset.</returns>
+			/// <exception cref="runtime_error">Iterator invalid out of bounds.</exception>
+			Iterator& operator-=(const size_t rhs);
+
+			/// <summary>
+			/// Subtraction operator.
+			/// </summary>
+			/// <param name="rhs">A value to offset the iterator.</param>
+			/// <returns>An iterator at the given offset from this iterator.</returns>
+			Iterator operator-(const size_t rhs);
 
 		private:
 			/// <summary>
@@ -123,21 +163,6 @@ namespace Library
 			using iterator_category = std::forward_iterator_tag;
 
 		public:
-			/// <summary>
-			/// Specialized copy constructor that enables the construction of a ConstIterator from a non-const Itrerator.
-			/// </summary>
-			/// <param name="iterator"></param>
-			ConstIterator(const Iterator& iterator);
-
-		private:
-			/// <summary>
-			/// Specialized constructor for creating an iterator for a vector at a given node.
-			/// </summary>
-			/// <param name="vector">Source vector for the iterator's values.</param>
-			/// <param name="node">Current element of the vector referenced by the iterator, defaulted to a nullptr value.</param>
-			ConstIterator(const Vector& vector, size_t index=0);
-
-		public:
 			/* Defaults */
 			ConstIterator() = default;
 			ConstIterator(const ConstIterator&) = default;
@@ -146,12 +171,26 @@ namespace Library
 			ConstIterator& operator=(ConstIterator&&) = default;
 			~ConstIterator() = default;
 
+			/// <summary>
+			/// Specialized copy constructor that enables the construction of a ConstIterator from a non-const Itrerator.
+			/// </summary>
+			/// <param name="iterator"></param>
+			ConstIterator(const Iterator& iterator);
+
+		private:
+			/// <summary>
+			/// Specialized constructor for creating an iterator for a vector at a given index.
+			/// </summary>
+			/// <param name="vector">Source vector for the iterator's values.</param>
+			/// <param name="index">Current element of the vector referenced by the iterator, defaulted to a nullptr value.</param>
+			ConstIterator(const Vector& vector, size_t index=0);
+
 		public:
 			/// <summary>
 			/// Dereference operator.
 			/// </summary>
 			/// <returns>Value of the current element of the vector.</returns>
-			/// <exception cref="runtime_error">Attempted to access an iterator with no associated value.</exception>
+			/// <exception cref="runtime_error">Iterator invalid.</exception>
 			const T& operator*() const;
 
 			/// <summary>
@@ -172,16 +211,58 @@ namespace Library
 			/// Pre-increment operator.
 			/// </summary>
 			/// <returns>Reference to the next iterator.</returns>
-			/// <exception cref="runtime_error">Cannot increment past the end of the vector, including when empty.</exception>
+			/// <exception cref="runtime_error">Iterator invalid or out of bounds.</exception>
 			ConstIterator& operator++();
 
 			/// <summary>
 			/// Post-increment operator.
 			/// </summary>
 			/// <returns>A copy of the iterator before it was incremented.</returns>
-			/// <exception cref="runtime_error">Cannot increment past the end of the vector, including when empty.</exception>
 			ConstIterator operator++(int);
 
+			/// <summary>
+			/// Addition assignment operator.
+			/// </summary>
+			/// <param name="rhs">A value to offset the iterator.</param>
+			/// <returns>Reference to the iterator with the given offset.</returns>
+			/// <exception cref="runtime_error">Iterator invalid or out of bounds.</exception>
+			ConstIterator& operator+=(const size_t rhs);
+
+			/// <summary>
+			/// Addition operator.
+			/// </summary>
+			/// <param name="rhs">A value to offset the iterator.</param>
+			/// <returns>An iterator at the given offset from this iterator.</returns>
+			ConstIterator operator+(const size_t rhs);
+
+			/// <summary>
+			/// Pre-decrement operator.
+			/// </summary>
+			/// <returns>Reference to the next iterator.</returns>
+			/// <exception cref="runtime_error">Iterator invalid or out of bounds.</exception>
+			ConstIterator& operator--();
+
+			/// <summary>
+			/// Post-decrement operator.
+			/// </summary>
+			/// <returns>A copy of the iterator before it was decremented.</returns>
+			ConstIterator operator--(int);
+
+			/// <summary>
+			/// Subtraction assignment operator.
+			/// </summary>
+			/// <param name="rhs">A value to offset the iterator.</param>
+			/// <returns>Reference to the iterator with the given offset.</returns>
+			ConstIterator& operator-=(const size_t rhs);
+
+			/// <summary>
+			/// Subtraction operator.
+			/// </summary>
+			/// <param name="rhs">A value to offset the iterator.</param>
+			/// <returns>An iterator at the given offset from this iterator.</returns>
+			/// <exception cref="runtime_error">Iterator invalid or out of bounds.</exception>
+			ConstIterator operator-(const size_t rhs);
+		
 		private:
 			/// <summary>
 			/// Owner vector that is able to be traversed by the iterator instance.
@@ -195,6 +276,7 @@ namespace Library
 		};
 #pragma endregion ConstIterator
 
+	private:
 		/// <summary>
 		/// Functor specifying the default strategy for incrementing the capacity of the vector.
 		/// </summary>
@@ -221,7 +303,7 @@ namespace Library
 
 		/// <summary>
 		/// Destructor. 
-		/// Clears all existing node references.
+		/// Clears all existing elements.
 		/// </summary>
 		~Vector();
 
@@ -448,19 +530,18 @@ namespace Library
 		/// <summary>
 		/// Removes a single element from the vector given the corresponding iterator.
 		/// </summary>
-		/// <param name="vale">Value to be searched for in the vector to be removed.</param>
+		/// <param name="value">Value to be searched for in the vector to be removed.</param>
 		/// <param name="equal">Equality functor for comparing the search value to elements in the vector.</param>
 		/// <returns>True on successful remove, false otherwise.</returns>
-		/// <exception cref="runtime_error">Iterator not associated with this vector.</exception>
 		bool Remove(const T& value, std::function<bool(T, T)> equal = [](T a, T b) { return a == b; });
 
 		/// <summary>
 		/// Removes a single element from the vector given the corresponding iterator.
 		/// </summary>
-		/// <param name="iterator">An iterator referencing the element in the vector to be removed.</param>
+		/// <param name="it">An iterator referencing the element in the vector to be removed.</param>
 		/// <returns>True on successful remove, false otherwise.</returns>
-		/// <exception cref="runtime_error">Iterator not associated with this vector.</exception>
-		bool Remove(const Iterator& iterator);
+		/// <exception cref="runtime_error">Invalid iterator.</exception>
+		bool Remove(const Iterator& it);
 
 		/// <summary>
 		/// Removes all elements from the vector and resets the size to zero.

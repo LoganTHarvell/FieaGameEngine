@@ -5,6 +5,7 @@
 #include "Foo.h"
 #include "Bar.h"
 #include "SList.h"
+#include "Vector.h"
 
 using namespace UnitTests;
 using namespace Library;
@@ -13,6 +14,7 @@ using namespace std::string_literals;
 
 namespace Microsoft::VisualStudio::CppUnitTestFramework
 {
+#pragma region Foo
 	template<>
 	inline std::wstring ToString<Foo>(const Foo& t)
 	{
@@ -30,7 +32,9 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 	{
 		RETURN_WIDE_STRING(t);
 	}
+#pragma endregion Foo
 
+#pragma region Bar
 	template<>
 	inline std::wstring ToString<Bar>(const Bar& t)
 	{
@@ -48,7 +52,9 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 	{
 		RETURN_WIDE_STRING(t);
 	}
+#pragma endregion Bar
 
+#pragma region SList
 	template<>
 	inline std::wstring ToString<SList<int>>(const SList<int>& t)
 	{
@@ -120,7 +126,9 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 	{
 		RETURN_WIDE_STRING(t);
 	}
+#pragma endregion SList
 
+#pragma region SList Iterator
 	template<>
 	inline std::wstring ToString<SList<int>::Iterator>(const SList<int>::Iterator& t)
 	{
@@ -220,7 +228,9 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 	{
 		RETURN_WIDE_STRING(t);
 	}
+#pragma endregion SList Iterator
 
+#pragma region SList ConstIterator
 	template<>
 	inline std::wstring ToString<SList<int>::ConstIterator>(const SList<int>::ConstIterator& t)
 	{
@@ -320,4 +330,283 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 	{
 		RETURN_WIDE_STRING(t);
 	}
+#pragma endregion SList ConstIterator
+
+#pragma region Vector
+	template<>
+	inline std::wstring ToString<Vector<int>>(const Vector<int>& t)
+	{
+		RETURN_WIDE_STRING(t.Size());
+	}
+
+	template<>
+	inline std::wstring ToString<Vector<int>>(const Vector<int>* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<Vector<int>>(Vector<int>* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<Vector<double>>(const Vector<double>& t)
+	{
+		RETURN_WIDE_STRING(t.Size());
+	}
+
+	template<>
+	inline std::wstring ToString<Vector<double>>(const Vector<double>* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<Vector<double>>(Vector<double>* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<Vector<Foo>>(const Vector<Foo>& t)
+	{
+		RETURN_WIDE_STRING(t.Size());
+	}
+
+	template<>
+	inline std::wstring ToString<Vector<Foo>>(const Vector<Foo>* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<Vector<Foo>>(Vector<Foo>* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<Vector<Bar>>(const Vector<Bar>& t)
+	{
+		RETURN_WIDE_STRING(t.Size());
+	}
+
+	template<>
+	inline std::wstring ToString<Vector<Bar>>(const Vector<Bar>* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<Vector<Bar>>(Vector<Bar>* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+#pragma endregion Vector
+
+#pragma region Vector Iterator
+	template<>
+	inline std::wstring ToString<Vector<int>::Iterator>(const Vector<int>::Iterator& t)
+	{
+		try
+		{
+			return ToString(*t);
+		}
+		catch (const std::exception&)
+		{
+			return L"end()"s;
+		}
+	}
+
+	template<>
+	inline std::wstring ToString<Vector<int>::Iterator>(const Vector<int>::Iterator* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<Vector<int>::Iterator>(Vector<int>::Iterator* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<Vector<double>::Iterator>(const Vector<double>::Iterator& t)
+	{
+		try
+		{
+			return ToString(*t);
+		}
+		catch (const std::exception&)
+		{
+			return L"end()"s;
+		}
+	}
+
+	template<>
+	inline std::wstring ToString<Vector<double>::Iterator>(const Vector<double>::Iterator* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<Vector<double>::Iterator>(Vector<double>::Iterator* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<Vector<Foo>::Iterator>(const Vector<Foo>::Iterator& t)
+	{
+		try
+		{
+			return ToString(*t);
+		}
+		catch (const std::exception&)
+		{
+			return L"end()"s;
+		}
+	}
+
+	template<>
+	inline std::wstring ToString<Vector<Foo>::Iterator>(const Vector<Foo>::Iterator* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<Vector<Foo>::Iterator>(Vector<Foo>::Iterator* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<Vector<Bar>::Iterator>(const Vector<Bar>::Iterator& t)
+	{
+		try
+		{
+			return ToString(*t);
+		}
+		catch (const std::exception&)
+		{
+			return L"end()"s;
+		}
+	}
+
+	template<>
+	inline std::wstring ToString<Vector<Bar>::Iterator>(const Vector<Bar>::Iterator* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<Vector<Bar>::Iterator>(Vector<Bar>::Iterator* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+#pragma endregion Vector Iterator
+
+#pragma region Vector ConstIterator
+	template<>
+	inline std::wstring ToString<Vector<int>::ConstIterator>(const Vector<int>::ConstIterator& t)
+	{
+		try
+		{
+			return ToString(*t);
+		}
+		catch (const std::exception&)
+		{
+			return L"end()"s;
+		}
+	}
+
+	template<>
+	inline std::wstring ToString<Vector<int>::ConstIterator>(const Vector<int>::ConstIterator* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<Vector<int>::ConstIterator>(Vector<int>::ConstIterator* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<Vector<double>::ConstIterator>(const Vector<double>::ConstIterator& t)
+	{
+		try
+		{
+			return ToString(*t);
+		}
+		catch (const std::exception&)
+		{
+			return L"end()"s;
+		}
+	}
+
+	template<>
+	inline std::wstring ToString<Vector<double>::ConstIterator>(const Vector<double>::ConstIterator* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<Vector<double>::ConstIterator>(Vector<double>::ConstIterator* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<Vector<Foo>::ConstIterator>(const Vector<Foo>::ConstIterator& t)
+	{
+		try
+		{
+			return ToString(*t);
+		}
+		catch (const std::exception&)
+		{
+			return L"end()"s;
+		}
+	}
+
+	template<>
+	inline std::wstring ToString<Vector<Foo>::ConstIterator>(const Vector<Foo>::ConstIterator* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<Vector<Foo>::ConstIterator>(Vector<Foo>::ConstIterator* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}	
+	
+	template<>
+	inline std::wstring ToString<Vector<Bar>::ConstIterator>(const Vector<Bar>::ConstIterator& t)
+	{
+		try
+		{
+			return ToString(*t);
+		}
+		catch (const std::exception&)
+		{
+			return L"end()"s;
+		}
+	}
+
+	template<>
+	inline std::wstring ToString<Vector<Bar>::ConstIterator>(const Vector<Bar>::ConstIterator* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<Vector<Bar>::ConstIterator>(Vector<Bar>::ConstIterator* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+#pragma endregion Vector ConstIterator
 }

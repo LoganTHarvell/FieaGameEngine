@@ -46,17 +46,194 @@ namespace UnitTestLibraryDesktop
 			SList<double> doubleList;
 			SList<Foo> fooList;
 
-			SList<int>::Iterator intIterator = intList.begin();
-			SList<double>::Iterator doubleIterator = doubleList.begin();
-			SList<Foo>::Iterator fooIterator = fooList.begin();
-			
+			SList<int>::Iterator intIterator1 = SList<int>::Iterator(intList.begin());
+			SList<double>::Iterator doubleIterator1 = SList<double>::Iterator(doubleList.begin());
+			SList<Foo>::Iterator fooIterator1 = SList<Foo>::Iterator(fooList.begin());
+
+			SList<int>::Iterator intIterator2 = intList.begin();
+			SList<double>::Iterator doubleIterator2 = doubleList.begin();
+			SList<Foo>::Iterator fooIterator2 = fooList.begin();
+
+			Assert::AreEqual(intIterator1, intIterator2);
+			Assert::AreEqual(doubleIterator1, doubleIterator2);
+			Assert::AreEqual(fooIterator1, fooIterator2);
+
 			intList.PushBack(10);
 			doubleList.PushBack(10);
 			fooList.PushBack(Foo(10));
 
-			SList<int>::ConstIterator constTntIterator = SList<int>::ConstIterator(intList.begin());
-			SList<double>::ConstIterator constDoubleIterator = SList<double>::ConstIterator(doubleList.begin());
-			SList<Foo>::ConstIterator constFooIterator = SList<Foo>::ConstIterator(fooList.begin());
+			SList<int>::ConstIterator constIntIterator1 = SList<int>::ConstIterator(intList.begin());
+			SList<double>::ConstIterator constDoubleIterator1 = SList<double>::ConstIterator(doubleList.begin());
+			SList<Foo>::ConstIterator constFooIterator1 = SList<Foo>::ConstIterator(fooList.begin());
+
+			SList<int>::ConstIterator constIntIterator2 = intList.begin();
+			SList<double>::ConstIterator constDoubleIterator2 = doubleList.begin();
+			SList<Foo>::ConstIterator constFooIterator2 = fooList.begin();
+
+			Assert::AreEqual(constIntIterator1, constIntIterator2);
+			Assert::AreEqual(constDoubleIterator1, constDoubleIterator2);
+			Assert::AreEqual(constFooIterator1, constFooIterator2);
+		}
+
+		TEST_METHOD(IteratorDereference)
+		{
+			SList<int> intList;
+			SList<double> doubleList;
+			SList<Foo> fooList;
+
+			Assert::ExpectException<std::runtime_error>([&intList] { *(intList.begin()); });
+			Assert::ExpectException<std::runtime_error>([&doubleList] { *(doubleList.begin()); });
+			Assert::ExpectException<std::runtime_error>([&fooList] { *(fooList.begin()); });
+
+			Assert::ExpectException<std::runtime_error>([&intList] { *(intList.cbegin()); });
+			Assert::ExpectException<std::runtime_error>([&doubleList] { *(doubleList.cbegin()); });
+			Assert::ExpectException<std::runtime_error>([&fooList] { *(fooList.cbegin()); });
+
+			intList.PushBack(10);
+			doubleList.PushBack(10);
+			fooList.PushBack(Foo(10));
+
+			Assert::AreEqual(*intList.begin(), 10);
+			Assert::AreEqual(*doubleList.begin(), 10.0);
+			Assert::AreEqual(*fooList.begin(), Foo(10));
+
+			Assert::AreEqual(*intList.cbegin(), 10);
+			Assert::AreEqual(*doubleList.cbegin(), 10.0);
+			Assert::AreEqual(*fooList.cbegin(), Foo(10));
+		}
+
+		TEST_METHOD(IteratorEquality)
+		{
+			SList<int> intList;
+			SList<double> doubleList;
+			SList<Foo> fooList;
+
+			Assert::AreEqual(intList.begin(), intList.end());
+			Assert::AreEqual(doubleList.begin(), doubleList.end());
+			Assert::AreEqual(fooList.begin(), fooList.end());
+
+			Assert::AreEqual(intList.cbegin(), intList.cend());
+			Assert::AreEqual(doubleList.cbegin(), doubleList.cend());
+			Assert::AreEqual(fooList.cbegin(), fooList.cend());
+
+			intList.PushBack(10);
+			doubleList.PushBack(10);
+			fooList.PushBack(Foo(10));
+
+			intList.PushBack(10);
+			doubleList.PushBack(10);
+			fooList.PushBack(Foo(10));
+
+			SList<int>::Iterator intIterator = intList.begin();
+			SList<double>::Iterator doubleIterator = doubleList.begin();
+			SList<Foo>::Iterator fooIterator = fooList.begin();
+
+			SList<int>::ConstIterator constIntIterator = intList.cbegin();
+			SList<double>::ConstIterator constDoubleIterator = doubleList.cbegin();
+			SList<Foo>::ConstIterator constFooIterator = fooList.cbegin();
+
+			Assert::AreEqual(intIterator, intList.begin());
+			Assert::AreEqual(doubleIterator, doubleList.begin());
+			Assert::AreEqual(fooIterator, fooList.begin());
+
+			Assert::AreEqual(constIntIterator, intList.cbegin());
+			Assert::AreEqual(constDoubleIterator, doubleList.cbegin());
+			Assert::AreEqual(constFooIterator, fooList.cbegin());
+
+			SList<int>::Iterator prevIntIterator = intIterator++;
+			SList<double>::Iterator prevDoubleIterator = doubleIterator++;
+			SList<Foo>::Iterator prevFooIterator = fooIterator++;
+
+			SList<int>::ConstIterator prevConstIntIterator = constIntIterator++;
+			SList<double>::ConstIterator prevConstDoubleIterator = constDoubleIterator++;
+			SList<Foo>::ConstIterator prevConstFooIterator = constFooIterator++;
+
+			Assert::IsTrue(intIterator != prevIntIterator);
+			Assert::IsTrue(doubleIterator != prevDoubleIterator);
+			Assert::IsTrue(fooIterator != prevFooIterator);
+
+			Assert::IsTrue(constIntIterator != prevConstIntIterator);
+			Assert::IsTrue(constDoubleIterator != prevConstDoubleIterator);
+			Assert::IsTrue(constFooIterator != prevConstFooIterator);
+		}
+
+		TEST_METHOD(IteratorIncrementOperators)
+		{
+			SList<int> intList = { 10, 20, 30 };
+			SList<double> doubleList = { 10, 20, 30 };
+			SList<Foo> fooList = { Foo(10), Foo(20), Foo(30) };
+
+			SList<int>::Iterator intIterator = intList.begin();
+			SList<double>::Iterator doubleIterator = doubleList.begin();
+			SList<Foo>::Iterator fooIterator = fooList.begin();
+
+			SList<int>::ConstIterator constIntIterator = intList.cbegin();
+			SList<double>::ConstIterator constDoubleIterator = doubleList.cbegin();
+			SList<Foo>::ConstIterator constFooIterator = fooList.cbegin();
+
+			Assert::AreEqual(*intIterator, 10);
+			Assert::AreEqual(*doubleIterator, 10.0);
+			Assert::AreEqual(*fooIterator, Foo(10));
+
+			Assert::AreEqual(*constIntIterator, 10);
+			Assert::AreEqual(*constDoubleIterator, 10.0);
+			Assert::AreEqual(*constFooIterator, Foo(10));
+
+			SList<int>::Iterator prevIntIterator = intIterator++;
+			SList<double>::Iterator prevDoubleIterator = doubleIterator++;
+			SList<Foo>::Iterator prevFooIterator = fooIterator++;
+
+			Assert::AreEqual(*prevIntIterator, 10);
+			Assert::AreEqual(*prevDoubleIterator, 10.0);
+			Assert::AreEqual(*prevFooIterator, Foo(10));
+
+			Assert::AreEqual(*intIterator, 20);
+			Assert::AreEqual(*doubleIterator, 20.0);
+			Assert::AreEqual(*fooIterator, Foo(20));
+
+			SList<int>::ConstIterator prevConstIntIterator = constIntIterator++;
+			SList<double>::ConstIterator prevConstDoubleIterator = constDoubleIterator++;
+			SList<Foo>::ConstIterator prevConstFooIterator = constFooIterator++;
+
+			Assert::AreEqual(*prevConstIntIterator, 10);
+			Assert::AreEqual(*prevConstDoubleIterator, 10.0);
+			Assert::AreEqual(*prevConstFooIterator, Foo(10));
+
+			Assert::AreEqual(*constIntIterator, 20);
+			Assert::AreEqual(*constDoubleIterator, 20.0);
+			Assert::AreEqual(*constFooIterator, Foo(20));
+
+			++intIterator;
+			++doubleIterator;
+			++fooIterator;
+
+			++constIntIterator;
+			++constDoubleIterator;
+			++constFooIterator;
+
+			Assert::AreEqual(*intIterator, 30);
+			Assert::AreEqual(*doubleIterator, 30.0);
+			Assert::AreEqual(*fooIterator, Foo(30));
+
+			Assert::AreEqual(*constIntIterator, 30);
+			Assert::AreEqual(*constDoubleIterator, 30.0);
+			Assert::AreEqual(*constFooIterator, Foo(30));
+
+			++intIterator;
+			++doubleIterator;
+			++fooIterator;
+
+			++constIntIterator;
+			++constDoubleIterator;
+			++constFooIterator;
+
+			Assert::ExpectException<std::runtime_error>([&intIterator] { ++intIterator; });
+			Assert::ExpectException<std::runtime_error>([&doubleIterator] { ++doubleIterator; });
+			Assert::ExpectException<std::runtime_error>([&fooIterator] { ++fooIterator; });
+
+			Assert::ExpectException<std::runtime_error>([&constIntIterator] { ++constIntIterator; });
+			Assert::ExpectException<std::runtime_error>([&constDoubleIterator] { ++constDoubleIterator; });
+			Assert::ExpectException<std::runtime_error>([&constFooIterator] { ++constFooIterator; });
 		}
 
 		TEST_METHOD(SListInitialization)
@@ -114,12 +291,12 @@ namespace UnitTestLibraryDesktop
 
 		TEST_METHOD(MoveOperators)
 		{
-			/* Integer Data */
+			SList<int> intList = { 10, 20, 30 };
+			SList<double> doubleList = { 10, 20, 30 };
+			SList<Foo> fooList = { Foo(10), Foo(20), Foo(30) };
+			
 
-			SList<int> intList;
-			intList.PushBack(10);
-			intList.PushBack(20);
-			intList.PushBack(30);
+			/* Integer Data */
 
 			// Validates copies are equal to source
 			SList<int> intListCopy = intList;
@@ -140,11 +317,6 @@ namespace UnitTestLibraryDesktop
 
 			/* Double Data */
 
-			SList<double> doubleList;
-			doubleList.PushBack(10);
-			doubleList.PushBack(20);
-			doubleList.PushBack(30);
-
 			// Validates copies are equal to source
 			SList<double> doubleListCopy = doubleList;
 			doubleList = std::move(doubleList);
@@ -163,11 +335,6 @@ namespace UnitTestLibraryDesktop
 
 
 			/* Foo Data */
-
-			SList<Foo> fooList;
-			fooList.PushBack(Foo(10));
-			fooList.PushBack(Foo(20));
-			fooList.PushBack(Foo(30));
 
 			// Validates copies are equal to source
 			SList<Foo> fooListCopy = fooList;
@@ -192,7 +359,6 @@ namespace UnitTestLibraryDesktop
 
 			SList<int> intList1;
 			SList<int> intList2;
-
 
 			// Equality with self
 			Assert::AreEqual(intList1, intList1);
@@ -412,33 +578,6 @@ namespace UnitTestLibraryDesktop
 			Assert::IsTrue(!filledConstFooList.IsEmpty());
 		}
 
-		TEST_METHOD(IteratorDereference)
-		{
-			SList<int> intList;
-			SList<double> doubleList;
-			SList<Foo> fooList;
-
-			Assert::ExpectException<std::runtime_error>([&intList] { *(intList.begin()); });
-			Assert::ExpectException<std::runtime_error>([&doubleList] { *(doubleList.begin()); });
-			Assert::ExpectException<std::runtime_error>([&fooList] { *(fooList.begin()); });
-
-			Assert::ExpectException<std::runtime_error>([&intList] { *(intList.cbegin()); });
-			Assert::ExpectException<std::runtime_error>([&doubleList] { *(doubleList.cbegin()); });
-			Assert::ExpectException<std::runtime_error>([&fooList] { *(fooList.cbegin()); });
-
-			intList.PushBack(10);
-			doubleList.PushBack(10);
-			fooList.PushBack(Foo(10));
-
-			Assert::AreEqual(*intList.begin(), 10);
-			Assert::AreEqual(*doubleList.begin(), 10.0);
-			Assert::AreEqual(*fooList.begin(), Foo(10));
-
-			Assert::AreEqual(*intList.cbegin(), 10);
-			Assert::AreEqual(*doubleList.cbegin(), 10.0);
-			Assert::AreEqual(*fooList.cbegin(), Foo(10));
-		}
-
 		TEST_METHOD(Begin)
 		{
 			SList<int> intList;
@@ -548,141 +687,6 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(constDoubleIterator, doubleList.cend());
 			Assert::AreEqual(constFooIterator, fooList.cend());
 		}
-
-		TEST_METHOD(IteratorEquality)
-		{
-			SList<int> intList;
-			SList<double> doubleList;
-			SList<Foo> fooList;
-
-			Assert::AreEqual(intList.begin(), intList.end());
-			Assert::AreEqual(doubleList.begin(), doubleList.end());
-			Assert::AreEqual(fooList.begin(), fooList.end());
-
-			Assert::AreEqual(intList.cbegin(), intList.cend());
-			Assert::AreEqual(doubleList.cbegin(), doubleList.cend());
-			Assert::AreEqual(fooList.cbegin(), fooList.cend());
-
-			intList.PushBack(10);
-			doubleList.PushBack(10);
-			fooList.PushBack(Foo(10));
-
-			intList.PushBack(10);
-			doubleList.PushBack(10);
-			fooList.PushBack(Foo(10));
-
-			SList<int>::Iterator intIterator = intList.begin();
-			SList<double>::Iterator doubleIterator = doubleList.begin();
-			SList<Foo>::Iterator fooIterator = fooList.begin();
-
-			SList<int>::ConstIterator constIntIterator = intList.cbegin();
-			SList<double>::ConstIterator constDoubleIterator = doubleList.cbegin();
-			SList<Foo>::ConstIterator constFooIterator = fooList.cbegin();
-
-			Assert::AreEqual(intIterator, intList.begin());
-			Assert::AreEqual(doubleIterator, doubleList.begin());
-			Assert::AreEqual(fooIterator, fooList.begin());
-
-			Assert::AreEqual(constIntIterator, intList.cbegin());
-			Assert::AreEqual(constDoubleIterator, doubleList.cbegin());
-			Assert::AreEqual(constFooIterator, fooList.cbegin());
-
-			SList<int>::Iterator prevIntIterator = intIterator++;
-			SList<double>::Iterator prevDoubleIterator = doubleIterator++;
-			SList<Foo>::Iterator prevFooIterator = fooIterator++;
-
-			SList<int>::ConstIterator prevConstIntIterator = constIntIterator++;
-			SList<double>::ConstIterator prevConstDoubleIterator = constDoubleIterator++;
-			SList<Foo>::ConstIterator prevConstFooIterator = constFooIterator++;
-
-			Assert::IsTrue(intIterator != prevIntIterator);
-			Assert::IsTrue(doubleIterator != prevDoubleIterator);
-			Assert::IsTrue(fooIterator != prevFooIterator);
-
-			Assert::IsTrue(constIntIterator != prevConstIntIterator);
-			Assert::IsTrue(constDoubleIterator != prevConstDoubleIterator);
-			Assert::IsTrue(constFooIterator != prevConstFooIterator);
-		}
-
-		TEST_METHOD(IteratorIncrementOperators)
-		{
-			SList<int> intList = { 10, 20, 30 };
-			SList<double> doubleList = { 10, 20, 30 };
-			SList<Foo> fooList = { Foo(10), Foo(20), Foo(30) };
-
-			SList<int>::Iterator intIterator = intList.begin();
-			SList<double>::Iterator doubleIterator = doubleList.begin();
-			SList<Foo>::Iterator fooIterator = fooList.begin();
-
-			SList<int>::ConstIterator constIntIterator = intList.cbegin();
-			SList<double>::ConstIterator constDoubleIterator = doubleList.cbegin();
-			SList<Foo>::ConstIterator constFooIterator = fooList.cbegin();
-
-			Assert::AreEqual(*intIterator, 10);
-			Assert::AreEqual(*doubleIterator, 10.0);
-			Assert::AreEqual(*fooIterator, Foo(10));
-
-			Assert::AreEqual(*constIntIterator, 10);
-			Assert::AreEqual(*constDoubleIterator, 10.0);
-			Assert::AreEqual(*constFooIterator, Foo(10));
-
-			SList<int>::Iterator prevIntIterator = intIterator++;
-			SList<double>::Iterator prevDoubleIterator = doubleIterator++;
-			SList<Foo>::Iterator prevFooIterator = fooIterator++;
-
-			Assert::AreEqual(*prevIntIterator, 10);
-			Assert::AreEqual(*prevDoubleIterator, 10.0);
-			Assert::AreEqual(*prevFooIterator, Foo(10));
-
-			Assert::AreEqual(*intIterator, 20);
-			Assert::AreEqual(*doubleIterator, 20.0);
-			Assert::AreEqual(*fooIterator, Foo(20));
-
-			SList<int>::ConstIterator prevConstIntIterator = constIntIterator++;
-			SList<double>::ConstIterator prevConstDoubleIterator = constDoubleIterator++;
-			SList<Foo>::ConstIterator prevConstFooIterator = constFooIterator++;
-
-			Assert::AreEqual(*prevConstIntIterator, 10);
-			Assert::AreEqual(*prevConstDoubleIterator, 10.0);
-			Assert::AreEqual(*prevConstFooIterator, Foo(10));
-
-			Assert::AreEqual(*constIntIterator, 20);
-			Assert::AreEqual(*constDoubleIterator, 20.0);
-			Assert::AreEqual(*constFooIterator, Foo(20));
-
-			++intIterator;
-			++doubleIterator;
-			++fooIterator;
-
-			++constIntIterator;
-			++constDoubleIterator;
-			++constFooIterator;
-
-			Assert::AreEqual(*intIterator, 30);
-			Assert::AreEqual(*doubleIterator, 30.0);
-			Assert::AreEqual(*fooIterator, Foo(30));
-
-			Assert::AreEqual(*constIntIterator, 30);
-			Assert::AreEqual(*constDoubleIterator, 30.0);
-			Assert::AreEqual(*constFooIterator, Foo(30));
-
-			++intIterator;
-			++doubleIterator;
-			++fooIterator;
-
-			++constIntIterator;
-			++constDoubleIterator;
-			++constFooIterator;
-
-			Assert::ExpectException<std::runtime_error>([&intIterator] { ++intIterator; });
-			Assert::ExpectException<std::runtime_error>([&doubleIterator] { ++doubleIterator; });
-			Assert::ExpectException<std::runtime_error>([&fooIterator] { ++fooIterator; });
-		
-			Assert::ExpectException<std::runtime_error>([&constIntIterator] { ++constIntIterator; });
-			Assert::ExpectException<std::runtime_error>([&constDoubleIterator] { ++constDoubleIterator; });
-			Assert::ExpectException<std::runtime_error>([&constFooIterator] { ++constFooIterator; });
-		}
-
 
 		TEST_METHOD(PushFront)
 		{
