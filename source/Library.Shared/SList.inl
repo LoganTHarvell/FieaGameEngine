@@ -22,7 +22,7 @@ namespace Library
 	{
 		if (mNode == nullptr)
 		{
-			throw std::runtime_error("Iterator has no associated node.");
+			throw std::runtime_error("Invalid Iterator.");
 		}
 
 		return mNode->Data;
@@ -45,7 +45,7 @@ namespace Library
 	{
 		if (mNode == nullptr)
 		{
-			throw std::runtime_error("Invalid iterator.");
+			throw std::runtime_error("Invalid Iterator.");
 		}
 
 		mNode = mNode->Next;
@@ -64,8 +64,8 @@ namespace Library
 
 #pragma region ConstIterator
 	template<typename T>
-	inline SList<T>::ConstIterator::ConstIterator(const Iterator& rhs) :
-		mOwner(rhs.mOwner), mNode(rhs.mNode)
+	inline SList<T>::ConstIterator::ConstIterator(const Iterator& it) :
+		mOwner(it.mOwner), mNode(it.mNode)
 	{
 	}
 
@@ -80,7 +80,7 @@ namespace Library
 	{
 		if (mNode == nullptr)
 		{
-			throw std::runtime_error("ConstIterator has no associated node.");
+			throw std::runtime_error("Invalid ConstIterator.");
 		}
 
 		return mNode->Data;
@@ -103,7 +103,7 @@ namespace Library
 	{
 		if (mNode == nullptr)
 		{
-			throw std::runtime_error("Invalid iterator.");
+			throw std::runtime_error("Invalid ConstIterator.");
 		}
 
 		mNode = mNode->Next;

@@ -17,11 +17,19 @@ namespace Library
 	class Vector
 	{
 	public:
-		/* Iterator Traits */
+		/// <summary>
+		/// Value type for std::iterator_trait.
+		/// </summary>
 		using value_type = T;
 
-		/* Functor Signature Typenames */
+		/// <summary>
+		/// Reserve strategy functor type used during resize on insertion.
+		/// </summary>
 		using ReserveStrategy = std::function<size_t(const size_t, const size_t)>;
+		
+		/// <summary>
+		/// Equality functor type used to evaluate equality of vector types.
+		/// </summary>
 		using EqualityFunctor = std::function<bool(T, T)>;
 
 	public:
@@ -35,13 +43,37 @@ namespace Library
 			friend class ConstIterator;
 
 		public:
-			/* Iterator Traits */
+#pragma region Iterator Traits
+			/// <summary>
+			/// Size type for std::iterator_trait.
+			/// </summary>
 			using size_type = size_t;
+			
+			/// <summary>
+			/// Difference type for std::iterator_trait.
+			/// </summary>
 			using difference_type = std::ptrdiff_t;
+			
+			/// <summary>
+			/// Value type for std::iterator_trait.
+			/// </summary>
 			using value_type = T;
+			
+			/// <summary>
+			/// Pointer type for std::iterator_trait.
+			/// </summary>
 			using pointer = T*;
+			
+			/// <summary>
+			/// Reference type for std::iterator_trait.
+			/// </summary>
 			using reference = T&;
+
+			/// <summary>
+			/// Iterator category for std::iterator_trait.
+			/// </summary>
 			using iterator_category = std::forward_iterator_tag;
+#pragma endregion Iterator Traits
 
 		public:
 			/* Defaults */
@@ -54,10 +86,10 @@ namespace Library
 
 		private:
 			/// <summary>
-			/// Specialized constructor for creating an iterator for a vector at a given index.
+			/// Specialized constructor for creating an Iterator for a vector at a given index.
 			/// </summary>
-			/// <param name="vector">Source vector for the iterator's values.</param>
-			/// <param name="index">Current element of the vector referenced by the iterator.</param>
+			/// <param name="vector">Source vector for the Iterator's values.</param>
+			/// <param name="index">Current element of the vector referenced by the Iterator.</param>
 			Iterator(Vector<T>& vector, const size_t index=0);
 
 		public:
@@ -71,81 +103,81 @@ namespace Library
 			/// <summary>
 			/// Equal operator.
 			/// </summary>
-			/// <param name="rhs">Right hand side iterator to be compared against for equality.</param>
+			/// <param name="rhs">Right hand side Iterator to be compared against for equality.</param>
 			/// <returns>True when the rhs owner vector and element are equal to the left, false otherwise.</returns>
 			bool operator==(const Iterator& rhs) const noexcept;
 
 			/// <summary>
 			/// Not equal operator.
 			/// </summary>
-			/// <param name="rhs">Right hand side iterator to be compared against for equality.</param>
+			/// <param name="rhs">Right hand side Iterator to be compared against for equality.</param>
 			/// <returns>True when the rhs owner vector and element are inequal to the left, false otherwise.</returns>
 			bool operator!=(const Iterator& rhs) const noexcept;
 
 			/// <summary>
 			/// Pre-increment operator.
 			/// </summary>
-			/// <returns>Reference to the next iterator.</returns>
+			/// <returns>Reference to the next Iterator.</returns>
 			/// <exception cref="runtime_error">Iterator invalid or out of bounds.</exception>
 			Iterator& operator++();
 
 			/// <summary>
 			/// Post-increment operator.
 			/// </summary>
-			/// <returns>A copy of the iterator before it was incremented.</returns>
+			/// <returns>Copy of the Iterator before it was incremented.</returns>
 			Iterator operator++(int);
 
 			/// <summary>
 			/// Addition assignment operator.
 			/// </summary>
-			/// <param name="rhs">A value to offset the iterator.</param>
-			/// <returns>Reference to the iterator with the given offset.</returns>
+			/// <param name="rhs">Value to offset the Iterator.</param>
+			/// <returns>Reference to the Iterator with the given offset.</returns>
 			/// <exception cref="runtime_error">Iterator invalid or out of bounds.</exception>
 			Iterator& operator+=(const size_t rhs);
 
 			/// <summary>
 			/// Addition operator.
 			/// </summary>
-			/// <param name="rhs">A value to offset the iterator.</param>
-			/// <returns>An iterator at the given offset from this iterator.</returns>
+			/// <param name="rhs">Value to offset the Iterator.</param>
+			/// <returns>Iterator at the given offset from this Iterator.</returns>
 			Iterator operator+(const size_t rhs);
 
 			/// <summary>
 			/// Pre-decrement operator.
 			/// </summary>
-			/// <returns>Reference to the next iterator.</returns>
+			/// <returns>Reference to the next Iterator.</returns>
 			/// <exception cref="runtime_error">Iterator invalid out of bounds.</exception>
 			Iterator& operator--();
 
 			/// <summary>
 			/// Post-decrement operator.
 			/// </summary>
-			/// <returns>A copy of the iterator before it was decremented.</returns>
+			/// <returns>Copy of the Iterator before it was decremented.</returns>
 			Iterator operator--(int);
 
 			/// <summary>
 			/// Subtraction assignment operator.
 			/// </summary>
-			/// <param name="rhs">A value to offset the iterator.</param>
-			/// <returns>Reference to the iterator with the given offset.</returns>
+			/// <param name="rhs">Value to offset the Iterator.</param>
+			/// <returns>Reference to the Iterator with the given offset.</returns>
 			/// <exception cref="runtime_error">Iterator invalid out of bounds.</exception>
 			Iterator& operator-=(const size_t rhs);
 
 			/// <summary>
 			/// Subtraction operator.
 			/// </summary>
-			/// <param name="rhs">A value to offset the iterator.</param>
-			/// <returns>An iterator at the given offset from this iterator.</returns>
+			/// <param name="rhs">Value to offset the Iterator.</param>
+			/// <returns>Iterator at the given offset from this Iterator.</returns>
 			Iterator operator-(const size_t rhs);
 
 		private:
 			/// <summary>
-			/// Owner vector that is able to be traversed by the iterator instance.
+			/// Owner vector that is able to be traversed by the Iterator instance.
 			/// </summary>
 			Vector* mOwner{ nullptr };
 
 			/// <summary>
-			/// Index of the current element referenced by the iterator instance.
+			/// Index of the current element referenced by the Iterator instance.
 			/// </summary>
 			size_t mIndex{ 0 };
 		};
@@ -160,13 +192,37 @@ namespace Library
 			friend Vector;
 
 		public:
-			/* Iterator Traits */
+#pragma region Iterator Traits
+			/// <summary>
+			/// Size type for std::iterator_trait.
+			/// </summary>
 			using size_type = size_t;
+
+			/// <summary>
+			/// Difference type for std::iterator_trait.
+			/// </summary>
 			using difference_type = std::ptrdiff_t;
+
+			/// <summary>
+			/// Value type for std::iterator_trait.
+			/// </summary>
 			using value_type = T;
+
+			/// <summary>
+			/// Pointer type for std::iterator_trait.
+			/// </summary>
 			using pointer = const T*;
+
+			/// <summary>
+			/// Reference type for std::iterator_trait.
+			/// </summary>
 			using reference = const T&;
+
+			/// <summary>
+			/// Iterator category for std::iterator_trait.
+			/// </summary>
 			using iterator_category = std::forward_iterator_tag;
+#pragma endregion Iterator Traits
 
 		public:
 			/* Defaults */
@@ -180,15 +236,15 @@ namespace Library
 			/// <summary>
 			/// Specialized copy constructor that enables the construction of a ConstIterator from a non-const Itrerator.
 			/// </summary>
-			/// <param name="iterator"></param>
-			ConstIterator(const Iterator& iterator);
+			/// <param name="it">ConstIterator to be copied.</param>
+			ConstIterator(const Iterator& it);
 
 		private:
 			/// <summary>
-			/// Specialized constructor for creating an iterator for a vector at a given index.
+			/// Specialized constructor for creating an ConstIterator for a vector at a given index.
 			/// </summary>
-			/// <param name="vector">Source vector for the iterator's values.</param>
-			/// <param name="index">Current element of the vector referenced by the iterator, defaulted to a nullptr value.</param>
+			/// <param name="vector">Source vector for the ConstIterator's values.</param>
+			/// <param name="index">Current element of the vector referenced by the ConstIterator, defaulted to a nullptr value.</param>
 			ConstIterator(const Vector& vector, size_t index=0);
 
 		public:
@@ -196,87 +252,86 @@ namespace Library
 			/// Dereference operator.
 			/// </summary>
 			/// <returns>Value of the current element of the vector.</returns>
-			/// <exception cref="runtime_error">Iterator invalid.</exception>
 			const T& operator*() const;
 
 			/// <summary>
 			/// Equal operator.
 			/// </summary>
-			/// <param name="rhs">Right hand side iterator to be compared against for equality.</param>
+			/// <param name="rhs">Right hand side ConstIterator to be compared against for equality.</param>
 			/// <returns>True when the rhs owner vector and element are equal to the left, false otherwise.</returns>
 			bool operator==(const ConstIterator& rhs) const noexcept;
 
 			/// <summary>
 			/// Equal operator.
 			/// </summary>
-			/// <param name="rhs">Right hand side iterator to be compared against for equality.</param>
+			/// <param name="rhs">Right hand side ConstIterator to be compared against for equality.</param>
 			/// <returns>True when the rhs owner vector and element are inequal to the left, false otherwise.</returns>
 			bool operator!=(const ConstIterator& rhs) const noexcept;
 
 			/// <summary>
 			/// Pre-increment operator.
 			/// </summary>
-			/// <returns>Reference to the next iterator.</returns>
-			/// <exception cref="runtime_error">Iterator invalid or out of bounds.</exception>
+			/// <returns>Reference to the next ConstIterator.</returns>
+			/// <exception cref="runtime_error">ConstIterator invalid or out of bounds.</exception>
 			ConstIterator& operator++();
 
 			/// <summary>
 			/// Post-increment operator.
 			/// </summary>
-			/// <returns>A copy of the iterator before it was incremented.</returns>
+			/// <returns>Copy of the ConstIterator before it was incremented.</returns>
 			ConstIterator operator++(int);
 
 			/// <summary>
 			/// Addition assignment operator.
 			/// </summary>
-			/// <param name="rhs">A value to offset the iterator.</param>
-			/// <returns>Reference to the iterator with the given offset.</returns>
-			/// <exception cref="runtime_error">Iterator invalid or out of bounds.</exception>
+			/// <param name="rhs">Value to offset the ConstIterator.</param>
+			/// <returns>Reference to the ConstIterator with the given offset.</returns>
+			/// <exception cref="runtime_error">ConstIterator invalid or out of bounds.</exception>
 			ConstIterator& operator+=(const size_t rhs);
 
 			/// <summary>
 			/// Addition operator.
 			/// </summary>
-			/// <param name="rhs">A value to offset the iterator.</param>
-			/// <returns>An iterator at the given offset from this iterator.</returns>
+			/// <param name="rhs">Value to offset the ConstIterator.</param>
+			/// <returns>ConstIterator at the given offset from this ConstIterator.</returns>
 			ConstIterator operator+(const size_t rhs);
 
 			/// <summary>
 			/// Pre-decrement operator.
 			/// </summary>
-			/// <returns>Reference to the next iterator.</returns>
-			/// <exception cref="runtime_error">Iterator invalid or out of bounds.</exception>
+			/// <returns>Reference to the next ConstIterator.</returns>
+			/// <exception cref="runtime_error">ConstIterator invalid or out of bounds.</exception>
 			ConstIterator& operator--();
 
 			/// <summary>
 			/// Post-decrement operator.
 			/// </summary>
-			/// <returns>A copy of the iterator before it was decremented.</returns>
+			/// <returns>Vopy of the ConstIterator before it was decremented.</returns>
 			ConstIterator operator--(int);
 
 			/// <summary>
 			/// Subtraction assignment operator.
 			/// </summary>
-			/// <param name="rhs">A value to offset the iterator.</param>
-			/// <returns>Reference to the iterator with the given offset.</returns>
+			/// <param name="rhs">Value to offset the ConstIterator.</param>
+			/// <returns>Reference to the ConstIterator with the given offset.</returns>
 			ConstIterator& operator-=(const size_t rhs);
 
 			/// <summary>
 			/// Subtraction operator.
 			/// </summary>
-			/// <param name="rhs">A value to offset the iterator.</param>
-			/// <returns>An iterator at the given offset from this iterator.</returns>
-			/// <exception cref="runtime_error">Iterator invalid or out of bounds.</exception>
+			/// <param name="rhs">Value to offset the ConstIterator.</param>
+			/// <returns>ConstIterator at the given offset from this ConstIterator.</returns>
+			/// <exception cref="runtime_error">ConstIterator invalid or out of bounds.</exception>
 			ConstIterator operator-(const size_t rhs);
 		
 		private:
 			/// <summary>
-			/// Owner vector that is able to be traversed by the iterator instance.
+			/// Owner vector that is able to be traversed by the ConstIterator instance.
 			/// </summary>
 			const Vector* mOwner{ nullptr };
 
 			/// <summary>
-			/// Node reference that contains the current element referenced by the iterator instance.
+			/// Node reference that contains the current element referenced by the ConstIterator instance.
 			/// </summary>
 			size_t mIndex{ 0 };
 		};
@@ -286,7 +341,7 @@ namespace Library
 		/// <summary>
 		/// Functor specifying the default strategy for incrementing the capacity of the vector.
 		/// </summary>
-		struct DefaultReserveStrategy
+		struct DefaultReserveStrategy final
 		{
 			/// <summary>
 			/// Function call operator.
@@ -363,7 +418,7 @@ namespace Library
 		/// Equals operator. 
 		/// Checks if the size of the vector and the data values are equal to the size and values of the right hand side (rhs) vector.
 		/// </summary>
-		/// <param name="rhs">The vector on the right hand side to be compared to the left.</param>
+		/// <param name="rhs">Vector on the right hand side to be compared to the left.</param>
 		/// <returns>True when lists are equivalent, otherwise false.</returns>
 		bool operator==(const Vector& rhs) const noexcept;
 
@@ -371,62 +426,62 @@ namespace Library
 		/// Not equal operator. 
 		/// Checks if the size of the vector and the data values are equal to the size and values of the right hand side (rhs) vector.
 		/// </summary>
-		/// <param name="rhs">The vector on the right hand side to be compared to the left.</param>
+		/// <param name="rhs">Vector on the right hand side to be compared to the left.</param>
 		/// <returns>True when lists are not equivalent, otherwise false.</returns>
 		bool operator!=(const Vector& rhs) const noexcept;
 #pragma endregion Boolean Operators
 
 #pragma region Iterator Accessors
 		/// <summary>
-		/// Gets an iterator pointing to the first element in the vector, values are mutable.
+		/// Gets an Iterator pointing to the first element in the vector, values are mutable.
 		/// </summary>
 		/// <returns>Iterator to the first element in the vector.</returns>
 		Iterator begin();
 
 		/// <summary>
-		/// Gets an iterator pointing to the first element in the vector, values are immutable.
+		/// Gets an ConstIterator pointing to the first element in the vector, values are immutable.
 		/// </summary>
-		/// <returns>Constant value iterator to the first element in the vector.</returns>
+		/// <returns>Constant value ConstIterator to the first element in the vector.</returns>
 		ConstIterator begin() const;
 
 		/// <summary>
-		/// Gets an iterator pointing to the first element in the vector, values are immutable.
+		/// Gets an ConstIterator pointing to the first element in the vector, values are immutable.
 		/// </summary>
-		/// <returns>Constant value iterator to the first element in the vector.</returns>
+		/// <returns>Constant value ConstIterator to the first element in the vector.</returns>
 		ConstIterator cbegin() const;
 
 		/// <summary>
-		/// Gets an iterator pointing past the last element in the vector, value is mutable.
+		/// Gets an Iterator pointing past the last element in the vector, value is mutable.
 		/// </summary>
 		/// <returns>Iterator to the last element in the vector.</returns>	
 		Iterator end();
 
 		/// <summary>
-		/// Gets an iterator pointing past the last element in the vector, value is immutable.
+		/// Gets an ConstIterator pointing past the last element in the vector, value is immutable.
 		/// </summary>
-		/// <returns>Constant value iterator to the last element in the vector.</returns>	
+		/// <returns>Constant value ConstIterator to the last element in the vector.</returns>	
 		ConstIterator end() const;
 
 		/// <summary>
-		/// Gets an iterator pointing past the last element in the vector, value is immutable.
+		/// Gets an ConstIterator pointing past the last element in the vector, value is immutable.
 		/// </summary>
-		/// <returns>Constant value iterator to the last element in the vector.</returns>	
+		/// <returns>Constant value ConstIterator to the last element in the vector.</returns>	
 		ConstIterator cend() const;
 
 		/// <summary>
-		/// Searches the vector for a given value and returns an iterator.
+		/// Searches the vector for a given value and returns an Iterator.
 		/// </summary>
 		/// <param name="value">Value to search for in the vector.</param>
 		/// <param name="equal">Equality functor for comparing the search value to elements in the vector.</param>
-		/// <returns>An iterator referencing the value, if found. Otherwise it returns an empty iterator.</returns>
+		/// <returns>Iterator referencing the value, if found. Otherwise it returns an empty Iterator.</returns>
 		Iterator Find(const T& value, const EqualityFunctor equal=DefaultEquality<T>());
 
 		/// <summary>
-		/// Searches the vector for a given value and returns an iterator.
+		/// Searches the vector for a given value and returns an ConstIterator.
 		/// </summary>
 		/// <param name="value">Value to search for in the vector.</param>
 		/// <param name="equal">Equality functor for comparing the search value to elements in the vector.</param>
-		/// <returns>An const value iterator referencing the value, if found. Otherwise it returns an empty iterator.</returns>
+		/// <returns>ConstIterator referencing the value, if found. Otherwise it returns an empty ConstIterator.</returns>
 		ConstIterator Find(const T& value, const EqualityFunctor equal=DefaultEquality<T>()) const;
 #pragma endregion Iterator Accessors
 
@@ -453,7 +508,7 @@ namespace Library
 		/// Allocates memory for the specified capacity. Preserving any existing elements.
 		/// </summary>
 		/// <param name="capacity">Max number of elements for which to allocate memory.</param>
-		/// <exception cref="runtime_error">Insufficient memory."</exception>
+		/// <exception cref="runtime_error">Failed memory reallocation."</exception>
 		void Reserve(const size_t capacity);
 
 		/// <summary>
@@ -474,11 +529,39 @@ namespace Library
 		/// <summary>
 		/// Reduces the capacity of the vector to fit the content size.
 		/// </summary>
-		/// <exception cref="runtime_error">Unable to reallocate memory.</exception>
+		/// <exception cref="runtime_error">Failed memory reallocation.</exception>
 		void ShrinkToFit();
 #pragma endregion Size and Capacity
 
 #pragma region Element Accessors
+		/// <summary>
+		/// Getter method for the first data value in the vector.
+		/// </summary>
+		/// <returns>Reference to the first data value in the vector.</returns>
+		/// <exception cref="runtime_error">Thrown when called on an empty vector.</exception>
+		T& Front();
+
+		/// <summary>
+		/// Getter method for the first data value in the vector, as a constant.
+		/// </summary>
+		/// <returns>Reference to the first data value in the vector, as a constant.</returns>
+		/// <exception cref="runtime_error">Thrown when called on an empty vector.</exception>
+		const T& Front() const;
+
+		/// <summary>
+		/// Getter method for the last data value in the vector.
+		/// </summary>
+		/// <returns>Reference to the first data value in the vector.</returns>
+		/// <exception cref="runtime_error">Thrown when called on an empty vector.</exception>
+		T& Back();
+
+		/// <summary>
+		/// Getter method for the lase data value in the vector, as a constant.
+		/// </summary>
+		/// <returns>Reference to the last data value in the vector, as a constant.</returns>
+		/// <exception cref="runtime_error">Thrown when called on an empty vector.</exception>
+		const T& Back() const;
+
 		/// <summary>
 		/// Retrieves a value reference for the element at the specified index.
 		/// </summary>
@@ -512,34 +595,6 @@ namespace Library
 		/// <returns>Const value reference to the value of the element at the given index.</returns>
 		/// <exception cref="runtime_error">Index is out of bounds.</exception>
 		const T& operator[](const size_t index) const;
-
-		/// <summary>
-		/// Getter method for the first data value in the vector.
-		/// </summary>
-		/// <returns>Reference to the first data value in the vector.</returns>
-		/// <exception cref="runtime_error">Thrown when called on an empty vector.</exception>
-		T& Front();
-
-		/// <summary>
-		/// Getter method for the first data value in the vector, as a constant.
-		/// </summary>
-		/// <returns>Reference to the first data value in the vector, as a constant.</returns>
-		/// <exception cref="runtime_error">Thrown when called on an empty vector.</exception>
-		const T& Front() const;
-
-		/// <summary>
-		/// Getter method for the last data value in the vector.
-		/// </summary>
-		/// <returns>Reference to the first data value in the vector.</returns>
-		/// <exception cref="runtime_error">Thrown when called on an empty vector.</exception>
-		T& Back();
-
-		/// <summary>
-		/// Getter method for the lase data value in the vector, as a constant.
-		/// </summary>
-		/// <returns>Reference to the last data value in the vector, as a constant.</returns>
-		/// <exception cref="runtime_error">Thrown when called on an empty vector.</exception>
-		const T& Back() const;
 #pragma endregion Element Accessors
 
 #pragma region Modifiers
@@ -547,7 +602,7 @@ namespace Library
 		/// Adds an element with the passed in data to the back of the vector.
 		/// </summary>
 		/// <typeparam name="ReserveStrategy">Functor that takes in a capacity and size</typeparam>
-		/// <param name="data">A data value to be added to the back of the vector.</param>
+		/// <param name="data">Value to be added to the back of the vector.</param>
 		void PushBack(const T& data, const ReserveStrategy reserveStrategy=DefaultReserveStrategy());
 
 		/// <summary>
@@ -556,7 +611,7 @@ namespace Library
 		void PopBack();
 
 		/// <summary>
-		/// Removes a single element from the vector given the corresponding iterator.
+		/// Removes a single element from the vector given the corresponding Iterator.
 		/// </summary>
 		/// <param name="value">Value to be searched for in the vector to be removed.</param>
 		/// <param name="equal">Equality functor for comparing the search value to elements in the vector.</param>
@@ -564,11 +619,11 @@ namespace Library
 		bool Remove(const T& value, const EqualityFunctor equal=DefaultEquality<T>());
 
 		/// <summary>
-		/// Removes a single element from the vector given the corresponding iterator.
+		/// Removes a single element from the vector given the corresponding Iterator.
 		/// </summary>
-		/// <param name="it">An iterator referencing the element in the vector to be removed.</param>
+		/// <param name="it">Iterator referencing the element in the vector to be removed.</param>
 		/// <returns>True on successful remove, false otherwise.</returns>
-		/// <exception cref="runtime_error">Invalid iterator.</exception>
+		/// <exception cref="runtime_error">Invalid Iterator.</exception>
 		bool Remove(const Iterator& it);
 
 		/// <summary>

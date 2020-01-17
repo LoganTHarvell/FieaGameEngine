@@ -11,6 +11,7 @@
       <Filter>Support Code</Filter>
     </ClCompile>
     <ClCompile Include="VectorTest.cpp" />
+    <ClCompile Include="BarTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

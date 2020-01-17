@@ -17,10 +17,14 @@ namespace Library
 	class SList
 	{
 	public:
-		/* Iterator Traits */
+		/// <summary>
+		/// Value type for std::iterator_trait.
+		/// </summary>
 		using value_type = T;
 
-		/* Functor Signature Typenames */
+		/// <summary>
+		/// Equality functor type used to evaluate equality of vector types.
+		/// </summary>
 		using EqualityFunctor = std::function<bool(T, T)>;
 
 	private:
@@ -48,13 +52,37 @@ namespace Library
 			friend class ConstIterator;
 
 		public:
-			/* Iterator Traits */
-			using size_type = std::size_t;
+#pragma region Iterator Traits
+			/// <summary>
+			/// Size type for std::iterator_trait.
+			/// </summary>
+			using size_type = size_t;
+
+			/// <summary>
+			/// Difference type for std::iterator_trait.
+			/// </summary>
 			using difference_type = std::ptrdiff_t;
+
+			/// <summary>
+			/// Value type for std::iterator_trait.
+			/// </summary>
 			using value_type = T;
-			using pointer = const T*;
-			using reference = const T&;
+
+			/// <summary>
+			/// Pointer type for std::iterator_trait.
+			/// </summary>
+			using pointer = T*;
+
+			/// <summary>
+			/// Reference type for std::iterator_trait.
+			/// </summary>
+			using reference = T&;
+
+			/// <summary>
+			/// Iterator category for std::iterator_trait.
+			/// </summary>
 			using iterator_category = std::forward_iterator_tag;
+#pragma endregion Iterator Traits
 
 			/* Defaults */
 			Iterator() = default;
@@ -65,10 +93,10 @@ namespace Library
 			~Iterator() = default;
 
 			/// <summary>
-			/// Specialized constructor for creating an iterator for a list at a given node.
+			/// Specialized constructor for creating an Iterator for a list at a given node.
 			/// </summary>
-			/// <param name="list">Source list for the iterator's values.</param>
-			/// <param name="node">Current element of the list referenced by the iterator.</param>
+			/// <param name="list">Source list for the Iterator's values.</param>
+			/// <param name="node">Current element of the list referenced by the Iterator.</param>
 			Iterator(const SList<T>& owner, std::shared_ptr<Node> node = nullptr);
 
 		public:
@@ -76,44 +104,44 @@ namespace Library
 			/// Dereference operator.
 			/// </summary>
 			/// <returns>Value of the current element of the list.</returns>
-			/// <exception cref="runtime_error">Attempted to access an iterator with no associated value.</exception>
+			/// <exception cref="runtime_error">Attempted to access an Iterator with no associated value.</exception>
 			T& operator*() const;
 
 			/// <summary>
 			/// Equal operator.
 			/// </summary>
-			/// <param name="rhs">Right hand side iterator to be compared against for equality.</param>
+			/// <param name="rhs">Right hand side Iterator to be compared against for equality.</param>
 			/// <returns>True when the rhs owner list and element are equal to the left, false otherwise.</returns>
 			bool operator==(const Iterator& rhs) const noexcept;
 
 			/// <summary>
 			/// Not equal operator.
 			/// </summary>
-			/// <param name="rhs">Right hand side iterator to be compared against for equality.</param>
+			/// <param name="rhs">Right hand side Iterator to be compared against for equality.</param>
 			/// <returns>True when the rhs owner list and element are inequal to the left, false otherwise.</returns>
 			bool operator!=(const Iterator& rhs) const noexcept;
 
 			/// <summary>
 			/// Pre-increment operator.
 			/// </summary>
-			/// <returns>Reference to the next iterator.</returns>
-			/// <exception cref="runtime_error">Invalid iterator.</exception>
+			/// <returns>Reference to the next Iterator.</returns>
+			/// <exception cref="runtime_error">Invalid Iterator.</exception>
 			Iterator& operator++();
 
 			/// <summary>
 			/// Post-increment operator.
 			/// </summary>
-			/// <returns>A copy of the iterator before it was incremented.</returns>
+			/// <returns>Copy of the Iterator before it was incremented.</returns>
 			Iterator operator++(int);
 
 		private:
 			/// <summary>
-			/// Owner list that is able to be traversed by the iterator instance.
+			/// Owner list that is able to be traversed by the Iterator instance.
 			/// </summary>
 			const SList* mOwner{ nullptr };
 
 			/// <summary>
-			/// Node reference that contains the current element referenced by the iterator instance.
+			/// Node reference that contains the current element referenced by the Iterator instance.
 			/// </summary>
 			std::shared_ptr<Node> mNode{ nullptr };
 		};
@@ -128,13 +156,37 @@ namespace Library
 			friend SList;
 
 		public:
-			/* Iterator Traits */
-			using size_type = std::size_t;
+#pragma region Iterator Traits
+			/// <summary>
+			/// Size type for std::iterator_trait.
+			/// </summary>
+			using size_type = size_t;
+
+			/// <summary>
+			/// Difference type for std::iterator_trait.
+			/// </summary>
 			using difference_type = std::ptrdiff_t;
+
+			/// <summary>
+			/// Value type for std::iterator_trait.
+			/// </summary>
 			using value_type = T;
+
+			/// <summary>
+			/// Pointer type for std::iterator_trait.
+			/// </summary>
 			using pointer = const T*;
+
+			/// <summary>
+			/// Reference type for std::iterator_trait.
+			/// </summary>
 			using reference = const T&;
+
+			/// <summary>
+			/// Iterator category for std::iterator_trait.
+			/// </summary>
 			using iterator_category = std::forward_iterator_tag;
+#pragma endregion Iterator Traits
 
 		public:
 			/* Defaults */
@@ -148,15 +200,15 @@ namespace Library
 			/// <summary>
 			/// Specialized copy constructor that enables the construction of a ConstIterator from a non-const Itrerator.
 			/// </summary>
-			/// <param name="iterator"></param>
-			ConstIterator(const Iterator& iterator);
+			/// <param name="it"></param>
+			ConstIterator(const Iterator& it);
 
 		private:
 			/// <summary>
-			/// Specialized constructor for creating an iterator for a list at a given node.
+			/// Specialized constructor for creating an ConstIterator for a list at a given node.
 			/// </summary>
-			/// <param name="list">Source list for the iterator's values.</param>
-			/// <param name="node">Current element of the list referenced by the iterator, defaulted to a nullptr value.</param>
+			/// <param name="list">Source list for the ConstIterator's values.</param>
+			/// <param name="node">Current element of the list referenced by the ConstIterator, defaulted to a nullptr value.</param>
 			ConstIterator(const SList& owner, std::shared_ptr<Node> node=nullptr);
 
 		public:
@@ -164,44 +216,44 @@ namespace Library
 			/// Dereference operator.
 			/// </summary>
 			/// <returns>Value of the current element of the list.</returns>
-			/// <exception cref="runtime_error">Attempted to access an iterator with no associated value.</exception>
+			/// <exception cref="runtime_error">Attempted to access an ConstIterator with no associated value.</exception>
 			const T& operator*() const;
 
 			/// <summary>
 			/// Equal operator.
 			/// </summary>
-			/// <param name="rhs">Right hand side iterator to be compared against for equality.</param>
+			/// <param name="rhs">Right hand side ConstIterator to be compared against for equality.</param>
 			/// <returns>True when the rhs owner list and element are equal to the left, false otherwise.</returns>
 			bool operator==(const ConstIterator& rhs) const noexcept;
 
 			/// <summary>
 			/// Equal operator.
 			/// </summary>
-			/// <param name="rhs">Right hand side iterator to be compared against for equality.</param>
+			/// <param name="rhs">Right hand side ConstIterator to be compared against for equality.</param>
 			/// <returns>True when the rhs owner list and element are inequal to the left, false otherwise.</returns>
 			bool operator!=(const ConstIterator& rhs) const noexcept;
 
 			/// <summary>
 			/// Pre-increment operator.
 			/// </summary>
-			/// <returns>Reference to the next iterator.</returns>
-			/// <exception cref="runtime_error">Invalid iterator.</exception>
+			/// <returns>Reference to the next ConstIterator.</returns>
+			/// <exception cref="runtime_error">Invalid ConstIterator.</exception>
 			ConstIterator& operator++();
 
 			/// <summary>
 			/// Post-increment operator.
 			/// </summary>
-			/// <returns>A copy of the iterator before it was incremented.</returns>
+			/// <returns>Copy of the ConstIterator before it was incremented.</returns>
 			ConstIterator operator++(int);
 
 		private:
 			/// <summary>
-			/// Owner list that is able to be traversed by the iterator instance.
+			/// Owner list that is able to be traversed by the ConstIterator instance.
 			/// </summary>
 			const SList* mOwner{ nullptr };
 
 			/// <summary>
-			/// Node reference that contains the current element referenced by the iterator instance.
+			/// Node reference that contains the current element referenced by the ConstIterator instance.
 			/// </summary>
 			std::shared_ptr<Node> mNode{ nullptr };
 		};
@@ -270,7 +322,7 @@ namespace Library
 		/// Equals operator. 
 		/// Checks if the size of the list and the data values are equal to the size and values of the right hand side (rhs) list.
 		/// </summary>
-		/// <param name="rhs">The list on the right hand side to be compared to the left.</param>
+		/// <param name="rhs">List on the right hand side to be compared to the left.</param>
 		/// <returns>True when lists are equivalent, otherwise false.</returns>
 		bool operator==(const SList& rhs) const noexcept;
 
@@ -278,62 +330,62 @@ namespace Library
 		/// Not equal operator. 
 		/// Checks if the size of the list and the data values are equal to the size and values of the right hand side (rhs) list.
 		/// </summary>
-		/// <param name="rhs">The list on the right hand side to be compared to the left.</param>
+		/// <param name="rhs">List on the right hand side to be compared to the left.</param>
 		/// <returns>True when lists are not equivalent, otherwise false.</returns>
 		bool operator!=(const SList& rhs) const noexcept;
 #pragma endregion Boolean Operators
 
 #pragma region Iterator Accessors
 		/// <summary>
-		/// Gets an iterator pointing to the first element in the list, values are mutable.
+		/// Gets an Iterator pointing to the first element in the list, values are mutable.
 		/// </summary>
 		/// <returns>Iterator to the first element in the list.</returns>
 		Iterator begin();
 
 		/// <summary>
-		/// Gets an iterator pointing to the first element in the list, values are immutable.
+		/// Gets an ConstIterator pointing to the first element in the list, values are immutable.
 		/// </summary>
-		/// <returns>Constant value iterator to the first element in the list.</returns>
+		/// <returns>Constant value ConstIterator to the first element in the list.</returns>
 		ConstIterator begin() const;
 
 		/// <summary>
-		/// Gets an iterator pointing to the first element in the list, values are immutable.
+		/// Gets an ConstIterator pointing to the first element in the list, values are immutable.
 		/// </summary>
-		/// <returns>Constant value iterator to the first element in the list.</returns>
+		/// <returns>Constant value ConstIterator to the first element in the list.</returns>
 		ConstIterator cbegin() const;
 
 		/// <summary>
-		/// Gets an iterator pointing past the last element in the list, value is mutable.
+		/// Gets an Iterator pointing past the last element in the list, value is mutable.
 		/// </summary>
 		/// <returns>Iterator to the last element in the list.</returns>	
 		Iterator end();
 
 		/// <summary>
-		/// Gets an iterator pointing past the last element in the list, value is immutable.
+		/// Gets an ConstIterator pointing past the last element in the list, value is immutable.
 		/// </summary>
-		/// <returns>Constant value iterator to the last element in the list.</returns>	
+		/// <returns>Constant value ConstIterator to the last element in the list.</returns>	
 		ConstIterator end() const;
 
 		/// <summary>
-		/// Gets an iterator pointing past the last element in the list, value is immutable.
+		/// Gets an ConstIterator pointing past the last element in the list, value is immutable.
 		/// </summary>
-		/// <returns>Constant value iterator to the last element in the list.</returns>	
+		/// <returns>Constant value ConstIterator to the last element in the list.</returns>	
 		ConstIterator cend() const;
 
 		/// <summary>
-		/// Searches the list for a given value and returns an iterator.
+		/// Searches the list for a given value and returns an Iterator.
 		/// </summary>
 		/// <param name="value">Value to search for in the list.</param>
 		/// <param name="equal">Equality functor for comparing the search value to elements in the list.</param>
-		/// <returns>An iterator referencing the value, if found. Otherwise it returns an empty iterator.</returns>
+		/// <returns>Iterator referencing the value, if found. Otherwise it returns an empty Iterator.</returns>
 		Iterator Find(const T& value, const EqualityFunctor=DefaultEquality<T>());
 
 		/// <summary>
-		/// Searches the list for a given value and returns an iterator.
+		/// Searches the list for a given value and returns an ConstIterator.
 		/// </summary>
 		/// <param name="value">Value to search for in the list.</param>
 		/// <param name="equal">Equality functor for comparing the search value to elements in the list.</param>
-		/// <returns>An const value iterator referencing the value, if found. Otherwise it returns an empty iterator.</returns>
+		/// <returns>const value ConstIterator referencing the value, if found. Otherwise it returns an empty ConstIterator.</returns>
 		ConstIterator Find(const T& value, const EqualityFunctor=DefaultEquality<T>()) const;
 #pragma endregion Iterator Accessors
 
@@ -385,22 +437,22 @@ namespace Library
 		/// <summary>
 		/// Adds an element with the passed in data to the front of the list.
 		/// </summary>
-		/// <param name="data">A data value to be added to the front of the list.</param>
+		/// <param name="data">Value to be added to the front of the list.</param>
 		void PushFront(const T& data);
 
 		/// <summary>
 		/// Adds an element with the passed in data to the back of the list.
 		/// </summary>
-		/// <param name="data">A data value to be added to the back of the list.</param>
+		/// <param name="data">Value to be added to the back of the list.</param>
 		void PushBack(const T& data);
 
 		/// <summary>
-		/// Inserts a new element in the list in between a given iterator and the following element.
+		/// Inserts a new element in the list in between a given Iterator and the following element.
 		/// </summary>
-		/// <param name="it">An iterator used to insert a new element in the following position.</param>
-		/// <param name="data">A value to be used to create a new node.</param>
-		/// <returns>An iterator referencing the new node.</returns>
-		/// <exception cref="runtime_error">Invalid iterator.</exception>
+		/// <param name="it">Iterator used to insert a new element in the following position.</param>
+		/// <param name="data">Value to be used to create a new node.</param>
+		/// <returns>Iterator referencing the new node.</returns>
+		/// <exception cref="runtime_error">Invalid Iterator.</exception>
 		Iterator InsertAfter(const Iterator& it, const T& data);
 
 		/// <summary>
@@ -414,7 +466,7 @@ namespace Library
 		void PopBack();
 
 		/// <summary>
-		/// Removes a single element from the list given the corresponding iterator.
+		/// Removes a single element from the list given the corresponding Iterator.
 		/// </summary>
 		/// <param name="vale">Value to be searched for in the list to be removed.</param>
 		/// <param name="equal">Equality functor for comparing the search value to elements in the list.</param>
@@ -422,11 +474,11 @@ namespace Library
 		bool Remove(const T& value, const EqualityFunctor=DefaultEquality<T>());
 
 		/// <summary>
-		/// Removes a single element from the list given the corresponding iterator.
+		/// Removes a single element from the list given the corresponding Iterator.
 		/// </summary>
-		/// <param name="it">An iterator referencing the element in the list to be removed.</param>
+		/// <param name="it">Iterator referencing the element in the list to be removed.</param>
 		/// <returns>True on successful remove, false otherwise.</returns>
-		/// <exception cref="runtime_error">Invalid iterator.</exception>
+		/// <exception cref="runtime_error">Invalid Iterator.</exception>
 		bool Remove(const Iterator& it);
 
 		/// <summary>

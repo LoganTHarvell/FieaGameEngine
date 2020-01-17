@@ -133,8 +133,8 @@ namespace Library
 
 #pragma region ConstIterator
 	template<typename T>
-	inline Vector<T>::ConstIterator::ConstIterator(const Iterator& rhs) :
-		mOwner(rhs.mOwner), mIndex(rhs.mIndex)
+	inline Vector<T>::ConstIterator::ConstIterator(const Iterator& it) :
+		mOwner(it.mOwner), mIndex(it.mIndex)
 	{
 	}
 
@@ -167,12 +167,12 @@ namespace Library
 	{
 		if (mOwner == nullptr)
 		{
-			throw std::runtime_error("Iterator invalid.");
+			throw std::runtime_error("ConstIterator invalid.");
 		}
 		
 		if (mIndex >= mOwner->Size())
 		{
-			throw std::runtime_error("Iterator attempted to go past end.");
+			throw std::runtime_error("ConstIterator attempted to go past end.");
 		}
 
 		++mIndex;
@@ -193,12 +193,12 @@ namespace Library
 	{
 		if (mOwner == nullptr)
 		{
-			throw std::runtime_error("Iterator invalid.");
+			throw std::runtime_error("ConstIterator invalid.");
 		}
 
 		if (mIndex + rhs > mOwner->Size())
 		{
-			throw std::runtime_error("Iterator out of bounds.");
+			throw std::runtime_error("ConstIterator out of bounds.");
 		}
 
 		mIndex += rhs;
@@ -219,12 +219,12 @@ namespace Library
 	{
 		if (mOwner == nullptr)
 		{
-			throw std::runtime_error("Iterator invalid.");
+			throw std::runtime_error("ConstIterator invalid.");
 		}
 		
 		if (mIndex == 0)
 		{
-			throw std::runtime_error("Iterator out of bounds.");
+			throw std::runtime_error("ConstIterator out of bounds.");
 		}
 
 		--mIndex;
@@ -245,12 +245,12 @@ namespace Library
 	{
 		if (mOwner == nullptr)
 		{
-			throw std::runtime_error("Iterator invalid.");
+			throw std::runtime_error("ConstIterator invalid.");
 		}
 
 		if (mIndex < rhs)
 		{
-			throw std::runtime_error("Iterator out of bounds.");
+			throw std::runtime_error("ConstIterator out of bounds.");
 		}
 
 		mIndex -= rhs;
@@ -500,7 +500,7 @@ namespace Library
 			
 			if (newMemory == nullptr)
 			{
-				throw std::runtime_error("Insufficient memory.");
+				throw std::runtime_error("Failed memory reallocation.");
 			}
 	
 			mData = reinterpret_cast<T*>(newMemory);
@@ -559,11 +559,11 @@ namespace Library
 	{
 		if (mSize < mCapacity)
 		{
-			void* newMemory = realloc(mData, capacity * sizeof(T));
+			void* newMemory = realloc(mData, mSize * sizeof(T));
 
 			if (newMemory == nullptr)
 			{
-				throw std::runtime_error("Unable to reallocate memory.");
+				throw std::runtime_error("Failed memory reallocation.");
 			}
 
 			mData = reinterpret_cast<T*>(newMemory);
@@ -573,50 +573,6 @@ namespace Library
 #pragma endregion Size and Capacity
 
 #pragma region Element Accessors
-	template<typename T>
-	inline T& Vector<T>::At(const size_t index)
-	{
-		if (index >= mSize)
-		{
-			throw std::runtime_error("Index is out of bounds.");
-		}
-
-		return mData[index];
-	}
-
-	template<typename T>
-	inline const T& Vector<T>::At(const size_t index) const
-	{
-		if (index >= mSize)
-		{
-			throw std::runtime_error("Index is out of bounds.");
-		}
-
-		return mData[index];
-	}
-
-	template<typename T>
-	inline T& Vector<T>::operator[](const size_t index)
-	{
-		if (index >= mSize)
-		{
-			throw std::runtime_error("Index is out of bounds.");
-		}
-
-		return mData[index];
-	}
-
-	template<typename T>
-	inline const T& Vector<T>::operator[](const size_t index) const
-	{
-		if (index >= mSize)
-		{
-			throw std::runtime_error("Index is out of bounds.");
-		}
-
-		return mData[index];
-	}
-
 	template<typename T>
 	inline T& Vector<T>::Front()
 	{
@@ -659,6 +615,50 @@ namespace Library
 		}
 
 		return mData[mSize - 1];
+	}
+
+	template<typename T>
+	inline T& Vector<T>::At(const size_t index)
+	{
+		if (index >= mSize)
+		{
+			throw std::runtime_error("Index is out of bounds.");
+		}
+
+		return mData[index];
+	}
+
+	template<typename T>
+	inline const T& Vector<T>::At(const size_t index) const
+	{
+		if (index >= mSize)
+		{
+			throw std::runtime_error("Index is out of bounds.");
+		}
+
+		return mData[index];
+	}
+
+	template<typename T>
+	inline T& Vector<T>::operator[](const size_t index)
+	{
+		if (index >= mSize)
+		{
+			throw std::runtime_error("Index is out of bounds.");
+		}
+
+		return mData[index];
+	}
+
+	template<typename T>
+	inline const T& Vector<T>::operator[](const size_t index) const
+	{
+		if (index >= mSize)
+		{
+			throw std::runtime_error("Index is out of bounds.");
+		}
+
+		return mData[index];
 	}
 #pragma endregion Element Accessors
 

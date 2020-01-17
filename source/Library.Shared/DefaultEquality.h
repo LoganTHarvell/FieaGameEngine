@@ -10,7 +10,7 @@ namespace Library
 	/// </summary>
 	/// <returns>True on equal, false otherwise.</returns>
 	template<typename T>
-	struct DefaultEquality
+	struct DefaultEquality final
 	{		
 		const bool operator()(const T& a, const T& b) const
 		{
@@ -18,8 +18,12 @@ namespace Library
 		}
 	};
 
+	/// <summary>
+	/// Defines default callable equality functors for char pointers.
+	/// </summary>
+	/// <returns>True on equal, false otherwise.</returns>
 	template<>
-	struct DefaultEquality<char*>
+	struct DefaultEquality<char*> final
 	{
 		const bool operator()(char* a, char* b) const
 		{
@@ -27,8 +31,12 @@ namespace Library
 		}
 	};
 
+	/// <summary>
+	/// Defines default callable equality functors for pointers to constant char values.
+	/// </summary>
+	/// <returns>True on equal, false otherwise.</returns>
 	template<>
-	struct DefaultEquality<const char*>
+	struct DefaultEquality<const char*> final
 	{
 		const bool operator()(const char* a, const char* b) const
 		{
@@ -36,8 +44,13 @@ namespace Library
 		}
 	};
 
+
+	/// <summary>
+	/// Defines default callable equality functors for constant pointers to char values.
+	/// </summary>
+	/// <returns>True on equal, false otherwise.</returns>
 	template<>
-	struct DefaultEquality<char* const>
+	struct DefaultEquality<char* const> final
 	{
 		const bool operator()(char* const a, char* const b) const
 		{
@@ -45,8 +58,12 @@ namespace Library
 		}
 	};
 
+	/// <summary>
+	/// Defines default callable equality functors for constant value constant char pointers.
+	/// </summary>
+	/// <returns>True on equal, false otherwise.</returns>
 	template<>
-	struct DefaultEquality<const char* const>
+	struct DefaultEquality<const char* const> final
 	{
 		const bool operator()(const char* const a, const char* const b) const
 		{
