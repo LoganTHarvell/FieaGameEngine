@@ -269,7 +269,7 @@ namespace Library
 	}
 
 	template<typename T>
-	inline typename SList<T>::Iterator SList<T>::Find(const T& value, std::function<bool(T, T)> equal)
+	inline typename SList<T>::Iterator SList<T>::Find(const T& value, const EqualityFunctor equal)
 	{
 		for (auto it = begin(); it != end(); ++it)
 		{
@@ -283,7 +283,7 @@ namespace Library
 	}
 
 	template<typename T>
-	inline typename SList<T>::ConstIterator SList<T>::Find(const T& value, std::function<bool(T, T)> equal) const
+	inline typename SList<T>::ConstIterator SList<T>::Find(const T& value, const EqualityFunctor equal) const
 	{
 		for (auto it = begin(); it != end(); ++it)
 		{
@@ -456,7 +456,7 @@ namespace Library
 	}
 
 	template<typename T>
-	inline bool SList<T>::Remove(const T& value, std::function<bool(T, T)> equal)
+	inline bool SList<T>::Remove(const T& value, const EqualityFunctor equal)
 	{
 		 return Remove(Find(value, equal));
 	}

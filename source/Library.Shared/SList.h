@@ -6,6 +6,8 @@
 #include <functional>
 #include <algorithm>
 
+#include "DefaultEquality.h"
+
 namespace Library
 {
 	/// <summary>
@@ -17,6 +19,9 @@ namespace Library
 	public:
 		/* Iterator Traits */
 		using value_type = T;
+
+		/* Functor Signature Typenames */
+		using EqualityFunctor = std::function<bool(T, T)>;
 
 	private:
 #pragma region Node
@@ -321,7 +326,7 @@ namespace Library
 		/// <param name="value">Value to search for in the list.</param>
 		/// <param name="equal">Equality functor for comparing the search value to elements in the list.</param>
 		/// <returns>An iterator referencing the value, if found. Otherwise it returns an empty iterator.</returns>
-		Iterator Find(const T& value, std::function<bool(T, T)> equal = [](T a, T b) { return a == b; });
+		Iterator Find(const T& value, const EqualityFunctor=DefaultEquality<T>());
 
 		/// <summary>
 		/// Searches the list for a given value and returns an iterator.
@@ -329,7 +334,7 @@ namespace Library
 		/// <param name="value">Value to search for in the list.</param>
 		/// <param name="equal">Equality functor for comparing the search value to elements in the list.</param>
 		/// <returns>An const value iterator referencing the value, if found. Otherwise it returns an empty iterator.</returns>
-		ConstIterator Find(const T& value, std::function<bool(T, T)> equal = [](T a, T b) { return a == b; }) const;
+		ConstIterator Find(const T& value, const EqualityFunctor=DefaultEquality<T>()) const;
 #pragma endregion Iterator Accessors
 
 #pragma region Size and Capacity
@@ -344,7 +349,7 @@ namespace Library
 		/// </summary>
 		/// <returns>True if the list contains no elements, otherwise false.</returns>
 		bool IsEmpty() const;
-#pragma endregion Size and Capacity
+#pragma endregion Size
 
 #pragma region Element Accessors
 		/// <summary>
@@ -414,7 +419,7 @@ namespace Library
 		/// <param name="vale">Value to be searched for in the list to be removed.</param>
 		/// <param name="equal">Equality functor for comparing the search value to elements in the list.</param>
 		/// <returns>True on successful remove, false otherwise.</returns>
-		bool Remove(const T& value, std::function<bool(T, T)> equal=[](T a, T b) { return a == b; });
+		bool Remove(const T& value, const EqualityFunctor=DefaultEquality<T>());
 
 		/// <summary>
 		/// Removes a single element from the list given the corresponding iterator.

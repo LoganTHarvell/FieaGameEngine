@@ -4,7 +4,7 @@ namespace Library
 {
 #pragma region Iterator
 	template <typename T>
-	Vector<T>::Iterator::Iterator(const Vector<T>& owner, const size_t index) :
+	Vector<T>::Iterator::Iterator(Vector<T>& owner, const size_t index) :
 		mOwner(&owner), mIndex(index)
 	{
 	}
@@ -12,12 +12,7 @@ namespace Library
 	template<typename T>
 	inline T& Vector<T>::Iterator::operator*() const
 	{
-		if (mOwner == nullptr || mIndex >= mOwner->Size())
-		{
-			throw std::runtime_error("Iterator invalid.");
-		}
-
-		return mOwner->mData[mIndex];
+		return mOwner->operator[](mIndex);
 	}
 
 	template<typename T>
@@ -152,12 +147,7 @@ namespace Library
 	template<typename T>
 	inline const T& Vector<T>::ConstIterator::operator*() const
 	{
-		if (mOwner == nullptr || mIndex >= mOwner->Size())
-		{
-			throw std::runtime_error("Iterator invalid.");
-		}
-
-		return mOwner->mData[mIndex];
+		return mOwner->operator[](mIndex);
 	}
 
 	template<typename T>
@@ -454,7 +444,7 @@ namespace Library
 	}
 
 	template<typename T>
-	inline typename Vector<T>::Iterator Vector<T>::Find(const T& value, std::function<bool(T, T)> equal)
+	inline typename Vector<T>::Iterator Vector<T>::Find(const T& value, const EqualityFunctor equal)
 	{
 		for (size_t i = 0; i < mSize; ++i)
 		{
@@ -468,7 +458,7 @@ namespace Library
 	}
 
 	template<typename T>
-	inline typename Vector<T>::ConstIterator Vector<T>::Find(const T& value, std::function<bool(T, T)> equal) const
+	inline typename Vector<T>::ConstIterator Vector<T>::Find(const T& value, const EqualityFunctor equal) const
 	{
 		for (size_t i = 0; i < mSize; ++i)
 		{
@@ -515,6 +505,69 @@ namespace Library
 	
 			mData = reinterpret_cast<T*>(newMemory);
 			mCapacity = capacity;
+		}
+	}
+
+	template<typename T>
+	inline void Vector<T>::Resize(const size_t size)
+	{
+		if (size > mSize)
+		{
+			Reserve(size);
+
+			for (size_t i = mSize; i < size; ++i)
+			{
+				new(mData + i)T();
+			}
+		}
+		else if (size < mSize) 
+		{
+			for (size_t i = size; i < mSize; ++i)
+			{
+				mData[i].~T();
+			}
+		}
+
+		mSize = size;
+	}
+
+	template<typename T>
+	inline void Vector<T>::Resize(const size_t size, const T& value)
+	{
+		if (size > mSize)
+		{
+			Reserve(size);
+
+			for (size_t i = mSize; i < size; ++i)
+			{
+				new(mData + i)T(value);
+			}
+		}
+		else if (size < mSize) 
+		{
+			for (size_t i = size; i < mSize; ++i)
+			{
+				mData[i].~T();
+			}
+		}
+
+		mSize = size;
+	}
+	
+	template<typename T>
+	inline void Vector<T>::ShrinkToFit()
+	{
+		if (mSize < mCapacity)
+		{
+			void* newMemory = realloc(mData, capacity * sizeof(T));
+
+			if (newMemory == nullptr)
+			{
+				throw std::runtime_error("Unable to reallocate memory.");
+			}
+
+			mData = reinterpret_cast<T*>(newMemory);
+			mCapacity = mSize;
 		}
 	}
 #pragma endregion Size and Capacity
@@ -611,14 +664,14 @@ namespace Library
 
 #pragma region Modifiers
 	template<typename T>
-	inline void Vector<T>::PushBack(const T& data)
+	inline void Vector<T>::PushBack(const T& data, const ReserveStrategy reserveStrategy)
 	{
 		if (mCapacity <= mSize)
 		{
-			size_t newCapacity = mReserveStrategy(mCapacity, mSize);
+			size_t newCapacity = reserveStrategy(mCapacity, mSize);
 			Reserve(newCapacity > mCapacity ? newCapacity : mCapacity + 1);
 		}
-	
+
 		new(mData + mSize++)T(data);
 	}
 
@@ -632,7 +685,7 @@ namespace Library
 	}
 
 	template<typename T>
-	inline bool Vector<T>::Remove(const T& value, std::function<bool(T, T)> equal)
+	inline bool Vector<T>::Remove(const T& value, const EqualityFunctor equal)
 	{
 		for (size_t i = 0; i < mSize; ++i)
 		{

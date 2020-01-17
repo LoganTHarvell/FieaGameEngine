@@ -6,6 +6,8 @@
 #include <functional>
 #include <algorithm>
 
+#include "DefaultEquality.h"
+
 namespace Library
 {
 	/// <summary>
@@ -17,6 +19,10 @@ namespace Library
 	public:
 		/* Iterator Traits */
 		using value_type = T;
+
+		/* Functor Signature Typenames */
+		using ReserveStrategy = std::function<size_t(const size_t, const size_t)>;
+		using EqualityFunctor = std::function<bool(T, T)>;
 
 	public:
 #pragma region Iterator
@@ -52,7 +58,7 @@ namespace Library
 			/// </summary>
 			/// <param name="vector">Source vector for the iterator's values.</param>
 			/// <param name="index">Current element of the vector referenced by the iterator.</param>
-			Iterator(const Vector<T>& vector, const size_t index=0);
+			Iterator(Vector<T>& vector, const size_t index=0);
 
 		public:
 			/// <summary>
@@ -136,7 +142,7 @@ namespace Library
 			/// <summary>
 			/// Owner vector that is able to be traversed by the iterator instance.
 			/// </summary>
-			const Vector* mOwner{ nullptr };
+			Vector* mOwner{ nullptr };
 
 			/// <summary>
 			/// Index of the current element referenced by the iterator instance.
@@ -287,8 +293,8 @@ namespace Library
 			/// </summary>
 			/// <param name="">Placeholder for the vector size.</param>
 			/// <param name="capacity">Vector capacity.</param>
-			/// <returns></returns>
-			size_t operator()(const size_t, const size_t capacity) const
+			/// <returns>New capacity.</returns>
+			const size_t operator()(const size_t, const size_t capacity) const
 			{
 				return static_cast<size_t>(capacity * 1.5);
 			}
@@ -413,7 +419,7 @@ namespace Library
 		/// <param name="value">Value to search for in the vector.</param>
 		/// <param name="equal">Equality functor for comparing the search value to elements in the vector.</param>
 		/// <returns>An iterator referencing the value, if found. Otherwise it returns an empty iterator.</returns>
-		Iterator Find(const T& value, std::function<bool(T, T)> equal=[](T a, T b) { return a == b; });
+		Iterator Find(const T& value, const EqualityFunctor equal=DefaultEquality<T>());
 
 		/// <summary>
 		/// Searches the vector for a given value and returns an iterator.
@@ -421,7 +427,7 @@ namespace Library
 		/// <param name="value">Value to search for in the vector.</param>
 		/// <param name="equal">Equality functor for comparing the search value to elements in the vector.</param>
 		/// <returns>An const value iterator referencing the value, if found. Otherwise it returns an empty iterator.</returns>
-		ConstIterator Find(const T& value, std::function<bool(T, T)> equal=[](T a, T b) { return a == b; }) const;
+		ConstIterator Find(const T& value, const EqualityFunctor equal=DefaultEquality<T>()) const;
 #pragma endregion Iterator Accessors
 
 #pragma region Size and Capacity
@@ -449,6 +455,27 @@ namespace Library
 		/// <param name="capacity">Max number of elements for which to allocate memory.</param>
 		/// <exception cref="runtime_error">Insufficient memory."</exception>
 		void Reserve(const size_t capacity);
+
+		/// <summary>
+		/// Resizes the content of the vector to the given size.
+		/// Either destructs excess elements or initializes new elements.
+		/// </summary>
+		/// <param name="size">New size for the vector, signifying the number of initialized elements.</param>
+		void Resize(const size_t size);
+
+		/// <summary>
+		/// Resizes the content of the vector to the given size.
+		/// Either destructs excess elements or initializes new elements.
+		/// </summary>
+		/// <param name="size">New size for the vector, signifying the number of initialized elements.</param>
+		/// <param name="value">New value for the vector, if new elements are initialized.</param>
+		void Resize(const size_t size, const T& value);
+
+		/// <summary>
+		/// Reduces the capacity of the vector to fit the content size.
+		/// </summary>
+		/// <exception cref="runtime_error">Unable to reallocate memory.</exception>
+		void ShrinkToFit();
 #pragma endregion Size and Capacity
 
 #pragma region Element Accessors
@@ -519,8 +546,9 @@ namespace Library
 		/// <summary>
 		/// Adds an element with the passed in data to the back of the vector.
 		/// </summary>
+		/// <typeparam name="ReserveStrategy">Functor that takes in a capacity and size</typeparam>
 		/// <param name="data">A data value to be added to the back of the vector.</param>
-		void PushBack(const T& data);
+		void PushBack(const T& data, const ReserveStrategy reserveStrategy=DefaultReserveStrategy());
 
 		/// <summary>
 		/// Removes the last element from the vector.
@@ -533,7 +561,7 @@ namespace Library
 		/// <param name="value">Value to be searched for in the vector to be removed.</param>
 		/// <param name="equal">Equality functor for comparing the search value to elements in the vector.</param>
 		/// <returns>True on successful remove, false otherwise.</returns>
-		bool Remove(const T& value, std::function<bool(T, T)> equal = [](T a, T b) { return a == b; });
+		bool Remove(const T& value, const EqualityFunctor equal=DefaultEquality<T>());
 
 		/// <summary>
 		/// Removes a single element from the vector given the corresponding iterator.
@@ -564,11 +592,6 @@ namespace Library
 		/// Number of elements for which memory is reserved, but not necessarily initialized.
 		/// </summary>
 		size_t mCapacity{ 0 };
-
-		/// <summary>
-		/// Reserve strategy functor.
-		/// </summary>
-		std::function<size_t(const size_t, const size_t)> mReserveStrategy{ DefaultReserveStrategy() };
 	};
 }
 
