@@ -418,82 +418,6 @@ namespace Library
 	}
 #pragma endregion Boolean Operators
 
-#pragma region Iterator Accessors
-	template<typename T>
-	inline typename Vector<T>::Iterator Vector<T>::begin()
-	{
-		return Iterator(*this, 0);
-	}
-
-	template<typename T>
-	inline typename Vector<T>::ConstIterator Vector<T>::begin() const
-	{
-		return ConstIterator(*this, 0);
-	}
-
-	template<typename T>
-	inline typename Vector<T>::ConstIterator Vector<T>::cbegin() const
-	{
-		return ConstIterator(*this, 0);
-	}
-	
-	template<typename T>
-	inline typename Vector<T>::Iterator Vector<T>::end()
-	{
-		return Iterator(*this, mSize);
-	}
-
-	template<typename T>
-	inline typename Vector<T>::ConstIterator Vector<T>::end() const
-	{
-		return ConstIterator(*this, mSize);
-	}
-
-	template<typename T>
-	inline typename Vector<T>::ConstIterator Vector<T>::cend() const
-	{
-		return ConstIterator(*this, mSize);
-	}
-
-	template<typename T>
-	inline typename Vector<T>::Iterator Vector<T>::Find(const T& value)
-	{
-		if (!mEqualityFunctor)
-		{
-			throw std::runtime_error("Missing equality functor.");
-		}
-
-		for (size_t i = 0; i < mSize; ++i)
-		{
-			if (mEqualityFunctor(mData[i], value))
-			{
-				return Iterator(*this, i);
-			}
-		}
-
-		return Iterator(*this, mSize);
-	}
-
-	template<typename T>
-	inline typename Vector<T>::ConstIterator Vector<T>::Find(const T& value) const
-	{
-		if (!mEqualityFunctor)
-		{
-			throw std::runtime_error("Missing equality functor.");
-		}
-
-		for (size_t i = 0; i < mSize; ++i)
-		{
-			if (mEqualityFunctor(mData[i], value))
-			{
-				return ConstIterator(*this, i);
-			}
-		}
-
-		return ConstIterator(*this, mSize);
-	}
-#pragma endregion Iterator Accessors
-
 #pragma region Size and Capacity
 	template<typename T>
 	inline size_t Vector<T>::Size() const
@@ -591,6 +515,83 @@ namespace Library
 		mCapacity = mSize;
 	}
 #pragma endregion Size and Capacity
+
+
+#pragma region Iterator Accessors
+	template<typename T>
+	inline typename Vector<T>::Iterator Vector<T>::begin()
+	{
+		return Iterator(*this, 0);
+	}
+
+	template<typename T>
+	inline typename Vector<T>::ConstIterator Vector<T>::begin() const
+	{
+		return ConstIterator(*this, 0);
+	}
+
+	template<typename T>
+	inline typename Vector<T>::ConstIterator Vector<T>::cbegin() const
+	{
+		return ConstIterator(*this, 0);
+	}
+	
+	template<typename T>
+	inline typename Vector<T>::Iterator Vector<T>::end()
+	{
+		return Iterator(*this, mSize);
+	}
+
+	template<typename T>
+	inline typename Vector<T>::ConstIterator Vector<T>::end() const
+	{
+		return ConstIterator(*this, mSize);
+	}
+
+	template<typename T>
+	inline typename Vector<T>::ConstIterator Vector<T>::cend() const
+	{
+		return ConstIterator(*this, mSize);
+	}
+
+	template<typename T>
+	inline typename Vector<T>::Iterator Vector<T>::Find(const T& value)
+	{
+		if (!mEqualityFunctor)
+		{
+			throw std::runtime_error("Missing equality functor.");
+		}
+
+		for (size_t i = 0; i < mSize; ++i)
+		{
+			if (mEqualityFunctor(mData[i], value))
+			{
+				return Iterator(*this, i);
+			}
+		}
+
+		return Iterator(*this, mSize);
+	}
+
+	template<typename T>
+	inline typename Vector<T>::ConstIterator Vector<T>::Find(const T& value) const
+	{
+		if (!mEqualityFunctor)
+		{
+			throw std::runtime_error("Missing equality functor.");
+		}
+
+		for (size_t i = 0; i < mSize; ++i)
+		{
+			if (mEqualityFunctor(mData[i], value))
+			{
+				return ConstIterator(*this, i);
+			}
+		}
+
+		return ConstIterator(*this, mSize);
+	}
+#pragma endregion Iterator Accessors
 
 #pragma region Element Accessors
 	template<typename T>

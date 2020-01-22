@@ -457,6 +457,54 @@ namespace Library
 		bool operator!=(const Vector& rhs) const noexcept;
 #pragma endregion Boolean Operators
 
+#pragma region Size and Capacity
+		/// <summary>
+		/// Getter method for the number of elements in the vector.
+		/// </summary>
+		/// <returns>Number of initialized elements.</returns>
+		size_t Size() const;	
+		
+		/// <summary>
+		/// Checks if the size of the vector is greater than zero, indicating the vector is non-empty.
+		/// </summary>
+		/// <returns>True if the vector contains no elements, otherwise false.</returns>
+		bool IsEmpty() const;
+
+		/// <summary>
+		/// Getter method for the max number of elements for which memory is allocated.
+		/// </summary>
+		/// <returns>Max number of elements for which memory is allocated.</returns>
+		size_t Capacity() const;
+
+		/// <summary>
+		/// Allocates memory for the specified capacity. Preserving any existing elements.
+		/// </summary>
+		/// <param name="capacity">Max number of elements for which to allocate memory.</param>
+		/// <exception cref="runtime_error">Failed memory reallocation."</exception>
+		void Reserve(const size_t capacity);
+
+		/// <summary>
+		/// Resizes the content of the vector to the given size.
+		/// Either destructs excess elements or initializes new elements.
+		/// </summary>
+		/// <param name="size">New size for the vector, signifying the number of initialized elements.</param>
+		void Resize(const size_t size);
+
+		/// <summary>
+		/// Resizes the content of the vector to the given size.
+		/// Either destructs excess elements or initializes new elements.
+		/// </summary>
+		/// <param name="size">New size for the vector, signifying the number of initialized elements.</param>
+		/// <param name="value">New value for the vector, if new elements are initialized.</param>
+		void Resize(const size_t size, const T& value);
+
+		/// <summary>
+		/// Reduces the capacity of the vector to fit the content size.
+		/// </summary>
+		/// <exception cref="runtime_error">Failed memory reallocation.</exception>
+		void ShrinkToFit();
+#pragma endregion Size and Capacity
+
 #pragma region Iterator Accessors
 		/// <summary>
 		/// Gets an Iterator pointing to the first element in the vector, values are mutable.
@@ -510,54 +558,6 @@ namespace Library
 		/// <exception cref="">Missing equality functor.</exception>
 		ConstIterator Find(const T& value) const;
 #pragma endregion Iterator Accessors
-
-#pragma region Size and Capacity
-		/// <summary>
-		/// Getter method for the number of elements in the vector.
-		/// </summary>
-		/// <returns>Number of initialized elements.</returns>
-		size_t Size() const;	
-		
-		/// <summary>
-		/// Checks if the size of the vector is greater than zero, indicating the vector is non-empty.
-		/// </summary>
-		/// <returns>True if the vector contains no elements, otherwise false.</returns>
-		bool IsEmpty() const;
-
-		/// <summary>
-		/// Getter method for the max number of elements for which memory is allocated.
-		/// </summary>
-		/// <returns>Max number of elements for which memory is allocated.</returns>
-		size_t Capacity() const;
-
-		/// <summary>
-		/// Allocates memory for the specified capacity. Preserving any existing elements.
-		/// </summary>
-		/// <param name="capacity">Max number of elements for which to allocate memory.</param>
-		/// <exception cref="runtime_error">Failed memory reallocation."</exception>
-		void Reserve(const size_t capacity);
-
-		/// <summary>
-		/// Resizes the content of the vector to the given size.
-		/// Either destructs excess elements or initializes new elements.
-		/// </summary>
-		/// <param name="size">New size for the vector, signifying the number of initialized elements.</param>
-		void Resize(const size_t size);
-
-		/// <summary>
-		/// Resizes the content of the vector to the given size.
-		/// Either destructs excess elements or initializes new elements.
-		/// </summary>
-		/// <param name="size">New size for the vector, signifying the number of initialized elements.</param>
-		/// <param name="value">New value for the vector, if new elements are initialized.</param>
-		void Resize(const size_t size, const T& value);
-
-		/// <summary>
-		/// Reduces the capacity of the vector to fit the content size.
-		/// </summary>
-		/// <exception cref="runtime_error">Failed memory reallocation.</exception>
-		void ShrinkToFit();
-#pragma endregion Size and Capacity
 
 #pragma region Element Accessors
 		/// <summary>

@@ -240,6 +240,20 @@ namespace Library
 	}
 #pragma endregion Boolean Operators
 
+#pragma region Size
+	template<typename T>
+	inline size_t SList<T>::Size() const
+	{
+		return mSize;
+	}
+
+	template<typename T>
+	inline bool SList<T>::IsEmpty() const
+	{
+		return mSize == 0;
+	}
+#pragma endregion Size
+
 #pragma region Iterator Accessors
 	template<typename T>
 	inline typename SList<T>::Iterator SList<T>::begin()
@@ -315,20 +329,6 @@ namespace Library
 		return ConstIterator();
 	}
 #pragma endregion Iterator Accessors
-
-#pragma region Size
-	template<typename T>
-	inline size_t SList<T>::Size() const
-	{
-		return mSize;
-	}
-
-	template<typename T>
-	inline bool SList<T>::IsEmpty() const
-	{
-		return mSize == 0;
-	}
-#pragma endregion Size
 
 #pragma region Element Accessors
 	template<typename T>

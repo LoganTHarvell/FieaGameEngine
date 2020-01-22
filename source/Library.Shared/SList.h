@@ -339,6 +339,20 @@ namespace Library
 		bool operator!=(const SList& rhs) const noexcept;
 #pragma endregion Boolean Operators
 
+#pragma region Size and Capacity
+		/// <summary>
+		/// Getter method for the number of elements in the list.
+		/// </summary>
+		/// <returns>Number of elements in the list.</returns>
+		size_t Size() const;
+
+		/// <summary>
+		/// Checks if the size of the list is greater than zero, indicating the list is non-empty.
+		/// </summary>
+		/// <returns>True if the list contains no elements, otherwise false.</returns>
+		bool IsEmpty() const;
+#pragma endregion Size
+
 #pragma region Iterator Accessors
 		/// <summary>
 		/// Gets an Iterator pointing to the first element in the list, values are mutable.
@@ -392,20 +406,6 @@ namespace Library
 		/// <exception cref="runtime_error">Missing equality functor.</exception>
 		ConstIterator Find(const T& value) const;
 #pragma endregion Iterator Accessors
-
-#pragma region Size and Capacity
-		/// <summary>
-		/// Getter method for the number of elements in the list.
-		/// </summary>
-		/// <returns>Number of elements in the list.</returns>
-		size_t Size() const;
-
-		/// <summary>
-		/// Checks if the size of the list is greater than zero, indicating the list is non-empty.
-		/// </summary>
-		/// <returns>True if the list contains no elements, otherwise false.</returns>
-		bool IsEmpty() const;
-#pragma endregion Size
 
 #pragma region Element Accessors
 		/// <summary>
