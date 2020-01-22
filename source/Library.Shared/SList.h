@@ -14,7 +14,7 @@ namespace Library
 	/// Represents a generic singly linked list.
 	/// </summary>
 	template <typename T>
-	class SList
+	class SList final
 	{
 	public:
 		/// <summary>
@@ -23,7 +23,7 @@ namespace Library
 		using value_type = T;
 
 		/// <summary>
-		/// Equality functor type used to evaluate equality of vector types.
+		/// Equality functor type used to evaluate equality of elements in the list.
 		/// </summary>
 		using EqualityFunctor = std::function<bool(T, T)>;
 
@@ -264,7 +264,9 @@ namespace Library
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
-		SList() = default;
+		/// <param name="equalityFunctor">Equality functor for comparing list elements.</param>
+		/// <remarks>If no EqualityFunctor is passed and no valid DefaultEquality exists, then a compiler error will occur.</remarks>
+		SList(const EqualityFunctor equalityFunctor=DefaultEquality<T>());
 
 		/// <summary>
 		/// Destructor. 
@@ -290,6 +292,7 @@ namespace Library
 		/// Initializer list constructor.
 		/// </summary>
 		/// <param name="list">Value list for initializing a new SList.</param>
+		/// <remarks>Does not initialize equality functor. User should follow with a call to SetEqualityFunctor.</remarks>
 		SList(const std::initializer_list<T> rhs);
 #pragma endregion Constructors and Destructor
 
@@ -314,6 +317,7 @@ namespace Library
 		/// Initializer list assignment operator.
 		/// </summary>
 		/// <param name="list">Value list for initializing a new SList.</param>
+		/// <remarks>Does not initialize equality functor. User should follow with a call to SetEqualityFunctor.</remarks>
 		SList& operator=(const std::initializer_list<T> rhs);
 #pragma endregion Assignment Operators
 
@@ -376,17 +380,17 @@ namespace Library
 		/// Searches the list for a given value and returns an Iterator.
 		/// </summary>
 		/// <param name="value">Value to search for in the list.</param>
-		/// <param name="equal">Equality functor for comparing the search value to elements in the list.</param>
 		/// <returns>Iterator referencing the value, if found. Otherwise it returns an empty Iterator.</returns>
-		Iterator Find(const T& value, const EqualityFunctor=DefaultEquality<T>());
+		/// <exception cref="runtime_error">Missing equality functor.</exception>
+		Iterator Find(const T& value);
 
 		/// <summary>
 		/// Searches the list for a given value and returns an ConstIterator.
 		/// </summary>
 		/// <param name="value">Value to search for in the list.</param>
-		/// <param name="equal">Equality functor for comparing the search value to elements in the list.</param>
 		/// <returns>const value ConstIterator referencing the value, if found. Otherwise it returns an empty ConstIterator.</returns>
-		ConstIterator Find(const T& value, const EqualityFunctor=DefaultEquality<T>()) const;
+		/// <exception cref="runtime_error">Missing equality functor.</exception>
+		ConstIterator Find(const T& value) const;
 #pragma endregion Iterator Accessors
 
 #pragma region Size and Capacity
@@ -469,9 +473,10 @@ namespace Library
 		/// Removes a single element from the list given the corresponding Iterator.
 		/// </summary>
 		/// <param name="vale">Value to be searched for in the list to be removed.</param>
-		/// <param name="equal">Equality functor for comparing the search value to elements in the list.</param>
 		/// <returns>True on successful remove, false otherwise.</returns>
-		bool Remove(const T& value, const EqualityFunctor=DefaultEquality<T>());
+		/// <exception cref="runtime_error">Missing equality functor.</exception>
+		/// <exception cref="runtime_error">Invalid Iterator.</exception>
+		bool Remove(const T& value);
 
 		/// <summary>
 		/// Removes a single element from the list given the corresponding Iterator.
@@ -485,6 +490,12 @@ namespace Library
 		/// Removes all elements from the list and resets the size to zero.
 		/// </summary>
 		void Clear();
+
+		/// <summary>
+		/// Setter for the equality functor used to compare elements in the list.
+		/// </summary>
+		/// <param name="equalityFunctor">New equality functor to be used.</param>
+		void SetEqualityFunctor(const EqualityFunctor equalityFunctor);
 #pragma endregion Modifiers
 
 	private:
@@ -502,6 +513,11 @@ namespace Library
 		/// Last element in the list.
 		/// </summary>
 		std::shared_ptr<Node> mBack{ nullptr };
+
+		/// <summary>
+		/// Functor for evaluating the equality of two values in the list.
+		/// </summary>
+		EqualityFunctor mEqualityFunctor;
 	};
 }
 

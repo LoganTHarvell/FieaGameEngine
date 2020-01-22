@@ -76,17 +76,25 @@ namespace UnitTestLibraryDesktop
 
 		TEST_METHOD(IteratorDereference)
 		{
+			Assert::ExpectException<std::runtime_error>([] { *(Vector<int>::Iterator()); });
+			Assert::ExpectException<std::runtime_error>([] { *(Vector<double>::Iterator()); });
+			Assert::ExpectException<std::runtime_error>([] { *(Vector<Foo>::Iterator()); });
+
+			Assert::ExpectException<std::runtime_error>([] { *(Vector<int>::ConstIterator()); });
+			Assert::ExpectException<std::runtime_error>([] { *(Vector<double>::ConstIterator()); });
+			Assert::ExpectException<std::runtime_error>([] { *(Vector<Foo>::ConstIterator()); });
+
 			Vector<int> intVector;
 			Vector<double> doubleVector;
 			Vector<Foo> fooVector;
 
-			Assert::ExpectException<std::runtime_error>([&intVector] { *(intVector.begin()); });
-			Assert::ExpectException<std::runtime_error>([&doubleVector] { *(doubleVector.begin()); });
-			Assert::ExpectException<std::runtime_error>([&fooVector] { *(fooVector.begin()); });
+			Assert::ExpectException<std::out_of_range>([&intVector] { *(intVector.begin()); });
+			Assert::ExpectException<std::out_of_range>([&doubleVector] { *(doubleVector.begin()); });
+			Assert::ExpectException<std::out_of_range>([&fooVector] { *(fooVector.begin()); });
 
-			Assert::ExpectException<std::runtime_error>([&intVector] { *(intVector.cbegin()); });
-			Assert::ExpectException<std::runtime_error>([&doubleVector] { *(doubleVector.cbegin()); });
-			Assert::ExpectException<std::runtime_error>([&fooVector] { *(fooVector.cbegin()); });
+			Assert::ExpectException<std::out_of_range>([&intVector] { *(intVector.cbegin()); });
+			Assert::ExpectException<std::out_of_range>([&doubleVector] { *(doubleVector.cbegin()); });
+			Assert::ExpectException<std::out_of_range>([&fooVector] { *(fooVector.cbegin()); });
 
 			intVector.PushBack(10);
 			doubleVector.PushBack(10);
@@ -210,21 +218,21 @@ namespace UnitTestLibraryDesktop
 			doubleConstIterator = doubleVector.cend();
 			fooConstIterator = fooVector.cend();
 
-			Assert::ExpectException<std::runtime_error>([&intIterator] { ++intIterator; });
-			Assert::ExpectException<std::runtime_error>([&doubleIterator] { ++doubleIterator; });
-			Assert::ExpectException<std::runtime_error>([&fooIterator] { ++fooIterator; });
+			Assert::ExpectException<std::out_of_range>([&intIterator] { ++intIterator; });
+			Assert::ExpectException<std::out_of_range>([&doubleIterator] { ++doubleIterator; });
+			Assert::ExpectException<std::out_of_range>([&fooIterator] { ++fooIterator; });
 
-			Assert::ExpectException<std::runtime_error>([&intConstIterator] { ++intConstIterator; });
-			Assert::ExpectException<std::runtime_error>([&doubleConstIterator] { ++doubleConstIterator; });
-			Assert::ExpectException<std::runtime_error>([&fooConstIterator] { ++fooConstIterator; });
+			Assert::ExpectException<std::out_of_range>([&intConstIterator] { ++intConstIterator; });
+			Assert::ExpectException<std::out_of_range>([&doubleConstIterator] { ++doubleConstIterator; });
+			Assert::ExpectException<std::out_of_range>([&fooConstIterator] { ++fooConstIterator; });
 
-			Assert::ExpectException<std::runtime_error>([&intIterator] { intIterator += 1; });
-			Assert::ExpectException<std::runtime_error>([&doubleIterator] { doubleIterator += 1; });
-			Assert::ExpectException<std::runtime_error>([&fooIterator] { fooIterator += 1; });
+			Assert::ExpectException<std::out_of_range>([&intIterator] { intIterator += 1; });
+			Assert::ExpectException<std::out_of_range>([&doubleIterator] { doubleIterator += 1; });
+			Assert::ExpectException<std::out_of_range>([&fooIterator] { fooIterator += 1; });
 
-			Assert::ExpectException<std::runtime_error>([&intConstIterator] { intConstIterator += 1; });
-			Assert::ExpectException<std::runtime_error>([&doubleConstIterator] { doubleConstIterator += 1; });
-			Assert::ExpectException<std::runtime_error>([&fooConstIterator] { fooConstIterator += 1; });
+			Assert::ExpectException<std::out_of_range>([&intConstIterator] { intConstIterator += 1; });
+			Assert::ExpectException<std::out_of_range>([&doubleConstIterator] { doubleConstIterator += 1; });
+			Assert::ExpectException<std::out_of_range>([&fooConstIterator] { fooConstIterator += 1; });
 
 			intIterator = intVector.begin();
 			doubleIterator = doubleVector.begin();
@@ -234,21 +242,21 @@ namespace UnitTestLibraryDesktop
 			doubleConstIterator = doubleVector.cbegin();
 			fooConstIterator = fooVector.cbegin();
 
-			Assert::ExpectException<std::runtime_error>([&intIterator] { --intIterator; });
-			Assert::ExpectException<std::runtime_error>([&doubleIterator] { --doubleIterator; });
-			Assert::ExpectException<std::runtime_error>([&fooIterator] { --fooIterator; });
+			Assert::ExpectException<std::out_of_range>([&intIterator] { --intIterator; });
+			Assert::ExpectException<std::out_of_range>([&doubleIterator] { --doubleIterator; });
+			Assert::ExpectException<std::out_of_range>([&fooIterator] { --fooIterator; });
 
-			Assert::ExpectException<std::runtime_error>([&intConstIterator] { --intConstIterator; });
-			Assert::ExpectException<std::runtime_error>([&doubleConstIterator] { --doubleConstIterator; });
-			Assert::ExpectException<std::runtime_error>([&fooConstIterator] { --fooConstIterator; });
+			Assert::ExpectException<std::out_of_range>([&intConstIterator] { --intConstIterator; });
+			Assert::ExpectException<std::out_of_range>([&doubleConstIterator] { --doubleConstIterator; });
+			Assert::ExpectException<std::out_of_range>([&fooConstIterator] { --fooConstIterator; });
 
-			Assert::ExpectException<std::runtime_error>([&intIterator] { intIterator -= 1; });
-			Assert::ExpectException<std::runtime_error>([&doubleIterator] { doubleIterator -= 1; });
-			Assert::ExpectException<std::runtime_error>([&fooIterator] { fooIterator -= 1; });
+			Assert::ExpectException<std::out_of_range>([&intIterator] { intIterator -= 1; });
+			Assert::ExpectException<std::out_of_range>([&doubleIterator] { doubleIterator -= 1; });
+			Assert::ExpectException<std::out_of_range>([&fooIterator] { fooIterator -= 1; });
 
-			Assert::ExpectException<std::runtime_error>([&intConstIterator] { intConstIterator -= 1; });
-			Assert::ExpectException<std::runtime_error>([&doubleConstIterator] { doubleConstIterator -= 1; });
-			Assert::ExpectException<std::runtime_error>([&fooConstIterator] { fooConstIterator -= 1; });
+			Assert::ExpectException<std::out_of_range>([&intConstIterator] { intConstIterator -= 1; });
+			Assert::ExpectException<std::out_of_range>([&doubleConstIterator] { doubleConstIterator -= 1; });
+			Assert::ExpectException<std::out_of_range>([&fooConstIterator] { fooConstIterator -= 1; });
 
 			intIterator = intVector.begin();
 			doubleIterator = doubleVector.begin();
@@ -390,6 +398,9 @@ namespace UnitTestLibraryDesktop
 			Vector<double> doubleVector = { 10, 20, 30 };
 			Vector<Foo> fooVector = { Foo(10), Foo(20), Foo(30) };
 
+			intVector.SetEqualityFunctor(DefaultEquality<int>());
+			doubleVector.SetEqualityFunctor(DefaultEquality<double>());
+			fooVector.SetEqualityFunctor(DefaultEquality<Foo>());
 
 			/* Integer Data */
 
@@ -528,8 +539,8 @@ namespace UnitTestLibraryDesktop
 
 			// Equality when empty
 			Assert::AreEqual(fooVector1, fooVector2);
-			const Vector<Foo> emptyConstFooVector = fooVector1;
-			Assert::AreEqual(emptyConstFooVector, fooVector2);
+			const Vector<Foo> emptyConstfooVector = fooVector1;
+			Assert::AreEqual(emptyConstfooVector, fooVector2);
 
 			// Inequality when filled and different sizes
 			fooVector1.PushBack(Foo(10));
@@ -537,20 +548,20 @@ namespace UnitTestLibraryDesktop
 			fooVector2.PushBack(Foo(10));
 
 			Assert::IsTrue(fooVector1 != fooVector2);
-			const Vector<Foo> filledConstFooVector1 = fooVector1;
-			Assert::IsTrue(filledConstFooVector1 != fooVector2);
+			const Vector<Foo> filledConstfooVector1 = fooVector1;
+			Assert::IsTrue(filledConstfooVector1 != fooVector2);
 
 			// Equality when filled
 			fooVector2.PushBack(Foo(20));
 			Assert::AreEqual(fooVector1, fooVector2);
-			const Vector<Foo> filledConstFooVector2 = fooVector1;
-			Assert::AreEqual(filledConstFooVector2, fooVector2);
+			const Vector<Foo> filledConstfooVector2 = fooVector1;
+			Assert::AreEqual(filledConstfooVector2, fooVector2);
 
 			// Inequality when filled and equal size
 			fooVector2.PopBack();
 			fooVector2.PushBack(Foo(30));
 			Assert::IsTrue(fooVector1 != fooVector2);
-			Assert::IsTrue(filledConstFooVector2 != fooVector2);
+			Assert::IsTrue(filledConstfooVector2 != fooVector2);
 		}
 
 		TEST_METHOD(SizeCapacity)
@@ -618,6 +629,19 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(decreasedConstIntVector.Size(), 4_z);
 			Assert::AreEqual(decreasedConstIntVector.Capacity(), 6_z);
 
+			intVector.Resize(10);
+			intVector.SetReserveStrategy([](const size_t capacity, const size_t) { return capacity * 2; });
+			intVector.PushBack(10);
+
+			Assert::AreEqual(intVector.Size(), 11_z);
+			Assert::AreEqual(intVector.Capacity(), 20_z);
+			
+			intVector.Clear();
+			Assert::AreEqual(intVector.Size(), 0_z);
+			intVector.ShrinkToFit();
+			Assert::AreEqual(intVector.Capacity(), 0_z);
+			Assert::IsTrue(intVector.IsEmpty());
+
 
 			/* Double Data */
 
@@ -682,6 +706,19 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(doubleDecreasedConstVector.Size(), 4_z);
 			Assert::AreEqual(doubleDecreasedConstVector.Capacity(), 6_z);
 
+			doubleVector.Resize(10);
+			doubleVector.SetReserveStrategy([](const size_t capacity, const size_t) { return capacity * 2; });
+			doubleVector.PushBack(10);
+
+			Assert::AreEqual(doubleVector.Size(), 11_z);
+			Assert::AreEqual(doubleVector.Capacity(), 20_z);
+
+			doubleVector.Clear();
+			Assert::AreEqual(doubleVector.Size(), 0_z);
+			doubleVector.ShrinkToFit();
+			Assert::AreEqual(doubleVector.Capacity(), 0_z);
+			Assert::IsTrue(doubleVector.IsEmpty());
+
 
 			/* Foo Data */
 
@@ -745,6 +782,19 @@ namespace UnitTestLibraryDesktop
 			const Vector<Foo> decreasedConstfooVector = fooVector;
 			Assert::AreEqual(decreasedConstfooVector.Size(), 4_z);
 			Assert::AreEqual(decreasedConstfooVector.Capacity(), 6_z);
+
+			fooVector.Resize(10);
+			fooVector.SetReserveStrategy([](const size_t capacity, const size_t) { return capacity * 2; });
+			fooVector.PushBack(Foo(10));
+
+			Assert::AreEqual(fooVector.Size(), 11_z);
+			Assert::AreEqual(fooVector.Capacity(), 20_z);
+
+			fooVector.Clear();
+			Assert::AreEqual(fooVector.Size(), 0_z);
+			fooVector.ShrinkToFit();
+			Assert::AreEqual(fooVector.Capacity(), 0_z);
+			Assert::IsTrue(fooVector.IsEmpty());
 		}
 
 		TEST_METHOD(IsEmpty)
@@ -787,15 +837,15 @@ namespace UnitTestLibraryDesktop
 			Vector<Foo> fooVector;
 			Assert::IsTrue(fooVector.IsEmpty());
 
-			const Vector<Foo> emptyConstFooVector = fooVector;
-			Assert::IsTrue(emptyConstFooVector.IsEmpty());
+			const Vector<Foo> emptyConstfooVector = fooVector;
+			Assert::IsTrue(emptyConstfooVector.IsEmpty());
 
 			// Non-empty list and size
 			fooVector.PushBack(Foo(10));
 			Assert::IsTrue(!fooVector.IsEmpty());
 
-			const Vector<Foo> filledConstFooVector = fooVector;
-			Assert::IsTrue(!filledConstFooVector.IsEmpty());
+			const Vector<Foo> filledConstfooVector = fooVector;
+			Assert::IsTrue(!filledConstfooVector.IsEmpty());
 		}
 
 		TEST_METHOD(Begin)
@@ -804,21 +854,21 @@ namespace UnitTestLibraryDesktop
 			Vector<double> doubleVector;
 			Vector<Foo> fooVector;
 
-			Assert::ExpectException<std::runtime_error>([&intVector] { *(intVector.begin()); });
-			Assert::ExpectException<std::runtime_error>([&doubleVector] { *(doubleVector.begin()); });
-			Assert::ExpectException<std::runtime_error>([&fooVector] { *(fooVector.begin()); });
+			Assert::ExpectException<std::out_of_range>([&intVector] { *(intVector.begin()); });
+			Assert::ExpectException<std::out_of_range>([&doubleVector] { *(doubleVector.begin()); });
+			Assert::ExpectException<std::out_of_range>([&fooVector] { *(fooVector.begin()); });
 
 			const Vector<int> emptyIntVectorCopy = intVector;
 			const Vector<double> emptyDoubleVectorCopy = doubleVector;
-			const Vector<Foo> emptyFooVectorCopy = fooVector;
+			const Vector<Foo> emptyfooVectorCopy = fooVector;
 
-			Assert::ExpectException<std::runtime_error>([&emptyIntVectorCopy] { *(emptyIntVectorCopy.begin()); });
-			Assert::ExpectException<std::runtime_error>([&emptyDoubleVectorCopy] { *(emptyDoubleVectorCopy.begin()); });
-			Assert::ExpectException<std::runtime_error>([&emptyFooVectorCopy] { *(emptyFooVectorCopy.begin()); });
+			Assert::ExpectException<std::out_of_range>([&emptyIntVectorCopy] { *(emptyIntVectorCopy.begin()); });
+			Assert::ExpectException<std::out_of_range>([&emptyDoubleVectorCopy] { *(emptyDoubleVectorCopy.begin()); });
+			Assert::ExpectException<std::out_of_range>([&emptyfooVectorCopy] { *(emptyfooVectorCopy.begin()); });
 
-			Assert::ExpectException<std::runtime_error>([&intVector] { *(intVector.cbegin()); });
-			Assert::ExpectException<std::runtime_error>([&doubleVector] { *(doubleVector.cbegin()); });
-			Assert::ExpectException<std::runtime_error>([&fooVector] { *(fooVector.cbegin()); });
+			Assert::ExpectException<std::out_of_range>([&intVector] { *(intVector.cbegin()); });
+			Assert::ExpectException<std::out_of_range>([&doubleVector] { *(doubleVector.cbegin()); });
+			Assert::ExpectException<std::out_of_range>([&fooVector] { *(fooVector.cbegin()); });
 
 			intVector.PushBack(10);
 			doubleVector.PushBack(10);
@@ -830,11 +880,11 @@ namespace UnitTestLibraryDesktop
 
 			const Vector<int> filledIntVectorCopy = intVector;
 			const Vector<double> filledDoubleVectorCopy = doubleVector;
-			const Vector<Foo> filledFooVectorCopy = fooVector;
+			const Vector<Foo> filledfooVectorCopy = fooVector;
 
 			Assert::AreEqual(*filledIntVectorCopy.begin(), 10);
 			Assert::AreEqual(*filledDoubleVectorCopy.begin(), 10.0);
-			Assert::AreEqual(*filledFooVectorCopy.begin(), Foo(10));
+			Assert::AreEqual(*filledfooVectorCopy.begin(), Foo(10));
 
 			Assert::AreEqual(*intVector.cbegin(), 10);
 			Assert::AreEqual(*doubleVector.cbegin(), 10.0);
@@ -847,41 +897,41 @@ namespace UnitTestLibraryDesktop
 			Vector<double> doubleVector;
 			Vector<Foo> fooVector;
 
-			Assert::ExpectException<std::runtime_error>([&intVector] { *(intVector.end()); });
-			Assert::ExpectException<std::runtime_error>([&doubleVector] { *(doubleVector.end()); });
-			Assert::ExpectException<std::runtime_error>([&fooVector] { *(fooVector.end()); });
+			Assert::ExpectException<std::out_of_range>([&intVector] { *(intVector.end()); });
+			Assert::ExpectException<std::out_of_range>([&doubleVector] { *(doubleVector.end()); });
+			Assert::ExpectException<std::out_of_range>([&fooVector] { *(fooVector.end()); });
 
 			const Vector<int> emptyIntVectorCopy = intVector;
 			const Vector<double> emptyDoubleVectorCopy = doubleVector;
-			const Vector<Foo> emptyFooVectorCopy = fooVector;
+			const Vector<Foo> emptyfooVectorCopy = fooVector;
 
-			Assert::ExpectException<std::runtime_error>([&emptyIntVectorCopy] { *(emptyIntVectorCopy.end()); });
-			Assert::ExpectException<std::runtime_error>([&emptyDoubleVectorCopy] { *(emptyDoubleVectorCopy.end()); });
-			Assert::ExpectException<std::runtime_error>([&emptyFooVectorCopy] { *(emptyFooVectorCopy.end()); });
+			Assert::ExpectException<std::out_of_range>([&emptyIntVectorCopy] { *(emptyIntVectorCopy.end()); });
+			Assert::ExpectException<std::out_of_range>([&emptyDoubleVectorCopy] { *(emptyDoubleVectorCopy.end()); });
+			Assert::ExpectException<std::out_of_range>([&emptyfooVectorCopy] { *(emptyfooVectorCopy.end()); });
 
-			Assert::ExpectException<std::runtime_error>([&intVector] { *(intVector.cend()); });
-			Assert::ExpectException<std::runtime_error>([&doubleVector] { *(doubleVector.cend()); });
-			Assert::ExpectException<std::runtime_error>([&fooVector] { *(fooVector.cend()); });
+			Assert::ExpectException<std::out_of_range>([&intVector] { *(intVector.cend()); });
+			Assert::ExpectException<std::out_of_range>([&doubleVector] { *(doubleVector.cend()); });
+			Assert::ExpectException<std::out_of_range>([&fooVector] { *(fooVector.cend()); });
 
 			intVector.PushBack(10);
 			doubleVector.PushBack(10);
 			fooVector.PushBack(Foo(10));
 
-			Assert::ExpectException<std::runtime_error>([&intVector] { *(intVector.end()); });
-			Assert::ExpectException<std::runtime_error>([&intVector] { *(intVector.end()); });
-			Assert::ExpectException<std::runtime_error>([&intVector] { *(intVector.end()); });
+			Assert::ExpectException<std::out_of_range>([&intVector] { *(intVector.end()); });
+			Assert::ExpectException<std::out_of_range>([&intVector] { *(intVector.end()); });
+			Assert::ExpectException<std::out_of_range>([&intVector] { *(intVector.end()); });
 
 			const Vector<int> filledIntVectorCopy = intVector;
 			const Vector<double> filledDoubleVectorCopy = doubleVector;
-			const Vector<Foo> filledFooVectorCopy = fooVector;
+			const Vector<Foo> filledfooVectorCopy = fooVector;
 
-			Assert::ExpectException<std::runtime_error>([&filledIntVectorCopy] { *(filledIntVectorCopy.end()); });
-			Assert::ExpectException<std::runtime_error>([&filledDoubleVectorCopy] { *(filledDoubleVectorCopy.end()); });
-			Assert::ExpectException<std::runtime_error>([&filledFooVectorCopy] { *(filledFooVectorCopy.end()); });
+			Assert::ExpectException<std::out_of_range>([&filledIntVectorCopy] { *(filledIntVectorCopy.end()); });
+			Assert::ExpectException<std::out_of_range>([&filledDoubleVectorCopy] { *(filledDoubleVectorCopy.end()); });
+			Assert::ExpectException<std::out_of_range>([&filledfooVectorCopy] { *(filledfooVectorCopy.end()); });
 
-			Assert::ExpectException<std::runtime_error>([&intVector] { *(intVector.cend()); });
-			Assert::ExpectException<std::runtime_error>([&doubleVector] { *(doubleVector.cend()); });
-			Assert::ExpectException<std::runtime_error>([&fooVector] { *(fooVector.cend()); });
+			Assert::ExpectException<std::out_of_range>([&intVector] { *(intVector.cend()); });
+			Assert::ExpectException<std::out_of_range>([&doubleVector] { *(doubleVector.cend()); });
+			Assert::ExpectException<std::out_of_range>([&fooVector] { *(fooVector.cend()); });
 
 			Vector<int>::Iterator intIterator = intVector.begin();
 			Vector<double>::Iterator doubleIterator = doubleVector.begin();
@@ -926,13 +976,13 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(doubleVector.At(2), 30.0);
 			Assert::AreEqual(fooVector.At(2), Foo(30));
 
-			Assert::ExpectException<std::runtime_error>([&intVector] { intVector[3]; });
-			Assert::ExpectException<std::runtime_error>([&doubleVector] { doubleVector[3]; });
-			Assert::ExpectException<std::runtime_error>([&fooVector] { fooVector[3]; });
+			Assert::ExpectException<std::out_of_range>([&intVector] { intVector[3]; });
+			Assert::ExpectException<std::out_of_range>([&doubleVector] { doubleVector[3]; });
+			Assert::ExpectException<std::out_of_range>([&fooVector] { fooVector[3]; });
 
-			Assert::ExpectException<std::runtime_error>([&intVector] { intVector.At(3); });
-			Assert::ExpectException<std::runtime_error>([&doubleVector] { doubleVector.At(3); });
-			Assert::ExpectException<std::runtime_error>([&fooVector] { fooVector.At(3); });
+			Assert::ExpectException<std::out_of_range>([&intVector] { intVector.At(3); });
+			Assert::ExpectException<std::out_of_range>([&doubleVector] { doubleVector.At(3); });
+			Assert::ExpectException<std::out_of_range>([&fooVector] { fooVector.At(3); });
 
 			const Vector<int> intConstVector = { 10, 20, 30 };
 			const Vector<double> doubleConstVector = { 10, 20, 30 };
@@ -950,13 +1000,13 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(doubleConstVector.At(2), 30.0);
 			Assert::AreEqual(fooConstVector.At(2), Foo(30));
 
-			Assert::ExpectException<std::runtime_error>([&intConstVector] { intConstVector[3]; });
-			Assert::ExpectException<std::runtime_error>([&doubleConstVector] { doubleConstVector[3]; });
-			Assert::ExpectException<std::runtime_error>([&fooConstVector] { fooConstVector[3]; });
+			Assert::ExpectException<std::out_of_range>([&intConstVector] { intConstVector[3]; });
+			Assert::ExpectException<std::out_of_range>([&doubleConstVector] { doubleConstVector[3]; });
+			Assert::ExpectException<std::out_of_range>([&fooConstVector] { fooConstVector[3]; });
 
-			Assert::ExpectException<std::runtime_error>([&intConstVector] { intConstVector.At(3); });
-			Assert::ExpectException<std::runtime_error>([&doubleConstVector] { doubleConstVector.At(3); });
-			Assert::ExpectException<std::runtime_error>([&fooConstVector] { fooConstVector.At(3); });
+			Assert::ExpectException<std::out_of_range>([&intConstVector] { intConstVector.At(3); });
+			Assert::ExpectException<std::out_of_range>([&doubleConstVector] { doubleConstVector.At(3); });
+			Assert::ExpectException<std::out_of_range>([&fooConstVector] { fooConstVector.At(3); });
 		}
 
 		TEST_METHOD(PushBack)
@@ -967,7 +1017,7 @@ namespace UnitTestLibraryDesktop
 
 			const Vector<int> emptyConstIntVector;
 			const Vector<double> emptyConstDoubleVector;
-			const Vector<Foo> emptyConstFooVector;
+			const Vector<Foo> emptyConstfooVector;
 
 			// Empty list exception when calling Front
 			Assert::ExpectException<std::runtime_error>([&intVector] { intVector.Front(); });
@@ -975,7 +1025,7 @@ namespace UnitTestLibraryDesktop
 			Assert::ExpectException<std::runtime_error>([&fooVector] { fooVector.Front(); });
 			Assert::ExpectException<std::runtime_error>([&emptyConstIntVector] { emptyConstIntVector.Front(); });
 			Assert::ExpectException<std::runtime_error>([&emptyConstDoubleVector] { emptyConstDoubleVector.Front(); });
-			Assert::ExpectException<std::runtime_error>([&emptyConstFooVector] { emptyConstFooVector.Front(); });
+			Assert::ExpectException<std::runtime_error>([&emptyConstfooVector] { emptyConstfooVector.Front(); });
 
 			// Empty list exception when calling Back
 			Assert::ExpectException<std::runtime_error>([&intVector] { intVector.Back(); });
@@ -983,7 +1033,7 @@ namespace UnitTestLibraryDesktop
 			Assert::ExpectException<std::runtime_error>([&fooVector] { fooVector.Back(); });
 			Assert::ExpectException<std::runtime_error>([&emptyConstIntVector] { emptyConstIntVector.Back(); });
 			Assert::ExpectException<std::runtime_error>([&emptyConstDoubleVector] { emptyConstDoubleVector.Back(); });
-			Assert::ExpectException<std::runtime_error>([&emptyConstFooVector] { emptyConstFooVector.Back(); });
+			Assert::ExpectException<std::runtime_error>([&emptyConstfooVector] { emptyConstfooVector.Back(); });
 
 			intVector.PushBack(10);
 			doubleVector.PushBack(10);
@@ -991,7 +1041,7 @@ namespace UnitTestLibraryDesktop
 
 			const Vector<int> filledConstIntVector1 = intVector;
 			const Vector<double> filledConstDoubleVector1 = doubleVector;
-			const Vector<Foo> filledConstFooVector1 = fooVector;
+			const Vector<Foo> filledConstfooVector1 = fooVector;
 
 			// Data was set correctly
 			Assert::AreEqual(intVector.Back(), 10);
@@ -999,7 +1049,7 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(fooVector.Back(), Foo(10));
 			Assert::AreEqual(filledConstIntVector1.Back(), 10);
 			Assert::AreEqual(filledConstDoubleVector1.Back(), 10.0);
-			Assert::AreEqual(filledConstFooVector1.Back(), Foo(10));
+			Assert::AreEqual(filledConstfooVector1.Back(), Foo(10));
 
 			// First data value sets front and back references
 			Assert::AreEqual(intVector.Back(), intVector.Front());
@@ -1007,7 +1057,7 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(fooVector.Back(), fooVector.Front());
 			Assert::AreEqual(filledConstIntVector1.Back(), intVector.Front());
 			Assert::AreEqual(filledConstDoubleVector1.Back(), doubleVector.Front());
-			Assert::AreEqual(filledConstFooVector1.Back(), fooVector.Front());
+			Assert::AreEqual(filledConstfooVector1.Back(), fooVector.Front());
 
 			// Non-empty
 			Assert::IsFalse(intVector.IsEmpty());
@@ -1015,7 +1065,7 @@ namespace UnitTestLibraryDesktop
 			Assert::IsFalse(fooVector.IsEmpty());
 			Assert::IsFalse(filledConstIntVector1.IsEmpty());
 			Assert::IsFalse(filledConstDoubleVector1.IsEmpty());
-			Assert::IsFalse(filledConstFooVector1.IsEmpty());
+			Assert::IsFalse(filledConstfooVector1.IsEmpty());
 
 			// Size of 1
 			Assert::AreEqual(intVector.Size(), 1_z);
@@ -1023,7 +1073,7 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(fooVector.Size(), 1_z);
 			Assert::AreEqual(filledConstIntVector1.Size(), 1_z);
 			Assert::AreEqual(filledConstDoubleVector1.Size(), 1_z);
-			Assert::AreEqual(filledConstFooVector1.Size(), 1_z);
+			Assert::AreEqual(filledConstfooVector1.Size(), 1_z);
 
 			intVector.PushBack(20);
 			doubleVector.PushBack(20);
@@ -1031,7 +1081,7 @@ namespace UnitTestLibraryDesktop
 
 			const Vector<int> filledConstIntVector2 = intVector;
 			const Vector<double> filledConstDoubleVector2 = doubleVector;
-			const Vector<Foo> filledConstFooVector2 = fooVector;
+			const Vector<Foo> filledConstfooVector2 = fooVector;
 
 			// Data was set correctly
 			Assert::AreEqual(intVector.Front(), 10);
@@ -1039,7 +1089,7 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(fooVector.Front(), Foo(10));
 			Assert::AreEqual(filledConstIntVector2.Front(), 10);
 			Assert::AreEqual(filledConstDoubleVector2.Front(), 10.0);
-			Assert::AreEqual(filledConstFooVector2.Front(), Foo(10));
+			Assert::AreEqual(filledConstfooVector2.Front(), Foo(10));
 
 			// Data was set correctly
 			Assert::AreEqual(intVector.Back(), 20);
@@ -1047,7 +1097,7 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(fooVector.Back(), Foo(20));
 			Assert::AreEqual(filledConstIntVector2.Back(), 20);
 			Assert::AreEqual(filledConstDoubleVector2.Back(), 20.0);
-			Assert::AreEqual(filledConstFooVector2.Back(), Foo(20));
+			Assert::AreEqual(filledConstfooVector2.Back(), Foo(20));
 
 			// Size of 2
 			Assert::AreEqual(intVector.Size(), 2_z);
@@ -1055,7 +1105,7 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(fooVector.Size(), 2_z);
 			Assert::AreEqual(filledConstIntVector2.Size(), 2_z);
 			Assert::AreEqual(filledConstDoubleVector2.Size(), 2_z);
-			Assert::AreEqual(filledConstFooVector2.Size(), 2_z);
+			Assert::AreEqual(filledConstfooVector2.Size(), 2_z);
 		}
 
 		TEST_METHOD(PopBack)
@@ -1128,27 +1178,35 @@ namespace UnitTestLibraryDesktop
 
 		TEST_METHOD(Find)
 		{
-			Vector<int> intVector;
-			Vector<double> doubleVector;
-			Vector<Foo> fooVector;
-			Vector<Bar> barVector;
+			Vector<int> intVector = { 10, 20, 30 };
+			Vector<double> doubleVector = { 10, 20, 30 };
+			Vector<Foo> fooVector = { Foo(10), Foo(20), Foo(30) };
+			Vector<Bar> barVector = { Bar(10), Bar(20), Bar(30) };
 
-			std::function<bool(Bar a, Bar b)> barEqual = [](Bar a, Bar b) { return a.Data() == b.Data(); };
+			const Vector<int> noEqualityConstIntVector = intVector;
+			const Vector<double> noEqualityConstDoubleVector = doubleVector;
+			const Vector<Foo> noEqualityConstfooVector = fooVector;
+			const Vector<Bar> noEqualityConstBarVector = barVector;
 
-			intVector.PushBack(10);
-			doubleVector.PushBack(10);
-			fooVector.PushBack(Foo(10));
-			barVector.PushBack(Bar(10));
+			Assert::ExpectException<std::runtime_error>([&intVector] { intVector.Find(10); });
+			Assert::ExpectException<std::runtime_error>([&doubleVector] { doubleVector.Find(10); });
+			Assert::ExpectException<std::runtime_error>([&fooVector] { fooVector.Find(Foo(10)); });
+			Assert::ExpectException<std::runtime_error>([&barVector] { barVector.Find(Bar(10)); });
 
-			intVector.PushBack(20);
-			doubleVector.PushBack(20);
-			fooVector.PushBack(Foo(20));
-			barVector.PushBack(Bar(20));
+			Assert::ExpectException<std::runtime_error>([&noEqualityConstIntVector] { noEqualityConstIntVector.Find(10); });
+			Assert::ExpectException<std::runtime_error>([&noEqualityConstDoubleVector] { noEqualityConstDoubleVector.Find(10); });
+			Assert::ExpectException<std::runtime_error>([&noEqualityConstfooVector] { noEqualityConstfooVector.Find(Foo(10)); });
+			Assert::ExpectException<std::runtime_error>([&noEqualityConstBarVector] { noEqualityConstBarVector.Find(Bar(10)); });
 
-			intVector.PushBack(30);
-			doubleVector.PushBack(30);
-			fooVector.PushBack(Foo(30));
-			barVector.PushBack(Bar(30));
+			intVector.SetEqualityFunctor(DefaultEquality<int>());
+			doubleVector.SetEqualityFunctor(DefaultEquality<double>());
+			fooVector.SetEqualityFunctor(DefaultEquality<Foo>());
+			barVector.SetEqualityFunctor([](Bar a, Bar b) { return a.Data() == b.Data(); });
+
+			const Vector<int> constIntVector = intVector;
+			const Vector<double> constDoubleVector = doubleVector;
+			const Vector<Foo> constfooVector = fooVector;
+			const Vector<Bar> constBarVector = barVector;
 
 			Vector<int>::Iterator intIterator = intVector.begin();
 			Vector<double>::Iterator doubleIterator = doubleVector.begin();
@@ -1158,64 +1216,59 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(intIterator++, intVector.Find(10));
 			Assert::AreEqual(doubleIterator++, doubleVector.Find(10));
 			Assert::AreEqual(fooIterator++, fooVector.Find(Foo(10)));
-			Assert::AreEqual(barIterator++, barVector.Find(Bar(10), barEqual));
+			Assert::AreEqual(barIterator++, barVector.Find(Bar(10)));
 
 			Assert::AreEqual(intIterator++, intVector.Find(20));
 			Assert::AreEqual(doubleIterator++, doubleVector.Find(20));
 			Assert::AreEqual(fooIterator++, fooVector.Find(Foo(20)));
-			Assert::AreEqual(barIterator++, barVector.Find(Bar(20), barEqual));
+			Assert::AreEqual(barIterator++, barVector.Find(Bar(20)));
 
 			Assert::AreEqual(intIterator, intVector.Find(30));
 			Assert::AreEqual(doubleIterator, doubleVector.Find(30));
 			Assert::AreEqual(fooIterator, fooVector.Find(Foo(30)));
-			Assert::AreEqual(barIterator, barVector.Find(Bar(30), barEqual));
+			Assert::AreEqual(barIterator, barVector.Find(Bar(30)));
 
 			Assert::AreEqual(intVector.end(), intVector.Find(40));
 			Assert::AreEqual(doubleVector.end(), doubleVector.Find(40));
 			Assert::AreEqual(fooVector.end(), fooVector.Find(Foo(40)));
-			Assert::AreEqual(barVector.end(), barVector.Find(Bar(40), barEqual));
-
-			const Vector<int> constIntVector = intVector;
-			const Vector<double> constDoubleVector = doubleVector;
-			const Vector<Foo> constFooVector = fooVector;
-			const Vector<Bar> constBarVector = barVector;
+			Assert::AreEqual(barVector.end(), barVector.Find(Bar(40)));
 
 			Vector<int>::ConstIterator constIntIterator = constIntVector.begin();
 			Vector<double>::ConstIterator constDoubleIterator = constDoubleVector.begin();
-			Vector<Foo>::ConstIterator constFooIterator = constFooVector.begin();
+			Vector<Foo>::ConstIterator constFooIterator = constfooVector.begin();
 			Vector<Bar>::ConstIterator constBarIterator = constBarVector.begin();
 
 			Assert::AreEqual(constIntIterator++, constIntVector.Find(10));
 			Assert::AreEqual(constDoubleIterator++, constDoubleVector.Find(10));
-			Assert::AreEqual(constFooIterator++, constFooVector.Find(Foo(10)));
-			Assert::AreEqual(constBarIterator++, constBarVector.Find(Bar(10), barEqual));
+			Assert::AreEqual(constFooIterator++, constfooVector.Find(Foo(10)));
+			Assert::AreEqual(constBarIterator++, constBarVector.Find(Bar(10)));
 
 			Assert::AreEqual(constIntIterator++, constIntVector.Find(20));
 			Assert::AreEqual(constDoubleIterator++, constDoubleVector.Find(20));
-			Assert::AreEqual(constFooIterator++, constFooVector.Find(Foo(20)));
-			Assert::AreEqual(constBarIterator++, constBarVector.Find(Bar(20), barEqual));
+			Assert::AreEqual(constFooIterator++, constfooVector.Find(Foo(20)));
+			Assert::AreEqual(constBarIterator++, constBarVector.Find(Bar(20)));
 
 			Assert::AreEqual(constIntIterator, constIntVector.Find(30));
 			Assert::AreEqual(constDoubleIterator, constDoubleVector.Find(30));
-			Assert::AreEqual(constFooIterator, constFooVector.Find(Foo(30)));
-			Assert::AreEqual(constBarIterator, constBarVector.Find(Bar(30), barEqual));
+			Assert::AreEqual(constFooIterator, constfooVector.Find(Foo(30)));
+			Assert::AreEqual(constBarIterator, constBarVector.Find(Bar(30)));
 
 			Assert::AreEqual(constIntVector.end(), constIntVector.Find(40));
 			Assert::AreEqual(constDoubleVector.end(), constDoubleVector.Find(40));
-			Assert::AreEqual(constFooVector.end(), constFooVector.Find(Foo(40)));
-			Assert::AreEqual(constBarVector.end(), constBarVector.Find(Bar(40), barEqual));
+			Assert::AreEqual(constfooVector.end(), constfooVector.Find(Foo(40)));
+			Assert::AreEqual(constBarVector.end(), constBarVector.Find(Bar(40)));
 		}
 
 		TEST_METHOD(Remove)
 		{
 			/* Integer Data */
 
-			Vector<int> intVector;
+			Vector<int> intVector = { 10, 20 };
 
+			Assert::ExpectException<std::runtime_error>([&intVector] { intVector.Remove(10); });
+			intVector.SetEqualityFunctor(DefaultEquality<int>());
 			Assert::ExpectException<std::runtime_error>([&intVector] { intVector.Remove(Vector<int>::Iterator()); });
 
-			intVector.PushBack(10);
-			intVector.PushBack(20);
 			intVector.Remove(intVector.begin());
 
 			Vector<int>::Iterator intIterator = intVector.begin();
@@ -1239,12 +1292,12 @@ namespace UnitTestLibraryDesktop
 
 			/* Double Data */
 
-			Vector<double> doubleVector;
+			Vector<double> doubleVector = { 10, 20 };
 
+			Assert::ExpectException<std::runtime_error>([&doubleVector] { doubleVector.Remove(10); });
+			doubleVector.SetEqualityFunctor(DefaultEquality<double>());
 			Assert::ExpectException<std::runtime_error>([&doubleVector] { doubleVector.Remove(Vector<double>::Iterator()); });
 
-			doubleVector.PushBack(10);
-			doubleVector.PushBack(20);
 			doubleVector.Remove(doubleVector.begin());
 
 			Vector<double>::Iterator doubleIterator = doubleVector.begin();
@@ -1268,12 +1321,12 @@ namespace UnitTestLibraryDesktop
 
 			/* Foo Data */
 
-			Vector<Foo> fooVector;
+			Vector<Foo> fooVector = { Foo(10), Foo(20) };
 
+			Assert::ExpectException<std::runtime_error>([&fooVector] { fooVector.Remove(Foo(10)); });
+			fooVector.SetEqualityFunctor(DefaultEquality<Foo>());
 			Assert::ExpectException<std::runtime_error>([&fooVector] { fooVector.Remove(Vector<Foo>::Iterator()); });
 
-			fooVector.PushBack(Foo(10));
-			fooVector.PushBack(Foo(20));
 			fooVector.Remove(fooVector.begin());
 
 			Vector<Foo>::Iterator fooIterator = fooVector.begin();

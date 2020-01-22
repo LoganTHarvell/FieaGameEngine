@@ -3,6 +3,7 @@
 #include <memory>
 #include <initializer_list>
 #include <stdexcept>
+#include <cassert>
 #include <functional>
 #include <algorithm>
 
@@ -14,7 +15,7 @@ namespace Library
 	/// Represents a generic vector list.
 	/// </summary>
 	template <typename T>
-	class Vector
+	class Vector final
 	{
 	public:
 		/// <summary>
@@ -33,6 +34,23 @@ namespace Library
 		using EqualityFunctor = std::function<bool(T, T)>;
 
 	public:
+		/// <summary>
+		/// Functor specifying the default strategy for incrementing the capacity of the vector.
+		/// </summary>
+		struct DefaultReserveStrategy final
+		{
+			/// <summary>
+			/// Function call operator.
+			/// </summary>
+			/// <param name="">Placeholder for the vector size.</param>
+			/// <param name="capacity">Vector capacity.</param>
+			/// <returns>New capacity.</returns>
+			const size_t operator()(const size_t, const size_t capacity) const
+			{
+				return static_cast<size_t>(capacity * 1.5);
+			}
+		};
+
 #pragma region Iterator
 		/// <summary>
 		/// Class for traversing the vector and retrieving values, which can then be manipulated.
@@ -90,7 +108,7 @@ namespace Library
 			/// </summary>
 			/// <param name="vector">Source vector for the Iterator's values.</param>
 			/// <param name="index">Current element of the vector referenced by the Iterator.</param>
-			Iterator(Vector<T>& vector, const size_t index=0);
+			Iterator(Vector& vector, const size_t index=0);
 
 		public:
 			/// <summary>
@@ -118,13 +136,16 @@ namespace Library
 			/// Pre-increment operator.
 			/// </summary>
 			/// <returns>Reference to the next Iterator.</returns>
-			/// <exception cref="runtime_error">Iterator invalid or out of bounds.</exception>
+			/// <exception cref="runtime_error">Iterator invalid.</exception>
+			/// <exception cref="out_of_range">Iterator out of bounds.</exception>
 			Iterator& operator++();
 
 			/// <summary>
 			/// Post-increment operator.
 			/// </summary>
 			/// <returns>Copy of the Iterator before it was incremented.</returns>
+			/// <exception cref="runtime_error">Iterator invalid.</exception>
+			/// <exception cref="out_of_range">Iterator out of bounds.</exception>
 			Iterator operator++(int);
 
 			/// <summary>
@@ -132,7 +153,8 @@ namespace Library
 			/// </summary>
 			/// <param name="rhs">Value to offset the Iterator.</param>
 			/// <returns>Reference to the Iterator with the given offset.</returns>
-			/// <exception cref="runtime_error">Iterator invalid or out of bounds.</exception>
+			/// <exception cref="runtime_error">Iterator invalid.</exception>
+			/// <exception cref="out_of_range">Iterator out of bounds.</exception>
 			Iterator& operator+=(const size_t rhs);
 
 			/// <summary>
@@ -140,19 +162,23 @@ namespace Library
 			/// </summary>
 			/// <param name="rhs">Value to offset the Iterator.</param>
 			/// <returns>Iterator at the given offset from this Iterator.</returns>
+			/// <exception cref="out_of_range">Iterator out of bounds.</exception>
 			Iterator operator+(const size_t rhs);
 
 			/// <summary>
 			/// Pre-decrement operator.
 			/// </summary>
 			/// <returns>Reference to the next Iterator.</returns>
-			/// <exception cref="runtime_error">Iterator invalid out of bounds.</exception>
+			/// <exception cref="runtime_error">Iterator invalid.</exception>
+			/// <exception cref="out_of_range">Iterator out of bounds.</exception>
 			Iterator& operator--();
 
 			/// <summary>
 			/// Post-decrement operator.
 			/// </summary>
 			/// <returns>Copy of the Iterator before it was decremented.</returns>
+			/// <exception cref="runtime_error">Iterator invalid.</exception>
+			/// <exception cref="out_of_range">Iterator out of bounds.</exception>	
 			Iterator operator--(int);
 
 			/// <summary>
@@ -160,7 +186,8 @@ namespace Library
 			/// </summary>
 			/// <param name="rhs">Value to offset the Iterator.</param>
 			/// <returns>Reference to the Iterator with the given offset.</returns>
-			/// <exception cref="runtime_error">Iterator invalid out of bounds.</exception>
+			/// <exception cref="runtime_error">Iterator invalid.</exception>
+			/// <exception cref="out_of_range">Iterator out of bounds.</exception>
 			Iterator& operator-=(const size_t rhs);
 
 			/// <summary>
@@ -168,6 +195,8 @@ namespace Library
 			/// </summary>
 			/// <param name="rhs">Value to offset the Iterator.</param>
 			/// <returns>Iterator at the given offset from this Iterator.</returns>
+			/// <exception cref="runtime_error">Iterator invalid.</exception>
+			/// <exception cref="out_of_range">Iterator out of bounds.</exception>
 			Iterator operator-(const size_t rhs);
 
 		private:
@@ -252,6 +281,7 @@ namespace Library
 			/// Dereference operator.
 			/// </summary>
 			/// <returns>Value of the current element of the vector.</returns>
+			/// <exception cref="runtime_error">ConstIterator invalid.</exception>
 			const T& operator*() const;
 
 			/// <summary>
@@ -272,13 +302,16 @@ namespace Library
 			/// Pre-increment operator.
 			/// </summary>
 			/// <returns>Reference to the next ConstIterator.</returns>
-			/// <exception cref="runtime_error">ConstIterator invalid or out of bounds.</exception>
+			/// <exception cref="runtime_error">ConstIterator invalid.</exception>
+			/// <exception cref="out_of_range">ConstIterator out of bounds.</exception>
 			ConstIterator& operator++();
 
 			/// <summary>
 			/// Post-increment operator.
 			/// </summary>
 			/// <returns>Copy of the ConstIterator before it was incremented.</returns>
+			/// <exception cref="runtime_error">ConstIterator invalid.</exception>
+			/// <exception cref="out_of_range">ConstIterator out of bounds.</exception>
 			ConstIterator operator++(int);
 
 			/// <summary>
@@ -286,7 +319,8 @@ namespace Library
 			/// </summary>
 			/// <param name="rhs">Value to offset the ConstIterator.</param>
 			/// <returns>Reference to the ConstIterator with the given offset.</returns>
-			/// <exception cref="runtime_error">ConstIterator invalid or out of bounds.</exception>
+			/// <exception cref="runtime_error">ConstIterator invalid.</exception>
+			/// <exception cref="out_of_range">ConstIterator out of bounds.</exception>
 			ConstIterator& operator+=(const size_t rhs);
 
 			/// <summary>
@@ -294,19 +328,24 @@ namespace Library
 			/// </summary>
 			/// <param name="rhs">Value to offset the ConstIterator.</param>
 			/// <returns>ConstIterator at the given offset from this ConstIterator.</returns>
+			/// <exception cref="runtime_error">ConstIterator invalid.</exception>
+			/// <exception cref="out_of_range">ConstIterator out of bounds.</exception>
 			ConstIterator operator+(const size_t rhs);
 
 			/// <summary>
 			/// Pre-decrement operator.
 			/// </summary>
 			/// <returns>Reference to the next ConstIterator.</returns>
-			/// <exception cref="runtime_error">ConstIterator invalid or out of bounds.</exception>
+			/// <exception cref="runtime_error">ConstIterator invalid.</exception>
+			/// <exception cref="out_of_range">ConstIterator out of bounds.</exception>
 			ConstIterator& operator--();
 
 			/// <summary>
 			/// Post-decrement operator.
 			/// </summary>
 			/// <returns>Vopy of the ConstIterator before it was decremented.</returns>
+			/// <exception cref="runtime_error">ConstIterator invalid.</exception>
+			/// <exception cref="out_of_range">ConstIterator out of bounds.</exception>
 			ConstIterator operator--(int);
 
 			/// <summary>
@@ -314,6 +353,8 @@ namespace Library
 			/// </summary>
 			/// <param name="rhs">Value to offset the ConstIterator.</param>
 			/// <returns>Reference to the ConstIterator with the given offset.</returns>
+			/// <exception cref="runtime_error">ConstIterator invalid.</exception>
+			/// <exception cref="out_of_range">ConstIterator out of bounds.</exception>
 			ConstIterator& operator-=(const size_t rhs);
 
 			/// <summary>
@@ -321,7 +362,8 @@ namespace Library
 			/// </summary>
 			/// <param name="rhs">Value to offset the ConstIterator.</param>
 			/// <returns>ConstIterator at the given offset from this ConstIterator.</returns>
-			/// <exception cref="runtime_error">ConstIterator invalid or out of bounds.</exception>
+			/// <exception cref="runtime_error">ConstIterator invalid.</exception>
+			/// <exception cref="out_of_range">ConstIterator out of bounds.</exception>
 			ConstIterator operator-(const size_t rhs);
 		
 		private:
@@ -337,30 +379,12 @@ namespace Library
 		};
 #pragma endregion ConstIterator
 
-	private:
-		/// <summary>
-		/// Functor specifying the default strategy for incrementing the capacity of the vector.
-		/// </summary>
-		struct DefaultReserveStrategy final
-		{
-			/// <summary>
-			/// Function call operator.
-			/// </summary>
-			/// <param name="">Placeholder for the vector size.</param>
-			/// <param name="capacity">Vector capacity.</param>
-			/// <returns>New capacity.</returns>
-			const size_t operator()(const size_t, const size_t capacity) const
-			{
-				return static_cast<size_t>(capacity * 1.5);
-			}
-		};
-
 	public:
 #pragma region Constructor and Destructor
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
-		Vector(const size_t capacity=0);
+		Vector(const size_t capacity=0, const ReserveStrategy reserveStrategy=DefaultReserveStrategy(), const EqualityFunctor equalityFunctor=DefaultEquality<T>());
 
 		/// <summary>
 		/// Destructor. 
@@ -383,9 +407,10 @@ namespace Library
 		Vector(Vector&& rhs) noexcept;
 
 		/// <summary>
-		/// Initializer vector constructor.
+		/// Initializer list constructor.
 		/// </summary>
 		/// <param name="rhs">Value list for intializing a new vector.</param>
+		/// <remarks>Does not initialize equality functor. User should follow with a call to SetEqualityFunctor.</remarks>
 		Vector(const std::initializer_list<T> rhs);
 #pragma endregion Constructors and Destructor
 
@@ -410,6 +435,7 @@ namespace Library
 		/// Initializer list assignment operator.
 		/// </summary>
 		/// <param name="vector">Value vector for initializing a new Vector.</param>
+		/// <remarks>Does not initialize equality functor. User should follow with a call to SetEqualityFunctor.</remarks>
 		Vector& operator=(const std::initializer_list<T> rhs);
 #pragma endregion Assignment Operators
 
@@ -472,17 +498,17 @@ namespace Library
 		/// Searches the vector for a given value and returns an Iterator.
 		/// </summary>
 		/// <param name="value">Value to search for in the vector.</param>
-		/// <param name="equal">Equality functor for comparing the search value to elements in the vector.</param>
 		/// <returns>Iterator referencing the value, if found. Otherwise it returns an empty Iterator.</returns>
-		Iterator Find(const T& value, const EqualityFunctor equal=DefaultEquality<T>());
+		/// <exception cref="">Missing equality functor.</exception>
+		Iterator Find(const T& value);
 
 		/// <summary>
 		/// Searches the vector for a given value and returns an ConstIterator.
 		/// </summary>
 		/// <param name="value">Value to search for in the vector.</param>
-		/// <param name="equal">Equality functor for comparing the search value to elements in the vector.</param>
 		/// <returns>ConstIterator referencing the value, if found. Otherwise it returns an empty ConstIterator.</returns>
-		ConstIterator Find(const T& value, const EqualityFunctor equal=DefaultEquality<T>()) const;
+		/// <exception cref="">Missing equality functor.</exception>
+		ConstIterator Find(const T& value) const;
 #pragma endregion Iterator Accessors
 
 #pragma region Size and Capacity
@@ -601,9 +627,8 @@ namespace Library
 		/// <summary>
 		/// Adds an element with the passed in data to the back of the vector.
 		/// </summary>
-		/// <typeparam name="ReserveStrategy">Functor that takes in a capacity and size</typeparam>
 		/// <param name="data">Value to be added to the back of the vector.</param>
-		void PushBack(const T& data, const ReserveStrategy reserveStrategy=DefaultReserveStrategy());
+		void PushBack(const T& data);
 
 		/// <summary>
 		/// Removes the last element from the vector.
@@ -614,9 +639,9 @@ namespace Library
 		/// Removes a single element from the vector given the corresponding Iterator.
 		/// </summary>
 		/// <param name="value">Value to be searched for in the vector to be removed.</param>
-		/// <param name="equal">Equality functor for comparing the search value to elements in the vector.</param>
 		/// <returns>True on successful remove, false otherwise.</returns>
-		bool Remove(const T& value, const EqualityFunctor equal=DefaultEquality<T>());
+		/// <exception cref="">Missing equality functor.</exception>
+		bool Remove(const T& value);
 
 		/// <summary>
 		/// Removes a single element from the vector given the corresponding Iterator.
@@ -630,6 +655,18 @@ namespace Library
 		/// Removes all elements from the vector and resets the size to zero.
 		/// </summary>
 		void Clear();
+
+		/// <summary>
+		/// Sets reserve strategy functor for incrementing capacity during insertion.
+		/// </summary>
+		/// <param name="reserveStrategy">New reserve strategy functor.</param>
+		void SetReserveStrategy(const ReserveStrategy reserveStrategy);
+
+		/// <summary>
+		/// Sets equality functor used to compare elements in the vector.
+		/// </summary>
+		/// <param name="equalityFunctor">New equality functor.</param>
+		void SetEqualityFunctor(const EqualityFunctor equalityFunctor);
 #pragma endregion Modifiers
 
 	private:
@@ -647,6 +684,16 @@ namespace Library
 		/// Number of elements for which memory is reserved, but not necessarily initialized.
 		/// </summary>
 		size_t mCapacity{ 0 };
+
+		/// <summary>
+		/// Functor for evaluating the capacity reserve strategy during resize during element insert.
+		/// </summary>
+		ReserveStrategy mReserveStrategy{ DefaultReserveStrategy() };
+
+		/// <summary>
+		/// Functor for evaluating the equality of two values in the list.
+		/// </summary>
+		EqualityFunctor mEqualityFunctor;
 	};
 }
 

@@ -124,6 +124,12 @@ namespace Library
 
 #pragma region Constructors and Destructor
 	template<typename T>
+	inline SList<T>::SList(const EqualityFunctor equalityFunctor)
+	{
+		mEqualityFunctor = equalityFunctor;
+	}
+
+	template<typename T>
 	inline SList<T>::~SList()
 	{
 		Clear();
@@ -136,11 +142,13 @@ namespace Library
 		{
 			PushBack(value);
 		}
+
+		mEqualityFunctor = rhs.mEqualityFunctor;
 	}
 
 	template<typename T>
 	inline SList<T>::SList(SList&& rhs) noexcept :
-		mSize(rhs.mSize), mFront(rhs.mFront), mBack(rhs.mBack)
+		mSize(rhs.mSize), mFront(rhs.mFront), mBack(rhs.mBack), mEqualityFunctor(rhs.mEqualityFunctor)
 	{
 		rhs.mSize = 0;
 		rhs.mFront = nullptr;
@@ -197,6 +205,7 @@ namespace Library
 			mSize = rhs.mSize;
 			mFront = rhs.mFront;
 			mBack = rhs.mBack;
+			mEqualityFunctor = rhs.mEqualityFunctor;
 
 			rhs.mSize = 0;
 			rhs.mFront = nullptr;
@@ -269,11 +278,16 @@ namespace Library
 	}
 
 	template<typename T>
-	inline typename SList<T>::Iterator SList<T>::Find(const T& value, const EqualityFunctor equal)
+	inline typename SList<T>::Iterator SList<T>::Find(const T& value)
 	{
+		if (!mEqualityFunctor)
+		{
+			throw std::runtime_error("Missing equality functor.");
+		}
+
 		for (auto it = begin(); it != end(); ++it)
 		{
-			if (equal(*it, value))
+			if (mEqualityFunctor(*it, value))
 			{
 				return it;
 			}
@@ -283,11 +297,16 @@ namespace Library
 	}
 
 	template<typename T>
-	inline typename SList<T>::ConstIterator SList<T>::Find(const T& value, const EqualityFunctor equal) const
+	inline typename SList<T>::ConstIterator SList<T>::Find(const T& value) const
 	{
+		if (!mEqualityFunctor)
+		{
+			throw std::runtime_error("Missing equality functor.");
+		}
+
 		for (auto it = begin(); it != end(); ++it)
 		{
-			if (equal(*it, value))
+			if (mEqualityFunctor(*it, value))
 			{
 				return ConstIterator(it);
 			}
@@ -456,9 +475,9 @@ namespace Library
 	}
 
 	template<typename T>
-	inline bool SList<T>::Remove(const T& value, const EqualityFunctor equal)
+	inline bool SList<T>::Remove(const T& value)
 	{
-		 return Remove(Find(value, equal));
+		 return Remove(Find(value));
 	}
 
 	template<typename T>
@@ -504,6 +523,12 @@ namespace Library
 		mSize = 0;
 		mFront = nullptr;
 		mBack = nullptr;
+	}
+
+	template<typename T>
+	inline void SList<T>::SetEqualityFunctor(const EqualityFunctor equalityFunctor)
+	{
+		mEqualityFunctor = equalityFunctor;
 	}
 }
 #pragma endregion Modifiers
