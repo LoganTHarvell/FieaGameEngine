@@ -84,10 +84,12 @@ namespace UnitTestLibraryDesktop
 			Assert::ExpectException<std::runtime_error>([&intList] { *(intList.begin()); });
 			Assert::ExpectException<std::runtime_error>([&doubleList] { *(doubleList.begin()); });
 			Assert::ExpectException<std::runtime_error>([&fooList] { *(fooList.begin()); });
+			Assert::ExpectException<std::runtime_error>([&fooList] { fooList.begin()->Data(); });
 
 			Assert::ExpectException<std::runtime_error>([&intList] { *(intList.cbegin()); });
 			Assert::ExpectException<std::runtime_error>([&doubleList] { *(doubleList.cbegin()); });
 			Assert::ExpectException<std::runtime_error>([&fooList] { *(fooList.cbegin()); });
+			Assert::ExpectException<std::runtime_error>([&fooList] { fooList.cbegin()->Data(); });
 
 			intList.PushBack(10);
 			doubleList.PushBack(10);
@@ -96,10 +98,12 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(*intList.begin(), 10);
 			Assert::AreEqual(*doubleList.begin(), 10.0);
 			Assert::AreEqual(*fooList.begin(), Foo(10));
+			Assert::AreEqual(fooList.begin()->Data(), 10);
 
 			Assert::AreEqual(*intList.cbegin(), 10);
 			Assert::AreEqual(*doubleList.cbegin(), 10.0);
 			Assert::AreEqual(*fooList.cbegin(), Foo(10));
+			Assert::AreEqual(fooList.cbegin()->Data(), 10);
 		}
 
 		TEST_METHOD(IteratorEquality)

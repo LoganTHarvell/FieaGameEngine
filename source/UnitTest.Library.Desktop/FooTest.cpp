@@ -4,7 +4,6 @@
 #include "Foo.h"
 
 
-using namespace std;
 using namespace std::string_literals;
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;

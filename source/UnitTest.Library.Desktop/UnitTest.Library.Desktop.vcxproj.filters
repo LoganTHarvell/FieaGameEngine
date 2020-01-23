@@ -12,6 +12,8 @@
     </ClCompile>
     <ClCompile Include="VectorTest.cpp" />
     <ClCompile Include="BarTest.cpp" />
+    <ClCompile Include="DefaultEqualityTest.cpp" />
+    <ClCompile Include="DefaultHashTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

@@ -29,6 +29,17 @@ namespace Library
 	}
 
 	template<typename T>
+	inline T* SList<T>::Iterator::operator->() const
+	{
+		if (mNode == nullptr)
+		{
+			throw std::runtime_error("Invalid Iterator.");
+		}
+
+		return &(mNode->Data);
+	}
+
+	template<typename T>
 	inline bool SList<T>::Iterator::operator==(const Iterator& rhs) const noexcept
 	{
 		return !(operator!=(rhs));
@@ -84,6 +95,17 @@ namespace Library
 		}
 
 		return mNode->Data;
+	}
+
+	template<typename T>
+	inline const T* SList<T>::ConstIterator::operator->() const
+	{
+		if (mNode == nullptr)
+		{
+			throw std::runtime_error("Invalid ConstIterator.");
+		}
+
+		return &(mNode->Data);
 	}
 
 	template<typename T>
@@ -242,7 +264,7 @@ namespace Library
 
 #pragma region Size
 	template<typename T>
-	inline size_t SList<T>::Size() const
+	inline std::size_t SList<T>::Size() const
 	{
 		return mSize;
 	}

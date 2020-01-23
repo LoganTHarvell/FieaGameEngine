@@ -76,25 +76,29 @@ namespace UnitTestLibraryDesktop
 
 		TEST_METHOD(IteratorDereference)
 		{
-			Assert::ExpectException<std::runtime_error>([] { *(Vector<int>::Iterator()); });
-			Assert::ExpectException<std::runtime_error>([] { *(Vector<double>::Iterator()); });
-			Assert::ExpectException<std::runtime_error>([] { *(Vector<Foo>::Iterator()); });
+			Assert::ExpectException<std::runtime_error>([] { *Vector<int>::Iterator(); });
+			Assert::ExpectException<std::runtime_error>([] { *Vector<double>::Iterator(); });
+			Assert::ExpectException<std::runtime_error>([] { *Vector<Foo>::Iterator(); });
+			Assert::ExpectException<std::runtime_error>([] { Vector<Foo>::Iterator()->Data(); });
 
-			Assert::ExpectException<std::runtime_error>([] { *(Vector<int>::ConstIterator()); });
-			Assert::ExpectException<std::runtime_error>([] { *(Vector<double>::ConstIterator()); });
-			Assert::ExpectException<std::runtime_error>([] { *(Vector<Foo>::ConstIterator()); });
+			Assert::ExpectException<std::runtime_error>([] { *Vector<int>::ConstIterator(); });
+			Assert::ExpectException<std::runtime_error>([] { *Vector<double>::ConstIterator(); });
+			Assert::ExpectException<std::runtime_error>([] { *Vector<Foo>::ConstIterator(); });
+			Assert::ExpectException<std::runtime_error>([] { Vector<Foo>::ConstIterator()->Data(); });
 
 			Vector<int> intVector;
 			Vector<double> doubleVector;
 			Vector<Foo> fooVector;
 
-			Assert::ExpectException<std::out_of_range>([&intVector] { *(intVector.begin()); });
-			Assert::ExpectException<std::out_of_range>([&doubleVector] { *(doubleVector.begin()); });
-			Assert::ExpectException<std::out_of_range>([&fooVector] { *(fooVector.begin()); });
+			Assert::ExpectException<std::out_of_range>([&intVector] { *intVector.begin(); });
+			Assert::ExpectException<std::out_of_range>([&doubleVector] { *doubleVector.begin(); });
+			Assert::ExpectException<std::out_of_range>([&fooVector] { *fooVector.begin(); });
+			Assert::ExpectException<std::out_of_range>([&fooVector] { fooVector.begin()->Data(); });
 
-			Assert::ExpectException<std::out_of_range>([&intVector] { *(intVector.cbegin()); });
-			Assert::ExpectException<std::out_of_range>([&doubleVector] { *(doubleVector.cbegin()); });
-			Assert::ExpectException<std::out_of_range>([&fooVector] { *(fooVector.cbegin()); });
+			Assert::ExpectException<std::out_of_range>([&intVector] { *intVector.cbegin(); });
+			Assert::ExpectException<std::out_of_range>([&doubleVector] { *doubleVector.cbegin(); });
+			Assert::ExpectException<std::out_of_range>([&fooVector] { *fooVector.cbegin(); });
+			Assert::ExpectException<std::out_of_range>([&fooVector] { fooVector.cbegin()->Data(); });
 
 			intVector.PushBack(10);
 			doubleVector.PushBack(10);
@@ -103,10 +107,12 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(*intVector.begin(), 10);
 			Assert::AreEqual(*doubleVector.begin(), 10.0);
 			Assert::AreEqual(*fooVector.begin(), Foo(10));
+			Assert::AreEqual(fooVector.begin()->Data(), 10);
 
 			Assert::AreEqual(*intVector.cbegin(), 10);
 			Assert::AreEqual(*doubleVector.cbegin(), 10.0);
 			Assert::AreEqual(*fooVector.cbegin(), Foo(10));
+			Assert::AreEqual(fooVector.cbegin()->Data(), 10);
 		}
 
 		TEST_METHOD(IteratorEquality)
@@ -590,12 +596,12 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(intVector.Capacity(), 10_z);
 			Assert::AreEqual(intVector.Size(), 10_z);
 
-			for (size_t i = 0; i < 5; ++i)
+			for (std::size_t i = 0; i < 5; ++i)
 			{
 				Assert::AreEqual(intVector[i], int());
 			}
 
-			for (size_t i = 5; i < intVector.Size(); ++i)
+			for (std::size_t i = 5; i < intVector.Size(); ++i)
 			{
 				Assert::AreEqual(intVector[i], 10);
 			}
@@ -604,7 +610,7 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(intVector.Size(), 5_z);
 			Assert::AreEqual(intVector.Capacity(), 10_z);
 
-			for (size_t i = 0; i < intVector.Size(); ++i)
+			for (std::size_t i = 0; i < intVector.Size(); ++i)
 			{
 				Assert::AreEqual(intVector[i], int());
 			}
@@ -630,7 +636,7 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(decreasedConstIntVector.Capacity(), 6_z);
 
 			intVector.Resize(10);
-			intVector.SetReserveStrategy([](const size_t capacity, const size_t) { return capacity * 2; });
+			intVector.SetReserveStrategy([](const std::size_t capacity, const std::size_t) { return capacity * 2; });
 			intVector.PushBack(10);
 
 			Assert::AreEqual(intVector.Size(), 11_z);
@@ -667,12 +673,12 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(doubleVector.Capacity(), 10_z);
 			Assert::AreEqual(doubleVector.Size(), 10_z);
 
-			for (size_t i = 0; i < 5; ++i)
+			for (std::size_t i = 0; i < 5; ++i)
 			{
 				Assert::AreEqual(doubleVector[i], double());
 			}
 
-			for (size_t i = 5; i < doubleVector.Size(); ++i)
+			for (std::size_t i = 5; i < doubleVector.Size(); ++i)
 			{
 				Assert::AreEqual(doubleVector[i], 10.0);
 			}
@@ -681,7 +687,7 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(doubleVector.Size(), 5_z);
 			Assert::AreEqual(doubleVector.Capacity(), 10_z);
 
-			for (size_t i = 0; i < doubleVector.Size(); ++i)
+			for (std::size_t i = 0; i < doubleVector.Size(); ++i)
 			{
 				Assert::AreEqual(doubleVector[i], double());
 			}
@@ -707,7 +713,7 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(doubleDecreasedConstVector.Capacity(), 6_z);
 
 			doubleVector.Resize(10);
-			doubleVector.SetReserveStrategy([](const size_t capacity, const size_t) { return capacity * 2; });
+			doubleVector.SetReserveStrategy([](const std::size_t capacity, const std::size_t) { return capacity * 2; });
 			doubleVector.PushBack(10);
 
 			Assert::AreEqual(doubleVector.Size(), 11_z);
@@ -744,12 +750,12 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(fooVector.Capacity(), 10_z);
 			Assert::AreEqual(fooVector.Size(), 10_z);
 
-			for (size_t i = 0; i < 5; ++i)
+			for (std::size_t i = 0; i < 5; ++i)
 			{
 				Assert::AreEqual(fooVector[i], Foo());
 			}
 
-			for (size_t i = 5; i < fooVector.Size(); ++i)
+			for (std::size_t i = 5; i < fooVector.Size(); ++i)
 			{
 				Assert::AreEqual(fooVector[i], Foo(10));
 			}
@@ -758,7 +764,7 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(fooVector.Size(), 5_z);
 			Assert::AreEqual(fooVector.Capacity(), 10_z);
 
-			for (size_t i = 0; i < fooVector.Size(); ++i)
+			for (std::size_t i = 0; i < fooVector.Size(); ++i)
 			{
 				Assert::AreEqual(fooVector[i], Foo());
 			}
@@ -784,7 +790,7 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(decreasedConstfooVector.Capacity(), 6_z);
 
 			fooVector.Resize(10);
-			fooVector.SetReserveStrategy([](const size_t capacity, const size_t) { return capacity * 2; });
+			fooVector.SetReserveStrategy([](const std::size_t capacity, const std::size_t) { return capacity * 2; });
 			fooVector.PushBack(Foo(10));
 
 			Assert::AreEqual(fooVector.Size(), 11_z);

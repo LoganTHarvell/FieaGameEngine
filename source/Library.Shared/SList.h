@@ -37,7 +37,7 @@ namespace Library
 			T Data;
 			std::shared_ptr<Node> Next;
 		
-			Node(const T& data, std::shared_ptr<Node> next = nullptr);
+			Node(const T& data, std::shared_ptr<Node> next=nullptr);
 		};
 #pragma endregion Node
 
@@ -56,7 +56,7 @@ namespace Library
 			/// <summary>
 			/// Size type for std::iterator_trait.
 			/// </summary>
-			using size_type = size_t;
+			using size_type = std::size_t;
 
 			/// <summary>
 			/// Difference type for std::iterator_trait.
@@ -97,15 +97,22 @@ namespace Library
 			/// </summary>
 			/// <param name="list">Source list for the Iterator's values.</param>
 			/// <param name="node">Current element of the list referenced by the Iterator.</param>
-			Iterator(const SList<T>& owner, std::shared_ptr<Node> node = nullptr);
+			Iterator(const SList<T>& owner, std::shared_ptr<Node> node=nullptr);
 
 		public:
 			/// <summary>
 			/// Dereference operator.
 			/// </summary>
 			/// <returns>Value of the current element of the list.</returns>
-			/// <exception cref="runtime_error">Attempted to access an Iterator with no associated value.</exception>
+			/// <exception cref="runtime_error">Invalid Iterator.</exception>
 			T& operator*() const;
+
+			/// <summary>
+			/// Member access operator.
+			/// </summary>
+			/// <returns>Pointer to the value of the current element of the list.</returns>
+			/// <exception cref="runtime_error">Invalid Iterator.</exception>
+			T* operator->() const;
 
 			/// <summary>
 			/// Equal operator.
@@ -160,7 +167,7 @@ namespace Library
 			/// <summary>
 			/// Size type for std::iterator_trait.
 			/// </summary>
-			using size_type = size_t;
+			using size_type = std::size_t;
 
 			/// <summary>
 			/// Difference type for std::iterator_trait.
@@ -216,8 +223,15 @@ namespace Library
 			/// Dereference operator.
 			/// </summary>
 			/// <returns>Value of the current element of the list.</returns>
-			/// <exception cref="runtime_error">Attempted to access an ConstIterator with no associated value.</exception>
+			/// <exception cref="runtime_error">Invalid ConstIterator.</exception>
 			const T& operator*() const;
+
+			/// <summary>
+			/// Member access operator.
+			/// </summary>
+			/// <returns>Pointer to the value of the current element of the list.</returns>
+			/// <exception cref="runtime_error">Invalid ConstIterator.</exception>
+			const T* operator->() const;
 
 			/// <summary>
 			/// Equal operator.
@@ -344,7 +358,7 @@ namespace Library
 		/// Getter method for the number of elements in the list.
 		/// </summary>
 		/// <returns>Number of elements in the list.</returns>
-		size_t Size() const;
+		std::size_t Size() const;
 
 		/// <summary>
 		/// Checks if the size of the list is greater than zero, indicating the list is non-empty.
@@ -502,7 +516,7 @@ namespace Library
 		/// <summary>
 		/// Number of elements in the list.
 		/// </summary>
-		size_t mSize{ 0 };
+		std::size_t mSize{ 0 };
 
 		/// <summary>
 		/// First element in the list.
