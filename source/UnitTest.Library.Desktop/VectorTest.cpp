@@ -636,7 +636,7 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(decreasedConstIntVector.Capacity(), 6_z);
 
 			intVector.Resize(10);
-			intVector.SetReserveStrategy([](const std::size_t capacity, const std::size_t) { return capacity * 2; });
+			intVector.SetReserveStrategy([](const std::size_t, const std::size_t capacity) { return capacity * 2; });
 			intVector.PushBack(10);
 
 			Assert::AreEqual(intVector.Size(), 11_z);
@@ -713,7 +713,7 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(doubleDecreasedConstVector.Capacity(), 6_z);
 
 			doubleVector.Resize(10);
-			doubleVector.SetReserveStrategy([](const std::size_t capacity, const std::size_t) { return capacity * 2; });
+			doubleVector.SetReserveStrategy([](const std::size_t, const std::size_t capacity) { return capacity * 2; });
 			doubleVector.PushBack(10);
 
 			Assert::AreEqual(doubleVector.Size(), 11_z);
@@ -790,7 +790,7 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(decreasedConstfooVector.Capacity(), 6_z);
 
 			fooVector.Resize(10);
-			fooVector.SetReserveStrategy([](const std::size_t capacity, const std::size_t) { return capacity * 2; });
+			fooVector.SetReserveStrategy([](const std::size_t, const std::size_t capacity) { return capacity * 2; });
 			fooVector.PushBack(Foo(10));
 
 			Assert::AreEqual(fooVector.Size(), 11_z);

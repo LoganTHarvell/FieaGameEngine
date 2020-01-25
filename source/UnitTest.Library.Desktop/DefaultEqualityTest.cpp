@@ -3,7 +3,6 @@
 #include "DefaultEquality.h"
 #include "Foo.h"
 
-
 using namespace std::string_literals;
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
@@ -109,8 +108,15 @@ namespace UnitTestLibraryDesktop
 
 			char* a = "Hello";
 			char* b = "Goodbye";
-			char* c(a);
+			
+			char c[6];
 
+#if defined(_WIN32)
+			strcpy_s(c, a);
+#else
+			strcpy(c, a);
+#endif
+			 
 			Assert::IsTrue(equality(a, a));
 			Assert::IsFalse(equality(a, b));
 			Assert::IsTrue(equality(a, c));

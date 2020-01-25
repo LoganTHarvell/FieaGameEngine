@@ -9,7 +9,7 @@ namespace Library
 	/// <summary>
 	/// Simple additive hash function.
 	/// </summary>
-	const std::size_t AdditiveHash(const std::uint8_t* data, const std::size_t byteCount, const std::size_t hashPrime=31);
+	std::size_t AdditiveHash(const std::uint8_t* data, const std::size_t byteCount, const std::size_t hashPrime=31);
 #pragma endregion Hash Functions
 
 	/// <summary>
@@ -20,7 +20,7 @@ namespace Library
 	template<typename T>
 	struct DefaultHash final
 	{
-		const std::size_t operator()(const T& key) const;
+		std::size_t operator()(const T& key) const;
 	};
 
 #pragma region Default Hash String Specializations
@@ -32,7 +32,7 @@ namespace Library
 	template<>
 	struct DefaultHash<std::string> final
 	{
-		const std::size_t operator()(const std::string& key) const;
+		std::size_t operator()(const std::string& key) const;
 	};
 
 	/// <summary>
@@ -43,7 +43,7 @@ namespace Library
 	template<>
 	struct DefaultHash<const std::string> final
 	{
-		const std::size_t operator()(const std::string& key) const;
+		std::size_t operator()(const std::string& key) const;
 	};
 
 	/// <summary>
@@ -54,7 +54,7 @@ namespace Library
 	template<>
 	struct DefaultHash<std::wstring> final
 	{
-		const std::size_t operator()(const std::wstring& key) const;
+		std::size_t operator()(const std::wstring& key) const;
 	};
 
 	/// <summary>
@@ -65,7 +65,7 @@ namespace Library
 	template<>
 	struct DefaultHash<const std::wstring> final
 	{
-		const std::size_t operator()(const std::wstring& key) const;
+		std::size_t operator()(const std::wstring& key) const;
 	};
 
 	/// <summary>
@@ -76,7 +76,7 @@ namespace Library
 	template<>
 	struct DefaultHash<char*> final
 	{
-		const std::size_t operator()(const char* const key) const;
+		std::size_t operator()(const char* const key) const;
 	};
 
 	/// <summary>
@@ -87,7 +87,7 @@ namespace Library
 	template<>
 	struct DefaultHash<const char*> final
 	{
-		const std::size_t operator()(const char* const key) const;
+		std::size_t operator()(const char* const key) const;
 	};
 
 	/// <summary>
@@ -98,7 +98,7 @@ namespace Library
 	template<>
 	struct DefaultHash<char* const> final
 	{
-		const std::size_t operator()(const char* const key) const;
+		std::size_t operator()(const char* const key) const;
 	};
 
 	/// <summary>
@@ -109,7 +109,7 @@ namespace Library
 	template<>
 	struct DefaultHash<const char* const> final
 	{
-		const std::size_t operator()(const char* const key) const;
+		std::size_t operator()(const char* const key) const;
 	};
 #pragma endregion Default Hash String Specializations
 }

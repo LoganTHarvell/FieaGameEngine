@@ -77,19 +77,27 @@ namespace UnitTestLibraryDesktop
 
 		TEST_METHOD(IteratorDereference)
 		{
+			Assert::ExpectException<std::runtime_error>([] { *SList<int>::Iterator(); });
+			Assert::ExpectException<std::runtime_error>([] { *SList<double>::Iterator(); });
+			Assert::ExpectException<std::runtime_error>([] { *SList<Foo>::Iterator(); });
+
+			Assert::ExpectException<std::runtime_error>([] { *SList<int>::ConstIterator(); });
+			Assert::ExpectException<std::runtime_error>([] { *SList<double>::ConstIterator(); });
+			Assert::ExpectException<std::runtime_error>([] { *SList<Foo>::ConstIterator(); });
+
 			SList<int> intList;
 			SList<double> doubleList;
 			SList<Foo> fooList;
 
-			Assert::ExpectException<std::runtime_error>([&intList] { *(intList.begin()); });
-			Assert::ExpectException<std::runtime_error>([&doubleList] { *(doubleList.begin()); });
-			Assert::ExpectException<std::runtime_error>([&fooList] { *(fooList.begin()); });
-			Assert::ExpectException<std::runtime_error>([&fooList] { fooList.begin()->Data(); });
+			Assert::ExpectException<std::out_of_range>([&intList] { *(intList.begin()); });
+			Assert::ExpectException<std::out_of_range>([&doubleList] { *(doubleList.begin()); });
+			Assert::ExpectException<std::out_of_range>([&fooList] { *(fooList.begin()); });
+			Assert::ExpectException<std::out_of_range>([&fooList] { fooList.begin()->Data(); });
 
-			Assert::ExpectException<std::runtime_error>([&intList] { *(intList.cbegin()); });
-			Assert::ExpectException<std::runtime_error>([&doubleList] { *(doubleList.cbegin()); });
-			Assert::ExpectException<std::runtime_error>([&fooList] { *(fooList.cbegin()); });
-			Assert::ExpectException<std::runtime_error>([&fooList] { fooList.cbegin()->Data(); });
+			Assert::ExpectException<std::out_of_range>([&intList] { *(intList.cbegin()); });
+			Assert::ExpectException<std::out_of_range>([&doubleList] { *(doubleList.cbegin()); });
+			Assert::ExpectException<std::out_of_range>([&fooList] { *(fooList.cbegin()); });
+			Assert::ExpectException<std::out_of_range>([&fooList] { fooList.cbegin()->Data(); });
 
 			intList.PushBack(10);
 			doubleList.PushBack(10);
@@ -231,13 +239,13 @@ namespace UnitTestLibraryDesktop
 			++constDoubleIterator;
 			++constFooIterator;
 
-			Assert::ExpectException<std::runtime_error>([&intIterator] { ++intIterator; });
-			Assert::ExpectException<std::runtime_error>([&doubleIterator] { ++doubleIterator; });
-			Assert::ExpectException<std::runtime_error>([&fooIterator] { ++fooIterator; });
-
-			Assert::ExpectException<std::runtime_error>([&constIntIterator] { ++constIntIterator; });
-			Assert::ExpectException<std::runtime_error>([&constDoubleIterator] { ++constDoubleIterator; });
-			Assert::ExpectException<std::runtime_error>([&constFooIterator] { ++constFooIterator; });
+			Assert::ExpectException<std::out_of_range>([&intIterator] { ++intIterator; });
+			Assert::ExpectException<std::out_of_range>([&doubleIterator] { ++doubleIterator; });
+			Assert::ExpectException<std::out_of_range>([&fooIterator] { ++fooIterator; });
+										 
+			Assert::ExpectException<std::out_of_range>([&constIntIterator] { ++constIntIterator; });
+			Assert::ExpectException<std::out_of_range>([&constDoubleIterator] { ++constDoubleIterator; });
+			Assert::ExpectException<std::out_of_range>([&constFooIterator] { ++constFooIterator; });
 		}
 
 		TEST_METHOD(SListInitialization)
@@ -588,21 +596,21 @@ namespace UnitTestLibraryDesktop
 			SList<double> doubleList;
 			SList<Foo> fooList;
 
-			Assert::ExpectException<std::runtime_error>([&intList] { *(intList.begin()); });
-			Assert::ExpectException<std::runtime_error>([&doubleList] { *(doubleList.begin()); });
-			Assert::ExpectException<std::runtime_error>([&fooList] { *(fooList.begin()); });
+			Assert::ExpectException<std::out_of_range>([&intList] { *(intList.begin()); });
+			Assert::ExpectException<std::out_of_range>([&doubleList] { *(doubleList.begin()); });
+			Assert::ExpectException<std::out_of_range>([&fooList] { *(fooList.begin()); });
 
 			const SList<int> emptyIntListCopy = intList;
 			const SList<double> emptyDoubleListCopy = doubleList;
 			const SList<Foo> emptyFooListCopy = fooList;
 
-			Assert::ExpectException<std::runtime_error>([&emptyIntListCopy] { *(emptyIntListCopy.begin()); });
-			Assert::ExpectException<std::runtime_error>([&emptyDoubleListCopy] { *(emptyDoubleListCopy.begin()); });
-			Assert::ExpectException<std::runtime_error>([&emptyFooListCopy] { *(emptyFooListCopy.begin()); });
+			Assert::ExpectException<std::out_of_range>([&emptyIntListCopy] { *(emptyIntListCopy.begin()); });
+			Assert::ExpectException<std::out_of_range>([&emptyDoubleListCopy] { *(emptyDoubleListCopy.begin()); });
+			Assert::ExpectException<std::out_of_range>([&emptyFooListCopy] { *(emptyFooListCopy.begin()); });
 
-			Assert::ExpectException<std::runtime_error>([&intList] { *(intList.cbegin()); });
-			Assert::ExpectException<std::runtime_error>([&doubleList] { *(doubleList.cbegin()); });
-			Assert::ExpectException<std::runtime_error>([&fooList] { *(fooList.cbegin()); });
+			Assert::ExpectException<std::out_of_range>([&intList] { *(intList.cbegin()); });
+			Assert::ExpectException<std::out_of_range>([&doubleList] { *(doubleList.cbegin()); });
+			Assert::ExpectException<std::out_of_range>([&fooList] { *(fooList.cbegin()); });
 
 			intList.PushBack(10);
 			doubleList.PushBack(10);
@@ -631,41 +639,41 @@ namespace UnitTestLibraryDesktop
 			SList<double> doubleList;
 			SList<Foo> fooList;
 
-			Assert::ExpectException<std::runtime_error>([&intList] { *(intList.end()); });
-			Assert::ExpectException<std::runtime_error>([&doubleList] { *(doubleList.end()); });
-			Assert::ExpectException<std::runtime_error>([&fooList] { *(fooList.end()); });
+			Assert::ExpectException<std::out_of_range>([&intList] { *(intList.end()); });
+			Assert::ExpectException<std::out_of_range>([&doubleList] { *(doubleList.end()); });
+			Assert::ExpectException<std::out_of_range>([&fooList] { *(fooList.end()); });
 
 			const SList<int> emptyIntListCopy = intList;
 			const SList<double> emptyDoubleListCopy = doubleList;
 			const SList<Foo> emptyFooListCopy = fooList;
 
-			Assert::ExpectException<std::runtime_error>([&emptyIntListCopy] { *(emptyIntListCopy.end()); });
-			Assert::ExpectException<std::runtime_error>([&emptyDoubleListCopy] { *(emptyDoubleListCopy.end()); });
-			Assert::ExpectException<std::runtime_error>([&emptyFooListCopy] { *(emptyFooListCopy.end()); });
+			Assert::ExpectException<std::out_of_range>([&emptyIntListCopy] { *(emptyIntListCopy.end()); });
+			Assert::ExpectException<std::out_of_range>([&emptyDoubleListCopy] { *(emptyDoubleListCopy.end()); });
+			Assert::ExpectException<std::out_of_range>([&emptyFooListCopy] { *(emptyFooListCopy.end()); });
 
-			Assert::ExpectException<std::runtime_error>([&intList] { *(intList.cend()); });
-			Assert::ExpectException<std::runtime_error>([&doubleList] { *(doubleList.cend()); });
-			Assert::ExpectException<std::runtime_error>([&fooList] { *(fooList.cend()); });
+			Assert::ExpectException<std::out_of_range>([&intList] { *(intList.cend()); });
+			Assert::ExpectException<std::out_of_range>([&doubleList] { *(doubleList.cend()); });
+			Assert::ExpectException<std::out_of_range>([&fooList] { *(fooList.cend()); });
 
 			intList.PushBack(10);
 			doubleList.PushBack(10);
 			fooList.PushBack(Foo(10));
 
-			Assert::ExpectException<std::runtime_error>([&intList] { *(intList.end()); });
-			Assert::ExpectException<std::runtime_error>([&intList] { *(intList.end()); });
-			Assert::ExpectException<std::runtime_error>([&intList] { *(intList.end()); });
+			Assert::ExpectException<std::out_of_range>([&intList] { *(intList.end()); });
+			Assert::ExpectException<std::out_of_range>([&intList] { *(intList.end()); });
+			Assert::ExpectException<std::out_of_range>([&intList] { *(intList.end()); });
 
 			const SList<int> filledIntListCopy = intList;
 			const SList<double> filledDoubleListCopy = doubleList;
 			const SList<Foo> filledFooListCopy = fooList;
 
-			Assert::ExpectException<std::runtime_error>([&filledIntListCopy] { *(filledIntListCopy.end()); });
-			Assert::ExpectException<std::runtime_error>([&filledDoubleListCopy] { *(filledDoubleListCopy.end()); });
-			Assert::ExpectException<std::runtime_error>([&filledFooListCopy] { *(filledFooListCopy.end()); });
+			Assert::ExpectException<std::out_of_range>([&filledIntListCopy] { *(filledIntListCopy.end()); });
+			Assert::ExpectException<std::out_of_range>([&filledDoubleListCopy] { *(filledDoubleListCopy.end()); });
+			Assert::ExpectException<std::out_of_range>([&filledFooListCopy] { *(filledFooListCopy.end()); });
 
-			Assert::ExpectException<std::runtime_error>([&intList] { *(intList.cend()); });
-			Assert::ExpectException<std::runtime_error>([&doubleList] { *(doubleList.cend()); });
-			Assert::ExpectException<std::runtime_error>([&fooList] { *(fooList.cend()); });
+			Assert::ExpectException<std::out_of_range>([&intList] { *(intList.cend()); });
+			Assert::ExpectException<std::out_of_range>([&doubleList] { *(doubleList.cend()); });
+			Assert::ExpectException<std::out_of_range>([&fooList] { *(fooList.cend()); });
 
 			SList<int>::Iterator intIterator = intList.begin();
 			SList<double>::Iterator doubleIterator = doubleList.begin();

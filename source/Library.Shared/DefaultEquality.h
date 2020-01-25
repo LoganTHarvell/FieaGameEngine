@@ -12,7 +12,7 @@ namespace Library
 	template<typename T>
 	struct DefaultEquality final
 	{		
-		const bool operator()(const T& lhs, const T& rhs) const;
+		bool operator()(const T& lhs, const T& rhs) const;
 	};
 
 #pragma region Default Equality String Specializations
@@ -23,7 +23,7 @@ namespace Library
 	template<>
 	struct DefaultEquality<char*> final
 	{
-		const bool operator()(const char* const lhs, const char* const rhs) const;
+		bool operator()(const char* const lhs, const char* const rhs) const;
 	};
 
 	/// <summary>
@@ -33,7 +33,7 @@ namespace Library
 	template<>
 	struct DefaultEquality<const char*> final
 	{
-		const bool operator()(const char* const lhs, const char* const rhs) const;
+		bool operator()(const char* const lhs, const char* const rhs) const;
 	};
 
 	/// <summary>
@@ -43,7 +43,7 @@ namespace Library
 	template<>
 	struct DefaultEquality<char* const> final
 	{
-		const bool operator()(const char* const lhs, const char* const rhs) const;
+		bool operator()(const char* const lhs, const char* const rhs) const;
 	};
 
 	/// <summary>
@@ -53,7 +53,7 @@ namespace Library
 	template<>
 	struct DefaultEquality<const char* const> final
 	{
-		const bool operator()(const char* const lhs, const char* const rhs) const;
+		bool operator()(const char* const lhs, const char* const rhs) const;
 	};
 #pragma endregion Default Equality String Specializations
 }

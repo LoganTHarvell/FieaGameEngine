@@ -4,7 +4,7 @@ namespace Library
 {
 #pragma region Node
 	template<typename T>
-	inline SList<T>::Node::Node(const T& data, std::shared_ptr<Node> next) :
+	inline SList<T>::Node::Node(const T& data, const std::shared_ptr<Node> next) :
 		Data(data), Next(next)
 	{
 	}
@@ -12,7 +12,7 @@ namespace Library
 
 #pragma region Iterator
 	template<typename T>
-	inline SList<T>::Iterator::Iterator(const SList<T>& owner, std::shared_ptr<Node> node) :
+	inline SList<T>::Iterator::Iterator(const SList& owner, const std::shared_ptr<Node> node) :
 		mOwner(&owner), mNode(node)
 	{
 	}
@@ -20,9 +20,14 @@ namespace Library
 	template<typename T>
 	inline T& SList<T>::Iterator::operator*() const
 	{
-		if (mNode == nullptr)
+		if (mOwner == nullptr)
 		{
 			throw std::runtime_error("Invalid Iterator.");
+		}
+
+		if (mNode == nullptr)
+		{
+			throw std::out_of_range("Iterator out of bounds.");
 		}
 
 		return mNode->Data;
@@ -31,12 +36,7 @@ namespace Library
 	template<typename T>
 	inline T* SList<T>::Iterator::operator->() const
 	{
-		if (mNode == nullptr)
-		{
-			throw std::runtime_error("Invalid Iterator.");
-		}
-
-		return &(mNode->Data);
+		return &(this->operator*());
 	}
 
 	template<typename T>
@@ -54,9 +54,14 @@ namespace Library
 	template<typename T>
 	inline typename SList<T>::Iterator& SList<T>::Iterator::operator++()
 	{
-		if (mNode == nullptr)
+		if (mOwner == nullptr)
 		{
 			throw std::runtime_error("Invalid Iterator.");
+		}
+
+		if (mNode == nullptr)
+		{
+			throw std::out_of_range("Iterator out of bounds.");
 		}
 
 		mNode = mNode->Next;
@@ -81,7 +86,7 @@ namespace Library
 	}
 
 	template<typename T>
-	inline SList<T>::ConstIterator::ConstIterator(const SList& owner, std::shared_ptr<Node> node) :
+	inline SList<T>::ConstIterator::ConstIterator(const SList& owner, const std::shared_ptr<Node> node) :
 		mOwner(&owner), mNode(node)
 	{
 	}
@@ -89,9 +94,14 @@ namespace Library
 	template<typename T>
 	inline const T& SList<T>::ConstIterator::operator*() const
 	{
-		if (mNode == nullptr)
+		if (mOwner == nullptr)
 		{
 			throw std::runtime_error("Invalid ConstIterator.");
+		}
+
+		if (mNode == nullptr)
+		{
+			throw std::out_of_range("ConstIterator out of bounds.");
 		}
 
 		return mNode->Data;
@@ -100,12 +110,7 @@ namespace Library
 	template<typename T>
 	inline const T* SList<T>::ConstIterator::operator->() const
 	{
-		if (mNode == nullptr)
-		{
-			throw std::runtime_error("Invalid ConstIterator.");
-		}
-
-		return &(mNode->Data);
+		return &(this->operator*());
 	}
 
 	template<typename T>
@@ -123,9 +128,14 @@ namespace Library
 	template<typename T>
 	inline typename SList<T>::ConstIterator& SList<T>::ConstIterator::operator++()
 	{
-		if (mNode == nullptr)
+		if (mOwner == nullptr)
 		{
 			throw std::runtime_error("Invalid ConstIterator.");
+		}
+
+		if (mNode == nullptr)
+		{
+			throw std::out_of_range("ConstIterator out of bounds.");
 		}
 
 		mNode = mNode->Next;
@@ -202,7 +212,7 @@ namespace Library
 	}
 
 	template<typename T>
-	inline SList<T>& SList<T>::operator=(const SList<T>& rhs)
+	inline SList<T>& SList<T>::operator=(const SList& rhs)
 	{
 		if (this != &rhs)
 		{

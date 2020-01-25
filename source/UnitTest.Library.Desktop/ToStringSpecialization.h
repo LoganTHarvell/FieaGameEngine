@@ -6,6 +6,7 @@
 #include "Bar.h"
 #include "SList.h"
 #include "Vector.h"
+#include "HashMap.h"
 
 using namespace UnitTests;
 using namespace Library;
@@ -609,4 +610,71 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 		RETURN_WIDE_STRING(t);
 	}
 #pragma endregion Vector ConstIterator
+
+#pragma region HashMap
+	template<>
+	inline std::wstring ToString<HashMap<double, Foo>>(const HashMap<double, Foo>& t)
+	{
+		RETURN_WIDE_STRING(t.Size());
+	}
+
+	template<>
+	inline std::wstring ToString<HashMap<double, Foo>>(const HashMap<double, Foo>* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<HashMap<double, Foo>>(HashMap<double, Foo>* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+#pragma endregion HashMap
+
+#pragma region HashMap PairType
+	template<>
+	inline std::wstring ToString<HashMap<double, Foo>::PairType>(const HashMap<double, Foo>::PairType& t)
+	{
+		RETURN_WIDE_STRING(t.first);
+	}
+
+	template<>
+	inline std::wstring ToString<HashMap<double, Foo>::PairType>(const HashMap<double, Foo>::PairType* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<HashMap<double, Foo>::PairType>(HashMap<double, Foo>::PairType* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+#pragma endregion HashMap PairType
+
+#pragma region HashMap Iterator
+	template<>
+	inline std::wstring ToString<HashMap<double, Foo>::Iterator>(const HashMap<double, Foo>::Iterator& t)
+	{
+		try
+		{
+			return ToString(*t);
+		}
+		catch (const std::exception&)
+		{
+			return L"end()"s;
+		}
+	}
+
+	template<>
+	inline std::wstring ToString<HashMap<double, Foo>::Iterator>(const HashMap<double, Foo>::Iterator* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<HashMap<double, Foo>::Iterator>(HashMap<double, Foo>::Iterator* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+#pragma endregion HashMap Iterator
 }

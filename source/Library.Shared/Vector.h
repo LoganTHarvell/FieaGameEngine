@@ -31,9 +31,10 @@ namespace Library
 		/// <summary>
 		/// Equality functor type used to evaluate equality of Vector types.
 		/// </summary>
-		using EqualityFunctor = std::function<bool(T, T)>;
+		using EqualityFunctor = std::function<bool(const T&, const T&)>;
 
 	public:
+#pragma region Default Functors
 		/// <summary>
 		/// Functor specifying the default strategy for incrementing the capacity of the Vector.
 		/// </summary>
@@ -42,14 +43,12 @@ namespace Library
 			/// <summary>
 			/// Function call operator.
 			/// </summary>
-			/// <param name="">Placeholder for the Vector size.</param>
+			/// <param name="">Placeholder argument for the Vector size.</param>
 			/// <param name="capacity">Vector capacity.</param>
 			/// <returns>New capacity.</returns>
-			const std::size_t operator()(const std::size_t, const std::size_t capacity) const
-			{
-				return static_cast<std::size_t>(capacity * 1.5);
-			}
+			std::size_t operator()(const std::size_t, const std::size_t capacity) const;
 		};
+#pragma endregion Default Functors
 
 #pragma region Iterator
 		/// <summary>
@@ -270,7 +269,7 @@ namespace Library
 			~ConstIterator() = default;
 
 			/// <summary>
-			/// Specialized copy constructor that enables the construction of a ConstIterator from a non-const Itrerator.
+			/// Specialized copy constructor that enables the construction of a ConstIterator from a non-const Iterator.
 			/// </summary>
 			/// <param name="it">ConstIterator to be copied.</param>
 			ConstIterator(const Iterator& it);
@@ -281,7 +280,7 @@ namespace Library
 			/// </summary>
 			/// <param name="vector">Source Vector for the ConstIterator's values.</param>
 			/// <param name="index">Current element of the Vector referenced by the ConstIterator, defaulted to a nullptr value.</param>
-			ConstIterator(const Vector& vector, std::size_t index=0);
+			ConstIterator(const Vector& vector, const std::size_t index=0);
 
 		public:
 			/// <summary>

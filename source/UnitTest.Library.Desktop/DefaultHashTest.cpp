@@ -15,7 +15,7 @@ using namespace Library;
 namespace Library
 {
 	template<>
-	inline const std::size_t DefaultHash<Foo>::operator()(const Foo& key) const
+	inline std::size_t DefaultHash<Foo>::operator()(const Foo& key) const
 	{
 		int fooData = key.Data();
 		const uint8_t* data = reinterpret_cast<const uint8_t*>(&fooData);

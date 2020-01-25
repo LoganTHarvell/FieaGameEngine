@@ -25,7 +25,7 @@ namespace Library
 		/// <summary>
 		/// Equality functor type used to evaluate equality of elements in the list.
 		/// </summary>
-		using EqualityFunctor = std::function<bool(T, T)>;
+		using EqualityFunctor = std::function<bool(const T&, const T&)>;
 
 	private:
 #pragma region Node
@@ -37,7 +37,7 @@ namespace Library
 			T Data;
 			std::shared_ptr<Node> Next;
 		
-			Node(const T& data, std::shared_ptr<Node> next=nullptr);
+			Node(const T& data, const std::shared_ptr<Node> next=nullptr);
 		};
 #pragma endregion Node
 
@@ -97,7 +97,7 @@ namespace Library
 			/// </summary>
 			/// <param name="list">Source list for the Iterator's values.</param>
 			/// <param name="node">Current element of the list referenced by the Iterator.</param>
-			Iterator(const SList<T>& owner, std::shared_ptr<Node> node=nullptr);
+			Iterator(const SList<T>& owner, const std::shared_ptr<Node> node=nullptr);
 
 		public:
 			/// <summary>
@@ -105,6 +105,7 @@ namespace Library
 			/// </summary>
 			/// <returns>Value of the current element of the list.</returns>
 			/// <exception cref="runtime_error">Invalid Iterator.</exception>
+			/// <exception cref="out_of_range">Iterator out of bounds.</exception>
 			T& operator*() const;
 
 			/// <summary>
@@ -112,6 +113,7 @@ namespace Library
 			/// </summary>
 			/// <returns>Pointer to the value of the current element of the list.</returns>
 			/// <exception cref="runtime_error">Invalid Iterator.</exception>
+			/// <exception cref="out_of_range">Iterator out of bounds.</exception>
 			T* operator->() const;
 
 			/// <summary>
@@ -133,12 +135,14 @@ namespace Library
 			/// </summary>
 			/// <returns>Reference to the next Iterator.</returns>
 			/// <exception cref="runtime_error">Invalid Iterator.</exception>
+			/// <exception cref="out_of_range">Iterator out of bounds.</exception>
 			Iterator& operator++();
 
 			/// <summary>
 			/// Post-increment operator.
 			/// </summary>
 			/// <returns>Copy of the Iterator before it was incremented.</returns>
+			/// <exception cref="out_of_range">Iterator out of bounds.</exception>
 			Iterator operator++(int);
 
 		private:
@@ -205,7 +209,7 @@ namespace Library
 			~ConstIterator() = default;
 
 			/// <summary>
-			/// Specialized copy constructor that enables the construction of a ConstIterator from a non-const Itrerator.
+			/// Specialized copy constructor that enables the construction of a ConstIterator from a non-const Iterator.
 			/// </summary>
 			/// <param name="it"></param>
 			ConstIterator(const Iterator& it);
@@ -216,7 +220,7 @@ namespace Library
 			/// </summary>
 			/// <param name="list">Source list for the ConstIterator's values.</param>
 			/// <param name="node">Current element of the list referenced by the ConstIterator, defaulted to a nullptr value.</param>
-			ConstIterator(const SList& owner, std::shared_ptr<Node> node=nullptr);
+			ConstIterator(const SList& owner, const std::shared_ptr<Node> node=nullptr);
 
 		public:
 			/// <summary>
@@ -224,6 +228,7 @@ namespace Library
 			/// </summary>
 			/// <returns>Value of the current element of the list.</returns>
 			/// <exception cref="runtime_error">Invalid ConstIterator.</exception>
+			/// <exception cref="out_of_range">ConstIterator out of bounds.</exception>
 			const T& operator*() const;
 
 			/// <summary>
@@ -231,6 +236,7 @@ namespace Library
 			/// </summary>
 			/// <returns>Pointer to the value of the current element of the list.</returns>
 			/// <exception cref="runtime_error">Invalid ConstIterator.</exception>
+			/// <exception cref="out_of_range">ConstIterator out of bounds.</exception>
 			const T* operator->() const;
 
 			/// <summary>
@@ -252,12 +258,14 @@ namespace Library
 			/// </summary>
 			/// <returns>Reference to the next ConstIterator.</returns>
 			/// <exception cref="runtime_error">Invalid ConstIterator.</exception>
+			/// <exception cref="out_of_range">Iterator out of bounds.</exception>
 			ConstIterator& operator++();
 
 			/// <summary>
 			/// Post-increment operator.
 			/// </summary>
 			/// <returns>Copy of the ConstIterator before it was incremented.</returns>
+			/// <exception cref="out_of_range">Iterator out of bounds.</exception>
 			ConstIterator operator++(int);
 
 		private:
