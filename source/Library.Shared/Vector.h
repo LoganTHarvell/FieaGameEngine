@@ -12,7 +12,7 @@
 namespace Library
 {
 	/// <summary>
-	/// Represents a generic Vector list.
+	/// Represents a generic vector list.
 	/// </summary>
 	template <typename T>
 	class Vector final
@@ -95,11 +95,11 @@ namespace Library
 		public:
 			/* Defaults */
 			Iterator() = default;
+			~Iterator() = default;
 			Iterator(const Iterator& rhs) = default;
 			Iterator& operator=(const Iterator& rhs) = default;
 			Iterator(Iterator&& rhs) = default;
 			Iterator& operator=(Iterator&& rhs) = default;
-			~Iterator() = default;
 
 		private:
 			/// <summary>
@@ -120,7 +120,7 @@ namespace Library
 			/// <summary>
 			/// Member access operator.
 			/// </summary>
-			/// <returns>Pointer to the value of the current element of the list.</returns>
+			/// <returns>Pointer to the value of the current element of the Vector.</returns>
 			/// <exception cref="runtime_error">Invalid Iterator.</exception>
 			T* operator->() const;
 
@@ -271,11 +271,11 @@ namespace Library
 		public:
 			/* Defaults */
 			ConstIterator() = default;
+			~ConstIterator() = default;
 			ConstIterator(const ConstIterator&) = default;
 			ConstIterator& operator=(const ConstIterator&) = default;
 			ConstIterator(ConstIterator&&) = default;
 			ConstIterator& operator=(ConstIterator&&) = default;
-			~ConstIterator() = default;
 
 			/// <summary>
 			/// Specialized copy constructor that enables the construction of a ConstIterator from a non-const Iterator.
@@ -302,7 +302,7 @@ namespace Library
 			/// <summary>
 			/// Member access operator.
 			/// </summary>
-			/// <returns>Pointer to the value of the current element of the list.</returns>
+			/// <returns>Pointer to the value of the current element of the Vector.</returns>
 			/// <exception cref="runtime_error">Invalid ConstIterator.</exception>
 			const T* operator->() const;
 
@@ -428,16 +428,16 @@ namespace Library
 
 		/// <summary>
 		/// Copy constructor.
-		/// Takes in a Vector as a parameters, then copies the data values to the constructed Vector.
+		/// Takes in a Vector as a parameter, then copies the data values to the constructed Vector.
 		/// </summary>
-		/// <param name="rhs">List to be copied.</param>
+		/// <param name="rhs">Vector to be copied.</param>
 		Vector(const Vector& rhs);
 
 		/// <summary>
 		/// Move constructor.
 		/// Takes a Vector as a parameter and moves the data to the constructed Vector.
 		/// </summary>
-		/// <param name="rhs">List to be moved.</param>
+		/// <param name="rhs">Vector to be moved.</param>
 		Vector(Vector&& rhs) noexcept;
 
 		/// <summary>
@@ -455,7 +455,7 @@ namespace Library
 		/// Copy assignment operator.
 		/// Copies the data values from the right hand side (rhs) value to the left hand side.
 		/// </summary>
-		/// <param name="rhs">List whose values are copied.</param>
+		/// <param name="rhs">Vector whose values are copied.</param>
 		/// <returns>Modified Vector with copied values.</returns>
 		Vector& operator=(const Vector& rhs);
 
@@ -463,14 +463,14 @@ namespace Library
 		/// Move assignment operator.
 		/// Moves the data values from the right hand side (rhs) value to the left hand side.
 		/// </summary>
-		/// <param name="rhs">List whose values are copied.</param>
+		/// <param name="rhs">Vector whose values are copied.</param>
 		/// <returns>Modified Vector with copied values.</returns>
 		Vector& operator=(Vector&& rhs) noexcept;
 
 		/// <summary>
 		/// Initializer list assignment operator.
 		/// </summary>
-		/// <param name="vector">Value Vector for initializing a new Vector.</param>
+		/// <param name="rhs">Value Vector for initializing a new Vector.</param>
 		/// <remarks>Does not initialize equality functor. Must call SetEqualityFunctor for full functionality.</remarks>
 		Vector& operator=(const std::initializer_list<T> rhs);
 #pragma endregion Assignment Operators
@@ -712,7 +712,7 @@ namespace Library
 		ReserveFunctor mReserveFunctor{ DefaultReserveFunctor() };
 
 		/// <summary>
-		/// Functor for evaluating the equality of two values in the list.
+		/// Functor for evaluating the equality of two values in the Vector.
 		/// </summary>
 		EqualityFunctor mEqualityFunctor{ DefaultEquality<T>() };
 	};

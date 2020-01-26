@@ -23,14 +23,14 @@ namespace Library
 		using value_type = T;
 
 		/// <summary>
-		/// Equality functor type used to evaluate equality of elements in the list.
+		/// Equality functor type used to evaluate equality of elements in the SList.
 		/// </summary>
 		using EqualityFunctor = std::function<bool(const T&, const T&)>;
 
 	private:
 #pragma region Node
 		/// <summary>
-		/// Represents an element in a list.
+		/// Represents an element in a SList.
 		/// </summary>
 		struct Node final
 		{
@@ -44,7 +44,7 @@ namespace Library
 	public:
 #pragma region Iterator
 		/// <summary>
-		/// Class for traversing the list and retrieving values, which can then be manipulated.
+		/// Class for traversing the SList and retrieving values, which can then be manipulated.
 		/// </summary>
 		class Iterator final
 		{
@@ -86,24 +86,24 @@ namespace Library
 
 			/* Defaults */
 			Iterator() = default;
+			~Iterator() = default;
 			Iterator(const Iterator& rhs) = default;
 			Iterator& operator=(const Iterator& rhs) = default;
 			Iterator(Iterator&& rhs) = default;
 			Iterator& operator=(Iterator&& rhs) = default;
-			~Iterator() = default;
 
 			/// <summary>
-			/// Specialized constructor for creating an Iterator for a list at a given node.
+			/// Specialized constructor for creating an Iterator for a SList at a given node.
 			/// </summary>
-			/// <param name="list">Source list for the Iterator's values.</param>
-			/// <param name="node">Current element of the list referenced by the Iterator.</param>
+			/// <param name="list">Source SList for the Iterator's values.</param>
+			/// <param name="node">Current element of the SList referenced by the Iterator.</param>
 			Iterator(const SList<T>& owner, const std::shared_ptr<Node> node=nullptr);
 
 		public:
 			/// <summary>
 			/// Dereference operator.
 			/// </summary>
-			/// <returns>Value of the current element of the list.</returns>
+			/// <returns>Value of the current element of the SList.</returns>
 			/// <exception cref="runtime_error">Invalid Iterator.</exception>
 			/// <exception cref="out_of_range">Iterator out of bounds.</exception>
 			T& operator*() const;
@@ -111,7 +111,7 @@ namespace Library
 			/// <summary>
 			/// Member access operator.
 			/// </summary>
-			/// <returns>Pointer to the value of the current element of the list.</returns>
+			/// <returns>Pointer to the value of the current element of the SList.</returns>
 			/// <exception cref="runtime_error">Invalid Iterator.</exception>
 			/// <exception cref="out_of_range">Iterator out of bounds.</exception>
 			T* operator->() const;
@@ -120,14 +120,14 @@ namespace Library
 			/// Equal operator.
 			/// </summary>
 			/// <param name="rhs">Right hand side Iterator to be compared against for equality.</param>
-			/// <returns>True when the rhs owner list and element are equal to the left, false otherwise.</returns>
+			/// <returns>True when the rhs owner SList and element are equal to the left, false otherwise.</returns>
 			bool operator==(const Iterator& rhs) const noexcept;
 
 			/// <summary>
 			/// Not equal operator.
 			/// </summary>
 			/// <param name="rhs">Right hand side Iterator to be compared against for equality.</param>
-			/// <returns>True when the rhs owner list and element are inequal to the left, false otherwise.</returns>
+			/// <returns>True when the rhs owner SList and element are inequal to the left, false otherwise.</returns>
 			bool operator!=(const Iterator& rhs) const noexcept;
 
 			/// <summary>
@@ -147,7 +147,7 @@ namespace Library
 
 		private:
 			/// <summary>
-			/// Owner list that is able to be traversed by the Iterator instance.
+			/// Owner SList that is able to be traversed by the Iterator instance.
 			/// </summary>
 			const SList* mOwner{ nullptr };
 
@@ -160,7 +160,7 @@ namespace Library
 
 #pragma region ConstIterator
 		/// <summary>
-		/// Class for traversing the list and reading values, may not manipulate the list.
+		/// Class for traversing the SList and reading values, may not manipulate the SList.
 		/// </summary>
 		class ConstIterator final
 		{
@@ -202,11 +202,11 @@ namespace Library
 		public:
 			/* Defaults */
 			ConstIterator() = default;
+			~ConstIterator() = default;
 			ConstIterator(const ConstIterator&) = default;
 			ConstIterator& operator=(const ConstIterator&) = default;
 			ConstIterator(ConstIterator&&) = default;
 			ConstIterator& operator=(ConstIterator&&) = default;
-			~ConstIterator() = default;
 
 			/// <summary>
 			/// Specialized copy constructor that enables the construction of a ConstIterator from a non-const Iterator.
@@ -216,17 +216,17 @@ namespace Library
 
 		private:
 			/// <summary>
-			/// Specialized constructor for creating an ConstIterator for a list at a given node.
+			/// Specialized constructor for creating an ConstIterator for a SList at a given node.
 			/// </summary>
-			/// <param name="list">Source list for the ConstIterator's values.</param>
-			/// <param name="node">Current element of the list referenced by the ConstIterator, defaulted to a nullptr value.</param>
+			/// <param name="list">Source SList for the ConstIterator's values.</param>
+			/// <param name="node">Current element of the SList referenced by the ConstIterator, defaulted to a nullptr value.</param>
 			ConstIterator(const SList& owner, const std::shared_ptr<Node> node=nullptr);
 
 		public:
 			/// <summary>
 			/// Dereference operator.
 			/// </summary>
-			/// <returns>Value of the current element of the list.</returns>
+			/// <returns>Value of the current element of the SList.</returns>
 			/// <exception cref="runtime_error">Invalid ConstIterator.</exception>
 			/// <exception cref="out_of_range">ConstIterator out of bounds.</exception>
 			const T& operator*() const;
@@ -234,7 +234,7 @@ namespace Library
 			/// <summary>
 			/// Member access operator.
 			/// </summary>
-			/// <returns>Pointer to the value of the current element of the list.</returns>
+			/// <returns>Pointer to the value of the current element of the SList.</returns>
 			/// <exception cref="runtime_error">Invalid ConstIterator.</exception>
 			/// <exception cref="out_of_range">ConstIterator out of bounds.</exception>
 			const T* operator->() const;
@@ -243,14 +243,14 @@ namespace Library
 			/// Equal operator.
 			/// </summary>
 			/// <param name="rhs">Right hand side ConstIterator to be compared against for equality.</param>
-			/// <returns>True when the rhs owner list and element are equal to the left, false otherwise.</returns>
+			/// <returns>True when the rhs owner SList and element are equal to the left, false otherwise.</returns>
 			bool operator==(const ConstIterator& rhs) const noexcept;
 
 			/// <summary>
 			/// Equal operator.
 			/// </summary>
 			/// <param name="rhs">Right hand side ConstIterator to be compared against for equality.</param>
-			/// <returns>True when the rhs owner list and element are inequal to the left, false otherwise.</returns>
+			/// <returns>True when the rhs owner SList and element are inequal to the left, false otherwise.</returns>
 			bool operator!=(const ConstIterator& rhs) const noexcept;
 
 			/// <summary>
@@ -270,7 +270,7 @@ namespace Library
 
 		private:
 			/// <summary>
-			/// Owner list that is able to be traversed by the ConstIterator instance.
+			/// Owner SList that is able to be traversed by the ConstIterator instance.
 			/// </summary>
 			const SList* mOwner{ nullptr };
 
@@ -286,7 +286,7 @@ namespace Library
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
-		/// <param name="equalityFunctor">Equality functor for comparing list elements.</param>
+		/// <param name="equalityFunctor">Equality functor for comparing SList elements.</param>
 		/// <remarks>If no EqualityFunctor is passed and no valid DefaultEquality exists, then a compiler error will occur.</remarks>
 		SList(const EqualityFunctor equalityFunctor=DefaultEquality<T>());
 
@@ -298,23 +298,23 @@ namespace Library
 
 		/// <summary>
 		/// Copy constructor.
-		/// Takes in a list as a parameters, then copies the data values to the constructed list.
+		/// Takes in a SList as a parameter, then copies the data values to the constructed SList.
 		/// </summary>
-		/// <param name="rhs">List to be copied.</param>
+		/// <param name="rhs">SList to be copied.</param>
 		SList(const SList& rhs);
 
 		/// <summary>
 		/// Move constructor.
-		/// Takes a list as a parameter and moves the data to the constructed list.
+		/// Takes a SList as a parameter and moves the data to the constructed SList.
 		/// </summary>
-		/// <param name="rhs">List to be moved.</param>
+		/// <param name="rhs">SList to be moved.</param>
 		SList(SList&& rhs) noexcept;
 
 		/// <summary>
-		/// Initializer list constructor.
+		/// Initializer SList constructor.
 		/// </summary>
-		/// <param name="list">Value list for initializing a new SList.</param>
-		/// <param name="equalityFunctor">Equality functor for comparing list elements.</param>
+		/// <param name="rhs">Value SList for initializing a new SList.</param>
+		/// <param name="equalityFunctor">Equality functor for comparing SList elements.</param>
 		/// <remarks>May require an EqualityFunctor passed using constructor syntax, if no suitable DefaultEquality exists.</remarks>
 		SList(const std::initializer_list<T> rhs, const EqualityFunctor equalityFunctor=DefaultEquality<T>());
 #pragma endregion Constructors and Destructor
@@ -324,154 +324,154 @@ namespace Library
 		/// Copy assignment operator.
 		/// Copies the data values from the right hand side (rhs) value to the left hand side.
 		/// </summary>
-		/// <param name="rhs">List whose values are copied.</param>
-		/// <returns>Modified list with copied values.</returns>
+		/// <param name="rhs">SList whose values are copied.</param>
+		/// <returns>Modified SList with copied values.</returns>
 		SList& operator=(const SList& rhs);
 
 		/// <summary>
 		/// Move assignment operator.
 		/// Copies the data values from the right hand side (rhs) value to the left hand side.
 		/// </summary>
-		/// <param name="rhs">List whose values are copied.</param>
-		/// <returns>Modified list with copied values.</returns>
+		/// <param name="rhs">SList whose values are copied.</param>
+		/// <returns>Modified SList with copied values.</returns>
 		SList& operator=(SList&& rhs) noexcept;
 
 		/// <summary>
-		/// Initializer list assignment operator.
+		/// Initializer SList assignment operator.
 		/// </summary>
-		/// <param name="list">Value list for initializing a new SList.</param>
+		/// <param name="rhs">Value list for initializing a new SList.</param>
 		SList& operator=(const std::initializer_list<T> rhs);
 #pragma endregion Assignment Operators
 
 #pragma region Boolean Operators
 		/// <summary>
 		/// Equals operator. 
-		/// Checks if the size of the list and the data values are equal to the size and values of the right hand side (rhs) list.
+		/// Checks if the size of the SList and the data values are equal to the size and values of the right hand side (rhs) SList.
 		/// </summary>
-		/// <param name="rhs">List on the right hand side to be compared to the left.</param>
+		/// <param name="rhs">SList on the right hand side to be compared to the left.</param>
 		/// <returns>True when lists are equivalent, otherwise false.</returns>
 		bool operator==(const SList& rhs) const noexcept;
 
 		/// <summary>
 		/// Not equal operator. 
-		/// Checks if the size of the list and the data values are equal to the size and values of the right hand side (rhs) list.
+		/// Checks if the size of the SList and the data values are equal to the size and values of the right hand side (rhs) SList.
 		/// </summary>
-		/// <param name="rhs">List on the right hand side to be compared to the left.</param>
+		/// <param name="rhs">SList on the right hand side to be compared to the left.</param>
 		/// <returns>True when lists are not equivalent, otherwise false.</returns>
 		bool operator!=(const SList& rhs) const noexcept;
 #pragma endregion Boolean Operators
 
 #pragma region Size and Capacity
 		/// <summary>
-		/// Getter method for the number of elements in the list.
+		/// Getter method for the number of elements in the SList.
 		/// </summary>
-		/// <returns>Number of elements in the list.</returns>
+		/// <returns>Number of elements in the SList.</returns>
 		std::size_t Size() const;
 
 		/// <summary>
-		/// Checks if the size of the list is greater than zero, indicating the list is non-empty.
+		/// Checks if the size of the SList is greater than zero, indicating the SList is non-empty.
 		/// </summary>
-		/// <returns>True if the list contains no elements, otherwise false.</returns>
+		/// <returns>True if the SList contains no elements, otherwise false.</returns>
 		bool IsEmpty() const;
 #pragma endregion Size
 
 #pragma region Iterator Accessors
 		/// <summary>
-		/// Gets an Iterator pointing to the first element in the list, values are mutable.
+		/// Gets an Iterator pointing to the first element in the SList, values are mutable.
 		/// </summary>
-		/// <returns>Iterator to the first element in the list.</returns>
+		/// <returns>Iterator to the first element in the SList.</returns>
 		Iterator begin();
 
 		/// <summary>
-		/// Gets an ConstIterator pointing to the first element in the list, values are immutable.
+		/// Gets an ConstIterator pointing to the first element in the SList, values are immutable.
 		/// </summary>
-		/// <returns>Constant value ConstIterator to the first element in the list.</returns>
+		/// <returns>Constant value ConstIterator to the first element in the SList.</returns>
 		ConstIterator begin() const;
 
 		/// <summary>
-		/// Gets an ConstIterator pointing to the first element in the list, values are immutable.
+		/// Gets an ConstIterator pointing to the first element in the SList, values are immutable.
 		/// </summary>
-		/// <returns>Constant value ConstIterator to the first element in the list.</returns>
+		/// <returns>Constant value ConstIterator to the first element in the SList.</returns>
 		ConstIterator cbegin() const;
 
 		/// <summary>
-		/// Gets an Iterator pointing past the last element in the list, value is mutable.
+		/// Gets an Iterator pointing past the last element in the SList, value is mutable.
 		/// </summary>
-		/// <returns>Iterator to the last element in the list.</returns>	
+		/// <returns>Iterator to the last element in the SList.</returns>	
 		Iterator end();
 
 		/// <summary>
-		/// Gets an ConstIterator pointing past the last element in the list, value is immutable.
+		/// Gets an ConstIterator pointing past the last element in the SList, value is immutable.
 		/// </summary>
-		/// <returns>Constant value ConstIterator to the last element in the list.</returns>	
+		/// <returns>Constant value ConstIterator to the last element in the SList.</returns>	
 		ConstIterator end() const;
 
 		/// <summary>
-		/// Gets an ConstIterator pointing past the last element in the list, value is immutable.
+		/// Gets an ConstIterator pointing past the last element in the SList, value is immutable.
 		/// </summary>
-		/// <returns>Constant value ConstIterator to the last element in the list.</returns>	
+		/// <returns>Constant value ConstIterator to the last element in the SList.</returns>	
 		ConstIterator cend() const;
 
 		/// <summary>
-		/// Searches the list for a given value and returns an Iterator.
+		/// Searches the SList for a given value and returns an Iterator.
 		/// </summary>
-		/// <param name="value">Value to search for in the list.</param>
+		/// <param name="value">Value to search for in the SList.</param>
 		/// <returns>Iterator referencing the value, if found. Otherwise it returns an empty Iterator.</returns>
 		Iterator Find(const T& value);
 
 		/// <summary>
-		/// Searches the list for a given value and returns an ConstIterator.
+		/// Searches the SList for a given value and returns an ConstIterator.
 		/// </summary>
-		/// <param name="value">Value to search for in the list.</param>
+		/// <param name="value">Value to search for in the SList.</param>
 		/// <returns>const value ConstIterator referencing the value, if found. Otherwise it returns an empty ConstIterator.</returns>
 		ConstIterator Find(const T& value) const;
 #pragma endregion Iterator Accessors
 
 #pragma region Element Accessors
 		/// <summary>
-		/// Getter method for the first data value in the list.
+		/// Getter method for the first data value in the SList.
 		/// </summary>
-		/// <returns>Reference to the first data value in the list.</returns>
-		/// <exception cref="runtime_error">Thrown when called on an empty list.</exception>
+		/// <returns>Reference to the first data value in the SList.</returns>
+		/// <exception cref="runtime_error">Thrown when called on an empty SList.</exception>
 		T& Front();
 
 		/// <summary>
-		/// Getter method for the first data value in the list, as a constant.
+		/// Getter method for the first data value in the SList, as a constant.
 		/// </summary>
-		/// <returns>Reference to the first data value in the list, as a constant.</returns>
-		/// <exception cref="runtime_error">Thrown when called on an empty list.</exception>
+		/// <returns>Reference to the first data value in the SList, as a constant.</returns>
+		/// <exception cref="runtime_error">Thrown when called on an empty SList.</exception>
 		const T& Front() const;
 
 		/// <summary>
-		/// Getter method for the last data value in the list.
+		/// Getter method for the last data value in the SList.
 		/// </summary>
-		/// <returns>Reference to the first data value in the list.</returns>
-		/// <exception cref="runtime_error">Thrown when called on an empty list.</exception>
+		/// <returns>Reference to the first data value in the SList.</returns>
+		/// <exception cref="runtime_error">Thrown when called on an empty SList.</exception>
 		T& Back();
 
 		/// <summary>
-		/// Getter method for the lase data value in the list, as a constant.
+		/// Getter method for the lase data value in the SList, as a constant.
 		/// </summary>
-		/// <returns>Reference to the last data value in the list, as a constant.</returns>
-		/// <exception cref="runtime_error">Thrown when called on an empty list.</exception>
+		/// <returns>Reference to the last data value in the SList, as a constant.</returns>
+		/// <exception cref="runtime_error">Thrown when called on an empty SList.</exception>
 		const T& Back() const;
 #pragma endregion Element Accessors
 
 #pragma region Modifiers
 		/// <summary>
-		/// Adds an element with the passed in data to the front of the list.
+		/// Adds an element with the passed in data to the front of the SList.
 		/// </summary>
-		/// <param name="data">Value to be added to the front of the list.</param>
+		/// <param name="data">Value to be added to the front of the SList.</param>
 		void PushFront(const T& data);
 
 		/// <summary>
-		/// Adds an element with the passed in data to the back of the list.
+		/// Adds an element with the passed in data to the back of the SList.
 		/// </summary>
-		/// <param name="data">Value to be added to the back of the list.</param>
+		/// <param name="data">Value to be added to the back of the SList.</param>
 		void PushBack(const T& data);
 
 		/// <summary>
-		/// Inserts a new element in the list in between a given Iterator and the following element.
+		/// Inserts a new element in the SList in between a given Iterator and the following element.
 		/// </summary>
 		/// <param name="it">Iterator used to insert a new element in the following position.</param>
 		/// <param name="data">Value to be used to create a new node.</param>
@@ -480,56 +480,56 @@ namespace Library
 		Iterator InsertAfter(const Iterator& it, const T& data);
 
 		/// <summary>
-		/// Removes the first element from the list.
+		/// Removes the first element from the SList.
 		/// </summary>
 		void PopFront();
 
 		/// <summary>
-		/// Removes the last element from the list.
+		/// Removes the last element from the SList.
 		/// </summary>
 		void PopBack();
 
 		/// <summary>
-		/// Removes a single element from the list given the corresponding Iterator.
+		/// Removes a single element from the SList given the corresponding Iterator.
 		/// </summary>
-		/// <param name="vale">Value to be searched for in the list to be removed.</param>
+		/// <param name="vale">Value to be searched for in the SList to be removed.</param>
 		/// <returns>True on successful remove, false otherwise.</returns>
 		/// <exception cref="runtime_error">Missing equality functor.</exception>
 		/// <exception cref="runtime_error">Invalid Iterator.</exception>
 		bool Remove(const T& value);
 
 		/// <summary>
-		/// Removes a single element from the list given the corresponding Iterator.
+		/// Removes a single element from the SList given the corresponding Iterator.
 		/// </summary>
-		/// <param name="it">Iterator referencing the element in the list to be removed.</param>
+		/// <param name="it">Iterator referencing the element in the SList to be removed.</param>
 		/// <returns>True on successful remove, false otherwise.</returns>
 		/// <exception cref="runtime_error">Invalid Iterator.</exception>
 		bool Remove(const Iterator& it);
 
 		/// <summary>
-		/// Removes all elements from the list and resets the size to zero.
+		/// Removes all elements from the SList and resets the size to zero.
 		/// </summary>
 		void Clear();
 #pragma endregion Modifiers
 
 	private:
 		/// <summary>
-		/// Number of elements in the list.
+		/// Number of elements in the SList.
 		/// </summary>
 		std::size_t mSize{ 0 };
 
 		/// <summary>
-		/// First element in the list.
+		/// First element in the SList.
 		/// </summary>
 		std::shared_ptr<Node> mFront{ nullptr };
 
 		/// <summary>
-		/// Last element in the list.
+		/// Last element in the SList.
 		/// </summary>
 		std::shared_ptr<Node> mBack{ nullptr };
 
 		/// <summary>
-		/// Functor for evaluating the equality of two values in the list.
+		/// Functor for evaluating the equality of two values in the SList.
 		/// </summary>
 		EqualityFunctor mEqualityFunctor{ DefaultEquality<T>() };
 	};
