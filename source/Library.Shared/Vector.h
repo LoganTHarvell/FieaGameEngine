@@ -169,7 +169,7 @@ namespace Library
 			/// <param name="rhs">Value to offset the Iterator.</param>
 			/// <returns>Iterator at the given offset from this Iterator.</returns>
 			/// <exception cref="out_of_range">Iterator out of bounds.</exception>
-			Iterator operator+(const std::size_t rhs);
+			Iterator operator+(const std::size_t rhs) const;
 
 			/// <summary>
 			/// Pre-decrement operator.
@@ -203,7 +203,16 @@ namespace Library
 			/// <returns>Iterator at the given offset from this Iterator.</returns>
 			/// <exception cref="runtime_error">Iterator invalid.</exception>
 			/// <exception cref="out_of_range">Iterator out of bounds.</exception>
-			Iterator operator-(const std::size_t rhs);
+			Iterator operator-(const std::size_t rhs) const;
+
+			/// <summary>
+			/// Subscript operator.
+			/// </summary>
+			/// <param name="rhs">Value to offset the Iterator.</param>
+			/// <returns>Iterator at the given offset from this Iterator.</returns>
+			/// <exception cref="runtime_error">Iterator invalid.</exception>
+			/// <exception cref="out_of_range">Iterator out of bounds.</exception>
+			Iterator operator[](const std::size_t rhs) const;
 
 		private:
 			/// <summary>
@@ -343,7 +352,7 @@ namespace Library
 			/// <returns>ConstIterator at the given offset from this ConstIterator.</returns>
 			/// <exception cref="runtime_error">ConstIterator invalid.</exception>
 			/// <exception cref="out_of_range">ConstIterator out of bounds.</exception>
-			ConstIterator operator+(const std::size_t rhs);
+			ConstIterator operator+(const std::size_t rhs) const;
 
 			/// <summary>
 			/// Pre-decrement operator.
@@ -377,7 +386,16 @@ namespace Library
 			/// <returns>ConstIterator at the given offset from this ConstIterator.</returns>
 			/// <exception cref="runtime_error">ConstIterator invalid.</exception>
 			/// <exception cref="out_of_range">ConstIterator out of bounds.</exception>
-			ConstIterator operator-(const std::size_t rhs);
+			ConstIterator operator-(const std::size_t rhs) const;
+
+			/// <summary>
+			/// Subscript operator.
+			/// </summary>
+			/// <param name="rhs">Value to offset the ConstIterator.</param>
+			/// <returns>Iterator at the given offset from this ConstIterator.</returns>
+			/// <exception cref="runtime_error">ConstIterator invalid.</exception>
+			/// <exception cref="out_of_range">ConstIterator out of bounds.</exception>
+			ConstIterator operator[](const std::size_t rhs) const;
 		
 		private:
 			/// <summary>
@@ -400,7 +418,7 @@ namespace Library
 		/// <param name="capacity">Default capacity for the vector.</param>
 		/// <param name="reserveStrategy">Default reserve strategy functor.</param>
 		/// <param name="equalityFunctor">Default equality functor.</param>
-		Vector(const std::size_t capacity=0, const ReserveFunctor reserveStrategy=DefaultReserveFunctor(), const EqualityFunctor equalityFunctor=DefaultEquality<T>());
+		Vector(const std::size_t capacity=0, const EqualityFunctor equalityFunctor=DefaultEquality<T>(), const ReserveFunctor reserveFunctor=DefaultReserveFunctor());
 
 		/// <summary>
 		/// Destructor. 
@@ -426,8 +444,10 @@ namespace Library
 		/// Initializer list constructor.
 		/// </summary>
 		/// <param name="rhs">Value list for intializing a new Vector.</param>
-		/// <remarks>Does not initialize equality functor. User should follow with a call to SetEqualityFunctor.</remarks>
-		Vector(const std::initializer_list<T> rhs);
+		/// <remarks>May require an EqualityFunctor passed using constructor syntax, if no suitable DefaultEquality exists.</remarks>
+		/// <param name="reserveStrategy">Default reserve strategy functor.</param>
+		/// <param name="equalityFunctor">Default equality functor.</param>
+		Vector(const std::initializer_list<T> rhs, const EqualityFunctor equalityFunctor=DefaultEquality<T>(), const ReserveFunctor reserveFunctor=DefaultReserveFunctor());
 #pragma endregion Constructors and Destructor
 
 #pragma region Assignment Operators
@@ -451,7 +471,7 @@ namespace Library
 		/// Initializer list assignment operator.
 		/// </summary>
 		/// <param name="vector">Value Vector for initializing a new Vector.</param>
-		/// <remarks>Does not initialize equality functor. User should follow with a call to SetEqualityFunctor.</remarks>
+		/// <remarks>Does not initialize equality functor. Must call SetEqualityFunctor for full functionality.</remarks>
 		Vector& operator=(const std::initializer_list<T> rhs);
 #pragma endregion Assignment Operators
 
@@ -563,7 +583,6 @@ namespace Library
 		/// </summary>
 		/// <param name="value">Value to search for in the Vector.</param>
 		/// <returns>Iterator referencing the value, if found. Otherwise it returns an empty Iterator.</returns>
-		/// <exception cref="">Missing equality functor.</exception>
 		Iterator Find(const T& value);
 
 		/// <summary>
@@ -571,7 +590,6 @@ namespace Library
 		/// </summary>
 		/// <param name="value">Value to search for in the Vector.</param>
 		/// <returns>ConstIterator referencing the value, if found. Otherwise it returns an empty ConstIterator.</returns>
-		/// <exception cref="">Missing equality functor.</exception>
 		ConstIterator Find(const T& value) const;
 #pragma endregion Iterator Accessors
 
@@ -656,7 +674,6 @@ namespace Library
 		/// </summary>
 		/// <param name="value">Value to be searched for in the Vector to be removed.</param>
 		/// <returns>True on successful remove, false otherwise.</returns>
-		/// <exception cref="">Missing equality functor.</exception>
 		bool Remove(const T& value);
 
 		/// <summary>
@@ -671,18 +688,6 @@ namespace Library
 		/// Removes all elements from the Vector and resets the size to zero.
 		/// </summary>
 		void Clear();
-
-		/// <summary>
-		/// Sets reserve strategy functor for incrementing capacity during insertion.
-		/// </summary>
-		/// <param name="reserveStrategy">New reserve strategy functor.</param>
-		void SetReserveStrategy(const ReserveFunctor reserveStrategy);
-
-		/// <summary>
-		/// Sets equality functor used to compare elements in the Vector.
-		/// </summary>
-		/// <param name="equalityFunctor">New equality functor.</param>
-		void SetEqualityFunctor(const EqualityFunctor equalityFunctor);
 #pragma endregion Modifiers
 
 	private:
@@ -709,7 +714,7 @@ namespace Library
 		/// <summary>
 		/// Functor for evaluating the equality of two values in the list.
 		/// </summary>
-		EqualityFunctor mEqualityFunctor;
+		EqualityFunctor mEqualityFunctor{ DefaultEquality<T>() };
 	};
 }
 

@@ -1,6 +1,6 @@
 #include "Vector.h"	
 
-namespace Library 
+namespace Library
 {
 #pragma region Default Functors
 	template<typename T>
@@ -53,7 +53,7 @@ namespace Library
 		{
 			throw std::runtime_error("Iterator invalid.");
 		}
-		
+
 		if (mIndex >= mOwner->Size())
 		{
 			throw std::out_of_range("Iterator out of bounds.");
@@ -91,7 +91,7 @@ namespace Library
 	}
 
 	template<typename T>
-	inline typename Vector<T>::Iterator Vector<T>::Iterator::operator+(const std::size_t rhs)
+	inline typename Vector<T>::Iterator Vector<T>::Iterator::operator+(const std::size_t rhs) const
 	{
 		return Iterator(*this) += rhs;
 	}
@@ -103,7 +103,7 @@ namespace Library
 		{
 			throw std::runtime_error("Iterator invalid.");
 		}
-		
+
 		if (mIndex == 0)
 		{
 			throw std::out_of_range("Iterator out of bounds.");
@@ -141,9 +141,15 @@ namespace Library
 	}
 
 	template<typename T>
-	inline typename Vector<T>::Iterator Vector<T>::Iterator::operator-(const std::size_t rhs)
+	inline typename Vector<T>::Iterator Vector<T>::Iterator::operator-(const std::size_t rhs) const
 	{
 		return Iterator(*this) -= rhs;
+	}
+
+	template<typename T>
+	inline typename Vector<T>::Iterator Vector<T>::Iterator::operator[](const std::size_t rhs) const
+	{
+		return Iterator(*this) + rhs;
 	}
 #pragma endregion Iterator
 
@@ -196,7 +202,7 @@ namespace Library
 		{
 			throw std::runtime_error("ConstIterator invalid.");
 		}
-		
+
 		if (mIndex >= mOwner->Size())
 		{
 			throw std::out_of_range("ConstIterator out of bounds.");
@@ -234,7 +240,7 @@ namespace Library
 	}
 
 	template<typename T>
-	inline typename Vector<T>::ConstIterator Vector<T>::ConstIterator::operator+(const std::size_t rhs)
+	inline typename Vector<T>::ConstIterator Vector<T>::ConstIterator::operator+(const std::size_t rhs) const
 	{
 		return ConstIterator(*this) += rhs;
 	}
@@ -246,7 +252,7 @@ namespace Library
 		{
 			throw std::runtime_error("ConstIterator invalid.");
 		}
-		
+
 		if (mIndex == 0)
 		{
 			throw std::out_of_range("ConstIterator out of bounds.");
@@ -284,16 +290,22 @@ namespace Library
 	}
 
 	template<typename T>
-	inline typename Vector<T>::ConstIterator Vector<T>::ConstIterator::operator-(const std::size_t rhs)
+	inline typename Vector<T>::ConstIterator Vector<T>::ConstIterator::operator-(const std::size_t rhs) const
 	{
 		return ConstIterator(*this) -= rhs;
+	}
+
+	template<typename T>
+	inline typename Vector<T>::ConstIterator Vector<T>::ConstIterator::operator[](const std::size_t rhs) const
+	{
+		return ConstIterator(*this) + rhs;
 	}
 #pragma endregion ConstIterator
 
 #pragma region Constructors and Destructor
 	template <typename T>
-	Vector<T>::Vector(const std::size_t capacity, const ReserveFunctor reserveStrategy, const EqualityFunctor equalityFunctor) :
-		mReserveFunctor(reserveStrategy), mEqualityFunctor(equalityFunctor)
+	Vector<T>::Vector(const std::size_t capacity, const EqualityFunctor equalityFunctor, const ReserveFunctor reserveFunctor) :
+		mEqualityFunctor(equalityFunctor), mReserveFunctor(reserveFunctor)
 	{
 		if (capacity > 0)
 		{
@@ -317,7 +329,7 @@ namespace Library
 
 	template<typename T>
 	inline Vector<T>::Vector(const Vector& rhs) :
-		mReserveFunctor(rhs.mReserveFunctor), mEqualityFunctor(rhs.mEqualityFunctor)
+		mEqualityFunctor(rhs.mEqualityFunctor), mReserveFunctor(rhs.mReserveFunctor)
 	{
 		Reserve(rhs.Capacity());
 
@@ -329,7 +341,7 @@ namespace Library
 
 	template<typename T>
 	inline Vector<T>::Vector(Vector&& rhs) noexcept :
-		mData(rhs.mData), mSize(rhs.mSize), mCapacity(rhs.mCapacity), mReserveFunctor(rhs.mReserveFunctor), mEqualityFunctor(rhs.mEqualityFunctor)
+		mData(rhs.mData), mSize(rhs.mSize), mCapacity(rhs.mCapacity), mEqualityFunctor(rhs.mEqualityFunctor), mReserveFunctor(rhs.mReserveFunctor)
 	{
 		rhs.mData = nullptr;
 		rhs.mSize = 0;
@@ -337,7 +349,8 @@ namespace Library
 	}
 
 	template<typename T>
-	inline Vector<T>::Vector(const std::initializer_list<T> rhs)
+	inline Vector<T>::Vector(const std::initializer_list<T> rhs, const EqualityFunctor equalityFunctor, const ReserveFunctor reserveFunctor) :
+		mEqualityFunctor(equalityFunctor), mReserveFunctor(reserveFunctor)
 	{
 		Reserve(rhs.size());
 
@@ -461,7 +474,7 @@ namespace Library
 		if (capacity > mCapacity)
 		{
 			void* newMemory = realloc(mData, capacity * sizeof(T));
-			
+
 			assert(newMemory != nullptr);
 			mData = reinterpret_cast<T*>(newMemory);
 			mCapacity = capacity;
@@ -480,7 +493,7 @@ namespace Library
 				new(mData + i)T();
 			}
 		}
-		else if (size < mSize) 
+		else if (size < mSize)
 		{
 			for (std::size_t i = size; i < mSize; ++i)
 			{
@@ -503,7 +516,7 @@ namespace Library
 				new(mData + i)T(value);
 			}
 		}
-		else if (size < mSize) 
+		else if (size < mSize)
 		{
 			for (std::size_t i = size; i < mSize; ++i)
 			{
@@ -513,7 +526,7 @@ namespace Library
 
 		mSize = size;
 	}
-	
+
 	template<typename T>
 	inline void Vector<T>::ShrinkToFit()
 	{
@@ -552,7 +565,7 @@ namespace Library
 	{
 		return ConstIterator(*this, 0);
 	}
-	
+
 	template<typename T>
 	inline typename Vector<T>::Iterator Vector<T>::end()
 	{
@@ -574,11 +587,6 @@ namespace Library
 	template<typename T>
 	inline typename Vector<T>::Iterator Vector<T>::Find(const T& value)
 	{
-		if (!mEqualityFunctor)
-		{
-			throw std::runtime_error("Missing equality functor.");
-		}
-
 		for (std::size_t i = 0; i < mSize; ++i)
 		{
 			if (mEqualityFunctor(mData[i], value))
@@ -593,11 +601,6 @@ namespace Library
 	template<typename T>
 	inline typename Vector<T>::ConstIterator Vector<T>::Find(const T& value) const
 	{
-		if (!mEqualityFunctor)
-		{
-			throw std::runtime_error("Missing equality functor.");
-		}
-
 		for (std::size_t i = 0; i < mSize; ++i)
 		{
 			if (mEqualityFunctor(mData[i], value))
@@ -707,7 +710,7 @@ namespace Library
 		if (mCapacity <= mSize)
 		{
 			std::size_t newCapacity = mReserveFunctor(mCapacity, mSize);
-			Reserve(newCapacity > mCapacity ? newCapacity : mCapacity + 1);
+			Reserve(std::max(newCapacity, mCapacity + 1));
 		}
 
 		new(mData + mSize++)T(data);
@@ -725,11 +728,6 @@ namespace Library
 	template<typename T>
 	inline bool Vector<T>::Remove(const T& value)
 	{
-		if (!mEqualityFunctor)
-		{
-			throw std::runtime_error("Missing equality functor.");
-		}
-
 		for (std::size_t i = 0; i < mSize; ++i)
 		{
 			if (mEqualityFunctor(mData[i], value))
@@ -783,18 +781,6 @@ namespace Library
 		}
 
 		mSize = 0;
-	}
-
-	template<typename T>
-	inline void Vector<T>::SetReserveStrategy(const ReserveFunctor reserveStrategy)
-	{
-		mReserveFunctor = reserveStrategy;
-	}
-	
-	template<typename T>
-	inline void Vector<T>::SetEqualityFunctor(const EqualityFunctor equalityFunctor)
-	{
-		mEqualityFunctor = equalityFunctor;
 	}
 #pragma endregion Modifiers
 }
