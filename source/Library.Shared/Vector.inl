@@ -25,7 +25,7 @@ namespace Library
 			throw std::runtime_error("Iterator invalid.");
 		}
 
-		return mOwner->operator[](mIndex);
+		return mOwner->At(mIndex);
 	}
 
 	template<typename T>
@@ -174,7 +174,7 @@ namespace Library
 			throw std::runtime_error("ConstIterator invalid.");
 		}
 
-		return mOwner->operator[](mIndex);
+		return mOwner->At(mIndex);
 	}
 
 	template<typename T>
@@ -683,23 +683,13 @@ namespace Library
 	template<typename T>
 	inline T& Vector<T>::operator[](const std::size_t index)
 	{
-		if (index >= mSize)
-		{
-			throw std::out_of_range("Index is out of bounds.");
-		}
-
-		return mData[index];
+		return At(index);
 	}
 
 	template<typename T>
 	inline const T& Vector<T>::operator[](const std::size_t index) const
 	{
-		if (index >= mSize)
-		{
-			throw std::out_of_range("Index is out of bounds.");
-		}
-
-		return mData[index];
+		return At(index);
 	}
 #pragma endregion Element Accessors
 

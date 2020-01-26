@@ -12,8 +12,9 @@
 namespace Library
 {
 	/// <summary>
-	/// Represents a generic vector list.
+	/// Represents a generic Vector list.
 	/// </summary>
+	/// <typeparam name="T">Data type of elements in a Vector.</typeparam>
 	template <typename T>
 	class Vector final
 	{
@@ -416,8 +417,8 @@ namespace Library
 		/// Default constructor.
 		/// </summary>
 		/// <param name="capacity">Default capacity for the vector.</param>
-		/// <param name="reserveStrategy">Default reserve strategy functor.</param>
 		/// <param name="equalityFunctor">Default equality functor.</param>
+		/// <param name="reserveFunctor">Default reserve strategy functor.</param>
 		Vector(const std::size_t capacity=0, const EqualityFunctor equalityFunctor=DefaultEquality<T>(), const ReserveFunctor reserveFunctor=DefaultReserveFunctor());
 
 		/// <summary>
@@ -582,14 +583,14 @@ namespace Library
 		/// Searches the Vector for a given value and returns an Iterator.
 		/// </summary>
 		/// <param name="value">Value to search for in the Vector.</param>
-		/// <returns>Iterator referencing the value, if found. Otherwise it returns an empty Iterator.</returns>
+		/// <returns>Iterator referencing the value, if found. Otherwise it returns an Iterator to the end.</returns>
 		Iterator Find(const T& value);
 
 		/// <summary>
 		/// Searches the Vector for a given value and returns an ConstIterator.
 		/// </summary>
 		/// <param name="value">Value to search for in the Vector.</param>
-		/// <returns>ConstIterator referencing the value, if found. Otherwise it returns an empty ConstIterator.</returns>
+		/// <returns>ConstIterator referencing the value, if found. Otherwise it returns an ConstIterator to the end.</returns>
 		ConstIterator Find(const T& value) const;
 #pragma endregion Iterator Accessors
 
@@ -627,7 +628,7 @@ namespace Library
 		/// </summary>
 		/// <param name="index">Position of an element in the Vector.</param>
 		/// <returns>Reference to the value of the element at the given index.</returns>
-		/// <exception cref="runtime_error">Index is out of bounds.</exception>
+		/// <exception cref="out_of_range">Index is out of bounds.</exception>
 		T& At(const std::size_t index);
 
 		/// <summary>
@@ -635,7 +636,7 @@ namespace Library
 		/// </summary>
 		/// <param name="index">Position of an element in the Vector.</param>
 		/// <returns>Const value reference to the value of the element at the given index.</returns>
-		/// <exception cref="runtime_error">Index is out of bounds.</exception>
+		/// <exception cref="out_of_range">Index is out of bounds.</exception>
 		const T& At(const std::size_t index) const;
 
 		/// <summary>
@@ -644,7 +645,7 @@ namespace Library
 		/// </summary>
 		/// <param name="index">Position of an element in the Vector.</param>
 		/// <returns>Reference to the value of the element at the given index.</returns>
-		/// <exception cref="runtime_error">Index is out of bounds.</exception>
+		/// <exception cref="out_of_range">Index is out of bounds.</exception>
 		T& operator[](const std::size_t index);
 
 		/// <summary>
@@ -653,7 +654,7 @@ namespace Library
 		/// </summary>
 		/// <param name="index">Position of an element in the Vector.</param>
 		/// <returns>Const value reference to the value of the element at the given index.</returns>
-		/// <exception cref="runtime_error">Index is out of bounds.</exception>
+		/// <exception cref="out_of_range">Index is out of bounds.</exception>
 		const T& operator[](const std::size_t index) const;
 #pragma endregion Element Accessors
 
@@ -670,7 +671,7 @@ namespace Library
 		void PopBack();
 
 		/// <summary>
-		/// Removes a single element from the Vector given the corresponding Iterator.
+		/// Removes a single element from the Vector given the corresponding value.
 		/// </summary>
 		/// <param name="value">Value to be searched for in the Vector to be removed.</param>
 		/// <returns>True on successful remove, false otherwise.</returns>

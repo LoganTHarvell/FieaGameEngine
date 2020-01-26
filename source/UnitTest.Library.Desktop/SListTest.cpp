@@ -58,10 +58,6 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(doubleIterator1, doubleIterator2);
 			Assert::AreEqual(fooIterator1, fooIterator2);
 
-			intList.PushBack(10);
-			doubleList.PushBack(10);
-			fooList.PushBack(Foo(10));
-
 			SList<int>::ConstIterator constIntIterator1 = SList<int>::ConstIterator(intList.begin());
 			SList<double>::ConstIterator constDoubleIterator1 = SList<double>::ConstIterator(doubleList.begin());
 			SList<Foo>::ConstIterator constFooIterator1 = SList<Foo>::ConstIterator(fooList.begin());
@@ -116,25 +112,9 @@ namespace UnitTestLibraryDesktop
 
 		TEST_METHOD(IteratorEquality)
 		{
-			SList<int> intList;
-			SList<double> doubleList;
-			SList<Foo> fooList;
-
-			Assert::AreEqual(intList.begin(), intList.end());
-			Assert::AreEqual(doubleList.begin(), doubleList.end());
-			Assert::AreEqual(fooList.begin(), fooList.end());
-
-			Assert::AreEqual(intList.cbegin(), intList.cend());
-			Assert::AreEqual(doubleList.cbegin(), doubleList.cend());
-			Assert::AreEqual(fooList.cbegin(), fooList.cend());
-
-			intList.PushBack(10);
-			doubleList.PushBack(10);
-			fooList.PushBack(Foo(10));
-
-			intList.PushBack(10);
-			doubleList.PushBack(10);
-			fooList.PushBack(Foo(10));
+			SList<int> intList = { 10, 10 };
+			SList<double> doubleList = { 10, 10 };
+			SList<Foo> fooList = { Foo(10), Foo(10) };
 
 			SList<int>::Iterator intIterator = intList.begin();
 			SList<double>::Iterator doubleIterator = doubleList.begin();
@@ -253,6 +233,14 @@ namespace UnitTestLibraryDesktop
 			SList<int> intListEmpty;
 			SList<double> doubleListEmpty;
 			SList<Foo> fooListEmpty;
+
+			Assert::AreEqual(intListEmpty.begin(), intListEmpty.end());
+			Assert::AreEqual(doubleListEmpty.begin(), doubleListEmpty.end());
+			Assert::AreEqual(fooListEmpty.begin(), fooListEmpty.end());
+
+			Assert::AreEqual(intListEmpty.cbegin(), intListEmpty.cend());
+			Assert::AreEqual(doubleListEmpty.cbegin(), doubleListEmpty.cend());
+			Assert::AreEqual(fooListEmpty.cbegin(), fooListEmpty.cend());
 
 			Assert::AreEqual(intListEmpty.Size(), 0_z);
 			Assert::AreEqual(doubleListEmpty.Size(), 0_z);
@@ -1071,9 +1059,9 @@ namespace UnitTestLibraryDesktop
 			SList<double> doubleList;
 			SList<Foo> fooList;
 
-			Assert::ExpectException<std::runtime_error>([&intList] { intList.InsertAfter(SList<int>::Iterator(), 10); });
-			Assert::ExpectException<std::runtime_error>([&doubleList] { doubleList.InsertAfter(SList<double>::Iterator(), 10); });
-			Assert::ExpectException<std::runtime_error>([&fooList] { fooList.InsertAfter(SList<Foo>::Iterator(), Foo(10)); });
+			Assert::ExpectException<std::runtime_error>([&intList] { auto it = intList.InsertAfter(SList<int>::Iterator(), 10); });
+			Assert::ExpectException<std::runtime_error>([&doubleList] { auto it = doubleList.InsertAfter(SList<double>::Iterator(), 10); });
+			Assert::ExpectException<std::runtime_error>([&fooList] { auto it = fooList.InsertAfter(SList<Foo>::Iterator(), Foo(10)); });
 
 			SList<int>::Iterator intIterator = intList.InsertAfter(intList.begin(), 10);
 			SList<double>::Iterator doubleIterator = doubleList.InsertAfter(doubleList.begin(), 10);

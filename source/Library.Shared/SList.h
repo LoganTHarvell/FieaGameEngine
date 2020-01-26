@@ -13,6 +13,7 @@ namespace Library
 	/// <summary>
 	/// Represents a generic singly linked list.
 	/// </summary>
+	/// <typeparam name="T">Data type of elements in a SList.</typeparam>
 	template <typename T>
 	class SList final
 	{

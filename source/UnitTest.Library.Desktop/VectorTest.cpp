@@ -57,10 +57,6 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(doubleIterator1, doubleIterator2);
 			Assert::AreEqual(fooIterator1, fooIterator2);
 
-			intVector.PushBack(10);
-			doubleVector.PushBack(10);
-			fooVector.PushBack(Foo(10));
-
 			Vector<int>::ConstIterator constIntIterator1 = Vector<int>::ConstIterator(intVector.begin());
 			Vector<double>::ConstIterator constDoubleIterator1 = Vector<double>::ConstIterator(doubleVector.begin());
 			Vector<Foo>::ConstIterator constFooIterator1 = Vector<Foo>::ConstIterator(fooVector.begin());
@@ -117,25 +113,9 @@ namespace UnitTestLibraryDesktop
 
 		TEST_METHOD(IteratorEquality)
 		{
-			Vector<int> intVector;
-			Vector<double> doubleVector;
-			Vector<Foo> fooVector;
-
-			Assert::AreEqual(intVector.begin(), intVector.end());
-			Assert::AreEqual(doubleVector.begin(), doubleVector.end());
-			Assert::AreEqual(fooVector.begin(), fooVector.end());
-
-			Assert::AreEqual(intVector.cbegin(), intVector.cend());
-			Assert::AreEqual(doubleVector.cbegin(), doubleVector.cend());
-			Assert::AreEqual(fooVector.cbegin(), fooVector.cend());
-
-			intVector.PushBack(10);
-			doubleVector.PushBack(10);
-			fooVector.PushBack(Foo(10));
-
-			intVector.PushBack(10);
-			doubleVector.PushBack(10);
-			fooVector.PushBack(Foo(10));
+			Vector<int> intVector{ 10, 10 };
+			Vector<double> doubleVector{ 10, 10 };
+			Vector<Foo> fooVector{ Foo(10), Foo(10) };
 
 			Vector<int>::Iterator intIterator = intVector.begin();
 			Vector<double>::Iterator doubleIterator = doubleVector.begin();
@@ -353,11 +333,19 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(*fooConstIterator, Foo(10));
 	}
 
-		TEST_METHOD(VectorInitialization)
+		TEST_METHOD(Initialization)
 		{
 			Vector<int> intVectorEmpty = Vector<int>(1);
 			Vector<double> doubleVectorEmpty = Vector<double>(1);
 			Vector<Foo> fooVectorEmpty = Vector<Foo>(1);
+
+			Assert::AreEqual(intVectorEmpty.begin(), intVectorEmpty.end());
+			Assert::AreEqual(doubleVectorEmpty.begin(), doubleVectorEmpty.end());
+			Assert::AreEqual(fooVectorEmpty.begin(), fooVectorEmpty.end());
+
+			Assert::AreEqual(intVectorEmpty.cbegin(), intVectorEmpty.cend());
+			Assert::AreEqual(doubleVectorEmpty.cbegin(), doubleVectorEmpty.cend());
+			Assert::AreEqual(fooVectorEmpty.cbegin(), fooVectorEmpty.cend());
 
 			Assert::AreEqual(intVectorEmpty.Size(), 0_z);
 			Assert::AreEqual(doubleVectorEmpty.Size(), 0_z);
@@ -894,18 +882,6 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(*intVector.begin(), 10);
 			Assert::AreEqual(*doubleVector.begin(), 10.0);
 			Assert::AreEqual(*fooVector.begin(), Foo(10));
-
-			const Vector<int> filledIntVectorCopy = intVector;
-			const Vector<double> filledDoubleVectorCopy = doubleVector;
-			const Vector<Foo> filledfooVectorCopy = fooVector;
-
-			Assert::AreEqual(*filledIntVectorCopy.begin(), 10);
-			Assert::AreEqual(*filledDoubleVectorCopy.begin(), 10.0);
-			Assert::AreEqual(*filledfooVectorCopy.begin(), Foo(10));
-
-			Assert::AreEqual(*intVector.cbegin(), 10);
-			Assert::AreEqual(*doubleVector.cbegin(), 10.0);
-			Assert::AreEqual(*fooVector.cbegin(), Foo(10));
 		}
 
 		TEST_METHOD(End)

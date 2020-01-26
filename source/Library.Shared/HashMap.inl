@@ -1,5 +1,6 @@
-#include "HashMap.h"
 #pragma once
+
+#include "HashMap.h"
 
 namespace Library
 {
@@ -36,9 +37,7 @@ namespace Library
 	template<typename TKey, typename TData>
 	inline bool HashMap<TKey, TData>::Iterator::operator!=(const Iterator& rhs) const noexcept
 	{
-		if (mOwner != rhs.mOwner) return true;
-		// TODO: Set Equality functor for SLists
-		return mChainIterator == rhs.mChainIterator;
+		return (mOwner != rhs.mOwner || mChainIterator != rhs.mChainIterator);
 	}
 
 	template<typename TKey, typename TData>
@@ -49,7 +48,7 @@ namespace Library
 			throw std::runtime_error("Iterator invalid.");
 		}
 
-		if (mBucketIterator == mBuckets.end())
+		if (mBucketIterator == mOwner->mBuckets.end())
 		{
 			throw std::out_of_range("Iterator out of bounds.");
 		}
@@ -61,11 +60,15 @@ namespace Library
 
 		if (mChainIterator == mBucketIterator->end())
 		{
-			while (++mBucketIterator != mBuckets.end() && mBucketIterator->IsEmpty());
+			while (++mBucketIterator != mOwner->mBuckets.end() && mBucketIterator->IsEmpty());
 
-			if (mBucketIterator != mBuckets.end())
+			if (mBucketIterator != mOwner->mBuckets.end())
 			{
 				mChainIterator = mBucketIterator->begin();
+			}
+			else
+			{
+				mChainIterator = (mBucketIterator - 1)->end();
 			}
 		}
 
@@ -89,7 +92,7 @@ namespace Library
 	}
 
 	template<typename TKey, typename TData>
-	inline HashMap<TKey, TData>::ConstIterator::ConstIterator(const HashMap& hashMap, const typename BucketType::Iterator& bucketIterator, const typename ChainType::Iterator& chainIterator) :
+	inline HashMap<TKey, TData>::ConstIterator::ConstIterator(const HashMap& hashMap, const typename BucketType::ConstIterator& bucketIterator, const typename ChainType::ConstIterator& chainIterator) :
 		mOwner(&hashMap), mBucketIterator(bucketIterator), mChainIterator(chainIterator)
 	{
 	}
@@ -120,16 +123,7 @@ namespace Library
 	template<typename TKey, typename TData>
 	inline bool HashMap<TKey, TData>::ConstIterator::operator!=(const ConstIterator& rhs) const noexcept
 	{
-		if (mOwner != rhs.mOwner) return;
-
-		bool isEqual = mKeyEqualityFunctor(mChainIterator->first, rhs.mChainIterator->first);
-
-		if (isEqual)
-		{
-			isEqual = mDataEqualityFunctor(mChainIterator->second, rhs.mChainIterator->second);
-		}
-
-		return isEqual;
+		return (mOwner != rhs.mOwner || mChainIterator != rhs.mChainIterator);
 	}
 
 	template<typename TKey, typename TData>
@@ -140,7 +134,7 @@ namespace Library
 			throw std::runtime_error("ConstIterator invalid.");
 		}
 
-		if (mBucketIterator == mBuckets.end())
+		if (mBucketIterator == mOwner->mBuckets.end())
 		{
 			throw std::out_of_range("ConstIterator out of bounds.");
 		}
@@ -152,11 +146,15 @@ namespace Library
 
 		if (mChainIterator == mBucketIterator->end())
 		{
-			while (++mBucketIterator != mBuckets.end() && mBucketIterator->IsEmpty());
+			while (++mBucketIterator != mOwner->mBuckets.end() && mBucketIterator->IsEmpty());
 
-			if (mBucketIterator != mBuckets.end())
+			if (mBucketIterator != mOwner->mBuckets.end())
 			{
 				mChainIterator = mBucketIterator->begin();
+			}
+			else
+			{
+				mChainIterator = (mBucketIterator - 1)->end();
 			}
 		}
 
@@ -174,54 +172,24 @@ namespace Library
 
 #pragma region Constructors
 	template<typename TKey, typename TData>
-	inline HashMap<TKey, TData>::HashMap(const size_t capacity, const KeyEqualityFunctor keyEqualityFunctor, const DataEqualityFunctor dataEqualityFunctor, const HashFunctor hashFunctor) :
-		mKeyEqualityFunctor(keyEqualityFunctor), mDataEqualityFunctor(dataEqualityFunctor), mHashFunctor(hashFunctor)
-	{
-		mBuckets.Resize(capacity);	
-	}
-
-	template<typename TKey, typename TData>
-	inline HashMap<TKey, TData>::HashMap(const HashMap& rhs) :
-		mBuckets(rhs.mBuckets), mSize(rhs.mSize), mKeyEqualityFunctor(rhs.mKeyEqualityFunctor), mDataEqualityFunctor(mDataEqualityFunctor), mHashFunctor(rhs.mHashFunctor)
-	{
-	}
-
-	template<typename TKey, typename TData>
-	inline HashMap<TKey, TData>::HashMap(HashMap&& rhs) noexcept :
-		mBuckets(std::move(rhs.mBuckets)), mSize(rhs.mSize), mKeyEqualityFunctor(rhs.mKeyEqualityFunctor), mDataEqualityFunctor(mDataEqualityFunctor), mHashFunctor(rhs.mHashFunctor)
-	{
+	inline HashMap<TKey, TData>::HashMap(const size_t bucketCount, const KeyEqualityFunctor keyEqualityFunctor, const HashFunctor hashFunctor) :
+		mKeyEqualityFunctor(keyEqualityFunctor), mHashFunctor(hashFunctor)
+	{		
+		mBuckets.Resize(std::max(bucketCount, std::size_t(1)));
 	}
 #pragma endregion Constructors
-
-#pragma region Assignment Operators
-	template<typename TKey, typename TData>
-	inline HashMap<TKey, TData>& HashMap<TKey, TData>::operator=(const HashMap& rhs)
-	{
-		mBuckets = rhs.mBuckets;
-		mSize = rhs.mSize;
-		mKeyEqualityFunctor = rhs.mKeyEqualityFunctor;
-		mDataEqualityFunctor = rhs.mDataEqualityFunctor;
-		mHashFunctor = rhs.mHashFunctor;
-	}
-	
-	template<typename TKey, typename TData>
-	inline HashMap<TKey, TData>& HashMap<TKey, TData>::operator=(HashMap&& rhs) noexcept
-	{
-		mBuckets = std::move(rhs.mBuckets);
-		mSize = rhs.mSize;
-		mKeyEqualityFunctor = rhs.mKeyEqualityFunctor;
-		mDataEqualityFunctor = rhs.mDataEqualityFunctor;
-		mHashFunctor = rhs.mHashFunctor;
-
-		rhs.mSize = 0;
-	}
-#pragma endregion Assignment Operators
 
 #pragma region Size and Capacity
 	template<typename TKey, typename TData>
 	inline std::size_t HashMap<TKey, TData>::Size() const
 	{
 		return mSize;
+	}
+
+	template<typename TKey, typename TData>
+	inline std::size_t HashMap<TKey, TData>::BucketCount() const
+	{
+		return mBuckets.Capacity();
 	}
 
 	template<typename TKey, typename TData>
@@ -237,7 +205,7 @@ namespace Library
 	{
 		if (mSize == 0)
 		{
-			return Iterator(*this, mBuckets.end(), (mBuckets.end() - 1)->end());
+			return end();
 		}
 
 		BucketType::Iterator bucketIterator = mBuckets.begin();
@@ -259,14 +227,14 @@ namespace Library
 	template<typename TKey, typename TData>
 	inline typename HashMap<TKey, TData>::ConstIterator HashMap<TKey, TData>::begin() const
 	{
-		Iterator it = const_cast<HashMap<TKey, TData>>(*this).begin();
+		Iterator it = const_cast<HashMap<TKey, TData>*>(this)->begin();
 		return ConstIterator(it);
 	}
 
 	template<typename TKey, typename TData>
 	inline typename HashMap<TKey, TData>::ConstIterator HashMap<TKey, TData>::cbegin() const
 	{
-		Iterator it = const_cast<HashMap<TKey, TData>>(*this).begin();
+		Iterator it = const_cast<HashMap<TKey, TData>*>(this)->begin();
 		return ConstIterator(it);
 	}
 
@@ -279,51 +247,178 @@ namespace Library
 	template<typename TKey, typename TData>
 	inline typename HashMap<TKey, TData>::ConstIterator HashMap<TKey, TData>::end() const
 	{
-		return Iterator(*this, mBuckets.end(), (mBuckets.end() - 1)->end());
+		Iterator it = const_cast<HashMap<TKey, TData>*>(this)->end();
+		return ConstIterator(it);
 	}
 
 	template<typename TKey, typename TData>
 	inline typename HashMap<TKey, TData>::ConstIterator HashMap<TKey, TData>::cend() const
 	{
-		return Iterator(*this, mBuckets.end(), (mBuckets.end() - 1)->end());
+		Iterator it = const_cast<HashMap<TKey, TData>*>(this)->end();
+		return ConstIterator(it);
 	}
 
 	template<typename TKey, typename TData>
-	inline typename HashMap<TKey, TData>::Iterator HashMap<TKey, TData>::Find(const TKey& value)
+	inline typename HashMap<TKey, TData>::Iterator HashMap<TKey, TData>::Find(const TKey& key)
 	{
-		if (!mKeyEqualityFunctor || !mDataEqualityFunctor)
-		{
-			throw std::runtime_error("Missing equality functor.");
-		}
+		const std::size_t index = mHashFunctor(key) % mBuckets.Capacity();
 
-		for (std::size_t i = 0; i < mSize; ++i)
+		ChainType chain = mBuckets[index];
+
+		ChainType::Iterator chainIterator = chain.begin();
+		for (; chainIterator != chain.end(); ++chainIterator)
 		{
-			if (mEqualityFunctor(mData[i], value))
+			if (mKeyEqualityFunctor(key, chainIterator->first))
 			{
-				return Iterator(*this, i);
+				break;
 			}
 		}
 
-		return Iterator(*this, mSize);
+		if (chainIterator != chain.end())
+		{
+			return Iterator(*this, mBuckets.begin()[index], chainIterator);
+		}
+
+		return end();
 	}
 
 	template<typename TKey, typename TData>
-	inline typename HashMap<TKey, TData>::ConstIterator HashMap<TKey, TData>::Find(const TKey& value) const
+	inline typename HashMap<TKey, TData>::ConstIterator HashMap<TKey, TData>::Find(const TKey& key) const
 	{
-		if (!mKeyEqualityFunctor || !mDataEqualityFunctor)
-		{
-			throw std::runtime_error("Missing equality functor.");
-		}
+		const std::size_t index = mHashFunctor(key) % mBuckets.Capacity();
 
-		for (std::size_t i = 0; i < mSize; ++i)
+		ChainType chain = mBuckets[index];
+
+		ChainType::ConstIterator chainIterator = chain.cbegin();
+		for (; chainIterator != chain.cend(); ++chainIterator)
 		{
-			if (mEqualityFunctor(mData[i], value))
+			if (mKeyEqualityFunctor(key, chainIterator->first))
 			{
-				return ConstIterator(*this, i);
+				break;
 			}
 		}
 
-		return ConstIterator(*this, mSize);
+		if (chainIterator != chain.cend())
+		{
+			return ConstIterator(*this, mBuckets.cbegin()[index], chainIterator);
+		}
+
+		return cend();
 	}
 #pragma endregion Iterator Accessors
+
+#pragma region Element Accessors
+	template<typename TKey, typename TData>
+	inline TData& HashMap<TKey, TData>::At(const TKey& key)
+	{
+		Iterator it = Find(key);
+
+		if (it == end())
+		{
+			throw std::out_of_range("TKey not found.");
+		}
+
+		return it->second;
+	}
+
+	template<typename TKey, typename TData>
+	inline const TData& HashMap<TKey, TData>::At(const TKey& key) const
+	{
+		ConstIterator it = Find(key);
+
+		if (it == end())
+		{
+			throw std::out_of_range("TKey not found.");
+		}
+
+		return it->second;
+	}
+
+	template<typename TKey, typename TData>
+	inline TData& HashMap<TKey, TData>::operator[](const TKey& key)
+	{
+		return Insert({ key, TData() }).first->second;
+	}
+
+	template<typename TKey, typename TData>
+	inline const TData& HashMap<TKey, TData>::operator[](const TKey& key) const
+	{
+		return At(key);
+	}
+	
+	template<typename TKey, typename TData>
+	inline bool HashMap<TKey, TData>::ContainsKey(const TKey& key) const
+	{
+		return Find(key) != end();
+	}
+#pragma endregion Element Accessors
+
+#pragma region Modifiers
+	template<typename TKey, typename TData>
+	inline std::pair<typename HashMap<TKey, TData>::Iterator, bool> HashMap<TKey, TData>::Insert(const PairType& entry)
+	{
+		const std::size_t index = mHashFunctor(entry.first) % mBuckets.Capacity();
+		
+		ChainType& chain = mBuckets[index];
+
+		ChainType::Iterator chainIterator = chain.begin();
+		for (; chainIterator != chain.end(); ++chainIterator)
+		{
+			if (mKeyEqualityFunctor(entry.first, chainIterator->first))
+			{
+				break;
+			}
+		}
+		
+		bool alreadyExists = chainIterator != chain.end();
+		
+		if (!alreadyExists)
+		{
+			chainIterator = chain.InsertAfter(chainIterator, entry);
+			++mSize;
+		}
+
+		return { Iterator(*this, mBuckets.begin()[index], chainIterator), !alreadyExists };
+	}
+
+	template<typename TKey, typename TData>
+	inline bool HashMap<TKey, TData>::Remove(const TKey& key)
+	{
+		const std::size_t index = mHashFunctor(key) % mBuckets.Capacity();
+
+		ChainType chain = mBuckets[index];
+
+		ChainType::Iterator chainIterator = chain.begin();
+		for (; chainIterator != chain.end; ++chainIterator)
+		{
+			if (mKeyEqualityFunctor(key, chainIterator->first))
+			{
+				break;
+			}
+		}
+
+		return chain.Remove(chainIterator);
+	}
+
+	template<typename TKey, typename TData>
+	inline bool HashMap<TKey, TData>::Remove(const Iterator& it)
+	{
+		const std::size_t index = mHashFunctor(it->first) % mBuckets.Capacity();
+
+		ChainType chain = mBuckets[index];
+
+		return chain.Remove(chainIterator);
+	}
+
+	template<typename TKey, typename TData>
+	inline void HashMap<TKey, TData>::Clear()
+	{
+		for (ChainType chain : mBuckets)
+		{
+			chain.Clear();
+		}
+
+		mSize = 0;
+	}
+#pragma endregion Modifiers
 }
