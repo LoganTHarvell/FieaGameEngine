@@ -89,7 +89,7 @@ namespace Library
 			/// <summary>
 			/// Iterator category for std::iterator_trait.
 			/// </summary>
-			using iterator_category = std::forward_iterator_tag;
+			using iterator_category = std::bidirectional_iterator_tag;
 #pragma endregion Iterator Traits
 
 		public:
@@ -265,7 +265,7 @@ namespace Library
 			/// <summary>
 			/// Iterator category for std::iterator_trait.
 			/// </summary>
-			using iterator_category = std::forward_iterator_tag;
+			using iterator_category = std::bidirectional_iterator_tag;
 #pragma endregion Iterator Traits
 
 		public:
