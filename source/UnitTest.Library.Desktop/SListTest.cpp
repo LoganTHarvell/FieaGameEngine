@@ -1034,10 +1034,10 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(fooIterator, fooList.Find(Foo(30)));
 			Assert::AreEqual(barIterator, barList.Find(Bar(30)));
 
-			Assert::AreEqual(SList<int>::Iterator(), intList.Find(40));
-			Assert::AreEqual(SList<double>::Iterator(), doubleList.Find(40));
-			Assert::AreEqual(SList<Foo>::Iterator(), fooList.Find(Foo(40)));
-			Assert::AreEqual(SList<Bar>::Iterator(), barList.Find(Bar(40)));
+			Assert::AreEqual(intList.end(), intList.Find(40));
+			Assert::AreEqual(doubleList.end(), doubleList.Find(40));
+			Assert::AreEqual(fooList.end(), fooList.Find(Foo(40)));
+			Assert::AreEqual(barList.end(), barList.Find(Bar(40)));
 			
 			SList<int>::ConstIterator constIntIterator = constIntList.begin();
 			SList<double>::ConstIterator constDoubleIterator = constDoubleList.begin();
@@ -1059,10 +1059,10 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(constFooIterator, constFooList.Find(Foo(30)));
 			Assert::AreEqual(constBarIterator, constBarList.Find(Bar(30)));
 
-			Assert::AreEqual(SList<int>::ConstIterator(), constIntList.Find(40));
-			Assert::AreEqual(SList<double>::ConstIterator(), constDoubleList.Find(40));
-			Assert::AreEqual(SList<Foo>::ConstIterator(), constFooList.Find(Foo(40)));
-			Assert::AreEqual(SList<Bar>::ConstIterator(), constBarList.Find(Bar(40)));
+			Assert::AreEqual(constIntList.cend(), constIntList.Find(40));
+			Assert::AreEqual(constDoubleList.cend(), constDoubleList.Find(40));
+			Assert::AreEqual(constFooList.cend(), constFooList.Find(Foo(40)));
+			Assert::AreEqual(constBarList.cend(), constBarList.Find(Bar(40)));
 		}
 
 		TEST_METHOD(InsertAfter)

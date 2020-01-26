@@ -326,29 +326,31 @@ namespace Library
 	template<typename T>
 	inline typename SList<T>::Iterator SList<T>::Find(const T& value)
 	{
-		for (auto it = begin(); it != end(); ++it)
+		auto it = begin();
+		for (; it != end(); ++it)
 		{
 			if (mEqualityFunctor(*it, value))
 			{
-				return it;
+				break;
 			}
 		}
 
-		return Iterator();
+		return it;
 	}
 
 	template<typename T>
 	inline typename SList<T>::ConstIterator SList<T>::Find(const T& value) const
 	{
-		for (auto it = begin(); it != end(); ++it)
+		auto it = cbegin();
+		for (; it != cend(); ++it)
 		{
 			if (mEqualityFunctor(*it, value))
 			{
-				return ConstIterator(it);
+				break;
 			}
 		}
 
-		return ConstIterator();
+		return it;
 	}
 #pragma endregion Iterator Accessors
 
