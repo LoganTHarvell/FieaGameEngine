@@ -1007,27 +1007,7 @@ namespace UnitTestLibraryDesktop
 			SList<int> intList = { 10, 20, 30 };
 			SList<double> doubleList = { 10, 20, 30 };
 			SList<Foo> fooList = { Foo(10), Foo(20), Foo(30) };
-			SList<Bar> barList = { Bar(10), Bar(20), Bar(30) };
-
-			const SList<int> noEqualityConstIntList = intList;
-			const SList<double> noEqualityConstDoubleList = doubleList;
-			const SList<Foo> noEqualityConstFooList = fooList;
-			const SList<Bar> noEqualityConstBarList = barList;
-
-			Assert::ExpectException<std::runtime_error>([&intList] { intList.Find(10); });
-			Assert::ExpectException<std::runtime_error>([&doubleList] { doubleList.Find(10); });
-			Assert::ExpectException<std::runtime_error>([&fooList] { fooList.Find(Foo(10)); });
-			Assert::ExpectException<std::runtime_error>([&barList] { barList.Find(Bar(10)); });
-
-			Assert::ExpectException<std::runtime_error>([&noEqualityConstIntList] { noEqualityConstIntList.Find(10); });
-			Assert::ExpectException<std::runtime_error>([&noEqualityConstDoubleList] { noEqualityConstDoubleList.Find(10); });
-			Assert::ExpectException<std::runtime_error>([&noEqualityConstFooList] { noEqualityConstFooList.Find(Foo(10)); });
-			Assert::ExpectException<std::runtime_error>([&noEqualityConstBarList] { noEqualityConstBarList.Find(Bar(10)); });
-
-			intList.SetEqualityFunctor(DefaultEquality<int>());
-			doubleList.SetEqualityFunctor(DefaultEquality<double>());
-			fooList.SetEqualityFunctor(DefaultEquality<Foo>());
-			barList.SetEqualityFunctor([](Bar a, Bar b) { return a.Data() == b.Data(); });
+			SList<Bar> barList = SList<Bar>({ Bar(10), Bar(20), Bar(30) }, [](Bar a, Bar b) { return a.Data() == b.Data(); });
 
 			const SList<int> constIntList = intList;
 			const SList<double> constDoubleList = doubleList;

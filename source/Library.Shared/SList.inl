@@ -152,13 +152,11 @@ namespace Library
 	}
 #pragma endregion ConstIterator
 
-#pragma region SList
-
 #pragma region Constructors and Destructor
 	template<typename T>
-	inline SList<T>::SList(const EqualityFunctor equalityFunctor)
+	inline SList<T>::SList(const EqualityFunctor equalityFunctor) :
+		mEqualityFunctor(equalityFunctor)
 	{
-		mEqualityFunctor = equalityFunctor;
 	}
 
 	template<typename T>
@@ -168,14 +166,13 @@ namespace Library
 	}
 
 	template<typename T>
-	inline SList<T>::SList(const SList& rhs)
+	inline SList<T>::SList(const SList& rhs) :
+		mEqualityFunctor(rhs.mEqualityFunctor)
 	{
 		for (const auto& value : rhs)
 		{
 			PushBack(value);
 		}
-
-		mEqualityFunctor = rhs.mEqualityFunctor;
 	}
 
 	template<typename T>
@@ -188,7 +185,8 @@ namespace Library
 	}
 
 	template<typename T>
-	inline SList<T>::SList(const std::initializer_list<T> rhs)
+	inline SList<T>::SList(const std::initializer_list<T> rhs, const EqualityFunctor equalityFunctor) :
+		mEqualityFunctor(equalityFunctor)
 	{
 		for (const auto& value : rhs)
 		{
@@ -198,19 +196,6 @@ namespace Library
 #pragma endregion Constructors and Destructor
 
 #pragma region Assignment Operators
-	template<typename T>
-	inline SList<T>& SList<T>::operator=(const std::initializer_list<T> rhs)
-	{
-		Clear();
-
-		for (const auto& value : rhs)
-		{
-			PushBack(value);
-		}
-
-		return *this;
-	}
-
 	template<typename T>
 	inline SList<T>& SList<T>::operator=(const SList& rhs)
 	{
@@ -223,6 +208,8 @@ namespace Library
 				PushBack(value);
 			}
 		}
+
+		mEqualityFunctor = rhs.mEqualityFunctor;
 
 		return *this;
 	}
@@ -242,6 +229,19 @@ namespace Library
 			rhs.mSize = 0;
 			rhs.mFront = nullptr;
 			rhs.mBack = nullptr;
+		}
+
+		return *this;
+	}
+
+	template<typename T>
+	inline SList<T>& SList<T>::operator=(const std::initializer_list<T> rhs)
+	{
+		Clear();
+
+		for (const auto& value : rhs)
+		{
+			PushBack(value);
 		}
 
 		return *this;
@@ -326,11 +326,6 @@ namespace Library
 	template<typename T>
 	inline typename SList<T>::Iterator SList<T>::Find(const T& value)
 	{
-		if (!mEqualityFunctor)
-		{
-			throw std::runtime_error("Missing equality functor.");
-		}
-
 		for (auto it = begin(); it != end(); ++it)
 		{
 			if (mEqualityFunctor(*it, value))
@@ -345,11 +340,6 @@ namespace Library
 	template<typename T>
 	inline typename SList<T>::ConstIterator SList<T>::Find(const T& value) const
 	{
-		if (!mEqualityFunctor)
-		{
-			throw std::runtime_error("Missing equality functor.");
-		}
-
 		for (auto it = begin(); it != end(); ++it)
 		{
 			if (mEqualityFunctor(*it, value))
@@ -556,13 +546,5 @@ namespace Library
 		mFront = nullptr;
 		mBack = nullptr;
 	}
-
-	template<typename T>
-	inline void SList<T>::SetEqualityFunctor(const EqualityFunctor equalityFunctor)
-	{
-		mEqualityFunctor = equalityFunctor;
-	}
-}
 #pragma endregion Modifiers
-
-#pragma endregion SList
+}

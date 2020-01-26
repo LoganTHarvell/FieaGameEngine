@@ -280,6 +280,14 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(*doubleConstIterator, 10.0);
 			Assert::AreEqual(*fooConstIterator, Foo(10));
 
+			Assert::AreEqual(*(intIterator[2]), 30);
+			Assert::AreEqual(*(doubleIterator[2]), 30.0);
+			Assert::AreEqual(*(fooIterator[2]), Foo(30));
+
+			Assert::AreEqual(*(intConstIterator[2]), 30);
+			Assert::AreEqual(*(doubleConstIterator[2]), 30.0);
+			Assert::AreEqual(*(fooConstIterator[2]), Foo(30));
+
 			Vector<int>::Iterator intPrevIterator = intIterator++;
 			Vector<double>::Iterator doublePrevIterator = doubleIterator++;
 			Vector<Foo>::Iterator fooPrevIterator = fooIterator++;
@@ -404,9 +412,6 @@ namespace UnitTestLibraryDesktop
 			Vector<double> doubleVector = { 10, 20, 30 };
 			Vector<Foo> fooVector = { Foo(10), Foo(20), Foo(30) };
 
-			intVector.SetEqualityFunctor(DefaultEquality<int>());
-			doubleVector.SetEqualityFunctor(DefaultEquality<double>());
-			fooVector.SetEqualityFunctor(DefaultEquality<Foo>());
 
 			/* Integer Data */
 
@@ -574,6 +579,15 @@ namespace UnitTestLibraryDesktop
 		{
 			/* Integer Data */
 
+			{
+				Vector<int> doubleVector(0, DefaultEquality<int>(), [](const std::size_t, const std::size_t capacity) { return capacity * 2; });
+				doubleVector.Resize(10);
+				doubleVector.PushBack(10);
+
+				Assert::AreEqual(doubleVector.Size(), 11_z);
+				Assert::AreEqual(doubleVector.Capacity(), 20_z);
+			}
+
 			// Size is zero
 			Vector<int> intVector;
 			Assert::AreEqual(intVector.Size(), 0_z);
@@ -634,13 +648,6 @@ namespace UnitTestLibraryDesktop
 			const Vector<int> decreasedConstIntVector = intVector;
 			Assert::AreEqual(decreasedConstIntVector.Size(), 4_z);
 			Assert::AreEqual(decreasedConstIntVector.Capacity(), 6_z);
-
-			intVector.Resize(10);
-			intVector.SetReserveStrategy([](const std::size_t, const std::size_t capacity) { return capacity * 2; });
-			intVector.PushBack(10);
-
-			Assert::AreEqual(intVector.Size(), 11_z);
-			Assert::AreEqual(intVector.Capacity(), 20_z);
 			
 			intVector.Clear();
 			Assert::AreEqual(intVector.Size(), 0_z);
@@ -650,6 +657,15 @@ namespace UnitTestLibraryDesktop
 
 
 			/* Double Data */
+
+			{
+				Vector<double> doubleVector(0, DefaultEquality<double>(), [](const std::size_t, const std::size_t capacity) { return capacity * 2; });
+				doubleVector.Resize(10);
+				doubleVector.PushBack(10);
+
+				Assert::AreEqual(doubleVector.Size(), 11_z);
+				Assert::AreEqual(doubleVector.Capacity(), 20_z);
+			}
 
 			// Size is zero
 			Vector<double> doubleVector;
@@ -712,13 +728,6 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(doubleDecreasedConstVector.Size(), 4_z);
 			Assert::AreEqual(doubleDecreasedConstVector.Capacity(), 6_z);
 
-			doubleVector.Resize(10);
-			doubleVector.SetReserveStrategy([](const std::size_t, const std::size_t capacity) { return capacity * 2; });
-			doubleVector.PushBack(10);
-
-			Assert::AreEqual(doubleVector.Size(), 11_z);
-			Assert::AreEqual(doubleVector.Capacity(), 20_z);
-
 			doubleVector.Clear();
 			Assert::AreEqual(doubleVector.Size(), 0_z);
 			doubleVector.ShrinkToFit();
@@ -727,6 +736,15 @@ namespace UnitTestLibraryDesktop
 
 
 			/* Foo Data */
+
+			{
+				Vector<Foo> fooVector(0, DefaultEquality<Foo>(), [](const std::size_t, const std::size_t capacity) { return capacity * 2; });
+				fooVector.Resize(10);
+				fooVector.PushBack(Foo(10));
+
+				Assert::AreEqual(fooVector.Size(), 11_z);
+				Assert::AreEqual(fooVector.Capacity(), 20_z);
+			}
 
 			// Size is zero
 			Vector<Foo> fooVector;
@@ -788,13 +806,6 @@ namespace UnitTestLibraryDesktop
 			const Vector<Foo> decreasedConstfooVector = fooVector;
 			Assert::AreEqual(decreasedConstfooVector.Size(), 4_z);
 			Assert::AreEqual(decreasedConstfooVector.Capacity(), 6_z);
-
-			fooVector.Resize(10);
-			fooVector.SetReserveStrategy([](const std::size_t, const std::size_t capacity) { return capacity * 2; });
-			fooVector.PushBack(Foo(10));
-
-			Assert::AreEqual(fooVector.Size(), 11_z);
-			Assert::AreEqual(fooVector.Capacity(), 20_z);
 
 			fooVector.Clear();
 			Assert::AreEqual(fooVector.Size(), 0_z);
@@ -1187,27 +1198,7 @@ namespace UnitTestLibraryDesktop
 			Vector<int> intVector = { 10, 20, 30 };
 			Vector<double> doubleVector = { 10, 20, 30 };
 			Vector<Foo> fooVector = { Foo(10), Foo(20), Foo(30) };
-			Vector<Bar> barVector = { Bar(10), Bar(20), Bar(30) };
-
-			const Vector<int> noEqualityConstIntVector = intVector;
-			const Vector<double> noEqualityConstDoubleVector = doubleVector;
-			const Vector<Foo> noEqualityConstfooVector = fooVector;
-			const Vector<Bar> noEqualityConstBarVector = barVector;
-
-			Assert::ExpectException<std::runtime_error>([&intVector] { intVector.Find(10); });
-			Assert::ExpectException<std::runtime_error>([&doubleVector] { doubleVector.Find(10); });
-			Assert::ExpectException<std::runtime_error>([&fooVector] { fooVector.Find(Foo(10)); });
-			Assert::ExpectException<std::runtime_error>([&barVector] { barVector.Find(Bar(10)); });
-
-			Assert::ExpectException<std::runtime_error>([&noEqualityConstIntVector] { noEqualityConstIntVector.Find(10); });
-			Assert::ExpectException<std::runtime_error>([&noEqualityConstDoubleVector] { noEqualityConstDoubleVector.Find(10); });
-			Assert::ExpectException<std::runtime_error>([&noEqualityConstfooVector] { noEqualityConstfooVector.Find(Foo(10)); });
-			Assert::ExpectException<std::runtime_error>([&noEqualityConstBarVector] { noEqualityConstBarVector.Find(Bar(10)); });
-
-			intVector.SetEqualityFunctor(DefaultEquality<int>());
-			doubleVector.SetEqualityFunctor(DefaultEquality<double>());
-			fooVector.SetEqualityFunctor(DefaultEquality<Foo>());
-			barVector.SetEqualityFunctor([](Bar a, Bar b) { return a.Data() == b.Data(); });
+			Vector<Bar> barVector = Vector<Bar>({ Bar(10), Bar(20), Bar(30) }, [](Bar a, Bar b) { return a.Data() == b.Data(); });
 
 			const Vector<int> constIntVector = intVector;
 			const Vector<double> constDoubleVector = doubleVector;
@@ -1270,9 +1261,6 @@ namespace UnitTestLibraryDesktop
 			/* Integer Data */
 
 			Vector<int> intVector = { 10, 20 };
-
-			Assert::ExpectException<std::runtime_error>([&intVector] { intVector.Remove(10); });
-			intVector.SetEqualityFunctor(DefaultEquality<int>());
 			Assert::ExpectException<std::runtime_error>([&intVector] { intVector.Remove(Vector<int>::Iterator()); });
 
 			intVector.Remove(intVector.begin());
@@ -1299,9 +1287,6 @@ namespace UnitTestLibraryDesktop
 			/* Double Data */
 
 			Vector<double> doubleVector = { 10, 20 };
-
-			Assert::ExpectException<std::runtime_error>([&doubleVector] { doubleVector.Remove(10); });
-			doubleVector.SetEqualityFunctor(DefaultEquality<double>());
 			Assert::ExpectException<std::runtime_error>([&doubleVector] { doubleVector.Remove(Vector<double>::Iterator()); });
 
 			doubleVector.Remove(doubleVector.begin());
@@ -1328,9 +1313,6 @@ namespace UnitTestLibraryDesktop
 			/* Foo Data */
 
 			Vector<Foo> fooVector = { Foo(10), Foo(20) };
-
-			Assert::ExpectException<std::runtime_error>([&fooVector] { fooVector.Remove(Foo(10)); });
-			fooVector.SetEqualityFunctor(DefaultEquality<Foo>());
 			Assert::ExpectException<std::runtime_error>([&fooVector] { fooVector.Remove(Vector<Foo>::Iterator()); });
 
 			fooVector.Remove(fooVector.begin());
