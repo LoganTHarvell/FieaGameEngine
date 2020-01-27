@@ -2,6 +2,7 @@
 
 #include "DefaultHash.h"
 #include "Foo.h"
+#include "Bar.h"
 
 
 using namespace std::string_literals;
@@ -20,6 +21,28 @@ namespace Library
 		int fooData = key.Data();
 		const uint8_t* data = reinterpret_cast<const uint8_t*>(&fooData);
 		return AdditiveHash(data, sizeof(int));
+	}
+
+	template<>
+	inline std::size_t DefaultHash<Bar>::operator()(const Bar& key) const
+	{
+		int fooData = key.Data();
+		const uint8_t* data = reinterpret_cast<const uint8_t*>(&fooData);
+		return AdditiveHash(data, sizeof(int));
+	}
+
+	template<typename T>
+	void TestHash()
+	{
+		DefaultHash<T> hash;
+
+		T a = T(10);
+		T b = T(20);
+		T c(a);
+
+		Assert::AreEqual(hash(a), hash(a));
+		Assert::IsTrue(hash(a) != hash(b));
+		Assert::AreEqual(hash(a), hash(c));
 	}
 }
 
@@ -50,82 +73,121 @@ namespace UnitTestLibraryDesktop
 #endif
 		}
 
-		TEST_METHOD(IntHash)
+		TEST_METHOD(Primitives)
 		{
-			DefaultHash<int> hash;
-
-			int a = 10;
-			int b = 20;
-			int c(a);
-
-			Assert::AreEqual(hash(a), hash(a));
-			Assert::IsTrue(hash(a) != hash(b));
-			Assert::AreEqual(hash(a), hash(c));
+			TestHash<int>();
+			TestHash<double>();
 		}
 
-		TEST_METHOD(DoubleHash)
+		TEST_METHOD(FooBarHash)
 		{
-			DefaultHash<double> hash;
-
-			double a = 10;
-			double b = 20;
-			double c(a);
-
-			Assert::AreEqual(hash(a), hash(a));
-			Assert::IsTrue(hash(a) != hash(b));
-			Assert::AreEqual(hash(a), hash(c));
-		}
-
-		TEST_METHOD(FooHash)
-		{
-			DefaultHash<Foo> hash;
-
-			Foo a = Foo(10);
-			Foo b = Foo(20);
-			Foo c(a);
-
-			Assert::AreEqual(hash(a), hash(a));
-			Assert::IsTrue(hash(a) != hash(b));
-			Assert::AreEqual(hash(a), hash(c));
+			TestHash<Foo>();
+			TestHash<Bar>();
 		}
 
 		TEST_METHOD(StringHash)
 		{
-			DefaultHash<std::string> hash;
+			{
+				DefaultHash<std::string> hash;
+	
+				std::string a = "Hello"s;
+				std::string b = "Goodbye"s;
+				std::string c(a);
+	
+				Assert::AreEqual(hash(a), hash(a));
+				Assert::IsTrue(hash(a) != hash(b));
+				Assert::AreEqual(hash(a), hash(c));
+			}
 
-			std::string a = "Hello"s;
-			std::string b = "Goodbye"s;
-			std::string c(a);
-
-			Assert::AreEqual(hash(a), hash(a));
-			Assert::IsTrue(hash(a) != hash(b));
-			Assert::AreEqual(hash(a), hash(c));
+			{
+				DefaultHash<const std::string> hash;
+	
+				std::string a = "Hello"s;
+				std::string b = "Goodbye"s;
+				std::string c(a);
+	
+				Assert::AreEqual(hash(a), hash(a));
+				Assert::IsTrue(hash(a) != hash(b));
+				Assert::AreEqual(hash(a), hash(c));
+			}
 		}
 
 		TEST_METHOD(WideStringHash)
 		{
-			DefaultHash<std::wstring> hash;
+			{
+				DefaultHash<std::wstring> hash;
+	
+				std::wstring a = L"Hello"s;
+				std::wstring b = L"Goodbye"s;
+				std::wstring c(a);
+	
+				Assert::AreEqual(hash(a), hash(a));
+				Assert::IsTrue(hash(a) != hash(b));
+				Assert::AreEqual(hash(a), hash(c));
+			}
 
-			std::wstring a = L"Hello"s;
-			std::wstring b = L"Goodbye"s;
-			std::wstring c(a);
-
-			Assert::AreEqual(hash(a), hash(a));
-			Assert::IsTrue(hash(a) != hash(b));
-			Assert::AreEqual(hash(a), hash(c));
+			{
+				DefaultHash<const std::wstring> hash;
+	
+				std::wstring a = L"Hello"s;
+				std::wstring b = L"Goodbye"s;
+				std::wstring c(a);
+	
+				Assert::AreEqual(hash(a), hash(a));
+				Assert::IsTrue(hash(a) != hash(b));
+				Assert::AreEqual(hash(a), hash(c));
+			}
 		}
 
 		TEST_METHOD(CharacterStringHash)
 		{
-			DefaultHash<char *> hash;
+			{
+				DefaultHash<char *> hash;
+	
+				char* a = "Hello";
+				char* b = "Goodbye";
+				char* c(a);
+	
+				Assert::AreEqual(hash(a), hash(a));
+				Assert::IsTrue(hash(a) != hash(b));
+				Assert::AreEqual(hash(a), hash(c));
+			}
 
-			char* a = "Hello";
-			char* b = "Goodbye";
-			char* c(a);
+			{
+				DefaultHash<const char *> hash;
+	
+				const char* a = "Hello";
+				const char* b = "Goodbye";
+				const char* c(a);
+	
+				Assert::AreEqual(hash(a), hash(a));
+				Assert::IsTrue(hash(a) != hash(b));
+				Assert::AreEqual(hash(a), hash(c));
+			}
 
-			Assert::AreEqual(hash(a), hash(a));
-			Assert::IsTrue(hash(a) != hash(b));
-			Assert::AreEqual(hash(a), hash(c));
+			{
+				DefaultHash<char * const> hash;
+	
+				char* const a = "Hello";
+				char* const b = "Goodbye";
+				char* const c(a);
+	
+				Assert::AreEqual(hash(a), hash(a));
+				Assert::IsTrue(hash(a) != hash(b));
+				Assert::AreEqual(hash(a), hash(c));
+			}
+
+			{
+				DefaultHash<const char * const> hash;
+	
+				const char* const a = "Hello";
+				const char* const b = "Goodbye";
+				const char* const c(a);
+	
+				Assert::AreEqual(hash(a), hash(a));
+				Assert::IsTrue(hash(a) != hash(b));
+				Assert::AreEqual(hash(a), hash(c));
+			}
 		}
 
 	private:

@@ -104,22 +104,81 @@ namespace UnitTestLibraryDesktop
 
 		TEST_METHOD(CharacterStringEquality)
 		{
-			DefaultEquality<char *> equality;
+			{
+				DefaultEquality<char *> equality;
+	
+				char* a = "Hello";
+				char* b = "Goodbye";
+				
+				char c[6];
+	
+	#if defined(_WIN32)
+				strcpy_s(c, a);
+	#else
+				strcpy(c, a);
+	#endif
+				 
+				Assert::IsTrue(equality(a, a));
+				Assert::IsFalse(equality(a, b));
+				Assert::IsTrue(equality(a, c));
+			}
 
-			char* a = "Hello";
-			char* b = "Goodbye";
-			
-			char c[6];
+			{
+				DefaultEquality<const char *> equality;
+	
+				const char* a = "Hello";
+				const char* b = "Goodbye";
+				
+				char c[6];
+	
+	#if defined(_WIN32)
+				strcpy_s(c, a);
+	#else
+				strcpy(c, a);
+	#endif
+				 
+				Assert::IsTrue(equality(a, a));
+				Assert::IsFalse(equality(a, b));
+				Assert::IsTrue(equality(a, c));
+			}
 
-#if defined(_WIN32)
-			strcpy_s(c, a);
-#else
-			strcpy(c, a);
-#endif
-			 
-			Assert::IsTrue(equality(a, a));
-			Assert::IsFalse(equality(a, b));
-			Assert::IsTrue(equality(a, c));
+			{
+				DefaultEquality<char * const > equality;
+	
+				char* const a = "Hello";
+				char* const b = "Goodbye";
+				
+				char c[6];
+	
+	#if defined(_WIN32)
+				strcpy_s(c, a);
+	#else
+				strcpy(c, a);
+	#endif
+				 
+				Assert::IsTrue(equality(a, a));
+				Assert::IsFalse(equality(a, b));
+				Assert::IsTrue(equality(a, c));
+			}
+
+			{
+				DefaultEquality<const char * const> equality;
+	
+				const char* const a = "Hello";
+				const char* const b = "Goodbye";
+				
+				char c[6];
+	
+	#if defined(_WIN32)
+				strcpy_s(c, a);
+	#else
+				strcpy(c, a);
+	#endif
+				 
+				Assert::IsTrue(equality(a, a));
+				Assert::IsFalse(equality(a, b));
+				Assert::IsTrue(equality(a, c));
+			}
 		}
 
 	private:

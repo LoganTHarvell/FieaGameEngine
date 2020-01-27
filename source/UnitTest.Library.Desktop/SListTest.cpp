@@ -151,6 +151,14 @@ namespace UnitTestLibraryDesktop
 
 		TEST_METHOD(IteratorIncrementOperators)
 		{
+			Assert::ExpectException<std::runtime_error>([] { ++SList<int>::Iterator(); });
+			Assert::ExpectException<std::runtime_error>([] { ++SList<double>::Iterator(); });
+			Assert::ExpectException<std::runtime_error>([] { ++SList<Foo>::Iterator(); });
+
+			Assert::ExpectException<std::runtime_error>([] { ++SList<int>::ConstIterator(); });
+			Assert::ExpectException<std::runtime_error>([] { ++SList<double>::ConstIterator(); });
+			Assert::ExpectException<std::runtime_error>([] { ++SList<Foo>::ConstIterator(); });
+
 			SList<int> intList = { 10, 20, 30 };
 			SList<double> doubleList = { 10, 20, 30 };
 			SList<Foo> fooList = { Foo(10), Foo(20), Foo(30) };

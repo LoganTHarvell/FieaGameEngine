@@ -610,26 +610,6 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 	}
 #pragma endregion Vector ConstIterator
 
-#pragma region HashMap
-	template<>
-	inline std::wstring ToString<HashMap<double, Foo>>(const HashMap<double, Foo>& t)
-	{
-		RETURN_WIDE_STRING(t.Size());
-	}
-
-	template<>
-	inline std::wstring ToString<HashMap<double, Foo>>(const HashMap<double, Foo>* t)
-	{
-		RETURN_WIDE_STRING(t);
-	}
-
-	template<>
-	inline std::wstring ToString<HashMap<double, Foo>>(HashMap<double, Foo>* t)
-	{
-		RETURN_WIDE_STRING(t);
-	}
-#pragma endregion HashMap
-
 #pragma region HashMap PairType
 	template<>
 	inline std::wstring ToString<HashMap<int, Foo>::PairType>(const HashMap<int, Foo>::PairType& t)
@@ -681,6 +661,42 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 
 	template<>
 	inline std::wstring ToString<HashMap<Foo, Foo>::PairType>(HashMap<Foo, Foo>::PairType* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<HashMap<Bar, Foo>::PairType>(const HashMap<Bar, Foo>::PairType& t)
+	{
+		RETURN_WIDE_STRING(t.first.Data());
+	}
+
+	template<>
+	inline std::wstring ToString<HashMap<Bar, Foo>::PairType>(const HashMap<Bar, Foo>::PairType* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<HashMap<Bar, Foo>::PairType>(HashMap<Bar, Foo>::PairType* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<HashMap<Bar, Bar>::PairType>(const HashMap<Bar, Bar>::PairType& t)
+	{
+		RETURN_WIDE_STRING(t.first.Data());
+	}
+
+	template<>
+	inline std::wstring ToString<HashMap<Bar, Bar>::PairType>(const HashMap<Bar, Bar>::PairType* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<HashMap<Bar, Bar>::PairType>(HashMap<Bar, Bar>::PairType* t)
 	{
 		RETURN_WIDE_STRING(t);
 	}
@@ -763,6 +779,56 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 	}
 
 	template<>
+	inline std::wstring ToString<std::pair<HashMap<Bar, Foo>::Iterator, bool>>(const std::pair<HashMap<Bar, Foo>::Iterator, bool>& t)
+	{
+		try
+		{
+			return ToString(*(t.first));
+		}
+		catch (const std::exception&)
+		{
+			return L"end()"s;
+		}
+	}
+
+	template<>
+	inline std::wstring ToString<std::pair<HashMap<Bar, Foo>::Iterator, bool>>(const std::pair<HashMap<Bar, Foo>::Iterator, bool>* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<std::pair<HashMap<Bar, Foo>::Iterator, bool>>(std::pair<HashMap<Bar, Foo>::Iterator, bool>* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<std::pair<HashMap<Bar, Bar>::Iterator, bool>>(const std::pair<HashMap<Bar, Bar>::Iterator, bool>& t)
+	{
+		try
+		{
+			return ToString(*(t.first));
+		}
+		catch (const std::exception&)
+		{
+			return L"end()"s;
+		}
+	}
+
+	template<>
+	inline std::wstring ToString<std::pair<HashMap<Bar, Bar>::Iterator, bool>>(const std::pair<HashMap<Bar, Bar>::Iterator, bool>* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<std::pair<HashMap<Bar, Bar>::Iterator, bool>>(std::pair<HashMap<Bar, Bar>::Iterator, bool>* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
 	inline std::wstring ToString<HashMap<int, Foo>::Iterator>(const HashMap<int, Foo>::Iterator& t)
 	{
 		try
@@ -838,6 +904,56 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 	}
 
 	template<>
+	inline std::wstring ToString<HashMap<Bar, Foo>::Iterator>(const HashMap<Bar, Foo>::Iterator& t)
+	{
+		try
+		{
+			return ToString(*t);
+		}
+		catch (const std::exception&)
+		{
+			return L"end()"s;
+		}
+	}
+
+	template<>
+	inline std::wstring ToString<HashMap<Bar, Foo>::Iterator>(const HashMap<Bar, Foo>::Iterator* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<HashMap<Bar, Foo>::Iterator>(HashMap<Bar, Foo>::Iterator* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<HashMap<Bar, Bar>::Iterator>(const HashMap<Bar, Bar>::Iterator& t)
+	{
+		try
+		{
+			return ToString(*t);
+		}
+		catch (const std::exception&)
+		{
+			return L"end()"s;
+		}
+	}
+
+	template<>
+	inline std::wstring ToString<HashMap<Bar, Bar>::Iterator>(const HashMap<Bar, Bar>::Iterator* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<HashMap<Bar, Bar>::Iterator>(HashMap<Bar, Bar>::Iterator* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
 	inline std::wstring ToString<HashMap<int, Foo>::ConstIterator>(const HashMap<int, Foo>::ConstIterator& t)
 	{
 		try
@@ -907,6 +1023,56 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 
 	template<>
 	inline std::wstring ToString<HashMap<Foo, Foo>::ConstIterator>(HashMap<Foo, Foo>::ConstIterator* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<HashMap<Bar, Foo>::ConstIterator>(const HashMap<Bar, Foo>::ConstIterator& t)
+	{
+		try
+		{
+			return ToString(*t);
+		}
+		catch (const std::exception&)
+		{
+			return L"end()"s;
+		}
+	}
+
+	template<>
+	inline std::wstring ToString<HashMap<Bar, Foo>::ConstIterator>(const HashMap<Bar, Foo>::ConstIterator* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<HashMap<Bar, Foo>::ConstIterator>(HashMap<Bar, Foo>::ConstIterator* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<HashMap<Bar, Bar>::ConstIterator>(const HashMap<Bar, Bar>::ConstIterator& t)
+	{
+		try
+		{
+			return ToString(*t);
+		}
+		catch (const std::exception&)
+		{
+			return L"end()"s;
+		}
+	}
+
+	template<>
+	inline std::wstring ToString<HashMap<Bar, Bar>::ConstIterator>(const HashMap<Bar, Bar>::ConstIterator* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<HashMap<Bar, Bar>::ConstIterator>(HashMap<Bar, Bar>::ConstIterator* t)
 	{
 		RETURN_WIDE_STRING(t);
 	}

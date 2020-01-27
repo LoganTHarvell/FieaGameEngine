@@ -195,18 +195,57 @@ namespace UnitTests
 		HashMap<TKey, TData>::Iterator it = hashMap.Find(TKey(10));
 		Assert::AreEqual(it->first, TKey(10));
 		Assert::AreEqual(it->second, TData(10));
+		
+		it = hashMap.Find(TKey(20));
+		Assert::AreEqual(it, hashMap.end());
 
 		const HashMap constHashMap = hashMap;
 		HashMap<TKey, TData>::ConstIterator itConst = constHashMap.Find(TKey(10));
 		Assert::AreEqual(itConst->first, TKey(10));
 		Assert::AreEqual(itConst->second, TData(10));
+
+		itConst = hashMap.Find(TKey(20));
+		Assert::AreEqual(itConst, hashMap.cend());
+	}
+
+	template<typename TKey, typename TData>
+	void TestElementAccessors(typename HashMap<TKey, TData>::KeyEqualityFunctor keyEqualityFunctor = DefaultEquality<TKey>())
+	{
+		HashMap hashMap = HashMap<TKey, TData>(20, keyEqualityFunctor);
+		auto tmp1 = hashMap.Insert({ TKey(10), TData(10) }).first;
+		auto tmp2 = hashMap.Insert({ TKey(20), TData(20) }).first;
+
+		Assert::AreEqual(hashMap.At(TKey(10)), TData(10));
+		Assert::ExpectException<std::out_of_range>([&hashMap] { hashMap.At(TKey(30)); });
+		Assert::AreEqual(hashMap[TKey(30)], TData());
+		hashMap[TKey(30)] = TData(30);
+		Assert::AreEqual(hashMap[TKey(30)], TData(30));
+
+		const HashMap constHashMap = hashMap;
+		Assert::AreEqual(constHashMap[TKey(20)], TData(20));
+		Assert::ExpectException<std::out_of_range>([&constHashMap] { constHashMap.At(TKey(40)); });
+	}
+
+	template<typename TKey, typename TData>
+	void TestContainsKey(typename HashMap<TKey, TData>::KeyEqualityFunctor keyEqualityFunctor = DefaultEquality<TKey>())
+	{
+		HashMap hashMap = HashMap<TKey, TData>(20, keyEqualityFunctor);
+		auto tmp = hashMap.Insert({ TKey(10), TData(10) }).first;
+
+		Assert::IsTrue(hashMap.ContainsKey(TKey(10)));
+		Assert::IsFalse(hashMap.ContainsKey(TKey(20)));
 	}
 
 	template<typename TKey, typename TData>
 	void TestInsert(typename HashMap<TKey, TData>::KeyEqualityFunctor keyEqualityFunctor = DefaultEquality<TKey>())
 	{
 		HashMap hashMap = HashMap<TKey, TData>(20, keyEqualityFunctor);
-		auto tmp = hashMap.Insert({ TKey(10), TData(10) }).first;
+
+		auto tmp = hashMap.Insert({ TKey(10), TData(10) });
+		Assert::IsTrue(tmp.second);
+		
+		tmp = hashMap.Insert({ TKey(10), TData(10) });
+		Assert::IsFalse(tmp.second);
 
 		HashMap<TKey, TData>::Iterator it = hashMap.begin();
 		HashMap<TKey, TData>::ConstIterator itConst = hashMap.cbegin();
@@ -219,6 +258,39 @@ namespace UnitTests
 		Assert::IsTrue(hashMap.begin() != hashMap.end());
 		Assert::AreEqual(1_z, hashMap.Size());
 		Assert::IsTrue(!hashMap.IsEmpty());
+	}
+
+	template<typename TKey, typename TData>
+	void TestRemove(typename HashMap<TKey, TData>::KeyEqualityFunctor keyEqualityFunctor = DefaultEquality<TKey>())
+	{
+		HashMap hashMap = HashMap<TKey, TData>(5, keyEqualityFunctor);
+		
+		for (int i = 0; i < 10 * 21; i += 10)
+		{
+			auto tmp = hashMap.Insert({ TKey(i), TData(i) });
+		}
+
+		Assert::IsFalse(hashMap.Remove(HashMap<TKey,TData>::Iterator()));
+		Assert::IsTrue(hashMap.Remove(TKey(10)));
+		Assert::IsFalse(hashMap.ContainsKey(TKey(10)));
+
+		auto tmp = hashMap.Insert({ TKey(10), TData(10) }).first;
+		Assert::IsTrue(hashMap.Remove(tmp));
+		Assert::IsFalse(hashMap.ContainsKey(TKey(10)));
+	}
+
+	template<typename TKey, typename TData>
+	void TestClear(typename HashMap<TKey, TData>::KeyEqualityFunctor keyEqualityFunctor = DefaultEquality<TKey>())
+	{
+		HashMap hashMap = HashMap<TKey, TData>(20, keyEqualityFunctor);
+		auto tmp = hashMap.Insert({ TKey(10), TData(10) }).first;
+		tmp = hashMap.Insert({ TKey(20), TData(10) }).first;
+		tmp = hashMap.Insert({ TKey(30), TData(10) }).first;
+
+		hashMap.Clear();
+
+		Assert::AreEqual(hashMap.Size(), 0_z);
+		Assert::AreEqual(hashMap.BucketCount(), 20_z);
 	}
 }
 
@@ -253,6 +325,8 @@ namespace UnitTestLibraryDesktop
 			TestIteratorInitialization<int, Foo>();
 			TestIteratorInitialization<double, Foo>();
 			TestIteratorInitialization<Foo, Foo>();
+			TestIteratorInitialization<Bar, Foo>([](const Bar& lhs, const Bar& rhs) { return lhs.Data() == rhs.Data(); });
+			TestIteratorInitialization<Bar, Bar>([](const Bar& lhs, const Bar& rhs) { return lhs.Data() == rhs.Data(); });
 		}
 
 		TEST_METHOD(IteratorDereference)
@@ -267,6 +341,8 @@ namespace UnitTestLibraryDesktop
 			TestIteratorEquality<int, Foo>();
 			TestIteratorEquality<double, Foo>();
 			TestIteratorEquality<Foo, Foo>();
+			TestIteratorEquality<Bar, Foo>([](const Bar& lhs, const Bar& rhs) { return lhs.Data() == rhs.Data(); });
+			TestIteratorEquality<Bar, Bar>([](const Bar& lhs, const Bar& rhs) { return lhs.Data() == rhs.Data(); });
 		}
 
 		TEST_METHOD(IteratorArithmetic)
@@ -274,21 +350,25 @@ namespace UnitTestLibraryDesktop
 			TestIteratorArithmetic<int, Foo>();
 			TestIteratorArithmetic<double, Foo>();
 			TestIteratorArithmetic<Foo, Foo>();
+			TestIteratorArithmetic<Bar, Foo>([](const Bar& lhs, const Bar& rhs) { return lhs.Data() == rhs.Data(); });
+			TestIteratorArithmetic<Bar, Bar>([](const Bar& lhs, const Bar& rhs) { return lhs.Data() == rhs.Data(); });
 		}
 
-		TEST_METHOD(Initialization)
-		{
-			TestInitialization<int, Foo>();
-			TestInitialization<double, Foo>();
-			TestInitialization<Foo, Foo>();
-		}
+ 		TEST_METHOD(Initialization)
+ 		{
+ 			TestInitialization<int, Foo>();
+ 			TestInitialization<double, Foo>();
+ 			TestInitialization<Foo, Foo>();
+ 			TestInitialization<Bar, Foo>([](const Bar& lhs, const Bar& rhs) { return lhs.Data() == rhs.Data(); });
+ 			TestInitialization<Bar, Bar>([](const Bar& lhs, const Bar& rhs) { return lhs.Data() == rhs.Data(); });
+ 		}
 
-		TEST_METHOD(Copy)
-		{
-			TestCopy<int, Foo>();
-			TestCopy<double, Foo>();
-			TestCopy<Foo, Foo>();
-		}
+ 		TEST_METHOD(Copy)
+ 		{
+ 			TestCopy<int, Foo>();
+ 			TestCopy<double, Foo>();
+ 			TestCopy<Foo, Foo>();
+ 		}
 
 		TEST_METHOD(Move)
 		{
@@ -297,25 +377,44 @@ namespace UnitTestLibraryDesktop
 			TestMove<Foo, Foo>();
 		}
 
-		TEST_METHOD(Begin)
+ 		TEST_METHOD(Begin)
+ 		{
+ 			TestBegin<int, Foo>();
+ 			TestBegin<double, Foo>();
+ 			TestBegin<Foo, Foo>();
+ 		}
+
+ 		TEST_METHOD(End)
+ 		{
+ 			TestEnd<int, Foo>();
+ 			TestEnd<double, Foo>();
+ 			TestEnd<Foo, Foo>();
+ 			TestEnd<Bar, Foo>([](const Bar& lhs, const Bar& rhs) { return lhs.Data() == rhs.Data(); });
+ 			TestEnd<Bar, Bar>([](const Bar& lhs, const Bar& rhs) { return lhs.Data() == rhs.Data(); });
+ 		}
+
+ 		TEST_METHOD(Find)
+ 		{
+ 			TestFind<int, Foo>();
+ 			TestFind<double, Foo>();
+ 			TestFind<Foo, Foo>();
+ 		}
+
+		TEST_METHOD(ElementAccess)
 		{
-			TestBegin<int, Foo>();
-			TestBegin<double, Foo>();
-			TestBegin<Foo, Foo>();
+			TestElementAccessors<int, Foo>();
+			TestElementAccessors<double, Foo>();
+			TestElementAccessors<Foo, Foo>();
+			TestElementAccessors<Bar, Foo>([](const Bar& lhs, const Bar& rhs) { return lhs.Data() == rhs.Data(); });
 		}
 
-		TEST_METHOD(End)
+		TEST_METHOD(ContainsKey)
 		{
-			TestEnd<int, Foo>();
-			TestEnd<double, Foo>();
-			TestEnd<Foo, Foo>();
-		}
-
-		TEST_METHOD(Find)
-		{
-			TestFind<int, Foo>();
-			TestFind<double, Foo>();
-			TestFind<Foo, Foo>();
+			TestContainsKey<int, Foo>();
+			TestContainsKey<double, Foo>();
+			TestContainsKey<Foo, Foo>();
+			TestContainsKey<Bar, Foo>([](const Bar& lhs, const Bar& rhs) { return lhs.Data() == rhs.Data(); });
+			TestContainsKey<Bar, Bar>([](const Bar& lhs, const Bar& rhs) { return lhs.Data() == rhs.Data(); });
 		}
 
 		TEST_METHOD(Insert)
@@ -323,6 +422,24 @@ namespace UnitTestLibraryDesktop
 			TestInsert<int, Foo>();
 			TestInsert<double, Foo>();
 			TestInsert<Foo, Foo>();
+		}
+
+		TEST_METHOD(Remove)
+		{
+			TestRemove<int, Foo>();
+			TestRemove<double, Foo>();
+			TestRemove<Foo, Foo>();
+			TestRemove<Bar, Foo>([](const Bar& lhs, const Bar& rhs) { return lhs.Data() == rhs.Data(); });
+			TestRemove<Bar, Bar>([](const Bar& lhs, const Bar& rhs) { return lhs.Data() == rhs.Data(); });
+		}
+
+		TEST_METHOD(Clear)
+		{
+			TestClear<int, Foo>();
+			TestClear<double, Foo>();
+			TestClear<Foo, Foo>();
+			TestClear<Bar, Foo>([](const Bar& lhs, const Bar& rhs) { return lhs.Data() == rhs.Data(); });
+			TestClear<Bar, Bar>([](const Bar& lhs, const Bar& rhs) { return lhs.Data() == rhs.Data(); });
 		}
 
 	private:

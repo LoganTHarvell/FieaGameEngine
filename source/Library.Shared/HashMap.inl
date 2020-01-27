@@ -175,7 +175,7 @@ namespace Library
 	inline HashMap<TKey, TData>::HashMap(const size_t bucketCount, const KeyEqualityFunctor keyEqualityFunctor, const HashFunctor hashFunctor) :
 		mKeyEqualityFunctor(keyEqualityFunctor), mHashFunctor(hashFunctor)
 	{		
-		mBuckets.Resize(std::max(bucketCount, std::size_t(1)));
+		mBuckets.Resize(std::max(bucketCount, std::size_t(1)), ChainType(ChainType::EqualityFunctor()));
 	}
 #pragma endregion Constructors
 
@@ -263,7 +263,7 @@ namespace Library
 	{
 		const std::size_t index = mHashFunctor(key) % mBuckets.Capacity();
 
-		ChainType chain = mBuckets[index];
+		ChainType& chain = mBuckets[index];
 
 		ChainType::Iterator chainIterator = chain.begin();
 		for (; chainIterator != chain.end(); ++chainIterator)
@@ -287,7 +287,7 @@ namespace Library
 	{
 		const std::size_t index = mHashFunctor(key) % mBuckets.Capacity();
 
-		ChainType chain = mBuckets[index];
+		const ChainType& chain = mBuckets[index];
 
 		ChainType::ConstIterator chainIterator = chain.cbegin();
 		for (; chainIterator != chain.cend(); ++chainIterator)
@@ -386,10 +386,10 @@ namespace Library
 	{
 		const std::size_t index = mHashFunctor(key) % mBuckets.Capacity();
 
-		ChainType chain = mBuckets[index];
+		ChainType& chain = mBuckets[index];
 
 		ChainType::Iterator chainIterator = chain.begin();
-		for (; chainIterator != chain.end; ++chainIterator)
+		for (; chainIterator != chain.end(); ++chainIterator)
 		{
 			if (mKeyEqualityFunctor(key, chainIterator->first))
 			{
@@ -403,17 +403,15 @@ namespace Library
 	template<typename TKey, typename TData>
 	inline bool HashMap<TKey, TData>::Remove(const Iterator& it)
 	{
-		const std::size_t index = mHashFunctor(it->first) % mBuckets.Capacity();
+		if (it.mOwner != this || it == end()) return false;
 
-		ChainType chain = mBuckets[index];
-
-		return chain.Remove(chainIterator);
+		return it.mBucketIterator->Remove(it.mChainIterator);
 	}
 
 	template<typename TKey, typename TData>
 	inline void HashMap<TKey, TData>::Clear()
 	{
-		for (ChainType chain : mBuckets)
+		for (ChainType& chain : mBuckets)
 		{
 			chain.Clear();
 		}

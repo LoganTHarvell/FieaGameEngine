@@ -496,7 +496,7 @@ namespace Library
 		/// <summary>
 		/// HashMap of chain lists for storing key-value pairs according at a hashed index.
 		/// </summary>
-		Vector<ChainType> mBuckets;
+		Vector<ChainType> mBuckets{ Vector<ChainType>(0, Vector<ChainType>::EqualityFunctor()) };
 
 		/// <summary>
 		/// Number of elements in the HashMap.
