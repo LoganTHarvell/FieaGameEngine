@@ -175,7 +175,9 @@ namespace Library
 	inline HashMap<TKey, TData>::HashMap(const size_t bucketCount, const KeyEqualityFunctor keyEqualityFunctor, const HashFunctor hashFunctor) :
 		mKeyEqualityFunctor(keyEqualityFunctor), mHashFunctor(hashFunctor)
 	{		
-		mBuckets.Resize(std::max(bucketCount, std::size_t(1)), ChainType(ChainType::EqualityFunctor()));
+		assert(bucketCount > 0);
+
+		mBuckets.Resize(bucketCount, ChainType(ChainType::EqualityFunctor()));
 	}
 #pragma endregion Constructors
 
@@ -196,6 +198,25 @@ namespace Library
 	inline bool HashMap<TKey, TData>::IsEmpty() const
 	{
 		return mSize == 0;
+	}
+
+	template<typename TKey, typename TData>
+	inline float HashMap<TKey, TData>::LoadFactor() const
+	{
+		return static_cast<float>(mSize) / mBuckets.Capacity();
+	}
+
+	template<typename TKey, typename TData>
+	inline void HashMap<TKey, TData>::Rehash(const std::size_t bucketCount)
+	{
+		HashMap newHash = HashMap(bucketCount, mKeyEqualityFunctor, mHashFunctor);
+
+		for (auto it = begin(); it != end(); ++it)
+		{
+			newHash.Insert(*it);
+		}
+
+		*this = std::move(newHash);
 	}
 #pragma endregion Size and Capacity
 

@@ -2,7 +2,7 @@
 
 #include "DefaultHash.h"
 
-namespace Library
+namespace Library::Hash
 {
 #pragma region Hash Functions
 	inline std::size_t AdditiveHash(const std::uint8_t* data, const std::size_t byteCount, const std::size_t hashPrime)
@@ -25,7 +25,19 @@ namespace Library
 		return AdditiveHash(data, sizeof(T));
 	}
 
-#pragma region Default Hash String Specializations
+#pragma region Integer Specializations
+	inline std::size_t DefaultHash<int>::operator()(const int& key) const
+	{
+		return static_cast<std::size_t>(key);
+	}
+
+	inline std::size_t DefaultHash<const int>::operator()(const int& key) const
+	{
+		return static_cast<std::size_t>(key);
+	}
+#pragma endregion Integer Specializations
+
+#pragma region String Specializations
 	inline std::size_t DefaultHash<std::string>::operator()(const std::string& key) const
 	{
 		const std::uint8_t* data = reinterpret_cast<const std::uint8_t*>(key.c_str());
@@ -73,5 +85,5 @@ namespace Library
 		const std::uint8_t* data = reinterpret_cast<const std::uint8_t*>(key);
 		return AdditiveHash(data, strlen(key));
 	}
-#pragma endregion Default Hash String Specializations
+#pragma endregion String Specializations
 }

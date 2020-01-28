@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <string>
 
-namespace Library
+namespace Library::Hash
 {
 #pragma region Hash Functions
 	/// <summary>
@@ -23,7 +23,31 @@ namespace Library
 		std::size_t operator()(const T& key) const;
 	};
 
-#pragma region Default Hash String Specializations
+#pragma region Integer Specializations
+	/// <summary>
+	/// Default hash functor for computing hash codes for int values.
+	/// </summary>
+	/// <param name="key">Key used to compute the hashcode.</param>
+	/// <returns>Hash code for the given key.</returns>
+	template<>
+	struct DefaultHash<int> final
+	{
+		std::size_t operator()(const int& key) const;
+	};
+
+	/// <summary>
+	/// Default hash functor for computing hash codes for const int values.
+	/// </summary>
+	/// <param name="key">Key used to compute the hashcode.</param>
+	/// <returns>Hash code for the given key.</returns>
+	template<>
+	struct DefaultHash<const int> final
+	{
+		std::size_t operator()(const int& key) const;
+	};
+#pragma endregion Integer Specializations
+
+#pragma region String Specializations
 	/// <summary>
 	/// Default hash functor for computing hash codes for std:string values.
 	/// </summary>
@@ -111,7 +135,9 @@ namespace Library
 	{
 		std::size_t operator()(const char* const key) const;
 	};
-#pragma endregion Default Hash String Specializations
+#pragma endregion String Specializations
 }
+
+using namespace Library::Hash;
 
 #include "DefaultHash.inl"

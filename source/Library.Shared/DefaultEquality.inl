@@ -2,7 +2,7 @@
 
 #include "DefaultEquality.h"
 
-namespace Library
+namespace Library::Equality
 {
 	template<typename T>
 	inline bool DefaultEquality<T>::operator()(const T& lhs, const T& rhs) const

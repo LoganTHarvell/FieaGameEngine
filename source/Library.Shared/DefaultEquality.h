@@ -3,7 +3,7 @@
 #include <string>
 #include <functional>
 
-namespace Library
+namespace Library::Equality
 {
 	/// <summary>
 	/// Default callable equality functors for comparisons of various types.
@@ -57,5 +57,7 @@ namespace Library
 	};
 #pragma endregion Default Equality String Specializations
 }
+
+using namespace Library::Equality;
 
 #include "DefaultEquality.inl"

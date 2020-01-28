@@ -149,6 +149,43 @@ namespace UnitTests
 	}
 
 	template<typename TKey, typename TData>
+	void TestSizeCapacity(typename HashMap<TKey, TData>::KeyEqualityFunctor keyEqualityFunctor = DefaultEquality<TKey>())
+	{
+		HashMap hashMap = HashMap<TKey, TData>(20, keyEqualityFunctor);
+		
+		Assert::AreEqual(hashMap.Size(), 0_z);
+		Assert::AreEqual(hashMap.BucketCount(), 20_z);
+		Assert::IsTrue(hashMap.IsEmpty());
+		Assert::AreEqual(hashMap.LoadFactor(), 0.0f);
+		
+		auto tmp = hashMap.Insert({ TKey(10), TData(10) }).first;
+		tmp = hashMap.Insert({ TKey(20), TData(10) }).first;
+
+		Assert::AreEqual(hashMap.Size(), 2_z);
+		Assert::AreEqual(hashMap.BucketCount(), 20_z);
+		Assert::IsFalse(hashMap.IsEmpty());
+		Assert::AreEqual(hashMap.LoadFactor(), static_cast<float>(hashMap.Size())/hashMap.BucketCount());
+	}
+
+	template<typename TKey, typename TData>
+	void TestRehash(typename HashMap<TKey, TData>::KeyEqualityFunctor keyEqualityFunctor = DefaultEquality<TKey>())
+	{
+		HashMap hashMap = HashMap<TKey, TData>(20, keyEqualityFunctor);	
+		auto tmp = hashMap.Insert({ TKey(10), TData(10) }).first;
+		tmp = hashMap.Insert({ TKey(20), TData(20) }).first;
+		tmp = hashMap.Insert({ TKey(30), TData(30) }).first;
+
+		hashMap.Rehash(10);
+
+		Assert::AreEqual(hashMap.Size(), 3_z);
+		Assert::AreEqual(hashMap.BucketCount(), 10_z);
+
+		Assert::AreEqual(hashMap[TKey(10)], TData(10));
+		Assert::AreEqual(hashMap[TKey(20)], TData(20));
+		Assert::AreEqual(hashMap[TKey(30)], TData(30));
+	}
+
+	template<typename TKey, typename TData>
 	void TestBegin(typename HashMap<TKey, TData>::KeyEqualityFunctor keyEqualityFunctor = DefaultEquality<TKey>())
 	{
 		HashMap hashMap = HashMap<TKey, TData>(20, keyEqualityFunctor);
@@ -375,6 +412,20 @@ namespace UnitTestLibraryDesktop
 			TestMove<int, Foo>();
 			TestMove<double, Foo>();
 			TestMove<Foo, Foo>();
+		}
+
+		TEST_METHOD(SizeCapacity)
+		{
+			TestSizeCapacity<int, Foo>();
+			TestSizeCapacity<double, Foo>();
+			TestSizeCapacity<Foo, Foo>();
+		}
+
+		TEST_METHOD(Rehash)
+		{
+			TestRehash<int, Foo>();
+			TestRehash<double, Foo>();
+			TestRehash<Foo, Foo>();
 		}
 
  		TEST_METHOD(Begin)

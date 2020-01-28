@@ -11,6 +11,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 using namespace UnitTests;
 using namespace Library;
+using namespace Library::Hash;
 
 
 namespace Library
@@ -76,6 +77,7 @@ namespace UnitTestLibraryDesktop
 		TEST_METHOD(Primitives)
 		{
 			TestHash<int>();
+			TestHash<const int>();
 			TestHash<double>();
 		}
 
@@ -102,9 +104,9 @@ namespace UnitTestLibraryDesktop
 			{
 				DefaultHash<const std::string> hash;
 	
-				std::string a = "Hello"s;
-				std::string b = "Goodbye"s;
-				std::string c(a);
+				const std::string a = "Hello"s;
+				const std::string b = "Goodbye"s;
+				const std::string c(a);
 	
 				Assert::AreEqual(hash(a), hash(a));
 				Assert::IsTrue(hash(a) != hash(b));
@@ -129,9 +131,9 @@ namespace UnitTestLibraryDesktop
 			{
 				DefaultHash<const std::wstring> hash;
 	
-				std::wstring a = L"Hello"s;
-				std::wstring b = L"Goodbye"s;
-				std::wstring c(a);
+				const std::wstring a = L"Hello"s;
+				const std::wstring b = L"Goodbye"s;
+				const std::wstring c(a);
 	
 				Assert::AreEqual(hash(a), hash(a));
 				Assert::IsTrue(hash(a) != hash(b));
@@ -146,8 +148,14 @@ namespace UnitTestLibraryDesktop
 	
 				char* a = "Hello";
 				char* b = "Goodbye";
-				char* c(a);
-	
+
+				char c[6];
+
+#if defined(_WIN32)
+				strcpy_s(c, a);
+#else
+				strcpy(c, a);
+#endif	
 				Assert::AreEqual(hash(a), hash(a));
 				Assert::IsTrue(hash(a) != hash(b));
 				Assert::AreEqual(hash(a), hash(c));
@@ -158,8 +166,15 @@ namespace UnitTestLibraryDesktop
 	
 				const char* a = "Hello";
 				const char* b = "Goodbye";
-				const char* c(a);
-	
+
+				char c[6];
+
+#if defined(_WIN32)
+				strcpy_s(c, a);
+#else
+				strcpy(c, a);
+#endif
+
 				Assert::AreEqual(hash(a), hash(a));
 				Assert::IsTrue(hash(a) != hash(b));
 				Assert::AreEqual(hash(a), hash(c));
@@ -170,8 +185,15 @@ namespace UnitTestLibraryDesktop
 	
 				char* const a = "Hello";
 				char* const b = "Goodbye";
-				char* const c(a);
-	
+
+				char c[6];
+
+#if defined(_WIN32)
+				strcpy_s(c, a);
+#else
+				strcpy(c, a);
+#endif
+
 				Assert::AreEqual(hash(a), hash(a));
 				Assert::IsTrue(hash(a) != hash(b));
 				Assert::AreEqual(hash(a), hash(c));
@@ -182,8 +204,15 @@ namespace UnitTestLibraryDesktop
 	
 				const char* const a = "Hello";
 				const char* const b = "Goodbye";
-				const char* const c(a);
-	
+
+				char c[6];
+
+#if defined(_WIN32)
+				strcpy_s(c, a);
+#else
+				strcpy(c, a);
+#endif
+
 				Assert::AreEqual(hash(a), hash(a));
 				Assert::IsTrue(hash(a) != hash(b));
 				Assert::AreEqual(hash(a), hash(c));

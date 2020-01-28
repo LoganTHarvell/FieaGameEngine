@@ -9,6 +9,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 using namespace UnitTests;
 using namespace Library;
+using namespace Library::Equality;
 
 
 namespace UnitTestLibraryDesktop

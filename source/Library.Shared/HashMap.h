@@ -308,9 +308,10 @@ namespace Library
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
-		/// <param name="bucketCount">Number of buckets (1 bucket minimum) to initialize for the HashMap.</param>
+		/// <param name="bucketCount">Number of buckets to initialize for the HashMap. Cannot be zero.</param>
 		/// <param name="keyEqualityFunctor">Equality functor for comparing TKey values.</param>
 		/// <param name="hashFunctor">Hashing functor for creating hash codes from TKey values.</param>
+		/// <remarks cref="bucketCount">Asserts on zero bucketCount.</remarks>
 		HashMap(const std::size_t capacity=0, const KeyEqualityFunctor keyEqualityFunctor=DefaultEquality<TKey>(), const HashFunctor hashFunctor=DefaultHash<TKey>());
 
 		/// <summary>
@@ -368,6 +369,18 @@ namespace Library
 		/// </summary>
 		/// <returns>True if the HashMap contains no elements, otherwise false.</returns>
 		bool IsEmpty() const;
+
+		/// <summary>
+		/// Checks the ratio of the size of the HashMap to the bucket count.
+		/// </summary>
+		/// <returns>True if the HashMap contains no elements, otherwise false.</returns>
+		float LoadFactor() const;
+
+		/// <summary>
+		/// Resizes the HashMap to a given bucket count, re-indexing the elements.
+		/// </summary>
+		/// <param name="bucketCount">New bucket count for the HashMap.</param>
+		void Rehash(const std::size_t bucketCount);
 #pragma endregion Size and Capacity
 
 #pragma region Iterator Accessors
@@ -473,14 +486,14 @@ namespace Library
 		std::pair<Iterator, bool> Insert(const PairType& entry);
 
 		/// <summary>
-		/// Removes a single PairType value from the HashMAp given the corresponding TKey value.
+		/// Removes a single PairType value from the HashMap given the corresponding TKey value.
 		/// </summary>
 		/// <param name="key">TKey value to be searched for in the HashMap to be removed.</param>
 		/// <returns>True on successful remove, false otherwise.</returns>
 		bool Remove(const TKey& key);
 
 		/// <summary>
-		/// Removes a single PairType value from the HashMAp given the corresponding TKey value.
+		/// Removes a single PairType value from the HashMap given the corresponding TKey value.
 		/// </summary>
 		/// <param name="it">Iterator pointing to the PairType value to be removed.</param>
 		/// <returns>True on successful remove, false otherwise.</returns>
@@ -496,7 +509,7 @@ namespace Library
 		/// <summary>
 		/// HashMap of chain lists for storing key-value pairs according at a hashed index.
 		/// </summary>
-		Vector<ChainType> mBuckets{ Vector<ChainType>(0, Vector<ChainType>::EqualityFunctor()) };
+		BucketType mBuckets{ BucketType(1, BucketType::EqualityFunctor()) };
 
 		/// <summary>
 		/// Number of elements in the HashMap.
