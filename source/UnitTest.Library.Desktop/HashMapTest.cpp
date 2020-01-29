@@ -25,7 +25,7 @@ namespace UnitTests
 		Assert::AreEqual(it1, it2);
 
 		HashMap<TKey, TData>::ConstIterator itConst1 = HashMap<TKey, TData>::ConstIterator(hashMap.begin());
-		HashMap<TKey, TData>::ConstIterator itConst2 = hashMap.begin();
+		HashMap<TKey, TData>::ConstIterator itConst2 = hashMap.cbegin();
 		Assert::AreEqual(itConst1, itConst2);
 	}
 
@@ -110,6 +110,16 @@ namespace UnitTests
 		Assert::AreEqual(hashMap.Size(), 0_z);
 		Assert::AreEqual(hashMap.BucketCount(), 20_z);
 		Assert::IsTrue(hashMap.IsEmpty());
+
+		HashMap hashMap2 = HashMap<TKey, TData>({ { TKey(10), TData(10) }, { TKey(20), TData(20) } }, 20, keyEqualityFunctor);
+		Assert::AreEqual(2_z, hashMap2.Size());
+		Assert::AreEqual(hashMap2.BucketCount(), 20_z);
+		
+		TData data;
+		Assert::IsTrue(hashMap2.ContainsKey(TKey(10), data));
+		Assert::AreEqual(TData(10), data);
+		Assert::IsTrue(hashMap2.ContainsKey(TKey(20), data));
+		Assert::AreEqual(TData(20), data);
 	}
 
 	template<typename TKey, typename TData>
@@ -137,6 +147,8 @@ namespace UnitTests
 		Assert::AreEqual(moved.Size(), copy.Size());
 		Assert::AreEqual(moved.BucketCount(), copy.BucketCount());
 		Assert::AreEqual(*moved.begin(), *copy.begin());
+		
+		Assert::AreEqual(hashMap.Size(), 0_z);
 		Assert::AreEqual(hashMap.BucketCount(), 0_z);
 		
 		hashMap = copy;
@@ -145,7 +157,26 @@ namespace UnitTests
 		Assert::AreEqual(moved.Size(), copy.Size());
 		Assert::AreEqual(moved.BucketCount(), copy.BucketCount());
 		Assert::AreEqual(*moved.begin(), *copy.begin());
+		
+		Assert::AreEqual(hashMap.Size(), 0_z);
 		Assert::AreEqual(hashMap.BucketCount(), 0_z);
+	}
+
+	template<typename TKey, typename TData>
+	void TestInitializerListAssignment(typename HashMap<TKey, TData>::KeyEqualityFunctor keyEqualityFunctor = DefaultEquality<TKey>())
+	{
+		HashMap hashMap = HashMap<TKey, TData>(20, keyEqualityFunctor);
+		hashMap = { { TKey(10), TData(10) }, { TKey(20), TData(20) } };
+
+		Assert::AreEqual(hashMap.Size(), 2_z);
+		Assert::AreEqual(hashMap.BucketCount(), 20_z);
+
+		TData data;
+		Assert::IsTrue(hashMap.ContainsKey(TKey(10), data));
+		Assert::AreEqual(TData(10), data);
+		Assert::IsTrue(hashMap.ContainsKey(TKey(20), data));
+		Assert::AreEqual(TData(20), data);
+
 	}
 
 	template<typename TKey, typename TData>
@@ -269,8 +300,13 @@ namespace UnitTests
 		HashMap hashMap = HashMap<TKey, TData>(20, keyEqualityFunctor);
 		auto tmp = hashMap.Insert({ TKey(10), TData(10) }).first;
 
+		TData data;
 		Assert::IsTrue(hashMap.ContainsKey(TKey(10)));
 		Assert::IsFalse(hashMap.ContainsKey(TKey(20)));
+		
+		Assert::IsTrue(hashMap.ContainsKey(TKey(10), data));
+		Assert::AreEqual(data, TData(10));
+		Assert::IsFalse(hashMap.ContainsKey(TKey(20), data));
 	}
 
 	template<typename TKey, typename TData>
@@ -396,8 +432,6 @@ namespace UnitTestLibraryDesktop
  			TestInitialization<int, Foo>();
  			TestInitialization<double, Foo>();
  			TestInitialization<Foo, Foo>();
- 			TestInitialization<Bar, Foo>([](const Bar& lhs, const Bar& rhs) { return lhs.Data() == rhs.Data(); });
- 			TestInitialization<Bar, Bar>([](const Bar& lhs, const Bar& rhs) { return lhs.Data() == rhs.Data(); });
  		}
 
  		TEST_METHOD(Copy)
@@ -412,6 +446,13 @@ namespace UnitTestLibraryDesktop
 			TestMove<int, Foo>();
 			TestMove<double, Foo>();
 			TestMove<Foo, Foo>();
+		}
+
+		TEST_METHOD(InitializerListAssignment)
+		{
+			TestInitializerListAssignment<int, Foo>();
+			TestInitializerListAssignment<double, Foo>();
+			TestInitializerListAssignment<Foo, Foo>();
 		}
 
 		TEST_METHOD(SizeCapacity)
@@ -464,8 +505,6 @@ namespace UnitTestLibraryDesktop
 			TestContainsKey<int, Foo>();
 			TestContainsKey<double, Foo>();
 			TestContainsKey<Foo, Foo>();
-			TestContainsKey<Bar, Foo>([](const Bar& lhs, const Bar& rhs) { return lhs.Data() == rhs.Data(); });
-			TestContainsKey<Bar, Bar>([](const Bar& lhs, const Bar& rhs) { return lhs.Data() == rhs.Data(); });
 		}
 
 		TEST_METHOD(Insert)

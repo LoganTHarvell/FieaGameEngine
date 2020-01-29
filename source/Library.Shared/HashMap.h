@@ -15,7 +15,7 @@ namespace Library
 	class HashMap final
 	{
 	public:
-#pragma region Type Definitions
+#pragma region Type Definitions and Constants
 		/// <summary>
 		/// Pairs of TKey and TData values that make up the elements of the HashMap.
 		/// </summary>
@@ -45,7 +45,12 @@ namespace Library
 		/// Equality functor type for comparing TKey values.
 		/// </summary>
 		using KeyEqualityFunctor = std::function<bool(const TKey& lhs, const TKey& rhs)>;
-#pragma endregion Type Definitions
+
+		/// <summary>
+		/// Default number of buckets in the HashMap.
+		/// </summary>
+		static constexpr std::size_t DefaultBucketCount = 31;
+#pragma endregion Type Definitions and Constants
 
 	public:
 #pragma region Iterator
@@ -304,7 +309,7 @@ namespace Library
 #pragma endregion ConstIterator
 
 	public:
-#pragma region Constructor, Destructor, Assignment
+#pragma region Constructors, Destructor, Assignment
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
@@ -312,7 +317,7 @@ namespace Library
 		/// <param name="keyEqualityFunctor">Equality functor for comparing TKey values.</param>
 		/// <param name="hashFunctor">Hashing functor for creating hash codes from TKey values.</param>
 		/// <remarks cref="bucketCount">Asserts on zero bucketCount.</remarks>
-		HashMap(const std::size_t capacity=0, const KeyEqualityFunctor keyEqualityFunctor=DefaultEquality<TKey>(), const HashFunctor hashFunctor=DefaultHash<TKey>());
+		explicit HashMap(const std::size_t bucketCount=DefaultBucketCount, const KeyEqualityFunctor keyEqualityFunctor=DefaultEquality<TKey>(), const HashFunctor hashFunctor=DefaultHash<TKey>());
 
 		/// <summary>
 		/// Default Destructor. 
@@ -328,11 +333,21 @@ namespace Library
 		HashMap(const HashMap& rhs) = default;
 
 		/// <summary>
+		/// Initializer list constructor.
+		/// </summary>
+		/// <param name="rhs">List of PairType values for insertion.</param>
+		/// <param name="bucketCount">Number of buckets to initialize for the HashMap. Cannot be zero.</param>
+		/// <param name="keyEqualityFunctor">Equality functor for comparing TKey values.</param>
+		/// <param name="hashFunctor">Hashing functor for creating hash codes from TKey values.</param>
+		/// <remarks cref="bucketCount">Asserts on zero bucketCount.</remarks>
+		HashMap(const std::initializer_list<PairType> rhs, const std::size_t bucketCount=DefaultBucketCount, KeyEqualityFunctor keyEqualityFunctor = DefaultEquality<TKey>(), const HashFunctor hashFunctor = DefaultHash<TKey>());
+
+		/// <summary>
 		/// Move constructor.
 		/// Takes a HashMap as a parameter and moves the data to the constructed HashMap.
 		/// </summary>
 		/// <param name="rhs">HashMap to be moved.</param>
-		HashMap(HashMap&& rhs) = default;
+		HashMap(HashMap&& rhs) noexcept;
 
 		/// <summary>
 		/// Copy assignment operator.
@@ -348,8 +363,15 @@ namespace Library
 		/// </summary>
 		/// <param name="rhs">HashMap whose values are copied.</param>
 		/// <returns>Modified HashMap with copied values.</returns>
-		HashMap& operator=(HashMap && rhs) = default;
-#pragma endregion Constructor, Destructor, Assignment
+		HashMap& operator=(HashMap && rhs) noexcept;
+
+		/// <summary>
+		/// Initializer list assignment operator.
+		/// </summary>
+		/// <param name="rhs">List of values to be in the hashmap.</param>
+		/// <returns>Reference to the modified HashMap containing the new pairs.</returns>
+		HashMap& operator=(std::initializer_list<PairType> rhs);
+#pragma endregion Constructors, Destructor, and Assignment
 
 #pragma region Size and Capacity
 		/// <summary>
@@ -475,6 +497,14 @@ namespace Library
 		/// <param name="key">Key of an element in the HashMap.</param>
 		/// <returns>True if the key exists in the HashMap, false otherwise.</returns>
 		bool ContainsKey(const TKey& key) const;
+
+		/// <summary>
+		/// Checks if a PairType value with the given key is within the HashMap.
+		/// </summary>
+		/// <param name="key">Key of an element in the HashMap.</param>
+		/// <param name="dataOut">Reference to be written with the associated TData value, if the key is found.</param>
+		/// <returns>True if the key exists in the HashMap, false otherwise.</returns>
+		bool ContainsKey(const TKey& key, TData& dataOut);
 #pragma endregion Element Accessors
 
 #pragma region Modifiers
@@ -505,11 +535,22 @@ namespace Library
 		void Clear();
 #pragma endregion Modifiers
 
+#pragma region Helper Methods
+	private:
+		/// <summary>
+		/// Searches the HashMap for a given value and returns an Iterator.
+		/// </summary>
+		/// <param name="key">TKey value to search for in the HashMap.</param>
+		/// <param name="indexOut">Reference to be written with the hashed index.</param>
+		/// <returns>Iterator referencing the value, if found. Otherwise it returns an Iterator to the end.</returns>
+		Iterator Find(const TKey& key, std::size_t& indexOut);
+#pragma endregion Helper Methods
+
 	private:
 		/// <summary>
 		/// HashMap of chain lists for storing key-value pairs according at a hashed index.
 		/// </summary>
-		BucketType mBuckets{ BucketType(1, BucketType::EqualityFunctor()) };
+		BucketType mBuckets;
 
 		/// <summary>
 		/// Number of elements in the HashMap.
@@ -519,12 +560,12 @@ namespace Library
 		/// <summary>
 		/// Equality functor for comparing two TKey values.
 		/// </summary>
-		KeyEqualityFunctor mKeyEqualityFunctor{ DefaultEquality<TKey>() };
+		KeyEqualityFunctor mKeyEqualityFunctor;
 
 		/// <summary>
 		/// Hash functor used to compute hash code from a TKey.
 		/// </summary>
-		HashFunctor mHashFunctor{ DefaultHash<TKey>() };
+		HashFunctor mHashFunctor;
 	};
 }
 
