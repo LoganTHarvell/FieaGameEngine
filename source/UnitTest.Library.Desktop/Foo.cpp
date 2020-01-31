@@ -3,6 +3,8 @@
 
 namespace UnitTests
 {
+	RTTI_DEFINITIONS(Foo);
+
 	Foo::Foo(int data) :
 		mData(std::make_unique<int>(data))
 	{

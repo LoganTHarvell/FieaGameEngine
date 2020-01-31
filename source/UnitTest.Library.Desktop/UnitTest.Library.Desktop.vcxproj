@@ -164,6 +164,7 @@
   <ItemGroup>
     <ClCompile Include="Bar.cpp" />
     <ClCompile Include="BarTest.cpp" />
+    <ClCompile Include="DatumTest.cpp" />
     <ClCompile Include="DefaultEqualityTest.cpp" />
     <ClCompile Include="DefaultHashTest.cpp" />
     <ClCompile Include="Foo.cpp" />

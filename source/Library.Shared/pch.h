@@ -9,3 +9,6 @@
 #include <cassert>
 #include <functional>
 #include <algorithm>
+
+// OpenGL Mathematics
+#include <glm/glm.hpp>

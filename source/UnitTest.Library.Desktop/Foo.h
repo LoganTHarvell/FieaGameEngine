@@ -2,10 +2,14 @@
 
 #include <memory>
 
+#include "RTTI.h"
+
 namespace UnitTests
 {
-	class Foo
+	class Foo final : public Library::RTTI
 	{
+		RTTI_DECLARATIONS(Foo, Library::RTTI);
+
 	public:
 		explicit Foo(int data = 0);
 		Foo(const Foo& rhs);

@@ -99,6 +99,13 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(data, c.Data());
 		}
 
+		TEST_METHOD(RTTITest)
+		{
+			Foo a;
+
+			Assert::IsTrue(a.Is(Foo::TypeIdClass()));
+		}
+
 	private:
 		static _CrtMemState sStartMemState;
 	};
