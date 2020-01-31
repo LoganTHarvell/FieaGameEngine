@@ -152,7 +152,7 @@ namespace Library
 	}
 #pragma endregion ConstIterator
 
-#pragma region Constructors and Destructor
+#pragma region Constructors, Destructor, Assignment
 	template<typename T>
 	inline SList<T>::SList(const EqualityFunctor equalityFunctor) :
 		mEqualityFunctor(equalityFunctor)
@@ -176,27 +176,6 @@ namespace Library
 	}
 
 	template<typename T>
-	inline SList<T>::SList(SList&& rhs) noexcept :
-		mSize(rhs.mSize), mFront(rhs.mFront), mBack(rhs.mBack), mEqualityFunctor(rhs.mEqualityFunctor)
-	{
-		rhs.mSize = 0;
-		rhs.mFront = nullptr;
-		rhs.mBack = nullptr;
-	}
-
-	template<typename T>
-	inline SList<T>::SList(const std::initializer_list<T> rhs, const EqualityFunctor equalityFunctor) :
-		mEqualityFunctor(equalityFunctor)
-	{
-		for (const auto& value : rhs)
-		{
-			PushBack(value);
-		}
-	}
-#pragma endregion Constructors and Destructor
-
-#pragma region Assignment Operators
-	template<typename T>
 	inline SList<T>& SList<T>::operator=(const SList& rhs)
 	{
 		if (this != &rhs)
@@ -212,6 +191,15 @@ namespace Library
 		mEqualityFunctor = rhs.mEqualityFunctor;
 
 		return *this;
+	}
+
+	template<typename T>
+	inline SList<T>::SList(SList&& rhs) noexcept :
+		mSize(rhs.mSize), mFront(rhs.mFront), mBack(rhs.mBack), mEqualityFunctor(rhs.mEqualityFunctor)
+	{
+		rhs.mSize = 0;
+		rhs.mFront = nullptr;
+		rhs.mBack = nullptr;
 	}
 
 	template<typename T>
@@ -235,6 +223,16 @@ namespace Library
 	}
 
 	template<typename T>
+	inline SList<T>::SList(const std::initializer_list<T> rhs, const EqualityFunctor equalityFunctor) :
+		mEqualityFunctor(equalityFunctor)
+	{
+		for (const auto& value : rhs)
+		{
+			PushBack(value);
+		}
+	}
+
+	template<typename T>
 	inline SList<T>& SList<T>::operator=(const std::initializer_list<T> rhs)
 	{
 		Clear();
@@ -246,7 +244,7 @@ namespace Library
 
 		return *this;
 	}
-#pragma endregion Assignment Operators
+#pragma endregion Constructors, Destructor, Assignment
 
 #pragma region Boolean Operators
 	template<typename T>

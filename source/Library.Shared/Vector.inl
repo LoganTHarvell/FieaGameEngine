@@ -302,7 +302,7 @@ namespace Library
 	}
 #pragma endregion ConstIterator
 
-#pragma region Constructors and Destructor
+#pragma region Constructors, Destructor, Assignment
 	template <typename T>
 	Vector<T>::Vector(const std::size_t capacity, const EqualityFunctor equalityFunctor, const ReserveFunctor reserveFunctor) :
 		mEqualityFunctor(equalityFunctor), mReserveFunctor(reserveFunctor)
@@ -340,29 +340,6 @@ namespace Library
 	}
 
 	template<typename T>
-	inline Vector<T>::Vector(Vector&& rhs) noexcept :
-		mData(rhs.mData), mSize(rhs.mSize), mCapacity(rhs.mCapacity), mEqualityFunctor(rhs.mEqualityFunctor), mReserveFunctor(rhs.mReserveFunctor)
-	{
-		rhs.mData = nullptr;
-		rhs.mSize = 0;
-		rhs.mCapacity = 0;
-	}
-
-	template<typename T>
-	inline Vector<T>::Vector(const std::initializer_list<T> rhs, const EqualityFunctor equalityFunctor, const ReserveFunctor reserveFunctor) :
-		mEqualityFunctor(equalityFunctor), mReserveFunctor(reserveFunctor)
-	{
-		Reserve(rhs.size());
-
-		for (const auto& value : rhs)
-		{
-			PushBack(value);
-		}
-	}
-#pragma endregion Constructors and Destructor
-
-#pragma region Assignment Operators
-	template<typename T>
 	inline Vector<T>& Vector<T>::operator=(const Vector& rhs)
 	{
 		if (this != &rhs)
@@ -381,6 +358,15 @@ namespace Library
 		mEqualityFunctor = rhs.mEqualityFunctor;
 
 		return *this;
+	}
+
+	template<typename T>
+	inline Vector<T>::Vector(Vector&& rhs) noexcept :
+		mData(rhs.mData), mSize(rhs.mSize), mCapacity(rhs.mCapacity), mEqualityFunctor(rhs.mEqualityFunctor), mReserveFunctor(rhs.mReserveFunctor)
+	{
+		rhs.mData = nullptr;
+		rhs.mSize = 0;
+		rhs.mCapacity = 0;
 	}
 
 	template<typename T>
@@ -410,6 +396,17 @@ namespace Library
 	}
 
 	template<typename T>
+	inline Vector<T>::Vector(const std::initializer_list<T> rhs, const EqualityFunctor equalityFunctor, const ReserveFunctor reserveFunctor) :
+		mEqualityFunctor(equalityFunctor), mReserveFunctor(reserveFunctor)
+	{
+		Reserve(rhs.size());
+
+		for (const auto& value : rhs)
+		{
+			PushBack(value);
+		}
+	}
+	template<typename T>
 	inline Vector<T>& Vector<T>::operator=(const std::initializer_list<T> rhs)
 	{
 		Clear();
@@ -423,7 +420,7 @@ namespace Library
 
 		return *this;
 	}
-#pragma endregion Assignment Operators
+#pragma endregion Constructors, Destructor, Assignment
 
 #pragma region Boolean Operators
 	template<typename T>

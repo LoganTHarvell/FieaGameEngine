@@ -333,14 +333,12 @@ namespace Library
 		HashMap(const HashMap& rhs) = default;
 
 		/// <summary>
-		/// Initializer list constructor.
+		/// Copy assignment operator.
+		/// Copies the data values from the right hand side (rhs) value to the left hand side.
 		/// </summary>
-		/// <param name="rhs">List of PairType values for insertion.</param>
-		/// <param name="bucketCount">Number of buckets to initialize for the HashMap. Cannot be zero.</param>
-		/// <param name="keyEqualityFunctor">Equality functor for comparing TKey values.</param>
-		/// <param name="hashFunctor">Hashing functor for creating hash codes from TKey values.</param>
-		/// <remarks cref="bucketCount">Asserts on zero bucketCount.</remarks>
-		HashMap(const std::initializer_list<PairType> rhs, const std::size_t bucketCount=DefaultBucketCount, KeyEqualityFunctor keyEqualityFunctor = DefaultEquality<TKey>(), const HashFunctor hashFunctor = DefaultHash<TKey>());
+		/// <param name="rhs">HashMap whose values are copied.</param>
+		/// <returns>Modified HashMap with copied values.</returns>
+		HashMap& operator=(const HashMap& rhs) = default;
 
 		/// <summary>
 		/// Move constructor.
@@ -350,20 +348,22 @@ namespace Library
 		HashMap(HashMap&& rhs) noexcept;
 
 		/// <summary>
-		/// Copy assignment operator.
-		/// Copies the data values from the right hand side (rhs) value to the left hand side.
-		/// </summary>
-		/// <param name="rhs">HashMap whose values are copied.</param>
-		/// <returns>Modified HashMap with copied values.</returns>
-		HashMap& operator=(const HashMap& rhs) = default;
-
-		/// <summary>
 		/// Move assignment operator.
 		/// Moves the data values from the right hand side (rhs) value to the left hand side.
 		/// </summary>
 		/// <param name="rhs">HashMap whose values are copied.</param>
 		/// <returns>Modified HashMap with copied values.</returns>
 		HashMap& operator=(HashMap && rhs) noexcept;
+
+		/// <summary>
+		/// Initializer list constructor.
+		/// </summary>
+		/// <param name="rhs">List of PairType values for insertion.</param>
+		/// <param name="bucketCount">Number of buckets to initialize for the HashMap. Cannot be zero.</param>
+		/// <param name="keyEqualityFunctor">Equality functor for comparing TKey values.</param>
+		/// <param name="hashFunctor">Hashing functor for creating hash codes from TKey values.</param>
+		/// <remarks cref="bucketCount">Asserts on zero bucketCount.</remarks>
+		HashMap(const std::initializer_list<PairType> rhs, const std::size_t bucketCount = DefaultBucketCount, KeyEqualityFunctor keyEqualityFunctor = DefaultEquality<TKey>(), const HashFunctor hashFunctor = DefaultHash<TKey>());
 
 		/// <summary>
 		/// Initializer list assignment operator.
@@ -547,6 +547,7 @@ namespace Library
 #pragma endregion Helper Methods
 
 	private:
+#pragma region Data Members
 		/// <summary>
 		/// HashMap of chain lists for storing key-value pairs according at a hashed index.
 		/// </summary>
@@ -566,6 +567,7 @@ namespace Library
 		/// Hash functor used to compute hash code from a TKey.
 		/// </summary>
 		HashFunctor mHashFunctor;
+#pragma endregion Data Members
 	};
 }
 

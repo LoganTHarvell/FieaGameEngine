@@ -18,6 +18,7 @@ namespace Library
 	class SList final
 	{
 	public:
+#pragma region Type Definitions
 		/// <summary>
 		/// Value type for std::iterator_trait.
 		/// </summary>
@@ -27,6 +28,7 @@ namespace Library
 		/// Equality functor type used to evaluate equality of elements in the SList.
 		/// </summary>
 		using EqualityFunctor = std::function<bool(const T&, const T&)>;
+#pragma endregion Type Definitions
 
 	private:
 #pragma region Node
@@ -52,8 +54,8 @@ namespace Library
 			friend SList;
 			friend class ConstIterator;
 
-		public:
 #pragma region Iterator Traits
+		public:
 			/// <summary>
 			/// Size type for std::iterator_trait.
 			/// </summary>
@@ -85,6 +87,7 @@ namespace Library
 			using iterator_category = std::forward_iterator_tag;
 #pragma endregion Iterator Traits
 
+		public:
 			/* Defaults */
 			Iterator() = default;
 			~Iterator() = default;
@@ -167,8 +170,8 @@ namespace Library
 		{
 			friend SList;
 
-		public:
 #pragma region Iterator Traits
+		public:
 			/// <summary>
 			/// Size type for std::iterator_trait.
 			/// </summary>
@@ -283,7 +286,7 @@ namespace Library
 #pragma endregion ConstIterator
 
 	public:
-#pragma region Constructors and Destructor
+#pragma region Constructors, Destructor, Assignment
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
@@ -305,29 +308,19 @@ namespace Library
 		SList(const SList& rhs);
 
 		/// <summary>
-		/// Move constructor.
-		/// Takes a SList as a parameter and moves the data to the constructed SList.
-		/// </summary>
-		/// <param name="rhs">SList to be moved.</param>
-		SList(SList&& rhs) noexcept;
-
-		/// <summary>
-		/// Initializer SList constructor.
-		/// </summary>
-		/// <param name="rhs">Value SList for initializing a new SList.</param>
-		/// <param name="equalityFunctor">Equality functor for comparing SList elements.</param>
-		/// <remarks>May require an EqualityFunctor passed using constructor syntax, if no suitable DefaultEquality exists.</remarks>
-		SList(const std::initializer_list<T> rhs, const EqualityFunctor equalityFunctor=DefaultEquality<T>());
-#pragma endregion Constructors and Destructor
-
-#pragma region Assignment Operators
-		/// <summary>
 		/// Copy assignment operator.
 		/// Copies the data values from the right hand side (rhs) value to the left hand side.
 		/// </summary>
 		/// <param name="rhs">SList whose values are copied.</param>
 		/// <returns>Modified SList with copied values.</returns>
 		SList& operator=(const SList& rhs);
+
+		/// <summary>
+		/// Move constructor.
+		/// Takes a SList as a parameter and moves the data to the constructed SList.
+		/// </summary>
+		/// <param name="rhs">SList to be moved.</param>
+		SList(SList&& rhs) noexcept;
 
 		/// <summary>
 		/// Move assignment operator.
@@ -338,11 +331,19 @@ namespace Library
 		SList& operator=(SList&& rhs) noexcept;
 
 		/// <summary>
+		/// Initializer SList constructor.
+		/// </summary>
+		/// <param name="rhs">Value SList for initializing a new SList.</param>
+		/// <param name="equalityFunctor">Equality functor for comparing SList elements.</param>
+		/// <remarks>May require an EqualityFunctor passed using constructor syntax, if no suitable DefaultEquality exists.</remarks>
+		SList(const std::initializer_list<T> rhs, const EqualityFunctor equalityFunctor=DefaultEquality<T>());
+
+		/// <summary>
 		/// Initializer SList assignment operator.
 		/// </summary>
 		/// <param name="rhs">Value list for initializing a new SList.</param>
 		SList& operator=(const std::initializer_list<T> rhs);
-#pragma endregion Assignment Operators
+#pragma endregion Constructors, Destructor, Assignment
 
 #pragma region Boolean Operators
 		/// <summary>
@@ -514,6 +515,7 @@ namespace Library
 #pragma endregion Modifiers
 
 	private:
+#pragma region Data Members
 		/// <summary>
 		/// Number of elements in the SList.
 		/// </summary>
@@ -533,6 +535,7 @@ namespace Library
 		/// Functor for evaluating the equality of two values in the SList.
 		/// </summary>
 		EqualityFunctor mEqualityFunctor{ DefaultEquality<T>() };
+#pragma endregion Data Members
 	};
 }
 

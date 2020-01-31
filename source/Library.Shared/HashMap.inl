@@ -170,7 +170,7 @@ namespace Library
 	}
 #pragma endregion ConstIterator
 
-#pragma region Constructors
+#pragma region Constructors, Destructor, Assignment
 	template<typename TKey, typename TData>
 	inline HashMap<TKey, TData>::HashMap(const size_t bucketCount, const KeyEqualityFunctor keyEqualityFunctor, const HashFunctor hashFunctor) :
 		mBuckets(0, BucketType::EqualityFunctor()), mKeyEqualityFunctor(keyEqualityFunctor), mHashFunctor(hashFunctor)
@@ -226,7 +226,7 @@ namespace Library
 
 		return *this;
 	}
-#pragma endregion Constructors
+#pragma endregion Constructors, Destructor, Assignment
 
 #pragma region Size and Capacity
 	template<typename TKey, typename TData>

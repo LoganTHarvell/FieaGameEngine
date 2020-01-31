@@ -19,6 +19,7 @@ namespace Library
 	class Vector final
 	{
 	public:
+#pragma region Type Definitions
 		/// <summary>
 		/// Value type for std::iterator_trait.
 		/// </summary>
@@ -33,8 +34,8 @@ namespace Library
 		/// Equality functor type used to evaluate equality of Vector types.
 		/// </summary>
 		using EqualityFunctor = std::function<bool(const T&, const T&)>;
+#pragma endregion Type Definitions
 
-	public:
 #pragma region Default Functors
 		/// <summary>
 		/// Functor specifying the default strategy for incrementing the capacity of the Vector.
@@ -51,6 +52,7 @@ namespace Library
 		};
 #pragma endregion Default Functors
 
+	public:
 #pragma region Iterator
 		/// <summary>
 		/// Class for traversing the Vector and retrieving values, which can then be manipulated.
@@ -412,14 +414,15 @@ namespace Library
 #pragma endregion ConstIterator
 
 	public:
-#pragma region Constructor and Destructor
+#pragma region Constructors, Destructor, Assignment
+	public:
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
 		/// <param name="capacity">Default capacity for the vector.</param>
 		/// <param name="equalityFunctor">Default equality functor.</param>
 		/// <param name="reserveFunctor">Default reserve strategy functor.</param>
-		Vector(const std::size_t capacity=0, const EqualityFunctor equalityFunctor=DefaultEquality<T>(), const ReserveFunctor reserveFunctor=DefaultReserveFunctor());
+		explicit Vector(const std::size_t capacity=0, const EqualityFunctor equalityFunctor=DefaultEquality<T>(), const ReserveFunctor reserveFunctor=DefaultReserveFunctor());
 
 		/// <summary>
 		/// Destructor. 
@@ -435,30 +438,19 @@ namespace Library
 		Vector(const Vector& rhs);
 
 		/// <summary>
-		/// Move constructor.
-		/// Takes a Vector as a parameter and moves the data to the constructed Vector.
-		/// </summary>
-		/// <param name="rhs">Vector to be moved.</param>
-		Vector(Vector&& rhs) noexcept;
-
-		/// <summary>
-		/// Initializer list constructor.
-		/// </summary>
-		/// <param name="rhs">Value list for intializing a new Vector.</param>
-		/// <remarks>May require an EqualityFunctor passed using constructor syntax, if no suitable DefaultEquality exists.</remarks>
-		/// <param name="reserveStrategy">Default reserve strategy functor.</param>
-		/// <param name="equalityFunctor">Default equality functor.</param>
-		Vector(const std::initializer_list<T> rhs, const EqualityFunctor equalityFunctor=DefaultEquality<T>(), const ReserveFunctor reserveFunctor=DefaultReserveFunctor());
-#pragma endregion Constructors and Destructor
-
-#pragma region Assignment Operators
-		/// <summary>
 		/// Copy assignment operator.
 		/// Copies the data values from the right hand side (rhs) value to the left hand side.
 		/// </summary>
 		/// <param name="rhs">Vector whose values are copied.</param>
 		/// <returns>Modified Vector with copied values.</returns>
 		Vector& operator=(const Vector& rhs);
+
+		/// <summary>
+		/// Move constructor.
+		/// Takes a Vector as a parameter and moves the data to the constructed Vector.
+		/// </summary>
+		/// <param name="rhs">Vector to be moved.</param>
+		Vector(Vector&& rhs) noexcept;
 
 		/// <summary>
 		/// Move assignment operator.
@@ -469,12 +461,21 @@ namespace Library
 		Vector& operator=(Vector&& rhs) noexcept;
 
 		/// <summary>
+		/// Initializer list constructor.
+		/// </summary>
+		/// <param name="rhs">Value list for intializing a new Vector.</param>
+		/// <remarks>May require an EqualityFunctor passed using constructor syntax, if no suitable DefaultEquality exists.</remarks>
+		/// <param name="reserveStrategy">Default reserve strategy functor.</param>
+		/// <param name="equalityFunctor">Default equality functor.</param>
+		Vector(const std::initializer_list<T> rhs, const EqualityFunctor equalityFunctor=DefaultEquality<T>(), const ReserveFunctor reserveFunctor=DefaultReserveFunctor());
+
+		/// <summary>
 		/// Initializer list assignment operator.
 		/// </summary>
 		/// <param name="rhs">Value Vector for initializing a new Vector.</param>
 		/// <remarks>Does not initialize equality functor. Must call SetEqualityFunctor for full functionality.</remarks>
 		Vector& operator=(const std::initializer_list<T> rhs);
-#pragma endregion Assignment Operators
+#pragma endregion Constructors, Destructor, Assignment
 
 #pragma region Boolean Operators
 		/// <summary>
@@ -692,6 +693,7 @@ namespace Library
 #pragma endregion Modifiers
 
 	private:
+#pragma region Data Members
 		/// <summary>
 		/// Pointer to a memory block for inserting elements into the Vector.
 		/// </summary>
@@ -716,6 +718,7 @@ namespace Library
 		/// Functor for evaluating the equality of two values in the Vector.
 		/// </summary>
 		EqualityFunctor mEqualityFunctor{ DefaultEquality<T>() };
+#pragma endregion Data Members
 	};
 }
 
