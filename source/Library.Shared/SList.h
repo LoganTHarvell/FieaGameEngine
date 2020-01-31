@@ -17,8 +17,8 @@ namespace Library
 	template <typename T>
 	class SList final
 	{
-	public:
 #pragma region Type Definitions
+	public:
 		/// <summary>
 		/// Value type for std::iterator_trait.
 		/// </summary>
@@ -30,8 +30,8 @@ namespace Library
 		using EqualityFunctor = std::function<bool(const T&, const T&)>;
 #pragma endregion Type Definitions
 
-	private:
 #pragma region Node
+	private:
 		/// <summary>
 		/// Represents an element in a SList.
 		/// </summary>
@@ -44,8 +44,8 @@ namespace Library
 		};
 #pragma endregion Node
 
-	public:
 #pragma region Iterator
+	public:
 		/// <summary>
 		/// Class for traversing the SList and retrieving values, which can then be manipulated.
 		/// </summary>
@@ -163,6 +163,7 @@ namespace Library
 #pragma endregion Iterator
 
 #pragma region ConstIterator
+	public:
 		/// <summary>
 		/// Class for traversing the SList and reading values, may not manipulate the SList.
 		/// </summary>
@@ -285,8 +286,8 @@ namespace Library
 		};
 #pragma endregion ConstIterator
 
-	public:
 #pragma region Constructors, Destructor, Assignment
+	public:
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
@@ -346,6 +347,7 @@ namespace Library
 #pragma endregion Constructors, Destructor, Assignment
 
 #pragma region Boolean Operators
+	public:
 		/// <summary>
 		/// Equals operator. 
 		/// Checks if the size of the SList and the data values are equal to the size and values of the right hand side (rhs) SList.
@@ -364,6 +366,7 @@ namespace Library
 #pragma endregion Boolean Operators
 
 #pragma region Size and Capacity
+	public:
 		/// <summary>
 		/// Getter method for the number of elements in the SList.
 		/// </summary>
@@ -378,6 +381,7 @@ namespace Library
 #pragma endregion Size
 
 #pragma region Iterator Accessors
+	public:
 		/// <summary>
 		/// Gets an Iterator pointing to the first element in the SList, values are mutable.
 		/// </summary>
@@ -430,6 +434,7 @@ namespace Library
 #pragma endregion Iterator Accessors
 
 #pragma region Element Accessors
+	public:
 		/// <summary>
 		/// Getter method for the first data value in the SList.
 		/// </summary>
@@ -460,6 +465,7 @@ namespace Library
 #pragma endregion Element Accessors
 
 #pragma region Modifiers
+	public:
 		/// <summary>
 		/// Adds an element with the passed in data to the front of the SList.
 		/// </summary>
@@ -514,8 +520,8 @@ namespace Library
 		void Clear();
 #pragma endregion Modifiers
 
-	private:
 #pragma region Data Members
+	private:
 		/// <summary>
 		/// Number of elements in the SList.
 		/// </summary>

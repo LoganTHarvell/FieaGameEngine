@@ -18,8 +18,8 @@ namespace Library
 	template <typename T>
 	class Vector final
 	{
-	public:
 #pragma region Type Definitions
+	public:
 		/// <summary>
 		/// Value type for std::iterator_trait.
 		/// </summary>
@@ -37,6 +37,7 @@ namespace Library
 #pragma endregion Type Definitions
 
 #pragma region Default Functors
+	private:
 		/// <summary>
 		/// Functor specifying the default strategy for incrementing the capacity of the Vector.
 		/// </summary>
@@ -52,8 +53,8 @@ namespace Library
 		};
 #pragma endregion Default Functors
 
-	public:
 #pragma region Iterator
+	public:
 		/// <summary>
 		/// Class for traversing the Vector and retrieving values, which can then be manipulated.
 		/// </summary>
@@ -231,6 +232,7 @@ namespace Library
 #pragma endregion Iterator
 
 #pragma region ConstIterator
+	public:
 		/// <summary>
 		/// Class for traversing the Vector and reading values, may not manipulate the Vector.
 		/// </summary>
@@ -413,7 +415,6 @@ namespace Library
 		};
 #pragma endregion ConstIterator
 
-	public:
 #pragma region Constructors, Destructor, Assignment
 	public:
 		/// <summary>
@@ -478,6 +479,7 @@ namespace Library
 #pragma endregion Constructors, Destructor, Assignment
 
 #pragma region Boolean Operators
+	public:
 		/// <summary>
 		/// Equals operator. 
 		/// Checks if the size of the Vector and the data values are equal to the size and values of the right hand side (rhs) Vector.
@@ -496,6 +498,7 @@ namespace Library
 #pragma endregion Boolean Operators
 
 #pragma region Size and Capacity
+	public:
 		/// <summary>
 		/// Getter method for the number of elements in the Vector.
 		/// </summary>
@@ -544,6 +547,7 @@ namespace Library
 #pragma endregion Size and Capacity
 
 #pragma region Iterator Accessors
+	public:
 		/// <summary>
 		/// Gets an Iterator pointing to the first element in the Vector, values are mutable.
 		/// </summary>
@@ -596,6 +600,7 @@ namespace Library
 #pragma endregion Iterator Accessors
 
 #pragma region Element Accessors
+	public:
 		/// <summary>
 		/// Getter method for the first data value in the Vector.
 		/// </summary>
@@ -660,6 +665,7 @@ namespace Library
 #pragma endregion Element Accessors
 
 #pragma region Modifiers
+	public:
 		/// <summary>
 		/// Adds an element with the passed in data to the back of the Vector.
 		/// </summary>
@@ -692,8 +698,8 @@ namespace Library
 		void Clear();
 #pragma endregion Modifiers
 
-	private:
 #pragma region Data Members
+	private:
 		/// <summary>
 		/// Pointer to a memory block for inserting elements into the Vector.
 		/// </summary>

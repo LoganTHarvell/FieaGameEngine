@@ -331,7 +331,7 @@ namespace Library
 	inline Vector<T>::Vector(const Vector& rhs) :
 		mEqualityFunctor(rhs.mEqualityFunctor), mReserveFunctor(rhs.mReserveFunctor)
 	{
-		Reserve(rhs.Capacity());
+		Reserve(rhs.mCapacity);
 
 		for (std::size_t i = 0; i < rhs.mSize; ++i)
 		{
@@ -346,7 +346,7 @@ namespace Library
 		{
 			Clear();
 			ShrinkToFit();
-			Reserve(rhs.Capacity());
+			Reserve(rhs.mCapacity);
 
 			for (std::size_t i = 0; i < rhs.mSize; ++i)
 			{
