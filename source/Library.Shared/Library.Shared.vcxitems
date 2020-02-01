@@ -42,6 +42,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Vector.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Datum.inl" />
     <None Include="$(MSBuildThisFileDirectory)DefaultEquality.inl" />
     <None Include="$(MSBuildThisFileDirectory)DefaultHash.inl" />
     <None Include="$(MSBuildThisFileDirectory)HashMap.inl" />

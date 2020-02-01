@@ -49,7 +49,7 @@ namespace Library
 			/// <param name="">Placeholder argument for the Vector size.</param>
 			/// <param name="capacity">Vector capacity.</param>
 			/// <returns>New capacity.</returns>
-			std::size_t operator()(const std::size_t, const std::size_t capacity) const;
+			constexpr std::size_t operator()(const std::size_t, const std::size_t capacity) const;
 		};
 #pragma endregion Default Functors
 

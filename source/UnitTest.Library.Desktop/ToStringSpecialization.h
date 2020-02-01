@@ -7,6 +7,7 @@
 #include "SList.h"
 #include "Vector.h"
 #include "HashMap.h"
+#include "Datum.h"
 
 using namespace UnitTests;
 using namespace Library;
@@ -1077,4 +1078,42 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 		RETURN_WIDE_STRING(t);
 	}
 #pragma endregion HashMap Iterator
+
+#pragma region Datum
+	template<>
+	inline std::wstring ToString<Datum::DatumTypes>(const Datum::DatumTypes& t)
+	{
+		RETURN_WIDE_STRING(static_cast<int>(t));
+	}
+
+	template<>
+	inline std::wstring ToString<Datum::DatumTypes>(const Datum::DatumTypes* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<Datum::DatumTypes>(Datum::DatumTypes* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<Datum>(const Datum& t)
+	{
+		RETURN_WIDE_STRING(t.Size());
+	}
+
+	template<>
+	inline std::wstring ToString<Datum>(const Datum* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<Datum>(Datum* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+#pragma endregion Datum
 }

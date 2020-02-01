@@ -102,7 +102,7 @@ namespace UnitTests
 	}
 
 	template<typename TKey, typename TData>
-	void TestInitialization(typename HashMap<TKey, TData>::KeyEqualityFunctor keyEqualityFunctor = DefaultEquality<TKey>())
+	void TestConstructors(typename HashMap<TKey, TData>::KeyEqualityFunctor keyEqualityFunctor = DefaultEquality<TKey>())
 	{
 		HashMap hashMap = HashMap<TKey, TData>(20, keyEqualityFunctor);
 		Assert::AreEqual(hashMap.begin(), hashMap.end());
@@ -429,9 +429,9 @@ namespace UnitTestLibraryDesktop
 
  		TEST_METHOD(Initialization)
  		{
- 			TestInitialization<int, Foo>();
- 			TestInitialization<double, Foo>();
- 			TestInitialization<Foo, Foo>();
+ 			TestConstructors<int, Foo>();
+ 			TestConstructors<double, Foo>();
+ 			TestConstructors<Foo, Foo>();
  		}
 
  		TEST_METHOD(Copy)

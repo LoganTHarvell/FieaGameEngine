@@ -17,21 +17,55 @@ using namespace Library;
 namespace UnitTests
 {
 	template<typename T>
-	void TestInitialization()
+	void TestConstructors(const std::initializer_list<T> data)
 	{
+		Datum emptyDatum;
+		Assert::AreEqual(0_z, emptyDatum.Size());
+		Assert::AreEqual(0_z, emptyDatum.Capacity());
+		Assert::AreEqual(emptyDatum.Type(), Datum::DatumTypes::Unknown);
 
+		Datum datum1 = *data.begin();
+		Assert::AreEqual(1_z, datum1.Size());
+		Assert::AreEqual(1_z, datum1.Capacity());
+		Assert::AreEqual(datum1.Type(), Datum::TypeOf<T>());
+
+		datum1 = data;
+		Assert::AreEqual(3_z, datum1.Size());
+		Assert::AreEqual(3_z, datum1.Capacity());
+		Assert::AreEqual(datum1.Type(), Datum::TypeOf<T>());
+
+		Datum datum2 = data;
+		Assert::AreEqual(3_z, datum2.Size());
+		Assert::AreEqual(3_z, datum2.Capacity());
+		Assert::AreEqual(datum2.Type(), Datum::TypeOf<T>());
+
+		datum2 = *data.begin();
+		Assert::AreEqual(1_z, datum2.Size());
+		Assert::AreEqual(1_z, datum2.Capacity());
+		Assert::AreEqual(datum2.Type(), Datum::TypeOf<T>());
 	}
 
 	template<typename T>
-	void TestCopy()
+	void TestCopy(const std::initializer_list<T> data)
 	{
+		Datum datum = data;
+		
+		Datum copy = datum;
+		Assert::AreEqual(datum, copy);
 
+		copy = datum;
+		Assert::AreEqual(datum, copy);
 	}
 
 	template<typename T>
-	void TestMove()
+	void TestMove(const std::initializer_list<T> data)
 	{
+		Datum datum = data;
+		Datum moved(std::move(datum));
 
+		datum = moved;
+
+		moved = std::move(datum);
 	}
 
 	template<typename T>
@@ -114,25 +148,19 @@ namespace UnitTestLibraryDesktop
 #endif
 		}
 
- 		TEST_METHOD(Initialization)
+ 		TEST_METHOD(Constructors)
  		{
- 			TestInitialization<int>();
- 			TestInitialization<float>();
- 			TestInitialization<Foo>();
+			TestConstructors<int>({ 10, 20, 30 });
  		}
 
  		TEST_METHOD(Copy)
  		{
- 			TestCopy<int>();
- 			TestCopy<double>();
- 			TestCopy<Foo>();
+ 			TestCopy<int>({ 10, 20, 30 });
  		}
 
 		TEST_METHOD(Move)
 		{
-			TestMove<int>();
-			TestMove<double>();
-			TestMove<Foo>();
+			TestMove<int>({ 10, 20, 30 });
 		}
 
 		TEST_METHOD(InitializerListAssignment)

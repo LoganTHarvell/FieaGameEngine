@@ -1099,6 +1099,14 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(filledConstIntVector2.Size(), 2_z);
 			Assert::AreEqual(filledConstDoubleVector2.Size(), 2_z);
 			Assert::AreEqual(filledConstfooVector2.Size(), 2_z);
+
+			intVector = Vector<int>(0, Vector<int>::EqualityFunctor(), Vector<int>::ReserveFunctor());
+			doubleVector = Vector<double>(0, Vector<double>::EqualityFunctor(), Vector<double>::ReserveFunctor());
+			fooVector = Vector<Foo>(0, Vector<Foo>::EqualityFunctor(), Vector<Foo>::ReserveFunctor());
+
+			Assert::ExpectException<std::runtime_error>([&intVector] { intVector.PushBack(10); });
+			Assert::ExpectException<std::runtime_error>([&doubleVector] { doubleVector.PushBack(10); });
+			Assert::ExpectException<std::runtime_error>([&fooVector] { fooVector.PushBack(Foo(10)); });
 		}
 
 		TEST_METHOD(PopBack)
@@ -1230,6 +1238,14 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(constDoubleVector.end(), constDoubleVector.Find(40));
 			Assert::AreEqual(constfooVector.end(), constfooVector.Find(Foo(40)));
 			Assert::AreEqual(constBarVector.end(), constBarVector.Find(Bar(40)));
+
+			intVector = Vector<int>(0, Vector<int>::EqualityFunctor());
+			doubleVector = Vector<double>(0, Vector<double>::EqualityFunctor());
+			fooVector = Vector<Foo>(0, Vector<Foo>::EqualityFunctor());
+
+			Assert::ExpectException<std::runtime_error>([&intVector] { intVector.Find(10); });
+			Assert::ExpectException<std::runtime_error>([&doubleVector] { doubleVector.Find(10); });
+			Assert::ExpectException<std::runtime_error>([&fooVector] { fooVector.Find(Foo(10)); });
 		}
 
 		TEST_METHOD(Remove)
@@ -1310,6 +1326,14 @@ namespace UnitTestLibraryDesktop
 
 			Assert::IsTrue(fooVector.IsEmpty());
 			Assert::IsFalse(fooVector.Remove(Foo(60)));
+
+			intVector = Vector<int>(0, Vector<int>::EqualityFunctor());
+			doubleVector = Vector<double>(0, Vector<double>::EqualityFunctor());
+			fooVector = Vector<Foo>(0, Vector<Foo>::EqualityFunctor());
+
+			Assert::ExpectException<std::runtime_error>([&intVector] { intVector.Remove(10); });
+			Assert::ExpectException<std::runtime_error>([&doubleVector] { doubleVector.Remove(10); });
+			Assert::ExpectException<std::runtime_error>([&fooVector] { fooVector.Remove(Foo(10)); });
 		}
 
 		TEST_METHOD(Clear)
