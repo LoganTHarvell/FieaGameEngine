@@ -43,6 +43,9 @@ namespace Library
 		};
 
 	private:
+		/// <summary>
+		/// Alias for a pointer to an RTTI class instance.
+		/// </summary>
 		using RTTIPointer = RTTI*;
 
 		/// <summary>
@@ -124,7 +127,7 @@ namespace Library
 		static constexpr DatumTypes TypeOf<std::string>();
 
 		/// <summary>
-		/// Returns the DatumTypes value associated with a RTTI pointer type.
+		/// Returns the DatumTypes value associated with a RTTIPointer type.
 		/// </summary>
 		template<>
 		static constexpr DatumTypes TypeOf<RTTIPointer>();
@@ -451,26 +454,159 @@ namespace Library
 
 #pragma region Type, Size, Capacity
 	public:
+		/// <summary>
+		/// Gets the DatumTypes value.
+		/// </summary>
+		/// <returns>Current DatumTypes value.</returns>
 		DatumTypes Type() const;
+
+		/// <summary>
+		/// Sets the DatumTypes value.
+		/// </summary>
+		/// <param name="type">DatumTypes value to set.</param>
 		void SetType(DatumTypes type);
+
+		/// <summary>
+		/// Gets the number of elements.
+		/// </summary>
+		/// <returns>Current number of elements.</returns>
 		std::size_t Size() const;
+
+		/// <summary>
+		/// Determines if the Datum is empty.
+		/// </summary>
+		/// <returns>True if the Datum contains no elements, otherwise false.</returns>
 		bool IsEmpty() const;
+
+		/// <summary>
+		/// Gets the max number of elements for which memory is available. 
+		/// </summary>
+		/// <returns>Max number of elements for which memory is available.</returns>
 		std::size_t Capacity() const;
+
+		/// <summary>
+		/// Allocates memory for the number of elements specified.
+		/// </summary>
+		/// <param name="capacity">Number of elements for for which to allocate memory.</param>
 		void Reserve(std::size_t capacity);
-		void Resize(std::size_t capacity);
+
+		/// <summary>
+		/// Inserts or destroys elements so the Datum contains only the specified number of elements.
+		/// </summary>
+		/// <param name="size">New size for the Datum.</param>
+		void Resize(std::size_t size);
+
+		/// <summary>
+		/// Shrinks any excess capacity to match the number of elements the Datum contains.
+		/// </summary>
 		void ShrinkToFit();
 #pragma endregion Type, Size Capacity
 
+#pragma region Element Accessors
+		/// <summary>
+		/// Gets the first element of the Datum.
+		/// </summary>
+		/// <returns>Reference to the first element.</returns>
+		/// <typeparam name="T">Type of elements in the Datum.</typeparam>
+		template<typename T>
+		T& Front();
+
+		/// <summary>
+		/// Gets the first element of the Datum.
+		/// </summary>
+		/// <returns>Constant reference to the first element.</returns>
+		/// <typeparam name="T">Type of elements in the Datum.</typeparam>
+		template<typename T>
+		const T& Front() const;
+
+		/// <summary>
+		/// Gets the last element of the Datum.
+		/// </summary>
+		/// <returns>Reference to the last element.</returns>
+		/// <typeparam name="T">Type of elements in the Datum.</typeparam>
+		template<typename T>
+		T& Back();
+
+		/// <summary>
+		/// Gets the first element of the Datum.
+		/// </summary>
+		/// <returns>Constant reference to the first element.</returns>
+		/// <typeparam name="T">Type of elements in the Datum.</typeparam>
+		template<typename T>
+		const T& Back() const;
+
+		/// <summary>
+		/// Sets the element of the Datum at a given index, defaults to the first element.
+		/// </summary>
+		/// <param name="value">Value to set the element.</param>
+		/// <param name="index">Index of the element to be set with the value.</param>
+		/// <returns>Reference to the set element.</returns>
+		/// <typeparam name="T">Type of elements in the Datum.</typeparam>
+		template<typename T>
+		T& Set(const T& value, std::size_t index=0);
+
+		/// <summary>
+		/// Gets the element of the Datum at a given index, defaults to the first element.
+		/// </summary>
+		/// <param name="index">Index of the element.</param>
+		/// <returns>Reference to the element.</returns>
+		/// <typeparam name="T">Type of elements in the Datum.</typeparam>
+		template<typename T>
+		T& Get(std::size_t index=0);
+
+		/// <summary>
+		/// Gets the element of the Datum at a given index, defaults to the first element.
+		/// </summary>
+		/// <param name="index">Index of the element.</param>
+		/// <returns>Constant reference to the element.</returns>
+		/// <typeparam name="T">Type of elements in the Datum.</typeparam>
+		template<typename T>
+		const T& Get(std::size_t index=0) const;
+
+		/// <summary>
+		/// Finds an element from the Datum given the corresponding value.
+		/// </summary>
+		/// <param name="value">Value to be searched for in the Datun to be removed.</param>
+		/// <returns>Index of the value in the Datum if found, otherwise one past the last index.</returns>
+		/// <typeparam name="T">Type of elements in the Datum.</typeparam>
+		template<typename T>
+		std::size_t Find(const T& value);
+#pragma endregion Element Accessors
+
 #pragma region Modifiers
 	public:
-#pragma region Push Back Overloads
-		void PushBack(const int data);
-		void PushBack(const float data);
-		void PushBack(const glm::vec4& data);
-		void PushBack(const glm::mat4& data);
-		void PushBack(const std::string& data);
-		void PushBack(RTTIPointer const& data);
-#pragma endregion Push Back Overloads
+		/// <summary>
+		/// Inserts data into the end of the Datum, incrementing capacity if needed.
+		/// </summary>
+		/// <param name="size">New size for the Datum.</param>
+		/// <param name="mDataPtr">Pointer alias for mData for the DatumTypes value.</param>
+		/// <typeparam name="T">Type of elements in the Datum.</typeparam>
+		template<typename T>
+		void PushBack(const T& data);
+
+		/// <summary>
+		/// Removes the last element of the Datum.
+		/// </summary>
+		void PopBack();
+
+		/// <summary>
+		/// Removes a single element from the Datum given the corresponding value.
+		/// </summary>
+		/// <param name="value">Value to be searched for in the Datum to be removed.</param>
+		/// <returns>True on successful remove, false otherwise.</returns>
+		/// <typeparam name="T">Type of elements in the Datum.</typeparam>
+		template<typename T>
+		bool Remove(const T& value);
+
+		/// <summary>
+		/// Removes a single element from the Datum given the corresponding value.
+		/// </summary>
+		/// <param name="value">Value to be searched for in the Datum to be removed.</param>
+		/// <param name="index">Index of the element.</param>
+		/// <returns>True on successful remove, false otherwise.</returns>
+		/// <typeparam name="T">Type of elements in the Datum.</typeparam>
+		template<typename T>
+		bool RemoveAt(const T& value, const std::size_t index);
 
 		/// <summary>
 		/// Destroys all elements in the Datum. Sets size to zero, but does not change capacity.
@@ -498,11 +634,21 @@ namespace Library
 		template<typename T>
 		Datum& AssignmentHelper(const std::initializer_list<T> rhs);
 
+		/// <summary>
+		/// Determines if the Datum is equal to a scalar value.
+		/// </summary>
+		/// <param name="rhs">Scalar value to compare against.</param>
+		/// <returns>True if the Datum is equal to the scalar value.</returns>
 		template<typename T>
-		bool EqualsScalarHelper(const T& rhs, const T*) const;
+		bool EqualsScalarHelper(const T& rhs) const;
 
+		/// <summary>
+		/// Determines if the Datum is equal to the scalar string.
+		/// </summary>
+		/// <param name="rhs">Scalar value to compare against.</param>
+		/// <returns>True if the Datum is equal to the scalar value.</returns>
 		template<>
-		bool EqualsScalarHelper<RTTIPointer>(const RTTIPointer& rhs, const RTTIPointer* mDataPtr) const;
+		bool EqualsScalarHelper<RTTIPointer>(const RTTIPointer& rhs) const;
 
 		/// <summary>
 		/// Resize helper that inserts or destroys data to resize the Datum to contain the given size.
@@ -511,16 +657,13 @@ namespace Library
 		/// <param name="mDataPtr">Pointer alias for mData for the DatumTypes value.</param>
 		/// <typeparam name="T">Type of elements in the Datum.</typeparam>
 		template<typename T>
-		void ResizeHelper(std::size_t size, T*& mDataPtr);
+		void ResizeHelper(std::size_t size);
 
 		/// <summary>
-		/// PushBack helper that inserts data into the end of the Datum, incrementing capacity if needed.
+		/// Removes the last element of the Datum.
 		/// </summary>
-		/// <param name="size">New size for the Datum.</param>
-		/// <param name="mDataPtr">Pointer alias for mData for the DatumTypes value.</param>
-		/// <typeparam name="T">Type of elements in the Datum.</typeparam>
 		template<typename T>
-		void PushBackHelper(const T& data, T*& mDataPtr);
+		void PopBackHelper();
 #pragma endregion HelperMethods
 
 #pragma region Data Members

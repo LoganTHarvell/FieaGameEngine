@@ -103,7 +103,7 @@ namespace UnitTestLibraryDesktop
 		{
 			Foo a;
 
-			Assert::IsTrue(a.Is(Foo::TypeIdClass()));
+			Assert::IsTrue(a.Set(Foo::TypeIdClass()));
 		}
 
 	private:

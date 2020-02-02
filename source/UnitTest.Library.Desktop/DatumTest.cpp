@@ -85,6 +85,9 @@ namespace UnitTests
 		datum1 = data;
 		datum2 = *data.begin();
 		Assert::IsTrue(datum1 != datum2);
+
+		Assert::IsTrue(datum2 == *data.begin());
+		Assert::IsFalse(datum2 != *data.begin());
 	}
 
 	template<typename T>
@@ -151,15 +154,57 @@ namespace UnitTests
 	}
 
 	template<typename T>
-	void TestElementAccessors()
+	void TestElementAccessors(const std::initializer_list<T> data)
 	{
+		Datum datum;
+		
+		auto it = data.begin();
+		for (std::size_t i = 0; i < data.size(); ++i, ++it)
+		{
+			datum.PushBack(T());
+			Assert::AreEqual(*it, datum.Set(*it, i));
+			Assert::AreEqual(*it, datum.Get<T>(i));
+		}
 
+		Assert::AreEqual(*data.begin(), datum.Front<T>());
+		Assert::AreEqual(*(data.end()-1), datum.Back<T>());
+
+		const Datum datumConst = datum;
+
+		it = data.begin();
+		for (std::size_t i = 0; i < data.size(); ++i, ++it)
+		{
+			Assert::AreEqual(*it, datumConst.Get<T>(i));
+		}
+
+		Assert::AreEqual(*data.begin(), datumConst.Front<T>());
+		Assert::AreEqual(*(data.end()-1), datumConst.Back<T>());
 	}
 
 	template<typename T>
-	void TestPushBack()
+	void TestPushBack(const std::initializer_list<T> data)
 	{
+		Datum datum;
 
+		auto it = data.begin();
+		for (std::size_t i = 0; i < data.size(); ++i, ++it)
+		{
+			std::size_t capacity;
+
+			if (datum.Size() < datum.Capacity())
+			{
+				capacity = datum.Capacity();
+			}
+			else
+			{
+				capacity = std::max(static_cast<std::size_t>(datum.Capacity() * 1.5), datum.Capacity() + 1_z);
+			}
+
+			datum.PushBack(*it);
+			Assert::AreEqual(*it, datum.Get<T>(i));
+			Assert::AreEqual(i+1, datum.Size());
+			Assert::AreEqual(capacity, datum.Capacity());
+		}
 	}
 
 	template<typename T>
@@ -245,6 +290,18 @@ namespace UnitTestLibraryDesktop
 		{
 			TestResize<int>({ 10, 20, 30 });
 			TestResize<float>({ 10, 20, 30 });
+		}
+
+		TEST_METHOD(ElementAccessors)
+		{
+			TestElementAccessors<int>({ 10, 20, 30 });
+			TestElementAccessors<float>({ 10, 20, 30 });
+		}
+
+		TEST_METHOD(PushBack)
+		{
+			TestPushBack<int>({ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
+			TestPushBack<float>({ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
 		}
 
 		TEST_METHOD(Clear)

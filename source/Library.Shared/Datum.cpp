@@ -314,32 +314,32 @@ namespace Library
 #pragma region Equals Scalar
 	bool Datum::operator==(const int rhs) const noexcept
 	{
-		return EqualsScalarHelper(rhs, mData.intPtr);
+		return EqualsScalarHelper(rhs);
 	}
 
 	bool Datum::operator==(const float rhs) const noexcept
 	{
-		return EqualsScalarHelper(rhs, mData.floatPtr);
+		return EqualsScalarHelper(rhs);
 	}
 
 	bool Datum::operator==(const glm::vec4& rhs) const noexcept
 	{
-		return EqualsScalarHelper(rhs, mData.vectorPtr);
+		return EqualsScalarHelper(rhs);
 	}
 
 	bool Datum::operator==(const glm::mat4& rhs) const noexcept
 	{
-		return EqualsScalarHelper(rhs, mData.matrixPtr);
+		return EqualsScalarHelper(rhs);
 	}
 
 	bool Datum::operator==(const std::string& rhs) const noexcept
 	{
-		return EqualsScalarHelper(rhs, mData.stringPtr);
+		return EqualsScalarHelper(rhs);
 	}
 
 	bool Datum::operator==(const RTTIPointer& rhs) const noexcept
 	{
-		return EqualsScalarHelper(rhs, mData.rttiPtr);
+		return EqualsScalarHelper(rhs);
 	}
 #pragma endregion Equals Scalar
 
@@ -398,22 +398,22 @@ namespace Library
 		switch (mType)
 		{
 		case DatumTypes::Integer:
-			ResizeHelper(size, mData.intPtr);
+			ResizeHelper<int>(size);
 			break;
 		case DatumTypes::Float:
-			ResizeHelper(size, mData.floatPtr);
+			ResizeHelper<float>(size);
 			break;
 		case DatumTypes::Vector:
-			ResizeHelper(size, mData.vectorPtr);
+			ResizeHelper<glm::vec4>(size);
 			break;
 		case DatumTypes::Matrix:
-			ResizeHelper(size, mData.matrixPtr);
+			ResizeHelper<glm::mat4>(size);
 			break;
 		case DatumTypes::String:
-			ResizeHelper(size, mData.stringPtr);
+			ResizeHelper<std::string>(size);
 			break;
 		case DatumTypes::Pointer:
-			ResizeHelper(size, mData.rttiPtr);
+			ResizeHelper<RTTIPointer>(size);
 			break;
 
 		default:
@@ -445,37 +445,33 @@ namespace Library
 #pragma endregion Size and Capacity
 
 #pragma region Modifiers
-#pragma region Push Back Overloads
-	void Datum::PushBack(const int data)
+	void Datum::PopBack()
 	{
-		PushBackHelper(data, mData.intPtr);
-	}
+		switch (mType)
+		{
+		case DatumTypes::Integer:
+			PopBackHelper<int>();
+			break;
+		case DatumTypes::Float:
+			PopBackHelper<float>();
+			break;
+		case DatumTypes::Vector:
+			PopBackHelper<glm::vec4>();
+			break;
+		case DatumTypes::Matrix:
+			PopBackHelper<glm::mat4>();
+			break;
+		case DatumTypes::String:
+			PopBackHelper<std::string>();
+			break;
+		case DatumTypes::Pointer:
+			PopBackHelper<RTTIPointer>();
+			break;
 
-	void Datum::PushBack(const float data)
-	{
-		PushBackHelper(data, mData.floatPtr);
+		default:
+			break;
+		}
 	}
-
-	void Datum::PushBack(const glm::vec4& data)
-	{
-		PushBackHelper(data, mData.vectorPtr);
-	}
-
-	void Datum::PushBack(const glm::mat4& data)
-	{
-		PushBackHelper(data, mData.matrixPtr);
-	}
-
-	void Datum::PushBack(const std::string& data)
-	{
-		PushBackHelper(data, mData.stringPtr);
-	}
-
-	void Datum::PushBack(const RTTIPointer& data)
-	{
-		PushBackHelper(data, mData.rttiPtr);
-	}
-#pragma endregion Push Back Overloads
 
 	void Datum::Clear()
 	{		
@@ -536,21 +532,21 @@ namespace Library
 	}
 
 	template<typename T>
-	inline bool Datum::EqualsScalarHelper(const T& rhs, const T* mDataPtr) const
+	inline bool Datum::EqualsScalarHelper(const T& rhs) const
 	{
 		if (mSize != 1) return false;
-		return mDataPtr[0] == rhs;
+		return reinterpret_cast<T*>(mData.voidPtr)[0] == rhs;
 	}
 
 	template<>
-	inline bool Datum::EqualsScalarHelper(const Datum::RTTIPointer& rhs, const Datum::RTTIPointer* mDataPtr) const
+	inline bool Datum::EqualsScalarHelper(const Datum::RTTIPointer& rhs) const
 	{
 		if (mSize != 1) return false;
-		return (*mDataPtr)->Equals(rhs);
+		return (*mData.rttiPtr)->Equals(rhs);
 	}
 
 	template<typename T>
-	void Datum::ResizeHelper(std::size_t size, T*& mDataPtr)
+	void Datum::ResizeHelper(std::size_t size)
 	{
 		if (size > mSize)
 		{
@@ -558,14 +554,14 @@ namespace Library
 
 			for (std::size_t i = mSize; i < size; ++i)
 			{
-				new(mDataPtr + i)T();
+				new(reinterpret_cast<T*>(mData.voidPtr) + i)T();
 			}
 		}
 		else if (size < mSize)
 		{
 			for (std::size_t i = size; i < mSize; ++i)
 			{
-				mDataPtr[i].~T();
+				reinterpret_cast<T*>(mData.voidPtr)[i].~T();
 			}
 		}
 
@@ -573,26 +569,14 @@ namespace Library
 	}
 
 	template<typename T>
-	inline void Datum::PushBackHelper(const T& data, T*& mDataPtr)
+	inline void Datum::PopBackHelper()
 	{
 		if (!mInternalStorage) throw std::runtime_error("External storage.");
 
-		if (mType == DatumTypes::Unknown)
+		if (mSize > 0)
 		{
-			mType = TypeOf<T>();
+			reinterpret_cast<T*>(mData.voidPtr)[--mSize].~T();
 		}
-		else if (mType != TypeOf<T>())
-		{
-			throw std::runtime_error("Incompatible types.");
-		}
-
-		if (mCapacity <= mSize)
-		{
-			std::size_t newCapacity = mReserveFunctor(mCapacity, mSize);
-			Reserve(std::max(newCapacity, mCapacity + 1));
-		}
-
-		new(mDataPtr + mSize++)T(data);
 	}
 #pragma endregion Helper Methods
 }

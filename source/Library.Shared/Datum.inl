@@ -83,4 +83,154 @@ namespace Library
 		return mCapacity;
 	}
 #pragma endregion Size and Capacity
+
+#pragma region Element Accessors
+	template<typename T>
+	inline T& Datum::Front()
+	{
+		return Get<T>();
+	}
+
+	template<typename T>
+	inline const T& Datum::Front() const
+	{
+		return Get<T>();
+	}
+
+	template<typename T>
+	inline T& Datum::Back()
+	{
+		return Get<T>(mSize-1);
+	}
+
+	template<typename T>
+	inline const T& Datum::Back() const
+	{
+		return Get<T>(mSize-1);
+	}
+
+	template<typename T>
+	inline T& Datum::Set(const T& value, std::size_t index)
+	{
+		if (mType == DatumTypes::Unknown)		throw std::runtime_error("Type not set.");
+		if (TypeOf<T>() == DatumTypes::Unknown) throw std::runtime_error("Unknown data type.");
+		if (TypeOf<T>() != mType)				throw std::runtime_error("Incorrect type.");
+		if (index >= mSize)						throw std::out_of_range("Index out of bounds.");
+
+		reinterpret_cast<T*>(mData.voidPtr)[index] = value;
+		return reinterpret_cast<T*>(mData.voidPtr)[index];
+	}
+
+	template<typename T>
+	inline T& Datum::Get(std::size_t index)
+	{
+		if (mType == DatumTypes::Unknown)		throw std::runtime_error("Type not set.");
+		if (TypeOf<T>() == DatumTypes::Unknown) throw std::runtime_error("Unknown data type.");
+		if (TypeOf<T>() != mType)				throw std::runtime_error("Incorrect type.");
+		if (index >= mSize)						throw std::out_of_range("Index out of bounds.");
+
+		return reinterpret_cast<T*>(mData.voidPtr)[index];
+	}
+
+	template<typename T>
+	inline const T& Datum::Get(std::size_t index) const
+	{
+		if (mType == DatumTypes::Unknown)		throw std::runtime_error("Type not set.");
+		if (TypeOf<T>() == DatumTypes::Unknown) throw std::runtime_error("Unknown data type.");
+		if (TypeOf<T>() != mType)				throw std::runtime_error("Incorrect type.");
+		if (index >= mSize)						throw std::out_of_range("Index out of bounds.");
+
+		return reinterpret_cast<T*>(mData.voidPtr)[index];
+	}
+
+	template<typename T>
+	inline std::size_t Datum::Find(const T& value)
+	{
+		if (mType == DatumTypes::Unknown)		throw std::runtime_error("Type not set.");
+		if (TypeOf<T>() == DatumTypes::Unknown) throw std::runtime_error("Unknown data type.");
+		if (TypeOf<T>() != mType)				throw std::runtime_error("Incorrect type.");
+
+		T*& data = reinterpret_cast<T*>(mData.voidPtr);
+		for (std::size_t i = 0; i < mSize; ++i)
+		{
+			if (data[i] == value || (TypeOf<T>() == DatumTypes::Pointer && data[i].Equals(value)))
+			{
+				break;
+			}
+		}
+
+		return i;
+	}
+#pragma endregion Element Accessors
+
+#pragma region Modifiers
+	template<typename T>
+	void Datum::PushBack(const T& data)
+	{
+		if (TypeOf<T>() == DatumTypes::Unknown) throw std::runtime_error("Unknown data type.");
+		if (!mInternalStorage)					throw std::runtime_error("External storage.");
+
+		if (mType == DatumTypes::Unknown)
+		{
+			mType = TypeOf<T>();
+		}
+		else if (mType != TypeOf<T>())
+		{
+			throw std::runtime_error("Incorrect type.");
+		}
+
+		if (mCapacity <= mSize)
+		{
+			std::size_t newCapacity = mReserveFunctor(mCapacity, mSize);
+			Reserve(std::max(newCapacity, mCapacity + 1));
+		}
+
+		new(reinterpret_cast<T*>(mData.voidPtr) + mSize++)T(data);
+	}
+
+	template<typename T>
+	inline bool Datum::Remove(const T& value)
+	{
+		if (mType == DatumTypes::Unknown)		throw std::runtime_error("Type not set.");
+		if (TypeOf<T>() == DatumTypes::Unknown) throw std::runtime_error("Unknown data type.");
+		if (TypeOf<T>() != mType)				throw std::runtime_error("Incorrect type.");
+
+		T*& data = reinterpret_cast<T*>(mData.voidPtr);
+
+		for (std::size_t i = 0; i < mSize; ++i)
+		{
+			if (data[i] == value || (TypeOf<T>() == DatumTypes::Pointer && data[i].Equals(value)))
+			{
+				data[i].~T();
+				memmove(&data[i], &data[i + 1], sizeof(T) * (mSize - i));
+
+				--mSize;
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	template<typename T>
+	inline bool Datum::RemoveAt(const T& value, const std::size_t index)
+	{
+		if (mType == DatumTypes::Unknown)		throw std::runtime_error("Type not set.");
+		if (TypeOf<T>() == DatumTypes::Unknown) throw std::runtime_error("Unknown data type.");
+		if (TypeOf<T>() != mType)				throw std::runtime_error("Incorrect type.");
+
+		T*& data = reinterpret_cast<T*>(mData.voidPtr);
+
+		if (data[index] == value || (TypeOf<T>() == DatumTypes::Pointer && data[index].Equals(value)))
+		{
+			data[index].~T();
+			memmove(&data[index], &data[index + 1], sizeof(T) * (mSize - index));
+
+			--mSize;
+			return true;
+		}
+
+		return false;
+	}
+#pragma endregion Modifiers
 }

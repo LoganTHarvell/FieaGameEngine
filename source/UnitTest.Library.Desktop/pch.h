@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <string>
 #include <functional>
+#include <algorithm>
 #include <crtdbg.h>
 
 // Microsoft Native Unit Testing
