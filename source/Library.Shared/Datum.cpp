@@ -34,7 +34,7 @@ namespace Library
 						new(mData.stringPtr + i)std::string(rhs.mData.stringPtr[i]);
 					}
 				}
-				else
+				else if (mData.voidPtr && rhs.mData.voidPtr)
 				{
 					std::size_t dataSize = DatumSizeLUT[static_cast<std::size_t>(mType)];
 					std::memcpy(mData.voidPtr, rhs.mData.voidPtr, rhs.mSize * dataSize);
@@ -150,7 +150,7 @@ namespace Library
 		ConstructorHelper({ rhs });
 	}
 
-	Datum::Datum(RTTI* const& rhs)
+	Datum::Datum(RTTIPointer const& rhs)
 	{
 		ConstructorHelper({ rhs });
 	}
@@ -182,7 +182,7 @@ namespace Library
 		ConstructorHelper(rhs);
 	}
 
-	Datum::Datum(const std::initializer_list <RTTI*> rhs)
+	Datum::Datum(const std::initializer_list <RTTIPointer> rhs)
 	{
 		ConstructorHelper(rhs);
 	}
@@ -216,7 +216,7 @@ namespace Library
 		return AssignmentHelper({ rhs });
 	}
 
-	Datum& Datum::operator=(RTTI* const& rhs)
+	Datum& Datum::operator=(RTTIPointer const& rhs)
 	{
 		return AssignmentHelper({ rhs });
 	}
@@ -248,7 +248,7 @@ namespace Library
 		return AssignmentHelper(rhs);
 	}
 
-	Datum& Datum::operator=(std::initializer_list<RTTI*> rhs)
+	Datum& Datum::operator=(std::initializer_list<RTTIPointer> rhs)
 	{
 		return AssignmentHelper(rhs);
 	}
@@ -314,32 +314,32 @@ namespace Library
 #pragma region Equals Scalar
 	bool Datum::operator==(const int rhs) const noexcept
 	{
-		return EqualsScalarHelper(rhs);
+		return EqualsScalarHelper(rhs, mData.intPtr);
 	}
 
 	bool Datum::operator==(const float rhs) const noexcept
 	{
-		return EqualsScalarHelper(rhs);
+		return EqualsScalarHelper(rhs, mData.floatPtr);
 	}
 
 	bool Datum::operator==(const glm::vec4& rhs) const noexcept
 	{
-		return EqualsScalarHelper(rhs);
+		return EqualsScalarHelper(rhs, mData.vectorPtr);
 	}
 
 	bool Datum::operator==(const glm::mat4& rhs) const noexcept
 	{
-		return EqualsScalarHelper(rhs);
+		return EqualsScalarHelper(rhs, mData.matrixPtr);
 	}
 
 	bool Datum::operator==(const std::string& rhs) const noexcept
 	{
-		return EqualsScalarHelper(rhs);
+		return EqualsScalarHelper(rhs, mData.stringPtr);
 	}
 
-	bool Datum::operator==(const RTTI*& rhs) const noexcept
+	bool Datum::operator==(const RTTIPointer& rhs) const noexcept
 	{
-		return EqualsScalarHelper(*rhs);
+		return EqualsScalarHelper(rhs, mData.rttiPtr);
 	}
 #pragma endregion Equals Scalar
 
@@ -369,7 +369,7 @@ namespace Library
 		return !(operator==(rhs));
 	}
 
-	bool Datum::operator!=(const RTTI*& rhs) const noexcept
+	bool Datum::operator!=(const RTTIPointer& rhs) const noexcept
 	{
 		return !(operator==(rhs));
 	}
@@ -448,32 +448,32 @@ namespace Library
 #pragma region Push Back Overloads
 	void Datum::PushBack(const int data)
 	{
-		PushBackHelper(data, DatumTypes::Integer);
+		PushBackHelper(data, mData.intPtr);
 	}
 
 	void Datum::PushBack(const float data)
 	{
-		PushBackHelper(data, DatumTypes::Float);
+		PushBackHelper(data, mData.floatPtr);
 	}
 
 	void Datum::PushBack(const glm::vec4& data)
 	{
-		PushBackHelper(data, DatumTypes::Vector);
+		PushBackHelper(data, mData.vectorPtr);
 	}
 
 	void Datum::PushBack(const glm::mat4& data)
 	{
-		PushBackHelper(data, DatumTypes::Matrix);
+		PushBackHelper(data, mData.matrixPtr);
 	}
 
 	void Datum::PushBack(const std::string& data)
 	{
-		PushBackHelper(data, DatumTypes::String);
+		PushBackHelper(data, mData.stringPtr);
 	}
 
-	void Datum::PushBack(RTTI* const& data)
+	void Datum::PushBack(const RTTIPointer& data)
 	{
-		PushBackHelper(data, DatumTypes::Pointer);
+		PushBackHelper(data, mData.rttiPtr);
 	}
 #pragma endregion Push Back Overloads
 
@@ -505,7 +505,7 @@ namespace Library
 
 		for (const auto& value : rhs)
 		{
-			PushBackHelper(value, mType);
+			PushBack(value);
 		}
 	}
 
@@ -529,24 +529,24 @@ namespace Library
 
 		for (const auto& value : rhs)
 		{
-			PushBackHelper(value, mType);
+			PushBack(value);
 		}
 
 		return *this;
 	}
 
 	template<typename T>
-	inline bool Datum::EqualsScalarHelper(const T& rhs) const
+	inline bool Datum::EqualsScalarHelper(const T& rhs, const T* mDataPtr) const
 	{
 		if (mSize != 1) return false;
-		return GetPointer<T>()[0] == rhs;
+		return mDataPtr[0] == rhs;
 	}
 
 	template<>
-	bool Datum::EqualsScalarHelper(const RTTI& rhs) const
+	inline bool Datum::EqualsScalarHelper(const Datum::RTTIPointer& rhs, const Datum::RTTIPointer* mDataPtr) const
 	{
 		if (mSize != 1) return false;
-		return mData.rttiPtr[0]->Equals(&rhs);
+		return (*mDataPtr)->Equals(rhs);
 	}
 
 	template<typename T>
@@ -573,15 +573,15 @@ namespace Library
 	}
 
 	template<typename T>
-	inline void Datum::PushBackHelper(const T& data, DatumTypes type)
+	inline void Datum::PushBackHelper(const T& data, T*& mDataPtr)
 	{
 		if (!mInternalStorage) throw std::runtime_error("External storage.");
 
 		if (mType == DatumTypes::Unknown)
 		{
-			mType = type;
+			mType = TypeOf<T>();
 		}
-		else if (mType != type)
+		else if (mType != TypeOf<T>())
 		{
 			throw std::runtime_error("Incompatible types.");
 		}
@@ -592,7 +592,7 @@ namespace Library
 			Reserve(std::max(newCapacity, mCapacity + 1));
 		}
 
-		new(GetPointer<T>() + mSize++)T(data);
+		new(mDataPtr + mSize++)T(data);
 	}
 #pragma endregion Helper Methods
 }

@@ -43,6 +43,8 @@ namespace Library
 		};
 
 	private:
+		using RTTIPointer = RTTI*;
+
 		/// <summary>
 		/// Wrapper for a pointer to data of any type that datum can contain.
 		/// </summary>
@@ -54,57 +56,15 @@ namespace Library
 			glm::vec4* vectorPtr;
 			glm::mat4* matrixPtr;
 			std::string* stringPtr;
-			RTTI** rttiPtr;
+			RTTIPointer* rttiPtr;
 		};
-
-		/// <summary>
-		/// Templated struct defining the return type pointer for the given type.
-		/// </summary>
-		template<typename T>
-		struct DatumPointer { typedef T& Type; };
-
-		template<>
-		struct DatumPointer<int> { typedef int*& Type; };
-
-		template<>
-		struct DatumPointer<float> { typedef float*& Type; };
-
-		template<>
-		struct DatumPointer<glm::vec4> { typedef glm::vec4*& Type; };
-
-		template<>
-		struct DatumPointer<glm::mat4> { typedef glm::mat4*& Type; };
-
-		template<>
-		struct DatumPointer<std::string> { typedef std::string*& Type; };
-
-		template<>
-		struct DatumPointer<RTTI*> { typedef RTTI**& Type; };
-
-		template<>
-		struct DatumPointer<const int> { typedef int* const Type; };
-
-		template<>
-		struct DatumPointer<const float> { typedef float* const Type; };
-
-		template<>
-		struct DatumPointer<const glm::vec4> { typedef glm::vec4* const Type; };
-
-		template<>
-		struct DatumPointer<const glm::mat4> { typedef glm::mat4* const Type; };
-
-		template<>
-		struct DatumPointer<const std::string> { typedef std::string* const Type; };
-
-		template<>
-		struct DatumPointer<RTTI* const> { typedef RTTI** const Type; };
 
 		/// <summary>
 		/// Datum type size look-up table.
 		/// </summary>
 		static constexpr std::size_t DatumSizeLUT[static_cast<std::size_t>(DatumTypes::End)] = { sizeof(int), sizeof(float),
 																								 sizeof(glm::vec4), sizeof(glm::mat4),
-																								 sizeof(std::string), sizeof(RTTI*) };
+																								 sizeof(std::string), sizeof(RTTIPointer) };
 #pragma endregion Type Definitions and Constants
 
 #pragma region Default Functors
@@ -167,7 +127,7 @@ namespace Library
 		/// Returns the DatumTypes value associated with a RTTI pointer type.
 		/// </summary>
 		template<>
-		static constexpr DatumTypes TypeOf<RTTI*>();
+		static constexpr DatumTypes TypeOf<RTTIPointer>();
 #pragma endregion TypeOf Static Method
 
 #pragma region Constructors, Destructor, Assignment
@@ -245,7 +205,7 @@ namespace Library
 		/// Scalar constructor overloads for assigning Datum to a RTTI pointer.
 		/// </summary>
 		/// <param name="rhs">A RTTI pointer for initializing mData.</param>
-		Datum(RTTI* const& rhs);
+		Datum(RTTIPointer const& rhs);
 #pragma endregion Scalar Constructor Overloads
 
 #pragma region Initializer List Constructor Overloads
@@ -284,7 +244,7 @@ namespace Library
 		/// Initializer list constructor overloads for assigning Datum to a list of RTTI pointers.
 		/// </summary>
 		/// <param name="rhs">A list of RTTI pointers for initializing mData.</param>
-		Datum(const std::initializer_list<RTTI*> rhs);
+		Datum(const std::initializer_list<RTTIPointer> rhs);
 #pragma endregion Initializer List Constructor Overloads
 
 #pragma endregion Constructors
@@ -326,7 +286,7 @@ namespace Library
 		/// Scalar assignment overloads for assigning Datum to a RTTI pointer.
 		/// </summary>
 		/// <param name="rhs">A RTTI pointer for assigning to mData.</param>
-		Datum& operator=(RTTI* const& rhs);
+		Datum& operator=(RTTIPointer const& rhs);
 #pragma endregion Scalar Assignment Overloads
 
 #pragma region Initializer List Assignment Overloads
@@ -365,55 +325,10 @@ namespace Library
 		/// Initializer list assignment overloads for assigning Datum to a list of RTTI pointers.
 		/// </summary>
 		/// <param name="rhs">A list of RTTI pointers for assigning to mData.</param>
-		Datum& operator=(const std::initializer_list<RTTI*> rhs);
+		Datum& operator=(const std::initializer_list<RTTIPointer> rhs);
 #pragma endregion Initializer List Assignment Overloads
 #pragma endregion Assignment
 #pragma endregion Constructors, Destructor, Assignment
-
-#pragma region Pointer Accessors
-	private:
-		template<typename T>
-		constexpr typename DatumPointer<T>::Type GetPointer();
-
-		template<>
-		constexpr typename DatumPointer<int>::Type GetPointer<int>();
-
-		template<>
-		constexpr typename DatumPointer<float>::Type GetPointer<float>();
-
-		template<>
-		constexpr typename DatumPointer<glm::vec4>::Type GetPointer<glm::vec4>();
-
-		template<>
-		constexpr typename DatumPointer<glm::mat4>::Type GetPointer<glm::mat4>();
-
-		template<>
-		constexpr typename DatumPointer<std::string>::Type GetPointer<std::string>();
-
-		template<>
-		constexpr typename DatumPointer<RTTI*>::Type GetPointer<RTTI*>();
-
-		template<typename T>
-		constexpr typename DatumPointer<const T>::Type GetPointer() const;
-							  
-		template<>			  
-		constexpr typename DatumPointer<const int>::Type GetPointer<int>() const;
-							  
-		template<>			  
-		constexpr typename DatumPointer<const float>::Type GetPointer<float>() const;
-							  
-		template<>			  
-		constexpr typename DatumPointer<const glm::vec4>::Type GetPointer<glm::vec4>() const;
-							  
-		template<>			  
-		constexpr typename DatumPointer<const glm::mat4>::Type GetPointer<glm::mat4>() const;
-							  
-		template<>			  
-		constexpr typename DatumPointer<const std::string>::Type GetPointer<std::string>() const;
-							  
-		template<>			  
-		constexpr typename DatumPointer<RTTI* const>::Type GetPointer<RTTI*>() const;
-#pragma endregion Pointer Accessors
 
 #pragma region Boolean Operators
 	public:
@@ -480,7 +395,7 @@ namespace Library
 		/// </summary>
 		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
 		/// <returns>True when Datum and scalar are equivalent, otherwise false.</returns>
-		bool operator==(const RTTI*& rhs) const noexcept;
+		bool operator==(const RTTIPointer& rhs) const noexcept;
 #pragma endregion Equals Scalar
 
 #pragma region Not Equals Scalar
@@ -530,7 +445,7 @@ namespace Library
 		/// </summary>
 		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
 		/// <returns>True when Datum and scalar are not equivalent, otherwise false.</returns>
-		bool operator!=(const RTTI*& rhs) const noexcept;
+		bool operator!=(const RTTIPointer& rhs) const noexcept;
 #pragma endregion Not Equals Scalar
 #pragma endregion Boolean Operators
 
@@ -554,7 +469,7 @@ namespace Library
 		void PushBack(const glm::vec4& data);
 		void PushBack(const glm::mat4& data);
 		void PushBack(const std::string& data);
-		void PushBack(RTTI* const& data);
+		void PushBack(RTTIPointer const& data);
 #pragma endregion Push Back Overloads
 
 		/// <summary>
@@ -584,10 +499,10 @@ namespace Library
 		Datum& AssignmentHelper(const std::initializer_list<T> rhs);
 
 		template<typename T>
-		bool EqualsScalarHelper(const T& rhs) const;
+		bool EqualsScalarHelper(const T& rhs, const T*) const;
 
 		template<>
-		bool EqualsScalarHelper<RTTI>(const RTTI& rhs) const;
+		bool EqualsScalarHelper<RTTIPointer>(const RTTIPointer& rhs, const RTTIPointer* mDataPtr) const;
 
 		/// <summary>
 		/// Resize helper that inserts or destroys data to resize the Datum to contain the given size.
@@ -602,10 +517,10 @@ namespace Library
 		/// PushBack helper that inserts data into the end of the Datum, incrementing capacity if needed.
 		/// </summary>
 		/// <param name="size">New size for the Datum.</param>
-		/// <param name="type">DatumTypes value of the data to insert.</param>
+		/// <param name="mDataPtr">Pointer alias for mData for the DatumTypes value.</param>
 		/// <typeparam name="T">Type of elements in the Datum.</typeparam>
 		template<typename T>
-		void PushBackHelper(const T& data, DatumTypes type);
+		void PushBackHelper(const T& data, T*& mDataPtr);
 #pragma endregion HelperMethods
 
 #pragma region Data Members

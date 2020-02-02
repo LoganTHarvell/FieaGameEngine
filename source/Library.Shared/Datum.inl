@@ -49,85 +49,11 @@ namespace Library
 	}
 
 	template<>
-	inline constexpr Datum::DatumTypes Datum::TypeOf<RTTI*>()
+	inline constexpr Datum::DatumTypes Datum::TypeOf<Datum::RTTIPointer>()
 	{
 		return DatumTypes::Pointer;
 	}
 #pragma endregion TypeOf Static Method
-
-#pragma region Pointer Accessors
-	template<>
-	inline constexpr Datum::DatumPointer<int>::Type Datum::GetPointer<int>()
-	{
-		return mData.intPtr;
-	}
-
-	template<>
-	inline constexpr Datum::DatumPointer<float>::Type Datum::GetPointer<float>()
-	{
-		return mData.floatPtr;
-	}
-
-	template<>
-	inline constexpr Datum::DatumPointer<glm::vec4>::Type Datum::GetPointer<glm::vec4>()
-	{
-		return mData.vectorPtr;
-	}
-
-	template<>
-	inline constexpr Datum::DatumPointer<glm::mat4>::Type Datum::GetPointer<glm::mat4>()
-	{
-		return mData.matrixPtr;
-	}
-
-	template<>
-	inline constexpr Datum::DatumPointer<std::string>::Type Datum::GetPointer<std::string>()
-	{
-		return mData.stringPtr;
-	}
-
-	template<>
-	inline constexpr Datum::DatumPointer<RTTI*>::Type Datum::GetPointer<RTTI*>()
-	{
-		return mData.rttiPtr;
-	}
-
-	template<>
-	inline constexpr typename Datum::DatumPointer<const int>::Type Datum::GetPointer<int>() const
-	{
-		return mData.intPtr;
-	}
-
-	template<>
-	inline constexpr typename Datum::DatumPointer<const float>::Type Datum::GetPointer<float>() const
-	{
-		return mData.floatPtr;
-	}
-
-	template<>
-	inline constexpr typename Datum::DatumPointer<const glm::vec4>::Type Datum::GetPointer<glm::vec4>() const
-	{
-		return mData.vectorPtr;
-	}
-
-	template<>
-	inline constexpr typename Datum::DatumPointer<const glm::mat4>::Type Datum::GetPointer<glm::mat4>() const
-	{
-		return mData.matrixPtr;
-	}
-
-	template<>
-	inline constexpr typename Datum::DatumPointer<const std::string>::Type Datum::GetPointer<std::string>() const
-	{
-		return mData.stringPtr;
-	}
-
-	template<>
-	inline constexpr typename Datum::DatumPointer<RTTI* const>::Type Datum::GetPointer<RTTI*>() const
-	{
-		return mData.rttiPtr;
-	}
-#pragma endregion Pointer Accessors
 
 #pragma region Size and Capacity
 	inline Datum::DatumTypes Datum::Type() const
