@@ -21,6 +21,11 @@ namespace Library
 #pragma region Type Definitions and Constants
 	public:
 		/// <summary>
+		/// Alias for a pointer to an RTTI class instance.
+		/// </summary>
+		using RTTIPointer = RTTI*;
+
+		/// <summary>
 		/// Reserve strategy functor type used during resize on insertion.
 		/// </summary>
 		using ReserveFunctor = std::function<std::size_t(const std::size_t, const std::size_t)>;
@@ -43,11 +48,6 @@ namespace Library
 		};
 
 	private:
-		/// <summary>
-		/// Alias for a pointer to an RTTI class instance.
-		/// </summary>
-		using RTTIPointer = RTTI*;
-
 		/// <summary>
 		/// Wrapper for a pointer to data of any type that datum can contain.
 		/// </summary>
@@ -334,122 +334,158 @@ namespace Library
 #pragma endregion Constructors, Destructor, Assignment
 
 #pragma region Boolean Operators
-	public:
+ 	public:
 		/// <summary>
-		/// Equals operator. 
-		/// Checks if the type and size of the Datum and the data values are equal to the right hand side Datum.
+		/// Scalar Equals operator. 
+		/// Checks if the Datum values are equal to the right hand side value. Defaulted to compare scalar values.
 		/// </summary>
-		/// <param name="rhs">Datum on the right hand side to be compared to the left.</param>
-		/// <returns>True when lists are equivalent, otherwise false.</returns>
-		bool operator==(const Datum& rhs) const noexcept;
+		/// <param name="rhs">Value on the right hand side to be compared to the left.</param>
+		/// <returns>True when the values are equivalent, otherwise false.</returns>
+		template<typename T>
+		bool operator==(const T& rhs) const;
+
+		/// <summary>
+		/// Equals operator specialization for Datum to Datum comparison. 
+ 		/// Checks if the type and size of the Datum and the data values are equal to the right hand side Datum.
+		/// </summary>
+ 		/// <param name="rhs">Datum on the right hand side to be compared to the left.</param>
+		/// <returns>True when the values are equivalent, otherwise false.</returns>
+		template<>
+		bool operator==<Datum>(const Datum& rhs) const;
+
+		/// <summary>
+		/// Equals operator specialization for scalar RTTIPointer comparison. 
+		/// Checks if the Datum RTTIPointer value is equal to the right hand side RTTI derived class.
+		/// </summary>
+		/// <param name="rhs">RTTIPointer on the right hand side to be compared against.</param>
+		/// <returns>True when the values are equivalent, otherwise false.</returns>
+		template<>
+		bool operator==<RTTIPointer>(const RTTIPointer& rhs) const;
 
 		/// <summary>
 		/// Not equals operator. 
-		/// Checks if the type and size of the Datum and the data values are not equal to the right hand side Datum.
+		/// Checks if the type and size of the Datum and the data values are not equal to the right hand side.
 		/// </summary>
 		/// <param name="rhs">Datum on the right hand side to be compared to the left.</param>
 		/// <returns>True when lists are not equivalent, otherwise false.</returns>
-		bool operator!=(const Datum& rhs) const noexcept;
+		template<typename T>
+		bool operator!=(const T& rhs) const;
 
-#pragma region Equals Scalar
-		/// <summary>
-		/// Scalar equals operator. 
-		/// Checks if the Datum contains only one element that is equal to the right hand side value.
-		/// </summary>
-		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
-		/// <returns>True when Datum and scalar are equivalent, otherwise false.</returns>
-		bool operator==(const int rhs) const noexcept;
-
-		/// <summary>
-		/// Scalar equals operator. 
-		/// Checks if the Datum contains only one element that is equal to the right hand side value.
-		/// </summary>
-		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
-		/// <returns>True when Datum and scalar are equivalent, otherwise false.</returns>
-		bool operator==(const float rhs) const noexcept;
-
-		/// <summary>
-		/// Scalar equals operator. 
-		/// Checks if the Datum contains only one element that is equal to the right hand side value.
-		/// </summary>
-		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
-		/// <returns>True when Datum and scalar are equivalent, otherwise false.</returns>
-		bool operator==(const glm::vec4& rhs) const noexcept;
-
-		/// <summary>
-		/// Scalar equals operator. 
-		/// Checks if the Datum contains only one element that is equal to the right hand side value.
-		/// </summary>
-		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
-		/// <returns>True when Datum and scalar are equivalent, otherwise false.</returns>
-		bool operator==(const glm::mat4& rhs) const noexcept;
-
-		/// <summary>
-		/// Scalar equals operator. 
-		/// Checks if the Datum contains only one element that is equal to the right hand side value.
-		/// </summary>
-		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
-		/// <returns>True when Datum and scalar are equivalent, otherwise false.</returns>
-		bool operator==(const std::string& rhs) const noexcept;
-
-		/// <summary>
-		/// Scalar equals operator. 
-		/// Checks if the Datum contains only one element that is equal to the right hand side value.
-		/// </summary>
-		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
-		/// <returns>True when Datum and scalar are equivalent, otherwise false.</returns>
-		bool operator==(const RTTIPointer& rhs) const noexcept;
-#pragma endregion Equals Scalar
-
-#pragma region Not Equals Scalar
-		/// <summary>
-		/// Scalar not equals operator. 
-		/// Checks if the Datum contains only one element that is not equal to the right hand side value.
-		/// </summary>
-		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
-		/// <returns>True when Datum and scalar are not equivalent, otherwise false.</returns>
-		bool operator!=(const int rhs) const noexcept;
-
-		/// <summary>
-		/// Scalar not equals operator. 
-		/// Checks if the Datum contains only one element that is not equal to the right hand side value.
-		/// </summary>
-		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
-		/// <returns>True when Datum and scalar are not equivalent, otherwise false.</returns>
-		bool operator!=(const float rhs) const noexcept;
-
-		/// <summary>
-		/// Scalar not equals operator. 
-		/// Checks if the Datum contains only one element that is not equal to the right hand side value.
-		/// </summary>
-		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
-		/// <returns>True when Datum and scalar are not equivalent, otherwise false.</returns>
-		bool operator!=(const glm::vec4& rhs) const noexcept;
-
-		/// <summary>
-		/// Scalar not equals operator. 
-		/// Checks if the Datum contains only one element that is not equal to the right hand side value.
-		/// </summary>
-		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
-		/// <returns>True when Datum and scalar are not equivalent, otherwise false.</returns>
-		bool operator!=(const glm::mat4& rhs) const noexcept;
-
-		/// <summary>
-		/// Scalar not equals operator. 
-		/// Checks if the Datum contains only one element that is not equal to the right hand side value.
-		/// </summary>
-		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
-		/// <returns>True when Datum and scalar are not equivalent, otherwise false.</returns>
-		bool operator!=(const std::string& rhs) const noexcept;
-
-		/// <summary>
-		/// Scalar not equals operator. 
-		/// Checks if the Datum contains only one element that is not equal to the right hand side value.
-		/// </summary>
-		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
-		/// <returns>True when Datum and scalar are not equivalent, otherwise false.</returns>
-		bool operator!=(const RTTIPointer& rhs) const noexcept;
-#pragma endregion Not Equals Scalar
+// 		/// <summary>
+// 		/// Equals operator. 
+// 		/// Checks if the type and size of the Datum and the data values are equal to the right hand side Datum.
+// 		/// </summary>
+// 		/// <param name="rhs">Datum on the right hand side to be compared to the left.</param>
+// 		/// <returns>True when lists are equivalent, otherwise false.</returns>
+// 		bool operator==(const Datum& rhs) const noexcept;
+// 
+// 		/// <summary>
+// 		/// Not equals operator. 
+// 		/// Checks if the type and size of the Datum and the data values are not equal to the right hand side Datum.
+// 		/// </summary>
+// 		/// <param name="rhs">Datum on the right hand side to be compared to the left.</param>
+// 		/// <returns>True when lists are not equivalent, otherwise false.</returns>
+// 		bool operator!=(const Datum& rhs) const noexcept;
+// 
+// #pragma region Equals Scalar
+// 		/// <summary>
+// 		/// Scalar equals operator. 
+// 		/// Checks if the Datum contains only one element that is equal to the right hand side value.
+// 		/// </summary>
+// 		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
+// 		/// <returns>True when Datum and scalar are equivalent, otherwise false.</returns>
+// 		bool operator==(const int rhs) const noexcept;
+// 
+// 		/// <summary>
+// 		/// Scalar equals operator. 
+// 		/// Checks if the Datum contains only one element that is equal to the right hand side value.
+// 		/// </summary>
+// 		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
+// 		/// <returns>True when Datum and scalar are equivalent, otherwise false.</returns>
+// 		bool operator==(const float rhs) const noexcept;
+// 
+// 		/// <summary>
+// 		/// Scalar equals operator. 
+// 		/// Checks if the Datum contains only one element that is equal to the right hand side value.
+// 		/// </summary>
+// 		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
+// 		/// <returns>True when Datum and scalar are equivalent, otherwise false.</returns>
+// 		bool operator==(const glm::vec4& rhs) const noexcept;
+// 
+// 		/// <summary>
+// 		/// Scalar equals operator. 
+// 		/// Checks if the Datum contains only one element that is equal to the right hand side value.
+// 		/// </summary>
+// 		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
+// 		/// <returns>True when Datum and scalar are equivalent, otherwise false.</returns>
+// 		bool operator==(const glm::mat4& rhs) const noexcept;
+// 
+// 		/// <summary>
+// 		/// Scalar equals operator. 
+// 		/// Checks if the Datum contains only one element that is equal to the right hand side value.
+// 		/// </summary>
+// 		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
+// 		/// <returns>True when Datum and scalar are equivalent, otherwise false.</returns>
+// 		bool operator==(const std::string& rhs) const noexcept;
+// 
+// 		/// <summary>
+// 		/// Scalar equals operator. 
+// 		/// Checks if the Datum contains only one element that is equal to the right hand side value.
+// 		/// </summary>
+// 		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
+// 		/// <returns>True when Datum and scalar are equivalent, otherwise false.</returns>
+// 		bool operator==(const RTTIPointer& rhs) const noexcept;
+// #pragma endregion Equals Scalar
+// 
+// #pragma region Not Equals Scalar
+// 		/// <summary>
+// 		/// Scalar not equals operator. 
+// 		/// Checks if the Datum contains only one element that is not equal to the right hand side value.
+// 		/// </summary>
+// 		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
+// 		/// <returns>True when Datum and scalar are not equivalent, otherwise false.</returns>
+// 		bool operator!=(const int rhs) const noexcept;
+// 
+// 		/// <summary>
+// 		/// Scalar not equals operator. 
+// 		/// Checks if the Datum contains only one element that is not equal to the right hand side value.
+// 		/// </summary>
+// 		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
+// 		/// <returns>True when Datum and scalar are not equivalent, otherwise false.</returns>
+// 		bool operator!=(const float rhs) const noexcept;
+// 
+// 		/// <summary>
+// 		/// Scalar not equals operator. 
+// 		/// Checks if the Datum contains only one element that is not equal to the right hand side value.
+// 		/// </summary>
+// 		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
+// 		/// <returns>True when Datum and scalar are not equivalent, otherwise false.</returns>
+// 		bool operator!=(const glm::vec4& rhs) const noexcept;
+// 
+// 		/// <summary>
+// 		/// Scalar not equals operator. 
+// 		/// Checks if the Datum contains only one element that is not equal to the right hand side value.
+// 		/// </summary>
+// 		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
+// 		/// <returns>True when Datum and scalar are not equivalent, otherwise false.</returns>
+// 		bool operator!=(const glm::mat4& rhs) const noexcept;
+// 
+// 		/// <summary>
+// 		/// Scalar not equals operator. 
+// 		/// Checks if the Datum contains only one element that is not equal to the right hand side value.
+// 		/// </summary>
+// 		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
+// 		/// <returns>True when Datum and scalar are not equivalent, otherwise false.</returns>
+// 		bool operator!=(const std::string& rhs) const noexcept;
+// 
+// 		/// <summary>
+// 		/// Scalar not equals operator. 
+// 		/// Checks if the Datum contains only one element that is not equal to the right hand side value.
+// 		/// </summary>
+// 		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
+// 		/// <returns>True when Datum and scalar are not equivalent, otherwise false.</returns>
+// 		bool operator!=(const RTTIPointer& rhs) const noexcept;
+// #pragma endregion Not Equals Scalar
 #pragma endregion Boolean Operators
 
 #pragma region Type, Size, Capacity
@@ -567,10 +603,10 @@ namespace Library
 		/// Finds an element from the Datum given the corresponding value.
 		/// </summary>
 		/// <param name="value">Value to be searched for in the Datun to be removed.</param>
-		/// <returns>Index of the value in the Datum if found, otherwise one past the last index.</returns>
+		/// <returns>Index of the value if found, otherwise one past the last index, a.k.a. the size.</returns>
 		/// <typeparam name="T">Type of elements in the Datum.</typeparam>
 		template<typename T>
-		std::size_t Find(const T& value);
+		std::size_t Find(const T& value) const;
 #pragma endregion Element Accessors
 
 #pragma region Modifiers

@@ -1081,6 +1081,24 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 
 #pragma region Datum
 	template<>
+	inline std::wstring ToString<RTTI>(const RTTI& t)
+	{
+		RETURN_WIDE_STRING(&t);
+	}
+
+	template<>
+	inline std::wstring ToString<RTTI>(const RTTI* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<RTTI>(RTTI* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
 	inline std::wstring ToString<Datum::DatumTypes>(const Datum::DatumTypes& t)
 	{
 		RETURN_WIDE_STRING(static_cast<int>(t));

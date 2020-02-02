@@ -52,6 +52,14 @@ namespace UnitTests
 		return !operator==(rhs);
 	}
 
+	bool Foo::Equals(const RTTI* rhs) const
+	{
+		const Foo* rhsFoo = rhs->Get<Foo>();
+		if (!rhsFoo) return false;
+
+		return *mData == rhsFoo->Data();
+	}
+
 	int& Foo::Data()
 	{
 		return *mData;

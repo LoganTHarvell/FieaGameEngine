@@ -55,6 +55,85 @@ namespace Library
 	}
 #pragma endregion TypeOf Static Method
 
+#pragma region Boolean Operators
+	template<typename T>
+	inline bool Datum::operator==(const T& rhs) const
+	{
+		if (mType == DatumTypes::Unknown)		throw std::runtime_error("Type not set.");
+		if (TypeOf<T>() == DatumTypes::Unknown) throw std::runtime_error("Unknown data type.");
+		if (TypeOf<T>() != mType)				throw std::runtime_error("Incorrect type.");
+
+		if (mSize != 1) return false;
+
+		T* const data = reinterpret_cast<T*>(mData.voidPtr);
+		bool isEqual = (data[0] == rhs);
+		return isEqual;
+	}
+
+	template<>
+	inline bool Datum::operator==<Datum>(const Datum& rhs) const
+	{
+		if (this == &rhs)
+		{
+			return true;
+		}
+
+		if (mType != rhs.mType || mSize != rhs.mSize)
+		{
+			return false;
+		}
+
+		switch (mType)
+		{
+		case DatumTypes::Unknown:
+			return true;
+		case DatumTypes::Integer:
+		case DatumTypes::Float:
+		case DatumTypes::Vector:
+		case DatumTypes::Matrix:
+		{
+			const std::size_t size = mSize * DatumSizeLUT[static_cast<std::size_t>(mType)];
+			return memcmp(mData.voidPtr, rhs.mData.voidPtr, size) == 0;
+		}
+		case DatumTypes::String:
+		{
+			for (std::size_t i = 0; i < mSize; ++i)
+			{
+				if (mData.stringPtr[i] != rhs.mData.stringPtr[i]) return false;
+			}
+
+			return true;
+		}
+		case DatumTypes::Pointer:
+		{
+			for (std::size_t i = 0; i < mSize; ++i)
+			{
+				if (!mData.rttiPtr[i]->Equals(rhs.mData.rttiPtr[i])) return false;
+			}
+
+			return true;
+		}
+
+		default:
+			return false;
+			break;
+		}
+	}
+
+	template<>
+	bool Datum::operator==<Datum::RTTIPointer>(const Datum::RTTIPointer& rhs) const
+	{
+		if (mSize != 1) return false;
+		return mData.rttiPtr[0]->Equals(rhs);
+	}
+
+	template<typename T>
+	bool Datum::operator!=(const T& rhs) const
+	{
+		return !(operator==(rhs));
+	}
+#pragma endregion Boolean Operators
+
 #pragma region Size and Capacity
 	inline Datum::DatumTypes Datum::Type() const
 	{
@@ -144,14 +223,16 @@ namespace Library
 	}
 
 	template<typename T>
-	inline std::size_t Datum::Find(const T& value)
+	inline std::size_t Datum::Find(const T& value) const
 	{
 		if (mType == DatumTypes::Unknown)		throw std::runtime_error("Type not set.");
 		if (TypeOf<T>() == DatumTypes::Unknown) throw std::runtime_error("Unknown data type.");
 		if (TypeOf<T>() != mType)				throw std::runtime_error("Incorrect type.");
 
 		T*& data = reinterpret_cast<T*>(mData.voidPtr);
-		for (std::size_t i = 0; i < mSize; ++i)
+		
+		std::size_t i = 0;
+		for (; i < mSize; ++i)
 		{
 			if (data[i] == value || (TypeOf<T>() == DatumTypes::Pointer && data[i].Equals(value)))
 			{
@@ -195,7 +276,7 @@ namespace Library
 		if (TypeOf<T>() == DatumTypes::Unknown) throw std::runtime_error("Unknown data type.");
 		if (TypeOf<T>() != mType)				throw std::runtime_error("Incorrect type.");
 
-		T*& data = reinterpret_cast<T*>(mData.voidPtr);
+		T* data = reinterpret_cast<T*>(mData.voidPtr);
 
 		for (std::size_t i = 0; i < mSize; ++i)
 		{

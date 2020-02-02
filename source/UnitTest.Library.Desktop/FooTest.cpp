@@ -101,9 +101,11 @@ namespace UnitTestLibraryDesktop
 
 		TEST_METHOD(RTTITest)
 		{
-			Foo a;
+			Foo a = Foo(10);
+			Foo b = Foo(10);
 
 			Assert::IsTrue(a.Set(Foo::TypeIdClass()));
+			Assert::IsTrue(a.Equals(&b));
 		}
 
 	private:

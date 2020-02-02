@@ -29,13 +29,13 @@ namespace UnitTests
 		Assert::AreEqual(datum1.Type(), Datum::TypeOf<T>());
 
 		datum1 = data;
-		Assert::AreEqual(3_z, datum1.Size());
-		Assert::AreEqual(3_z, datum1.Capacity());
+		Assert::AreEqual(data.size(), datum1.Size());
+		Assert::AreEqual(data.size(), datum1.Capacity());
 		Assert::AreEqual(datum1.Type(), Datum::TypeOf<T>());
 
 		Datum datum2 = data;
-		Assert::AreEqual(3_z, datum2.Size());
-		Assert::AreEqual(3_z, datum2.Capacity());
+		Assert::AreEqual(data.size(), datum2.Size());
+		Assert::AreEqual(data.size(), datum2.Capacity());
 		Assert::AreEqual(datum2.Type(), Datum::TypeOf<T>());
 
 		datum2 = *data.begin();
@@ -86,8 +86,12 @@ namespace UnitTests
 		datum2 = *data.begin();
 		Assert::IsTrue(datum1 != datum2);
 
-		Assert::IsTrue(datum2 == *data.begin());
-		Assert::IsFalse(datum2 != *data.begin());
+		for (const auto& value : data)
+		{
+			datum2 = value;
+			Assert::IsTrue(datum2 == value);
+			Assert::IsFalse(datum2 != value);
+		}
 	}
 
 	template<typename T>
@@ -260,54 +264,81 @@ namespace UnitTestLibraryDesktop
  		{
 			TestConstructors<int>({ 10, 20, 30 });
 			TestConstructors<float>({ 10, 20, 30 });
+
+			Foo a(10), b(20), c(30);
+			TestConstructors<RTTI*>({ &a, &b, &c });
  		}
 
  		TEST_METHOD(Copy)
  		{
  			TestCopy<int>({ 10, 20, 30 });
  			TestCopy<float>({ 10, 20, 30 });
+
+			Foo a(10), b(20), c(30);
+			TestCopy<RTTI*>({ &a, &b, &c });
  		}
 
 		TEST_METHOD(Move)
 		{
 			TestMove<int>({ 10, 20, 30 });
 			TestMove<float>({ 10, 20, 30 });
+
+			Foo a(10), b(20), c(30);
+			TestMove<RTTI*>({ &a, &b, &c });
 		}
 
 		TEST_METHOD(Equality)
 		{
 			TestEquality<int>({ 10, 20, 30 });
 			TestEquality<float>({ 10, 20, 30 });
+
+			Foo a(10), b(20), c(30);
+			TestEquality<RTTI*>({ &a, &b, &c });
 		}
 
 		TEST_METHOD(TypeSizeCapacity)
 		{
 			TestTypeSizeCapacity<int>({ 10, 20, 30 });
 			TestTypeSizeCapacity<float>({ 10, 20, 30 });
+
+			Foo a(10), b(20), c(30);
+			TestTypeSizeCapacity<RTTI*>({ &a, &b, &c });
 		}
 
 		TEST_METHOD(Resize)
 		{
 			TestResize<int>({ 10, 20, 30 });
 			TestResize<float>({ 10, 20, 30 });
+
+			Foo a(10), b(20), c(30);
+			TestResize<RTTI*>({ &a, &b, &c });
 		}
 
 		TEST_METHOD(ElementAccessors)
 		{
 			TestElementAccessors<int>({ 10, 20, 30 });
 			TestElementAccessors<float>({ 10, 20, 30 });
+
+			Foo a(10), b(20), c(30);
+			TestElementAccessors<RTTI*>({ &a, &b, &c });
 		}
 
 		TEST_METHOD(PushBack)
 		{
 			TestPushBack<int>({ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
 			TestPushBack<float>({ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
+
+			Foo a(1), b(2), c(3), d(4), e(5), f(6), g(7), h(8), i(9), j(10);
+			TestPushBack<RTTI*>({ &a, &b, &c, &d, &e, &f, &g, &h, &i, &j });
 		}
 
 		TEST_METHOD(Clear)
 		{
 			TestClear<int>({ 10, 20, 30 });
 			TestClear<float>({ 10, 20, 30 });
+
+			Foo a(10), b(20), c(30);
+			TestClear<RTTI*>({ &a, &b, &c });
 		}
 
 	private:
