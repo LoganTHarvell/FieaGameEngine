@@ -57,37 +57,73 @@ namespace Library
 
 #pragma region Pointer Accessors
 	template<>
-	inline constexpr int*& Datum::GetPointer<int>()
+	inline constexpr Datum::DatumPointer<int>::Type Datum::GetPointer<int>()
 	{
 		return mData.intPtr;
 	}
 
 	template<>
-	inline constexpr float*& Datum::GetPointer<float>()
+	inline constexpr Datum::DatumPointer<float>::Type Datum::GetPointer<float>()
 	{
 		return mData.floatPtr;
 	}
 
 	template<>
-	inline constexpr glm::vec4*& Datum::GetPointer<glm::vec4>()
+	inline constexpr Datum::DatumPointer<glm::vec4>::Type Datum::GetPointer<glm::vec4>()
 	{
 		return mData.vectorPtr;
 	}
 
 	template<>
-	inline constexpr glm::mat4*& Datum::GetPointer<glm::mat4>()
+	inline constexpr Datum::DatumPointer<glm::mat4>::Type Datum::GetPointer<glm::mat4>()
 	{
 		return mData.matrixPtr;
 	}
 
 	template<>
-	inline constexpr std::string*& Datum::GetPointer<std::string>()
+	inline constexpr Datum::DatumPointer<std::string>::Type Datum::GetPointer<std::string>()
 	{
 		return mData.stringPtr;
 	}
 
 	template<>
-	inline constexpr RTTI**& Datum::GetPointer<RTTI*>()
+	inline constexpr Datum::DatumPointer<RTTI*>::Type Datum::GetPointer<RTTI*>()
+	{
+		return mData.rttiPtr;
+	}
+
+	template<>
+	inline constexpr typename Datum::DatumPointer<const int>::Type Datum::GetPointer<int>() const
+	{
+		return mData.intPtr;
+	}
+
+	template<>
+	inline constexpr typename Datum::DatumPointer<const float>::Type Datum::GetPointer<float>() const
+	{
+		return mData.floatPtr;
+	}
+
+	template<>
+	inline constexpr typename Datum::DatumPointer<const glm::vec4>::Type Datum::GetPointer<glm::vec4>() const
+	{
+		return mData.vectorPtr;
+	}
+
+	template<>
+	inline constexpr typename Datum::DatumPointer<const glm::mat4>::Type Datum::GetPointer<glm::mat4>() const
+	{
+		return mData.matrixPtr;
+	}
+
+	template<>
+	inline constexpr typename Datum::DatumPointer<const std::string>::Type Datum::GetPointer<std::string>() const
+	{
+		return mData.stringPtr;
+	}
+
+	template<>
+	inline constexpr typename Datum::DatumPointer<RTTI* const>::Type Datum::GetPointer<RTTI*>() const
 	{
 		return mData.rttiPtr;
 	}
@@ -101,7 +137,7 @@ namespace Library
 
 	inline void Datum::SetType(DatumTypes type)
 	{
-		if (type != DatumTypes::Unknown) throw std::runtime_error("Type reassignment.");
+		if (mType != DatumTypes::Unknown) throw std::runtime_error("Type reassignment.");
 
 		mType = type;
 	}

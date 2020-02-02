@@ -5,7 +5,6 @@
 #include "Bar.h"
 #include "Datum.h"
 
-#include <vector>
 
 using namespace std::string_literals;
 
@@ -61,35 +60,94 @@ namespace UnitTests
 	void TestMove(const std::initializer_list<T> data)
 	{
 		Datum datum = data;
-		Datum moved(std::move(datum));
+		Datum copy = datum;
 
-		datum = moved;
+		Datum moved(std::move(datum));
+		Assert::AreEqual(moved, copy);
+
+		datum = copy;
 
 		moved = std::move(datum);
+		Assert::AreEqual(moved, copy);
 	}
 
 	template<typename T>
-	void TestInitializerListAssignment()
+	void TestEquality(const std::initializer_list<T> data)
 	{
+		Datum datum1;
+		Datum datum2;
+		Assert::AreEqual(datum1, datum2);
 
+		datum1 = data;
+		datum2 = data;
+		Assert::AreEqual(datum1, datum2);
+
+		datum1 = data;
+		datum2 = *data.begin();
+		Assert::IsTrue(datum1 != datum2);
 	}
 
 	template<typename T>
-	void TestSizeCapacity()
+	void TestTypeSizeCapacity(const std::initializer_list<T> data)
 	{
+		Datum datum;
+		Assert::AreEqual(Datum::DatumTypes::Unknown, datum.Type());
+		Assert::AreEqual(0_z, datum.Size());
+		Assert::IsTrue(datum.IsEmpty());
+		Assert::AreEqual(0_z, datum.Capacity());
 
+		datum.SetType(Datum::TypeOf<T>());
+		Assert::AreEqual(Datum::TypeOf<T>(), datum.Type());
+		Assert::ExpectException<std::runtime_error>([&datum] { datum.SetType(Datum::TypeOf<T>()); });
+
+		datum = data;
+		Assert::AreEqual(Datum::TypeOf<T>(), datum.Type());
+		Assert::AreEqual(data.size(), datum.Size());
+		Assert::IsFalse(datum.IsEmpty());
+		Assert::AreEqual(data.size(), datum.Capacity());
+
+		datum.Reserve(10);
+		Assert::AreEqual(data.size(), datum.Size());
+		Assert::AreEqual(10_z, datum.Capacity());
 	}
 
 	template<typename T>
-	void TestRehash()
+	void TestResize(const std::initializer_list<T> data)
 	{
+		Datum datum = data;
 
+		datum.Resize(10);
+		Assert::AreEqual(10_z, datum.Size());
+		Assert::AreEqual(10_z, datum.Capacity());
+
+		datum.Resize(3);
+		Assert::AreEqual(3_z, datum.Size());
+		Assert::AreEqual(10_z, datum.Capacity());
 	}
 
 	template<typename T>
-	void TestFind()
+	void TestShrinkToFit(const std::initializer_list<T> data)
 	{
+		{
+			Datum datum;
+			Assert::ExpectException<std::runtime_error>([&datum] { datum.ShrinkToFit() });
+		}
 
+		Datum datum = data;
+
+		datum.Resize(10);
+		Assert::AreEqual(10_z, datum.Size());
+		Assert::AreEqual(10_z, datum.Capacity());
+
+		datum.Resize(5);
+		datum.ShrinkToFit();
+		Assert::AreEqual(5_z, datum.Size());
+		Assert::AreEqual(5_z, datum.Capacity());
+
+		datum.Resize(0);
+		datum.ShrinkToFit();
+		Assert::AreEqual(0_z, datum.Size());
+		Assert::AreEqual(0_z, datum.Capacity());
 	}
 
 	template<typename T>
@@ -117,8 +175,13 @@ namespace UnitTests
 	}
 
 	template<typename T>
-	void TestClear()
+	void TestClear(const std::initializer_list<T> data)
 	{
+		Datum datum = data;
+		
+		datum.Clear();
+		Assert::AreEqual(0_z, datum.Size());
+		Assert::AreEqual(data.size(), datum.Capacity());
 	}
 }
 
@@ -151,79 +214,43 @@ namespace UnitTestLibraryDesktop
  		TEST_METHOD(Constructors)
  		{
 			TestConstructors<int>({ 10, 20, 30 });
+			TestConstructors<float>({ 10, 20, 30 });
  		}
 
  		TEST_METHOD(Copy)
  		{
  			TestCopy<int>({ 10, 20, 30 });
+ 			TestCopy<float>({ 10, 20, 30 });
  		}
 
 		TEST_METHOD(Move)
 		{
 			TestMove<int>({ 10, 20, 30 });
+			TestMove<float>({ 10, 20, 30 });
 		}
 
-		TEST_METHOD(InitializerListAssignment)
+		TEST_METHOD(Equality)
 		{
-			TestInitializerListAssignment<int>();
-			TestInitializerListAssignment<double>();
-			TestInitializerListAssignment<Foo>();
+			TestEquality<int>({ 10, 20, 30 });
+			TestEquality<float>({ 10, 20, 30 });
 		}
 
-		TEST_METHOD(SizeCapacity)
+		TEST_METHOD(TypeSizeCapacity)
 		{
-			TestSizeCapacity<int>();
-			TestSizeCapacity<double>();
-			TestSizeCapacity<Foo>();
+			TestTypeSizeCapacity<int>({ 10, 20, 30 });
+			TestTypeSizeCapacity<float>({ 10, 20, 30 });
 		}
 
-		TEST_METHOD(Rehash)
+		TEST_METHOD(Resize)
 		{
-			TestRehash<int>();
-			TestRehash<double>();
-			TestRehash<Foo>();
-		}
-
- 		TEST_METHOD(Find)
- 		{
- 			TestFind<int>();
- 			TestFind<double>();
- 			TestFind<Foo>();
- 		}
-
-		TEST_METHOD(ElementAccess)
-		{
-			TestElementAccessors<int>();
-			TestElementAccessors<double>();
-			TestElementAccessors<Foo>();
-		}
-
-		TEST_METHOD(PushBack)
-		{
-			TestPushBack<int>();
-			TestPushBack<double>();
-			TestPushBack<Foo>();
-		}
-
-		TEST_METHOD(PopBack)
-		{
-			TestPopBack<int>();
-			TestPopBack<double>();
-			TestPopBack<Foo>();
-		}
-
-		TEST_METHOD(Remove)
-		{
-			TestRemove<int>();
-			TestRemove<double>();
-			TestRemove<Foo>();
+			TestResize<int>({ 10, 20, 30 });
+			TestResize<float>({ 10, 20, 30 });
 		}
 
 		TEST_METHOD(Clear)
 		{
-			TestClear<int>();
-			TestClear<double>();
-			TestClear<Foo>();
+			TestClear<int>({ 10, 20, 30 });
+			TestClear<float>({ 10, 20, 30 });
 		}
 
 	private:

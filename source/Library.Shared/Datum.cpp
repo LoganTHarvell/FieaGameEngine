@@ -271,6 +271,8 @@ namespace Library
 
 		switch (mType)
 		{
+		case DatumTypes::Unknown:
+			return true;
 		case DatumTypes::Integer:
 		case DatumTypes::Float:
 		case DatumTypes::Vector:
@@ -289,7 +291,8 @@ namespace Library
 			return true;
 		}
 		case DatumTypes::Pointer:
-		{	for (std::size_t i = 0; i < mSize; ++i)
+		{	
+			for (std::size_t i = 0; i < mSize; ++i)
 			{
 				if (mData.rttiPtr[i]->Equals(rhs.mData.rttiPtr[i])) return false;
 			}
@@ -308,7 +311,69 @@ namespace Library
 		return !(operator==(rhs));
 	}
 
+#pragma region Equals Scalar
+	bool Datum::operator==(const int rhs) const noexcept
+	{
+		return EqualsScalarHelper(rhs);
+	}
 
+	bool Datum::operator==(const float rhs) const noexcept
+	{
+		return EqualsScalarHelper(rhs);
+	}
+
+	bool Datum::operator==(const glm::vec4& rhs) const noexcept
+	{
+		return EqualsScalarHelper(rhs);
+	}
+
+	bool Datum::operator==(const glm::mat4& rhs) const noexcept
+	{
+		return EqualsScalarHelper(rhs);
+	}
+
+	bool Datum::operator==(const std::string& rhs) const noexcept
+	{
+		return EqualsScalarHelper(rhs);
+	}
+
+	bool Datum::operator==(const RTTI*& rhs) const noexcept
+	{
+		return EqualsScalarHelper(*rhs);
+	}
+#pragma endregion Equals Scalar
+
+#pragma region Not Equals Scalar
+	bool Datum::operator!=(const int rhs) const noexcept
+	{
+		return !(operator==(rhs));
+	}
+
+	bool Datum::operator!=(const float rhs) const noexcept
+	{
+		return !(operator==(rhs));
+	}
+
+	bool Datum::operator!=(const glm::vec4& rhs) const noexcept
+	{
+		return !(operator==(rhs));
+	}
+
+	bool Datum::operator!=(const glm::mat4& rhs) const noexcept
+	{
+		return !(operator==(rhs));
+	}
+
+	bool Datum::operator!=(const std::string& rhs) const noexcept
+	{
+		return !(operator==(rhs));
+	}
+
+	bool Datum::operator!=(const RTTI*& rhs) const noexcept
+	{
+		return !(operator==(rhs));
+	}
+#pragma endregion  Not Equals Scalar
 #pragma endregion Boolean Operators
 
 #pragma region Size and Capacity
@@ -334,16 +399,22 @@ namespace Library
 		{
 		case DatumTypes::Integer:
 			ResizeHelper(size, mData.intPtr);
+			break;
 		case DatumTypes::Float:
 			ResizeHelper(size, mData.floatPtr);
+			break;
 		case DatumTypes::Vector:
 			ResizeHelper(size, mData.vectorPtr);
+			break;
 		case DatumTypes::Matrix:
 			ResizeHelper(size, mData.matrixPtr);
+			break;
 		case DatumTypes::String:
 			ResizeHelper(size, mData.stringPtr);
+			break;
 		case DatumTypes::Pointer:
 			ResizeHelper(size, mData.rttiPtr);
+			break;
 
 		default:
 			break;
@@ -462,6 +533,20 @@ namespace Library
 		}
 
 		return *this;
+	}
+
+	template<typename T>
+	inline bool Datum::EqualsScalarHelper(const T& rhs) const
+	{
+		if (mSize != 1) return false;
+		return GetPointer<T>()[0] == rhs;
+	}
+
+	template<>
+	bool Datum::EqualsScalarHelper(const RTTI& rhs) const
+	{
+		if (mSize != 1) return false;
+		return mData.rttiPtr[0]->Equals(&rhs);
 	}
 
 	template<typename T>

@@ -81,6 +81,24 @@ namespace Library
 		template<>
 		struct DatumPointer<RTTI*> { typedef RTTI**& Type; };
 
+		template<>
+		struct DatumPointer<const int> { typedef int* const Type; };
+
+		template<>
+		struct DatumPointer<const float> { typedef float* const Type; };
+
+		template<>
+		struct DatumPointer<const glm::vec4> { typedef glm::vec4* const Type; };
+
+		template<>
+		struct DatumPointer<const glm::mat4> { typedef glm::mat4* const Type; };
+
+		template<>
+		struct DatumPointer<const std::string> { typedef std::string* const Type; };
+
+		template<>
+		struct DatumPointer<RTTI* const> { typedef RTTI** const Type; };
+
 		/// <summary>
 		/// Datum type size look-up table.
 		/// </summary>
@@ -108,24 +126,46 @@ namespace Library
 	
 #pragma region TypeOf Static Method
 	public:
+		/// <summary>
+		/// Returns the DatumTypes value associated with the template typename T.
+		/// </summary>
+		/// <typeparam name="T">Type to check for an associated DatumTypes value.</typeparam>
 		template<typename T>
 		static constexpr DatumTypes TypeOf();
 
+		/// <summary>
+		/// Returns the DatumTypes value associated with an int type.
+		/// </summary>
 		template<>
 		static constexpr DatumTypes TypeOf<int>();
 
+		/// <summary>
+		/// Returns the DatumTypes value associated with a float type.
+		/// </summary>
 		template<>
 		static constexpr DatumTypes TypeOf<float>();
 
+		/// <summary>
+		/// Returns the DatumTypes value associated with a glm::vec4 type.
+		/// </summary>
 		template<>
 		static constexpr DatumTypes TypeOf<glm::vec4>();
 
+		/// <summary>
+		/// Returns the DatumTypes value associated with a glm::mat4 type.
+		/// </summary>
 		template<>
 		static constexpr DatumTypes TypeOf<glm::mat4>();
 
+		/// <summary>
+		/// Returns the DatumTypes value associated with a std::string type.
+		/// </summary>
 		template<>
 		static constexpr DatumTypes TypeOf<std::string>();
 
+		/// <summary>
+		/// Returns the DatumTypes value associated with a RTTI pointer type.
+		/// </summary>
 		template<>
 		static constexpr DatumTypes TypeOf<RTTI*>();
 #pragma endregion TypeOf Static Method
@@ -352,26 +392,146 @@ namespace Library
 
 		template<>
 		constexpr typename DatumPointer<RTTI*>::Type GetPointer<RTTI*>();
+
+		template<typename T>
+		constexpr typename DatumPointer<const T>::Type GetPointer() const;
+							  
+		template<>			  
+		constexpr typename DatumPointer<const int>::Type GetPointer<int>() const;
+							  
+		template<>			  
+		constexpr typename DatumPointer<const float>::Type GetPointer<float>() const;
+							  
+		template<>			  
+		constexpr typename DatumPointer<const glm::vec4>::Type GetPointer<glm::vec4>() const;
+							  
+		template<>			  
+		constexpr typename DatumPointer<const glm::mat4>::Type GetPointer<glm::mat4>() const;
+							  
+		template<>			  
+		constexpr typename DatumPointer<const std::string>::Type GetPointer<std::string>() const;
+							  
+		template<>			  
+		constexpr typename DatumPointer<RTTI* const>::Type GetPointer<RTTI*>() const;
 #pragma endregion Pointer Accessors
 
 #pragma region Boolean Operators
 	public:
+		/// <summary>
+		/// Equals operator. 
+		/// Checks if the type and size of the Datum and the data values are equal to the right hand side Datum.
+		/// </summary>
+		/// <param name="rhs">Datum on the right hand side to be compared to the left.</param>
+		/// <returns>True when lists are equivalent, otherwise false.</returns>
 		bool operator==(const Datum& rhs) const noexcept;
+
+		/// <summary>
+		/// Not equals operator. 
+		/// Checks if the type and size of the Datum and the data values are not equal to the right hand side Datum.
+		/// </summary>
+		/// <param name="rhs">Datum on the right hand side to be compared to the left.</param>
+		/// <returns>True when lists are not equivalent, otherwise false.</returns>
 		bool operator!=(const Datum& rhs) const noexcept;
 
+#pragma region Equals Scalar
+		/// <summary>
+		/// Scalar equals operator. 
+		/// Checks if the Datum contains only one element that is equal to the right hand side value.
+		/// </summary>
+		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
+		/// <returns>True when Datum and scalar are equivalent, otherwise false.</returns>
 		bool operator==(const int rhs) const noexcept;
-		bool operator==(const float rhs) const noexcept;
-		bool operator==(const glm::vec4& rhs) const noexcept;
-		bool operator==(const glm::mat4& rhs) const noexcept;
-		bool operator==(const std::string& rhs) const noexcept;
-		bool operator==(const RTTI*& rhs) const noexcept;
 
+		/// <summary>
+		/// Scalar equals operator. 
+		/// Checks if the Datum contains only one element that is equal to the right hand side value.
+		/// </summary>
+		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
+		/// <returns>True when Datum and scalar are equivalent, otherwise false.</returns>
+		bool operator==(const float rhs) const noexcept;
+
+		/// <summary>
+		/// Scalar equals operator. 
+		/// Checks if the Datum contains only one element that is equal to the right hand side value.
+		/// </summary>
+		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
+		/// <returns>True when Datum and scalar are equivalent, otherwise false.</returns>
+		bool operator==(const glm::vec4& rhs) const noexcept;
+
+		/// <summary>
+		/// Scalar equals operator. 
+		/// Checks if the Datum contains only one element that is equal to the right hand side value.
+		/// </summary>
+		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
+		/// <returns>True when Datum and scalar are equivalent, otherwise false.</returns>
+		bool operator==(const glm::mat4& rhs) const noexcept;
+
+		/// <summary>
+		/// Scalar equals operator. 
+		/// Checks if the Datum contains only one element that is equal to the right hand side value.
+		/// </summary>
+		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
+		/// <returns>True when Datum and scalar are equivalent, otherwise false.</returns>
+		bool operator==(const std::string& rhs) const noexcept;
+
+		/// <summary>
+		/// Scalar equals operator. 
+		/// Checks if the Datum contains only one element that is equal to the right hand side value.
+		/// </summary>
+		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
+		/// <returns>True when Datum and scalar are equivalent, otherwise false.</returns>
+		bool operator==(const RTTI*& rhs) const noexcept;
+#pragma endregion Equals Scalar
+
+#pragma region Not Equals Scalar
+		/// <summary>
+		/// Scalar not equals operator. 
+		/// Checks if the Datum contains only one element that is not equal to the right hand side value.
+		/// </summary>
+		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
+		/// <returns>True when Datum and scalar are not equivalent, otherwise false.</returns>
 		bool operator!=(const int rhs) const noexcept;
+
+		/// <summary>
+		/// Scalar not equals operator. 
+		/// Checks if the Datum contains only one element that is not equal to the right hand side value.
+		/// </summary>
+		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
+		/// <returns>True when Datum and scalar are not equivalent, otherwise false.</returns>
 		bool operator!=(const float rhs) const noexcept;
+
+		/// <summary>
+		/// Scalar not equals operator. 
+		/// Checks if the Datum contains only one element that is not equal to the right hand side value.
+		/// </summary>
+		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
+		/// <returns>True when Datum and scalar are not equivalent, otherwise false.</returns>
 		bool operator!=(const glm::vec4& rhs) const noexcept;
+
+		/// <summary>
+		/// Scalar not equals operator. 
+		/// Checks if the Datum contains only one element that is not equal to the right hand side value.
+		/// </summary>
+		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
+		/// <returns>True when Datum and scalar are not equivalent, otherwise false.</returns>
 		bool operator!=(const glm::mat4& rhs) const noexcept;
+
+		/// <summary>
+		/// Scalar not equals operator. 
+		/// Checks if the Datum contains only one element that is not equal to the right hand side value.
+		/// </summary>
+		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
+		/// <returns>True when Datum and scalar are not equivalent, otherwise false.</returns>
 		bool operator!=(const std::string& rhs) const noexcept;
+
+		/// <summary>
+		/// Scalar not equals operator. 
+		/// Checks if the Datum contains only one element that is not equal to the right hand side value.
+		/// </summary>
+		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
+		/// <returns>True when Datum and scalar are not equivalent, otherwise false.</returns>
 		bool operator!=(const RTTI*& rhs) const noexcept;
+#pragma endregion Not Equals Scalar
 #pragma endregion Boolean Operators
 
 #pragma region Type, Size, Capacity
@@ -397,12 +557,15 @@ namespace Library
 		void PushBack(RTTI* const& data);
 #pragma endregion Push Back Overloads
 
+		/// <summary>
+		/// Destroys all elements in the Datum. Sets size to zero, but does not change capacity.
+		/// </summary>
 		void Clear();
 #pragma endregion Modifiers
 
 #pragma region HelperMethods
 	private:
-		/// /// <summary>
+		/// <summary>
 		/// Constructor helper that initializes Datum with values passed from scalar and initializer list constructor overloads.
 		/// </summary>
 		/// <param name="rhs">List of scalar values to fill the Datum.</param>
@@ -421,8 +584,26 @@ namespace Library
 		Datum& AssignmentHelper(const std::initializer_list<T> rhs);
 
 		template<typename T>
+		bool EqualsScalarHelper(const T& rhs) const;
+
+		template<>
+		bool EqualsScalarHelper<RTTI>(const RTTI& rhs) const;
+
+		/// <summary>
+		/// Resize helper that inserts or destroys data to resize the Datum to contain the given size.
+		/// </summary>
+		/// <param name="size">New size for the Datum.</param>
+		/// <param name="mDataPtr">Pointer alias for mData for the DatumTypes value.</param>
+		/// <typeparam name="T">Type of elements in the Datum.</typeparam>
+		template<typename T>
 		void ResizeHelper(std::size_t size, T*& mDataPtr);
 
+		/// <summary>
+		/// PushBack helper that inserts data into the end of the Datum, incrementing capacity if needed.
+		/// </summary>
+		/// <param name="size">New size for the Datum.</param>
+		/// <param name="type">DatumTypes value of the data to insert.</param>
+		/// <typeparam name="T">Type of elements in the Datum.</typeparam>
 		template<typename T>
 		void PushBackHelper(const T& data, DatumTypes type);
 #pragma endregion HelperMethods
