@@ -3,6 +3,7 @@
 #pragma region Includes
 // Standard
 #include <string>
+#include <type_traits>
 
 // Third Party
 #include <glm/glm.hpp>
@@ -570,22 +571,39 @@ namespace Library
 		const T& Get(std::size_t index=0) const;
 
 		/// <summary>
-		/// Finds an element from the Datum given the corresponding value.
+		/// Finds an element in the Datum given the corresponding value.
 		/// </summary>
-		/// <param name="value">Value to be searched for in the Datun to be removed.</param>
-		/// <returns>Constant pointer to the element.</returns>
+		/// <param name="value">Value to be searched for in the Datum.</param>
+		/// <returns>Pointer to the value if found, otherwise nullptr.</returns>
 		/// <typeparam name="T">Type of elements in the Datum.</typeparam>
 		template<typename T>
-		T* const Find(const T& value);
+		T* Find(const T& value);
 
 		/// <summary>
-		/// Finds an element from the Datum given the corresponding value.
+		/// Finds an element in the Datum given the corresponding value.
 		/// </summary>
-		/// <param name="value">Value to be searched for in the Datun to be removed.</param>
+		/// <param name="value">Value to be searched for in the Datum.</param>
+		/// <returns>Pointer to the value if found, otherwise nullptr.</returns>
+		/// <typeparam name="T">Type of elements in the Datum.</typeparam>
+		template<typename T>
+		const T* Find(const T& value) const;
+
+		/// <summary>
+		/// Finds the index of an element in the Datum given the corresponding value.
+		/// </summary>
+		/// <param name="value">Value to be searched for in the Datum.</param>
 		/// <returns>Index of the value if found, otherwise one past the last index, a.k.a. the size.</returns>
 		/// <typeparam name="T">Type of elements in the Datum.</typeparam>
 		template<typename T>
-		const T* const Find(const T& value) const;
+		std::size_t IndexOf(const T& value) const;
+
+		/// <summary>
+		/// Template specialization that finds the index of an RTTIPointer in the Datum given an equal RTTIPointer.
+		/// </summary>
+		/// <param name="value">Value to be searched for in the Datum.</param>
+		/// <returns>Index of the value if found, otherwise one past the last index, a.k.a. the size.</returns>
+		template<>
+		std::size_t IndexOf(const RTTIPointer& value) const;
 #pragma endregion Element Accessors
 
 #pragma region Modifiers

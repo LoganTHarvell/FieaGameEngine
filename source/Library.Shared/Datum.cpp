@@ -60,7 +60,7 @@ namespace Library
 			mInternalStorage = rhs.mInternalStorage;
 			mReserveFunctor = rhs.mReserveFunctor;
 
-			if (mInternalStorage && rhs.mCapacity > 0)
+			if (rhs.mInternalStorage && rhs.mCapacity > 0)
 			{
 				Reserve(rhs.mCapacity);
 
@@ -290,7 +290,13 @@ namespace Library
 		{
 			for (std::size_t i = 0; i < mSize; ++i)
 			{
-				if (!mData.rttiPtr[i]->Equals(rhs.mData.rttiPtr[i]))
+				if (!mData.rttiPtr[i] && !rhs.mData.rttiPtr[i])
+				{
+					continue;
+				}
+
+				else if (	!mData.rttiPtr[i] || !rhs.mData.rttiPtr[i] 
+						 || !mData.rttiPtr[i]->Equals(rhs.mData.rttiPtr[i])	)
 				{
 					isEqual = false;
 					break;
@@ -316,32 +322,32 @@ namespace Library
 #pragma region Equals Scalar
 	bool Datum::operator==(const int rhs) const noexcept
 	{
-		return mSize == 1 && mData.intPtr[0] == rhs;
+		return mData.intPtr[0] == rhs;
 	}
 
 	bool Datum::operator==(const float rhs) const noexcept
 	{
-		return mSize == 1 && mData.floatPtr[0] == rhs;
+		return mData.floatPtr[0] == rhs;
 	}
 
 	bool Datum::operator==(const glm::vec4& rhs) const noexcept
 	{
-		return mSize == 1 && mData.vectorPtr[0] == rhs;
+		return mData.vectorPtr[0] == rhs;
 	}
 
 	bool Datum::operator==(const glm::mat4& rhs) const noexcept
 	{
-		return mSize == 1 && mData.matrixPtr[0] == rhs;
+		return mData.matrixPtr[0] == rhs;
 	}
 
 	bool Datum::operator==(const std::string& rhs) const noexcept
 	{
-		return mSize == 1 && mData.stringPtr[0] == rhs;
+		return mData.stringPtr[0] == rhs;
 	}
 
 	bool Datum::operator==(const RTTIPointer& rhs) const noexcept
 	{
-		return mSize == 1 && mData.rttiPtr[0]->Equals(rhs);
+		return ((!mData.rttiPtr[0] && !rhs) || (mData.rttiPtr[0] && mData.rttiPtr[0]->Equals(rhs)));
 	}
 #pragma endregion Equals Scalar
 
@@ -468,7 +474,7 @@ namespace Library
 			mData.stringPtr[index].~basic_string();
 		}
 
-		std::size_t size = DatumSizeLUT[static_cast<std::size_t>(mType)];
+		const std::size_t size = DatumSizeLUT[static_cast<std::size_t>(mType)];
 		memmove(&mData.bytePtr[index * size], &mData.bytePtr[(index * size) + size], size * (mSize - index));
 
 		--mSize;
@@ -497,24 +503,28 @@ namespace Library
 	template<typename T>
 	Datum& Datum::ConstructorAssignmentHelper(const std::initializer_list<T> rhs)
 	{
-		if (!mInternalStorage) throw std::runtime_error("External storage.");
-
 		if (mType == DatumTypes::Unknown)
 		{
 			mType = TypeOf<T>();
 		}
 		else if (mType != TypeOf<T>())
 		{
-			throw std::runtime_error("Incompatible types.");
+			throw std::runtime_error("Mismatched types.");
 		}
 
-		Clear();
-		ShrinkToFit();
-		Reserve(rhs.size());
-
-		for (const auto& value : rhs)
+		if (mInternalStorage && mSize < rhs.size())
 		{
-			PushBack(value);
+			Resize(rhs.size());
+		}
+		else if (mSize < rhs.size())
+		{
+			throw std::runtime_error("External storage has insufficient memory.");
+		}
+
+		auto it = rhs.begin();
+		for (std::size_t i = 0; i < rhs.size(); ++i, ++it)
+		{
+			Set(*it, i);
 		}
 
 		return *this;

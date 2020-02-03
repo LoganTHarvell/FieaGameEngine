@@ -63,7 +63,8 @@ namespace Library
 
 	inline void Datum::SetType(DatumTypes type)
 	{
-		if (mType != DatumTypes::Unknown) throw std::runtime_error("Type reassignment.");
+		if (mType != DatumTypes::Unknown)	throw std::runtime_error("Type reassignment.");
+		if (type == DatumTypes::Unknown)	throw std::runtime_error("Unknown assignment.");
 
 		mType = type;
 	}
@@ -115,11 +116,10 @@ namespace Library
 		static_assert(TypeOf<T>() != DatumTypes::Unknown, "Invalid data type.");
 
 		if (mType == DatumTypes::Unknown)	throw std::runtime_error("Type not set.");
-		if (TypeOf<T>() != mType)			throw std::runtime_error("Mismatched type.");
+		if (mType != TypeOf<T>())			throw std::runtime_error("Mismatched type.");
 		if (index >= mSize)					throw std::out_of_range("Index out of bounds.");
-
-		reinterpret_cast<T*>(mData.voidPtr)[index] = value;
-		return reinterpret_cast<T*>(mData.voidPtr)[index];
+		
+		return Get<T>(index) = value;
 	}
 
 	template<typename T>
@@ -128,7 +128,7 @@ namespace Library
 		static_assert(TypeOf<T>() != DatumTypes::Unknown, "Invalid data type.");
 
 		if (mType == DatumTypes::Unknown)	throw std::runtime_error("Type not set.");
-		if (TypeOf<T>() != mType)			throw std::runtime_error("Mismatched type.");
+		if (mType != TypeOf<T>())			throw std::runtime_error("Mismatched type.");
 		if (index >= mSize)					throw std::out_of_range("Index out of bounds.");
 
 		return reinterpret_cast<T*>(mData.voidPtr)[index];
@@ -137,56 +137,71 @@ namespace Library
 	template<typename T>
 	inline const T& Datum::Get(std::size_t index) const
 	{
-		return const_cast<Datum*>(this)->Get<T>(index);
+		static_assert(TypeOf<T>() != DatumTypes::Unknown, "Invalid data type.");
+
+		if (mType == DatumTypes::Unknown)	throw std::runtime_error("Type not set.");
+		if (mType != TypeOf<T>())			throw std::runtime_error("Mismatched type.");
+		if (index >= mSize)					throw std::out_of_range("Index out of bounds.");
+
+		return reinterpret_cast<T*>(mData.voidPtr)[index];
 	}
 
 	template<typename T>
-	inline T* const Datum::Find(const T& value)
+	inline T* Datum::Find(const T& value)
+	{
+		static_assert(TypeOf<T>() != DatumTypes::Unknown, "Invalid data type.");
+
+		const std::size_t index = IndexOf(value);
+		return index < mSize ? &Get<T>(index) : nullptr;
+	}
+
+	template<typename T>
+	inline const T* Datum::Find(const T& value) const
+	{
+		static_assert(TypeOf<T>() != DatumTypes::Unknown, "Invalid data type.");
+
+		const std::size_t index = IndexOf(value);
+		return index < mSize ? &Get<T>(index) : nullptr;
+	}
+
+	template<typename T>
+	inline std::size_t Datum::IndexOf(const T& value) const
 	{
 		static_assert(TypeOf<T>() != DatumTypes::Unknown, "Invalid data type.");
 
 		if (mType == DatumTypes::Unknown)	throw std::runtime_error("Type not set.");
-		if (TypeOf<T>() != mType)			throw std::runtime_error("Mismatched type.");
+		if (mType != TypeOf<T>())			throw std::runtime_error("Mismatched type.");
 
-		T* data = reinterpret_cast<T*>(mData.voidPtr);
-		T* valuePtr = nullptr;
-	
-		for (std::size_t i = 0; i < mSize; ++i)
+		T* const data = reinterpret_cast<T*>(mData.voidPtr);
+
+		std::size_t i = 0;
+		for (; i < mSize; ++i)
 		{
 			if (data[i] == value)
 			{
-				valuePtr = &data[i];
 				break;
 			}
 		}
 
-		return valuePtr;
+		return i;
 	}
 
 	template<>
-	inline Datum::RTTIPointer* const Datum::Find(const Datum::RTTIPointer& value)
+	inline std::size_t Datum::IndexOf(const RTTIPointer& value) const
 	{
-		if (mType == DatumTypes::Unknown) throw std::runtime_error("Type not set.");
-		if (mType != DatumTypes::Pointer) throw std::runtime_error("Mismatched type.");
-		
-		RTTIPointer* valuePtr = nullptr;
+		if (mType == DatumTypes::Unknown)	throw std::runtime_error("Type not set.");
+		if (mType != DatumTypes::Pointer)	throw std::runtime_error("Mismatched type.");
 
-		for (std::size_t i = 0; i < mSize; ++i)
+		std::size_t i = 0;
+		for (; i < mSize; ++i)
 		{
-			if (mData.rttiPtr[i]->Equals(value))
+			if ((!mData.rttiPtr[0] && !value) || (mData.rttiPtr[0] && mData.rttiPtr[i]->Equals(value)))
 			{
-				valuePtr = &mData.rttiPtr[i];
 				break;
 			}
 		}
 
-		return valuePtr;
-	}
-
-	template<typename T>
-	inline const T* const Datum::Find(const T& value) const
-	{
-		return const_cast<Datum*>(this)->Find(value);
+		return i;
 	}
 #pragma endregion Element Accessors
 
@@ -231,7 +246,7 @@ namespace Library
 
 		if (mCapacity <= mSize)
 		{
-			std::size_t newCapacity = mReserveFunctor(mCapacity, mSize);
+			const std::size_t newCapacity = mReserveFunctor(mCapacity, mSize);
 			Reserve(std::max(newCapacity, mCapacity + 1));
 		}
 
@@ -245,17 +260,17 @@ namespace Library
 
 		if (!mInternalStorage) throw std::runtime_error("External storage.");
 
-		T* data = Find(value);
-		if (data != nullptr)
+		T* const data = reinterpret_cast<T*>(mData.voidPtr);
+		const std::size_t index = IndexOf(value);
+		
+		if (index < mSize)
 		{
-			std::size_t index = data - reinterpret_cast<T*>(mData.voidPtr);
-
 			if (mType == DatumTypes::String)
 			{
 				mData.stringPtr[index].~basic_string();
 			}
 
-			memmove(data, &data[1], sizeof(T) * (mSize - index));
+			memmove(&data[index], &data[index + 1], sizeof(T) * (mSize - index));
 
 			--mSize;
 			return true;

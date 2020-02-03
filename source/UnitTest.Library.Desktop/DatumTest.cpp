@@ -38,9 +38,9 @@ namespace UnitTests
 		Assert::AreEqual(data.size(), datum2.Capacity());
 		Assert::AreEqual(datum2.Type(), Datum::TypeOf<T>());
 
-		datum2 = *data.begin();
-		Assert::AreEqual(1_z, datum2.Size());
-		Assert::AreEqual(1_z, datum2.Capacity());
+		datum2 = T();
+		Assert::AreEqual(data.size(), datum2.Size());
+		Assert::AreEqual(data.size(), datum2.Capacity());
 		Assert::AreEqual(datum2.Type(), Datum::TypeOf<T>());
 	}
 
@@ -72,7 +72,7 @@ namespace UnitTests
 	}
 
 	template<typename T>
-	void TestEquality(const std::initializer_list<T> data)
+	void TestEquality(const std::initializer_list<T> data, const T& differentData)
 	{
 		Datum datum1;
 		Datum datum2;
@@ -83,7 +83,7 @@ namespace UnitTests
 		Assert::AreEqual(datum1, datum2);
 
 		datum1 = data;
-		datum2 = *data.begin();
+		datum2 = differentData;
 		Assert::IsTrue(datum1 != datum2);
 
 		for (const auto& value : data)
@@ -163,7 +163,7 @@ namespace UnitTests
 	}
 
 	template<typename T>
-	void TestElementAccessors(const std::initializer_list<T> data)
+	void TestElementAccessors(const std::initializer_list<T> data, const T& notFoundData)
 	{
 		Datum datum;
 		
@@ -191,7 +191,7 @@ namespace UnitTests
 
 		Assert::AreEqual(*(data.end() - 1), *datum.Find(*(data.end() - 1)));
 		datum.PopBack();
-		Assert::IsTrue(datum.Find(*(data.end() - 1)) == nullptr);
+		Assert::IsTrue(datum.Find(notFoundData) == nullptr);
 	}
 
 	template<typename T>
@@ -331,7 +331,8 @@ namespace UnitTestLibraryDesktop
 
 			Foo a(10), b(20), c(30);
 			TestConstructors<RTTI*>({ &a, &b, &c });
- 		}
+			TestConstructors<RTTI*>({ nullptr, nullptr, nullptr });
+		}
 
  		TEST_METHOD(Copy)
  		{
@@ -341,7 +342,8 @@ namespace UnitTestLibraryDesktop
 
 			Foo a(10), b(20), c(30);
 			TestCopy<RTTI*>({ &a, &b, &c });
- 		}
+			TestCopy<RTTI*>({ nullptr, nullptr, nullptr });
+		}
 
 		TEST_METHOD(Move)
 		{
@@ -351,16 +353,18 @@ namespace UnitTestLibraryDesktop
 
 			Foo a(10), b(20), c(30);
 			TestMove<RTTI*>({ &a, &b, &c });
+			TestMove<RTTI*>({ nullptr, nullptr, nullptr });
 		}
 
 		TEST_METHOD(Equality)
 		{
-			TestEquality<int>({ 10, 20, 30 });
-			TestEquality<float>({ 10, 20, 30 });
-			TestEquality<std::string>({ "10", "20", "30" });
+			TestEquality<int>({ 10, 20, 30 }, 40);
+			TestEquality<float>({ 10, 20, 30 }, 40);
+			TestEquality<std::string>({ "10", "20", "30" }, "40");
 
 			Foo a(10), b(20), c(30);
-			TestEquality<RTTI*>({ &a, &b, &c });
+			TestEquality<RTTI*>({ &a, &b, &c }, nullptr);
+			TestEquality<RTTI*>({ nullptr, nullptr, nullptr }, &a);
 		}
 
 		TEST_METHOD(TypeSizeCapacity)
@@ -371,6 +375,7 @@ namespace UnitTestLibraryDesktop
 
 			Foo a(10), b(20), c(30);
 			TestTypeSizeCapacity<RTTI*>({ &a, &b, &c });
+			TestTypeSizeCapacity<RTTI*>({ nullptr, nullptr, nullptr });
 		}
 
 		TEST_METHOD(Resize)
@@ -381,16 +386,18 @@ namespace UnitTestLibraryDesktop
 
 			Foo a(10), b(20), c(30);
 			TestResize<RTTI*>({ &a, &b, &c });
+			TestResize<RTTI*>({ nullptr, nullptr, nullptr });
 		}
 
 		TEST_METHOD(ElementAccessors)
 		{
-			TestElementAccessors<int>({ 10, 20, 30 });
-			TestElementAccessors<float>({ 10, 20, 30 });
-			TestElementAccessors<std::string>({ "10", "20", "30" });
+			TestElementAccessors<int>({ 10, 20, 30 }, 40);
+			TestElementAccessors<float>({ 10, 20, 30 }, 40);
+			TestElementAccessors<std::string>({ "10", "20", "30" }, "40");
 
 			Foo a(10), b(20), c(30);
-			TestElementAccessors<RTTI*>({ &a, &b, &c });
+			TestElementAccessors<RTTI*>({ &a, &b, &c }, nullptr);
+			TestElementAccessors<RTTI*>({ nullptr, nullptr, nullptr }, &a);
 		}
 
 		TEST_METHOD(SetStorage)
@@ -401,11 +408,13 @@ namespace UnitTestLibraryDesktop
 
 			Foo a(1), b(2), c(3), d(4), e(5), f(6), g(7), h(8), i(9), j(10);
 			RTTI* dataFoo[10] = { &a, &b, &c, &d, &e, &f, &g, &h, &i, &j };
+			RTTI* dataNullptr[10] = { nullptr, nullptr, nullptr, nullptr, nullptr };
 
 			TestSetStorage<int>(dataInt, 10);
 			TestSetStorage<float>(dataFloat, 10);
 			TestSetStorage<std::string>(dataString, 10);
 			TestSetStorage<RTTI*>(dataFoo, 10);
+			TestSetStorage<RTTI*>(dataNullptr, 5);
 		}
 
 		TEST_METHOD(PushBack)
@@ -416,6 +425,7 @@ namespace UnitTestLibraryDesktop
 
 			Foo a(1), b(2), c(3), d(4), e(5), f(6), g(7), h(8), i(9), j(10);
 			TestPushBack<RTTI*>({ &a, &b, &c, &d, &e, &f, &g, &h, &i, &j });
+			TestPushBack<RTTI*>({ nullptr, nullptr, nullptr, nullptr, nullptr });
 		}
 
 		TEST_METHOD(PopBack)
@@ -426,6 +436,7 @@ namespace UnitTestLibraryDesktop
 
 			Foo a(10), b(20), c(30);
 			TestPopBack<RTTI*>({ &a, &b, &c });
+			TestPopBack<RTTI*>({ nullptr, nullptr, nullptr });
 		}
 
 		TEST_METHOD(Remove)
@@ -436,6 +447,7 @@ namespace UnitTestLibraryDesktop
 
 			Foo a(10), b(20), c(30);
 			TestRemove<RTTI*>({ &a, &b, &c });
+			TestRemove<RTTI*>({ nullptr, nullptr, nullptr });
 		}
 
 		TEST_METHOD(Clear)
@@ -445,6 +457,7 @@ namespace UnitTestLibraryDesktop
 
 			Foo a(10), b(20), c(30);
 			TestClear<RTTI*>({ &a, &b, &c });
+			TestClear<RTTI*>({ nullptr, nullptr, nullptr });
 		}
 
 	private:

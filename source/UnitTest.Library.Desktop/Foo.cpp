@@ -54,6 +54,8 @@ namespace UnitTests
 
 	bool Foo::Equals(const RTTI* rhs) const
 	{
+		if (!rhs) return false;
+		
 		const Foo* rhsFoo = rhs->Get<Foo>();
 		if (!rhsFoo) return false;
 
