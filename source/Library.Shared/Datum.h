@@ -590,8 +590,13 @@ namespace Library
 
 #pragma region Modifiers
 	public:
+		/// <summary>
+		/// Sets the storage to the external data at the given address with the given size.
+		/// </summary>
+		/// <param name="data">External data storage to be wrapped by the Datum.</param>
+		/// <param name="size">Size of the external data.</param>
 		template<typename T>
-		void SetStorage(T*& array, std::size_t size);
+		void SetStorage(T*& data, std::size_t size);
 
 		/// <summary>
 		/// Inserts data into the end of the Datum, incrementing capacity if needed.

@@ -327,6 +327,7 @@ namespace UnitTestLibraryDesktop
  		{
 			TestConstructors<int>({ 10, 20, 30 });
 			TestConstructors<float>({ 10, 20, 30 });
+			TestConstructors<std::string>({ "10", "20", "30" });
 
 			Foo a(10), b(20), c(30);
 			TestConstructors<RTTI*>({ &a, &b, &c });
@@ -336,6 +337,7 @@ namespace UnitTestLibraryDesktop
  		{
  			TestCopy<int>({ 10, 20, 30 });
  			TestCopy<float>({ 10, 20, 30 });
+			TestCopy<std::string>({ "10", "20", "30" });
 
 			Foo a(10), b(20), c(30);
 			TestCopy<RTTI*>({ &a, &b, &c });
@@ -345,6 +347,7 @@ namespace UnitTestLibraryDesktop
 		{
 			TestMove<int>({ 10, 20, 30 });
 			TestMove<float>({ 10, 20, 30 });
+			TestMove<std::string>({ "10", "20", "30" });
 
 			Foo a(10), b(20), c(30);
 			TestMove<RTTI*>({ &a, &b, &c });
@@ -354,6 +357,7 @@ namespace UnitTestLibraryDesktop
 		{
 			TestEquality<int>({ 10, 20, 30 });
 			TestEquality<float>({ 10, 20, 30 });
+			TestEquality<std::string>({ "10", "20", "30" });
 
 			Foo a(10), b(20), c(30);
 			TestEquality<RTTI*>({ &a, &b, &c });
@@ -363,6 +367,7 @@ namespace UnitTestLibraryDesktop
 		{
 			TestTypeSizeCapacity<int>({ 10, 20, 30 });
 			TestTypeSizeCapacity<float>({ 10, 20, 30 });
+			TestTypeSizeCapacity<std::string>({ "10", "20", "30" });
 
 			Foo a(10), b(20), c(30);
 			TestTypeSizeCapacity<RTTI*>({ &a, &b, &c });
@@ -372,6 +377,7 @@ namespace UnitTestLibraryDesktop
 		{
 			TestResize<int>({ 10, 20, 30 });
 			TestResize<float>({ 10, 20, 30 });
+			TestResize<std::string>({ "10", "20", "30" });
 
 			Foo a(10), b(20), c(30);
 			TestResize<RTTI*>({ &a, &b, &c });
@@ -381,6 +387,7 @@ namespace UnitTestLibraryDesktop
 		{
 			TestElementAccessors<int>({ 10, 20, 30 });
 			TestElementAccessors<float>({ 10, 20, 30 });
+			TestElementAccessors<std::string>({ "10", "20", "30" });
 
 			Foo a(10), b(20), c(30);
 			TestElementAccessors<RTTI*>({ &a, &b, &c });
@@ -390,12 +397,14 @@ namespace UnitTestLibraryDesktop
 		{
 			int dataInt[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 			float dataFloat[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+			std::string dataString[10] = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" };
 
 			Foo a(1), b(2), c(3), d(4), e(5), f(6), g(7), h(8), i(9), j(10);
 			RTTI* dataFoo[10] = { &a, &b, &c, &d, &e, &f, &g, &h, &i, &j };
 
 			TestSetStorage<int>(dataInt, 10);
 			TestSetStorage<float>(dataFloat, 10);
+			TestSetStorage<std::string>(dataString, 10);
 			TestSetStorage<RTTI*>(dataFoo, 10);
 		}
 
@@ -403,6 +412,7 @@ namespace UnitTestLibraryDesktop
 		{
 			TestPushBack<int>({ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
 			TestPushBack<float>({ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
+			TestPushBack<std::string>({ "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"});
 
 			Foo a(1), b(2), c(3), d(4), e(5), f(6), g(7), h(8), i(9), j(10);
 			TestPushBack<RTTI*>({ &a, &b, &c, &d, &e, &f, &g, &h, &i, &j });
@@ -412,6 +422,7 @@ namespace UnitTestLibraryDesktop
 		{
 			TestPopBack<int>({ 10, 20, 30 });
 			TestPopBack<float>({ 10, 20, 30 });
+			TestPopBack<std::string>({ "10", "20", "30" });
 
 			Foo a(10), b(20), c(30);
 			TestPopBack<RTTI*>({ &a, &b, &c });
@@ -421,6 +432,7 @@ namespace UnitTestLibraryDesktop
 		{
 			TestRemove<int>({ 10, 20, 30 });
 			TestRemove<float>({ 10, 20, 30 });
+			TestRemove<std::string>({ "10", "20", "30" });
 
 			Foo a(10), b(20), c(30);
 			TestRemove<RTTI*>({ &a, &b, &c });
