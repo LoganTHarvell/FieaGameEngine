@@ -55,85 +55,6 @@ namespace Library
 	}
 #pragma endregion TypeOf Static Method
 
-#pragma region Boolean Operators
-	template<typename T>
-	inline bool Datum::operator==(const T& rhs) const
-	{
-		if (mType == DatumTypes::Unknown)		throw std::runtime_error("Type not set.");
-		if (TypeOf<T>() == DatumTypes::Unknown) throw std::runtime_error("Unknown data type.");
-		if (TypeOf<T>() != mType)				throw std::runtime_error("Incorrect type.");
-
-		if (mSize != 1) return false;
-
-		T* const data = reinterpret_cast<T*>(mData.voidPtr);
-		bool isEqual = (data[0] == rhs);
-		return isEqual;
-	}
-
-	template<>
-	inline bool Datum::operator==<Datum>(const Datum& rhs) const
-	{
-		if (this == &rhs)
-		{
-			return true;
-		}
-
-		if (mType != rhs.mType || mSize != rhs.mSize)
-		{
-			return false;
-		}
-
-		switch (mType)
-		{
-		case DatumTypes::Unknown:
-			return true;
-		case DatumTypes::Integer:
-		case DatumTypes::Float:
-		case DatumTypes::Vector:
-		case DatumTypes::Matrix:
-		{
-			const std::size_t size = mSize * DatumSizeLUT[static_cast<std::size_t>(mType)];
-			return memcmp(mData.voidPtr, rhs.mData.voidPtr, size) == 0;
-		}
-		case DatumTypes::String:
-		{
-			for (std::size_t i = 0; i < mSize; ++i)
-			{
-				if (mData.stringPtr[i] != rhs.mData.stringPtr[i]) return false;
-			}
-
-			return true;
-		}
-		case DatumTypes::Pointer:
-		{
-			for (std::size_t i = 0; i < mSize; ++i)
-			{
-				if (!mData.rttiPtr[i]->Equals(rhs.mData.rttiPtr[i])) return false;
-			}
-
-			return true;
-		}
-
-		default:
-			return false;
-			break;
-		}
-	}
-
-	template<>
-	bool Datum::operator==<Datum::RTTIPointer>(const Datum::RTTIPointer& rhs) const
-	{
-		if (mSize != 1) return false;
-		return mData.rttiPtr[0]->Equals(rhs);
-	}
-
-	template<typename T>
-	bool Datum::operator!=(const T& rhs) const
-	{
-		return !(operator==(rhs));
-	}
-#pragma endregion Boolean Operators
-
 #pragma region Size and Capacity
 	inline Datum::DatumTypes Datum::Type() const
 	{
@@ -214,33 +135,55 @@ namespace Library
 	template<typename T>
 	inline const T& Datum::Get(std::size_t index) const
 	{
-		if (mType == DatumTypes::Unknown)		throw std::runtime_error("Type not set.");
-		if (TypeOf<T>() == DatumTypes::Unknown) throw std::runtime_error("Unknown data type.");
-		if (TypeOf<T>() != mType)				throw std::runtime_error("Incorrect type.");
-		if (index >= mSize)						throw std::out_of_range("Index out of bounds.");
-
-		return reinterpret_cast<T*>(mData.voidPtr)[index];
+		return const_cast<Datum*>(this)->Get<T>(index);
 	}
 
 	template<typename T>
-	inline std::size_t Datum::Find(const T& value) const
+	inline T* const Datum::Find(const T& value)
 	{
 		if (mType == DatumTypes::Unknown)		throw std::runtime_error("Type not set.");
 		if (TypeOf<T>() == DatumTypes::Unknown) throw std::runtime_error("Unknown data type.");
 		if (TypeOf<T>() != mType)				throw std::runtime_error("Incorrect type.");
 
-		T*& data = reinterpret_cast<T*>(mData.voidPtr);
-		
-		std::size_t i = 0;
-		for (; i < mSize; ++i)
+		T* data = reinterpret_cast<T*>(mData.voidPtr);
+		T* valuePtr = nullptr;
+	
+		for (std::size_t i = 0; i < mSize; ++i)
 		{
-			if (data[i] == value || (TypeOf<T>() == DatumTypes::Pointer && data[i].Equals(value)))
+			if (data[i] == value)
 			{
+				valuePtr = &data[i];
 				break;
 			}
 		}
 
-		return i;
+		return valuePtr;
+	}
+
+	template<>
+	inline Datum::RTTIPointer* const Datum::Find(const Datum::RTTIPointer& value)
+	{
+		if (mType == DatumTypes::Unknown) throw std::runtime_error("Type not set.");
+		if (mType != DatumTypes::Pointer) throw std::runtime_error("Incorrect type.");
+		
+		RTTIPointer* valuePtr = nullptr;
+
+		for (std::size_t i = 0; i < mSize; ++i)
+		{
+			if (mData.rttiPtr[i]->Equals(value))
+			{
+				valuePtr = &mData.rttiPtr[i];
+				break;
+			}
+		}
+
+		return valuePtr;
+	}
+
+	template<typename T>
+	inline const T* const Datum::Find(const T& value) const
+	{
+		return const_cast<Datum*>(this)->Find(value);
 	}
 #pragma endregion Element Accessors
 
@@ -248,8 +191,9 @@ namespace Library
 	template<typename T>
 	void Datum::PushBack(const T& data)
 	{
-		if (TypeOf<T>() == DatumTypes::Unknown) throw std::runtime_error("Unknown data type.");
-		if (!mInternalStorage)					throw std::runtime_error("External storage.");
+		static_assert(TypeOf<T>() != DatumTypes::Unknown, "Unknown data type.");
+		
+		if (!mInternalStorage) throw std::runtime_error("External storage.");
 
 		if (mType == DatumTypes::Unknown)
 		{
@@ -272,6 +216,7 @@ namespace Library
 	template<typename T>
 	inline bool Datum::Remove(const T& value)
 	{
+		if (!mInternalStorage)					throw std::runtime_error("External storage.");
 		if (mType == DatumTypes::Unknown)		throw std::runtime_error("Type not set.");
 		if (TypeOf<T>() == DatumTypes::Unknown) throw std::runtime_error("Unknown data type.");
 		if (TypeOf<T>() != mType)				throw std::runtime_error("Incorrect type.");
@@ -280,9 +225,10 @@ namespace Library
 
 		for (std::size_t i = 0; i < mSize; ++i)
 		{
-			if (data[i] == value || (TypeOf<T>() == DatumTypes::Pointer && data[i].Equals(value)))
+			if (data[i] == value)
 			{
-				data[i].~T();
+				if (mType == DatumTypes::String) data[i].~T();
+
 				memmove(&data[i], &data[i + 1], sizeof(T) * (mSize - i));
 
 				--mSize;
@@ -293,22 +239,22 @@ namespace Library
 		return false;
 	}
 
-	template<typename T>
-	inline bool Datum::RemoveAt(const T& value, const std::size_t index)
+	template<>
+	inline bool Datum::Remove(const RTTIPointer& value)
 	{
-		if (mType == DatumTypes::Unknown)		throw std::runtime_error("Type not set.");
-		if (TypeOf<T>() == DatumTypes::Unknown) throw std::runtime_error("Unknown data type.");
-		if (TypeOf<T>() != mType)				throw std::runtime_error("Incorrect type.");
+		if (!mInternalStorage)				throw std::runtime_error("External storage.");
+		if (mType == DatumTypes::Unknown)	throw std::runtime_error("Type not set.");
+		if (mType != DatumTypes::Pointer)	throw std::runtime_error("Incorrect type.");
 
-		T*& data = reinterpret_cast<T*>(mData.voidPtr);
-
-		if (data[index] == value || (TypeOf<T>() == DatumTypes::Pointer && data[index].Equals(value)))
+		for (std::size_t i = 0; i < mSize; ++i)
 		{
-			data[index].~T();
-			memmove(&data[index], &data[index + 1], sizeof(T) * (mSize - index));
+			if (mData.rttiPtr[i]->Equals(value))
+			{
+				memmove(&mData.rttiPtr[i], &mData.rttiPtr[i + 1], sizeof(RTTIPointer) * (mSize - i));
 
-			--mSize;
-			return true;
+				--mSize;
+				return true;
+			}
 		}
 
 		return false;

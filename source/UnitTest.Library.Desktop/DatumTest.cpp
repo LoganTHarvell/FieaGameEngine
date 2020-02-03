@@ -183,6 +183,10 @@ namespace UnitTests
 
 		Assert::AreEqual(*data.begin(), datumConst.Front<T>());
 		Assert::AreEqual(*(data.end()-1), datumConst.Back<T>());
+
+		Assert::AreEqual(*(data.end() - 1), *datum.Find(*(data.end() - 1)));
+		datum.PopBack();
+		Assert::IsTrue(datum.Find(*(data.end() - 1)) == nullptr);
 	}
 
 	template<typename T>
@@ -212,15 +216,53 @@ namespace UnitTests
 	}
 
 	template<typename T>
-	void TestPopBack()
+	void TestPopBack(const std::initializer_list<T> data)
 	{
+		Datum datum = data;
 
+		for (std::size_t i = 0; i < data.size(); ++i)
+		{
+			datum.PopBack();
+			Assert::AreEqual(data.size() - i - 1, datum.Size());
+			
+			auto it = data.begin();
+			for (std::size_t j = 0; j < datum.Size(); ++j, ++it)
+			{
+				Assert::AreEqual(*it, datum.Get<T>(j));
+			}
+		}
 	}
 
 	template<typename T>
-	void TestRemove()
+	void TestRemove(const std::initializer_list<T> data)
 	{
+		Datum datum = data;
 
+		for (std::size_t i = 0; i < data.size(); ++i)
+		{
+			datum.Remove(*(data.end()-i-1));
+			Assert::AreEqual(data.size() - i - 1, datum.Size());
+
+			auto it = data.begin();
+			for (std::size_t j = 0; j < datum.Size(); ++j, ++it)
+			{
+				Assert::AreEqual(*it, datum.Get<T>(j));
+			}
+		}
+
+		datum = data;
+
+		for (std::size_t i = 0; i < data.size(); ++i)
+		{
+			datum.RemoveAt(datum.Size() - 1);
+			Assert::AreEqual(data.size() - i - 1, datum.Size());
+
+			auto it = data.begin();
+			for (std::size_t j = 0; j < datum.Size(); ++j, ++it)
+			{
+				Assert::AreEqual(*it, datum.Get<T>(j));
+			}
+		}
 	}
 
 	template<typename T>
@@ -330,6 +372,24 @@ namespace UnitTestLibraryDesktop
 
 			Foo a(1), b(2), c(3), d(4), e(5), f(6), g(7), h(8), i(9), j(10);
 			TestPushBack<RTTI*>({ &a, &b, &c, &d, &e, &f, &g, &h, &i, &j });
+		}
+
+		TEST_METHOD(PopBack)
+		{
+			TestPopBack<int>({ 10, 20, 30 });
+			TestPopBack<float>({ 10, 20, 30 });
+
+			Foo a(10), b(20), c(30);
+			TestPopBack<RTTI*>({ &a, &b, &c });
+		}
+
+		TEST_METHOD(Remove)
+		{
+			TestRemove<int>({ 10, 20, 30 });
+			TestRemove<float>({ 10, 20, 30 });
+
+			Foo a(10), b(20), c(30);
+			TestRemove<RTTI*>({ &a, &b, &c });
 		}
 
 		TEST_METHOD(Clear)
