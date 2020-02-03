@@ -116,6 +116,11 @@ namespace UnitTests
 		datum.Reserve(10);
 		Assert::AreEqual(data.size(), datum.Size());
 		Assert::AreEqual(10_z, datum.Capacity());
+
+		datum.Resize(10);
+		datum.SetReserveStrategy(Datum::DefaultReserveFunctor());
+		datum.PushBack(*data.begin());
+		Assert::AreEqual(15_z, datum.Capacity());
 	}
 
 	template<typename T>
@@ -187,6 +192,22 @@ namespace UnitTests
 		Assert::AreEqual(*(data.end() - 1), *datum.Find(*(data.end() - 1)));
 		datum.PopBack();
 		Assert::IsTrue(datum.Find(*(data.end() - 1)) == nullptr);
+	}
+
+	template<typename T>
+	void TestSetStorage(T data[], std::size_t size)
+	{
+		Datum datum;
+		datum.SetStorage(data, size);
+
+		Assert::AreEqual(Datum::TypeOf<T>(), datum.Type());
+		Assert::AreEqual(size, datum.Size());
+		Assert::AreEqual(size, datum.Capacity());
+
+		for (std::size_t i = 0; i < size; ++i)
+		{
+			Assert::AreEqual(data[i], datum.Get<T>(i));
+		}
 	}
 
 	template<typename T>
@@ -363,6 +384,19 @@ namespace UnitTestLibraryDesktop
 
 			Foo a(10), b(20), c(30);
 			TestElementAccessors<RTTI*>({ &a, &b, &c });
+		}
+
+		TEST_METHOD(SetStorage)
+		{
+			int dataInt[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+			float dataFloat[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+
+			Foo a(1), b(2), c(3), d(4), e(5), f(6), g(7), h(8), i(9), j(10);
+			RTTI* dataFoo[10] = { &a, &b, &c, &d, &e, &f, &g, &h, &i, &j };
+
+			TestSetStorage<int>(dataInt, 10);
+			TestSetStorage<float>(dataFloat, 10);
+			TestSetStorage<RTTI*>(dataFoo, 10);
 		}
 
 		TEST_METHOD(PushBack)

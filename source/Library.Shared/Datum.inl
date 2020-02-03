@@ -112,9 +112,10 @@ namespace Library
 	template<typename T>
 	inline T& Datum::Set(const T& value, std::size_t index)
 	{
+		static_assert(TypeOf<T>() != DatumTypes::Unknown, "Invalid data type.");
+
 		if (mType == DatumTypes::Unknown)		throw std::runtime_error("Type not set.");
-		if (TypeOf<T>() == DatumTypes::Unknown) throw std::runtime_error("Unknown data type.");
-		if (TypeOf<T>() != mType)				throw std::runtime_error("Incorrect type.");
+		if (TypeOf<T>() != mType)				throw std::runtime_error("Mismatched type.");
 		if (index >= mSize)						throw std::out_of_range("Index out of bounds.");
 
 		reinterpret_cast<T*>(mData.voidPtr)[index] = value;
@@ -124,9 +125,10 @@ namespace Library
 	template<typename T>
 	inline T& Datum::Get(std::size_t index)
 	{
+		static_assert(TypeOf<T>() != DatumTypes::Unknown, "Invalid data type.");
+
 		if (mType == DatumTypes::Unknown)		throw std::runtime_error("Type not set.");
-		if (TypeOf<T>() == DatumTypes::Unknown) throw std::runtime_error("Unknown data type.");
-		if (TypeOf<T>() != mType)				throw std::runtime_error("Incorrect type.");
+		if (TypeOf<T>() != mType)				throw std::runtime_error("Mismatched type.");
 		if (index >= mSize)						throw std::out_of_range("Index out of bounds.");
 
 		return reinterpret_cast<T*>(mData.voidPtr)[index];
@@ -141,9 +143,10 @@ namespace Library
 	template<typename T>
 	inline T* const Datum::Find(const T& value)
 	{
+		static_assert(TypeOf<T>() != DatumTypes::Unknown, "Invalid data type.");
+
 		if (mType == DatumTypes::Unknown)		throw std::runtime_error("Type not set.");
-		if (TypeOf<T>() == DatumTypes::Unknown) throw std::runtime_error("Unknown data type.");
-		if (TypeOf<T>() != mType)				throw std::runtime_error("Incorrect type.");
+		if (TypeOf<T>() != mType)				throw std::runtime_error("Mismatched type.");
 
 		T* data = reinterpret_cast<T*>(mData.voidPtr);
 		T* valuePtr = nullptr;
@@ -164,7 +167,7 @@ namespace Library
 	inline Datum::RTTIPointer* const Datum::Find(const Datum::RTTIPointer& value)
 	{
 		if (mType == DatumTypes::Unknown) throw std::runtime_error("Type not set.");
-		if (mType != DatumTypes::Pointer) throw std::runtime_error("Incorrect type.");
+		if (mType != DatumTypes::Pointer) throw std::runtime_error("Mismatched type.");
 		
 		RTTIPointer* valuePtr = nullptr;
 
@@ -189,9 +192,31 @@ namespace Library
 
 #pragma region Modifiers
 	template<typename T>
-	void Datum::PushBack(const T& data)
+	inline void Datum::SetStorage(T*& array, std::size_t size)
 	{
-		static_assert(TypeOf<T>() != DatumTypes::Unknown, "Unknown data type.");
+		static_assert(TypeOf<T>() != DatumTypes::Unknown, "Invalid data type.");
+		
+		if (mType == DatumTypes::Unknown)
+		{
+			mType = TypeOf<T>();
+		}
+		else if (mType != TypeOf<T>())
+		{
+			throw std::runtime_error("Mismatched types.");
+		}
+
+		Clear();
+
+		mData.voidPtr = array;
+		mSize = size;
+		mCapacity = size;
+		mInternalStorage = false;
+	}
+
+	template<typename T>
+	inline void Datum::PushBack(const T& data)
+	{
+		static_assert(TypeOf<T>() != DatumTypes::Unknown, "Invalid data type.");
 		
 		if (!mInternalStorage) throw std::runtime_error("External storage.");
 
@@ -201,7 +226,7 @@ namespace Library
 		}
 		else if (mType != TypeOf<T>())
 		{
-			throw std::runtime_error("Incorrect type.");
+			throw std::runtime_error("Mismatched type.");
 		}
 
 		if (mCapacity <= mSize)
@@ -216,10 +241,11 @@ namespace Library
 	template<typename T>
 	inline bool Datum::Remove(const T& value)
 	{
+		static_assert(TypeOf<T>() != DatumTypes::Unknown, "Invalid data type.");
+
 		if (!mInternalStorage)					throw std::runtime_error("External storage.");
 		if (mType == DatumTypes::Unknown)		throw std::runtime_error("Type not set.");
-		if (TypeOf<T>() == DatumTypes::Unknown) throw std::runtime_error("Unknown data type.");
-		if (TypeOf<T>() != mType)				throw std::runtime_error("Incorrect type.");
+		if (TypeOf<T>() != mType)				throw std::runtime_error("Mismatched type.");
 
 		T* data = reinterpret_cast<T*>(mData.voidPtr);
 
@@ -244,7 +270,7 @@ namespace Library
 	{
 		if (!mInternalStorage)				throw std::runtime_error("External storage.");
 		if (mType == DatumTypes::Unknown)	throw std::runtime_error("Type not set.");
-		if (mType != DatumTypes::Pointer)	throw std::runtime_error("Incorrect type.");
+		if (mType != DatumTypes::Pointer)	throw std::runtime_error("Mismatched type.");
 
 		for (std::size_t i = 0; i < mSize; ++i)
 		{
@@ -258,6 +284,11 @@ namespace Library
 		}
 
 		return false;
+	}
+
+	inline void Datum::SetReserveStrategy(ReserveFunctor reserveFunctor)
+	{
+		mReserveFunctor = reserveFunctor;
 	}
 #pragma endregion Modifiers
 }

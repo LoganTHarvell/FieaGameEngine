@@ -259,51 +259,53 @@ namespace Library
 #pragma region Boolean Operators
 	bool Datum::operator==(const Datum& rhs) const noexcept
 	{
-		if (this == &rhs)
-		{
-			return true;
-		}
-
-		if (mType != rhs.mType || mSize != rhs.mSize)
-		{
-			return false;
-		}
+		if (this == &rhs)								return true;
+		if (mType != rhs.mType || mSize != rhs.mSize)	return false;
+		
+		bool isEqual = true;
 
 		switch (mType)
 		{
 		case DatumTypes::Unknown:
-			return true;
+			break;
 		case DatumTypes::Integer:
 		case DatumTypes::Float:
 		case DatumTypes::Vector:
 		case DatumTypes::Matrix:
 		{
 			const std::size_t size = mSize * DatumSizeLUT[static_cast<std::size_t>(mType)];
-			return memcmp(mData.voidPtr, rhs.mData.voidPtr, size) == 0;
+			isEqual = memcmp(mData.voidPtr, rhs.mData.voidPtr, size) == 0;
+			break;
 		}
 		case DatumTypes::String:
 		{
 			for (std::size_t i = 0; i < mSize; ++i)
 			{
-				if (mData.stringPtr[i] != rhs.mData.stringPtr[i]) return false;
+				if (mData.stringPtr[i] != rhs.mData.stringPtr[i]) isEqual = false;
 			}
 
-			return true;
+			break;
 		}
 		case DatumTypes::Pointer:
 		{
 			for (std::size_t i = 0; i < mSize; ++i)
 			{
-				if (!mData.rttiPtr[i]->Equals(rhs.mData.rttiPtr[i])) return false;
+				if (!mData.rttiPtr[i]->Equals(rhs.mData.rttiPtr[i]))
+				{
+					isEqual = false;
+					break;
+				}
 			}
 
-			return true;
+			break;
 		}
 
 		default:
-			return false;
+			isEqual = false;
 			break;
 		}
+
+		return isEqual;
 	}
 
 	bool Datum::operator!=(const Datum& rhs) const noexcept
@@ -314,32 +316,32 @@ namespace Library
 #pragma region Equals Scalar
 	bool Datum::operator==(const int rhs) const noexcept
 	{
-		return EqualsScalarHelper(rhs);
+		return mSize == 1 && mData.intPtr[0] == rhs;
 	}
 
 	bool Datum::operator==(const float rhs) const noexcept
 	{
-		return EqualsScalarHelper(rhs);
+		return mSize == 1 && mData.floatPtr[0] == rhs;
 	}
 
 	bool Datum::operator==(const glm::vec4& rhs) const noexcept
 	{
-		return EqualsScalarHelper(rhs);
+		return mSize == 1 && mData.vectorPtr[0] == rhs;
 	}
 
 	bool Datum::operator==(const glm::mat4& rhs) const noexcept
 	{
-		return EqualsScalarHelper(rhs);
+		return mSize == 1 && mData.matrixPtr[0] == rhs;
 	}
 
 	bool Datum::operator==(const std::string& rhs) const noexcept
 	{
-		return EqualsScalarHelper(rhs);
+		return mSize == 1 && mData.stringPtr[0] == rhs;
 	}
 
 	bool Datum::operator==(const RTTIPointer& rhs) const noexcept
 	{
-		return EqualsScalarHelper(rhs);
+		return mSize == 1 && mData.rttiPtr[0]->Equals(rhs);
 	}
 #pragma endregion Equals Scalar
 
@@ -395,6 +397,8 @@ namespace Library
 
 	void Datum::Resize(std::size_t size)
 	{
+		if (!mInternalStorage) throw std::runtime_error("External storage.");
+
 		if (size > mSize)
 		{
 			Reserve(size);
@@ -417,8 +421,8 @@ namespace Library
 
 	void Datum::ShrinkToFit()
 	{
-		if (!mInternalStorage) throw std::runtime_error("External storage.");
-		if (mType == DatumTypes::Unknown) throw std::runtime_error("Datum type is unknown.");
+		if (mType == DatumTypes::Unknown)	throw std::runtime_error("Unknown data type.");
+		if (!mInternalStorage)				throw std::runtime_error("External storage.");
 
 		if (mSize == 0)
 		{
@@ -449,9 +453,9 @@ namespace Library
 			{
 				mData.stringPtr[mSize - 1].~basic_string();
 			}
-		}
 
-		--mSize;
+			--mSize;
+		}
 	}
 
 	void Datum::RemoveAt(const std::size_t index)
@@ -514,20 +518,6 @@ namespace Library
 		}
 
 		return *this;
-	}
-
-	template<typename T>
-	inline bool Datum::EqualsScalarHelper(const T& rhs) const
-	{
-		if (mSize != 1) return false;
-		return reinterpret_cast<T*>(mData.voidPtr)[0] == rhs;
-	}
-
-	template<>
-	inline bool Datum::EqualsScalarHelper(const Datum::RTTIPointer& rhs) const
-	{
-		if (mSize != 1) return false;
-		return mData.rttiPtr[0]->Equals(rhs);
 	}
 
 	void Datum::ResizeHelper(std::size_t index)

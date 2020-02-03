@@ -68,13 +68,16 @@ namespace Library
 		/// <summary>
 		/// Datum type size look-up table.
 		/// </summary>
-		static constexpr std::size_t DatumSizeLUT[static_cast<std::size_t>(DatumTypes::End)] = { sizeof(int), sizeof(float),
-																								 sizeof(glm::vec4), sizeof(glm::mat4),
-																								 sizeof(std::string), sizeof(RTTIPointer) };
+		static constexpr std::size_t DatumSizeLUT[static_cast<std::size_t>(DatumTypes::End)] = 
+		{ 
+			sizeof(int), sizeof(float),
+			sizeof(glm::vec4), sizeof(glm::mat4),
+			sizeof(std::string), sizeof(RTTIPointer) 
+		};
 #pragma endregion Type Definitions and Constants
 
 #pragma region Default Functors
-	private:
+	public:
 		/// <summary>
 		/// Functor specifying the default strategy for incrementing the capacity of the Vector.
 		/// </summary>
@@ -587,6 +590,9 @@ namespace Library
 
 #pragma region Modifiers
 	public:
+		template<typename T>
+		void SetStorage(T*& array, std::size_t size);
+
 		/// <summary>
 		/// Inserts data into the end of the Datum, incrementing capacity if needed.
 		/// </summary>
@@ -621,6 +627,12 @@ namespace Library
 		/// Destroys all elements in the Datum. Sets size to zero, but does not change capacity.
 		/// </summary>
 		void Clear();
+
+		/// <summary>
+		/// Sets the reserve strategy for incrementing the capacity during a PushBack call at full capacity.
+		/// </summary>
+		/// <param name="reserveFunctor">New reserve strategy functor.</param>
+		void SetReserveStrategy(ReserveFunctor reserveFunctor);
 #pragma endregion Modifiers
 
 #pragma region HelperMethods
@@ -632,22 +644,6 @@ namespace Library
 		/// <typeparam name="T">Type of elements to fill the Datum.</typeparam>
 		template<typename T>
 		Datum& ConstructorAssignmentHelper(const std::initializer_list<T> rhs);
-
-		/// <summary>
-		/// Determines if the Datum is equal to a scalar value.
-		/// </summary>
-		/// <param name="rhs">Scalar value to compare against.</param>
-		/// <returns>True if the Datum is equal to the scalar value.</returns>
-		template<typename T>
-		bool EqualsScalarHelper(const T& rhs) const;
-
-		/// <summary>
-		/// Determines if the Datum is equal to the scalar string.
-		/// </summary>
-		/// <param name="rhs">Scalar value to compare against.</param>
-		/// <returns>True if the Datum is equal to the scalar value.</returns>
-		template<>
-		bool EqualsScalarHelper<RTTIPointer>(const RTTIPointer& rhs) const;
 
 		/// <summary>
 		/// Places a new empty element at the given index without allocating memory.
