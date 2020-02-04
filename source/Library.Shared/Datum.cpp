@@ -4,6 +4,40 @@
 
 namespace Library
 {
+#pragma region Look Up Tables
+	inline const std::function<std::string(void*, std::size_t)> Datum::DatumToStringLUT[static_cast<std::size_t>(DatumTypes::End)] =
+	{
+		[](void* data, std::size_t index) { return std::to_string(reinterpret_cast<int*>(data)[index]); },
+		[](void* data, std::size_t index) { return std::to_string(reinterpret_cast<float*>(data)[index]); },
+		[](void* data, std::size_t index) { return glm::to_string(reinterpret_cast<glm::vec4*>(data)[index]); },
+		[](void* data, std::size_t index) { return glm::to_string(reinterpret_cast<glm::mat4*>(data)[index]); },
+		[](void* data, std::size_t index) { return reinterpret_cast<std::string*>(data)[index]; },
+		[](void* data, std::size_t index) { RTTIPointer ptr = reinterpret_cast<RTTIPointer*>(data)[index]; return ptr ? ptr->ToString() : "nullptr";  }
+	};
+
+	inline const std::function<void(std::string, void*, std::size_t)> Datum::DatumFromStringLUT[static_cast<std::size_t>(DatumTypes::End)] =
+	{
+		[](std::string str, void* data, std::size_t index) { sscanf_s(str.c_str(), "%d", &reinterpret_cast<int*>(data)[index]); },
+		[](std::string str, void* data, std::size_t index) { sscanf_s(str.c_str(), "%f", &reinterpret_cast<float*>(data)[index]); },
+		[](std::string str, void* data, std::size_t index)
+		{
+			float* vector = glm::value_ptr(reinterpret_cast<glm::vec4*>(data)[index]);
+			sscanf_s(str.c_str(), "vec4(%f,%f,%f,%f)", &vector[0], &vector[1], &vector[2], &vector[3]);
+		},
+		[](std::string str, void* data, std::size_t index)
+		{
+			float* matrix = glm::value_ptr(reinterpret_cast<glm::mat4*>(data)[index]);
+			sscanf_s(str.c_str(), "mat4x4((%f,%f,%f,%f), (%f,%f,%f,%f), (%f,%f,%f,%f), (%f,%f,%f,%f))",
+						&matrix[0], &matrix[1], &matrix[2], &matrix[3],
+						&matrix[4], &matrix[5], &matrix[6], &matrix[7],
+						&matrix[8], &matrix[9], &matrix[10], &matrix[11],
+						&matrix[12], &matrix[13], &matrix[14], &matrix[15]);
+		},
+		[](std::string str, void* data, std::size_t index) { reinterpret_cast<std::string*>(data)[index] = str; },
+		[](std::string, void*, std::size_t) {}
+	};
+#pragma endregion Look Up Tables
+
 #pragma region Constructors, Destructor, Assignment
 	Datum::~Datum()
 	{
