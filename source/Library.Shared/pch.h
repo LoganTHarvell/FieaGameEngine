@@ -17,5 +17,6 @@
 #include <glm/glm.hpp>
 
 #pragma warning(disable : 4201)
+#include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/string_cast.hpp>
 #pragma warning(default : 4201)

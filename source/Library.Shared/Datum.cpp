@@ -52,9 +52,12 @@ namespace Library
 	{
 		if (this != &rhs)
 		{
-			Clear();
-			ShrinkToFit();
-			
+			if (mSize > 0)
+			{
+				Clear();
+				ShrinkToFit();
+			}
+
 			mType = rhs.mType;
 			mSize = rhs.mSize;
 			mInternalStorage = rhs.mInternalStorage;
@@ -267,6 +270,7 @@ namespace Library
 		switch (mType)
 		{
 		case DatumTypes::Unknown:
+			isEqual = true;
 			break;
 		case DatumTypes::Integer:
 		case DatumTypes::Float:
@@ -290,11 +294,7 @@ namespace Library
 		{
 			for (std::size_t i = 0; i < mSize; ++i)
 			{
-				if (!mData.rttiPtr[i] && !rhs.mData.rttiPtr[i])
-				{
-					continue;
-				}
-
+				if (!mData.rttiPtr[i] && !rhs.mData.rttiPtr[i]) continue;
 				else if (	!mData.rttiPtr[i] || !rhs.mData.rttiPtr[i] 
 						 || !mData.rttiPtr[i]->Equals(rhs.mData.rttiPtr[i])	)
 				{
@@ -307,7 +307,6 @@ namespace Library
 		}
 
 		default:
-			isEqual = false;
 			break;
 		}
 

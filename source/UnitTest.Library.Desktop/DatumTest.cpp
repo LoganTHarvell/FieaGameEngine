@@ -42,6 +42,27 @@ namespace UnitTests
 		Assert::AreEqual(data.size(), datum2.Size());
 		Assert::AreEqual(data.size(), datum2.Capacity());
 		Assert::AreEqual(datum2.Type(), Datum::TypeOf<T>());
+
+		if (Datum::TypeOf<T>() != Datum::DatumTypes::Integer)
+		{
+			Assert::ExpectException<std::runtime_error>([&datum1] { datum1 = int(); });
+		}
+		else
+		{
+			Assert::ExpectException<std::runtime_error>([&datum1] { datum1 = float(); });
+		}
+
+		T tmp[1] = { T() };
+		Datum externalStorage;
+		externalStorage.SetStorage(gsl::span<T>(tmp));
+		Assert::ExpectException<std::runtime_error>([&externalStorage, &data] { externalStorage = data; });
+
+		Datum datumCopy(externalStorage);
+		Assert::AreEqual(datumCopy, externalStorage);
+
+		Datum datumAssign;
+		datumAssign = externalStorage;
+		Assert::AreEqual(datumAssign, externalStorage);
 	}
 
 	template<typename T>
@@ -79,6 +100,7 @@ namespace UnitTests
 		Assert::AreEqual(datum1, datum2);
 
 		datum1 = data;
+		Assert::IsTrue(datum1 != datum2);
 		datum2 = data;
 		Assert::AreEqual(datum1, datum2);
 
@@ -142,7 +164,7 @@ namespace UnitTests
 	{
 		{
 			Datum datum;
-			Assert::ExpectException<std::runtime_error>([&datum] { datum.ShrinkToFit() });
+			Assert::ExpectException<std::runtime_error>([&datum] { datum.ShrinkToFit(); });
 		}
 
 		Datum datum = data;
@@ -152,6 +174,8 @@ namespace UnitTests
 		Assert::AreEqual(10_z, datum.Capacity());
 
 		datum.Resize(5);
+		Assert::AreEqual(5_z, datum.Size());
+		Assert::AreEqual(10_z, datum.Capacity());
 		datum.ShrinkToFit();
 		Assert::AreEqual(5_z, datum.Size());
 		Assert::AreEqual(5_z, datum.Capacity());
@@ -190,8 +214,11 @@ namespace UnitTests
 		Assert::AreEqual(*(data.end()-1), datumConst.Back<T>());
 
 		Assert::AreEqual(*(data.end() - 1), *datum.Find(*(data.end() - 1)));
-		datum.PopBack();
 		Assert::IsTrue(datum.Find(notFoundData) == nullptr);
+
+		const Datum constDatum = datum;
+		Assert::AreEqual(*(data.end() - 1), *constDatum.Find(*(data.end() - 1)));
+		Assert::IsTrue(constDatum.Find(notFoundData) == nullptr);
 	}
 
 	template<typename T>
@@ -207,6 +234,17 @@ namespace UnitTests
 		for (std::ptrdiff_t i = 0; i < storage.size(); ++i)
 		{
 			Assert::AreEqual(storage[i], datum.Get<T>(i));
+		}
+
+		if (Datum::TypeOf<T>() != Datum::DatumTypes::Integer)
+		{
+			Assert::ExpectException<std::runtime_error>([&datum] {	int unknown[5] = { 1, 2, 3, 4, 5 };
+																	datum.SetStorage(gsl::span<int>(unknown));	});
+		}
+		else
+		{
+			Assert::ExpectException<std::runtime_error>([&datum] {	float unknown[5] = { 1, 2, 3, 4, 5 };
+																	datum.SetStorage(gsl::span<float>(unknown));	});
 		}
 	}
 
@@ -233,6 +271,15 @@ namespace UnitTests
 			Assert::AreEqual(*it, datum.Get<T>(i));
 			Assert::AreEqual(i+1, datum.Size());
 			Assert::AreEqual(capacity, datum.Capacity());
+
+			if (Datum::TypeOf<T>() != Datum::DatumTypes::Integer)
+			{
+				Assert::ExpectException<std::runtime_error>([&datum] { datum.PushBack(int()); });
+			}
+			else
+			{
+				Assert::ExpectException<std::runtime_error>([&datum] { datum.PushBack(float()); });
+			}
 		}
 	}
 
@@ -255,7 +302,7 @@ namespace UnitTests
 	}
 
 	template<typename T>
-	void TestRemove(const std::initializer_list<T> data)
+	void TestRemove(const std::initializer_list<T> data, const T& notFoundData)
 	{
 		Datum datum = data;
 
@@ -284,6 +331,8 @@ namespace UnitTests
 				Assert::AreEqual(*it, datum.Get<T>(j));
 			}
 		}
+
+		Assert::IsFalse(datum.Remove(notFoundData));
 	}
 
 	template<typename T>
@@ -341,6 +390,17 @@ namespace UnitTestLibraryDesktop
 				Assert::Fail(L"Memory Leaks!");
 			}
 #endif
+		}
+
+		TEST_METHOD(TypeOf)
+		{
+			Assert::AreEqual(Datum::DatumTypes::Unknown, Datum::TypeOf<double>());
+			Assert::AreEqual(Datum::DatumTypes::Integer, Datum::TypeOf<int>());
+			Assert::AreEqual(Datum::DatumTypes::Float, Datum::TypeOf<float>());
+			Assert::AreEqual(Datum::DatumTypes::Vector, Datum::TypeOf<glm::vec4>());
+			Assert::AreEqual(Datum::DatumTypes::Matrix, Datum::TypeOf<glm::mat4>());
+			Assert::AreEqual(Datum::DatumTypes::String, Datum::TypeOf<std::string>());
+			Assert::AreEqual(Datum::DatumTypes::Pointer, Datum::TypeOf<RTTI*>());
 		}
 
  		TEST_METHOD(Constructors)
@@ -421,6 +481,19 @@ namespace UnitTestLibraryDesktop
 			TestResize<RTTI*>({ nullptr, nullptr, nullptr });
 		}
 
+		TEST_METHOD(ShrinkToFit)
+		{
+			TestShrinkToFit<int>({ 10, 20, 30 });
+			TestShrinkToFit<float>({ 10, 20, 30 });
+			TestShrinkToFit<glm::vec4>({ glm::vec4(10), glm::vec4(20), glm::vec4(30) });
+			TestShrinkToFit<glm::mat4>({ glm::mat4(10), glm::mat4(20), glm::mat4(30) });
+			TestShrinkToFit<std::string>({ "10", "20", "30" });
+
+			Foo a(10), b(20), c(30);
+			TestShrinkToFit<RTTI*>({ &a, &b, &c });
+			TestShrinkToFit<RTTI*>({ nullptr, nullptr, nullptr });
+		}
+
 		TEST_METHOD(ElementAccessors)
 		{
 			TestElementAccessors<int>({ 10, 20, 30 }, 40);
@@ -479,15 +552,15 @@ namespace UnitTestLibraryDesktop
 
 		TEST_METHOD(Remove)
 		{
-			TestRemove<int>({ 10, 20, 30 });
-			TestRemove<float>({ 10, 20, 30 });
-			TestRemove<glm::vec4>({ glm::vec4(10), glm::vec4(20), glm::vec4(30) });
-			TestRemove<glm::mat4>({ glm::mat4(10), glm::mat4(20), glm::mat4(30) });
-			TestRemove<std::string>({ "10", "20", "30" }); 
+			TestRemove<int>({ 10, 20, 30 }, 40);
+			TestRemove<float>({ 10, 20, 30 }, 40);
+			TestRemove<glm::vec4>({ glm::vec4(10), glm::vec4(20), glm::vec4(30) }, glm::vec4(40));
+			TestRemove<glm::mat4>({ glm::mat4(10), glm::mat4(20), glm::mat4(30) }, glm::mat4(40));
+			TestRemove<std::string>({ "10", "20", "30" }, "40");
 
 			Foo a(10), b(20), c(30);
-			TestRemove<RTTI*>({ &a, &b, &c });
-			TestRemove<RTTI*>({ nullptr, nullptr, nullptr });
+			TestRemove<RTTI*>({ &a, &b, &c }, nullptr);
+			TestRemove<RTTI*>({ nullptr, nullptr, nullptr }, &a);
 		}
 
 		TEST_METHOD(Clear)
