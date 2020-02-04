@@ -195,18 +195,18 @@ namespace UnitTests
 	}
 
 	template<typename T>
-	void TestSetStorage(T data[], std::size_t size)
+	void TestSetStorage(gsl::span<T> storage)
 	{
 		Datum datum;
-		datum.SetStorage(data, size);
+		datum.SetStorage(storage);
 
 		Assert::AreEqual(Datum::TypeOf<T>(), datum.Type());
-		Assert::AreEqual(size, datum.Size());
-		Assert::AreEqual(size, datum.Capacity());
+		Assert::AreEqual(static_cast<std::size_t>(storage.size()), datum.Size());
+		Assert::AreEqual(static_cast<std::size_t>(storage.size()), datum.Capacity());
 
-		for (std::size_t i = 0; i < size; ++i)
+		for (std::ptrdiff_t i = 0; i < storage.size(); ++i)
 		{
-			Assert::AreEqual(data[i], datum.Get<T>(i));
+			Assert::AreEqual(storage[i], datum.Get<T>(i));
 		}
 	}
 
@@ -295,6 +295,26 @@ namespace UnitTests
 		Assert::AreEqual(0_z, datum.Size());
 		Assert::AreEqual(data.size(), datum.Capacity());
 	}
+
+	template<typename T>
+	void TestStringConversion(const std::initializer_list<T> data)
+	{
+		Datum datum = data;
+
+		Datum datumToSet;
+		datumToSet.SetType(datum.Type());
+		datumToSet.Resize(data.size());
+
+		for (std::size_t i = 0; i < data.size(); ++i)
+		{
+			datumToSet.SetFromString(datum.ToString(i), i);
+		}
+
+		if (Datum::TypeOf<T>() != Datum::DatumTypes::Pointer)
+		{
+			Assert::AreEqual(datum, datumToSet);
+		}
+	}
 }
 
 namespace UnitTestLibraryDesktop
@@ -327,6 +347,8 @@ namespace UnitTestLibraryDesktop
  		{
 			TestConstructors<int>({ 10, 20, 30 });
 			TestConstructors<float>({ 10, 20, 30 });
+			TestConstructors<glm::vec4>({ glm::vec4(10), glm::vec4(20), glm::vec4(30) });
+			TestConstructors<glm::mat4>({ glm::mat4(10), glm::mat4(20), glm::mat4(30) });
 			TestConstructors<std::string>({ "10", "20", "30" });
 
 			Foo a(10), b(20), c(30);
@@ -338,6 +360,8 @@ namespace UnitTestLibraryDesktop
  		{
  			TestCopy<int>({ 10, 20, 30 });
  			TestCopy<float>({ 10, 20, 30 });
+			TestCopy<glm::vec4>({ glm::vec4(10), glm::vec4(20), glm::vec4(30) });
+			TestCopy<glm::mat4>({ glm::mat4(10), glm::mat4(20), glm::mat4(30) });
 			TestCopy<std::string>({ "10", "20", "30" });
 
 			Foo a(10), b(20), c(30);
@@ -349,6 +373,8 @@ namespace UnitTestLibraryDesktop
 		{
 			TestMove<int>({ 10, 20, 30 });
 			TestMove<float>({ 10, 20, 30 });
+			TestMove<glm::vec4>({ glm::vec4(10), glm::vec4(20), glm::vec4(30) });
+			TestMove<glm::mat4>({ glm::mat4(10), glm::mat4(20), glm::mat4(30) });
 			TestMove<std::string>({ "10", "20", "30" });
 
 			Foo a(10), b(20), c(30);
@@ -360,6 +386,8 @@ namespace UnitTestLibraryDesktop
 		{
 			TestEquality<int>({ 10, 20, 30 }, 40);
 			TestEquality<float>({ 10, 20, 30 }, 40);
+			TestEquality<glm::vec4>({ glm::vec4(10), glm::vec4(20), glm::vec4(30) }, glm::vec4(40));
+			TestEquality<glm::mat4>({ glm::mat4(10), glm::mat4(20), glm::mat4(30) }, glm::mat4(40));
 			TestEquality<std::string>({ "10", "20", "30" }, "40");
 
 			Foo a(10), b(20), c(30);
@@ -371,6 +399,8 @@ namespace UnitTestLibraryDesktop
 		{
 			TestTypeSizeCapacity<int>({ 10, 20, 30 });
 			TestTypeSizeCapacity<float>({ 10, 20, 30 });
+			TestTypeSizeCapacity<glm::vec4>({ glm::vec4(10), glm::vec4(20), glm::vec4(30) });
+			TestTypeSizeCapacity<glm::mat4>({ glm::mat4(10), glm::mat4(20), glm::mat4(30) });
 			TestTypeSizeCapacity<std::string>({ "10", "20", "30" });
 
 			Foo a(10), b(20), c(30);
@@ -382,6 +412,8 @@ namespace UnitTestLibraryDesktop
 		{
 			TestResize<int>({ 10, 20, 30 });
 			TestResize<float>({ 10, 20, 30 });
+			TestResize<glm::vec4>({ glm::vec4(10), glm::vec4(20), glm::vec4(30) });
+			TestResize<glm::mat4>({ glm::mat4(10), glm::mat4(20), glm::mat4(30) });
 			TestResize<std::string>({ "10", "20", "30" });
 
 			Foo a(10), b(20), c(30);
@@ -393,6 +425,8 @@ namespace UnitTestLibraryDesktop
 		{
 			TestElementAccessors<int>({ 10, 20, 30 }, 40);
 			TestElementAccessors<float>({ 10, 20, 30 }, 40);
+			TestElementAccessors<glm::vec4>({ glm::vec4(10), glm::vec4(20), glm::vec4(30) }, glm::vec4(40));
+			TestElementAccessors<glm::mat4>({ glm::mat4(10), glm::mat4(20), glm::mat4(30) }, glm::mat4(40));
 			TestElementAccessors<std::string>({ "10", "20", "30" }, "40");
 
 			Foo a(10), b(20), c(30);
@@ -410,17 +444,19 @@ namespace UnitTestLibraryDesktop
 			RTTI* dataFoo[10] = { &a, &b, &c, &d, &e, &f, &g, &h, &i, &j };
 			RTTI* dataNullptr[10] = { nullptr, nullptr, nullptr, nullptr, nullptr };
 
-			TestSetStorage<int>(dataInt, 10);
-			TestSetStorage<float>(dataFloat, 10);
-			TestSetStorage<std::string>(dataString, 10);
-			TestSetStorage<RTTI*>(dataFoo, 10);
-			TestSetStorage<RTTI*>(dataNullptr, 5);
+			TestSetStorage<int>(dataInt);
+			TestSetStorage<float>(dataFloat);
+			TestSetStorage<std::string>(dataString);
+			TestSetStorage<RTTI*>(dataFoo);
+			TestSetStorage<RTTI*>(dataNullptr);
 		}
 
 		TEST_METHOD(PushBack)
 		{
 			TestPushBack<int>({ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
 			TestPushBack<float>({ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
+			TestPushBack<glm::vec4>({ glm::vec4(10), glm::vec4(20), glm::vec4(30) });
+			TestPushBack<glm::mat4>({ glm::mat4(10), glm::mat4(20), glm::mat4(30) });
 			TestPushBack<std::string>({ "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"});
 
 			Foo a(1), b(2), c(3), d(4), e(5), f(6), g(7), h(8), i(9), j(10);
@@ -432,6 +468,8 @@ namespace UnitTestLibraryDesktop
 		{
 			TestPopBack<int>({ 10, 20, 30 });
 			TestPopBack<float>({ 10, 20, 30 });
+			TestPopBack<glm::vec4>({ glm::vec4(10), glm::vec4(20), glm::vec4(30) });
+			TestPopBack<glm::mat4>({ glm::mat4(10), glm::mat4(20), glm::mat4(30) });
 			TestPopBack<std::string>({ "10", "20", "30" });
 
 			Foo a(10), b(20), c(30);
@@ -443,7 +481,9 @@ namespace UnitTestLibraryDesktop
 		{
 			TestRemove<int>({ 10, 20, 30 });
 			TestRemove<float>({ 10, 20, 30 });
-			TestRemove<std::string>({ "10", "20", "30" });
+			TestRemove<glm::vec4>({ glm::vec4(10), glm::vec4(20), glm::vec4(30) });
+			TestRemove<glm::mat4>({ glm::mat4(10), glm::mat4(20), glm::mat4(30) });
+			TestRemove<std::string>({ "10", "20", "30" }); 
 
 			Foo a(10), b(20), c(30);
 			TestRemove<RTTI*>({ &a, &b, &c });
@@ -454,10 +494,26 @@ namespace UnitTestLibraryDesktop
 		{
 			TestClear<int>({ 10, 20, 30 });
 			TestClear<float>({ 10, 20, 30 });
+			TestClear<glm::vec4>({ glm::vec4(10), glm::vec4(20), glm::vec4(30) });
+			TestClear<glm::mat4>({ glm::mat4(10), glm::mat4(20), glm::mat4(30) });
+			TestClear<std::string>({ "10", "20", "30" });
 
 			Foo a(10), b(20), c(30);
 			TestClear<RTTI*>({ &a, &b, &c });
 			TestClear<RTTI*>({ nullptr, nullptr, nullptr });
+		}
+
+		TEST_METHOD(StringConversion)
+		{
+			TestStringConversion<int>({ 10, 20, 30 });
+			TestStringConversion<float>({ 10, 20, 30 });
+			TestStringConversion<glm::vec4>({ glm::vec4(10), glm::vec4(20), glm::vec4(30) });
+			TestStringConversion<glm::mat4>({ glm::mat4(10), glm::mat4(20), glm::mat4(30) });
+			TestStringConversion<std::string>({ "10", "20", "30" });
+
+			Foo a(10), b(20), c(30);
+			TestStringConversion<RTTI*>({ &a, &b, &c });
+			TestStringConversion<RTTI*>({ nullptr, nullptr, nullptr });
 		}
 
 	private:

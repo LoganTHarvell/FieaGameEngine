@@ -1,5 +1,9 @@
 #pragma once
 
+#pragma warning(disable : 4201)
+#include <glm/gtx/string_cast.hpp>
+#pragma warning(default : 4201)
+
 #include "CppUnitTest.h"
 
 #include "Foo.h"
@@ -15,6 +19,44 @@ using namespace std::string_literals;
 
 namespace Microsoft::VisualStudio::CppUnitTestFramework
 {
+#pragma region ThirdParty
+	template<>
+	inline std::wstring ToString<glm::vec4>(const glm::vec4& t)
+	{
+		RETURN_WIDE_STRING(glm::to_string(t).c_str());
+	}
+
+	template<>
+	inline std::wstring ToString<glm::vec4>(const glm::vec4* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<glm::vec4>(glm::vec4* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<glm::mat4>(const glm::mat4& t)
+	{
+		RETURN_WIDE_STRING(glm::to_string(t).c_str());
+	}
+
+	template<>
+	inline std::wstring ToString<glm::mat4>(const glm::mat4* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<glm::mat4>(glm::mat4* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+#pragma endregion ThirdParty
+
 #pragma region Foo
 	template<>
 	inline std::wstring ToString<Foo>(const Foo& t)
@@ -1119,7 +1161,14 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 	template<>
 	inline std::wstring ToString<Datum>(const Datum& t)
 	{
-		RETURN_WIDE_STRING(t.Size());
+		try
+		{
+			RETURN_WIDE_STRING(t.ToString().c_str());
+		}
+		catch (const std::exception&)
+		{
+			return L"DataType Unknown"s;
+		}
 	}
 
 	template<>

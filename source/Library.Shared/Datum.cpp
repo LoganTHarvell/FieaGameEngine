@@ -387,8 +387,8 @@ namespace Library
 #pragma region Size and Capacity
 	void Datum::Reserve(std::size_t capacity)
 	{
-		if (!mInternalStorage) throw std::runtime_error("External storage.");
-		if (mType == DatumTypes::Unknown) throw std::runtime_error("Datum type is unknown.");
+		if (mType == DatumTypes::Unknown)	throw std::runtime_error("Data type unknown.");
+		if (!mInternalStorage)				throw std::runtime_error("Cannot modify external storage.");
 
 		if (capacity > mCapacity)
 		{
@@ -403,7 +403,8 @@ namespace Library
 
 	void Datum::Resize(std::size_t size)
 	{
-		if (!mInternalStorage) throw std::runtime_error("External storage.");
+		if (mType == DatumTypes::Unknown)	throw std::runtime_error("Data type unknown.");
+		if (!mInternalStorage)				throw std::runtime_error("Cannot modify external storage.");
 
 		if (size > mSize)
 		{
@@ -427,8 +428,8 @@ namespace Library
 
 	void Datum::ShrinkToFit()
 	{
-		if (mType == DatumTypes::Unknown)	throw std::runtime_error("Unknown data type.");
-		if (!mInternalStorage)				throw std::runtime_error("External storage.");
+		if (mType == DatumTypes::Unknown)	throw std::runtime_error("Data type unknown.");
+		if (!mInternalStorage)				throw std::runtime_error("Cannot modify external storage.");
 
 		if (mSize == 0)
 		{
@@ -451,7 +452,8 @@ namespace Library
 #pragma region Modifiers
 	void Datum::PopBack()
 	{
-		if (!mInternalStorage) throw std::runtime_error("External storage.");
+		if (mType == DatumTypes::Unknown)	throw std::runtime_error("Data type unknown.");
+		if (!mInternalStorage)				throw std::runtime_error("Cannot modify external storage.");
 
 		if (mSize > 0)
 		{
@@ -466,8 +468,9 @@ namespace Library
 
 	void Datum::RemoveAt(const std::size_t index)
 	{
-		if (!mInternalStorage)	throw std::runtime_error("External storage.");
-		if (index >= mSize)		throw std::out_of_range("Index out of bounds.");
+		if (mType == DatumTypes::Unknown)	throw std::runtime_error("Data type unknown.");
+		if (!mInternalStorage)				throw std::runtime_error("Cannot modify external storage.");
+		if (index >= mSize)					throw std::out_of_range("Index out of bounds.");
 
 		if (mType == DatumTypes::String)
 		{
@@ -498,6 +501,22 @@ namespace Library
 		mInternalStorage = true;
 	}
 #pragma endregion Modifiers
+
+#pragma region String Conversion
+	std::string Datum::ToString(const std::size_t index) const
+	{
+		if (mType == DatumTypes::Unknown) throw std::runtime_error("Data type unknown.");
+		
+		return DatumToStringLUT[static_cast<std::size_t>(mType)](mData.voidPtr, index);
+	}
+
+	void Datum::SetFromString(const std::string str, const std::size_t index)
+	{
+		if (mType == DatumTypes::Unknown) throw std::runtime_error("Data type unknown.");
+
+		DatumFromStringLUT[static_cast<std::size_t>(mType)](str, mData.voidPtr, index);
+	}
+#pragma endregion String Conversion
 
 #pragma region Helper Methods
 	template<typename T>

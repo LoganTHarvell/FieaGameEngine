@@ -63,8 +63,8 @@ namespace Library
 
 	inline void Datum::SetType(DatumTypes type)
 	{
-		if (mType != DatumTypes::Unknown)	throw std::runtime_error("Type reassignment.");
-		if (type == DatumTypes::Unknown)	throw std::runtime_error("Unknown assignment.");
+		if (mType != DatumTypes::Unknown)	throw std::runtime_error("Type cannot be reassigned.");
+		if (type == DatumTypes::Unknown)	throw std::runtime_error("Cannot assign to unknown type.");
 
 		mType = type;
 	}
@@ -113,7 +113,7 @@ namespace Library
 	template<typename T>
 	inline T& Datum::Set(const T& value, std::size_t index)
 	{
-		static_assert(TypeOf<T>() != DatumTypes::Unknown, "Invalid data type.");
+		static_assert(TypeOf<T>() != DatumTypes::Unknown && TypeOf<T>() != DatumTypes::End, "Invalid data type.");
 
 		if (mType == DatumTypes::Unknown)	throw std::runtime_error("Type not set.");
 		if (mType != TypeOf<T>())			throw std::runtime_error("Mismatched type.");
@@ -125,7 +125,7 @@ namespace Library
 	template<typename T>
 	inline T& Datum::Get(std::size_t index)
 	{
-		static_assert(TypeOf<T>() != DatumTypes::Unknown, "Invalid data type.");
+		static_assert(TypeOf<T>() != DatumTypes::Unknown && TypeOf<T>() != DatumTypes::End, "Invalid data type.");
 
 		if (mType == DatumTypes::Unknown)	throw std::runtime_error("Type not set.");
 		if (mType != TypeOf<T>())			throw std::runtime_error("Mismatched type.");
@@ -137,7 +137,7 @@ namespace Library
 	template<typename T>
 	inline const T& Datum::Get(std::size_t index) const
 	{
-		static_assert(TypeOf<T>() != DatumTypes::Unknown, "Invalid data type.");
+		static_assert(TypeOf<T>() != DatumTypes::Unknown && TypeOf<T>() != DatumTypes::End, "Invalid data type.");
 
 		if (mType == DatumTypes::Unknown)	throw std::runtime_error("Type not set.");
 		if (mType != TypeOf<T>())			throw std::runtime_error("Mismatched type.");
@@ -149,7 +149,7 @@ namespace Library
 	template<typename T>
 	inline T* Datum::Find(const T& value)
 	{
-		static_assert(TypeOf<T>() != DatumTypes::Unknown, "Invalid data type.");
+		static_assert(TypeOf<T>() != DatumTypes::Unknown && TypeOf<T>() != DatumTypes::End, "Invalid data type.");
 
 		const std::size_t index = IndexOf(value);
 		return index < mSize ? &Get<T>(index) : nullptr;
@@ -158,7 +158,7 @@ namespace Library
 	template<typename T>
 	inline const T* Datum::Find(const T& value) const
 	{
-		static_assert(TypeOf<T>() != DatumTypes::Unknown, "Invalid data type.");
+		static_assert(TypeOf<T>() != DatumTypes::Unknown && TypeOf<T>() != DatumTypes::End, "Invalid data type.");
 
 		const std::size_t index = IndexOf(value);
 		return index < mSize ? &Get<T>(index) : nullptr;
@@ -167,7 +167,7 @@ namespace Library
 	template<typename T>
 	inline std::size_t Datum::IndexOf(const T& value) const
 	{
-		static_assert(TypeOf<T>() != DatumTypes::Unknown, "Invalid data type.");
+		static_assert(TypeOf<T>() != DatumTypes::Unknown && TypeOf<T>() != DatumTypes::End, "Invalid data type.");
 
 		if (mType == DatumTypes::Unknown)	throw std::runtime_error("Type not set.");
 		if (mType != TypeOf<T>())			throw std::runtime_error("Mismatched type.");
@@ -207,9 +207,11 @@ namespace Library
 
 #pragma region Modifiers
 	template<typename T>
-	inline void Datum::SetStorage(T*& data, std::size_t size)
+	inline void Datum::SetStorage(gsl::span<T> storage)
 	{
-		static_assert(TypeOf<T>() != DatumTypes::Unknown, "Invalid data type.");
+		static_assert(TypeOf<T>() != DatumTypes::Unknown && TypeOf<T>() != DatumTypes::End, "Invalid data type.");
+
+		if (storage.size() < 1) throw std::runtime_error("External storage size must be greater than zero.");
 		
 		if (mType == DatumTypes::Unknown)
 		{
@@ -221,19 +223,20 @@ namespace Library
 		}
 
 		Clear();
+		ShrinkToFit();
 
-		mData.voidPtr = data;
-		mSize = size;
-		mCapacity = size;
+		mData.voidPtr = storage.data();
+		mSize = storage.size();
+		mCapacity = storage.size();
 		mInternalStorage = false;
 	}
 
 	template<typename T>
 	inline void Datum::PushBack(const T& data)
 	{
-		static_assert(TypeOf<T>() != DatumTypes::Unknown, "Invalid data type.");
+		static_assert(TypeOf<T>() != DatumTypes::Unknown && TypeOf<T>() != DatumTypes::End, "Invalid data type.");
 		
-		if (!mInternalStorage) throw std::runtime_error("External storage.");
+		if (!mInternalStorage) throw std::runtime_error("Cannot modify external storage.");
 
 		if (mType == DatumTypes::Unknown)
 		{
@@ -256,9 +259,9 @@ namespace Library
 	template<typename T>
 	inline bool Datum::Remove(const T& value)
 	{
-		static_assert(TypeOf<T>() != DatumTypes::Unknown, "Invalid data type.");
+		static_assert(TypeOf<T>() != DatumTypes::Unknown && TypeOf<T>() != DatumTypes::End, "Invalid data type.");
 
-		if (!mInternalStorage) throw std::runtime_error("External storage.");
+		if (!mInternalStorage) throw std::runtime_error("Cannot modify external storage.");
 
 		T* const data = reinterpret_cast<T*>(mData.voidPtr);
 		const std::size_t index = IndexOf(value);

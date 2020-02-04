@@ -6,7 +6,9 @@
 #include <type_traits>
 
 // Third Party
+#include <gsl/span>
 #include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 // First Party
 #include "RTTI.h"
@@ -69,11 +71,49 @@ namespace Library
 		/// <summary>
 		/// Datum type size look-up table.
 		/// </summary>
-		static constexpr std::size_t DatumSizeLUT[static_cast<std::size_t>(DatumTypes::End)] = 
+		inline static constexpr std::size_t DatumSizeLUT[static_cast<std::size_t>(DatumTypes::End)] = 
 		{ 
 			sizeof(int), sizeof(float),
 			sizeof(glm::vec4), sizeof(glm::mat4),
 			sizeof(std::string), sizeof(RTTIPointer) 
+		};
+
+		/// <summary>
+		/// Datum ToString look-up table.
+		/// </summary>
+		inline static const std::function<std::string(void*, std::size_t)> DatumToStringLUT[static_cast<std::size_t>(DatumTypes::End)] =
+		{
+			[](void* data, std::size_t index) { return std::to_string(reinterpret_cast<int*>(data)[index]); },
+			[](void* data, std::size_t index) { return std::to_string(reinterpret_cast<float*>(data)[index]); },
+			[](void* data, std::size_t index) { return glm::to_string(reinterpret_cast<glm::vec4*>(data)[index]); },
+			[](void* data, std::size_t index) { return glm::to_string(reinterpret_cast<glm::mat4*>(data)[index]); },
+			[](void* data, std::size_t index) { return reinterpret_cast<std::string*>(data)[index]; },
+			[](void* data, std::size_t index) { RTTIPointer ptr = reinterpret_cast<RTTIPointer*>(data)[index]; return ptr ? ptr->ToString() : "nullptr";  }
+		};
+
+		/// <summary>
+		/// Datum FromString conversion look-up table.
+		/// </summary>
+		inline static const std::function<void(std::string, void*, std::size_t)> DatumFromStringLUT[static_cast<std::size_t>(DatumTypes::End)] =
+		{
+			[](std::string str, void* data, std::size_t index) { sscanf_s(str.c_str(), "%d", &reinterpret_cast<int*>(data)[index]); },
+			[](std::string str, void* data, std::size_t index) { sscanf_s(str.c_str(), "%f", &reinterpret_cast<float*>(data)[index]); },
+			[](std::string str, void* data, std::size_t index) 
+			{ 
+				float* vector = glm::value_ptr(reinterpret_cast<glm::vec4*>(data)[index]);
+				sscanf_s(str.c_str(), "vec4(%f,%f,%f,%f)", &vector[0], &vector[1], &vector[2], &vector[3]); 
+			},
+			[](std::string str, void* data, std::size_t index)
+			{
+				float* matrix = glm::value_ptr(reinterpret_cast<glm::mat4*>(data)[index]);
+				sscanf_s(	str.c_str(), "mat4x4((%f,%f,%f,%f), (%f,%f,%f,%f), (%f,%f,%f,%f), (%f,%f,%f,%f))",
+							&matrix[0], &matrix[1], &matrix[2], &matrix[3],
+							&matrix[4], &matrix[5], &matrix[6], &matrix[7],
+							&matrix[8], &matrix[9], &matrix[10], &matrix[11],
+							&matrix[12], &matrix[13], &matrix[14], &matrix[15]);
+			},
+			[](std::string str, void* data, std::size_t index) { reinterpret_cast<std::string*>(data)[index] = str; },
+			[](std::string, void*, std::size_t) { }
 		};
 #pragma endregion Type Definitions and Constants
 
@@ -185,36 +225,48 @@ namespace Library
 		/// Scalar constructor overloads for assigning Datum to an int value.
 		/// </summary>
 		/// <param name="rhs">An int value for intializing mData.</param>
+		/// <exception cref="runtime_error">Mismatched types.</exception>
+		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
 		Datum(const int rhs);
 
 		/// <summary>
 		/// Scalar constructor overloads for assigning Datum to a float value.
 		/// </summary>
 		/// <param name="rhs">A float value for initializing mData.</param>
+		/// <exception cref="runtime_error">Mismatched types.</exception>
+		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
 		Datum(const float rhs);
 
 		/// <summary>
 		/// Scalar constructor overloads for assigning Datum to a glm::vec4 vector.
 		/// </summary>
 		/// <param name="rhs">A glm::vec4 value for initializing mData.</param>
+		/// <exception cref="runtime_error">Mismatched types.</exception>
+		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
 		Datum(const glm::vec4& rhs);
 
 		/// <summary>
 		/// Scalar constructor overloads for assigning Datum to a glm::mat4 matrix.
 		/// </summary>
 		/// <param name="rhs">A glm::mat4 value for initializing mData.</param>
+		/// <exception cref="runtime_error">Mismatched types.</exception>
+		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
 		Datum(const glm::mat4& rhs);
 
 		/// <summary>
 		/// Scalar constructor overloads for assigning Datum to a std::string value.
 		/// </summary>
 		/// <param name="rhs">A std::string value for initializing mData.</param>
+		/// <exception cref="runtime_error">Mismatched types.</exception>
+		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
 		Datum(const std::string& rhs);
 		
 		/// <summary>
 		/// Scalar constructor overloads for assigning Datum to a RTTI pointer.
 		/// </summary>
 		/// <param name="rhs">A RTTI pointer for initializing mData.</param>
+		/// <exception cref="runtime_error">Mismatched types.</exception>
+		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
 		Datum(RTTIPointer const& rhs);
 #pragma endregion Scalar Constructor Overloads
 
@@ -224,36 +276,48 @@ namespace Library
 		/// Initializer list constructor overloads for assigning Datum to a list of int values.
 		/// </summary>
 		/// <param name="rhs">A list of int values for intializing mData.</param>
+		/// <exception cref="runtime_error">Mismatched types.</exception>
+		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
 		Datum(const std::initializer_list<int> rhs);
 
 		/// <summary>
 		/// Initializer list constructor overloads for assigning Datum to a list of float values.
 		/// </summary>
 		/// <param name="rhs">A list of float values for initializing mData.</param>
+		/// <exception cref="runtime_error">Mismatched types.</exception>
+		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
 		Datum(const std::initializer_list<float> rhs);
 
 		/// <summary>
 		/// Initializer list constructor overloads for assigning Datum to a list of glm::vec4 vectors.
 		/// </summary>
 		/// <param name="rhs">A list of glm::vec4 values for initializing mData.</param>
+		/// <exception cref="runtime_error">Mismatched types.</exception>
+		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
 		Datum(const std::initializer_list<glm::vec4> rhs);
 
 		/// <summary>
 		/// Initializer list constructor overloads for assigning Datum to a list of glm::mat4 matrices.
 		/// </summary>
 		/// <param name="rhs">A list of glm::mat4 values for initializing mData.</param>
+		/// <exception cref="runtime_error">Mismatched types.</exception>
+		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
 		Datum(const std::initializer_list<glm::mat4> rhs);
 
 		/// <summary>
 		/// Initializer list constructor overloads for assigning Datum to a list of std::string values.
 		/// </summary>
 		/// <param name="rhs">A list of std::string values for initializing mData.</param>
+		/// <exception cref="runtime_error">Mismatched types.</exception>
+		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
 		Datum(const std::initializer_list<std::string> rhs);
 
 		/// <summary>
 		/// Initializer list constructor overloads for assigning Datum to a list of RTTI pointers.
 		/// </summary>
 		/// <param name="rhs">A list of RTTI pointers for initializing mData.</param>
+		/// <exception cref="runtime_error">Mismatched types.</exception>
+		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
 		Datum(const std::initializer_list<RTTIPointer> rhs);
 #pragma endregion Initializer List Constructor Overloads
 
@@ -266,36 +330,48 @@ namespace Library
 		/// Scalar assignment overloads for assigning Datum to an int value.
 		/// </summary>
 		/// <param name="rhs">An int value for assigning to mData.</param>
+		/// <exception cref="runtime_error">Mismatched types.</exception>
+		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
 		Datum& operator=(const int rhs);
 
 		/// <summary>
 		/// Scalar assignment overloads for assigning Datum to a float value.
 		/// </summary>
 		/// <param name="rhs">A float value for assigning to mData.</param>
+		/// <exception cref="runtime_error">Mismatched types.</exception>
+		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
 		Datum& operator=(const float rhs);
 
 		/// <summary>
 		/// Scalar assignment overloads for assigning Datum to a glm::vec4 vector.
 		/// </summary>
 		/// <param name="rhs">A glm::vec4 value for assigning to mData.</param>
+		/// <exception cref="runtime_error">Mismatched types.</exception>
+		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
 		Datum& operator=(const glm::vec4& rhs);
 
 		/// <summary>
 		/// Scalar assignment overloads for assigning Datum to a glm::mat4 matrix.
 		/// </summary>
 		/// <param name="rhs">A glm::mat4 value for assigning to mData.</param>
+		/// <exception cref="runtime_error">Mismatched types.</exception>
+		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
 		Datum& operator=(const glm::mat4& rhs);
 
 		/// <summary>
 		/// Scalar assignment overloads for assigning Datum to a std:string value.
 		/// </summary>
 		/// <param name="rhs">A std::string value for assigning to mData.</param>
+		/// <exception cref="runtime_error">Mismatched types.</exception>
+		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
 		Datum& operator=(const std::string& rhs);
 
 		/// <summary>
 		/// Scalar assignment overloads for assigning Datum to a RTTI pointer.
 		/// </summary>
 		/// <param name="rhs">A RTTI pointer for assigning to mData.</param>
+		/// <exception cref="runtime_error">Mismatched types.</exception>
+		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
 		Datum& operator=(RTTIPointer const& rhs);
 #pragma endregion Scalar Assignment Overloads
 
@@ -305,36 +381,48 @@ namespace Library
 		/// Initializer list assignment overloads for assigning Datum to a list of int values.
 		/// </summary>
 		/// <param name="rhs">A list of int values for assigning to mData.</param>
+		/// <exception cref="runtime_error">Mismatched types.</exception>
+		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
 		Datum& operator=(const std::initializer_list<int> rhs);
 
 		/// <summary>
 		/// Initializer list assignment overloads for assigning Datum to a list of float values.
 		/// </summary>
 		/// <param name="rhs">A list of float values for assigning to mData.</param>
+		/// <exception cref="runtime_error">Mismatched types.</exception>
+		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
 		Datum& operator=(const std::initializer_list<float> rhs);
 
 		/// <summary>
 		/// Initializer list assignment overloads for assigning Datum to a list of glm::vec4 vectors.
 		/// </summary>
 		/// <param name="rhs">A list of glm::vec4 values for assigning to mData.</param>
+		/// <exception cref="runtime_error">Mismatched types.</exception>
+		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
 		Datum& operator=(const std::initializer_list<glm::vec4> rhs);
 
 		/// <summary>
 		/// Initializer list assignment overloads for assigning Datum to a list of glm::mat4 matrices.
 		/// </summary>
 		/// <param name="rhs">A list of glm::mat4 values for assigning to mData.</param>
+		/// <exception cref="runtime_error">Mismatched types.</exception>
+		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
 		Datum& operator=(const std::initializer_list<glm::mat4> rhs);
 
 		/// <summary>
 		/// Initializer list assignment overloads for assigning Datum to a list of std::string values.
 		/// </summary>
 		/// <param name="rhs">A list of std::string values for assigning to mData.</param>
+		/// <exception cref="runtime_error">Mismatched types.</exception>
+		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
 		Datum& operator=(const std::initializer_list<std::string> rhs);
 
 		/// <summary>
 		/// Initializer list assignment overloads for assigning Datum to a list of RTTI pointers.
 		/// </summary>
 		/// <param name="rhs">A list of RTTI pointers for assigning to mData.</param>
+		/// <exception cref="runtime_error">Mismatched types.</exception>
+		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
 		Datum& operator=(const std::initializer_list<RTTIPointer> rhs);
 #pragma endregion Initializer List Assignment Overloads
 #pragma endregion Assignment
@@ -471,6 +559,8 @@ namespace Library
 		/// Sets the DatumTypes value.
 		/// </summary>
 		/// <param name="type">DatumTypes value to set.</param>
+		/// <exception cref="runtime_error">Type cannot be reassigned.</exception>
+		/// <exception cref="runtime_error">Cannot assign to unknown type.</exception>
 		void SetType(DatumTypes type);
 
 		/// <summary>
@@ -495,26 +585,32 @@ namespace Library
 		/// Allocates memory for the number of elements specified.
 		/// </summary>
 		/// <param name="capacity">Number of elements for for which to allocate memory.</param>
+		/// <exception cref="runtime_error">Data type unknown.</exception>
+		/// <exception cref="runtime_error">Cannot modify external storage.</exception>
 		void Reserve(std::size_t capacity);
 
 		/// <summary>
 		/// Inserts or destroys elements so the Datum contains only the specified number of elements.
 		/// </summary>
 		/// <param name="size">New size for the Datum.</param>
+		/// <exception cref="runtime_error">Data type unknown.</exception>
+		/// <exception cref="runtime_error">Cannot modify external storage.</exception>
 		void Resize(std::size_t size);
 
 		/// <summary>
 		/// Shrinks any excess capacity to match the number of elements the Datum contains.
 		/// </summary>
+		/// <exception cref="runtime_error">Data type unknown.</exception>
+		/// <exception cref="runtime_error">Cannot modify external storage.</exception>
 		void ShrinkToFit();
-#pragma endregion Type, Size Capacity
+#pragma endregion Type, Size, Capacity
 
 #pragma region Element Accessors
 		/// <summary>
 		/// Gets the first element of the Datum.
 		/// </summary>
 		/// <returns>Reference to the first element.</returns>
-		/// <typeparam name="T">Type of elements in the Datum.</typeparam>
+		/// <typeparam name="T">Type of elements in the Datum. A compiler error is thrown on invalid types.</typeparam>
 		template<typename T>
 		T& Front();
 
@@ -522,7 +618,7 @@ namespace Library
 		/// Gets the first element of the Datum.
 		/// </summary>
 		/// <returns>Constant reference to the first element.</returns>
-		/// <typeparam name="T">Type of elements in the Datum.</typeparam>
+		/// <typeparam name="T">Type of elements in the Datum. A compiler error is thrown on invalid types.</typeparam>
 		template<typename T>
 		const T& Front() const;
 
@@ -530,7 +626,7 @@ namespace Library
 		/// Gets the last element of the Datum.
 		/// </summary>
 		/// <returns>Reference to the last element.</returns>
-		/// <typeparam name="T">Type of elements in the Datum.</typeparam>
+		/// <typeparam name="T">Type of elements in the Datum. A compiler error is thrown on invalid types.</typeparam>
 		template<typename T>
 		T& Back();
 
@@ -538,7 +634,7 @@ namespace Library
 		/// Gets the first element of the Datum.
 		/// </summary>
 		/// <returns>Constant reference to the first element.</returns>
-		/// <typeparam name="T">Type of elements in the Datum.</typeparam>
+		/// <typeparam name="T">Type of elements in the Datum. A compiler error is thrown on invalid types.</typeparam>
 		template<typename T>
 		const T& Back() const;
 
@@ -548,7 +644,7 @@ namespace Library
 		/// <param name="value">Value to set the element.</param>
 		/// <param name="index">Index of the element to be set with the value.</param>
 		/// <returns>Reference to the set element.</returns>
-		/// <typeparam name="T">Type of elements in the Datum.</typeparam>
+		/// <typeparam name="T">Type of elements in the Datum. A compiler error is thrown on invalid types.</typeparam>
 		template<typename T>
 		T& Set(const T& value, std::size_t index=0);
 
@@ -557,7 +653,7 @@ namespace Library
 		/// </summary>
 		/// <param name="index">Index of the element.</param>
 		/// <returns>Reference to the element.</returns>
-		/// <typeparam name="T">Type of elements in the Datum.</typeparam>
+		/// <typeparam name="T">Type of elements in the Datum. A compiler error is thrown on invalid types.</typeparam>
 		template<typename T>
 		T& Get(std::size_t index=0);
 
@@ -566,7 +662,7 @@ namespace Library
 		/// </summary>
 		/// <param name="index">Index of the element.</param>
 		/// <returns>Constant reference to the element.</returns>
-		/// <typeparam name="T">Type of elements in the Datum.</typeparam>
+		/// <typeparam name="T">Type of elements in the Datum. A compiler error is thrown on invalid types.</typeparam>
 		template<typename T>
 		const T& Get(std::size_t index=0) const;
 
@@ -575,7 +671,7 @@ namespace Library
 		/// </summary>
 		/// <param name="value">Value to be searched for in the Datum.</param>
 		/// <returns>Pointer to the value if found, otherwise nullptr.</returns>
-		/// <typeparam name="T">Type of elements in the Datum.</typeparam>
+		/// <typeparam name="T">Type of elements in the Datum. A compiler error is thrown on invalid types.</typeparam>
 		template<typename T>
 		T* Find(const T& value);
 
@@ -584,7 +680,7 @@ namespace Library
 		/// </summary>
 		/// <param name="value">Value to be searched for in the Datum.</param>
 		/// <returns>Pointer to the value if found, otherwise nullptr.</returns>
-		/// <typeparam name="T">Type of elements in the Datum.</typeparam>
+		/// <typeparam name="T">Type of elements in the Datum. A compiler error is thrown on invalid types.</typeparam>
 		template<typename T>
 		const T* Find(const T& value) const;
 
@@ -593,7 +689,7 @@ namespace Library
 		/// </summary>
 		/// <param name="value">Value to be searched for in the Datum.</param>
 		/// <returns>Index of the value if found, otherwise one past the last index, a.k.a. the size.</returns>
-		/// <typeparam name="T">Type of elements in the Datum.</typeparam>
+		/// <typeparam name="T">Type of elements in the Datum. A compiler error is thrown on invalid types.</typeparam>
 		template<typename T>
 		std::size_t IndexOf(const T& value) const;
 
@@ -602,6 +698,7 @@ namespace Library
 		/// </summary>
 		/// <param name="value">Value to be searched for in the Datum.</param>
 		/// <returns>Index of the value if found, otherwise one past the last index, a.k.a. the size.</returns>
+		/// <typeparam name="T">Type of elements in the Datum. A compiler error is thrown on invalid types.</typeparam>
 		template<>
 		std::size_t IndexOf(const RTTIPointer& value) const;
 #pragma endregion Element Accessors
@@ -612,22 +709,27 @@ namespace Library
 		/// Sets the storage to the external data at the given address with the given size.
 		/// </summary>
 		/// <param name="data">External data storage to be wrapped by the Datum.</param>
-		/// <param name="size">Size of the external data.</param>
+		/// <param name="size">Size of the external data. Must be greater than zero.</param>
+		/// <typeparam name="T">Type of elements in the Datum. A compiler error is thrown on invalid types.</typeparam>
+		/// <exception cref="runtime_error">External storage size must be greater than zero.</exception>
 		template<typename T>
-		void SetStorage(T*& data, std::size_t size);
+		void SetStorage(gsl::span<T> storage);
 
 		/// <summary>
 		/// Inserts data into the end of the Datum, incrementing capacity if needed.
 		/// </summary>
 		/// <param name="size">New size for the Datum.</param>
 		/// <param name="mDataPtr">Pointer alias for mData for the DatumTypes value.</param>
-		/// <typeparam name="T">Type of elements in the Datum.</typeparam>
+		/// <typeparam name="T">Type of elements in the Datum. A compiler error is thrown on invalid types.</typeparam>
+		/// <exception cref="runtime_error">Cannot modify external storage.</exception>
 		template<typename T>
 		void PushBack(const T& data);
 
 		/// <summary>
 		/// Removes the last element of the Datum.
 		/// </summary>
+		/// <exception cref="runtime_error">Data type unknown.</exception>
+		/// <exception cref="runtime_error">Cannot modify external storage.</exception>
 		void PopBack();
 
 		/// <summary>
@@ -635,7 +737,8 @@ namespace Library
 		/// </summary>
 		/// <param name="value">Value to be searched for in the Datum to be removed.</param>
 		/// <returns>True on successful remove, false otherwise.</returns>
-		/// <typeparam name="T">Type of elements in the Datum.</typeparam>
+		/// <typeparam name="T">Type of elements in the Datum. A compiler error is thrown on invalid types.</typeparam>
+		/// <exception cref="runtime_error">Cannot modify external storage.</exception>
 		template<typename T>
 		bool Remove(const T& value);
 
@@ -643,7 +746,9 @@ namespace Library
 		/// Removes a single element from the Datum given the corresponding value.
 		/// </summary>
 		/// <param name="index">Index of the element.</param>
-		/// <typeparam name="T">Type of elements in the Datum.</typeparam>
+		/// <exception cref="runtime_error">Data type unknown.</exception>
+		/// <exception cref="runtime_error">Cannot modify external storage.</exception>
+		/// <exception cref="out_of_range">Index out of bounds.</exception>
 		void RemoveAt(const std::size_t index);
 
 		/// <summary>
@@ -657,6 +762,25 @@ namespace Library
 		/// <param name="reserveFunctor">New reserve strategy functor.</param>
 		void SetReserveStrategy(ReserveFunctor reserveFunctor);
 #pragma endregion Modifiers
+
+#pragma region String Conversion
+	public:
+		/// <summary>
+		/// Converts a value in the Datum into a string representation.
+		/// </summary>
+		/// <param name="index">Index of the value to convert to a string. Defaults to the first element.</param>
+		/// <returns>String representation of the Datum value.</returns>
+		/// <exception cref="runtime_error">Data type unknown.</exception>
+		std::string ToString(const std::size_t index=0) const;
+
+		/// <summary>
+		/// Sets a value in the Datum from a string representation.
+		/// </summary>
+		/// <param name="index">Index of the value to set. Defaults to the first element.</param>
+		/// <returns>String representation of the Datum value.</returns>
+		/// <exception cref="runtime_error">Data type unknown.</exception>
+		void SetFromString(const std::string str, const std::size_t index=0);
+#pragma endregion String Conversion
 
 #pragma region HelperMethods
 	private:
