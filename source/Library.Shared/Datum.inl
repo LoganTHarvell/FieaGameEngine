@@ -13,58 +13,58 @@ namespace Library
 
 #pragma region TypeOf Static Method
 	template<typename T>
-	inline constexpr Datum::DatumTypes Datum::TypeOf()
+	inline constexpr Datum::Types Datum::TypeOf()
 	{
-		return DatumTypes::Unknown;
+		return Types::Unknown;
 	}
 
 	template<>
-	inline constexpr Datum::DatumTypes Datum::TypeOf<int>()
+	inline constexpr Datum::Types Datum::TypeOf<int>()
 	{
-		return DatumTypes::Integer;
+		return Types::Integer;
 	}
 
 	template<>
-	inline constexpr Datum::DatumTypes Datum::TypeOf<float>()
+	inline constexpr Datum::Types Datum::TypeOf<float>()
 	{
-		return DatumTypes::Float;
+		return Types::Float;
 	}
 
 	template<>
-	inline constexpr Datum::DatumTypes Datum::TypeOf<glm::vec4>()
+	inline constexpr Datum::Types Datum::TypeOf<glm::vec4>()
 	{
-		return DatumTypes::Vector;
+		return Types::Vector;
 	}
 
 	template<>
-	inline constexpr Datum::DatumTypes Datum::TypeOf<glm::mat4>()
+	inline constexpr Datum::Types Datum::TypeOf<glm::mat4>()
 	{
-		return DatumTypes::Matrix;
+		return Types::Matrix;
 	}
 
 	template<>
-	inline constexpr Datum::DatumTypes Datum::TypeOf<std::string>()
+	inline constexpr Datum::Types Datum::TypeOf<std::string>()
 	{
-		return DatumTypes::String;
+		return Types::String;
 	}
 
 	template<>
-	inline constexpr Datum::DatumTypes Datum::TypeOf<Datum::RTTIPointer>()
+	inline constexpr Datum::Types Datum::TypeOf<Datum::RTTIPointer>()
 	{
-		return DatumTypes::Pointer;
+		return Types::Pointer;
 	}
 #pragma endregion TypeOf Static Method
 
 #pragma region Size and Capacity
-	inline Datum::DatumTypes Datum::Type() const
+	inline Datum::Types Datum::Type() const
 	{
 		return mType;
 	}
 
-	inline void Datum::SetType(DatumTypes type)
+	inline void Datum::SetType(Types type)
 	{
-		if (mType != DatumTypes::Unknown)	throw std::runtime_error("Type cannot be reassigned.");
-		if (type == DatumTypes::Unknown)	throw std::runtime_error("Cannot assign to unknown type.");
+		if (mType != Types::Unknown)	throw std::runtime_error("Type cannot be reassigned.");
+		if (type == Types::Unknown)		throw std::runtime_error("Cannot assign to unknown type.");
 
 		mType = type;
 	}
@@ -113,11 +113,11 @@ namespace Library
 	template<typename T>
 	inline T& Datum::Set(const T& value, std::size_t index)
 	{
-		static_assert(TypeOf<T>() != DatumTypes::Unknown && TypeOf<T>() != DatumTypes::End, "Invalid data type.");
+		static_assert(TypeOf<T>() != Types::Unknown && TypeOf<T>() != Types::End, "Invalid data type.");
 
-		if (mType == DatumTypes::Unknown)	throw std::runtime_error("Type not set.");
-		if (mType != TypeOf<T>())			throw std::runtime_error("Mismatched type.");
-		if (index >= mSize)					throw std::out_of_range("Index out of bounds.");
+		if (mType == Types::Unknown)	throw std::runtime_error("Type not set.");
+		if (mType != TypeOf<T>())		throw std::runtime_error("Mismatched type.");
+		if (index >= mSize)				throw std::out_of_range("Index out of bounds.");
 		
 		return Get<T>(index) = value;
 	}
@@ -125,11 +125,11 @@ namespace Library
 	template<typename T>
 	inline T& Datum::Get(std::size_t index)
 	{
-		static_assert(TypeOf<T>() != DatumTypes::Unknown && TypeOf<T>() != DatumTypes::End, "Invalid data type.");
+		static_assert(TypeOf<T>() != Types::Unknown && TypeOf<T>() != Types::End, "Invalid data type.");
 
-		if (mType == DatumTypes::Unknown)	throw std::runtime_error("Type not set.");
-		if (mType != TypeOf<T>())			throw std::runtime_error("Mismatched type.");
-		if (index >= mSize)					throw std::out_of_range("Index out of bounds.");
+		if (mType == Types::Unknown)	throw std::runtime_error("Type not set.");
+		if (mType != TypeOf<T>())		throw std::runtime_error("Mismatched type.");
+		if (index >= mSize)				throw std::out_of_range("Index out of bounds.");
 
 		return reinterpret_cast<T*>(mData.voidPtr)[index];
 	}
@@ -137,11 +137,11 @@ namespace Library
 	template<typename T>
 	inline const T& Datum::Get(std::size_t index) const
 	{
-		static_assert(TypeOf<T>() != DatumTypes::Unknown && TypeOf<T>() != DatumTypes::End, "Invalid data type.");
+		static_assert(TypeOf<T>() != Types::Unknown && TypeOf<T>() != Types::End, "Invalid data type.");
 
-		if (mType == DatumTypes::Unknown)	throw std::runtime_error("Type not set.");
-		if (mType != TypeOf<T>())			throw std::runtime_error("Mismatched type.");
-		if (index >= mSize)					throw std::out_of_range("Index out of bounds.");
+		if (mType == Types::Unknown)	throw std::runtime_error("Type not set.");
+		if (mType != TypeOf<T>())		throw std::runtime_error("Mismatched type.");
+		if (index >= mSize)				throw std::out_of_range("Index out of bounds.");
 
 		return reinterpret_cast<T*>(mData.voidPtr)[index];
 	}
@@ -149,7 +149,7 @@ namespace Library
 	template<typename T>
 	inline T* Datum::Find(const T& value)
 	{
-		static_assert(TypeOf<T>() != DatumTypes::Unknown && TypeOf<T>() != DatumTypes::End, "Invalid data type.");
+		static_assert(TypeOf<T>() != Types::Unknown && TypeOf<T>() != Types::End, "Invalid data type.");
 
 		const std::size_t index = IndexOf(value);
 		return index < mSize ? &Get<T>(index) : nullptr;
@@ -158,7 +158,7 @@ namespace Library
 	template<typename T>
 	inline const T* Datum::Find(const T& value) const
 	{
-		static_assert(TypeOf<T>() != DatumTypes::Unknown && TypeOf<T>() != DatumTypes::End, "Invalid data type.");
+		static_assert(TypeOf<T>() != Types::Unknown && TypeOf<T>() != Types::End, "Invalid data type.");
 
 		const std::size_t index = IndexOf(value);
 		return index < mSize ? &Get<T>(index) : nullptr;
@@ -167,10 +167,10 @@ namespace Library
 	template<typename T>
 	inline std::size_t Datum::IndexOf(const T& value) const
 	{
-		static_assert(TypeOf<T>() != DatumTypes::Unknown && TypeOf<T>() != DatumTypes::End, "Invalid data type.");
+		static_assert(TypeOf<T>() != Types::Unknown && TypeOf<T>() != Types::End, "Invalid data type.");
 
-		if (mType == DatumTypes::Unknown)	throw std::runtime_error("Type not set.");
-		if (mType != TypeOf<T>())			throw std::runtime_error("Mismatched type.");
+		if (mType == Types::Unknown)	throw std::runtime_error("Type not set.");
+		if (mType != TypeOf<T>())		throw std::runtime_error("Mismatched type.");
 
 		T* const data = reinterpret_cast<T*>(mData.voidPtr);
 
@@ -189,8 +189,8 @@ namespace Library
 	template<>
 	inline std::size_t Datum::IndexOf(const RTTIPointer& value) const
 	{
-		if (mType == DatumTypes::Unknown)	throw std::runtime_error("Type not set.");
-		if (mType != DatumTypes::Pointer)	throw std::runtime_error("Mismatched type.");
+		if (mType == Types::Unknown)	throw std::runtime_error("Type not set.");
+		if (mType != Types::Pointer)	throw std::runtime_error("Mismatched type.");
 
 		std::size_t i = 0;
 		for (; i < mSize; ++i)
@@ -209,11 +209,11 @@ namespace Library
 	template<typename T>
 	inline void Datum::SetStorage(gsl::span<T> storage)
 	{
-		static_assert(TypeOf<T>() != DatumTypes::Unknown && TypeOf<T>() != DatumTypes::End, "Invalid data type.");
+		static_assert(TypeOf<T>() != Types::Unknown && TypeOf<T>() != Types::End, "Invalid data type.");
 
 		if (storage.size() < 1) throw std::runtime_error("External storage size must be greater than zero.");
 		
-		if (mType == DatumTypes::Unknown)
+		if (mType == Types::Unknown)
 		{
 			mType = TypeOf<T>();
 		}
@@ -234,11 +234,11 @@ namespace Library
 	template<typename T>
 	inline void Datum::PushBack(const T& data)
 	{
-		static_assert(TypeOf<T>() != DatumTypes::Unknown && TypeOf<T>() != DatumTypes::End, "Invalid data type.");
+		static_assert(TypeOf<T>() != Types::Unknown && TypeOf<T>() != Types::End, "Invalid data type.");
 		
 		if (!mInternalStorage) throw std::runtime_error("Cannot modify external storage.");
 
-		if (mType == DatumTypes::Unknown)
+		if (mType == Types::Unknown)
 		{
 			mType = TypeOf<T>();
 		}
@@ -259,7 +259,7 @@ namespace Library
 	template<typename T>
 	inline bool Datum::Remove(const T& value)
 	{
-		static_assert(TypeOf<T>() != DatumTypes::Unknown && TypeOf<T>() != DatumTypes::End, "Invalid data type.");
+		static_assert(TypeOf<T>() != Types::Unknown && TypeOf<T>() != Types::End, "Invalid data type.");
 
 		if (!mInternalStorage) throw std::runtime_error("Cannot modify external storage.");
 
@@ -268,7 +268,7 @@ namespace Library
 		
 		if (index < mSize)
 		{
-			if (mType == DatumTypes::String)
+			if (mType == Types::String)
 			{
 				mData.stringPtr[index].~basic_string();
 			}

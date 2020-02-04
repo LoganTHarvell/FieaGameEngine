@@ -1141,19 +1141,19 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 	}
 
 	template<>
-	inline std::wstring ToString<Datum::DatumTypes>(const Datum::DatumTypes& t)
+	inline std::wstring ToString<Datum::Types>(const Datum::Types& t)
 	{
 		RETURN_WIDE_STRING(static_cast<int>(t));
 	}
 
 	template<>
-	inline std::wstring ToString<Datum::DatumTypes>(const Datum::DatumTypes* t)
+	inline std::wstring ToString<Datum::Types>(const Datum::Types* t)
 	{
 		RETURN_WIDE_STRING(t);
 	}
 
 	template<>
-	inline std::wstring ToString<Datum::DatumTypes>(Datum::DatumTypes* t)
+	inline std::wstring ToString<Datum::Types>(Datum::Types* t)
 	{
 		RETURN_WIDE_STRING(t);
 	}

@@ -21,7 +21,7 @@ namespace UnitTests
 		Datum emptyDatum;
 		Assert::AreEqual(0_z, emptyDatum.Size());
 		Assert::AreEqual(0_z, emptyDatum.Capacity());
-		Assert::AreEqual(emptyDatum.Type(), Datum::DatumTypes::Unknown);
+		Assert::AreEqual(emptyDatum.Type(), Datum::Types::Unknown);
 
 		Datum datum1 = *data.begin();
 		Assert::AreEqual(1_z, datum1.Size());
@@ -43,7 +43,7 @@ namespace UnitTests
 		Assert::AreEqual(data.size(), datum2.Capacity());
 		Assert::AreEqual(datum2.Type(), Datum::TypeOf<T>());
 
-		if (Datum::TypeOf<T>() != Datum::DatumTypes::Integer)
+		if (Datum::TypeOf<T>() != Datum::Types::Integer)
 		{
 			Assert::ExpectException<std::runtime_error>([&datum1] { datum1 = int(); });
 		}
@@ -120,7 +120,7 @@ namespace UnitTests
 	void TestTypeSizeCapacity(const std::initializer_list<T> data)
 	{
 		Datum datum;
-		Assert::AreEqual(Datum::DatumTypes::Unknown, datum.Type());
+		Assert::AreEqual(Datum::Types::Unknown, datum.Type());
 		Assert::AreEqual(0_z, datum.Size());
 		Assert::IsTrue(datum.IsEmpty());
 		Assert::AreEqual(0_z, datum.Capacity());
@@ -236,7 +236,7 @@ namespace UnitTests
 			Assert::AreEqual(storage[i], datum.Get<T>(i));
 		}
 
-		if (Datum::TypeOf<T>() != Datum::DatumTypes::Integer)
+		if (Datum::TypeOf<T>() != Datum::Types::Integer)
 		{
 			Assert::ExpectException<std::runtime_error>([&datum] {	int unknown[5] = { 1, 2, 3, 4, 5 };
 																	datum.SetStorage(gsl::span<int>(unknown));	});
@@ -272,7 +272,7 @@ namespace UnitTests
 			Assert::AreEqual(i+1, datum.Size());
 			Assert::AreEqual(capacity, datum.Capacity());
 
-			if (Datum::TypeOf<T>() != Datum::DatumTypes::Integer)
+			if (Datum::TypeOf<T>() != Datum::Types::Integer)
 			{
 				Assert::ExpectException<std::runtime_error>([&datum] { datum.PushBack(int()); });
 			}
@@ -359,7 +359,7 @@ namespace UnitTests
 			datumToSet.SetFromString(datum.ToString(i), i);
 		}
 
-		if (Datum::TypeOf<T>() != Datum::DatumTypes::Pointer)
+		if (Datum::TypeOf<T>() != Datum::Types::Pointer)
 		{
 			Assert::AreEqual(datum, datumToSet);
 		}
@@ -394,13 +394,13 @@ namespace UnitTestLibraryDesktop
 
 		TEST_METHOD(TypeOf)
 		{
-			Assert::AreEqual(Datum::DatumTypes::Unknown, Datum::TypeOf<double>());
-			Assert::AreEqual(Datum::DatumTypes::Integer, Datum::TypeOf<int>());
-			Assert::AreEqual(Datum::DatumTypes::Float, Datum::TypeOf<float>());
-			Assert::AreEqual(Datum::DatumTypes::Vector, Datum::TypeOf<glm::vec4>());
-			Assert::AreEqual(Datum::DatumTypes::Matrix, Datum::TypeOf<glm::mat4>());
-			Assert::AreEqual(Datum::DatumTypes::String, Datum::TypeOf<std::string>());
-			Assert::AreEqual(Datum::DatumTypes::Pointer, Datum::TypeOf<RTTI*>());
+			Assert::AreEqual(Datum::Types::Unknown, Datum::TypeOf<double>());
+			Assert::AreEqual(Datum::Types::Integer, Datum::TypeOf<int>());
+			Assert::AreEqual(Datum::Types::Float, Datum::TypeOf<float>());
+			Assert::AreEqual(Datum::Types::Vector, Datum::TypeOf<glm::vec4>());
+			Assert::AreEqual(Datum::Types::Matrix, Datum::TypeOf<glm::mat4>());
+			Assert::AreEqual(Datum::Types::String, Datum::TypeOf<std::string>());
+			Assert::AreEqual(Datum::Types::Pointer, Datum::TypeOf<RTTI*>());
 		}
 
  		TEST_METHOD(Constructors)

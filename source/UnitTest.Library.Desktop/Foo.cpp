@@ -57,9 +57,7 @@ namespace UnitTests
 		if (!rhs) return false;
 		
 		const Foo* rhsFoo = rhs->Get<Foo>();
-		if (!rhsFoo) return false;
-
-		return *mData == rhsFoo->Data();
+		return rhsFoo ? *mData == rhsFoo->Data() : false;
 	}
 
 	int& Foo::Data()

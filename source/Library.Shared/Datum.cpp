@@ -5,7 +5,17 @@
 namespace Library
 {
 #pragma region Look Up Tables
-	inline const std::function<std::string(void*, std::size_t)> Datum::DatumToStringLUT[static_cast<std::size_t>(DatumTypes::End)] =
+	const Datum::CreateDefaultFunctor Datum::CreateDefaultLUT[static_cast<std::size_t>(Types::End)] =
+	{
+		[](void* data, std::size_t index) { new(reinterpret_cast<int*>(data) + index)int(0); },
+		[](void* data, std::size_t index) { new(reinterpret_cast<float*>(data) + index)float(0.0f); },
+		[](void* data, std::size_t index) { new(reinterpret_cast<glm::vec4*>(data) + index)glm::vec4(0.0f); },
+		[](void* data, std::size_t index) { new(reinterpret_cast<glm::mat4*>(data) + index)glm::mat4(0.0f); },
+		[](void* data, std::size_t index) { new(reinterpret_cast<std::string*>(data) + index)std::string(); },
+		[](void* data, std::size_t index) { new(reinterpret_cast<RTTIPointer*>(data) + index)RTTIPointer(nullptr); }
+	};
+
+	const Datum::ToStringFunctor Datum::ToStringLUT[static_cast<std::size_t>(Types::End)] =
 	{
 		[](void* data, std::size_t index) { return std::to_string(reinterpret_cast<int*>(data)[index]); },
 		[](void* data, std::size_t index) { return std::to_string(reinterpret_cast<float*>(data)[index]); },
@@ -15,10 +25,10 @@ namespace Library
 		[](void* data, std::size_t index) { RTTIPointer ptr = reinterpret_cast<RTTIPointer*>(data)[index]; return ptr ? ptr->ToString() : "nullptr";  }
 	};
 
-	inline const std::function<void(std::string, void*, std::size_t)> Datum::DatumFromStringLUT[static_cast<std::size_t>(DatumTypes::End)] =
+	const Datum::FromStringFunctor Datum::FromStringLUT[static_cast<std::size_t>(Types::End)] =
 	{
-		[](std::string str, void* data, std::size_t index) { sscanf_s(str.c_str(), "%d", &reinterpret_cast<int*>(data)[index]); },
-		[](std::string str, void* data, std::size_t index) { sscanf_s(str.c_str(), "%f", &reinterpret_cast<float*>(data)[index]); },
+		[](std::string str, void* data, std::size_t index) { reinterpret_cast<int*>(data)[index] = std::stoi(str); },
+		[](std::string str, void* data, std::size_t index) { reinterpret_cast<float*>(data)[index] = std::stof(str); },
 		[](std::string str, void* data, std::size_t index)
 		{
 			float* vector = glm::value_ptr(reinterpret_cast<glm::vec4*>(data)[index]);
@@ -61,7 +71,7 @@ namespace Library
 			{
 				Reserve(rhs.mCapacity);
 
-				if (mType == DatumTypes::String)
+				if (mType == Types::String)
 				{
 					for (std::size_t i = 0; i < mSize; ++i)
 					{
@@ -70,7 +80,7 @@ namespace Library
 				}
 				else if (mData.voidPtr && rhs.mData.voidPtr)
 				{
-					std::size_t dataSize = DatumSizeLUT[static_cast<std::size_t>(mType)];
+					std::size_t dataSize = TypeSizeLUT[static_cast<std::size_t>(mType)];
 					std::memcpy(mData.voidPtr, rhs.mData.voidPtr, rhs.mSize * dataSize);
 				}
 			}
@@ -101,7 +111,7 @@ namespace Library
 			{
 				Reserve(rhs.mCapacity);
 
-				if (mType == DatumTypes::String)
+				if (mType == Types::String)
 				{
 					for (std::size_t i = 0; i < mSize; ++i)
 					{
@@ -110,7 +120,7 @@ namespace Library
 				}
 				else
 				{
-					std::size_t dataSize = DatumSizeLUT[static_cast<std::size_t>(mType)];
+					std::size_t dataSize = TypeSizeLUT[static_cast<std::size_t>(mType)];
 					std::memcpy(mData.voidPtr, rhs.mData.voidPtr, rhs.mSize * dataSize);
 				}
 			}
@@ -160,8 +170,7 @@ namespace Library
 		return *this;
 	}
 
-#pragma region Constructors
-#pragma region Scalar Constructor Overloads
+#pragma region Scalar/Initializer List Constructors
 	Datum::Datum(const int rhs)
 	{
 		ConstructorAssignmentHelper({ rhs });
@@ -191,9 +200,7 @@ namespace Library
 	{
 		ConstructorAssignmentHelper({ rhs });
 	}
-#pragma endregion Scalar Constructor Overloads
 
-#pragma region Initializer List Constructor Overloads
 	Datum::Datum(const std::initializer_list<int> rhs)
 	{
 		ConstructorAssignmentHelper(rhs);
@@ -223,11 +230,9 @@ namespace Library
 	{
 		ConstructorAssignmentHelper(rhs);
 	}
-#pragma endregion Initializer List Constructor Overloads
-#pragma endregion Constructors
+#pragma endregion Scalar/List Constructors
 
-#pragma region Assignment
-#pragma region Scalar Assignment Overloads
+#pragma region Scalar/Initializer List Assignment
 	Datum& Datum::operator=(const int rhs)
 	{
 		return ConstructorAssignmentHelper({ rhs });
@@ -257,9 +262,7 @@ namespace Library
 	{
 		return ConstructorAssignmentHelper({ rhs });
 	}
-#pragma endregion Scalar Assignment Overloads
 
-#pragma region Initializer List Assignment Overloads
 	Datum& Datum::operator=(std::initializer_list<int> rhs)
 	{
 		return ConstructorAssignmentHelper(rhs);
@@ -289,8 +292,7 @@ namespace Library
 	{
 		return ConstructorAssignmentHelper(rhs);
 	}
-#pragma endregion Initializer List Assignment Overloads
-#pragma endregion Assignment
+#pragma endregion Scalar/List Assignment
 #pragma endregion Constructors, Destructor, Assignment
 
 #pragma region Boolean Operators
@@ -303,19 +305,19 @@ namespace Library
 
 		switch (mType)
 		{
-		case DatumTypes::Unknown:
+		case Types::Unknown:
 			isEqual = true;
 			break;
-		case DatumTypes::Integer:
-		case DatumTypes::Float:
-		case DatumTypes::Vector:
-		case DatumTypes::Matrix:
+		case Types::Integer:
+		case Types::Float:
+		case Types::Vector:
+		case Types::Matrix:
 		{
-			const std::size_t size = mSize * DatumSizeLUT[static_cast<std::size_t>(mType)];
+			const std::size_t size = mSize * TypeSizeLUT[static_cast<std::size_t>(mType)];
 			isEqual = memcmp(mData.voidPtr, rhs.mData.voidPtr, size) == 0;
 			break;
 		}
-		case DatumTypes::String:
+		case Types::String:
 		{
 			for (std::size_t i = 0; i < mSize; ++i)
 			{
@@ -324,7 +326,7 @@ namespace Library
 
 			break;
 		}
-		case DatumTypes::Pointer:
+		case Types::Pointer:
 		{
 			for (std::size_t i = 0; i < mSize; ++i)
 			{
@@ -420,12 +422,12 @@ namespace Library
 #pragma region Size and Capacity
 	void Datum::Reserve(std::size_t capacity)
 	{
-		if (mType == DatumTypes::Unknown)	throw std::runtime_error("Data type unknown.");
+		if (mType == Types::Unknown)	throw std::runtime_error("Data type unknown.");
 		if (!mInternalStorage)				throw std::runtime_error("Cannot modify external storage.");
 
 		if (capacity > mCapacity)
 		{
-			void* newMemory = realloc(mData.voidPtr, capacity * DatumSizeLUT[static_cast<std::size_t>(mType)]);
+			void* newMemory = realloc(mData.voidPtr, capacity * TypeSizeLUT[static_cast<std::size_t>(mType)]);
 
 			assert(newMemory != nullptr);
 
@@ -436,7 +438,7 @@ namespace Library
 
 	void Datum::Resize(std::size_t size)
 	{
-		if (mType == DatumTypes::Unknown)	throw std::runtime_error("Data type unknown.");
+		if (mType == Types::Unknown)	throw std::runtime_error("Data type unknown.");
 		if (!mInternalStorage)				throw std::runtime_error("Cannot modify external storage.");
 
 		if (size > mSize)
@@ -445,10 +447,10 @@ namespace Library
 
 			for (std::size_t i = mSize; i < size; ++i)
 			{
-				ResizeHelper(i);
+				CreateDefaultLUT[static_cast<std::size_t>(mType)](mData.voidPtr, i);
 			}
 		}
-		else if (mType == DatumTypes::String && size < mSize)
+		else if (mType == Types::String && size < mSize)
 		{
 			for (std::size_t i = size; i < mSize; ++i)
 			{
@@ -461,8 +463,8 @@ namespace Library
 
 	void Datum::ShrinkToFit()
 	{
-		if (mType == DatumTypes::Unknown)	throw std::runtime_error("Data type unknown.");
-		if (!mInternalStorage)				throw std::runtime_error("Cannot modify external storage.");
+		if (mType == Types::Unknown)	throw std::runtime_error("Data type unknown.");
+		if (!mInternalStorage)			throw std::runtime_error("Cannot modify external storage.");
 
 		if (mSize == 0)
 		{
@@ -471,7 +473,7 @@ namespace Library
 		}
 		else if (mSize < mCapacity)
 		{
-			void* newMemory = realloc(mData.voidPtr, mSize * DatumSizeLUT[static_cast<std::size_t>(mType)]);
+			void* newMemory = realloc(mData.voidPtr, mSize * TypeSizeLUT[static_cast<std::size_t>(mType)]);
 
 			assert(newMemory != nullptr);
 
@@ -485,12 +487,12 @@ namespace Library
 #pragma region Modifiers
 	void Datum::PopBack()
 	{
-		if (mType == DatumTypes::Unknown)	throw std::runtime_error("Data type unknown.");
-		if (!mInternalStorage)				throw std::runtime_error("Cannot modify external storage.");
+		if (mType == Types::Unknown)	throw std::runtime_error("Data type unknown.");
+		if (!mInternalStorage)			throw std::runtime_error("Cannot modify external storage.");
 
 		if (mSize > 0)
 		{
-			if (mType == DatumTypes::String)
+			if (mType == Types::String)
 			{
 				mData.stringPtr[mSize - 1].~basic_string();
 			}
@@ -501,16 +503,16 @@ namespace Library
 
 	void Datum::RemoveAt(const std::size_t index)
 	{
-		if (mType == DatumTypes::Unknown)	throw std::runtime_error("Data type unknown.");
+		if (mType == Types::Unknown)	throw std::runtime_error("Data type unknown.");
 		if (!mInternalStorage)				throw std::runtime_error("Cannot modify external storage.");
 		if (index >= mSize)					throw std::out_of_range("Index out of bounds.");
 
-		if (mType == DatumTypes::String)
+		if (mType == Types::String)
 		{
 			mData.stringPtr[index].~basic_string();
 		}
 
-		const std::size_t size = DatumSizeLUT[static_cast<std::size_t>(mType)];
+		const std::size_t size = TypeSizeLUT[static_cast<std::size_t>(mType)];
 		memmove(&mData.bytePtr[index * size], &mData.bytePtr[(index * size) + size], size * (mSize - index));
 
 		--mSize;
@@ -522,7 +524,7 @@ namespace Library
 		{
 			mData.voidPtr = nullptr;
 		}
-		else if (mType == DatumTypes::String)
+		else if (mType == Types::String)
 		{
 			for (std::size_t i = 0; i < mSize; ++i)
 			{
@@ -538,16 +540,16 @@ namespace Library
 #pragma region String Conversion
 	std::string Datum::ToString(const std::size_t index) const
 	{
-		if (mType == DatumTypes::Unknown) throw std::runtime_error("Data type unknown.");
+		if (mType == Types::Unknown) throw std::runtime_error("Data type unknown.");
 		
-		return DatumToStringLUT[static_cast<std::size_t>(mType)](mData.voidPtr, index);
+		return ToStringLUT[static_cast<std::size_t>(mType)](mData.voidPtr, index);
 	}
 
 	void Datum::SetFromString(const std::string str, const std::size_t index)
 	{
-		if (mType == DatumTypes::Unknown) throw std::runtime_error("Data type unknown.");
+		if (mType == Types::Unknown) throw std::runtime_error("Data type unknown.");
 
-		DatumFromStringLUT[static_cast<std::size_t>(mType)](str, mData.voidPtr, index);
+		FromStringLUT[static_cast<std::size_t>(mType)](str, mData.voidPtr, index);
 	}
 #pragma endregion String Conversion
 
@@ -555,7 +557,7 @@ namespace Library
 	template<typename T>
 	Datum& Datum::ConstructorAssignmentHelper(const std::initializer_list<T> rhs)
 	{
-		if (mType == DatumTypes::Unknown)
+		if (mType == Types::Unknown)
 		{
 			mType = TypeOf<T>();
 		}
@@ -580,34 +582,6 @@ namespace Library
 		}
 
 		return *this;
-	}
-
-	void Datum::ResizeHelper(std::size_t index)
-	{
-		switch (mType)
-		{
-		case DatumTypes::Integer:
-			new(mData.intPtr + index)int();
-			break;
-		case DatumTypes::Float:
-			new(mData.floatPtr + index)float();
-			break;
-		case DatumTypes::Vector:
-			new(mData.vectorPtr + index)glm::vec4();
-			break;
-		case DatumTypes::Matrix:
-			new(mData.matrixPtr + index)glm::mat4();
-			break;
-		case DatumTypes::String:
-			new(mData.stringPtr + index)std::string();
-			break;
-		case DatumTypes::Pointer:
-			new(mData.rttiPtr + index)RTTIPointer();
-			break;
-
-		default:
-			break;
-		}
 	}
 #pragma endregion Helper Methods
 }
