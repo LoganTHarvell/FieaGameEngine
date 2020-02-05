@@ -30,11 +30,8 @@ namespace Library
 
 			for (std::size_t i = 0; i < size; ++i)
 			{
-				if (!lhsRTTI[i] && !rhsRTTI[i])
-				{
-					continue;
-				}
-				else if (!lhsRTTI[i] || !rhsRTTI[i] || !lhsRTTI[i]->Equals(rhsRTTI[i]))
+				if (!lhsRTTI[i] && !rhsRTTI[i]) continue;
+				if (!lhsRTTI[i] || !rhsRTTI[i] || !lhsRTTI[i]->Equals(rhsRTTI[i]))
 				{
 					return false;
 				}
