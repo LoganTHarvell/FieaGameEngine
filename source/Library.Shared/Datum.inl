@@ -173,29 +173,12 @@ namespace Library
 		if (mType != TypeOf<T>())		throw std::runtime_error("Mismatched type.");
 
 		T* const data = reinterpret_cast<T*>(mData.voidPtr);
+		T valueCopy = value;
 
 		std::size_t i = 0;
 		for (; i < mSize; ++i)
 		{
-			if (data[i] == value)
-			{
-				break;
-			}
-		}
-
-		return i;
-	}
-
-	template<>
-	inline std::size_t Datum::IndexOf(const RTTIPointer& value) const
-	{
-		if (mType == Types::Unknown)	throw std::runtime_error("Type not set.");
-		if (mType != Types::Pointer)	throw std::runtime_error("Mismatched type.");
-
-		std::size_t i = 0;
-		for (; i < mSize; ++i)
-		{
-			if ((!mData.rttiPtr[0] && !value) || (mData.rttiPtr[0] && mData.rttiPtr[i]->Equals(value)))
+			if (ElementEqualityLUT[static_cast<std::size_t>(mType)](&data[i], &valueCopy))
 			{
 				break;
 			}

@@ -83,19 +83,31 @@ namespace Library
 		};
 
 		/// <summary>
-		/// Datum ToString look-up table.
+		/// Datum equality function look-up table.
+		/// </summary>
+		using EqualityFunctor = std::function<bool(void*, void*, std::size_t)>;
+		static const EqualityFunctor EqualityLUT[static_cast<std::size_t>(Types::End)];
+		
+		/// <summary>
+		/// Datum single value equality look-up table.
+		/// </summary>
+		using ElementEqualityFunctor = std::function<bool(void*, void*)>;
+		static const ElementEqualityFunctor ElementEqualityLUT[static_cast<std::size_t>(Types::End)];
+
+		/// <summary>
+		/// Create default value function look-up table.
 		/// </summary>
 		using CreateDefaultFunctor = std::function<void(void*, std::size_t)>;
 		static const CreateDefaultFunctor CreateDefaultLUT[static_cast<std::size_t>(Types::End)];
 
 		/// <summary>
-		/// Datum ToString look-up table.
+		/// ToString function look-up table.
 		/// </summary>
 		using ToStringFunctor = std::function<std::string(void*, std::size_t)>;
 		static const ToStringFunctor ToStringLUT[static_cast<std::size_t>(Types::End)];
 
 		/// <summary>
-		/// Datum FromString conversion look-up table.
+		/// FromString function look-up table.
 		/// </summary>
 		using FromStringFunctor = std::function<void(std::string, void*, std::size_t)>;
 		static const FromStringFunctor FromStringLUT[static_cast<std::size_t>(Types::End)];
@@ -104,7 +116,7 @@ namespace Library
 #pragma region Default Functors
 	public:
 		/// <summary>
-		/// Functor specifying the default strategy for incrementing the capacity of the Vector.
+		/// Functor specifying the default strategy for incrementing the capacity of the Datum.
 		/// </summary>
 		struct DefaultReserveFunctor final
 		{
@@ -665,15 +677,6 @@ namespace Library
 		/// <typeparam name="T">Type of elements in the Datum. A compiler error is thrown on invalid types.</typeparam>
 		template<typename T>
 		std::size_t IndexOf(const T& value) const;
-
-		/// <summary>
-		/// Template specialization that finds the index of an RTTIPointer in the Datum given an equal RTTIPointer.
-		/// </summary>
-		/// <param name="value">Value to be searched for in the Datum.</param>
-		/// <returns>Index of the value if found, otherwise one past the last index, a.k.a. the size.</returns>
-		/// <typeparam name="T">Type of elements in the Datum. A compiler error is thrown on invalid types.</typeparam>
-		template<>
-		std::size_t IndexOf(const RTTIPointer& value) const;
 #pragma endregion Element Accessors
 
 #pragma region Modifiers

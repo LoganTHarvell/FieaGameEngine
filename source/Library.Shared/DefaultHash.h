@@ -49,7 +49,7 @@ namespace Library::Hash
 
 #pragma region String Specializations
 	/// <summary>
-	/// Default hash functor for computing hash codes for std:string values.
+	/// Default hash functor for computing hash codes for std::string values.
 	/// </summary>
 	/// <param name="key">Key used to compute the hashcode.</param>
 	/// <returns>Hash code for the given key.</returns>
@@ -60,7 +60,7 @@ namespace Library::Hash
 	};
 
 	/// <summary>
-	/// Default hash functor for computing hash codes for constant std:string values.
+	/// Default hash functor for computing hash codes for constant std::string values.
 	/// </summary>
 	/// <param name="key">Key used to compute the hashcode.</param>
 	/// <returns>Hash code for the given key.</returns>
@@ -71,7 +71,7 @@ namespace Library::Hash
 	};
 
 	/// <summary>
-	/// Default hash functor for computing hash codes for std:wstring values.
+	/// Default hash functor for computing hash codes for std::wstring values.
 	/// </summary>
 	/// <param name="key">Key used to compute the hashcode.</param>
 	/// <returns>Hash code for the given key.</returns>
@@ -82,7 +82,7 @@ namespace Library::Hash
 	};
 
 	/// <summary>
-	/// Default hash functor for computing hash codes for constant std:wstring values.
+	/// Default hash functor for computing hash codes for constant std::wstring values.
 	/// </summary>
 	/// <param name="key">Key used to compute the hashcode.</param>
 	/// <returns>Hash code for the given key.</returns>

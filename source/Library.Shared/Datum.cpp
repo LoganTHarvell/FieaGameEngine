@@ -5,6 +5,60 @@
 namespace Library
 {
 #pragma region Look Up Tables
+	const Datum::EqualityFunctor Datum::EqualityLUT[static_cast<std::size_t>(Types::End)] =
+	{
+		[](void* lhs, void* rhs, std::size_t size) { return memcmp(lhs, rhs, size * TypeSizeLUT[static_cast<std::size_t>(Types::Integer)]) == 0; },
+		[](void* lhs, void* rhs, std::size_t size) { return memcmp(lhs, rhs, size * TypeSizeLUT[static_cast<std::size_t>(Types::Float)]) == 0; },
+		[](void* lhs, void* rhs, std::size_t size) { return memcmp(lhs, rhs, size * TypeSizeLUT[static_cast<std::size_t>(Types::Vector)]) == 0; },
+		[](void* lhs, void* rhs, std::size_t size) { return memcmp(lhs, rhs, size * TypeSizeLUT[static_cast<std::size_t>(Types::Matrix)]) == 0; },
+		[](void* lhs, void* rhs, std::size_t size) 
+		{ 
+			for (std::size_t i = 0; i < size; ++i)
+			{
+				if (reinterpret_cast<std::string*>(lhs)[i] != reinterpret_cast<std::string*>(rhs)[i])
+				{
+					return false;
+				}
+			}
+
+			return true;
+		},
+		[](void* lhs, void* rhs, std::size_t size) 
+		{
+			RTTIPointer* lhsRTTI = reinterpret_cast<RTTIPointer*>(lhs);
+			RTTIPointer* rhsRTTI = reinterpret_cast<RTTIPointer*>(rhs);
+
+			for (std::size_t i = 0; i < size; ++i)
+			{
+				if (!lhsRTTI[i] && !rhsRTTI[i])
+				{
+					continue;
+				}
+				else if (!lhsRTTI[i] || !rhsRTTI[i] || !lhsRTTI[i]->Equals(rhsRTTI[i]))
+				{
+					return false;
+				}
+			}
+			
+			return true;
+		}
+	};
+
+	const Datum::ElementEqualityFunctor Datum::ElementEqualityLUT[static_cast<std::size_t>(Types::End)] =
+	{
+		[](void* lhs, void* rhs) { return *reinterpret_cast<int*>(lhs) == *reinterpret_cast<int*>(rhs); },
+		[](void* lhs, void* rhs) { return *reinterpret_cast<float*>(lhs) == *reinterpret_cast<float*>(rhs); },
+		[](void* lhs, void* rhs) { return *reinterpret_cast<glm::vec4*>(lhs) == *reinterpret_cast<glm::vec4*>(rhs); },
+		[](void* lhs, void* rhs) { return *reinterpret_cast<glm::mat4*>(lhs) == *reinterpret_cast<glm::mat4*>(rhs); },
+		[](void* lhs, void* rhs) { return *reinterpret_cast<std::string*>(lhs) == *reinterpret_cast<std::string*>(rhs); },
+		[](void* lhs, void* rhs) 
+		{
+			RTTIPointer* lhsRTTI = reinterpret_cast<RTTIPointer*>(lhs);
+			RTTIPointer* rhsRTTI = reinterpret_cast<RTTIPointer*>(rhs);
+			return ((!*lhsRTTI && !*rhsRTTI) || (*lhsRTTI && (*lhsRTTI)->Equals(*rhsRTTI)));
+		}
+	};
+
 	const Datum::CreateDefaultFunctor Datum::CreateDefaultLUT[static_cast<std::size_t>(Types::End)] =
 	{
 		[](void* data, std::size_t index) { new(reinterpret_cast<int*>(data) + index)int(0); },
@@ -300,53 +354,9 @@ namespace Library
 	{
 		if (this == &rhs)								return true;
 		if (mType != rhs.mType || mSize != rhs.mSize)	return false;
+		if (mType == Types::Unknown)					return true;
 		
-		bool isEqual = true;
-
-		switch (mType)
-		{
-		case Types::Unknown:
-			isEqual = true;
-			break;
-		case Types::Integer:
-		case Types::Float:
-		case Types::Vector:
-		case Types::Matrix:
-		{
-			const std::size_t size = mSize * TypeSizeLUT[static_cast<std::size_t>(mType)];
-			isEqual = memcmp(mData.voidPtr, rhs.mData.voidPtr, size) == 0;
-			break;
-		}
-		case Types::String:
-		{
-			for (std::size_t i = 0; i < mSize; ++i)
-			{
-				if (mData.stringPtr[i] != rhs.mData.stringPtr[i]) isEqual = false;
-			}
-
-			break;
-		}
-		case Types::Pointer:
-		{
-			for (std::size_t i = 0; i < mSize; ++i)
-			{
-				if (!mData.rttiPtr[i] && !rhs.mData.rttiPtr[i]) continue;
-				else if (	!mData.rttiPtr[i] || !rhs.mData.rttiPtr[i] 
-						 || !mData.rttiPtr[i]->Equals(rhs.mData.rttiPtr[i])	)
-				{
-					isEqual = false;
-					break;
-				}
-			}
-
-			break;
-		}
-
-		default:
-			break;
-		}
-
-		return isEqual;
+		return EqualityLUT[static_cast<std::size_t>(mType)](mData.voidPtr, rhs.mData.voidPtr, mSize);
 	}
 
 	bool Datum::operator!=(const Datum& rhs) const noexcept
@@ -423,7 +433,7 @@ namespace Library
 	void Datum::Reserve(std::size_t capacity)
 	{
 		if (mType == Types::Unknown)	throw std::runtime_error("Data type unknown.");
-		if (!mInternalStorage)				throw std::runtime_error("Cannot modify external storage.");
+		if (!mInternalStorage)			throw std::runtime_error("Cannot modify external storage.");
 
 		if (capacity > mCapacity)
 		{

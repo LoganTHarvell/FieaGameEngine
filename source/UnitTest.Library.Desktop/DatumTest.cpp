@@ -449,10 +449,10 @@ namespace UnitTestLibraryDesktop
 			TestEquality<glm::vec4>({ glm::vec4(10), glm::vec4(20), glm::vec4(30) }, glm::vec4(40));
 			TestEquality<glm::mat4>({ glm::mat4(10), glm::mat4(20), glm::mat4(30) }, glm::mat4(40));
 			TestEquality<std::string>({ "10", "20", "30" }, "40");
-
-			Foo a(10), b(20), c(30);
-			TestEquality<RTTI*>({ &a, &b, &c }, nullptr);
-			TestEquality<RTTI*>({ nullptr, nullptr, nullptr }, &a);
+ 
+ 			Foo a(10), b(20), c(30);
+ 			TestEquality<RTTI*>({ &a, &b, &c }, nullptr);
+ 			TestEquality<RTTI*>({ nullptr, nullptr, nullptr }, &a);
 		}
 
 		TEST_METHOD(TypeSizeCapacity)
