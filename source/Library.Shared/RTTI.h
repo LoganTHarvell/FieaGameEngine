@@ -13,33 +13,33 @@ namespace Library
 
 		virtual ~RTTI() = default;
 
-		virtual Library::RTTI::IdType TypeIdInstance() const = 0;
+		virtual RTTI::IdType TypeIdInstance() const = 0;
 
 		virtual RTTI* QueryInterface(const IdType)
 		{
 			return nullptr;
 		}
 
-		virtual bool Set(IdType) const
+		virtual bool Is(IdType) const
 		{
 			return false;
 		}
 
-		virtual bool Set(const std::string&) const
+		virtual bool Is(const std::string&) const
 		{
 			return false;
 		}
 
 		template <typename T>
-		const T* Get() const
+		const T* As() const
 		{
-			return (Set(T::TypeIdClass()) ? reinterpret_cast<const T*>(this) : nullptr);
+			return (Is(T::TypeIdClass()) ? reinterpret_cast<const T*>(this) : nullptr);
 		}
 
 		template <typename T>
-		T* Get()
+		T* As()
 		{
-			return (Set(T::TypeIdClass()) ? reinterpret_cast<T*>(const_cast<RTTI*>(this)) : nullptr);
+			return (Is(T::TypeIdClass()) ? reinterpret_cast<T*>(const_cast<RTTI*>(this)) : nullptr);
 		}
 
 		virtual std::string ToString() const
@@ -56,19 +56,19 @@ namespace Library
 #define RTTI_DECLARATIONS(Type, ParentType)																						\
 		public:																													\
 			static std::string TypeName() { return std::string(#Type); }														\
-			static Library::RTTI::IdType TypeIdClass() { return sRunTimeTypeId; }										\
-			Library::RTTI::IdType TypeIdInstance() const override { return TypeIdClass(); }								\
+			static Library::RTTI::IdType TypeIdClass() { return sRunTimeTypeId; }																\
+			Library::RTTI::IdType TypeIdInstance() const override { return TypeIdClass(); }											\
 			Library::RTTI* QueryInterface(const RTTI::IdType id) override												\
             {																													\
 				return (id == sRunTimeTypeId ? reinterpret_cast<Library::RTTI*>(this) : ParentType::QueryInterface(id)); \
             }																													\
-			bool Set(Library::RTTI::IdType id) const override																\
+			bool Is(Library::RTTI::IdType id) const override																			\
 			{																													\
-				return (id == sRunTimeTypeId ? true : ParentType::Set(id));														\
+				return (id == sRunTimeTypeId ? true : ParentType::Is(id));														\
 			}																													\
-			bool Set(const std::string& name) const override																		\
+			bool Is(const std::string& name) const override																\
 			{																													\
-				return (name == TypeName() ? true : ParentType::Set(name));														\
+				return (name == TypeName() ? true : ParentType::Is(name));														\
 			}																													\
 			private:																											\
 				static const Library::RTTI::IdType sRunTimeTypeId;

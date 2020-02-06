@@ -104,7 +104,7 @@ namespace UnitTestLibraryDesktop
 			Foo a = Foo(10);
 			Foo b = Foo(10);
 
-			Assert::IsTrue(a.Set(Foo::TypeIdClass()));
+			Assert::IsTrue(a.Is(Foo::TypeIdClass()));
 			Assert::IsTrue(a.Equals(&b));
 		}
 
