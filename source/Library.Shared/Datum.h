@@ -88,7 +88,8 @@ namespace Library
 		{ 
 			sizeof(int), sizeof(float),
 			sizeof(glm::vec4), sizeof(glm::mat4),
-			sizeof(std::string), sizeof(RTTIPointer) 
+			sizeof(std::string), sizeof(ScopePointer), 
+			sizeof(RTTIPointer) 
 		};
 
 		/// <summary>

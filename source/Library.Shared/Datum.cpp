@@ -23,6 +23,18 @@ namespace Library
 
 			return true;
 		},
+		[](void* lhs, void* rhs, std::size_t size)
+		{
+			for (std::size_t i = 0; i < size; ++i)
+			{
+				if (reinterpret_cast<ScopePointer*>(lhs)[i] != reinterpret_cast<ScopePointer*>(rhs)[i])
+				{
+					return false;
+				}
+			}
+
+			return true;
+		},
 		[](void* lhs, void* rhs, std::size_t size) 
 		{
 			RTTIPointer* lhsRTTI = reinterpret_cast<RTTIPointer*>(lhs);
@@ -48,6 +60,7 @@ namespace Library
 		[](void* lhs, void* rhs) { return *reinterpret_cast<glm::vec4*>(lhs) == *reinterpret_cast<glm::vec4*>(rhs); },
 		[](void* lhs, void* rhs) { return *reinterpret_cast<glm::mat4*>(lhs) == *reinterpret_cast<glm::mat4*>(rhs); },
 		[](void* lhs, void* rhs) { return *reinterpret_cast<std::string*>(lhs) == *reinterpret_cast<std::string*>(rhs); },
+		[](void* lhs, void* rhs) { return *reinterpret_cast<ScopePointer*>(lhs) == *reinterpret_cast<ScopePointer*>(rhs); },
 		[](void* lhs, void* rhs) 
 		{
 			RTTIPointer* lhsRTTI = reinterpret_cast<RTTIPointer*>(lhs);
@@ -63,6 +76,7 @@ namespace Library
 		[](void* data, std::size_t index) { new(reinterpret_cast<glm::vec4*>(data) + index)glm::vec4(0.0f); },
 		[](void* data, std::size_t index) { new(reinterpret_cast<glm::mat4*>(data) + index)glm::mat4(0.0f); },
 		[](void* data, std::size_t index) { new(reinterpret_cast<std::string*>(data) + index)std::string(); },
+		[](void* data, std::size_t index) { new(reinterpret_cast<ScopePointer*>(data) + index)ScopePointer(nullptr); },
 		[](void* data, std::size_t index) { new(reinterpret_cast<RTTIPointer*>(data) + index)RTTIPointer(nullptr); }
 	};
 
@@ -73,6 +87,7 @@ namespace Library
 		[](void* data, std::size_t index) { return glm::to_string(reinterpret_cast<glm::vec4*>(data)[index]); },
 		[](void* data, std::size_t index) { return glm::to_string(reinterpret_cast<glm::mat4*>(data)[index]); },
 		[](void* data, std::size_t index) { return reinterpret_cast<std::string*>(data)[index]; },
+		[](void* data, std::size_t index) { ScopePointer ptr = reinterpret_cast<ScopePointer*>(data)[index]; return ptr ? "ScopePointer" : "nullptr";  },
 		[](void* data, std::size_t index) { RTTIPointer ptr = reinterpret_cast<RTTIPointer*>(data)[index]; return ptr ? ptr->ToString() : "nullptr";  }
 	};
 
@@ -95,6 +110,7 @@ namespace Library
 						&matrix[12], &matrix[13], &matrix[14], &matrix[15]);
 		},
 		[](std::string str, void* data, std::size_t index) { reinterpret_cast<std::string*>(data)[index] = str; },
+		[](std::string, void*, std::size_t) {},
 		[](std::string, void*, std::size_t) {}
 	};
 #pragma endregion Look Up Tables

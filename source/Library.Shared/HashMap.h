@@ -27,9 +27,29 @@ namespace Library
 		using ChainType = SList<PairType>;
 
 		/// <summary>
+		/// Iterator for HashMap chains.
+		/// </summary>
+		using ChainIterator = typename ChainType::Iterator;
+
+		/// <summary>
+		/// Iterator for HashMap chains.
+		/// </summary>
+		using ChainConstIterator = typename ChainType::ConstIterator;
+
+		/// <summary>
 		/// Vector of ChainType elements hashed to an index, termed a bucket.
 		/// </summary>
 		using BucketType = Vector<ChainType>;
+
+		/// <summary>
+		/// Iterator for HashMap buckets.
+		/// </summary>
+		using BucketIterator = typename BucketType::Iterator;
+
+		/// <summary>
+		/// Iterator for HashMap buckets.
+		/// </summary>
+		using BucketConstIterator = typename BucketType::ConstIterator;
 
 		/// <summary>
 		/// Value type for std::iterator_trait.
@@ -109,9 +129,9 @@ namespace Library
 			/// Specialized constructor for creating an Iterator for a HashMap.
 			/// </summary>
 			/// <param name="HashMap">Source HashMap for the Iterator's values.</param>
-			/// <param name="bucketIterator">BucketType::Iterator pointing to the target ChainType value.</param>
-			/// <param name="chainIterator">ChainType::Iterator to the target PairType value.</param>
-			Iterator(HashMap& hashMap, const typename BucketType::Iterator& bucketIterator=BucketType::Iterator(), const typename ChainType::Iterator& chainIterator=ChainType::Iterator());
+			/// <param name="bucketIterator">BucketIterator pointing to the target ChainType value.</param>
+			/// <param name="chainIterator">ChainIterator to the target PairType value.</param>
+			Iterator(HashMap& hashMap, const typename BucketIterator& bucketIterator=BucketIterator(), const typename ChainIterator& chainIterator=ChainIterator());
 
 		public:
 			/// <summary>
@@ -169,12 +189,12 @@ namespace Library
 			/// <summary>
 			/// Bucket iterator pointing to the current bucket with a chain of PairType entries.
 			/// </summary>
-			typename BucketType::Iterator mBucketIterator;
+			BucketIterator mBucketIterator;
 
 			/// <summary>
 			/// Chain iterator pointing to the current PairType in the chain of a bucket.
 			/// </summary>
-			typename ChainType::Iterator mChainIterator;
+			ChainIterator mChainIterator;
 		};
 #pragma endregion Iterator
 
@@ -239,9 +259,9 @@ namespace Library
 			/// Specialized constructor for creating an ConstIterator for a HashMap.
 			/// </summary>
 			/// <param name="HashMap">Source HashMap for the ConstIterator's values.</param>
-			/// <param name="bucketIterator">BucketType::Iterator pointing to the target ChainType value.</param>
-			/// <param name="chainIterator">ChainType::Iterator to the target PairType value.</param>
-			ConstIterator(const HashMap& hashMap, const typename BucketType::ConstIterator& bucketIterator=BucketType::ConstIterator(), const typename ChainType::ConstIterator& chainIterator=ChainType::ConstIterator());
+			/// <param name="bucketIterator">BucketIterator pointing to the target ChainType value.</param>
+			/// <param name="chainIterator">ChainIterator to the target PairType value.</param>
+			ConstIterator(const HashMap& hashMap, const typename BucketConstIterator& bucketIterator=BucketConstIterator(), const typename ChainConstIterator& chainIterator=ChainConstIterator());
 
 		public:
 			/// <summary>
@@ -299,12 +319,12 @@ namespace Library
 			/// <summary>
 			/// Bucket iterator pointing to the current bucket with a chain of PairType entries.
 			/// </summary>
-			typename BucketType::ConstIterator mBucketIterator;
+			BucketConstIterator mBucketIterator;
 
 			/// <summary>
 			/// Chain iterator pointing to the current PairType in the chain of a bucket.
 			/// </summary>
-			typename ChainType::ConstIterator mChainIterator;
+			ChainConstIterator mChainIterator;
 		};
 #pragma endregion ConstIterator
 

@@ -6,7 +6,7 @@ namespace Library
 {
 #pragma region Iterator
 	template<typename TKey, typename TData>
-	inline HashMap<TKey, TData>::Iterator::Iterator(HashMap& hashMap, const typename BucketType::Iterator& bucketIterator, const typename ChainType::Iterator& chainIterator) :
+	inline HashMap<TKey, TData>::Iterator::Iterator(HashMap& hashMap, const typename BucketIterator& bucketIterator, const typename ChainIterator& chainIterator) :
 		mOwner(&hashMap), mBucketIterator(bucketIterator), mChainIterator(chainIterator)
 	{
 	}
@@ -92,7 +92,7 @@ namespace Library
 	}
 
 	template<typename TKey, typename TData>
-	inline HashMap<TKey, TData>::ConstIterator::ConstIterator(const HashMap& hashMap, const typename BucketType::ConstIterator& bucketIterator, const typename ChainType::ConstIterator& chainIterator) :
+	inline HashMap<TKey, TData>::ConstIterator::ConstIterator(const HashMap& hashMap, const typename BucketConstIterator& bucketIterator, const typename ChainConstIterator& chainIterator) :
 		mOwner(&hashMap), mBucketIterator(bucketIterator), mChainIterator(chainIterator)
 	{
 	}
@@ -276,8 +276,8 @@ namespace Library
 			return end();
 		}
 
-		BucketType::Iterator bucketIterator = mBuckets.begin();
-		ChainType::Iterator chainIterator = bucketIterator->begin();
+		BucketIterator bucketIterator = mBuckets.begin();
+		ChainIterator chainIterator = bucketIterator->begin();
 
 		while (bucketIterator != mBuckets.end() && bucketIterator->IsEmpty())
 		{
@@ -452,7 +452,7 @@ namespace Library
 
 		ChainType& chain = mBuckets[indexOut];
 
-		ChainType::Iterator chainIterator = chain.begin();
+		ChainIterator chainIterator = chain.begin();
 		for (; chainIterator != chain.end(); ++chainIterator)
 		{
 			if (mKeyEqualityFunctor(key, chainIterator->first))
