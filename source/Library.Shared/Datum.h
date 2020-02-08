@@ -20,6 +20,8 @@
 
 namespace Library
 {
+	class Scope;
+
 	/// <summary>
 	/// Runtime type polymorphic wrapper for data elements.
 	/// </summary>
@@ -27,6 +29,11 @@ namespace Library
 	{
 #pragma region Type Definitions and Constants
 	public:
+		/// <summary>
+		/// Alias for a pointer to a Scope class instance.
+		/// </summary>
+		using ScopePointer = Scope*;
+
 		/// <summary>
 		/// Alias for a pointer to an RTTI class instance.
 		/// </summary>
@@ -49,6 +56,7 @@ namespace Library
 			Vector,
 			Matrix,
 			String,
+			Scope,
 			Pointer,
 			
 			End
@@ -65,6 +73,7 @@ namespace Library
 			glm::vec4* vectorPtr;
 			glm::mat4* matrixPtr;
 			std::string* stringPtr;
+			ScopePointer* scopePtr;
 			RTTIPointer* rttiPtr;
 
 			// Convenience Pointers
@@ -168,6 +177,12 @@ namespace Library
 		/// </summary>
 		template<>
 		static constexpr Types TypeOf<std::string>();
+
+		/// <summary>
+		/// Returns the DatumTypes value associated with a ScopePointer type.
+		/// </summary>
+		template<>
+		static constexpr Types TypeOf<ScopePointer>();
 
 		/// <summary>
 		/// Returns the DatumTypes value associated with a RTTIPointer type.
@@ -677,6 +692,14 @@ namespace Library
 		/// <typeparam name="T">Type of elements in the Datum. A compiler error is thrown on invalid types.</typeparam>
 		template<typename T>
 		std::size_t IndexOf(const T& value) const;
+
+		/// <summary>
+		/// Scope subscript dereference operator.
+		/// Gets a reference to the Scope located at the given index.
+		/// </summary>
+		/// <param name="index">Index in the Datum of the ScopePointer to be dereferenced.</param>
+		/// <returns>Reference to the scope pointed at by a ScopePointer at the given index in the Datum.</returns>
+		Scope& operator[](std::size_t index);
 #pragma endregion Element Accessors
 
 #pragma region Modifiers

@@ -49,6 +49,12 @@ namespace Library
 	}
 
 	template<>
+	inline constexpr Datum::Types Datum::TypeOf<Datum::ScopePointer>()
+	{
+		return Types::Scope;
+	}
+
+	template<>
 	inline constexpr Datum::Types Datum::TypeOf<Datum::RTTIPointer>()
 	{
 		return Types::Pointer;

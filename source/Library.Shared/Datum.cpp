@@ -491,6 +491,13 @@ namespace Library
 	}
 #pragma endregion Size and Capacity
 
+#pragma region Element Accessors
+	Scope& Datum::operator[](std::size_t index)
+	{
+		return *Get<ScopePointer>(index);
+	}
+#pragma endregion Element Accessors
+
 #pragma region Modifiers
 	void Datum::PopBack()
 	{
