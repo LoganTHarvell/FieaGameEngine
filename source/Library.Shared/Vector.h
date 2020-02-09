@@ -1,6 +1,5 @@
 #pragma once
 
-#include <memory>
 #include <initializer_list>
 #include <stdexcept>
 #include <cassert>

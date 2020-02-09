@@ -215,7 +215,7 @@ namespace Library
 	}
 
 	template<typename TKey, typename TData>
-	inline HashMap<TKey, TData>& HashMap<TKey, TData>::operator=(std::initializer_list<PairType> rhs)
+	inline HashMap<TKey, TData>& HashMap<TKey, TData>::operator=(const std::initializer_list<PairType> rhs)
 	{
 		Clear();
 

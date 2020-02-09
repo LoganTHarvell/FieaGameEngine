@@ -436,7 +436,7 @@ namespace Library
 		/// Checks if the type and size of the Datum and the data values are equal to the right hand side Datum.
 		/// </summary>
 		/// <param name="rhs">Datum on the right hand side to be compared to the left.</param>
-		/// <returns>True when lists are equivalent, otherwise false.</returns>
+		/// <returns>True when Datum values are equivalent, otherwise false.</returns>
 		bool operator==(const Datum& rhs) const noexcept;
 
 		/// <summary>
@@ -444,7 +444,7 @@ namespace Library
 		/// Checks if the type and size of the Datum and the data values are not equal to the right hand side Datum.
 		/// </summary>
 		/// <param name="rhs">Datum on the right hand side to be compared to the left.</param>
-		/// <returns>True when lists are not equivalent, otherwise false.</returns>
+		/// <returns>True when Datum values are not equivalent, otherwise false.</returns>
 		bool operator!=(const Datum& rhs) const noexcept;
 
 #pragma region Equals Scalar

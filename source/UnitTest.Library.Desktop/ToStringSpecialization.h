@@ -1183,4 +1183,24 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 		RETURN_WIDE_STRING(t);
 	}
 #pragma endregion Datum
+
+#pragma region Scope
+	template<>
+	inline std::wstring ToString<Scope>(const Scope&)
+	{
+		RETURN_WIDE_STRING("Scope");
+	}
+
+	template<>
+	inline std::wstring ToString<Scope>(const Scope* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<Scope>(Scope* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+#pragma endregion Scope
 }

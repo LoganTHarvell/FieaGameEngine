@@ -388,9 +388,9 @@ namespace Library
 		/// <summary>
 		/// Initializer list assignment operator.
 		/// </summary>
-		/// <param name="rhs">List of values to be in the hashmap.</param>
+		/// <param name="rhs">List of values to be in the HashMap.</param>
 		/// <returns>Reference to the modified HashMap containing the new pairs.</returns>
-		HashMap& operator=(std::initializer_list<PairType> rhs);
+		HashMap& operator=(const std::initializer_list<PairType> rhs);
 #pragma endregion Constructors, Destructor, and Assignment
 
 #pragma region Size and Capacity
@@ -555,8 +555,8 @@ namespace Library
 		void Clear();
 #pragma endregion Modifiers
 
-#pragma region Helper Methods
 	private:
+#pragma region Helper Methods
 		/// <summary>
 		/// Searches the HashMap for a given value and returns an Iterator.
 		/// </summary>
