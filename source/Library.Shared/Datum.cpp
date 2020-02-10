@@ -2,6 +2,8 @@
 
 #include "Datum.h"
 
+#include <cassert>
+
 #include "Scope.h"
 
 namespace Library
@@ -411,36 +413,43 @@ namespace Library
 #pragma region Equals Scalar
 	bool Datum::operator==(const int rhs) const noexcept
 	{
+		assert(mData.intPtr != nullptr);
 		return mData.intPtr[0] == rhs;
 	}
 
 	bool Datum::operator==(const float rhs) const noexcept
 	{
+		assert(mData.floatPtr != nullptr);
 		return mData.floatPtr[0] == rhs;
 	}
 
 	bool Datum::operator==(const glm::vec4& rhs) const noexcept
 	{
+		assert(mData.vectorPtr != nullptr);
 		return mData.vectorPtr[0] == rhs;
 	}
 
 	bool Datum::operator==(const glm::mat4& rhs) const noexcept
 	{
+		assert(mData.matrixPtr != nullptr);
 		return mData.matrixPtr[0] == rhs;
 	}
 
 	bool Datum::operator==(const std::string& rhs) const noexcept
 	{
+		assert(mData.stringPtr != nullptr);
 		return mData.stringPtr[0] == rhs;
 	}
 
 	bool Datum::operator==(const ScopePointer& rhs) const noexcept
 	{
+		assert(mData.scopePtr != nullptr);
 		return ((!mData.scopePtr[0] && !rhs) || (mData.scopePtr[0] && *mData.scopePtr[0] == *rhs));
 	}
 
 	bool Datum::operator==(const RTTIPointer& rhs) const noexcept
 	{
+		assert(mData.rttiPtr != nullptr);
 		return ((!mData.rttiPtr[0] && !rhs) || (mData.rttiPtr[0] && mData.rttiPtr[0]->Equals(rhs)));
 	}
 #pragma endregion Equals Scalar
@@ -623,7 +632,7 @@ namespace Library
 		return ToStringLUT[static_cast<std::size_t>(mType)](mData.voidPtr, index);
 	}
 
-	void Datum::SetFromString(const std::string str, const std::size_t index)
+	void Datum::SetFromString(const std::string& str, const std::size_t index)
 	{
 		if (mType == Types::Unknown) throw std::runtime_error("Data type unknown.");
 

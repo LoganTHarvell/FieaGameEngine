@@ -835,7 +835,7 @@ namespace Library
 		/// <param name="index">Index of the value to set. Defaults to the first element.</param>
 		/// <returns>String representation of the Datum value.</returns>
 		/// <exception cref="runtime_error">Data type unknown.</exception>
-		void SetFromString(const std::string str, const std::size_t index=0);
+		void SetFromString(const std::string& str, const std::size_t index=0);
 #pragma endregion String Conversion
 
 #pragma region HelperMethods

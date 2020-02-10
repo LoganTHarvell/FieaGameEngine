@@ -6,9 +6,12 @@
 #include <string>
 
 // First Party
+#include "RTTI.h"
 #include "HashMap.h"
-#include "Vector.h"
 #include "Datum.h"
+#include "Vector.h"
+#include "SList.h"
+
 
 #pragma endregion Includes
 namespace Library
@@ -16,8 +19,10 @@ namespace Library
 	/// <summary>
 	/// Represents an ordered table of string name and Datum value pairs.
 	/// </summary>
-	class Scope final
+	class Scope : public RTTI
 	{
+		RTTI_DECLARATIONS(Scope, RTTI);
+
 #pragma region Type Definitions and Constants
 	public:
 		/// <summary>
@@ -52,7 +57,7 @@ namespace Library
 		/// <summary>
 		/// Default destructor.
 		/// </summary>
-		~Scope();
+		virtual ~Scope() override;
 
 		/// <summary>
 		/// Copy constructor.
