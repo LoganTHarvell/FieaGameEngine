@@ -2,6 +2,8 @@
 
 #include "Datum.h"
 
+#include "Scope.h"
+
 namespace Library
 {
 #pragma region Look Up Tables
@@ -25,9 +27,13 @@ namespace Library
 		},
 		[](void* lhs, void* rhs, std::size_t size)
 		{
+			ScopePointer* lhsScope = reinterpret_cast<ScopePointer*>(lhs);
+			ScopePointer* rhsScope = reinterpret_cast<ScopePointer*>(rhs);
+
 			for (std::size_t i = 0; i < size; ++i)
 			{
-				if (reinterpret_cast<ScopePointer*>(lhs)[i] != reinterpret_cast<ScopePointer*>(rhs)[i])
+				if (!lhsScope[i] && !rhsScope[i]) continue;
+				if (!lhsScope[i] || !rhsScope[i] || *lhsScope[i] != *rhsScope[i])
 				{
 					return false;
 				}
@@ -60,7 +66,12 @@ namespace Library
 		[](void* lhs, void* rhs) { return *reinterpret_cast<glm::vec4*>(lhs) == *reinterpret_cast<glm::vec4*>(rhs); },
 		[](void* lhs, void* rhs) { return *reinterpret_cast<glm::mat4*>(lhs) == *reinterpret_cast<glm::mat4*>(rhs); },
 		[](void* lhs, void* rhs) { return *reinterpret_cast<std::string*>(lhs) == *reinterpret_cast<std::string*>(rhs); },
-		[](void* lhs, void* rhs) { return *reinterpret_cast<ScopePointer*>(lhs) == *reinterpret_cast<ScopePointer*>(rhs); },
+		[](void* lhs, void* rhs)
+		{
+			ScopePointer* lhsScope = reinterpret_cast<ScopePointer*>(lhs);
+			ScopePointer* rhsScope = reinterpret_cast<ScopePointer*>(rhs);
+			return ((!*lhsScope && !*rhsScope) || (*lhsScope && **lhsScope == **rhsScope));
+		},
 		[](void* lhs, void* rhs) 
 		{
 			RTTIPointer* lhsRTTI = reinterpret_cast<RTTIPointer*>(lhs);
@@ -263,7 +274,12 @@ namespace Library
 		ConstructorAssignmentHelper({ rhs });
 	}
 
-	Datum::Datum(RTTIPointer const& rhs)
+	Datum::Datum(const ScopePointer& rhs)
+	{
+		ConstructorAssignmentHelper({ rhs });
+	}
+
+	Datum::Datum(const RTTIPointer& rhs)
 	{
 		ConstructorAssignmentHelper({ rhs });
 	}
@@ -278,22 +294,27 @@ namespace Library
 		ConstructorAssignmentHelper(rhs);
 	}
 
-	Datum::Datum(const std::initializer_list <glm::vec4> rhs)
+	Datum::Datum(const std::initializer_list<glm::vec4> rhs)
 	{
 		ConstructorAssignmentHelper(rhs);
 	}
 
-	Datum::Datum(const std::initializer_list <glm::mat4> rhs)
+	Datum::Datum(const std::initializer_list<glm::mat4> rhs)
 	{
 		ConstructorAssignmentHelper(rhs);
 	}
 
-	Datum::Datum(const std::initializer_list <std::string> rhs)
+	Datum::Datum(const std::initializer_list<std::string> rhs)
 	{
 		ConstructorAssignmentHelper(rhs);
 	}
 
-	Datum::Datum(const std::initializer_list <RTTIPointer> rhs)
+	Datum::Datum(const std::initializer_list<ScopePointer> rhs)
+	{
+		ConstructorAssignmentHelper(rhs);
+	}
+
+	Datum::Datum(const std::initializer_list<RTTIPointer> rhs)
 	{
 		ConstructorAssignmentHelper(rhs);
 	}
@@ -325,37 +346,47 @@ namespace Library
 		return ConstructorAssignmentHelper({ rhs });
 	}
 
-	Datum& Datum::operator=(RTTIPointer const& rhs)
+	Datum& Datum::operator=(const ScopePointer& rhs)
 	{
 		return ConstructorAssignmentHelper({ rhs });
 	}
 
-	Datum& Datum::operator=(std::initializer_list<int> rhs)
+	Datum& Datum::operator=(const RTTIPointer& rhs)
+	{
+		return ConstructorAssignmentHelper({ rhs });
+	}
+
+	Datum& Datum::operator=(const std::initializer_list<int> rhs)
 	{
 		return ConstructorAssignmentHelper(rhs);
 	}
 
-	Datum& Datum::operator=(std::initializer_list<float> rhs)
+	Datum& Datum::operator=(const std::initializer_list<float> rhs)
 	{
 		return ConstructorAssignmentHelper(rhs);
 	}
 
-	Datum& Datum::operator=(std::initializer_list<glm::vec4> rhs)
+	Datum& Datum::operator=(const std::initializer_list<glm::vec4> rhs)
 	{
 		return ConstructorAssignmentHelper(rhs);
 	}
 
-	Datum& Datum::operator=(std::initializer_list<glm::mat4> rhs)
+	Datum& Datum::operator=(const std::initializer_list<glm::mat4> rhs)
 	{
 		return ConstructorAssignmentHelper(rhs);
 	}
 
-	Datum& Datum::operator=(std::initializer_list<std::string> rhs)
+	Datum& Datum::operator=(const std::initializer_list<std::string> rhs)
 	{
 		return ConstructorAssignmentHelper(rhs);
 	}
 
-	Datum& Datum::operator=(std::initializer_list<RTTIPointer> rhs)
+	Datum& Datum::operator=(const std::initializer_list<ScopePointer> rhs)
+	{
+		return ConstructorAssignmentHelper(rhs);
+	}
+
+	Datum& Datum::operator=(const std::initializer_list<RTTIPointer> rhs)
 	{
 		return ConstructorAssignmentHelper(rhs);
 	}
@@ -403,6 +434,11 @@ namespace Library
 		return mData.stringPtr[0] == rhs;
 	}
 
+	bool Datum::operator==(const ScopePointer& rhs) const noexcept
+	{
+		return ((!mData.scopePtr[0] && !rhs) || (mData.scopePtr[0] && *mData.scopePtr[0] == *rhs));
+	}
+
 	bool Datum::operator==(const RTTIPointer& rhs) const noexcept
 	{
 		return ((!mData.rttiPtr[0] && !rhs) || (mData.rttiPtr[0] && mData.rttiPtr[0]->Equals(rhs)));
@@ -431,6 +467,11 @@ namespace Library
 	}
 
 	bool Datum::operator!=(const std::string& rhs) const noexcept
+	{
+		return !(operator==(rhs));
+	}
+
+	bool Datum::operator!=(const ScopePointer& rhs) const noexcept
 	{
 		return !(operator==(rhs));
 	}
@@ -510,6 +551,13 @@ namespace Library
 #pragma region Element Accessors
 	Scope& Datum::operator[](std::size_t index)
 	{
+		if (mType != Types::Scope) throw std::runtime_error("Scope type expected.");
+		return *Get<ScopePointer>(index);
+	}
+
+	const Scope& Datum::operator[](std::size_t index) const
+	{
+		if (mType != Types::Scope) throw std::runtime_error("Scope type expected.");
 		return *Get<ScopePointer>(index);
 	}
 #pragma endregion Element Accessors
@@ -534,8 +582,8 @@ namespace Library
 	void Datum::RemoveAt(const std::size_t index)
 	{
 		if (mType == Types::Unknown)	throw std::runtime_error("Data type unknown.");
-		if (!mInternalStorage)				throw std::runtime_error("Cannot modify external storage.");
-		if (index >= mSize)					throw std::out_of_range("Index out of bounds.");
+		if (!mInternalStorage)			throw std::runtime_error("Cannot modify external storage.");
+		if (index >= mSize)				throw std::out_of_range("Index out of bounds.");
 
 		if (mType == Types::String)
 		{

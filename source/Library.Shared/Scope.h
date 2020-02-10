@@ -42,6 +42,7 @@ namespace Library
 #pragma endregion Type Definitions and Constants
 
 #pragma region Constructors, Destructor, Assignment
+	public:
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
@@ -51,14 +52,14 @@ namespace Library
 		/// <summary>
 		/// Default destructor.
 		/// </summary>
-		~Scope() = default;
+		~Scope();
 
 		/// <summary>
 		/// Copy constructor.
 		/// Takes in a Scope as a parameter, then copies the data values to the constructed Scope.
 		/// </summary>
 		/// <param name="rhs">Scope to be copied.</param>
-		Scope(const Scope& rhs) = default;
+		Scope(const Scope& rhs);
 
 		/// <summary>
 		/// Copy assignment operator.
@@ -66,14 +67,14 @@ namespace Library
 		/// </summary>
 		/// <param name="rhs">Scope whose values are copied.</param>
 		/// <returns>Modified Scope with copied values.</returns>
-		Scope& operator=(const Scope& rhs) = default;
+		Scope& operator=(const Scope& rhs);
 
 		/// <summary>
 		/// Move constructor.
 		/// Takes a Scope as a parameter and moves the data to the constructed Scope.
 		/// </summary>
 		/// <param name="rhs">Scope to be moved.</param>
-		Scope(Scope&& rhs) = default;
+		Scope(Scope&& rhs) noexcept;
 
 		/// <summary>
 		/// Move assignment operator.
@@ -81,7 +82,7 @@ namespace Library
 		/// </summary>
 		/// <param name="rhs">Scope whose values are copied.</param>
 		/// <returns>Modified Scope with copied values.</returns>
-		Scope& operator=(Scope&& rhs) = default;
+		Scope& operator=(Scope&& rhs) noexcept;
 
 		/// <summary>
 		/// Initializer list constructor.
@@ -99,6 +100,7 @@ namespace Library
 #pragma endregion Constructors, Destructor, Assignment
 
 #pragma region Boolean Operators
+	public:
 		/// <summary>
 		/// Equals operator. 
 		/// Checks if the size of the Scope and the data values are equal to the right hand side Scope.
@@ -117,6 +119,7 @@ namespace Library
 #pragma endregion Boolean Operators
 
 #pragma region Element Accessors
+	public:
 		/// <summary>
 		/// Gets a pointer to the parent Scope, if it exists.
 		/// </summary>
@@ -130,18 +133,37 @@ namespace Library
 		const Scope* GetParent() const;
 
 		/// <summary>
-		/// Subscript operator that wraps Append.
+		/// Subscript operator.
+		/// Gets a reference to the DataType value of the given NameType value.
+		/// Appends a new default DataType value if one does not already exist.
 		/// </summary>
-		/// <param name="name">Name for the TableEntry to be appended.</param>
-		/// <returns>Reference to the DataType value of the appended TableEntry.</returns>
+		/// <param name="name">Name for the TableEntry to be accessed or appended.</param>
+		/// <returns>Reference to the DataType value of the TableEntry with the given NameType value.</returns>
 		DataType& operator[](const NameType name);
 
 		/// <summary>
-		/// Subscript operator that gets the TableEntry DataType value
+		/// Subscript operator.
+		/// Gets a reference to a constant DataType value of the given NameType value.
 		/// </summary>
-		/// <param name="index"></param>
-		/// <returns></returns>
+		/// <param name="name">Name for the TableEntry to be accessed.</param>
+		/// <returns>Reference to the constant DataType value of the TableEntry with the given NameType value.</returns>
+		const DataType& operator[](const NameType name) const;
+
+		/// <summary>
+		/// Subscript operator.
+		/// Gets a reference to the DataType value at the given index.
+		/// </summary>
+		/// <param name="index">Index for the TableEntry to be accessed.</param>
+		/// <returns>Reference to the DataType value of the TableEntry at the given index.</returns>
 		DataType& operator[](const std::size_t index);
+
+		/// <summary>
+		/// Subscript operator.
+		/// Gets a reference to the constant DataType value at the given index.
+		/// </summary>
+		/// <param name="index">Index for the TableEntry to be accessed.</param>
+		/// <returns>Reference to the constant DataType value of the TableEntry at the given index.</returns>
+		const DataType& operator[](const std::size_t index) const;
 
 		/// <summary>
 		/// Finds the DataType value associated with the given NameType value, if it exists.
@@ -158,21 +180,63 @@ namespace Library
 		const DataType* Find(const NameType name) const;
 
 		/// <summary>
-		/// Finds the name for the TableEntry at the given index.
+		/// Gets a pointer to the constant NameType value for the TableEntry at the given index, if it exists.
 		/// </summary>
 		/// <param name="index">Index of the TableEntry with the name to be found.</param>
-		/// <returns>NameType value of the TableEntry at the given index.</returns>
-		const NameType& FindName(const std::size_t index) const;
+		/// <returns> If found, pointer to the constant NameType value. Otherwise, nullptr.</returns>
+		const NameType* FindName(const std::size_t index) const;
+
+		/// <summary>
+		/// Performs a breadth-first search on the scope and its ancestors for a TableEntry with a matching NameType value.
+		/// </summary>
+		/// <param name="name">Name of the TableEntry to be found.</param>
+		/// <param name="scopePtrOut">Output parameter that points to the Scope which owns the found TableEntry.</param>
+		/// <returns>If found, a pointer to the DataType value of the TableEntry. Otherwise, nullptr.</returns>
+		DataType* Search(const std::string name, Scope** scopePtrOut=nullptr);
+
+		/// <summary>
+		/// Performs a breadth-first search on the scope and its children for a TableEntry with a matching NameType value.
+		/// </summary>
+		/// <param name="name">Name of the TableEntry to be found.</param>
+		/// <param name="scopePtrOut">Output parameter that points to the Scope which owns the found TableEntry.</param>
+		/// <returns>If found, a pointer to the DataType value of the TableEntry. Otherwise, nullptr.</returns>
+		DataType* SearchChildren(const std::string name, Scope** scopePtrOut=nullptr);
 #pragma endregion Element Accessors
 
 #pragma region Modifiers
+	public:
 		/// <summary>
 		/// Appends a TableEntry to the Scope with the given name and a default data value.
 		/// </summary>
-		/// <param name="name"></param>
+		/// <param name="name">Name for the TableEntry to be accessed or appended.</param>
 		/// <returns>Reference to the DataType value of the appended TableEntry.</returns>
 		DataType& Append(const NameType name);
+
+		/// <summary>
+		/// Appends a TableEntry to the Scope with the given name and a default Scope value, as a child.
+		/// </summary>
+		/// <param name="name">Name for the TableEntry to be accessed or appended with a child Scope.</param>
+		/// <returns>Reference to the DataType value of the appended TableEntry.</returns>
+		Scope& AppendScope(const NameType name);
+
+		/// <summary>
+		/// Clears all members of the scope.
+		/// </summary>
+		void Clear();
 #pragma endregion Modifiers
+
+#pragma region Helper Methods
+	private:
+		/// <summary>
+		/// SearchChildren helper method. 
+		/// Performs a breadth-first search on the Scope and its children for a TableEntry with a matching NameType value.
+		/// </summary>
+		/// <param name="queue">Queue of Scope values to be searched.</param>
+		/// <param name="name">Name of the TableEntry to be found.</param>
+		/// <param name="scopePtrOut">Output parameter that points to the Scope which owns the found TableEntry.</param>
+		/// <returns>If found, a pointer to the DataType value of the TableEntry. Otherwise, nullptr.</returns>
+		DataType* SearchChildrenHelper(const Vector<Scope*>& queue, const std::string name, Scope** scopePtrOut=nullptr);
+#pragma endregion Helper Methods
 
 #pragma region DataType Members
 	private:
@@ -190,6 +254,11 @@ namespace Library
 		/// Vector of references to the TableEntryType values.
 		/// </summary>
 		Vector<TableEntryType*> mPairPtrs;
+
+		/// <summary>
+		/// SList containing child Scopes.
+		/// </summary>
+		SList<Scope> mChildren;
 #pragma endregion DataType Members
 	};
 }

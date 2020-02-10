@@ -12,6 +12,7 @@
 #include "Vector.h"
 #include "HashMap.h"
 #include "Datum.h"
+#include "Scope.h"
 
 using namespace UnitTests;
 using namespace Library;
@@ -1186,9 +1187,9 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 
 #pragma region Scope
 	template<>
-	inline std::wstring ToString<Scope>(const Scope&)
+	inline std::wstring ToString<Scope>(const Scope& t)
 	{
-		RETURN_WIDE_STRING("Scope");
+		RETURN_WIDE_STRING(t.GetParent());
 	}
 
 	template<>

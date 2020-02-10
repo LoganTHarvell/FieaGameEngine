@@ -273,12 +273,20 @@ namespace Library
 		Datum(const std::string& rhs);
 		
 		/// <summary>
-		/// Scalar constructor overloads for assigning Datum to a RTTI pointer.
+		/// Scalar constructor overloads for assigning Datum to a ScopePointer value.
 		/// </summary>
-		/// <param name="rhs">A RTTI pointer for initializing mData.</param>
+		/// <param name="rhs">A ScopePointer value for initializing mData.</param>
 		/// <exception cref="runtime_error">Mismatched types.</exception>
 		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
-		Datum(RTTIPointer const& rhs);
+		Datum(const ScopePointer& rhs);
+		
+		/// <summary>
+		/// Scalar constructor overloads for assigning Datum to an RTTIPointer.
+		/// </summary>
+		/// <param name="rhs">An RTTIPointer for initializing mData.</param>
+		/// <exception cref="runtime_error">Mismatched types.</exception>
+		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
+		Datum(const RTTIPointer& rhs);
 
 		/// <summary>
 		/// Initializer list constructor overloads for assigning Datum to a list of int values.
@@ -321,9 +329,17 @@ namespace Library
 		Datum(const std::initializer_list<std::string> rhs);
 
 		/// <summary>
-		/// Initializer list constructor overloads for assigning Datum to a list of RTTI pointers.
+		/// Initializer list constructor overloads for assigning Datum to a list of ScopePointer values.
 		/// </summary>
-		/// <param name="rhs">A list of RTTI pointers for initializing mData.</param>
+		/// <param name="rhs">A list of ScopePointer values for initializing mData.</param>
+		/// <exception cref="runtime_error">Mismatched types.</exception>
+		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
+		Datum(const std::initializer_list<ScopePointer> rhs);
+
+		/// <summary>
+		/// Initializer list constructor overloads for assigning Datum to a list of RTTIPointer values.
+		/// </summary>
+		/// <param name="rhs">A list of RTTIPointer values for initializing mData.</param>
 		/// <exception cref="runtime_error">Mismatched types.</exception>
 		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
 		Datum(const std::initializer_list<RTTIPointer> rhs);
@@ -372,12 +388,20 @@ namespace Library
 		Datum& operator=(const std::string& rhs);
 
 		/// <summary>
-		/// Scalar assignment overloads for assigning Datum to a RTTI pointer.
+		/// Scalar assignment overloads for assigning Datum to a ScopePointer.
 		/// </summary>
-		/// <param name="rhs">A RTTI pointer for assigning to mData.</param>
+		/// <param name="rhs">A ScopePointer for assigning to mData.</param>
 		/// <exception cref="runtime_error">Mismatched types.</exception>
 		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
-		Datum& operator=(RTTIPointer const& rhs);
+		Datum& operator=(const ScopePointer& rhs);
+
+		/// <summary>
+		/// Scalar assignment overloads for assigning Datum to an RTTIPointer.
+		/// </summary>
+		/// <param name="rhs">An RTTIPointer for assigning to mData.</param>
+		/// <exception cref="runtime_error">Mismatched types.</exception>
+		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
+		Datum& operator=(const RTTIPointer& rhs);
 
 		/// <summary>
 		/// Initializer list assignment overloads for assigning Datum to a list of int values.
@@ -420,9 +444,17 @@ namespace Library
 		Datum& operator=(const std::initializer_list<std::string> rhs);
 
 		/// <summary>
-		/// Initializer list assignment overloads for assigning Datum to a list of RTTI pointers.
+		/// Initializer list assignment overloads for assigning Datum to a list of ScopePointer values.
 		/// </summary>
-		/// <param name="rhs">A list of RTTI pointers for assigning to mData.</param>
+		/// <param name="rhs">A list of ScopePointer values for assigning to mData.</param>
+		/// <exception cref="runtime_error">Mismatched types.</exception>
+		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
+		Datum& operator=(const std::initializer_list<ScopePointer> rhs);
+
+		/// <summary>
+		/// Initializer list assignment overloads for assigning Datum to a list of RTTIPointer values.
+		/// </summary>
+		/// <param name="rhs">A list of RTTIPointer values for assigning to mData.</param>
 		/// <exception cref="runtime_error">Mismatched types.</exception>
 		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
 		Datum& operator=(const std::initializer_list<RTTIPointer> rhs);
@@ -494,6 +526,14 @@ namespace Library
 		/// </summary>
 		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
 		/// <returns>True when Datum and scalar are equivalent, otherwise false.</returns>
+		bool operator==(const ScopePointer& rhs) const noexcept;
+
+		/// <summary>
+		/// Scalar equals operator. 
+		/// Checks if the Datum contains only one element that is equal to the right hand side value.
+		/// </summary>
+		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
+		/// <returns>True when Datum and scalar are equivalent, otherwise false.</returns>
 		bool operator==(const RTTIPointer& rhs) const noexcept;
 #pragma endregion Equals Scalar
 
@@ -537,6 +577,14 @@ namespace Library
 		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
 		/// <returns>True when Datum and scalar are not equivalent, otherwise false.</returns>
 		bool operator!=(const std::string& rhs) const noexcept;
+
+		/// <summary>
+		/// Scalar not equals operator. 
+		/// Checks if the Datum contains only one element that is not equal to the right hand side value.
+		/// </summary>
+		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
+		/// <returns>True when Datum and scalar are not equivalent, otherwise false.</returns>
+		bool operator!=(const ScopePointer& rhs) const noexcept;
 
 		/// <summary>
 		/// Scalar not equals operator. 
@@ -701,6 +749,14 @@ namespace Library
 		/// <param name="index">Index in the Datum of the ScopePointer to be dereferenced.</param>
 		/// <returns>Reference to the scope pointed at by a ScopePointer at the given index in the Datum.</returns>
 		Scope& operator[](std::size_t index);
+
+		/// <summary>
+		/// Scope subscript dereference operator.
+		/// Gets a reference to the Scope located at the given index.
+		/// </summary>
+		/// <param name="index">Index in the Datum of the ScopePointer to be dereferenced.</param>
+		/// <returns>Reference to the scope pointed at by a ScopePointer at the given index in the Datum.</returns>
+		const Scope& operator[](std::size_t index) const;
 #pragma endregion Element Accessors
 
 #pragma region Modifiers
