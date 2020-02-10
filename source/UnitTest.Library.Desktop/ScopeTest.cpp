@@ -93,11 +93,21 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(scope1, scope2);
 			
 			Datum datumInt = { 10, 20, 30 };
+			Datum datumFloat = { 10, 20, 30 };
+			Datum datumVector = { glm::vec4(10), glm::vec4(20), glm::vec4(30) };
+			Datum datumMatrix = { glm::mat4(10), glm::mat4(20), glm::mat4(30) };
+			Datum datumString = { "10", "20", "30" };
 
-			scope1 = { { "ints", datumInt } };
-			scope2 = { { "ints", datumInt } };
+			Foo a(10), b(20), c(30);
+			Datum datumRTTI = { &a, &b, &c };
+
+			scope1 = {	{ "ints", datumInt }, { "floats", datumFloat }, { "vectors", datumVector },
+						{ "matrices", datumMatrix }, { "strings", datumString }, { "pointers", datumRTTI }	};
+
+			scope2 = {	{ "pointers", datumRTTI }, { "ints", datumInt }, { "floats", datumFloat }, 
+						{ "vectors", datumVector }, { "matrices", datumMatrix }, { "strings", datumString }	};
+
 			Assert::AreEqual(scope1, scope2);
-			Assert::IsTrue(scope1 == scope2);
 		}
 
 		TEST_METHOD(ElementAccessors)

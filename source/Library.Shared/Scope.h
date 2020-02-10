@@ -195,12 +195,28 @@ namespace Library
 		DataType* Search(const std::string name, Scope** scopePtrOut=nullptr);
 
 		/// <summary>
+		/// Performs a breadth-first search on the scope and its ancestors for a TableEntry with a matching NameType value.
+		/// </summary>
+		/// <param name="name">Name of the TableEntry to be found.</param>
+		/// <param name="scopePtrOut">Output parameter that points to the Scope which owns the found TableEntry.</param>
+		/// <returns>If found, a pointer to the DataType value of the TableEntry. Otherwise, nullptr.</returns>
+		const DataType* Search(const std::string name, const Scope** scopePtrOut=nullptr) const;
+
+		/// <summary>
 		/// Performs a breadth-first search on the scope and its children for a TableEntry with a matching NameType value.
 		/// </summary>
 		/// <param name="name">Name of the TableEntry to be found.</param>
 		/// <param name="scopePtrOut">Output parameter that points to the Scope which owns the found TableEntry.</param>
 		/// <returns>If found, a pointer to the DataType value of the TableEntry. Otherwise, nullptr.</returns>
 		DataType* SearchChildren(const std::string name, Scope** scopePtrOut=nullptr);
+
+		/// <summary>
+		/// Performs a breadth-first search on the scope and its children for a TableEntry with a matching NameType value.
+		/// </summary>
+		/// <param name="name">Name of the TableEntry to be found.</param>
+		/// <param name="scopePtrOut">Output parameter that points to the Scope which owns the found TableEntry.</param>
+		/// <returns>If found, a pointer to the DataType value of the TableEntry. Otherwise, nullptr.</returns>
+		const DataType* SearchChildren(const std::string name, const Scope** scopePtrOut=nullptr) const;
 #pragma endregion Element Accessors
 
 #pragma region Modifiers

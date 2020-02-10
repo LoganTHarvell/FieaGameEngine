@@ -8,7 +8,7 @@ namespace Library
 {
 #pragma region Constructors, Destructor, Assignment
 	Scope::Scope(const std::size_t capacity) :
-		mTable(TableType(Math::FindNextPrime(capacity))), mPairPtrs(capacity)
+		mTable(TableType(std::max(TableType::DefaultBucketCount, Math::FindNextPrime(capacity)))), mPairPtrs(capacity)
 	{
 	}
 
@@ -97,7 +97,7 @@ namespace Library
 	}
 
 	Scope::Scope(const std::initializer_list<TableEntryType> rhs, const std::size_t capacity) :
-		mTable(TableType(Math::FindNextPrime(capacity))), mPairPtrs(capacity)
+		mTable(TableType(std::max(TableType::DefaultBucketCount, Math::FindNextPrime(capacity)))), mPairPtrs(capacity)
 	{
 		for (auto& tableEntry : rhs)
 		{
@@ -161,9 +161,10 @@ namespace Library
 		if (this == &rhs)								return true;
 		if (mPairPtrs.Size() != rhs.mPairPtrs.Size())	return false;
 
-		for (std::size_t i = 0; i < mPairPtrs.Size(); ++i)
+		for (const auto& pairPtr : mPairPtrs)
 		{
-			if (*mPairPtrs[i] != *rhs.mPairPtrs[i]) return false;
+			const DataType* rhsData = Find(pairPtr->first);
+			if (!rhsData || pairPtr->second != *rhsData) return false;
 		}
 
 		return true;
@@ -242,16 +243,41 @@ namespace Library
 		return nullptr;
 	}
 
+	const Scope::DataType* Scope::Search(const std::string name, const Scope** scopePtrOut) const
+	{
+		const DataType* result = Find(name);
+
+		if (result)
+		{
+			if (scopePtrOut) *scopePtrOut = this;
+			return result;
+		}
+
+		if (mParent) return mParent->Search(name, scopePtrOut);
+		
+		if (scopePtrOut) *scopePtrOut = nullptr;
+		return nullptr;
+	}
+
 	Scope::DataType* Scope::SearchChildren(const std::string name, Scope** scopePtrOut)
 	{
 		Vector queue = { this };
 		return SearchChildrenHelper(queue, name, scopePtrOut);
+	}
+
+	const Scope::DataType* Scope::SearchChildren(const std::string name, const Scope** scopePtrOut) const
+	{
+		Scope* nonConstThis = const_cast<Scope*>(this);
+		Vector queue = { nonConstThis };
+		return nonConstThis->SearchChildrenHelper(queue, name, const_cast<Scope**>(scopePtrOut));
 	}
 #pragma endregion Element Accessors
 
 #pragma region Modifiers
 	Scope::DataType& Scope::Append(const NameType name)
 	{
+		if (name.empty()) throw std::runtime_error("Name cannot be empty.");
+
 		auto [it, isNew] = mTable.Insert({ name, DataType() });
 		if (isNew) mPairPtrs.PushBack(&(*it));
 
@@ -260,6 +286,8 @@ namespace Library
 
 	Scope& Scope::AppendScope(const NameType name)
 	{
+		if (name.empty()) throw std::runtime_error("Name cannot be empty.");
+
 		Scope child;
 		child.mParent = this;
 		mChildren.PushBack(child);
