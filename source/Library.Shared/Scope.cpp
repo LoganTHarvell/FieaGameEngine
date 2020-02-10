@@ -227,6 +227,44 @@ namespace Library
 		return index < mPairPtrs.Size() ? &mPairPtrs[index]->first : nullptr;
 	}
 
+	std::pair<Scope::DataType*, std::size_t> Scope::FindScope(const Scope& scope)
+	{
+		for (auto& pairPtr : mPairPtrs)
+		{
+			if (pairPtr->second.Type() == DataType::Types::Scope)
+			{
+				for (std::size_t i = 0; i < pairPtr->second.Size(); ++i)
+				{
+					if (&scope == pairPtr->second.Get<DataType::ScopePointer>(i))
+					{
+						return { &pairPtr->second, i };
+					}
+				}
+			}
+		}
+
+		return { nullptr, 0 };
+	}
+
+	std::pair<const Scope::DataType*, std::size_t> Scope::FindScope(const Scope& scope) const
+	{
+		for (auto& pairPtr : mPairPtrs)
+		{
+			if (pairPtr->second.Type() == DataType::Types::Scope)
+			{
+				for (std::size_t i = 0; i < pairPtr->second.Size(); ++i)
+				{
+					if (&scope == pairPtr->second.Get<DataType::ScopePointer>(i))
+					{
+						return { &pairPtr->second, i };
+					}
+				}
+			}
+		}
+
+		return { nullptr, 0 };
+	}
+
 	Scope::DataType* Scope::Search(const std::string name, Scope** scopePtrOut)
 	{
 		DataType* result = Find(name);
@@ -297,6 +335,30 @@ namespace Library
 		else it->second.PushBack(&mChildren.Back());
 
 		return *(it->second.Back<DataType::ScopePointer>());
+	}
+
+	Scope& Scope::Adopt(Scope& child, const std::string name)
+	{
+		if (this == child.mParent) return child;
+
+		mChildren.PushBack(child);
+		mChildren.Back().mParent = this;
+
+		Scope& newChild = AppendScope(name);
+		newChild = child;
+
+		if (child.mParent)
+		{
+			auto [data, index] = child.mParent->FindScope(child);
+
+			if (data)
+			{
+				data->RemoveAt(index);
+				child.mParent->mChildren.Remove(child);
+			}
+		}
+
+		return newChild;
 	}
 
 	void Scope::Clear()

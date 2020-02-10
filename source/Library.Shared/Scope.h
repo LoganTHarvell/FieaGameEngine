@@ -187,6 +187,20 @@ namespace Library
 		const NameType* FindName(const std::size_t index) const;
 
 		/// <summary>
+		/// Gets the DataType value and index of a given Scope.
+		/// </summary>
+		/// <param name="scope">Scope to be found.</param>
+		/// <returns>If found, a pair of a pointer to the DataType value and the index within. Otherwise, nullptr and 0.</returns>
+		std::pair<DataType*, std::size_t> FindScope(const Scope& scope);
+
+		/// <summary>
+		/// Gets the DataType value and index of a given Scope.
+		/// </summary>
+		/// <param name="scope">Scope to be found.</param>
+		/// <returns>If found, a pair of a pointer to the DataType value and the index within. Otherwise, nullptr and 0.</returns>
+		std::pair<const DataType*, std::size_t> FindScope(const Scope& scope) const;
+
+		/// <summary>
 		/// Performs a breadth-first search on the scope and its ancestors for a TableEntry with a matching NameType value.
 		/// </summary>
 		/// <param name="name">Name of the TableEntry to be found.</param>
@@ -234,6 +248,14 @@ namespace Library
 		/// <param name="name">Name for the TableEntry to be accessed or appended with a child Scope.</param>
 		/// <returns>Reference to the DataType value of the appended TableEntry.</returns>
 		Scope& AppendScope(const NameType name);
+
+		/// <summary>
+		/// Appends a copy of an existing Scope, removing it from its original parent as needed.
+		/// </summary>
+		/// <param name="child">Scope to copy and append.</param>
+		/// <param name="name">NameType value of the TableEntry that the child will be appended onto.</param>
+		/// <returns></returns>
+		Scope& Adopt(Scope& child, const std::string name);
 
 		/// <summary>
 		/// Clears all members of the scope.
