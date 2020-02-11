@@ -61,7 +61,7 @@ namespace Library
 	}
 #pragma endregion TypeOf Static Method
 
-#pragma region Size and Capacity
+#pragma region Type, Size, Capacity
 	inline Datum::Types Datum::Type() const
 	{
 		return mType;
@@ -69,8 +69,8 @@ namespace Library
 
 	inline void Datum::SetType(Types type)
 	{
-		if (mType != Types::Unknown)	throw std::runtime_error("Type cannot be reassigned.");
-		if (type == Types::Unknown)		throw std::runtime_error("Cannot assign to unknown type.");
+		if (type == Types::Unknown || type == Types::End)	throw std::runtime_error("Cannot assign to unknown type.");
+		if (mType != Types::Unknown && mType != type)		throw std::runtime_error("Type cannot be reassigned.");
 
 		mType = type;
 	}
@@ -89,7 +89,7 @@ namespace Library
 	{
 		return mCapacity;
 	}
-#pragma endregion Size and Capacity
+#pragma endregion Type, Size, Capacity
 
 #pragma region Element Accessors
 	template<typename T>

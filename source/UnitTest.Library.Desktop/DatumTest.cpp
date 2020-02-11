@@ -127,7 +127,15 @@ namespace UnitTests
 
 		datum.SetType(Datum::TypeOf<T>());
 		Assert::AreEqual(Datum::TypeOf<T>(), datum.Type());
-		Assert::ExpectException<std::runtime_error>([&datum] { datum.SetType(Datum::TypeOf<T>()); });
+
+		if (Datum::TypeOf<T>() != Datum::Types::Integer)
+		{
+			Assert::ExpectException<std::runtime_error>([&datum] { datum.SetType(Datum::Types::Integer); });
+		}
+		else
+		{
+			Assert::ExpectException<std::runtime_error>([&datum] { datum.SetType(Datum::Types::Float); });
+		}
 
 		datum = data;
 		Assert::AreEqual(Datum::TypeOf<T>(), datum.Type());

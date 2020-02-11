@@ -32,6 +32,7 @@ namespace Library
 				for (std::size_t i = 0; i < tableEntryPtr->second.Size(); ++i)
 				{
 					mChildren.PushBack(tableEntryPtr->second[i]);
+					mChildren.Back().mParent = this;
 					data.PushBack(&mChildren.Back());
 				}
 
@@ -48,7 +49,6 @@ namespace Library
 	{
 		Clear();
 
-		mParent = rhs.mParent;
 		mTable = TableType(rhs.mTable.BucketCount());
 		
 		mPairPtrs.ShrinkToFit();
@@ -64,6 +64,7 @@ namespace Library
 				for (std::size_t i = 0; i < tableEntryPtr->second.Size(); ++i)
 				{
 					mChildren.PushBack(tableEntryPtr->second[i]);
+					mChildren.Back().mParent = this;
 					data.PushBack(&mChildren.Back());
 				}
 
@@ -79,21 +80,26 @@ namespace Library
 	}
 
 	Scope::Scope(Scope&& rhs) noexcept :
-		mParent(rhs.mParent), mTable(std::move(rhs.mTable)), mPairPtrs(std::move(rhs.mPairPtrs)), mChildren(std::move(rhs.mChildren))
+		mTable(std::move(rhs.mTable)), mPairPtrs(std::move(rhs.mPairPtrs)), mChildren(std::move(rhs.mChildren))
 	{
-		rhs.mParent = nullptr;
+		for (auto& child : mChildren)
+		{
+			child.mParent = this;
+		}
 	}
 
 	Scope& Scope::operator=(Scope&& rhs) noexcept
 	{
 		Clear();
 
-		mParent = rhs.mParent;
 		mTable = std::move(rhs.mTable);
 		mPairPtrs = std::move(rhs.mPairPtrs);
 		mChildren = std::move(rhs.mChildren);
 
-		rhs.mParent = nullptr;
+		for (auto& child : mChildren)
+		{
+			child.mParent = this;
+		}
 
 		return *this;
 	}
@@ -111,6 +117,7 @@ namespace Library
 				for (std::size_t i = 0; i < tableEntry.second.Size(); ++i)
 				{
 					mChildren.PushBack(tableEntry.second[i]);
+					mChildren.Back().mParent = this;
 					data.PushBack(&mChildren.Back());
 				}
 
@@ -142,6 +149,7 @@ namespace Library
 				for (std::size_t i = 0; i < tableEntry.second.Size(); ++i)
 				{
 					mChildren.PushBack(tableEntry.second[i]);
+					mChildren.Back().mParent = this;
 					data.PushBack(&mChildren.Back());
 				}
 
@@ -189,12 +197,12 @@ namespace Library
 		return mParent;
 	}
 
-	Scope::DataType& Scope::operator[](const NameType name)
+	Scope::DataType& Scope::operator[](const NameType& name)
 	{
 		return Append(name);
 	}
 
-	const Scope::DataType& Scope::operator[](const NameType name) const
+	const Scope::DataType& Scope::operator[](const NameType& name) const
 	{
 		const DataType* entry = Find(name);
 		if (entry == nullptr) throw std::runtime_error("Name not found.");
@@ -212,13 +220,13 @@ namespace Library
 		return mPairPtrs[index]->second;
 	}
 
-	Scope::DataType* Scope::Find(const NameType name)
+	Scope::DataType* Scope::Find(const NameType& name)
 	{
 		TableType::Iterator it = mTable.Find(name);
 		return it != mTable.end() ? &it->second : nullptr;
 	}
 
-	const Scope::DataType* Scope::Find(const NameType name) const
+	const Scope::DataType* Scope::Find(const NameType& name) const
 	{
 		TableType::ConstIterator it = mTable.Find(name);
 		return it != mTable.end() ? &it->second : nullptr;
@@ -267,7 +275,7 @@ namespace Library
 		return { nullptr, 0 };
 	}
 
-	Scope::DataType* Scope::Search(const std::string name, Scope** scopePtrOut)
+	Scope::DataType* Scope::Search(const NameType& name, Scope** scopePtrOut)
 	{
 		DataType* result = Find(name);
 
@@ -283,7 +291,7 @@ namespace Library
 		return nullptr;
 	}
 
-	const Scope::DataType* Scope::Search(const std::string name, const Scope** scopePtrOut) const
+	const Scope::DataType* Scope::Search(const NameType& name, const Scope** scopePtrOut) const
 	{
 		const DataType* result = Find(name);
 
@@ -299,13 +307,13 @@ namespace Library
 		return nullptr;
 	}
 
-	Scope::DataType* Scope::SearchChildren(const std::string name, Scope** scopePtrOut)
+	Scope::DataType* Scope::SearchChildren(const NameType& name, Scope** scopePtrOut)
 	{
 		Vector queue = { this };
 		return SearchChildrenHelper(queue, name, scopePtrOut);
 	}
 
-	const Scope::DataType* Scope::SearchChildren(const std::string name, const Scope** scopePtrOut) const
+	const Scope::DataType* Scope::SearchChildren(const NameType& name, const Scope** scopePtrOut) const
 	{
 		Scope* nonConstThis = const_cast<Scope*>(this);
 		Vector queue = { nonConstThis };
@@ -314,7 +322,7 @@ namespace Library
 #pragma endregion Element Accessors
 
 #pragma region Modifiers
-	Scope::DataType& Scope::Append(const NameType name)
+	Scope::DataType& Scope::Append(const NameType& name)
 	{
 		if (name.empty()) throw std::runtime_error("Name cannot be empty.");
 
@@ -324,7 +332,7 @@ namespace Library
 		return it->second;
 	}
 
-	Scope& Scope::AppendScope(const NameType name)
+	Scope& Scope::AppendScope(const NameType& name)
 	{
 		if (name.empty()) throw std::runtime_error("Name cannot be empty.");
 
@@ -339,15 +347,11 @@ namespace Library
 		return *(it->second.Back<DataType::ScopePointer>());
 	}
 
-	Scope& Scope::Adopt(Scope& child, const std::string name)
+	Scope& Scope::Adopt(Scope& child, const NameType& name)
 	{
 		if (this == child.mParent) return child;
 
-		mChildren.PushBack(child);
-		mChildren.Back().mParent = this;
-
-		Scope& newChild = AppendScope(name);
-		newChild = child;
+		AppendScope(name) = std::move(child);
 
 		if (child.mParent)
 		{
@@ -360,7 +364,7 @@ namespace Library
 			}
 		}
 
-		return newChild;
+		return mChildren.Back();
 	}
 
 	void Scope::Clear()
@@ -372,7 +376,7 @@ namespace Library
 #pragma endregion Modifiers
 
 #pragma region Helper Methods
-	Scope::DataType* Scope::SearchChildrenHelper(const Vector<Scope*>& queue, const std::string name, Scope** scopePtrOut)
+	Scope::DataType* Scope::SearchChildrenHelper(const Vector<Scope*>& queue, const NameType& name, Scope** scopePtrOut)
 	{
 		Vector<Scope*> newQueue;
 
