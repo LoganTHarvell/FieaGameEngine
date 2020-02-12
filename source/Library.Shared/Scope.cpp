@@ -20,7 +20,7 @@ namespace Library
 	}
 
 	Scope::Scope(const Scope& rhs) :
-		mParent(rhs.mParent), mTable(rhs.mTable.BucketCount()), mPairPtrs(rhs.mPairPtrs.Size())
+		mTable(rhs.mTable.BucketCount()), mPairPtrs(rhs.mPairPtrs.Size())
 	{
 		for (auto& tableEntryPtr : rhs.mPairPtrs)
 		{
@@ -31,9 +31,9 @@ namespace Library
 				
 				for (std::size_t i = 0; i < tableEntryPtr->second.Size(); ++i)
 				{
-					mChildren.PushBack(tableEntryPtr->second[i]);
-					mChildren.Back().mParent = this;
-					data.PushBack(&mChildren.Back());
+					mChildren.PushBack(new Scope(tableEntryPtr->second[i]));
+					mChildren.Back()->mParent = this;
+					data.PushBack(mChildren.Back());
 				}
 
 				mPairPtrs.PushBack(&(*mTable.Insert({ tableEntryPtr->first, data }).first));
@@ -63,9 +63,9 @@ namespace Library
 				
 				for (std::size_t i = 0; i < tableEntryPtr->second.Size(); ++i)
 				{
-					mChildren.PushBack(tableEntryPtr->second[i]);
-					mChildren.Back().mParent = this;
-					data.PushBack(&mChildren.Back());
+					mChildren.PushBack(new Scope(tableEntryPtr->second[i]));
+					mChildren.Back()->mParent = this;
+					data.PushBack(mChildren.Back());
 				}
 
 				mPairPtrs.PushBack(&(*mTable.Insert({ tableEntryPtr->first, data }).first));
@@ -80,25 +80,48 @@ namespace Library
 	}
 
 	Scope::Scope(Scope&& rhs) noexcept :
-		mTable(std::move(rhs.mTable)), mPairPtrs(std::move(rhs.mPairPtrs)), mChildren(std::move(rhs.mChildren))
+		mParent(rhs.mParent), mTable(std::move(rhs.mTable)), mPairPtrs(std::move(rhs.mPairPtrs)), mChildren(std::move(rhs.mChildren))
 	{
 		for (auto& child : mChildren)
 		{
-			child.mParent = this;
+			child->mParent = this;
+		}
+
+		if (rhs.mParent)
+		{
+			rhs.mParent->mChildren.PushBack(this);
+
+			auto [data, index] = rhs.mParent->FindScope(rhs);
+			data->Set(this, index);
+			delete &rhs;
 		}
 	}
 
 	Scope& Scope::operator=(Scope&& rhs) noexcept
 	{
 		Clear();
+		
+		Scope* lhsParent = mParent;
 
+		mParent = rhs.mParent;
 		mTable = std::move(rhs.mTable);
 		mPairPtrs = std::move(rhs.mPairPtrs);
 		mChildren = std::move(rhs.mChildren);
 
 		for (auto& child : mChildren)
 		{
-			child.mParent = this;
+			child->mParent = this;
+		}
+
+		if (rhs.mParent)
+		{
+			rhs.mParent->mChildren.PushBack(this);
+
+			auto [data, index] = rhs.mParent->FindScope(rhs);
+			data->Set(this, index);
+			delete& rhs;
+
+ 			if (lhsParent) lhsParent->Orphan(*this);
 		}
 
 		return *this;
@@ -116,9 +139,9 @@ namespace Library
 
 				for (std::size_t i = 0; i < tableEntry.second.Size(); ++i)
 				{
-					mChildren.PushBack(tableEntry.second[i]);
-					mChildren.Back().mParent = this;
-					data.PushBack(&mChildren.Back());
+					mChildren.PushBack(new Scope(tableEntry.second[i]));
+					mChildren.Back()->mParent = this;
+					data.PushBack(mChildren.Back());
 				}
 
 				mPairPtrs.PushBack(&(*mTable.Insert({ tableEntry.first, data }).first));
@@ -148,9 +171,9 @@ namespace Library
 
 				for (std::size_t i = 0; i < tableEntry.second.Size(); ++i)
 				{
-					mChildren.PushBack(tableEntry.second[i]);
-					mChildren.Back().mParent = this;
-					data.PushBack(&mChildren.Back());
+					mChildren.PushBack(new Scope(tableEntry.second[i]));
+					mChildren.Back()->mParent = this;
+					data.PushBack(mChildren.Back());
 				}
 
 				mPairPtrs.PushBack(&(*mTable.Insert({ tableEntry.first, data }).first));
@@ -336,41 +359,61 @@ namespace Library
 	{
 		if (name.empty()) throw std::runtime_error("Name cannot be empty.");
 
-		Scope child;
-		child.mParent = this;
+		Scope* child = new Scope;
+		child->mParent = this;
 		mChildren.PushBack(child);
 
-		auto [it, isNew] = mTable.Insert({ name, DataType(&mChildren.Back()) });
+		auto [it, isNew] = mTable.Insert({ name, DataType(mChildren.Back()) });
 		if (isNew) mPairPtrs.PushBack(&(*it));
-		else it->second.PushBack(&mChildren.Back());
+		else it->second.PushBack(mChildren.Back());
 
 		return *(it->second.Back<DataType::ScopePointer>());
+	}
+
+	Scope* Scope::Orphan(Scope& child)
+	{
+		auto [data, index] = FindScope(child);
+
+		if (data)
+		{
+			data->RemoveAt(index);
+			mChildren.Remove(&child);
+
+			return &child;
+		}
+
+		return nullptr;
 	}
 
 	Scope& Scope::Adopt(Scope& child, const NameType& name)
 	{
 		if (this == child.mParent) return child;
 
-		AppendScope(name) = std::move(child);
+		Scope* orphan = child.mParent->Orphan(child);
+		orphan->mParent = this;
+		mChildren.PushBack(orphan);
 
-		if (child.mParent)
-		{
-			auto [data, index] = child.mParent->FindScope(child);
-
-			if (data)
-			{
-				data->RemoveAt(index);
-				child.mParent->mChildren.Remove(child);
-			}
-		}
-
-		return mChildren.Back();
+		auto [it, isNew] = mTable.Insert({ name, DataType(mChildren.Back()) });
+		if (isNew) mPairPtrs.PushBack(&(*it));
+		else it->second.PushBack(mChildren.Back());
+		
+		return *mChildren.Back();
 	}
 
 	void Scope::Clear()
 	{
 		mTable.Clear();
 		mPairPtrs.Clear();
+
+		for (auto& child : mChildren)
+		{
+			if (child != nullptr)
+			{
+				delete child;
+				child = nullptr;
+			}
+		}
+
 		mChildren.Clear();
 	}
 #pragma endregion Modifiers
@@ -394,7 +437,7 @@ namespace Library
 
 			for (auto& child : scopePtr->mChildren)
 			{
-				newQueue.PushBack(&child);
+				newQueue.PushBack(child);
 			}
 		}
 

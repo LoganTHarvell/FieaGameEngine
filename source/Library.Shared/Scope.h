@@ -255,11 +255,18 @@ namespace Library
 		Scope& AppendScope(const NameType& name);
 
 		/// <summary>
-		/// Appends a copy of an existing Scope, removing it from its original parent as needed.
+		/// Removes a child Scope, given its address.
+		/// </summary>
+		/// <param name="child">Scope to remove from the Table.</param>
+		/// <returns>True, if the child was successfully orphaned. Otherwise, false.</returns>
+		Scope* Orphan(Scope& child);
+
+		/// <summary>
+		/// Appends an existing Scope, calling Orphan as needed on the previous parent.
 		/// </summary>
 		/// <param name="child">Scope to copy and append.</param>
 		/// <param name="name">NameType value of the TableEntry that the child will be appended onto.</param>
-		/// <returns></returns>
+		/// <returns>Reference to the newly adopted Scope.</returns>
 		Scope& Adopt(Scope& child, const NameType& name);
 
 		/// <summary>
@@ -301,7 +308,7 @@ namespace Library
 		/// <summary>
 		/// SList containing child Scopes.
 		/// </summary>
-		SList<Scope> mChildren;
+		Vector<Scope*> mChildren;
 #pragma endregion DataType Members
 	};
 }

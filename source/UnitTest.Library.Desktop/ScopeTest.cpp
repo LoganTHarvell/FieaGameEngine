@@ -53,10 +53,27 @@ namespace UnitTestLibraryDesktop
 			Scope scope = { { "ints", datumInt }, { "floats", datumFloat }, { "vectors", datumVector },
 							{ "matrices", datumMatrix }, { "strings", datumString }, { "pointers", datumRTTI } };
 
-			Scope copyConstructed = scope;
-			Assert::AreEqual(scope, copyConstructed);
+			Scope copyConstructedNoNestedScopes = scope;
+			Assert::AreEqual(scope, copyConstructedNoNestedScopes);
+
+			Scope& child0_0 = scope.AppendScope("child0") = copyConstructedNoNestedScopes;
+			scope.AppendScope("child0") = copyConstructedNoNestedScopes;
+			scope.AppendScope("child1") = copyConstructedNoNestedScopes;
+			Scope& child0_0_0 = child0_0.AppendScope("child0_0") = copyConstructedNoNestedScopes;
+			child0_0.AppendScope("child0_0") = copyConstructedNoNestedScopes;
+			child0_0_0.AppendScope("child0_0_0") = copyConstructedNoNestedScopes;
+
+			Scope copyConstructedNestedScopes = scope;
+			Assert::AreEqual(scope, copyConstructedNestedScopes);
 
 			Scope copyAssigned;
+			copyAssigned = scope;
+			Assert::AreEqual(scope, copyAssigned);
+
+			Scope emptyScope;
+			copyAssigned = emptyScope;
+			Assert::AreEqual(emptyScope, copyAssigned);
+
 			copyAssigned = scope;
 			Assert::AreEqual(scope, copyAssigned);
 		}
@@ -76,6 +93,15 @@ namespace UnitTestLibraryDesktop
 							{ "matrices", datumMatrix }, { "strings", datumString }, { "pointers", datumRTTI } };
 
 			Scope copy = scope;
+
+			Scope& child0_0 = scope.AppendScope("child0") = copy;
+			scope.AppendScope("child0") = copy;
+			scope.AppendScope("child1") = copy;
+			Scope& child0_0_0 = child0_0.AppendScope("child0_0") = copy;
+			child0_0.AppendScope("child0_0") = copy;
+			child0_0_0.AppendScope("child0_0_0") = copy;
+
+			copy = scope;
 
 			Scope moveConstructed = std::move(scope);
 			Assert::AreEqual(copy, moveConstructed);
@@ -104,13 +130,43 @@ namespace UnitTestLibraryDesktop
 			scope1 = {	{ "ints", datumInt }, { "floats", datumFloat }, { "vectors", datumVector },
 						{ "matrices", datumMatrix }, { "strings", datumString }, { "pointers", datumRTTI }	};
 
+			Scope& child0_0 = scope1.AppendScope("child0");
+			scope1.AppendScope("child0");
+			scope1.AppendScope("child1");
+			Scope& child0_0_0 = child0_0.AppendScope("child0_0");
+			child0_0.AppendScope("child0_0");
+			child0_0_0.AppendScope("child0_0_0");
+
 			scope2 = {	{ "pointers", datumRTTI }, { "ints", datumInt }, { "floats", datumFloat }, 
 						{ "vectors", datumVector }, { "matrices", datumMatrix }, { "strings", datumString }	};
+
+			Scope& childS2_0_0 = scope2.AppendScope("child0");
+			scope2.AppendScope("child0");
+			scope2.AppendScope("child1");
+			Scope& childS2_0_0_0 = childS2_0_0.AppendScope("child0_0");
+			childS2_0_0.AppendScope("child0_0");
+			childS2_0_0_0.AppendScope("child0_0_0");
 
 			Assert::AreEqual(scope1, scope2);
 		}
 
-		TEST_METHOD(ElementAccessors)
+		TEST_METHOD(GetParent)
+		{
+			Scope scope;
+
+			Scope& child0_0 = scope.AppendScope("child0");
+			Scope& child0_1 = scope.AppendScope("child0");
+			Scope& child1_0 = scope.AppendScope("child1");
+			Scope& child0_0_0 = child0_0.AppendScope("child0_0");
+
+			Assert::IsNull(scope.GetParent());
+			Assert::AreEqual(&scope, child0_0.GetParent());
+			Assert::AreEqual(&scope, child0_1.GetParent());
+			Assert::AreEqual(&scope, child1_0.GetParent());
+			Assert::AreEqual(&child0_0, child0_0_0.GetParent());
+		}
+
+		TEST_METHOD(SubscriptOperators)
 		{
 			Datum datumInt = { 10, 20, 30 };
 			Datum datumFloat = { 10, 20, 30 };
@@ -218,6 +274,21 @@ namespace UnitTestLibraryDesktop
 			Assert::IsNull(scope.FindName(6));
 		}
 
+		TEST_METHOD(FindScope)
+		{
+			Scope scope;
+
+			Scope& child0_0 = scope.AppendScope("child0");
+			Scope& child0_1 = scope.AppendScope("child0");
+			Scope& child1_0 = scope.AppendScope("child1");
+			Scope& child0_0_0 = child0_0.AppendScope("child0_0");
+
+			Assert::AreEqual({ scope.Find("child0"), 0 }, scope.FindScope(child0_0));
+			Assert::AreEqual({ scope.Find("child0"), 1 }, scope.FindScope(child0_1));
+			Assert::AreEqual({ scope.Find("child1"), 0 }, scope.FindScope(child1_0));
+			Assert::AreEqual({ child0_0.Find("child0_0"), 0 }, child0_0.FindScope(child0_0_0));
+		}
+
 		TEST_METHOD(Search)
 		{
 			Scope scope;
@@ -278,6 +349,55 @@ namespace UnitTestLibraryDesktop
 
 		TEST_METHOD(AppendScope)
 		{
+			Datum datumInt = { 10, 20, 30 };
+			Datum datumFloat = { 10, 20, 30 };
+			Datum datumVector = { glm::vec4(10), glm::vec4(20), glm::vec4(30) };
+			Datum datumMatrix = { glm::mat4(10), glm::mat4(20), glm::mat4(30) };
+			Datum datumString = { "10", "20", "30" };
+
+			Foo a(10), b(20), c(30);
+			Datum datumRTTI = { &a, &b, &c };
+
+			Scope scope = { { "ints", datumInt }, { "floats", datumFloat }, { "vectors", datumVector },
+							{ "matrices", datumMatrix }, { "strings", datumString }, { "pointers", datumRTTI } };
+
+			Scope copy = scope;
+
+			Scope& child0_0 = scope.AppendScope("child0") = copy;
+			scope.AppendScope("child0") = copy;
+			scope.AppendScope("child1") = copy;
+			Scope& child0_0_0 = child0_0.AppendScope("child0_0") = copy;
+			child0_0.AppendScope("child0_0") = copy;
+			child0_0_0.AppendScope("child0_0_0") = copy;
+		}
+
+		TEST_METHOD(Orphan)
+		{
+			Scope scope;
+
+			Scope& child0_0 = scope.AppendScope("child0");
+			Scope& child0_1 = scope.AppendScope("child0");
+			Scope& child1_0 = scope.AppendScope("child1");
+			child0_0.AppendScope("child0_0");
+
+			Scope* tmp = scope.Orphan(child1_0);
+			Assert::IsNotNull(tmp);
+			delete tmp;
+
+			tmp = scope.Orphan(child0_1);
+			Assert::IsNotNull(tmp);
+			delete tmp;
+
+			tmp = scope.Orphan(child0_0);
+			Assert::IsNotNull(tmp);
+			delete tmp;
+
+			Assert::AreEqual(0_z, scope.Find("child0")->Size());
+			Assert::AreEqual(0_z, scope.Find("child1")->Size());
+		}
+
+		TEST_METHOD(Adopt)
+		{
 			Scope scope;
 
 			Scope& child0_0 = scope.AppendScope("child0");
@@ -285,10 +405,48 @@ namespace UnitTestLibraryDesktop
 			Scope& child1_0 = scope.AppendScope("child1");
 			Scope& child0_0_0 = child0_0.AppendScope("child0_0");
 
-			Assert::AreEqual(child0_0, (*scope.Find("child0"))[0]);
-			Assert::AreEqual(child0_1, (*scope.Find("child0"))[1]);
-			Assert::AreEqual(child1_0, (*scope.Find("child1"))[0]);
-			Assert::AreEqual(child0_0_0, (*child0_0.Find("child0_0"))[0]);
+			Scope copyChild0_0 = child0_0;
+			Scope copyChild0_1 = child0_1;
+			Scope copyChild1_0 = child1_0;
+			Scope copyChild0_0_0 = child0_0_0;
+
+			Scope adopter;
+
+			Assert::AreEqual(copyChild1_0, adopter.Adopt(child1_0, "child0"));
+			//Assert::AreEqual(copyChild0_1, adopter.Adopt(child0_1, "child0"));
+			//Assert::AreEqual(copyChild0_0_0, adopter.Adopt(child0_0_0, "child0"));
+			//Assert::AreEqual(copyChild0_0, adopter.Adopt(child0_0, "child0"));
+
+			//Assert::AreEqual(4_z, adopter.Find("child0")->Size());
+			//Assert::AreEqual(0_z, scope.Find("child0")->Size());
+			//Assert::AreEqual(0_z, scope.Find("child1")->Size());
+			//Assert::AreEqual(0_z, scope.Find("child0")[0].Size());
+		}
+
+		TEST_METHOD(Clear)
+		{
+			Datum datumInt = { 10, 20, 30 };
+			Datum datumFloat = { 10, 20, 30 };
+			Datum datumVector = { glm::vec4(10), glm::vec4(20), glm::vec4(30) };
+			Datum datumMatrix = { glm::mat4(10), glm::mat4(20), glm::mat4(30) };
+			Datum datumString = { "10", "20", "30" };
+
+			Foo a(10), b(20), c(30);
+			Datum datumRTTI = { &a, &b, &c };
+
+			Scope scope = { { "ints", datumInt }, { "floats", datumFloat }, { "vectors", datumVector },
+							{ "matrices", datumMatrix }, { "strings", datumString }, { "pointers", datumRTTI } };
+
+			Scope copy = scope;
+
+			Scope& child0_0 = scope.AppendScope("child0") = copy;
+			scope.AppendScope("child0") = copy;
+			scope.AppendScope("child1") = copy;
+			Scope& child0_0_0 = child0_0.AppendScope("child0_0") = copy;
+			child0_0.AppendScope("child0_0") = copy;
+			child0_0_0.AppendScope("child0_0_0") = copy;
+
+			scope.Clear();
 		}
 
 	private:

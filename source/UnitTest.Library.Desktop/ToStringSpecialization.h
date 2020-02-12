@@ -1203,5 +1203,47 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 	{
 		RETURN_WIDE_STRING(t);
 	}
+
+	template<>
+	inline std::wstring ToString<std::pair<Scope::DataType*, std::size_t>>(const std::pair<Scope::DataType*, std::size_t>& t)
+	{
+		try 
+		{
+			std::string str = (t.first ? t.first->ToString() : "nullptr") + ", index: "s + std::to_string(t.second);
+			return std::wstring(str.begin(), str.end());
+		}
+		catch (const std::exception&)
+		{
+			return L"DataType Unknown"s;
+		}
+	}
+
+	template<>
+	inline std::wstring ToString<std::pair<Scope::DataType*, std::size_t>>(const std::pair<Scope::DataType*, std::size_t>* t)
+	{
+		try
+		{
+			std::string str = t->first->ToString() + ", index: "s + std::to_string(t->second);
+			return std::wstring(str.begin(), str.end());
+		}
+		catch (const std::exception&)
+		{
+			return L"DataType Unknown"s;
+		}
+	}
+
+	template<>
+	inline std::wstring ToString<std::pair<Scope::DataType*, std::size_t>>(std::pair<Scope::DataType*, std::size_t>* t)
+	{
+		try
+		{
+			std::string str = t->first->ToString() + ", index: "s + std::to_string(t->second);
+			return std::wstring(str.begin(), str.end());
+		}
+		catch (const std::exception&)
+		{
+			return L"DataType Unknown"s;
+		}
+	}
 #pragma endregion Scope
 }
