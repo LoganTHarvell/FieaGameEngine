@@ -123,6 +123,31 @@ namespace Library
 		bool operator!=(const Scope& rhs) const noexcept;
 #pragma endregion Boolean Operators
 
+#pragma region Size and Capacity
+		/// <summary>
+		/// Getter method for the number of TableEntry values in the Scope.
+		/// </summary>
+		/// <returns>Number of Table Entry values in the Scope.</returns>
+		std::size_t Size() const;
+
+		/// <summary>
+		/// Checks if the size of the Scope is greater than zero, indicating it is non-empty.
+		/// </summary>
+		/// <returns>True if the Scope contains no elements, otherwise false.</returns>
+		bool IsEmpty() const;
+
+		/// <summary>
+		/// Reserves memory for a given number of elements.
+		/// </summary>
+		/// <param name="capacity">New capacity for the Scope.</param>
+		void Reserve(const std::size_t capacity);
+
+		/// <summary>
+		/// Reduces the capacity of the Scope to fit the content size.
+		/// </summary>
+		void ShrinkToFit();
+#pragma endregion Size and Capacity
+
 #pragma region Element Accessors
 	public:
 		/// <summary>
@@ -252,7 +277,7 @@ namespace Library
 		/// </summary>
 		/// <param name="name">Name for the TableEntry to be accessed or appended with a child Scope.</param>
 		/// <returns>Reference to the DataType value of the appended TableEntry.</returns>
-		Scope& AppendScope(const NameType& name);
+		Scope& AppendScope(const NameType& name, const std::size_t capacity=0);
 
 		/// <summary>
 		/// Removes a child Scope, given its address.
@@ -310,6 +335,22 @@ namespace Library
 		/// </summary>
 		Vector<Scope*> mChildren;
 #pragma endregion DataType Members
+
+#pragma region RTTI Overrides
+	public:
+		/// <summary>
+		/// RTTI override that returns a string representation of the Scope.
+		/// </summary>
+		/// <returns>String representation of the Scope.</returns>
+		virtual std::string ToString() const override;
+
+		/// <summary>
+		/// RTTI override that detemines if the Scope is equal to a given RTTI derived class instance.
+		/// </summary>
+		/// <param name="rhs">RTTI derived class instance to be compared against.</param>
+		/// <returns>True if the the Scope is equivalent to the given RTTI derived class instance.</returns>
+		virtual bool Equals(const RTTI* rhs) const override;
+#pragma endregion RTTI Overrides
 	};
 }
 

@@ -10,7 +10,7 @@ namespace Library
 
 #pragma region Constructors, Destructor, Assignment
 	Scope::Scope(const std::size_t capacity) :
-		mTable(TableType(std::max(TableType::DefaultBucketCount, Math::FindNextPrime(capacity)))), mPairPtrs(capacity)
+		mTable(std::max(TableType::DefaultBucketCount, Math::FindNextPrime(capacity))), mPairPtrs(capacity)
 	{
 	}
 
@@ -128,7 +128,7 @@ namespace Library
 	}
 
 	Scope::Scope(const std::initializer_list<TableEntryType> rhs, const std::size_t capacity) :
-		mTable(TableType(std::max(TableType::DefaultBucketCount, Math::FindNextPrime(capacity)))), mPairPtrs(capacity)
+		mTable(std::max(TableType::DefaultBucketCount, Math::FindNextPrime(capacity))), mPairPtrs(capacity)
 	{
 		for (auto& tableEntry : rhs)
 		{
@@ -208,6 +208,48 @@ namespace Library
 		return !(operator==(rhs));
 	}
 #pragma endregion Boolean Operators
+
+#pragma region Size and Capacity
+	std::size_t Scope::Size() const
+	{
+		return mTable.Size();
+	}
+
+	bool Scope::IsEmpty() const
+	{
+		return mTable.IsEmpty();
+	}
+
+	void Scope::Reserve(const std::size_t capacity)
+	{		
+		if (Math::FindNextPrime(capacity) > mTable.BucketCount())
+		{
+			Scope newScope = Scope(capacity);
+
+			for (const auto& pairPtr : mPairPtrs)
+			{
+				newScope.Append(pairPtr->first) = std::move(pairPtr->second);
+			}
+
+			*this = std::move(newScope);
+		}
+	}
+
+	void Scope::ShrinkToFit()
+	{
+		if (Math::FindNextPrime(mPairPtrs.Size()) < mTable.BucketCount())
+		{
+			Scope tmp = Scope(mPairPtrs.Size());
+
+			for (const auto& pairPtr : mPairPtrs)
+			{
+				tmp.Append(pairPtr->first) = std::move(pairPtr->second);
+			}
+
+			*this = std::move(tmp);
+		}
+	}
+#pragma endregion Size and Capacity
 
 #pragma region Element Accessors
 	Scope* Scope::GetParent()
@@ -355,11 +397,11 @@ namespace Library
 		return it->second;
 	}
 
-	Scope& Scope::AppendScope(const NameType& name)
+	Scope& Scope::AppendScope(const NameType& name, const std::size_t capacity)
 	{
 		if (name.empty()) throw std::runtime_error("Name cannot be empty.");
 
-		Scope* child = new Scope;
+		Scope* child = new Scope(std::max(TableType::DefaultBucketCount, Math::FindNextPrime(capacity)));
 		child->mParent = this;
 		mChildren.PushBack(child);
 
@@ -447,4 +489,26 @@ namespace Library
 		return nullptr;
 	}
 #pragma endregion Helper Methods
+	
+#pragma region RTTI Overrides
+	std::string Scope::ToString() const
+	{
+		std::string str = "Scope:";
+
+		for (const auto& pairPtr : mPairPtrs)
+		{
+			str += " (" + pairPtr->first + ", " + pairPtr->second.ToString() + ")";
+		}
+
+		return str;
+	}
+
+	bool Scope::Equals(const RTTI* rhs) const
+	{
+		if (!rhs) return false;
+
+		const Scope* rhsScopePtr = rhs->As<Scope>();
+		return rhsScopePtr ? operator==(*rhsScopePtr) : false;
+	}
+#pragma endregion RTTI Overrides
 }

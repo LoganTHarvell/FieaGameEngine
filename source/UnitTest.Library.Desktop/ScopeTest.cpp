@@ -150,6 +150,46 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(scope1, scope2);
 		}
 
+		TEST_METHOD(Size)
+		{
+			Scope scope;
+
+			Assert::IsTrue(scope.IsEmpty());
+			Assert::AreEqual(0_z, scope.Size());
+
+			Datum datumInt = { 10, 20, 30 };
+			Datum datumFloat = { 10, 20, 30 };
+			Datum datumVector = { glm::vec4(10), glm::vec4(20), glm::vec4(30) };
+			Datum datumMatrix = { glm::mat4(10), glm::mat4(20), glm::mat4(30) };
+			Datum datumString = { "10", "20", "30" };
+
+			Foo a(10), b(20), c(30);
+			Datum datumRTTI = { &a, &b, &c };
+
+
+			scope = {	{ "ints", datumInt }, { "floats", datumFloat }, { "vectors", datumVector },
+						{ "matrices", datumMatrix }, { "strings", datumString }, { "pointers", datumRTTI }	};
+
+			Assert::IsFalse(scope.IsEmpty());
+			Assert::AreEqual(6_z, scope.Size());
+
+			Scope copy = scope;
+
+			Scope& child0_0 = scope.AppendScope("child0") = copy;
+			scope.AppendScope("child0") = copy;
+			scope.AppendScope("child1") = copy;
+			Scope& child0_0_0 = child0_0.AppendScope("child0_0") = copy;
+			child0_0.AppendScope("child0_0") = copy;
+			child0_0_0.AppendScope("child0_0_0") = copy;
+
+			Assert::AreEqual(8_z, scope.Size());
+		}
+
+		TEST_METHOD(Reserve)
+		{
+
+		}
+
 		TEST_METHOD(GetParent)
 		{
 			Scope scope;

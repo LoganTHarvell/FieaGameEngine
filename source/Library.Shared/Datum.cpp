@@ -100,7 +100,7 @@ namespace Library
 		[](void* data, std::size_t index) { return glm::to_string(reinterpret_cast<glm::vec4*>(data)[index]); },
 		[](void* data, std::size_t index) { return glm::to_string(reinterpret_cast<glm::mat4*>(data)[index]); },
 		[](void* data, std::size_t index) { return reinterpret_cast<std::string*>(data)[index]; },
-		[](void* data, std::size_t index) { ScopePointer ptr = reinterpret_cast<ScopePointer*>(data)[index]; return ptr ? "ScopePointer" : "nullptr";  },
+		[](void* data, std::size_t index) { ScopePointer ptr = reinterpret_cast<ScopePointer*>(data)[index]; return ptr ? ptr->ToString() : "nullptr";  },
 		[](void* data, std::size_t index) { RTTIPointer ptr = reinterpret_cast<RTTIPointer*>(data)[index]; return ptr ? ptr->ToString() : "nullptr";  }
 	};
 
