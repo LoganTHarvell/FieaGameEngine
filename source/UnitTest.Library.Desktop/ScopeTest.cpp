@@ -553,6 +553,8 @@ namespace UnitTestLibraryDesktop
 			Scope& child0_0_0 = child0_0.AppendScope("child0_0") = copy;
 			child0_0.AppendScope("child0_0") = copy;
 			child0_0_0.AppendScope("child0_0_0") = copy;
+
+			Assert::ExpectException<std::runtime_error>([&scope] { scope.AppendScope("integers"); });
 		}
 
 		TEST_METHOD(Orphan)

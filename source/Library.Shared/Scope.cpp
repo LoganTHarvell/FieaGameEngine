@@ -396,8 +396,18 @@ namespace Library
 		mChildren.PushBack(child);
 
 		auto [it, isNew] = mTable.Insert({ name, DataType(mChildren.Back()) });
-		if (isNew) mPairPtrs.PushBack(&(*it));
-		else it->second.PushBack(mChildren.Back());
+		if (isNew)
+		{
+			mPairPtrs.PushBack(&(*it));
+		}
+		else if (it->second.Type() == DataType::Types::Scope)
+		{
+			it->second.PushBack(mChildren.Back());
+		}
+		else
+		{
+			throw std::runtime_error("Table entry already exists with a non-Scope type.");
+		}
 
 		return *(it->second.Back<DataType::ScopePointer>());
 	}

@@ -295,6 +295,7 @@ namespace Library
 		/// <param name="name">Name for the TableEntry to be accessed or appended with a child Scope.</param>
 		/// <returns>Reference to the DataType value of the appended TableEntry.</returns>
 		/// <exception cref="std::runtime_error">Name cannot be empty.</exception>
+		/// <exception cref="std::runtime_error">Table entry already exists with a non-Scope type.</exception>
 		Scope& AppendScope(const NameType& name, const std::size_t capacity=0);
 
 		/// <summary>
