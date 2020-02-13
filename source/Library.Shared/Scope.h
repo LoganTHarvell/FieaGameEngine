@@ -1,7 +1,6 @@
 #pragma once
 
 #pragma region Includes
-
 // Standard
 #include <string>
 
@@ -11,13 +10,12 @@
 #include "Datum.h"
 #include "Vector.h"
 #include "SList.h"
-
-
 #pragma endregion Includes
+
 namespace Library
 {
 	/// <summary>
-	/// Represents an ordered table of string name and Datum value pairs.
+	/// Represents an ordered table of name and data value pairs.
 	/// </summary>
 	class Scope : public RTTI
 	{
@@ -79,6 +77,7 @@ namespace Library
 		/// Takes a Scope as a parameter and moves the data to the constructed Scope.
 		/// </summary>
 		/// <param name="rhs">Scope to be moved.</param>
+		/// <remarks>Cannot call on a stack allocated Scope when moving from a nested Scope.</remarks>
 		Scope(Scope&& rhs) noexcept;
 
 		/// <summary>
@@ -87,6 +86,7 @@ namespace Library
 		/// </summary>
 		/// <param name="rhs">Scope whose values are copied.</param>
 		/// <returns>Modified Scope with copied values.</returns>
+		/// <remarks>Cannot call on a stack allocated Scope when moving from a nested Scope.</remarks>
 		Scope& operator=(Scope&& rhs) noexcept;
 
 		/// <summary>
@@ -94,6 +94,8 @@ namespace Library
 		/// </summary>
 		/// <param name="rhs">List of PairType values for insertion.</param>
 		/// <param name="capacity">Capacity to initialize for the Scope.</param>
+		/// <exception cref="std::runtime_error">Duplicate names found in the initializer list.</exception>
+		/// <remarks>DataType values are copied.</remarks>
 		Scope(const std::initializer_list<TableEntryType> rhs, const std::size_t capacity=0);
 
 		/// <summary>
@@ -101,6 +103,8 @@ namespace Library
 		/// </summary>
 		/// <param name="rhs">List of values to be in the Scope.</param>
 		/// <returns>Reference to the modified Scope containing the new pairs.</returns>
+		/// <exception cref="std::runtime_error">Duplicate names found in the initializer list.</exception>
+		/// <remarks>DataType values are copied.</remarks>
 		Scope& operator=(const std::initializer_list<TableEntryType> rhs);
 #pragma endregion Constructors, Destructor, Assignment
 
@@ -137,6 +141,13 @@ namespace Library
 		bool IsEmpty() const;
 
 		/// <summary>
+		/// Gets the number of elements for which memory is already allocated. 
+		/// </summary>
+		/// <returns>Number of elements for which memory is already allocated.</returns>
+		/// <remarks>This is not equivalent to the max size. It is the max size before new memory will be allocated.</remarks>
+		std::size_t Capacity() const;
+
+		/// <summary>
 		/// Reserves memory for a given number of elements.
 		/// </summary>
 		/// <param name="capacity">New capacity for the Scope.</param>
@@ -145,10 +156,14 @@ namespace Library
 		/// <summary>
 		/// Reduces the capacity of the Scope to fit the content size.
 		/// </summary>
+		/// <remarks>
+		/// For efficiency this should only be called once size will no longer increase. 
+		/// Otherwise, a Reserve call should be made to specify the new desired capacity.
+		/// </remarks>
 		void ShrinkToFit();
 #pragma endregion Size and Capacity
 
-#pragma region Element Accessors
+#pragma region Accessors
 	public:
 		/// <summary>
 		/// Gets a pointer to the parent Scope, if it exists.
@@ -177,6 +192,7 @@ namespace Library
 		/// </summary>
 		/// <param name="name">Name for the TableEntry to be accessed.</param>
 		/// <returns>Reference to the constant DataType value of the TableEntry with the given NameType value.</returns>
+		/// <exception cref="std::runtime_error">Name not found.</exception>
 		const DataType& operator[](const NameType& name) const;
 
 		/// <summary>
@@ -261,7 +277,7 @@ namespace Library
 		/// <param name="scopePtrOut">Output parameter that points to the Scope which owns the found TableEntry.</param>
 		/// <returns>If found, a pointer to the DataType value of the TableEntry. Otherwise, nullptr.</returns>
 		const DataType* SearchChildren(const NameType& name, const Scope** scopePtrOut=nullptr) const;
-#pragma endregion Element Accessors
+#pragma endregion Accessors
 
 #pragma region Modifiers
 	public:
@@ -270,6 +286,7 @@ namespace Library
 		/// </summary>
 		/// <param name="name">Name for the TableEntry to be accessed or appended.</param>
 		/// <returns>Reference to the DataType value of the appended TableEntry.</returns>
+		/// <exception cref="std::runtime_error">Name cannot be empty.</exception>
 		DataType& Append(const NameType& name);
 
 		/// <summary>
@@ -277,6 +294,7 @@ namespace Library
 		/// </summary>
 		/// <param name="name">Name for the TableEntry to be accessed or appended with a child Scope.</param>
 		/// <returns>Reference to the DataType value of the appended TableEntry.</returns>
+		/// <exception cref="std::runtime_error">Name cannot be empty.</exception>
 		Scope& AppendScope(const NameType& name, const std::size_t capacity=0);
 
 		/// <summary>
@@ -345,12 +363,14 @@ namespace Library
 		virtual std::string ToString() const override;
 
 		/// <summary>
-		/// RTTI override that detemines if the Scope is equal to a given RTTI derived class instance.
+		/// RTTI override that determines if the Scope is equal to a given RTTI derived class instance.
 		/// </summary>
 		/// <param name="rhs">RTTI derived class instance to be compared against.</param>
 		/// <returns>True if the the Scope is equivalent to the given RTTI derived class instance.</returns>
 		virtual bool Equals(const RTTI* rhs) const override;
 #pragma endregion RTTI Overrides
 	};
+
 }
 
+#include "Scope.inl"

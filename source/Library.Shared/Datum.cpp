@@ -1,10 +1,16 @@
+#pragma region Includes
+// Pre-compiled Header
 #include "pch.h"
 
+// Header File
 #include "Datum.h"
 
+// Standard
 #include <cassert>
 
+// First Party
 #include "Scope.h"
+#pragma endregion Includes
 
 namespace Library
 {
@@ -72,7 +78,7 @@ namespace Library
 		{
 			ScopePointer* lhsScope = reinterpret_cast<ScopePointer*>(lhs);
 			ScopePointer* rhsScope = reinterpret_cast<ScopePointer*>(rhs);
-			return ((!*lhsScope && !*rhsScope) || (*lhsScope && **lhsScope == **rhsScope));
+			return ((!*lhsScope && !*rhsScope) || (*lhsScope && (*lhsScope)->Equals(*rhsScope)));
 		},
 		[](void* lhs, void* rhs) 
 		{

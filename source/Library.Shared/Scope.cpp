@@ -1,8 +1,13 @@
+#pragma region Includes
+// Pre-compiled Header
 #include "pch.h"
 
+// Header
 #include "Scope.h"
 
+// First Party
 #include "Utility.h"
+#pragma endregion Includes
 
 namespace Library
 {
@@ -89,21 +94,22 @@ namespace Library
 
 		if (rhs.mParent)
 		{
-			rhs.mParent->mChildren.PushBack(this);
+			*rhs.mParent->mChildren.Find(&rhs) = this;
 
 			auto [data, index] = rhs.mParent->FindScope(rhs);
 			data->Set(this, index);
-			delete &rhs;
 		}
 	}
 
 	Scope& Scope::operator=(Scope&& rhs) noexcept
 	{
-		Clear();
-		
-		Scope* lhsParent = mParent;
+		if (mParent)
+		{
+			mParent->Orphan(*this);
+		}
 
-		mParent = rhs.mParent;
+		Clear();
+
 		mTable = std::move(rhs.mTable);
 		mPairPtrs = std::move(rhs.mPairPtrs);
 		mChildren = std::move(rhs.mChildren);
@@ -115,13 +121,10 @@ namespace Library
 
 		if (rhs.mParent)
 		{
-			rhs.mParent->mChildren.PushBack(this);
+			*rhs.mParent->mChildren.Find(&rhs) = this;
 
 			auto [data, index] = rhs.mParent->FindScope(rhs);
 			data->Set(this, index);
-			delete& rhs;
-
- 			if (lhsParent) lhsParent->Orphan(*this);
 		}
 
 		return *this;
@@ -132,6 +135,11 @@ namespace Library
 	{
 		for (auto& tableEntry : rhs)
 		{
+			if (Find(tableEntry.first) != nullptr)
+			{
+				throw std::runtime_error("Duplicate names found in the initializer list.");
+			}
+
 			if (tableEntry.second.Type() == DataType::Types::Scope)
 			{
 				DataType data;
@@ -142,9 +150,11 @@ namespace Library
 					mChildren.PushBack(new Scope(tableEntry.second[i]));
 					mChildren.Back()->mParent = this;
 					data.PushBack(mChildren.Back());
-				}
 
-				mPairPtrs.PushBack(&(*mTable.Insert({ tableEntry.first, data }).first));
+					auto [it, isNew] = mTable.Insert({ tableEntry.first, DataType(mChildren.Back()) });
+					if (isNew) mPairPtrs.PushBack(&(*it));
+					else it->second.PushBack(mChildren.Back());
+				}
 			}
 			else
 			{
@@ -164,6 +174,11 @@ namespace Library
 
 		for (auto& tableEntry : rhs)
 		{
+			if (Find(tableEntry.first) != nullptr)
+			{
+				throw std::runtime_error("Duplicate names found in the initializer list.");
+			}
+
 			if (tableEntry.second.Type() == DataType::Types::Scope)
 			{
 				DataType data;
@@ -174,9 +189,11 @@ namespace Library
 					mChildren.PushBack(new Scope(tableEntry.second[i]));
 					mChildren.Back()->mParent = this;
 					data.PushBack(mChildren.Back());
-				}
 
-				mPairPtrs.PushBack(&(*mTable.Insert({ tableEntry.first, data }).first));
+					auto [it, isNew] = mTable.Insert({ tableEntry.first, DataType(mChildren.Back()) });
+					if (isNew) mPairPtrs.PushBack(&(*it));
+					else it->second.PushBack(mChildren.Back());
+				}
 			}
 			else
 			{
@@ -210,16 +227,6 @@ namespace Library
 #pragma endregion Boolean Operators
 
 #pragma region Size and Capacity
-	std::size_t Scope::Size() const
-	{
-		return mTable.Size();
-	}
-
-	bool Scope::IsEmpty() const
-	{
-		return mTable.IsEmpty();
-	}
-
 	void Scope::Reserve(const std::size_t capacity)
 	{		
 		if (Math::FindNextPrime(capacity) > mTable.BucketCount())
@@ -232,6 +239,10 @@ namespace Library
 			}
 
 			*this = std::move(newScope);
+		}
+		else
+		{
+			mPairPtrs.Reserve(capacity);
 		}
 	}
 
@@ -248,20 +259,14 @@ namespace Library
 
 			*this = std::move(tmp);
 		}
+		else
+		{
+			mPairPtrs.ShrinkToFit();
+		}
 	}
 #pragma endregion Size and Capacity
 
-#pragma region Element Accessors
-	Scope* Scope::GetParent()
-	{
-		return mParent;
-	}
-
-	const Scope* Scope::GetParent() const
-	{
-		return mParent;
-	}
-
+#pragma region Accessors
 	Scope::DataType& Scope::operator[](const NameType& name)
 	{
 		return Append(name);
@@ -275,16 +280,6 @@ namespace Library
 		return *entry;
 	}
 
-	Scope::DataType& Scope::operator[](const std::size_t index)
-	{
-		return mPairPtrs[index]->second;
-	}
-
-	const Scope::DataType& Scope::operator[](const std::size_t index) const
-	{
-		return mPairPtrs[index]->second;
-	}
-
 	Scope::DataType* Scope::Find(const NameType& name)
 	{
 		TableType::Iterator it = mTable.Find(name);
@@ -295,11 +290,6 @@ namespace Library
 	{
 		TableType::ConstIterator it = mTable.Find(name);
 		return it != mTable.end() ? &it->second : nullptr;
-	}
-
-	const std::string* Scope::FindName(const std::size_t index) const
-	{
-		return index < mPairPtrs.Size() ? &mPairPtrs[index]->first : nullptr;
 	}
 
 	std::pair<Scope::DataType*, std::size_t> Scope::FindScope(const Scope& scope)
@@ -384,7 +374,7 @@ namespace Library
 		Vector queue = { nonConstThis };
 		return nonConstThis->SearchChildrenHelper(queue, name, const_cast<Scope**>(scopePtrOut));
 	}
-#pragma endregion Element Accessors
+#pragma endregion Accessors
 
 #pragma region Modifiers
 	Scope::DataType& Scope::Append(const NameType& name)

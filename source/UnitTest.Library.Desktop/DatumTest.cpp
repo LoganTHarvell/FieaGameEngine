@@ -461,6 +461,29 @@ namespace UnitTestLibraryDesktop
  			Foo a(10), b(20), c(30);
  			TestEquality<RTTI*>({ &a, &b, &c }, nullptr);
  			TestEquality<RTTI*>({ nullptr, nullptr, nullptr }, &a);
+
+			Datum datumInt = { 10, 20, 30 };
+			Datum datumFloat = { 10, 20, 30 };
+			Datum datumVector = { glm::vec4(10), glm::vec4(20), glm::vec4(30) };
+			Datum datumMatrix = { glm::mat4(10), glm::mat4(20), glm::mat4(30) };
+			Datum datumString = { "10", "20", "30" };
+			Datum datumRTTI = { &a, &b, &c };
+
+			Scope sa = { { "integers", datumInt } };
+			Scope sb = {	{ "integers", datumInt }, { "floats", datumFloat }, { "vectors", datumVector },
+							{ "matrices", datumMatrix }, { "strings", datumString }, { "pointers", datumRTTI }	};
+
+			Scope sc = sb;
+
+			Scope& child0_0 = sc.AppendScope("child0") = sb;
+			sc.AppendScope("child0") = sb;
+			sc.AppendScope("child1") = sb;
+			Scope& child0_0_0 = child0_0.AppendScope("child0_0") = sb;
+			child0_0.AppendScope("child0_0") = sb;
+			child0_0_0.AppendScope("child0_0_0") = sb;
+
+			TestEquality<Scope*>({ &sa, &sb, &sc }, nullptr);
+			TestEquality<Scope*>({ nullptr, nullptr, nullptr }, &sa);
 		}
 
 		TEST_METHOD(TypeSizeCapacity)
@@ -513,6 +536,64 @@ namespace UnitTestLibraryDesktop
 			Foo a(10), b(20), c(30);
 			TestElementAccessors<RTTI*>({ &a, &b, &c }, nullptr);
 			TestElementAccessors<RTTI*>({ nullptr, nullptr, nullptr }, &a);
+
+			Datum datumInt = { 10, 20, 30 };
+			Datum datumFloat = { 10, 20, 30 };
+			Datum datumVector = { glm::vec4(10), glm::vec4(20), glm::vec4(30) };
+			Datum datumMatrix = { glm::mat4(10), glm::mat4(20), glm::mat4(30) };
+			Datum datumString = { "10", "20", "30" };
+			Datum datumRTTI = { &a, &b, &c };
+
+			Scope sa = { { "integers", datumInt } };
+			Scope sb = { { "integers", datumInt }, { "floats", datumFloat }, { "vectors", datumVector },
+							{ "matrices", datumMatrix }, { "strings", datumString }, { "pointers", datumRTTI } };
+
+			Scope sc = sb;
+
+			Scope& child0_0 = sc.AppendScope("child0") = sb;
+			sc.AppendScope("child0") = sb;
+			sc.AppendScope("child1") = sb;
+			Scope& child0_0_0 = child0_0.AppendScope("child0_0") = sb;
+			child0_0.AppendScope("child0_0") = sb;
+			child0_0_0.AppendScope("child0_0_0") = sb;
+
+			TestElementAccessors<Scope*>({ &sa, &sb, &sc }, nullptr);
+			TestElementAccessors<Scope*>({ nullptr, nullptr, nullptr }, &sa);
+		}
+
+		TEST_METHOD(ScopeSubscriptOperator)
+		{
+			Datum datumInt = { 10, 20, 30 };
+			Datum datumFloat = { 10, 20, 30 };
+			Datum datumVector = { glm::vec4(10), glm::vec4(20), glm::vec4(30) };
+			Datum datumMatrix = { glm::mat4(10), glm::mat4(20), glm::mat4(30) };
+			Datum datumString = { "10", "20", "30" };
+			
+			Foo a(10), b(20), c(30);
+			Datum datumRTTI = { &a, &b, &c };
+
+			Scope sa = { { "integers", datumInt } };
+			Scope sb = { { "integers", datumInt }, { "floats", datumFloat }, { "vectors", datumVector },
+							{ "matrices", datumMatrix }, { "strings", datumString }, { "pointers", datumRTTI } };
+
+			Scope sc = sb;
+
+			Scope& child0_0 = sc.AppendScope("child0") = sb;
+			sc.AppendScope("child0") = sb;
+			sc.AppendScope("child1") = sb;
+			Scope& child0_0_0 = child0_0.AppendScope("child0_0") = sb;
+			child0_0.AppendScope("child0_0") = sb;
+			child0_0_0.AppendScope("child0_0_0") = sb;
+
+			Datum datumScope = { &sa, &sb, &sc };
+			Assert::AreEqual(sa, datumScope[0]);
+			Assert::AreEqual(sb, datumScope[1]);
+			Assert::AreEqual(sc, datumScope[2]);
+
+			const Datum constDatumScope = datumScope;
+			Assert::AreEqual(sa, constDatumScope[0]);
+			Assert::AreEqual(sb, constDatumScope[1]);
+			Assert::AreEqual(sc, constDatumScope[2]);
 		}
 
 		TEST_METHOD(SetStorage)

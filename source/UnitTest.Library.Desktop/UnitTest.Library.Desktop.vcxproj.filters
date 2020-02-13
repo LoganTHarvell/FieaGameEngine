@@ -17,6 +17,7 @@
     <ClCompile Include="HashMapTest.cpp" />
     <ClCompile Include="DatumTest.cpp" />
     <ClCompile Include="ScopeTest.cpp" />
+    <ClCompile Include="RTTITest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

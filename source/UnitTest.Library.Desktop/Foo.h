@@ -22,7 +22,8 @@ namespace UnitTests
 		bool operator==(const Foo& rhs) const noexcept;
 		bool operator!=(const Foo& rhs) const noexcept;
 
-		bool Equals(const RTTI* rhs) const override;
+		virtual bool Equals(const RTTI* rhs) const override;
+		virtual std::string ToString() const override;
 
 		int& Data();
 		int Data() const;

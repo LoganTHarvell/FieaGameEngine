@@ -3,6 +3,8 @@
 
 namespace UnitTests
 {
+	RTTI_DEFINITIONS(Bar);
+
 	Bar::Bar(int data) :
 		mData(std::make_unique<int>(data))
 	{
@@ -38,6 +40,19 @@ namespace UnitTests
 		}
 
 		return *this;
+	}
+
+	bool Bar::Equals(const RTTI* rhs) const
+	{
+		if (!rhs) return false;
+
+		const Bar* rhsFoo = rhs->As<Bar>();
+		return rhsFoo ? *mData == rhsFoo->Data() : false;
+	}
+
+	std::string Bar::ToString() const
+	{
+		return "Bar: " + std::to_string(*mData);
 	}
 
 	int& Bar::Data()

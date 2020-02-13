@@ -625,9 +625,9 @@ namespace Library
 		bool IsEmpty() const;
 
 		/// <summary>
-		/// Gets the max number of elements for which memory is available. 
+		/// Gets the max number of elements for which memory is already allocated. 
 		/// </summary>
-		/// <returns>Max number of elements for which memory is available.</returns>
+		/// <returns>Max number of elements for which memory is already allocated.</returns>
 		std::size_t Capacity() const;
 
 		/// <summary>

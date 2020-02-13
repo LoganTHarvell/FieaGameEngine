@@ -60,6 +60,11 @@ namespace UnitTests
 		return rhsFoo ? *mData == rhsFoo->Data() : false;
 	}
 
+	std::string Foo::ToString() const
+	{
+		return "Foo: " + std::to_string(*mData);
+	}
+
 	int& Foo::Data()
 	{
 		return *mData;

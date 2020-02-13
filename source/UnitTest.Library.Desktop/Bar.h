@@ -2,10 +2,14 @@
 
 #include <memory>
 
+#include "RTTI.h"
+
 namespace UnitTests
 {
-	class Bar
+	class Bar final : public Library::RTTI
 	{
+		RTTI_DECLARATIONS(Foo, Library::RTTI);
+
 	public:
 		explicit Bar(int data = 0);
 		Bar(const Bar& rhs);
@@ -13,6 +17,9 @@ namespace UnitTests
 		Bar& operator=(const Bar& rhs);
 		Bar& operator=(Bar&& rhs) noexcept;
 		~Bar() = default;
+
+		virtual bool Equals(const RTTI* rhs) const override;
+		virtual std::string ToString() const override;
 
 		int& Data();
 		int Data() const;
