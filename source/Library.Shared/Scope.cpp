@@ -21,6 +21,7 @@ namespace Library
 
 	Scope::~Scope()
 	{
+		if (mParent) mParent->Orphan(*this);
 		Clear();
 	}
 
