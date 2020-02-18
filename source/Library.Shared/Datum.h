@@ -838,7 +838,7 @@ namespace Library
 		void SetFromString(const std::string& str, const std::size_t index=0);
 #pragma endregion String Conversion
 
-#pragma region HelperMethods
+#pragma region Helper Methods
 	private:
 		/// <summary>
 		/// Constructor and assignment helper that initializes Datum with values from an initializer list.
@@ -847,7 +847,7 @@ namespace Library
 		/// <typeparam name="T">Type of elements to fill the Datum.</typeparam>
 		template<typename T>
 		Datum& ConstructorAssignmentHelper(const std::initializer_list<T> rhs);
-#pragma endregion HelperMethods
+#pragma endregion Helper Methods
 
 #pragma region Data Members
 	private:

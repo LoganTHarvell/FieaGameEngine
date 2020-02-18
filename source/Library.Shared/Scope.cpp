@@ -11,7 +11,7 @@
 
 namespace Library
 {
-	RTTI_DEFINITIONS(Scope);
+	RTTI_DEFINITIONS(Scope)
 
 #pragma region Constructors, Destructor, Assignment
 	Scope::Scope(const std::size_t capacity) :

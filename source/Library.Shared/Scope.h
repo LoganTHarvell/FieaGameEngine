@@ -22,7 +22,7 @@ namespace Library
 	/// </summary>
 	class Scope : public RTTI
 	{
-		RTTI_DECLARATIONS(Scope, RTTI);
+		RTTI_DECLARATIONS(Scope, RTTI)
 
 #pragma region Type Definitions and Constants
 	public:
