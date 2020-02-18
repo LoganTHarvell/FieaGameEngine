@@ -295,6 +295,36 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(&child0_0, child0_0_0.GetParent());
 		}
 
+		TEST_METHOD(IsAncestorDescendantOf)
+		{
+			Datum datumInt = { 10, 20, 30 };
+			Datum datumFloat = { 10, 20, 30 };
+			Datum datumVector = { glm::vec4(10), glm::vec4(20), glm::vec4(30) };
+			Datum datumMatrix = { glm::mat4(10), glm::mat4(20), glm::mat4(30) };
+			Datum datumString = { "10", "20", "30" };
+
+			Foo a(10), b(20), c(30);
+			Datum datumRTTI = { &a, &b, &c };
+
+			Scope scope = { { "integers", datumInt }, { "floats", datumFloat }, { "vectors", datumVector },
+							{ "matrices", datumMatrix }, { "strings", datumString }, { "pointers", datumRTTI } };
+
+			Scope copy = scope;
+
+			Scope& child0_0 = scope.AppendScope("child0") = copy;
+			scope.AppendScope("child0") = copy;
+			scope.AppendScope("child1") = copy;
+			Scope& child0_0_0 = child0_0.AppendScope("child0_0") = copy;
+			child0_0.AppendScope("child0_0") = copy;
+			child0_0_0.AppendScope("child0_0_0") = copy;
+
+			Assert::IsTrue(scope.IsAncestorOf(child0_0_0));
+			Assert::IsTrue(child0_0_0.IsDescendentOf(scope));
+
+			Scope copyChild0_0 = child0_0;
+			Assert::IsFalse(scope.IsAncestorOf((*copyChild0_0.Find("child0_0"))[0]));
+		}
+
 		TEST_METHOD(SubscriptOperators)
 		{
 			Datum datumInt = { 10, 20, 30 };
@@ -548,11 +578,27 @@ namespace UnitTestLibraryDesktop
 			Scope copy = scope;
 
 			Scope& child0_0 = scope.AppendScope("child0") = copy;
+			Scope::DataType* data = scope.Find("child0");
+			Assert::IsNotNull(data);
+
 			scope.AppendScope("child0") = copy;
+			Assert::AreEqual(2_z, data->Size());
+
 			scope.AppendScope("child1") = copy;
+			data = scope.Find("child1");
+			Assert::IsNotNull(data);
+
 			Scope& child0_0_0 = child0_0.AppendScope("child0_0") = copy;
+			data = child0_0.Find("child0_0");
+			Assert::IsNotNull(data);
+
 			child0_0.AppendScope("child0_0") = copy;
+			data = child0_0.Find("child0_0");
+			Assert::AreEqual(2_z, data->Size());
+
 			child0_0_0.AppendScope("child0_0_0") = copy;
+			data = child0_0_0.Find("child0_0_0");
+			Assert::IsNotNull(data);
 
 			Assert::ExpectException<std::runtime_error>([&scope] { scope.AppendScope("integers"); });
 		}
@@ -567,22 +613,18 @@ namespace UnitTestLibraryDesktop
 			child0_0.AppendScope("child0_0");
 
 			Scope* tmp = scope.Orphan(child1_0);
-			Assert::IsNotNull(tmp);
 			delete tmp;
 
 			tmp = scope.Orphan(child0_1);
-			Assert::IsNotNull(tmp);
 			delete tmp;
 
 			tmp = scope.Orphan(child0_0);
-			Assert::IsNotNull(tmp);
 			delete tmp;
 
 			Assert::AreEqual(0_z, scope.Find("child0")->Size());
 			Assert::AreEqual(0_z, scope.Find("child1")->Size());
 
-			Scope notFound;
-			Assert::IsNull(scope.Orphan(notFound));
+			Assert::ExpectException<std::runtime_error>([&scope] { Scope notFound; scope.Orphan(notFound); });
 		}
 
 		TEST_METHOD(Adopt)
@@ -599,7 +641,10 @@ namespace UnitTestLibraryDesktop
 			Scope copyChild1_0 = child1_0;
 			Scope copyChild0_0_0 = child0_0_0;
 
-			Scope adopter;
+			Datum datumInt = { 10, 20, 30 };
+			Scope adopter = Scope({ {"integers", datumInt } });
+
+			Assert::ExpectException<std::runtime_error>([&adopter, & child1_0] { adopter.Adopt(child1_0, "integers"); });
 
 			Assert::AreEqual(copyChild1_0, adopter.Adopt(child1_0, "child0"));
 			Assert::AreEqual(copyChild0_1, adopter.Adopt(child0_1, "child0"));
@@ -636,6 +681,16 @@ namespace UnitTestLibraryDesktop
 			child0_0_0.AppendScope("child0_0_0") = copy;
 
 			scope.Clear();
+
+			Assert::AreEqual(0_z, scope.Size());
+			Assert::IsNull(scope.Find("integers"));
+			Assert::IsNull(scope.Find("floats"));
+			Assert::IsNull(scope.Find("vectors"));
+			Assert::IsNull(scope.Find("matrices"));
+			Assert::IsNull(scope.Find("strings"));
+			Assert::IsNull(scope.Find("pointers"));
+			Assert::IsNull(scope.Find("child0"));
+			Assert::IsNull(scope.Find("child1"));
 		}
 
 	private:

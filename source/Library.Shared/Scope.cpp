@@ -20,8 +20,7 @@ namespace Library
 	}
 
 	Scope::~Scope()
-	{
-		if (mParent) mParent->Orphan(*this);
+	{		
 		Clear();
 	}
 
@@ -37,7 +36,7 @@ namespace Library
 				
 				for (std::size_t i = 0; i < tableEntryPtr->second.Size(); ++i)
 				{
-					mChildren.PushBack(new Scope(tableEntryPtr->second[i]));
+					mChildren.PushBack(tableEntryPtr->second[i].Clone());
 					mChildren.Back()->mParent = this;
 					data.PushBack(mChildren.Back());
 				}
@@ -69,7 +68,7 @@ namespace Library
 				
 				for (std::size_t i = 0; i < tableEntryPtr->second.Size(); ++i)
 				{
-					mChildren.PushBack(new Scope(tableEntryPtr->second[i]));
+					mChildren.PushBack(tableEntryPtr->second[i].Clone());
 					mChildren.Back()->mParent = this;
 					data.PushBack(mChildren.Back());
 				}
@@ -98,7 +97,10 @@ namespace Library
 			*rhs.mParent->mChildren.Find(&rhs) = this;
 
 			auto [data, index] = rhs.mParent->FindScope(rhs);
+			assert(data != nullptr);
 			data->Set(this, index);
+
+			rhs.mParent = nullptr;
 		}
 	}
 
@@ -111,6 +113,7 @@ namespace Library
 
 		Clear();
 
+		mParent = rhs.mParent;
 		mTable = std::move(rhs.mTable);
 		mPairPtrs = std::move(rhs.mPairPtrs);
 		mChildren = std::move(rhs.mChildren);
@@ -125,7 +128,10 @@ namespace Library
 			*rhs.mParent->mChildren.Find(&rhs) = this;
 
 			auto [data, index] = rhs.mParent->FindScope(rhs);
+			assert(data != nullptr);
 			data->Set(this, index);
+
+			rhs.mParent = nullptr;
 		}
 
 		return *this;
@@ -148,7 +154,7 @@ namespace Library
 
 				for (std::size_t i = 0; i < tableEntry.second.Size(); ++i)
 				{
-					mChildren.PushBack(new Scope(tableEntry.second[i]));
+					mChildren.PushBack(tableEntry.second[i].Clone());
 					mChildren.Back()->mParent = this;
 					data.PushBack(mChildren.Back());
 
@@ -187,7 +193,7 @@ namespace Library
 
 				for (std::size_t i = 0; i < tableEntry.second.Size(); ++i)
 				{
-					mChildren.PushBack(new Scope(tableEntry.second[i]));
+					mChildren.PushBack(tableEntry.second[i].Clone());
 					mChildren.Back()->mParent = this;
 					data.PushBack(mChildren.Back());
 
@@ -203,6 +209,11 @@ namespace Library
 		}
 
 		return *this;
+	}
+
+	gsl::owner<Scope*> Scope::Clone() const
+	{
+		return new Scope(*this);
 	}
 #pragma endregion Constructors, Destructor, Assignment
 
@@ -392,54 +403,68 @@ namespace Library
 	{
 		if (name.empty()) throw std::runtime_error("Name cannot be empty.");
 
-		Scope* child = new Scope(std::max(TableType::DefaultBucketCount, Math::FindNextPrime(capacity)));
-		child->mParent = this;
-		mChildren.PushBack(child);
+		DataType* data = Find(name);
 
-		auto [it, isNew] = mTable.Insert({ name, DataType(mChildren.Back()) });
-		if (isNew)
-		{
-			mPairPtrs.PushBack(&(*it));
-		}
-		else if (it->second.Type() == DataType::Types::Scope)
-		{
-			it->second.PushBack(mChildren.Back());
-		}
-		else
+		if (data && data->Type() != DataType::Types::Unknown && data->Type() != DataType::Types::Scope)
 		{
 			throw std::runtime_error("Table entry already exists with a non-Scope type.");
 		}
 
-		return *(it->second.Back<DataType::ScopePointer>());
+		Scope* child = new Scope(std::max(TableType::DefaultBucketCount, Math::FindNextPrime(capacity)));
+		child->mParent = this;
+		mChildren.PushBack(child);
+
+		if (data)
+		{
+			data->PushBack(child);
+		}
+		else
+		{
+			mPairPtrs.PushBack(&(*mTable.Insert({ name, DataType(mChildren.Back()) }).first));
+		}
+
+		return *child;
 	}
 
 	Scope* Scope::Orphan(Scope& child)
 	{
 		auto [data, index] = FindScope(child);
+		
+		if (data == nullptr) throw std::runtime_error("Child Scope not found.");
 
-		if (data)
-		{
-			data->RemoveAt(index);
-			mChildren.Remove(&child);
+		data->RemoveAt(index);
+		mChildren.Remove(&child);
+		child.mParent = nullptr;
 
-			return &child;
-		}
-
-		return nullptr;
+		return &child;
 	}
 
 	Scope& Scope::Adopt(Scope& child, const NameType& name)
 	{
-		if (this == child.mParent) return child;
+		if (this == &child)			throw std::runtime_error("Cannot adopt self.");
+		if (IsAncestorOf(child))	throw std::runtime_error("Cannot adopt descendant.");
+		if (name.empty())			throw std::runtime_error("Name cannot be empty.");
 
+		DataType* data = Find(name);
+
+		if (data && data->Type() != DataType::Types::Unknown && data->Type() != DataType::Types::Scope)
+		{
+			throw std::runtime_error("Table entry already exists with a non-Scope type.");
+		}
+	
 		Scope* orphan = child.mParent->Orphan(child);
 		orphan->mParent = this;
 		mChildren.PushBack(orphan);
 
-		auto [it, isNew] = mTable.Insert({ name, DataType(mChildren.Back()) });
-		if (isNew) mPairPtrs.PushBack(&(*it));
-		else it->second.PushBack(mChildren.Back());
-		
+		if (data)
+		{
+			data->PushBack(orphan);
+		}
+		else
+		{
+			mPairPtrs.PushBack(&(*mTable.Insert({ name, DataType(mChildren.Back()) }).first));
+		}
+
 		return *mChildren.Back();
 	}
 
@@ -452,6 +477,7 @@ namespace Library
 		{
 			if (child != nullptr)
 			{
+				child->mParent = nullptr;
 				delete child;
 				child = nullptr;
 			}
@@ -506,7 +532,8 @@ namespace Library
 
 	bool Scope::Equals(const RTTI* rhs) const
 	{
-		if (!rhs) return false;
+		if (this == rhs)	return true;
+		if (!rhs)			return false;
 
 		const Scope* rhsScopePtr = rhs->As<Scope>();
 		return rhsScopePtr ? operator==(*rhsScopePtr) : false;

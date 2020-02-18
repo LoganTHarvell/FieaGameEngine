@@ -32,6 +32,25 @@ namespace Library
 		return mParent;
 	}
 
+	inline bool Scope::IsAncestorOf(const Scope& scope) const
+	{
+		Scope* parent = scope.mParent;
+
+		while (parent != nullptr)
+		{
+			if (parent == this) return true;
+
+			parent = parent->mParent;
+		}
+
+		return false;
+	}
+
+	inline bool Scope::IsDescendentOf(const Scope& scope) const
+	{
+		return scope.IsAncestorOf(*this);
+	}
+
 	inline Scope::DataType& Scope::operator[](const std::size_t index)
 	{
 		return mPairPtrs[index]->second;

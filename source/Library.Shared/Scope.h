@@ -4,6 +4,9 @@
 // Standard
 #include <string>
 
+// Third Party
+#include <gsl/gsl>
+
 // First Party
 #include "RTTI.h"
 #include "HashMap.h"
@@ -106,6 +109,13 @@ namespace Library
 		/// <exception cref="std::runtime_error">Duplicate names found in the initializer list.</exception>
 		/// <remarks>DataType values are copied.</remarks>
 		Scope& operator=(const std::initializer_list<TableEntryType> rhs);
+
+		/// <summary>
+		/// Creates a heap allocated copy of the current Scope.
+		/// </summary>
+		/// <returns>Pointer to a newly heap allocated Scope copy.</returns>
+		/// <remarks>Override in derived classes to support copy construction and assignment as a nested Scope.</remarks>
+		virtual gsl::owner<Scope*> Clone() const;
 #pragma endregion Constructors, Destructor, Assignment
 
 #pragma region Boolean Operators
@@ -176,6 +186,20 @@ namespace Library
 		/// </summary>
 		/// <returns>If a child, the pointer to the parent Scope. Otherwise, nullptr.</returns>
 		const Scope* GetParent() const;
+
+		/// <summary>
+		/// Checks if the Scope instance is a parent of the given Scope or any of its parents.
+		/// </summary>
+		/// <param name="scope">Child scope to be checked against.</param>
+		/// <returns>True, if the Scope instance is an ancestor of the given Scope. Otherwise, false.</returns>
+		bool IsAncestorOf(const Scope& scope) const;
+
+		/// <summary>
+		/// Checks if the given Scope is the parent of the Scope instance or any of its parents.
+		/// </summary>
+		/// <param name="scope">Parent scope to be checked against.</param>
+		/// <returns>True, if the given Scope is an ancestor of the Scope instance. Otherwise, false.</returns>
+		bool IsDescendentOf(const Scope& scope) const;
 
 		/// <summary>
 		/// Subscript operator.
@@ -332,7 +356,7 @@ namespace Library
 		DataType* SearchChildrenHelper(const Vector<Scope*>& queue, const NameType& name, Scope** scopePtrOut=nullptr);
 #pragma endregion Helper Methods
 
-#pragma region DataType Members
+#pragma region Data Members
 	private:
 		/// <summary>
 		/// Pointer to the parent Scope instance, if a child.
@@ -353,7 +377,7 @@ namespace Library
 		/// SList containing child Scopes.
 		/// </summary>
 		Vector<Scope*> mChildren;
-#pragma endregion DataType Members
+#pragma endregion Data Members
 
 #pragma region RTTI Overrides
 	public:

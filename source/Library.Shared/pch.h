@@ -10,7 +10,9 @@
 #include <functional>
 #include <algorithm>
 
+
 // GSL Library
+#include <gsl/gsl>
 #include <gsl/span>
 
 // OpenGL Mathematics
