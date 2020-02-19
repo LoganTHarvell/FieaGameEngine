@@ -2,6 +2,9 @@
 // Pre-compiled Header
 #include "pch.h"
 
+// Standard
+#include <sstream>
+
 // Header
 #include "Scope.h"
 
@@ -520,14 +523,27 @@ namespace Library
 #pragma region RTTI Overrides
 	std::string Scope::ToString() const
 	{
-		std::string str = "Scope:";
+		std::ostringstream oss;
+		oss << "Scope(";
 
 		for (const auto& pairPtr : mPairPtrs)
 		{
-			str += " (" + pairPtr->first + ", " + pairPtr->second.ToString() + ")";
-		}
+			oss << "'" << pairPtr->first << "':";
 
-		return str;
+			for (std::size_t i = 0; i < pairPtr->second.Size(); ++i)
+			{
+				oss << pairPtr->second.ToString(i);
+
+				if (i < pairPtr->second.Size() - 1)
+				{
+					oss << ",";
+				}
+			}
+		}
+		
+		oss << ")";
+
+		return oss.str();
 	}
 
 	bool Scope::Equals(const RTTI* rhs) const
