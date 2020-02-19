@@ -220,6 +220,21 @@ namespace Library
 		mInternalStorage = false;
 	}
 
+	template<>
+	inline void Datum::SetStorage(gsl::span<std::byte> storage)
+	{
+		if (mType == Types::Unknown || mType == Types::End) throw std::runtime_error("Invalid data type.");
+		if (storage.size() < 1) throw std::runtime_error("External storage size must be greater than zero.");
+
+		Clear();
+		ShrinkToFit();
+
+		mData.voidPtr = storage.data();
+		mSize = storage.size();
+		mCapacity = storage.size();
+		mInternalStorage = false;
+	}
+
 	template<typename T>
 	inline void Datum::PushBack(const T& data)
 	{

@@ -21,12 +21,15 @@
 namespace Library
 {
 	class Scope;
+	class Attributed;
 
 	/// <summary>
 	/// Runtime type polymorphic wrapper for data elements.
 	/// </summary>
 	class Datum final
 	{
+		friend Attributed;
+
 #pragma region Type Definitions and Constants
 	public:
 		/// <summary>
@@ -78,7 +81,7 @@ namespace Library
 
 			// Convenience Pointers
 			void* voidPtr;
-			std::uint8_t* bytePtr;
+			std::byte* bytePtr;
 		};
 
 		/// <summary>
@@ -771,6 +774,11 @@ namespace Library
 		template<typename T>
 		void SetStorage(gsl::span<T> storage);
 
+	private:
+		template<>
+		void SetStorage(gsl::span<std::byte> storage);
+
+	public:
 		/// <summary>
 		/// Inserts data into the end of the Datum, incrementing capacity if needed.
 		/// </summary>

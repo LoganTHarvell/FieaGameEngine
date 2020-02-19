@@ -125,7 +125,7 @@ namespace UnitTestLibraryDesktop
 			TestToString<Foo>(&foo, "Foo: 10");
 
 			Scope scope;
-			TestToString<Scope>(&scope, "Scope:");
+			TestToString<Scope>(&scope, "Scope()");
 		}
 
 		TEST_METHOD(Equals)
