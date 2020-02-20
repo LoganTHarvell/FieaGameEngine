@@ -4,25 +4,13 @@
 
 // Header
 #include "TypeManager.h"
+
+// First Party
+#include "Attributed.h"
 #pragma endregion Includes
 
 namespace Library
 {
-#pragma region Signature Struct
-	bool Signature::operator==(const Signature& rhs) const noexcept
-	{
-		bool isEqual = true;
-
-		if (isEqual) isEqual = Name == rhs.Name;
-		if (isEqual) isEqual = Type == rhs.Type;
-		if (isEqual) isEqual = Offset == rhs.Offset;
-		if (isEqual) isEqual = IsInternal == rhs.IsInternal;
-		if (isEqual) isEqual = Size == rhs.Size;
-
-		return false;
-	}
-#pragma endregion Signature Struct
-
 #pragma region Instance Management
 	void TypeManager::Create()
 	{
@@ -49,7 +37,7 @@ namespace Library
 		IdType id = typeId;
 		std::size_t size = 0;
 
-		while (id != 0)
+		while (id != Attributed::TypeIdClass())
 		{
 			auto it = mRegistry.Find(id);
 			assert(it != mRegistry.end());
@@ -72,16 +60,21 @@ namespace Library
 		return combinedSignatures;
 	}
 
+	bool TypeManager::IsRegistered(const IdType typeId) const
+	{
+		return mRegistry.Find(typeId) != mRegistry.end();
+	}
+
 	void TypeManager::Register(const IdType typeId, SignatureListType&& signatures, const IdType parentTypeId)
 	{
-		if (!mRegistry.ContainsKey(parentTypeId))
+		if (parentTypeId != Attributed::TypeIdClass() && !mRegistry.ContainsKey(parentTypeId))
 		{
 			throw std::runtime_error("Parent type is not registered.");
 		}
 
-		auto [it, containsKey] = mRegistry.Insert({ typeId, { std::move(signatures), parentTypeId } });
+		auto [it, isNew] = mRegistry.Insert({ typeId, { std::move(signatures), parentTypeId } });
 
-		if (containsKey)
+		if (!isNew)
 		{
 			throw std::runtime_error("Type registered more than once.");
 		}

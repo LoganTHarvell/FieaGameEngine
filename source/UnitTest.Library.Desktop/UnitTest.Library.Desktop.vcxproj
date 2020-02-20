@@ -162,11 +162,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AttributedBar.cpp" />
+    <ClCompile Include="AttributedBarTest .cpp" />
+    <ClCompile Include="AttributedFoo.cpp" />
+    <ClCompile Include="AttributedFooTest.cpp" />
     <ClCompile Include="Bar.cpp" />
     <ClCompile Include="BarTest.cpp" />
     <ClCompile Include="DatumTest.cpp" />
     <ClCompile Include="DefaultEqualityTest.cpp" />
     <ClCompile Include="DefaultHashTest.cpp" />
+    <ClCompile Include="DerivedAttributedFoo.cpp" />
     <ClCompile Include="Foo.cpp" />
     <ClCompile Include="FooTest.cpp" />
     <ClCompile Include="HashMapTest.cpp" />
@@ -179,6 +184,7 @@
     <ClCompile Include="RTTITest.cpp" />
     <ClCompile Include="ScopeTest.cpp" />
     <ClCompile Include="SListTest.cpp" />
+    <ClCompile Include="TypeManagerTest.cpp" />
     <ClCompile Include="VectorTest.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -187,7 +193,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AttributedBar.h" />
+    <ClInclude Include="AttributedFoo.h" />
     <ClInclude Include="Bar.h" />
+    <ClInclude Include="DerivedAttributedFoo.h" />
     <ClInclude Include="Foo.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="ToStringSpecialization.h" />

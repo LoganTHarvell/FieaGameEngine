@@ -22,7 +22,7 @@ namespace Library
 		bool IsInternal;
 		std::size_t Size;
 
-		bool operator==(const Signature& rhs) const noexcept;
+		bool operator==(const Signature& rhs) const noexcept = default;
 	};
 #pragma endregion Signature Struct
 
@@ -101,6 +101,13 @@ namespace Library
 		SignatureListType Signatures(const IdType typeId);
 
 		/// <summary>
+		/// Checks if a given Attributed type has been registered.
+		/// </summary>
+		/// <param name="typeId">IdType for the Attributed type whose signatures will be retrieved.</param>
+		/// <returns>True, if the Attriuted type is registered. Otherwise, false.</returns>
+		bool IsRegistered(const IdType typeId) const;
+
+		/// <summary>
 		/// Registers an Attributed type and the attribute signatures with the registry.
 		/// </summary>
 		/// <param name="typeId">IdType associated with the Attributed type.</param>
@@ -137,5 +144,5 @@ namespace Library
 /// <summary>
 /// Macro that registers an Attributed type with the registry.
 /// </summary>
-#define REGISTER_TYPE(Type, ParentType) TypeManager::Register(Type::TypeIdClass(), Type::Signatures(), ParentType::TypeIdClass());
+#define REGISTER_TYPE(Type, ParentType) TypeManager::Instance()->Register(Type::TypeIdClass(), Type::Signatures(), ParentType::TypeIdClass());
 }

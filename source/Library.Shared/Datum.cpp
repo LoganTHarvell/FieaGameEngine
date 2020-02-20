@@ -139,12 +139,12 @@ namespace Library
 	{
 		Clear();
 	
-		if (mInternalStorage && mData.voidPtr != nullptr)
+		if (mInternalStorage && mIntData.voidPtr != nullptr)
 		{
-			free(mData.voidPtr);
+			free(mIntData.voidPtr);
 		}
 	
-		mData.voidPtr = nullptr;
+		mIntData.voidPtr = nullptr;
 		mCapacity = 0;
 	}
 	
@@ -161,18 +161,18 @@ namespace Library
 				{
 					for (std::size_t i = 0; i < mSize; ++i)
 					{
-						new(mData.stringPtr + i)std::string(rhs.mData.stringPtr[i]);
+						new(mIntData.stringPtr + i)std::string(rhs.mIntData.stringPtr[i]);
 					}
 				}
-				else if (mData.voidPtr && rhs.mData.voidPtr)
+				else if (mIntData.voidPtr && rhs.mIntData.voidPtr)
 				{
 					std::size_t dataSize = TypeSizeLUT[static_cast<std::size_t>(mType)];
-					std::memcpy(mData.voidPtr, rhs.mData.voidPtr, rhs.mSize * dataSize);
+					std::memcpy(mIntData.voidPtr, rhs.mIntData.voidPtr, rhs.mSize * dataSize);
 				}
 			}
 			else
 			{
-				mData = rhs.mData;
+				mIntData = rhs.mIntData;
 				mCapacity = rhs.mCapacity;
 			}
 		}
@@ -201,18 +201,18 @@ namespace Library
 				{
 					for (std::size_t i = 0; i < mSize; ++i)
 					{
-						new(mData.stringPtr + i)std::string(rhs.mData.stringPtr[i]);
+						new(mIntData.stringPtr + i)std::string(rhs.mIntData.stringPtr[i]);
 					}
 				}
 				else
 				{
 					std::size_t dataSize = TypeSizeLUT[static_cast<std::size_t>(mType)];
-					std::memcpy(mData.voidPtr, rhs.mData.voidPtr, rhs.mSize * dataSize);
+					std::memcpy(mIntData.voidPtr, rhs.mIntData.voidPtr, rhs.mSize * dataSize);
 				}
 			}
 			else
 			{
-				mData = rhs.mData;
+				mIntData = rhs.mIntData;
 				mCapacity = rhs.mCapacity;
 			}
 		}
@@ -221,10 +221,10 @@ namespace Library
 	}
 	
 	Datum::Datum(Datum&& rhs) noexcept :
-		mData(rhs.mData), mType(rhs.mType), mSize(rhs.mSize), mCapacity(rhs.mCapacity), 
+		mIntData(rhs.mIntData), mType(rhs.mType), mSize(rhs.mSize), mCapacity(rhs.mCapacity), 
 		mInternalStorage(rhs.mInternalStorage), mReserveFunctor(rhs.mReserveFunctor)
 	{
-		rhs.mData.voidPtr = nullptr;
+		rhs.mIntData.voidPtr = nullptr;
 		rhs.mSize = 0;
 		rhs.mCapacity = 0;
 		rhs.mInternalStorage = true;
@@ -237,17 +237,17 @@ namespace Library
 			if (mInternalStorage && mCapacity > 0)
 			{
 				Clear();
-				free(mData.voidPtr);
+				free(mIntData.voidPtr);
 			}
 
-			mData.voidPtr = rhs.mData.voidPtr;
+			mIntData.voidPtr = rhs.mIntData.voidPtr;
 			mType = rhs.mType;
 			mSize = rhs.mSize;
 			mCapacity = rhs.mCapacity;
 			mInternalStorage = rhs.mInternalStorage;
 			mReserveFunctor = rhs.mReserveFunctor;
 
-			rhs.mData.voidPtr = nullptr;
+			rhs.mIntData.voidPtr = nullptr;
 			rhs.mSize = 0;
 			rhs.mCapacity = 0;
 			rhs.mInternalStorage = true;
@@ -408,7 +408,7 @@ namespace Library
 		if (mType != rhs.mType || mSize != rhs.mSize)	return false;
 		if (mType == Types::Unknown)					return true;
 		
-		return EqualityLUT[static_cast<std::size_t>(mType)](mData.voidPtr, rhs.mData.voidPtr, mSize);
+		return EqualityLUT[static_cast<std::size_t>(mType)](mIntData.voidPtr, rhs.mIntData.voidPtr, mSize);
 	}
 
 	bool Datum::operator!=(const Datum& rhs) const noexcept
@@ -419,44 +419,44 @@ namespace Library
 #pragma region Equals Scalar
 	bool Datum::operator==(const int rhs) const noexcept
 	{
-		assert(mData.intPtr != nullptr);
-		return mData.intPtr[0] == rhs;
+		assert(mIntData.intPtr != nullptr);
+		return mIntData.intPtr[0] == rhs;
 	}
 
 	bool Datum::operator==(const float rhs) const noexcept
 	{
-		assert(mData.floatPtr != nullptr);
-		return mData.floatPtr[0] == rhs;
+		assert(mIntData.floatPtr != nullptr);
+		return mIntData.floatPtr[0] == rhs;
 	}
 
 	bool Datum::operator==(const glm::vec4& rhs) const noexcept
 	{
-		assert(mData.vectorPtr != nullptr);
-		return mData.vectorPtr[0] == rhs;
+		assert(mIntData.vectorPtr != nullptr);
+		return mIntData.vectorPtr[0] == rhs;
 	}
 
 	bool Datum::operator==(const glm::mat4& rhs) const noexcept
 	{
-		assert(mData.matrixPtr != nullptr);
-		return mData.matrixPtr[0] == rhs;
+		assert(mIntData.matrixPtr != nullptr);
+		return mIntData.matrixPtr[0] == rhs;
 	}
 
 	bool Datum::operator==(const std::string& rhs) const noexcept
 	{
-		assert(mData.stringPtr != nullptr);
-		return mData.stringPtr[0] == rhs;
+		assert(mIntData.stringPtr != nullptr);
+		return mIntData.stringPtr[0] == rhs;
 	}
 
 	bool Datum::operator==(const ScopePointer& rhs) const noexcept
 	{
-		assert(mData.scopePtr != nullptr);
-		return ((!mData.scopePtr[0] && !rhs) || (mData.scopePtr[0] && *mData.scopePtr[0] == *rhs));
+		assert(mIntData.scopePtr != nullptr);
+		return ((!mIntData.scopePtr[0] && !rhs) || (mIntData.scopePtr[0] && *mIntData.scopePtr[0] == *rhs));
 	}
 
 	bool Datum::operator==(const RTTIPointer& rhs) const noexcept
 	{
-		assert(mData.rttiPtr != nullptr);
-		return ((!mData.rttiPtr[0] && !rhs) || (mData.rttiPtr[0] && mData.rttiPtr[0]->Equals(rhs)));
+		assert(mIntData.rttiPtr != nullptr);
+		return ((!mIntData.rttiPtr[0] && !rhs) || (mIntData.rttiPtr[0] && mIntData.rttiPtr[0]->Equals(rhs)));
 	}
 #pragma endregion Equals Scalar
 
@@ -506,11 +506,11 @@ namespace Library
 
 		if (capacity > mCapacity)
 		{
-			void* newMemory = realloc(mData.voidPtr, capacity * TypeSizeLUT[static_cast<std::size_t>(mType)]);
+			void* newMemory = realloc(mIntData.voidPtr, capacity * TypeSizeLUT[static_cast<std::size_t>(mType)]);
 
 			assert(newMemory != nullptr);
 
-			mData.voidPtr = newMemory;
+			mIntData.voidPtr = newMemory;
 			mCapacity = capacity;
 		}
 	}
@@ -526,14 +526,14 @@ namespace Library
 
 			for (std::size_t i = mSize; i < size; ++i)
 			{
-				CreateDefaultLUT[static_cast<std::size_t>(mType)](mData.voidPtr, i);
+				CreateDefaultLUT[static_cast<std::size_t>(mType)](mIntData.voidPtr, i);
 			}
 		}
 		else if (mType == Types::String && size < mSize)
 		{
 			for (std::size_t i = size; i < mSize; ++i)
 			{
-				mData.stringPtr[i].~basic_string();
+				mIntData.stringPtr[i].~basic_string();
 			}
 		}
 
@@ -547,16 +547,16 @@ namespace Library
 
 		if (mSize == 0)
 		{
-			free(mData.voidPtr);
-			mData.voidPtr = nullptr;
+			free(mIntData.voidPtr);
+			mIntData.voidPtr = nullptr;
 		}
 		else if (mSize < mCapacity)
 		{
-			void* newMemory = realloc(mData.voidPtr, mSize * TypeSizeLUT[static_cast<std::size_t>(mType)]);
+			void* newMemory = realloc(mIntData.voidPtr, mSize * TypeSizeLUT[static_cast<std::size_t>(mType)]);
 
 			assert(newMemory != nullptr);
 
-			mData.voidPtr = newMemory;
+			mIntData.voidPtr = newMemory;
 		}
 
 		mCapacity = mSize;
@@ -587,7 +587,7 @@ namespace Library
 		{
 			if (mType == Types::String)
 			{
-				mData.stringPtr[mSize - 1].~basic_string();
+				mIntData.stringPtr[mSize - 1].~basic_string();
 			}
 
 			--mSize;
@@ -602,11 +602,11 @@ namespace Library
 
 		if (mType == Types::String)
 		{
-			mData.stringPtr[index].~basic_string();
+			mIntData.stringPtr[index].~basic_string();
 		}
 
 		const std::size_t size = TypeSizeLUT[static_cast<std::size_t>(mType)];
-		memmove(&mData.bytePtr[index * size], &mData.bytePtr[(index * size) + size], size * (mSize - index));
+		memmove(&mIntData.bytePtr[index * size], &mIntData.bytePtr[(index * size) + size], size * (mSize - index));
 
 		--mSize;
 	}
@@ -615,13 +615,13 @@ namespace Library
 	{
 		if (!mInternalStorage)
 		{
-			mData.voidPtr = nullptr;
+			mIntData.voidPtr = nullptr;
 		}
 		else if (mType == Types::String)
 		{
 			for (std::size_t i = 0; i < mSize; ++i)
 			{
-				std::destroy_at(mData.stringPtr + i);
+				std::destroy_at(mIntData.stringPtr + i);
 			}
 		}
 
@@ -635,14 +635,14 @@ namespace Library
 	{
 		if (mType == Types::Unknown) throw std::runtime_error("Data type unknown.");
 		
-		return ToStringLUT[static_cast<std::size_t>(mType)](mData.voidPtr, index);
+		return ToStringLUT[static_cast<std::size_t>(mType)](mIntData.voidPtr, index);
 	}
 
 	void Datum::SetFromString(const std::string& str, const std::size_t index)
 	{
 		if (mType == Types::Unknown) throw std::runtime_error("Data type unknown.");
 
-		FromStringLUT[static_cast<std::size_t>(mType)](str, mData.voidPtr, index);
+		FromStringLUT[static_cast<std::size_t>(mType)](str, mIntData.voidPtr, index);
 	}
 #pragma endregion String Conversion
 

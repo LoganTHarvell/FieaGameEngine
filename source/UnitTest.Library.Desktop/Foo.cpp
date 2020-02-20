@@ -6,26 +6,26 @@ namespace UnitTests
 	RTTI_DEFINITIONS(Foo);
 
 	Foo::Foo(int data) :
-		mData(std::make_unique<int>(data))
+		mIntData(std::make_unique<int>(data))
 	{
 	}
 
 	Foo::Foo(const Foo& rhs) :
-		mData(std::make_unique<int>(*rhs.mData))
+		mIntData(std::make_unique<int>(*rhs.mIntData))
 	{
 	}
 
 	Foo::Foo(Foo&& rhs) noexcept :
-		mData(std::move(rhs.mData))
+		mIntData(std::move(rhs.mIntData))
 	{
-		rhs.mData = nullptr;
+		rhs.mIntData = nullptr;
 	}
 
 	Foo& Foo::operator=(const Foo& rhs)
 	{
 		if (this != &rhs)
 		{
-			*mData = *rhs.mData;
+			*mIntData = *rhs.mIntData;
 		}
 
 		return *this;
@@ -35,8 +35,8 @@ namespace UnitTests
 	{
 		if (this != &rhs)
 		{
-			mData = std::move(rhs.mData);
-			rhs.mData = nullptr;
+			mIntData = std::move(rhs.mIntData);
+			rhs.mIntData = nullptr;
 		}
 
 		return *this;
@@ -44,7 +44,7 @@ namespace UnitTests
 
 	bool Foo::operator==(const Foo& rhs) const noexcept
 	{
-		return *mData == *rhs.mData;
+		return *mIntData == *rhs.mIntData;
 	}
 
 	bool Foo::operator!=(const Foo& rhs) const noexcept
@@ -57,26 +57,26 @@ namespace UnitTests
 		if (!rhs) return false;
 		
 		const Foo* rhsFoo = rhs->As<Foo>();
-		return rhsFoo ? *mData == rhsFoo->Data() : false;
+		return rhsFoo ? *mIntData == rhsFoo->Data() : false;
 	}
 
 	std::string Foo::ToString() const
 	{
-		return "Foo: " + std::to_string(*mData);
+		return "Foo: " + std::to_string(*mIntData);
 	}
 
 	int& Foo::Data()
 	{
-		return *mData;
+		return *mIntData;
 	}
 
 	int Foo::Data() const
 	{
-		return *mData;
+		return *mIntData;
 	}
 	
 	void Foo::SetData(int data)
 	{
-		*mData = data;
+		*mIntData = data;
 	}
 }

@@ -8,11 +8,15 @@
 
 #include "Foo.h"
 #include "Bar.h"
+#include "AttributedFoo.h"
+#include "AttributedBar.h"
 #include "SList.h"
 #include "Vector.h"
 #include "HashMap.h"
 #include "Datum.h"
 #include "Scope.h"
+#include "TypeManager.h"
+
 
 using namespace UnitTests;
 using namespace Library;
@@ -97,6 +101,46 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 		RETURN_WIDE_STRING(t);
 	}
 #pragma endregion Bar
+
+#pragma region AttributedFoo
+	template<>
+	inline std::wstring ToString<AttributedFoo>(const AttributedFoo& t)
+	{
+		RETURN_WIDE_STRING(t.Data());
+	}
+
+	template<>
+	inline std::wstring ToString<AttributedFoo>(const AttributedFoo* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<AttributedFoo>(AttributedFoo* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+#pragma endregion AttributedFoo
+
+#pragma region AttributedBar
+	template<>
+	inline std::wstring ToString<AttributedBar>(const AttributedBar& t)
+	{
+		RETURN_WIDE_STRING(t.Data());
+	}
+
+	template<>
+	inline std::wstring ToString<AttributedBar>(const AttributedBar* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<AttributedBar>(AttributedBar* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+#pragma endregion AttributedBar
 
 #pragma region SList
 	template<>
@@ -1288,4 +1332,24 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 		}
 	}
 #pragma endregion Scope
+
+#pragma region TypeManager
+	template<>
+	inline std::wstring ToString<TypeManager::SignatureListType>(const TypeManager::SignatureListType& t)
+	{
+		RETURN_WIDE_STRING(t.Size());
+	}
+
+	template<>
+	inline std::wstring ToString<TypeManager::SignatureListType>(const TypeManager::SignatureListType* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<TypeManager::SignatureListType>(TypeManager::SignatureListType* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+#pragma endregion TypeManager
 }

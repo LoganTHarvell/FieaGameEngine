@@ -318,10 +318,10 @@ namespace Library
 	{
 		Clear();
 
-		if (mData != nullptr)
+		if (mIntData != nullptr)
 		{
-			free(mData);
-			mData = nullptr;
+			free(mIntData);
+			mIntData = nullptr;
 		}
 
 		mCapacity = 0;
@@ -362,9 +362,9 @@ namespace Library
 
 	template<typename T>
 	inline Vector<T>::Vector(Vector&& rhs) noexcept :
-		mData(rhs.mData), mSize(rhs.mSize), mCapacity(rhs.mCapacity), mEqualityFunctor(rhs.mEqualityFunctor), mReserveFunctor(rhs.mReserveFunctor)
+		mIntData(rhs.mIntData), mSize(rhs.mSize), mCapacity(rhs.mCapacity), mEqualityFunctor(rhs.mEqualityFunctor), mReserveFunctor(rhs.mReserveFunctor)
 	{
-		rhs.mData = nullptr;
+		rhs.mIntData = nullptr;
 		rhs.mSize = 0;
 		rhs.mCapacity = 0;
 	}
@@ -377,16 +377,16 @@ namespace Library
 			if (mCapacity > 0)
 			{
 				Clear();
-				free(mData);
+				free(mIntData);
 			}
 
-			mData = rhs.mData;
+			mIntData = rhs.mIntData;
 			mSize = rhs.mSize;
 			mCapacity = rhs.mCapacity;
 			mReserveFunctor = rhs.mReserveFunctor;
 			mEqualityFunctor = rhs.mEqualityFunctor;
 
-			rhs.mData = nullptr;
+			rhs.mIntData = nullptr;
 			rhs.mSize = 0;
 			rhs.mCapacity = 0;
 		}
@@ -469,10 +469,10 @@ namespace Library
 	{
 		if (capacity > mCapacity)
 		{
-			void* newMemory = realloc(mData, capacity * sizeof(T));
+			void* newMemory = realloc(mIntData, capacity * sizeof(T));
 
 			assert(newMemory != nullptr);
-			mData = reinterpret_cast<T*>(newMemory);
+			mIntData = reinterpret_cast<T*>(newMemory);
 			mCapacity = capacity;
 		}
 	}
@@ -486,14 +486,14 @@ namespace Library
 
 			for (std::size_t i = mSize; i < size; ++i)
 			{
-				new(mData + i)T();
+				new(mIntData + i)T();
 			}
 		}
 		else if (size < mSize)
 		{
 			for (std::size_t i = size; i < mSize; ++i)
 			{
-				mData[i].~T();
+				mIntData[i].~T();
 			}
 		}
 
@@ -509,14 +509,14 @@ namespace Library
 
 			for (std::size_t i = mSize; i < size; ++i)
 			{
-				new(mData + i)T(value);
+				new(mIntData + i)T(value);
 			}
 		}
 		else if (size < mSize)
 		{
 			for (std::size_t i = size; i < mSize; ++i)
 			{
-				mData[i].~T();
+				mIntData[i].~T();
 			}
 		}
 
@@ -528,15 +528,15 @@ namespace Library
 	{
 		if (mSize == 0)
 		{
-			free(mData);
-			mData = nullptr;
+			free(mIntData);
+			mIntData = nullptr;
 		}
 		else if (mSize < mCapacity)
 		{
-			void* newMemory = realloc(mData, mSize * sizeof(T));
+			void* newMemory = realloc(mIntData, mSize * sizeof(T));
 
 			assert(newMemory != nullptr);
-			mData = reinterpret_cast<T*>(newMemory);
+			mIntData = reinterpret_cast<T*>(newMemory);
 		}
 
 		mCapacity = mSize;
@@ -587,7 +587,7 @@ namespace Library
 
 		for (std::size_t i = 0; i < mSize; ++i)
 		{
-			if (mEqualityFunctor(mData[i], value))
+			if (mEqualityFunctor(mIntData[i], value))
 			{
 				return Iterator(*this, i);
 			}
@@ -613,7 +613,7 @@ namespace Library
 			throw std::runtime_error("List is empty.");
 		}
 
-		return mData[0];
+		return mIntData[0];
 	}
 
 	template<typename T>
@@ -624,7 +624,7 @@ namespace Library
 			throw std::runtime_error("List is empty.");
 		}
 
-		return mData[0];
+		return mIntData[0];
 	}
 
 	template<typename T>
@@ -635,7 +635,7 @@ namespace Library
 			throw std::runtime_error("List is empty.");
 		}
 
-		return mData[mSize - 1];
+		return mIntData[mSize - 1];
 	}
 
 	template<typename T>
@@ -646,7 +646,7 @@ namespace Library
 			throw std::runtime_error("List is empty.");
 		}
 
-		return mData[mSize - 1];
+		return mIntData[mSize - 1];
 	}
 
 	template<typename T>
@@ -657,7 +657,7 @@ namespace Library
 			throw std::out_of_range("Index is out of bounds.");
 		}
 
-		return mData[index];
+		return mIntData[index];
 	}
 
 	template<typename T>
@@ -668,7 +668,7 @@ namespace Library
 			throw std::out_of_range("Index is out of bounds.");
 		}
 
-		return mData[index];
+		return mIntData[index];
 	}
 
 	template<typename T>
@@ -696,7 +696,7 @@ namespace Library
 			Reserve(std::max(newCapacity, mCapacity + 1));
 		}
 
-		new(mData + mSize++)T(data);
+		new(mIntData + mSize++)T(data);
 	}
 
 	template<typename T>
@@ -704,7 +704,7 @@ namespace Library
 	{
 		if (mSize > 0)
 		{
-			mData[--mSize].~T();
+			mIntData[--mSize].~T();
 		}
 	}
 
@@ -715,10 +715,10 @@ namespace Library
 
 		for (std::size_t i = 0; i < mSize; ++i)
 		{
-			if (mEqualityFunctor(mData[i], value))
+			if (mEqualityFunctor(mIntData[i], value))
 			{
-				mData[i].~T();
-				memmove(&mData[i], &mData[i + 1], sizeof(T) * (mSize - i));
+				mIntData[i].~T();
+				memmove(&mIntData[i], &mIntData[i + 1], sizeof(T) * (mSize - i));
 
 				--mSize;
 				return true;
@@ -743,8 +743,8 @@ namespace Library
 			}
 			else
 			{
-				mData[it.mIndex].~T();
-				memmove(&mData[it.mIndex], &mData[it.mIndex + 1], sizeof(T) * (mSize - it.mIndex));
+				mIntData[it.mIndex].~T();
+				memmove(&mIntData[it.mIndex], &mIntData[it.mIndex + 1], sizeof(T) * (mSize - it.mIndex));
 				--mSize;
 			}
 
@@ -759,7 +759,7 @@ namespace Library
 	{
 		for (std::size_t i = 0; i < mSize; ++i)
 		{
-			mData[i].~T();
+			mIntData[i].~T();
 		}
 
 		mSize = 0;

@@ -14,12 +14,17 @@ namespace Library
 #pragma region Constructors, Destructor, Assignment
 	public:
 		/// <summary>
-		/// Default constructor.
+		/// Main constructor.
 		/// Populates the scope with attributes associated with the passed RTTI::IdType.
 		/// </summary>
 		/// <param name="typeId">RTTI::IdType to use during Populate.</param>
 		explicit Attributed(const RTTI::IdType typeId);
 		
+		/// <summary>
+		/// Default constructor.
+		/// </summary>
+		Attributed() = delete;
+
 		/// <summary>
 		/// Virtual default destructor.
 		/// </summary>
@@ -51,15 +56,6 @@ namespace Library
 		/// <returns></returns>
 		Attributed& operator=(Attributed&& rhs) noexcept;
 #pragma endregion Constructors, Destructor, Assignment
-
-#pragma region Static Methods
-	public:
-		/// <summary>
-		/// Gets the attribute signatures list for the class.
-		/// </summary>
-		/// <returns>An empty SignatureListType value.</returns>
-		static TypeManager::SignatureListType Signatures();
-#pragma endregion Static Methods
 		
 #pragma region Accessors
 	public:

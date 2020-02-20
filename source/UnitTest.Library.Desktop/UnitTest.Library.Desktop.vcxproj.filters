@@ -18,6 +18,18 @@
     <ClCompile Include="DatumTest.cpp" />
     <ClCompile Include="ScopeTest.cpp" />
     <ClCompile Include="RTTITest.cpp" />
+    <ClCompile Include="AttributedBar.cpp">
+      <Filter>Support Code</Filter>
+    </ClCompile>
+    <ClCompile Include="AttributedFoo.cpp">
+      <Filter>Support Code</Filter>
+    </ClCompile>
+    <ClCompile Include="AttributedFooTest.cpp" />
+    <ClCompile Include="AttributedBarTest .cpp" />
+    <ClCompile Include="TypeManagerTest.cpp" />
+    <ClCompile Include="DerivedAttributedFoo.cpp">
+      <Filter>Support Code</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -28,6 +40,15 @@
       <Filter>Support Code</Filter>
     </ClInclude>
     <ClInclude Include="Bar.h">
+      <Filter>Support Code</Filter>
+    </ClInclude>
+    <ClInclude Include="AttributedBar.h">
+      <Filter>Support Code</Filter>
+    </ClInclude>
+    <ClInclude Include="AttributedFoo.h">
+      <Filter>Support Code</Filter>
+    </ClInclude>
+    <ClInclude Include="DerivedAttributedFoo.h">
       <Filter>Support Code</Filter>
     </ClInclude>
   </ItemGroup>

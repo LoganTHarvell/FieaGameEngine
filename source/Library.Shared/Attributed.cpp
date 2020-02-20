@@ -51,13 +51,6 @@ namespace Library
 	}
 #pragma endregion Constructors, Destructor, Assignment
 
-#pragma region Static Methods
-	TypeManager::SignatureListType Attributed::Signatures()
-	{
-		return TypeManager::SignatureListType();
-	}
-#pragma endregion Static Methods
-
 #pragma region Accessors
 	bool Attributed::IsAttribute(const NameType& name)
 	{
@@ -106,6 +99,7 @@ namespace Library
 		for (const auto& signature : signatures)
 		{
 			DataType& data = Append(signature.Name);
+			data.mType = signature.Type;
 
 			if (!signature.IsInternal)
 			{
@@ -114,7 +108,6 @@ namespace Library
 			}
 			else
 			{
-				data.SetType(signature.Type);
 				data.Reserve(signature.Size);
 			}
 		}

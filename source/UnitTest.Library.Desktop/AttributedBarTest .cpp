@@ -1,7 +1,8 @@
 #include "pch.h"
 
 #include "ToStringSpecialization.h"
-#include "Bar.h"
+#include "AttributedFoo.h"
+#include "AttributedBar.h"
 
 
 using namespace std::string_literals;
@@ -13,7 +14,7 @@ using namespace UnitTests;
 
 namespace UnitTestLibraryDesktop
 {
-	TEST_CLASS(BarTest)
+	TEST_CLASS(AttributedBarTest)
 	{
 	public:
 		TEST_METHOD_INITIALIZE(Initialize)
@@ -22,10 +23,16 @@ namespace UnitTestLibraryDesktop
 			_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF);
 			_CrtMemCheckpoint(&sStartMemState);
 #endif
+
+			TypeManager::Create();
+			REGISTER_TYPE(AttributedBar, Attributed)
 		}
 
 		TEST_METHOD_CLEANUP(Cleanup)
 		{
+			TypeManager::Destroy();
+
+
 #if defined(DEBUG) || defined(_DEBUG)
 			_CrtMemState endMemState, diffMemState;
 			_CrtMemCheckpoint(&endMemState);
@@ -39,44 +46,44 @@ namespace UnitTestLibraryDesktop
 
 		TEST_METHOD(Constructor)
 		{
-			Bar a;
+			AttributedBar a;
 			Assert::AreEqual(0, a.Data());
 
-			Bar b(10);
+			AttributedBar b(10);
 			Assert::AreEqual(10, b.Data());
 
-			Bar c = Bar(20);
+			AttributedBar c = AttributedBar(20);
 		}
 
 		TEST_METHOD(CopySemantics)
 		{
-			Bar a(10);
+			AttributedBar a(10);
 			Assert::AreEqual(10, a.Data());
 
-			Bar b(a);
+			AttributedBar b(a);
 			Assert::AreEqual(a.Data(), b.Data());
 
-			Bar c;
+			AttributedBar c;
 			c = a;
 			Assert::AreEqual(c.Data(), a.Data());
 
-			Bar d(a);
+			AttributedBar d(a);
 			Assert::AreEqual(d.Data(), a.Data());
 		}
 
 		TEST_METHOD(EqualityOperators)
 		{
-			Bar a(10);
-			Bar b(a);
+			AttributedBar a(10);
+			AttributedBar b(a);
 			Assert::AreEqual(a.Data(), b.Data());
 
-			Bar c;
+			AttributedBar c;
 			Assert::IsTrue(c.Data() != a.Data()); // Assert::AreNotEqual does not invoke operator!=
 		}
 
 		TEST_METHOD(SetData)
 		{
-			Bar a;
+			AttributedBar a;
 			Assert::AreEqual(0, a.Data());
 
 			const int data = 10;
@@ -87,13 +94,13 @@ namespace UnitTestLibraryDesktop
 		TEST_METHOD(MoveSemantics)
 		{
 			const int data = 10;
-			Bar a(data);
+			AttributedBar a(data);
 			Assert::AreEqual(data, a.Data());
 
-			Bar b(std::move(a));
+			AttributedBar b(std::move(a));
 			Assert::AreEqual(data, b.Data());
 
-			Bar c;
+			AttributedBar c;
 			Assert::AreEqual(0, c.Data());
 			c = std::move(b);
 			Assert::AreEqual(data, c.Data());
@@ -101,16 +108,30 @@ namespace UnitTestLibraryDesktop
 
 		TEST_METHOD(RTTITest)
 		{
-			Bar a = Bar(10);
-			Bar b = Bar(10);
+			AttributedBar a = AttributedBar(10);
+			AttributedBar b = AttributedBar(10);
 
-			Assert::IsTrue(a.Is(Bar::TypeIdClass()));
+			Assert::IsTrue(a.Is(AttributedBar::TypeIdClass()));
 			Assert::IsTrue(a.Equals(&b));
+		}
+		
+		TEST_METHOD(ToString)
+		{
+			Assert::AreEqual("AttributedBar: 0", AttributedBar().ToString().c_str());
+		}
+
+		TEST_METHOD(Clone)
+		{
+			Scope* scope = new AttributedBar();
+			Scope* tmp = scope->Clone();
+			Assert::AreEqual(*AttributedBar().As<Scope>(), *tmp);
+			delete scope;
+			delete tmp;
 		}
 
 	private:
 		static _CrtMemState sStartMemState;
 	};
 
-	_CrtMemState BarTest::sStartMemState;
+	_CrtMemState AttributedBarTest::sStartMemState;
 }
