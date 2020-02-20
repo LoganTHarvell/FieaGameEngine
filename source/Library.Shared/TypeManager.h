@@ -18,9 +18,9 @@ namespace Library
 	{
 		std::string Name;
 		Datum::Types Type;
-		std::size_t Offset;
 		bool IsInternal;
 		std::size_t Size;
+		std::size_t Offset;
 
 		bool operator==(const Signature& rhs) const noexcept = default;
 	};

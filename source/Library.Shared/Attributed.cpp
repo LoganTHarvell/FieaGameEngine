@@ -59,20 +59,12 @@ namespace Library
 
 	bool Attributed::IsPrescribedAttribute(const NameType& name)
 	{
-		DataType* data = Search(name);
-		if (data == nullptr) return false;
+		if (Search(name) == nullptr) return false;
 
-		bool isPrescribed = false;
-		for (const auto& signature : TypeManager::Instance()->Signatures(TypeIdInstance()))
-		{
-			if (signature.Name == name)
-			{
-				isPrescribed = true;
-				break;
-			}
-		}
+		auto signatures = TypeManager::Instance()->Signatures(TypeIdInstance());
 
-		return isPrescribed;
+		auto equalityFunctor = [&name](Signature signature) { return signature.Name == name; };
+		return std::find_if(signatures.begin(), signatures.end(), equalityFunctor) != signatures.end();
 	}
 
 	bool Attributed::IsAuxiliaryAttribute(const NameType& name)
@@ -99,15 +91,15 @@ namespace Library
 		for (const auto& signature : signatures)
 		{
 			DataType& data = Append(signature.Name);
-			data.mType = signature.Type;
 
 			if (!signature.IsInternal)
 			{
 				std::byte* address = reinterpret_cast<std::byte*>(this) + signature.Offset;
-				data.SetStorage(gsl::span(address, signature.Size));
+				data.SetStorage(signature.Type, gsl::span(address, signature.Size));
 			}
 			else
 			{
+				data.mType = signature.Type;
 				data.Reserve(signature.Size);
 			}
 		}
@@ -122,7 +114,7 @@ namespace Library
 			if (!signature.IsInternal)
 			{
 				std::byte* address = reinterpret_cast<std::byte*>(this) + signature.Offset;
-				Find(signature.Name)->SetStorage(gsl::span(address, signature.Size));
+				Find(signature.Name)->SetStorage(signature.Type, gsl::span(address, signature.Size));
 			}
 		}
 	}

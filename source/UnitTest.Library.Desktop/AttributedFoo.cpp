@@ -95,13 +95,13 @@ namespace UnitTests
 	{
 		return Library::TypeManager::SignatureListType
 		{
-			{ "integer", DataType::Types::Integer, offsetof(AttributedFoo, mIntData), false, 1 },
-			{ "float", DataType::Types::Integer, offsetof(AttributedFoo, mFloatData), false, 1 },
-			{ "vector", DataType::Types::Integer, offsetof(AttributedFoo, mVectorData), false, 1 },
-			{ "matrix", DataType::Types::Integer, offsetof(AttributedFoo, mMatrixData), false, 1 },
-			{ "string", DataType::Types::Integer, offsetof(AttributedFoo, mStringData), false, 1 },
-			{ "scope", DataType::Types::Integer, 0, true, 1 },
-			{ "rttiPtr", DataType::Types::Integer, offsetof(AttributedFoo, mRttiData), false, 1 }
+			{ "integer", DataType::Types::Integer, false, 1, offsetof(AttributedFoo, mIntData) },
+			{ "float", DataType::Types::Integer, false, 1, offsetof(AttributedFoo, mFloatData) },
+			{ "vector", DataType::Types::Integer, false, 1, offsetof(AttributedFoo, mVectorData) },
+			{ "matrix", DataType::Types::Integer, false, 1, offsetof(AttributedFoo, mMatrixData) },
+			{ "string", DataType::Types::Integer, false, 1, offsetof(AttributedFoo, mStringData) },
+			{ "scope", DataType::Types::Integer, true, 1 , 0},
+			{ "rttiPtr", DataType::Types::Integer, false, 1, offsetof(AttributedFoo, mRttiData) }
 		};
 	}
 }

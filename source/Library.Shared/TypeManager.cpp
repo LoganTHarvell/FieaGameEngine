@@ -40,7 +40,8 @@ namespace Library
 		while (id != Attributed::TypeIdClass())
 		{
 			auto it = mRegistry.Find(id);
-			assert(it != mRegistry.end());
+
+			if (it == mRegistry.end()) return SignatureListType();
 			
 			signaturesLists.PushFront(&it->second.signatures);
 			id = it->second.parentTypeId;

@@ -196,7 +196,7 @@ namespace Library
 
 #pragma region Modifiers
 	template<typename T>
-	inline void Datum::SetStorage(gsl::span<T> storage)
+	inline void Datum::SetStorage(const gsl::span<T> storage)
 	{
 		static_assert(TypeOf<T>() != Types::Unknown && TypeOf<T>() != Types::End, "Invalid data type.");
 
@@ -220,10 +220,18 @@ namespace Library
 		mInternalStorage = false;
 	}
 
-	template<>
-	inline void Datum::SetStorage(gsl::span<std::byte> storage)
+	inline void Datum::SetStorage(const Types type, const gsl::span<std::byte> storage)
 	{		
 		assert(storage.size() > 0);
+
+		if (mType == Types::Unknown)
+		{
+			mType = type;
+		}
+		else if (mType != type)
+		{
+			throw std::runtime_error("Mismatched types.");
+		}
 
 		Clear();
 		ShrinkToFit();

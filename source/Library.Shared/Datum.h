@@ -770,8 +770,9 @@ namespace Library
 		/// <param name="size">Size of the external data. Must be greater than zero.</param>
 		/// <typeparam name="T">Type of elements in the Datum. A compiler error is thrown on invalid types.</typeparam>
 		/// <exception cref="runtime_error">External storage size must be greater than zero.</exception>
+		/// <exception cref="runtime_error">Mismatched types.</exception>
 		template<typename T>
-		void SetStorage(gsl::span<T> storage);
+		void SetStorage(const gsl::span<T> storage);
 
 	private:
 		/// <summary>
@@ -779,10 +780,8 @@ namespace Library
 		/// </summary>
 		/// <param name="storage">External data storage to be wrapped by the Datum, as a byte pointer.</param>
 		/// <param name="size">Size of the external data. Must be greater than zero.</param>
-		/// <exception cref="runtime_error">External storage size must be greater than zero.</exception>
-		/// <remarks>Size must be the number of elements of the set type.</remarks>
-		template<>
-		void SetStorage(gsl::span<std::byte> storage);
+		/// <exception cref="runtime_error">Mismatched types.</exception>
+		void SetStorage(const Types type, const gsl::span<std::byte> storage);
 
 	public:
 		/// <summary>

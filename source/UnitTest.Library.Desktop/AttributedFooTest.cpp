@@ -126,12 +126,38 @@ namespace UnitTestLibraryDesktop
 
 			Assert::IsFalse(a.IsAttribute("null"));
 			Assert::IsTrue(a.IsAttribute("integer"));
-			Assert::IsTrue(a.IsPrescribedAttribute("integer"));
-			Assert::IsFalse(a.IsAuxiliaryAttribute("integer"));
+			Assert::IsTrue(a.IsAttribute("float"));
+			Assert::IsTrue(a.IsAttribute("vector"));
+			Assert::IsTrue(a.IsAttribute("matrix"));
+			Assert::IsTrue(a.IsAttribute("string"));
+			Assert::IsTrue(a.IsAttribute("scope"));
+			Assert::IsTrue(a.IsAttribute("rttiPtr"));
 
-			a.AppendAuxiliaryAttribute("auxInt") = 20;
-			Assert::IsFalse(a.IsPrescribedAttribute("auxInt"));
-			Assert::IsTrue(a.IsAuxiliaryAttribute("auxInt"));
+			Assert::IsTrue(a.IsPrescribedAttribute("integer"));
+			Assert::IsTrue(a.IsPrescribedAttribute("float"));
+			Assert::IsTrue(a.IsPrescribedAttribute("vector"));
+			Assert::IsTrue(a.IsPrescribedAttribute("matrix"));
+			Assert::IsTrue(a.IsPrescribedAttribute("string"));
+			Assert::IsTrue(a.IsPrescribedAttribute("scope"));
+			Assert::IsTrue(a.IsPrescribedAttribute("rttiPtr"));
+
+			Assert::IsFalse(a.IsAuxiliaryAttribute("integer"));
+			Assert::IsFalse(a.IsAuxiliaryAttribute("float"));
+			Assert::IsFalse(a.IsAuxiliaryAttribute("vector"));
+			Assert::IsFalse(a.IsAuxiliaryAttribute("matrix"));
+			Assert::IsFalse(a.IsAuxiliaryAttribute("string"));
+			Assert::IsFalse(a.IsAuxiliaryAttribute("scope"));
+			Assert::IsFalse(a.IsAuxiliaryAttribute("rttiPtr"));
+
+			a.AppendAuxiliaryAttribute("auxInteger") = 20;
+			Assert::IsFalse(a.IsPrescribedAttribute("auxInteger"));
+			Assert::IsTrue(a.IsAuxiliaryAttribute("auxInteger"));
+
+			a.AppendAuxiliaryAttribute("auxScope");
+			a.AppendScope("auxScope");
+
+			Assert::IsFalse(a.IsPrescribedAttribute("auxScope"));
+			Assert::IsTrue(a.IsAuxiliaryAttribute("auxScope"));
 		}
 
 		TEST_METHOD(AppendAttribute)

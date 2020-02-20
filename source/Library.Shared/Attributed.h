@@ -90,16 +90,6 @@ namespace Library
 		DataType& AppendAuxiliaryAttribute(const NameType& name);
 #pragma endregion Modifiers
 
-#pragma region Pure Virtual Methods
-	public:
-		/// <summary>
-		/// Pure virtual method signature for the Clone method inherited from Scope.
-		/// Creates an instance copy of a Scope derived class.
-		/// </summary>
-		/// <returns>Pointer to a newly heap allocated copy of the instance.</returns>
-		virtual gsl::owner<Scope*> Clone() const override = 0;
-#pragma endregion Pure Virtual Methods
-
 #pragma region Helper Methods
 	private:
 		/// <summary>
@@ -113,5 +103,15 @@ namespace Library
 		/// </summary>
 		void UpdateExternalStorage();
 #pragma endregion Helper Methods
+
+#pragma region Pure Virtual Methods
+	public:
+		/// <summary>
+		/// Pure virtual method signature for the Clone method inherited from Scope.
+		/// Creates an instance copy of a Scope derived class.
+		/// </summary>
+		/// <returns>Pointer to a newly heap allocated copy of the instance.</returns>
+		virtual gsl::owner<Scope*> Clone() const override = 0;
+#pragma endregion Pure Virtual Methods
 	};
 }

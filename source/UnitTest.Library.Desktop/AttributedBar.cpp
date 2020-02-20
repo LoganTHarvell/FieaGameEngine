@@ -83,7 +83,7 @@ namespace UnitTests
 	{
 		return Library::TypeManager::SignatureListType
 		{
-			{ "integer", DataType::Types::Integer, offsetof(AttributedBar, mIntData), false, 1 }
+			{ "integer", DataType::Types::Integer, false, 1, offsetof(AttributedBar, mIntData) }
 		};
 	}
 }
