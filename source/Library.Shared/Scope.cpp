@@ -429,7 +429,7 @@ namespace Library
 		return *child;
 	}
 
-	Scope* Scope::Orphan(Scope& child)
+	gsl::owner<Scope*> Scope::Orphan(Scope& child)
 	{
 		auto [data, index] = FindScope(child);
 		

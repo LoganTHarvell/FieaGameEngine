@@ -1,8 +1,11 @@
 #pragma once
 
+#pragma region Includes
+// First Party
 #include "SList.h"
 #include "Vector.h"
 #include "DefaultHash.h"
+#pragma endregion Includes
 
 namespace Library
 {

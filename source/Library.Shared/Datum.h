@@ -21,14 +21,13 @@
 namespace Library
 {
 	class Scope;
-	class Attributed;
 
 	/// <summary>
 	/// Runtime type polymorphic wrapper for data elements.
 	/// </summary>
 	class Datum final
 	{
-		friend Attributed;
+		friend class Attributed;
 
 #pragma region Type Definitions and Constants
 	public:
@@ -767,7 +766,7 @@ namespace Library
 		/// <summary>
 		/// Sets the storage to the external data at the given address with the given size.
 		/// </summary>
-		/// <param name="data">External data storage to be wrapped by the Datum.</param>
+		/// <param name="storage">External data storage to be wrapped by the Datum.</param>
 		/// <param name="size">Size of the external data. Must be greater than zero.</param>
 		/// <typeparam name="T">Type of elements in the Datum. A compiler error is thrown on invalid types.</typeparam>
 		/// <exception cref="runtime_error">External storage size must be greater than zero.</exception>
@@ -775,6 +774,13 @@ namespace Library
 		void SetStorage(gsl::span<T> storage);
 
 	private:
+		/// <summary>
+		/// Sets the storage to the external data at the given address with the given size.
+		/// </summary>
+		/// <param name="storage">External data storage to be wrapped by the Datum, as a byte pointer.</param>
+		/// <param name="size">Size of the external data. Must be greater than zero.</param>
+		/// <exception cref="runtime_error">External storage size must be greater than zero.</exception>
+		/// <remarks>Size must be the number of elements of the set type.</remarks>
 		template<>
 		void SetStorage(gsl::span<std::byte> storage);
 

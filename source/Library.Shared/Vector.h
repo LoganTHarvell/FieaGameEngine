@@ -1,12 +1,16 @@
 #pragma once
 
+#pragma region Includes
+// Standard
 #include <initializer_list>
 #include <stdexcept>
 #include <cassert>
 #include <functional>
 #include <algorithm>
 
+// First Party
 #include "DefaultEquality.h"
+#pragma endregion Includes
 
 namespace Library
 {

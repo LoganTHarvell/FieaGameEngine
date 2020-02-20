@@ -327,7 +327,7 @@ namespace Library
 		/// </summary>
 		/// <param name="child">Scope to remove from the Table.</param>
 		/// <returns>True, if the child was successfully orphaned. Otherwise, false.</returns>
-		Scope* Orphan(Scope& child);
+		gsl::owner<Scope*> Orphan(Scope& child);
 
 		/// <summary>
 		/// Appends an existing Scope, calling Orphan as needed on the previous parent.
@@ -356,6 +356,22 @@ namespace Library
 		DataType* SearchChildrenHelper(const Vector<Scope*>& queue, const NameType& name, Scope** scopePtrOut=nullptr);
 #pragma endregion Helper Methods
 
+#pragma region RTTI Overrides
+	public:
+		/// <summary>
+		/// RTTI override that returns a string representation of the Scope.
+		/// </summary>
+		/// <returns>String representation of the Scope.</returns>
+		virtual std::string ToString() const override;
+
+		/// <summary>
+		/// RTTI override that determines if the Scope is equal to a given RTTI derived class instance.
+		/// </summary>
+		/// <param name="rhs">RTTI derived class instance to be compared against.</param>
+		/// <returns>True if the the Scope is equivalent to the given RTTI derived class instance.</returns>
+		virtual bool Equals(const RTTI* rhs) const override;
+#pragma endregion RTTI Overrides
+
 #pragma region Data Members
 	private:
 		/// <summary>
@@ -378,22 +394,6 @@ namespace Library
 		/// </summary>
 		Vector<Scope*> mChildren;
 #pragma endregion Data Members
-
-#pragma region RTTI Overrides
-	public:
-		/// <summary>
-		/// RTTI override that returns a string representation of the Scope.
-		/// </summary>
-		/// <returns>String representation of the Scope.</returns>
-		virtual std::string ToString() const override;
-
-		/// <summary>
-		/// RTTI override that determines if the Scope is equal to a given RTTI derived class instance.
-		/// </summary>
-		/// <param name="rhs">RTTI derived class instance to be compared against.</param>
-		/// <returns>True if the the Scope is equivalent to the given RTTI derived class instance.</returns>
-		virtual bool Equals(const RTTI* rhs) const override;
-#pragma endregion RTTI Overrides
 	};
 
 }

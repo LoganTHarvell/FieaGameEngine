@@ -1,10 +1,14 @@
+#pragma region Includes
+// Pre-compiled Header
 #include "pch.h"
 
+// Header
 #include "TypeManager.h"
-
+#pragma endregion Includes
 
 namespace Library
 {
+#pragma region Signature Struct
 	bool Signature::operator==(const Signature& rhs) const noexcept
 	{
 		bool isEqual = true;
@@ -17,15 +21,12 @@ namespace Library
 
 		return false;
 	}
+#pragma endregion Signature Struct
 
+#pragma region Instance Management
 	void TypeManager::Create()
 	{
 		if (!mInstance) mInstance = new TypeManager();
-	}
-
-	TypeManager* TypeManager::Instance()
-	{
-		return mInstance;
 	}
 
 	void TypeManager::Destroy()
@@ -34,37 +35,44 @@ namespace Library
 		mInstance = nullptr;
 	}
 
-	TypeManager::SignaturesType TypeManager::Signatures(const IdType typeId)
+	TypeManager* TypeManager::Instance()
 	{
-		if (typeId == 0) return SignaturesType();
+		return mInstance;
+	}
+#pragma endregion Instance Management
 
-		const TypeInfo& typeInfo = mRegistry.At(typeId);
-		SignaturesType combinedSignatures = Signatures(typeInfo.parentTypeId);	
+#pragma region Registry
+	TypeManager::SignatureListType TypeManager::Signatures(const IdType typeId)
+	{
+		SList<SignatureListType*> signaturesLists;
 
-		for (const auto& signature : typeInfo.signatures)
+		IdType id = typeId;
+		std::size_t size = 0;
+
+		while (id != 0)
 		{
-			combinedSignatures.PushBack(signature);	
+			auto it = mRegistry.Find(id);
+			assert(it != mRegistry.end());
+			
+			signaturesLists.PushFront(&it->second.signatures);
+			id = it->second.parentTypeId;
+			size += it->second.signatures.Size();	
+		}
+
+		SignatureListType combinedSignatures(size);
+
+		for (const auto& signatures : signaturesLists)
+		{
+			for (const auto& signature : *signatures)
+			{
+				combinedSignatures.PushBack(signature);
+			}
 		}
 		
 		return combinedSignatures;
 	}
 
-	void TypeManager::Register(const IdType typeId, SignaturesType signatures, const IdType parentTypeId)
-	{
-		if (!mRegistry.ContainsKey(parentTypeId))
-		{
-			throw std::runtime_error("Parent type is not registered.");
-		}
-
-		auto [it, containsKey] = mRegistry.Insert({ typeId, { std::move(signatures), parentTypeId } });
-
-		if (containsKey)
-		{
-			throw std::runtime_error("Type registered more than once.");
-		}
-	}
-
-	void TypeManager::Register(const IdType typeId, SignaturesType&& signatures, const IdType parentTypeId)
+	void TypeManager::Register(const IdType typeId, SignatureListType&& signatures, const IdType parentTypeId)
 	{
 		if (!mRegistry.ContainsKey(parentTypeId))
 		{
@@ -88,4 +96,5 @@ namespace Library
 	{
 		mRegistry.Clear();
 	}
+#pragma endregion Registry
 }
