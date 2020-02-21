@@ -706,7 +706,7 @@ namespace Library
 		/// <summary>
 		/// Pointer to a memory block for inserting elements into the Vector.
 		/// </summary>
-		T* mIntData{ nullptr };
+		T* mData{ nullptr };
 
 		/// <summary>
 		/// Number of elements in the Vector.

@@ -137,7 +137,7 @@ namespace Library
 		if (mType != TypeOf<T>())		throw std::runtime_error("Mismatched type.");
 		if (index >= mSize)				throw std::out_of_range("Index out of bounds.");
 
-		return reinterpret_cast<T*>(mIntData.voidPtr)[index];
+		return reinterpret_cast<T*>(mData.voidPtr)[index];
 	}
 
 	template<typename T>
@@ -149,7 +149,7 @@ namespace Library
 		if (mType != TypeOf<T>())		throw std::runtime_error("Mismatched type.");
 		if (index >= mSize)				throw std::out_of_range("Index out of bounds.");
 
-		return reinterpret_cast<T*>(mIntData.voidPtr)[index];
+		return reinterpret_cast<T*>(mData.voidPtr)[index];
 	}
 
 	template<typename T>
@@ -178,7 +178,7 @@ namespace Library
 		if (mType == Types::Unknown)	throw std::runtime_error("Type not set.");
 		if (mType != TypeOf<T>())		throw std::runtime_error("Mismatched type.");
 
-		T* const data = reinterpret_cast<T*>(mIntData.voidPtr);
+		T* const data = reinterpret_cast<T*>(mData.voidPtr);
 		T valueCopy = value;
 
 		std::size_t i = 0;
@@ -214,7 +214,7 @@ namespace Library
 		Clear();
 		ShrinkToFit();
 
-		mIntData.voidPtr = storage.data();
+		mData.voidPtr = storage.data();
 		mSize = storage.size();
 		mCapacity = storage.size();
 		mInternalStorage = false;
@@ -236,7 +236,7 @@ namespace Library
 		Clear();
 		ShrinkToFit();
 
-		mIntData.voidPtr = storage.data();
+		mData.voidPtr = storage.data();
 		mSize = storage.size();
 		mCapacity = storage.size();
 		mInternalStorage = false;
@@ -264,7 +264,7 @@ namespace Library
 			Reserve(std::max(newCapacity, mCapacity + 1));
 		}
 
-		new(reinterpret_cast<T*>(mIntData.voidPtr) + mSize++)T(data);
+		new(reinterpret_cast<T*>(mData.voidPtr) + mSize++)T(data);
 	}
 
 	template<typename T>
@@ -274,14 +274,14 @@ namespace Library
 
 		if (!mInternalStorage) throw std::runtime_error("Cannot modify external storage.");
 
-		T* const data = reinterpret_cast<T*>(mIntData.voidPtr);
+		T* const data = reinterpret_cast<T*>(mData.voidPtr);
 		const std::size_t index = IndexOf(value);
 		
 		if (index < mSize)
 		{
 			if (mType == Types::String)
 			{
-				mIntData.stringPtr[index].~basic_string();
+				mData.stringPtr[index].~basic_string();
 			}
 
 			memmove(&data[index], &data[index + 1], sizeof(T) * (mSize - index));

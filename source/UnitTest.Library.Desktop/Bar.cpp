@@ -6,26 +6,26 @@ namespace UnitTests
 	RTTI_DEFINITIONS(Bar);
 
 	Bar::Bar(int data) :
-		mIntData(std::make_unique<int>(data))
+		mData(std::make_unique<int>(data))
 	{
 	}
 
 	Bar::Bar(const Bar& rhs) :
-		mIntData(std::make_unique<int>(*rhs.mIntData))
+		mData(std::make_unique<int>(*rhs.mData))
 	{
 	}
 
 	Bar::Bar(Bar&& rhs) noexcept :
-		mIntData(std::move(rhs.mIntData))
+		mData(std::move(rhs.mData))
 	{
-		rhs.mIntData = nullptr;
+		rhs.mData = nullptr;
 	}
 
 	Bar& Bar::operator=(const Bar& rhs)
 	{
 		if (this != &rhs)
 		{
-			*mIntData = *rhs.mIntData;
+			*mData = *rhs.mData;
 		}
 
 		return *this;
@@ -35,8 +35,8 @@ namespace UnitTests
 	{
 		if (this != &rhs)
 		{
-			mIntData = std::move(rhs.mIntData);
-			rhs.mIntData = nullptr;
+			mData = std::move(rhs.mData);
+			rhs.mData = nullptr;
 		}
 
 		return *this;
@@ -47,26 +47,26 @@ namespace UnitTests
 		if (!rhs) return false;
 
 		const Bar* rhsFoo = rhs->As<Bar>();
-		return rhsFoo ? *mIntData == rhsFoo->Data() : false;
+		return rhsFoo ? *mData == rhsFoo->Data() : false;
 	}
 
 	std::string Bar::ToString() const
 	{
-		return "Bar: " + std::to_string(*mIntData);
+		return "Bar: " + std::to_string(*mData);
 	}
 
 	int& Bar::Data()
 	{
-		return *mIntData;
+		return *mData;
 	}
 
 	int Bar::Data() const
 	{
-		return *mIntData;
+		return *mData;
 	}
 	
 	void Bar::SetData(int data)
 	{
-		*mIntData = data;
+		*mData = data;
 	}
 }

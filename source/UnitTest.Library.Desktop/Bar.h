@@ -26,6 +26,6 @@ namespace UnitTests
 		void SetData(int data);
 
 	private:
-		std::unique_ptr<int> mIntData;
+		std::unique_ptr<int> mData;
 	};
 }

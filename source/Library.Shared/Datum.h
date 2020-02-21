@@ -867,7 +867,7 @@ namespace Library
 		/// <summary>
 		/// Pointer to the data in the Datum.
 		/// </summary>
-		Values mIntData{ nullptr };
+		Values mData{ nullptr };
 
 		/// <summary>
 		/// Enum specifying the type of the data in the Datum.
