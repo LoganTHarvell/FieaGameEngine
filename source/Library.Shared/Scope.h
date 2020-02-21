@@ -39,12 +39,12 @@ namespace Library
 		/// <summary>
 		/// Table type defining a mapping names to data values.
 		/// </summary>
-		using TableType = HashMap<NameType, DataType>;
+		using Table = HashMap<NameType, DataType>;
 
 		/// <summary>
-		/// Table entry type defining a name and data value pair.
+		/// Attribute type defining a name and data value pair.
 		/// </summary>
-		using TableEntryType = TableType::PairType;
+		using Attribute = Table::PairType;
 #pragma endregion Type Definitions and Constants
 
 #pragma region Constructors, Destructor, Assignment
@@ -99,7 +99,7 @@ namespace Library
 		/// <param name="capacity">Capacity to initialize for the Scope.</param>
 		/// <exception cref="std::runtime_error">Duplicate names found in the initializer list.</exception>
 		/// <remarks>DataType values are copied.</remarks>
-		Scope(const std::initializer_list<TableEntryType> rhs, const std::size_t capacity=0);
+		Scope(const std::initializer_list<Attribute> rhs, const std::size_t capacity=0);
 
 		/// <summary>
 		/// Initializer list assignment operator.
@@ -108,7 +108,7 @@ namespace Library
 		/// <returns>Reference to the modified Scope containing the new pairs.</returns>
 		/// <exception cref="std::runtime_error">Duplicate names found in the initializer list.</exception>
 		/// <remarks>DataType values are copied.</remarks>
-		Scope& operator=(const std::initializer_list<TableEntryType> rhs);
+		Scope& operator=(const std::initializer_list<Attribute> rhs);
 
 		/// <summary>
 		/// Creates a heap allocated copy of the current Scope.
@@ -382,12 +382,12 @@ namespace Library
 		/// <summary>
 		/// Table containing TableEntryType values.
 		/// </summary>
-		TableType mTable;
+		Table mTable;
 
 		/// <summary>
 		/// Vector of references to the TableEntryType values.
 		/// </summary>
-		Vector<TableEntryType*> mPairPtrs;
+		Vector<Attribute*> mPairPtrs;
 
 		/// <summary>
 		/// SList containing child Scopes.

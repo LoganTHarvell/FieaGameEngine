@@ -18,7 +18,7 @@ namespace Library
 
 #pragma region Constructors, Destructor, Assignment
 	Scope::Scope(const std::size_t capacity) :
-		mTable(std::max(TableType::DefaultBucketCount, Math::FindNextPrime(capacity))), mPairPtrs(capacity)
+		mTable(std::max(Table::DefaultBucketCount, Math::FindNextPrime(capacity))), mPairPtrs(capacity)
 	{
 	}
 
@@ -57,7 +57,7 @@ namespace Library
 	{
 		Clear();
 
-		mTable = TableType(rhs.mTable.BucketCount());
+		mTable = Table(rhs.mTable.BucketCount());
 		
 		mPairPtrs.ShrinkToFit();
 		mPairPtrs.Reserve(rhs.mPairPtrs.Size());
@@ -140,8 +140,8 @@ namespace Library
 		return *this;
 	}
 
-	Scope::Scope(const std::initializer_list<TableEntryType> rhs, const std::size_t capacity) :
-		mTable(std::max(TableType::DefaultBucketCount, Math::FindNextPrime(capacity))), mPairPtrs(capacity)
+	Scope::Scope(const std::initializer_list<Attribute> rhs, const std::size_t capacity) :
+		mTable(std::max(Table::DefaultBucketCount, Math::FindNextPrime(capacity))), mPairPtrs(capacity)
 	{
 		for (auto& tableEntry : rhs)
 		{
@@ -173,11 +173,11 @@ namespace Library
 		}
 	}
 
-	Scope& Scope::operator=(const std::initializer_list<TableEntryType> rhs)
+	Scope& Scope::operator=(const std::initializer_list<Attribute> rhs)
 	{
 		Clear();
 		
-		mTable = TableType(Math::FindNextPrime(rhs.size()));
+		mTable = Table(Math::FindNextPrime(rhs.size()));
 
 		mPairPtrs.ShrinkToFit();
 		mPairPtrs.Reserve(rhs.size());
@@ -297,13 +297,13 @@ namespace Library
 
 	Scope::DataType* Scope::Find(const NameType& name)
 	{
-		TableType::Iterator it = mTable.Find(name);
+		Table::Iterator it = mTable.Find(name);
 		return it != mTable.end() ? &it->second : nullptr;
 	}
 
 	const Scope::DataType* Scope::Find(const NameType& name) const
 	{
-		TableType::ConstIterator it = mTable.Find(name);
+		Table::ConstIterator it = mTable.Find(name);
 		return it != mTable.end() ? &it->second : nullptr;
 	}
 
@@ -413,7 +413,7 @@ namespace Library
 			throw std::runtime_error("Table entry already exists with a non-Scope type.");
 		}
 
-		Scope* child = new Scope(std::max(TableType::DefaultBucketCount, Math::FindNextPrime(capacity)));
+		Scope* child = new Scope(std::max(Table::DefaultBucketCount, Math::FindNextPrime(capacity)));
 		child->mParent = this;
 		mChildren.PushBack(child);
 
