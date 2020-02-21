@@ -1335,19 +1335,19 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 
 #pragma region TypeManager
 	template<>
-	inline std::wstring ToString<TypeManager::SignatureListType>(const TypeManager::SignatureListType& t)
+	inline std::wstring ToString<SignatureListType>(const SignatureListType& t)
 	{
 		RETURN_WIDE_STRING(t.Size());
 	}
 
 	template<>
-	inline std::wstring ToString<TypeManager::SignatureListType>(const TypeManager::SignatureListType* t)
+	inline std::wstring ToString<SignatureListType>(const SignatureListType* t)
 	{
 		RETURN_WIDE_STRING(t);
 	}
 
 	template<>
-	inline std::wstring ToString<TypeManager::SignatureListType>(TypeManager::SignatureListType* t)
+	inline std::wstring ToString<SignatureListType>(SignatureListType* t)
 	{
 		RETURN_WIDE_STRING(t);
 	}

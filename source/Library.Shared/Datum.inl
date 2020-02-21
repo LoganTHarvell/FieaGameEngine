@@ -224,14 +224,7 @@ namespace Library
 	{		
 		assert(storage.size() > 0);
 
-		if (mType == Types::Unknown)
-		{
-			mType = type;
-		}
-		else if (mType != type)
-		{
-			throw std::runtime_error("Mismatched types.");
-		}
+		mType = type;
 
 		Clear();
 		ShrinkToFit();

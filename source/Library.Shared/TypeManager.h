@@ -10,7 +10,7 @@
 
 namespace Library
 {
-#pragma region Signature Struct
+#pragma region Signature Type
 	/// <summary>
 	/// Represents signature information for instantiating an attribute for a Scope.
 	/// </summary>
@@ -24,10 +24,15 @@ namespace Library
 
 		bool operator==(const Signature& rhs) const noexcept = default;
 	};
-#pragma endregion Signature Struct
 
 	/// <summary>
-	/// Type manager singleton used for registering Attributed type signatures.
+	/// List of signatures for each registered types attributes.
+	/// </summary>
+	using SignatureListType = Vector<Signature>;
+#pragma endregion Signature Type
+
+	/// <summary>
+	/// Manager singleton that maintains a registry for TypeInfo of Attributed subclasses.
 	/// </summary>
 	class TypeManager final
 	{
@@ -39,45 +44,39 @@ namespace Library
 		using IdType = RTTI::IdType;
 
 		/// <summary>
-		/// List of signatures for each registered types attributes.
-		/// </summary>
-		using SignatureListType = Vector<Signature>;
-
-		/// <summary>
 		/// Data registered for each type.
 		/// </summary>
 		struct TypeInfo
 		{
-			SignatureListType signatures;
+			const SignatureListType signatures;
 			const IdType parentTypeId;
 		};
 
 		/// <summary>
 		/// Registry type for containing TypeInfo.
 		/// </summary>
-		using RegistryType = HashMap<IdType, TypeInfo>;
+		using RegistryType = HashMap<IdType, const TypeInfo&>;
 #pragma endregion Type Definitions
 
-#pragma region Default Constructor/Destructor
+#pragma region Constructors, Destructor, Assignment
 	private:
 		TypeManager() = default;
 		~TypeManager() = default;
-#pragma endregion Default Constructor/Destructor
 
-#pragma region Deleted Copy/Move
 	public:
 		TypeManager(const TypeManager&) = delete;
 		TypeManager(TypeManager&&) = delete;
 		TypeManager& operator=(const TypeManager&) = delete;
 		TypeManager& operator=(TypeManager&&) = delete;
-#pragma endregion Deleted Copy/Move
+#pragma endregion Constructors, Destructor, Assignment
 
 #pragma region Instance Management
 	public:
 		/// <summary>
 		/// Initializes the TypeManager instance, if necessary.
 		/// </summary>
-		static void Create();
+		/// <param name="capacity">Initial capacity for the registry, not a max size.</param>
+		static void Create(const std::size_t capacity=RegistryType::DefaultBucketCount);
 
 		/// <summary>
 		/// Deletes the TypeManager instance, if necessary.
@@ -94,31 +93,33 @@ namespace Library
 #pragma region Registry
 	public:
 		/// <summary>
-		/// Gets the Attributed signatures for a given type.
+		/// Finds the Attributed signatures for a given type.
 		/// </summary>
-		/// <param name="typeId">IdType for the Attributed type whose signatures will be retrieved.</param>
-		/// <returns>Signatures for the given Attributed IdType.</returns>
-		SignatureListType Signatures(const IdType typeId);
+		/// <param name="typeId">IdType for the Attributed derived class whose signatures will be retrieved.</param>
+		/// <returns>Pointer to the TypeInfo of the given Attributed IdType.</returns>
+		const TypeInfo* Find(const IdType typeId) const;
 
 		/// <summary>
-		/// Checks if a given Attributed type has been registered.
+		/// Checks if a given Attributed derived class has been registered.
 		/// </summary>
-		/// <param name="typeId">IdType for the Attributed type whose signatures will be retrieved.</param>
-		/// <returns>True, if the Attriuted type is registered. Otherwise, false.</returns>
+		/// <param name="typeId">IdType for the Attributed derived class whose signatures will be retrieved.</param>
+		/// <returns>True, if the Attributed type is registered. Otherwise, false.</returns>
 		bool IsRegistered(const IdType typeId) const;
 
 		/// <summary>
-		/// Registers an Attributed type and the attribute signatures with the registry.
+		/// Adds TypeInfo for the given Attributed derived class type to the registry.
 		/// </summary>
-		/// <param name="typeId">IdType associated with the Attributed type.</param>
-		/// <param name="signatures">List of attribute signature structs.</param>
-		/// <param name="parentTypeId">IdType associated the parent of the Attributed type.</param>
-		void Register(const IdType typeId, SignatureListType&& signatures, const IdType parentTypeId);
+		/// <typeparam name="T">Typename of an Attribute derived class to be registered.</typeparam>
+		/// <exception cref="std::runtime_error">Parent type is not registered.</exception>
+		/// <exception cref="std::runtime_error">Type registered more than once.</exception>
+		template<typename T>
+		void Register();
 
 		/// <summary>
-		/// Removes an Attributed type from the registry.
+		/// Removes an Attributed derived class from the registry.
 		/// </summary>
-		/// <param name="typeId"></param>
+		/// <param name="typeId">IdType for the Attributed derived class whose signatures will be removed.</param>
+		/// <remarks>Do not remove parent classes if the child class needs access to the registry.</remarks>
 		void Deregister(const IdType typeId);
 
 		/// <summary>
@@ -141,8 +142,15 @@ namespace Library
 #pragma endregion Data Members
 	};
 
-/// <summary>
-/// Macro that registers an Attributed type with the registry.
-/// </summary>
-#define REGISTER_TYPE(Type, ParentType) TypeManager::Instance()->Register(Type::TypeIdClass(), Type::Signatures(), ParentType::TypeIdClass());
+#pragma region Global Registry Function
+	/// <summary>
+	/// Adds TypeInfo for the given Attributed derived class type to the TypeManager instance.
+	/// </summary>
+	/// <typeparam name="T">Typename of an Attribute derived class to be registered.</typeparam>
+	/// <exception cref="std::runtime_error">TypeManager instance null.</exception>
+	template<typename T>
+	void RegisterType();
+#pragma endregion Global Registry Function
 }
+
+#include "TypeManager.inl"

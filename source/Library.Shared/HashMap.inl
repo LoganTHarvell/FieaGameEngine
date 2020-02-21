@@ -256,6 +256,8 @@ namespace Library
 	template<typename TKey, typename TData>
 	inline void HashMap<TKey, TData>::Rehash(const std::size_t bucketCount)
 	{
+		if (bucketCount == mBuckets.Size()) return;
+
 		HashMap newHash = HashMap(bucketCount, mKeyEqualityFunctor, mHashFunctor);
 
 		for (auto it = begin(); it != end(); ++it)

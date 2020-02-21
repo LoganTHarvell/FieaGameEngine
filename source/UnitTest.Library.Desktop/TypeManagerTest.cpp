@@ -3,13 +3,12 @@
 #include "ToStringSpecialization.h"
 #include "TypeManager.h"
 #include "AttributedFoo.h"
+#include "DerivedAttributedFoo.h"
 #include "AttributedBar.h"
 
 
 using namespace std::string_literals;
-
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
-
 using namespace UnitTests;
 
 
@@ -54,27 +53,28 @@ namespace UnitTestLibraryDesktop
 		{
 			TypeManager::Create();
 			
-			Assert::ExpectException<std::runtime_error>([]
-				{
-					TypeManager::Instance()->Register(AttributedFoo::TypeIdClass(), AttributedFoo::Signatures(), RTTI::TypeIdClass());
-				});
+			Assert::ExpectException<std::runtime_error>([] { TypeManager::Instance()->Register<DerivedAttributedFoo>(); });
+			Assert::ExpectException<std::runtime_error>([] { RegisterType<DerivedAttributedFoo>(); });
 
-			REGISTER_TYPE(AttributedFoo, Attributed);
+			TypeManager::Instance()->Register<AttributedFoo>();
 			Assert::IsTrue(TypeManager::Instance()->IsRegistered(AttributedFoo::TypeIdClass()));
-
-			Assert::ExpectException<std::runtime_error>([] 
-				{
-					TypeManager::Instance()->Register(AttributedFoo::TypeIdClass(), AttributedFoo::Signatures(), Attributed::TypeIdClass());
-				});
- 	
  			TypeManager::Instance()->Deregister(AttributedFoo::TypeIdClass());
  			Assert::IsFalse(TypeManager::Instance()->IsRegistered(AttributedFoo::TypeIdClass()));
- 		
-			TypeManager::Instance()->Register(AttributedFoo::TypeIdClass(), AttributedFoo::Signatures(), Attributed::TypeIdClass());
-			TypeManager::Instance()->Register(AttributedBar::TypeIdClass(), AttributedBar::Signatures(), Attributed::TypeIdClass());
- 			TypeManager::Instance()->Clear();
+
+			RegisterType<AttributedFoo>();
+			Assert::IsTrue(TypeManager::Instance()->IsRegistered(AttributedFoo::TypeIdClass()));
+ 			TypeManager::Instance()->Deregister(AttributedFoo::TypeIdClass());
+ 			Assert::IsFalse(TypeManager::Instance()->IsRegistered(AttributedFoo::TypeIdClass()));
+
+			RegisterType<AttributedFoo>();
+			Assert::ExpectException<std::runtime_error>([] { RegisterType<AttributedFoo>(); });
+			RegisterType<AttributedBar>();
+			RegisterType<DerivedAttributedFoo>();
+			
+			TypeManager::Instance()->Clear();
 			
 			Assert::IsFalse(TypeManager::Instance()->IsRegistered(AttributedFoo::TypeIdClass()));
+			Assert::IsFalse(TypeManager::Instance()->IsRegistered(DerivedAttributedFoo::TypeIdClass()));
 			Assert::IsFalse(TypeManager::Instance()->IsRegistered(AttributedBar::TypeIdClass()));
 		}
 

@@ -395,7 +395,6 @@ namespace Library
 		Vector<Scope*> mChildren;
 #pragma endregion Data Members
 	};
-
 }
 
 #include "Scope.inl"

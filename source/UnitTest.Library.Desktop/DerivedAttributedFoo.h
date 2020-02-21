@@ -19,6 +19,6 @@ namespace UnitTests
 		virtual ~DerivedAttributedFoo() = default;
 
 		virtual gsl::owner<Library::Scope*> Clone() const override;
-		static Library::TypeManager::SignatureListType Signatures();
+		static const Library::TypeManager::TypeInfo& TypeInfo();
 	};
 }

@@ -15,8 +15,9 @@ namespace UnitTests
 		return new DerivedAttributedFoo(*this);
 	}
 
-	Library::TypeManager::SignatureListType DerivedAttributedFoo::Signatures()
+	const Library::TypeManager::TypeInfo& DerivedAttributedFoo::TypeInfo()
 	{
-		return Library::TypeManager::SignatureListType();
+		static const Library::TypeManager::TypeInfo typeInfo = { Library::SignatureListType(), AttributedFoo::TypeIdClass() };
+		return typeInfo;
 	}
 }

@@ -56,6 +56,7 @@
     <None Include="$(MSBuildThisFileDirectory)HashMap.inl" />
     <None Include="$(MSBuildThisFileDirectory)Scope.inl" />
     <None Include="$(MSBuildThisFileDirectory)SList.inl" />
+    <None Include="$(MSBuildThisFileDirectory)TypeManager.inl" />
     <None Include="$(MSBuildThisFileDirectory)Vector.inl" />
   </ItemGroup>
 </Project>

@@ -676,71 +676,71 @@ namespace Library
 		/// <summary>
 		/// Gets the last element of the Datum.
 		/// </summary>
-		/// <returns>Reference to the last element.</returns>
 		/// <typeparam name="T">Type of elements in the Datum. A compiler error is thrown on invalid types.</typeparam>
+		/// <returns>Reference to the last element.</returns>
 		template<typename T>
 		T& Back();
 
 		/// <summary>
 		/// Gets the first element of the Datum.
 		/// </summary>
-		/// <returns>Constant reference to the first element.</returns>
 		/// <typeparam name="T">Type of elements in the Datum. A compiler error is thrown on invalid types.</typeparam>
+		/// <returns>Constant reference to the first element.</returns>
 		template<typename T>
 		const T& Back() const;
 
 		/// <summary>
 		/// Sets the element of the Datum at a given index, defaults to the first element.
 		/// </summary>
+		/// <typeparam name="T">Type of elements in the Datum. A compiler error is thrown on invalid types.</typeparam>
 		/// <param name="value">Value to set the element.</param>
 		/// <param name="index">Index of the element to be set with the value.</param>
 		/// <returns>Reference to the set element.</returns>
-		/// <typeparam name="T">Type of elements in the Datum. A compiler error is thrown on invalid types.</typeparam>
 		template<typename T>
 		T& Set(const T& value, std::size_t index=0);
 
 		/// <summary>
 		/// Gets the element of the Datum at a given index, defaults to the first element.
 		/// </summary>
+		/// <typeparam name="T">Type of elements in the Datum. A compiler error is thrown on invalid types.</typeparam>
 		/// <param name="index">Index of the element.</param>
 		/// <returns>Reference to the element.</returns>
-		/// <typeparam name="T">Type of elements in the Datum. A compiler error is thrown on invalid types.</typeparam>
 		template<typename T>
 		T& Get(std::size_t index=0);
 
 		/// <summary>
 		/// Gets the element of the Datum at a given index, defaults to the first element.
 		/// </summary>
+		/// <typeparam name="T">Type of elements in the Datum. A compiler error is thrown on invalid types.</typeparam>
 		/// <param name="index">Index of the element.</param>
 		/// <returns>Constant reference to the element.</returns>
-		/// <typeparam name="T">Type of elements in the Datum. A compiler error is thrown on invalid types.</typeparam>
 		template<typename T>
 		const T& Get(std::size_t index=0) const;
 
 		/// <summary>
 		/// Finds an element in the Datum given the corresponding value.
 		/// </summary>
+		/// <typeparam name="T">Type of elements in the Datum. A compiler error is thrown on invalid types.</typeparam>
 		/// <param name="value">Value to be searched for in the Datum.</param>
 		/// <returns>Pointer to the value if found, otherwise nullptr.</returns>
-		/// <typeparam name="T">Type of elements in the Datum. A compiler error is thrown on invalid types.</typeparam>
 		template<typename T>
 		T* Find(const T& value);
 
 		/// <summary>
 		/// Finds an element in the Datum given the corresponding value.
 		/// </summary>
+		/// <typeparam name="T">Type of elements in the Datum. A compiler error is thrown on invalid types.</typeparam>
 		/// <param name="value">Value to be searched for in the Datum.</param>
 		/// <returns>Pointer to the value if found, otherwise nullptr.</returns>
-		/// <typeparam name="T">Type of elements in the Datum. A compiler error is thrown on invalid types.</typeparam>
 		template<typename T>
 		const T* Find(const T& value) const;
 
 		/// <summary>
 		/// Finds the index of an element in the Datum given the corresponding value.
 		/// </summary>
+		/// <typeparam name="T">Type of elements in the Datum. A compiler error is thrown on invalid types.</typeparam>
 		/// <param name="value">Value to be searched for in the Datum.</param>
 		/// <returns>Index of the value if found, otherwise one past the last index, a.k.a. the size.</returns>
-		/// <typeparam name="T">Type of elements in the Datum. A compiler error is thrown on invalid types.</typeparam>
 		template<typename T>
 		std::size_t IndexOf(const T& value) const;
 
@@ -766,9 +766,9 @@ namespace Library
 		/// <summary>
 		/// Sets the storage to the external data at the given address with the given size.
 		/// </summary>
+		/// <typeparam name="T">Type of elements in the Datum. A compiler error is thrown on invalid types.</typeparam>
 		/// <param name="storage">External data storage to be wrapped by the Datum.</param>
 		/// <param name="size">Size of the external data. Must be greater than zero.</param>
-		/// <typeparam name="T">Type of elements in the Datum. A compiler error is thrown on invalid types.</typeparam>
 		/// <exception cref="runtime_error">External storage size must be greater than zero.</exception>
 		/// <exception cref="runtime_error">Mismatched types.</exception>
 		template<typename T>
@@ -787,9 +787,9 @@ namespace Library
 		/// <summary>
 		/// Inserts data into the end of the Datum, incrementing capacity if needed.
 		/// </summary>
+		/// <typeparam name="T">Type of elements in the Datum. A compiler error is thrown on invalid types.</typeparam>
 		/// <param name="size">New size for the Datum.</param>
 		/// <param name="mDataPtr">Pointer alias for mData for the DatumTypes value.</param>
-		/// <typeparam name="T">Type of elements in the Datum. A compiler error is thrown on invalid types.</typeparam>
 		/// <exception cref="runtime_error">Cannot modify external storage.</exception>
 		template<typename T>
 		void PushBack(const T& data);
@@ -804,9 +804,9 @@ namespace Library
 		/// <summary>
 		/// Removes a single element from the Datum given the corresponding value.
 		/// </summary>
+		/// <typeparam name="T">Type of elements in the Datum. A compiler error is thrown on invalid types.</typeparam>
 		/// <param name="value">Value to be searched for in the Datum to be removed.</param>
 		/// <returns>True on successful remove, false otherwise.</returns>
-		/// <typeparam name="T">Type of elements in the Datum. A compiler error is thrown on invalid types.</typeparam>
 		/// <exception cref="runtime_error">Cannot modify external storage.</exception>
 		template<typename T>
 		bool Remove(const T& value);
@@ -856,8 +856,8 @@ namespace Library
 		/// <summary>
 		/// Constructor and assignment helper that initializes Datum with values from an initializer list.
 		/// </summary>
-		/// <param name="rhs">List of values to fill the Datum.</param>
 		/// <typeparam name="T">Type of elements to fill the Datum.</typeparam>
+		/// <param name="rhs">List of values to fill the Datum.</param>
 		template<typename T>
 		Datum& ConstructorAssignmentHelper(const std::initializer_list<T> rhs);
 #pragma endregion Helper Methods

@@ -79,11 +79,17 @@ namespace UnitTests
 		return new AttributedBar(*this);
 	}
 
-	Library::TypeManager::SignatureListType AttributedBar::Signatures()
+	const Library::TypeManager::TypeInfo& AttributedBar::TypeInfo()
 	{
-		return Library::TypeManager::SignatureListType
+		static Library::TypeManager::TypeInfo typeInfo
 		{
-			{ "integer", DataType::Types::Integer, false, 1, offsetof(AttributedBar, mIntData) }
+			{
+				{ "integer", DataType::Types::Integer, false, 1, offsetof(AttributedBar, mIntData) }
+			},
+		
+			Attributed::TypeIdClass()
 		};
+
+		return typeInfo;
 	}
 }

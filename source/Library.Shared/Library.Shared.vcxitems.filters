@@ -54,6 +54,7 @@
     <None Include="$(MSBuildThisFileDirectory)DefaultEquality.inl">
       <Filter>Utility</Filter>
     </None>
+    <None Include="$(MSBuildThisFileDirectory)TypeManager.inl" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Containers">

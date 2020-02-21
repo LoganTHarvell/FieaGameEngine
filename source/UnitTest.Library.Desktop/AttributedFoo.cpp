@@ -91,17 +91,23 @@ namespace UnitTests
 		return new AttributedFoo(*this);
 	}
 
-	Library::TypeManager::SignatureListType AttributedFoo::Signatures()
+	const Library::TypeManager::TypeInfo& AttributedFoo::TypeInfo()
 	{
-		return Library::TypeManager::SignatureListType
+		static const Library::TypeManager::TypeInfo typeInfo
 		{
-			{ "integer", DataType::Types::Integer, false, 1, offsetof(AttributedFoo, mIntData) },
-			{ "float", DataType::Types::Integer, false, 1, offsetof(AttributedFoo, mFloatData) },
-			{ "vector", DataType::Types::Integer, false, 1, offsetof(AttributedFoo, mVectorData) },
-			{ "matrix", DataType::Types::Integer, false, 1, offsetof(AttributedFoo, mMatrixData) },
-			{ "string", DataType::Types::Integer, false, 1, offsetof(AttributedFoo, mStringData) },
-			{ "scope", DataType::Types::Integer, true, 1 , 0},
-			{ "rttiPtr", DataType::Types::Integer, false, 1, offsetof(AttributedFoo, mRttiData) }
+			{
+				{ "integer", DataType::Types::Integer, false, 1, offsetof(AttributedFoo, mIntData) },
+				{ "float", DataType::Types::Float, false, 1, offsetof(AttributedFoo, mFloatData) },
+				{ "vector", DataType::Types::Vector, false, 1, offsetof(AttributedFoo, mVectorData) },
+				{ "matrix", DataType::Types::Matrix, false, 1, offsetof(AttributedFoo, mMatrixData) },
+				{ "string", DataType::Types::String, false, 1, offsetof(AttributedFoo, mStringData) },
+				{ "scope", DataType::Types::Scope, true, 1 , 0},
+				{ "rttiPtr", DataType::Types::Pointer, false, 1, offsetof(AttributedFoo, mRttiData) }
+			},
+
+			Attributed::TypeIdClass()
 		};
+
+		return typeInfo;
 	}
 }

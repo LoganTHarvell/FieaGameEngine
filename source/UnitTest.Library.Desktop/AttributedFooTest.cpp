@@ -19,19 +19,18 @@ namespace UnitTestLibraryDesktop
 	public:
 		TEST_METHOD_INITIALIZE(Initialize)
 		{
+			TypeManager::Create();
+			RegisterType<AttributedFoo>();
+			RegisterType<DerivedAttributedFoo>();
+
 #if defined(DEBUG) || defined(_DEBUG)
 			_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF);
 			_CrtMemCheckpoint(&sStartMemState);
 #endif
-
-			TypeManager::Create();
-			REGISTER_TYPE(AttributedFoo, Attributed)
-			REGISTER_TYPE(DerivedAttributedFoo, AttributedFoo)
 		}
 
 		TEST_METHOD_CLEANUP(Cleanup)
 		{
-			TypeManager::Destroy();
 
 #if defined(DEBUG) || defined(_DEBUG)
 			_CrtMemState endMemState, diffMemState;
@@ -42,6 +41,8 @@ namespace UnitTestLibraryDesktop
 				Assert::Fail(L"Memory Leaks!");
 			}
 #endif
+
+			TypeManager::Destroy();
 		}
 
 		TEST_METHOD(Constructor)
@@ -166,9 +167,9 @@ namespace UnitTestLibraryDesktop
 
 			Assert::ExpectException<std::runtime_error>([&a] { a.AppendAuxiliaryAttribute("integer") = 20; });
 			
-			a.AppendAuxiliaryAttribute("auxInt") = 20;
-			Assert::IsNotNull(a.Find("auxInt"));
-			Assert::IsTrue(a.IsAuxiliaryAttribute("auxInt"));
+ 			a.AppendAuxiliaryAttribute("auxInt") = 20;
+ 			Assert::IsNotNull(a.Find("auxInt"));
+ 			Assert::IsTrue(a.IsAuxiliaryAttribute("auxInt"));
 		}
 
 		TEST_METHOD(Derived)

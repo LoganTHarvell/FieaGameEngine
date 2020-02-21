@@ -19,20 +19,17 @@ namespace UnitTestLibraryDesktop
 	public:
 		TEST_METHOD_INITIALIZE(Initialize)
 		{
+			TypeManager::Create();
+			RegisterType<AttributedBar>();
+
 #if defined(DEBUG) || defined(_DEBUG)
 			_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF);
 			_CrtMemCheckpoint(&sStartMemState);
 #endif
-
-			TypeManager::Create();
-			REGISTER_TYPE(AttributedBar, Attributed)
 		}
 
 		TEST_METHOD_CLEANUP(Cleanup)
 		{
-			TypeManager::Destroy();
-
-
 #if defined(DEBUG) || defined(_DEBUG)
 			_CrtMemState endMemState, diffMemState;
 			_CrtMemCheckpoint(&endMemState);
@@ -42,6 +39,8 @@ namespace UnitTestLibraryDesktop
 				Assert::Fail(L"Memory Leaks!");
 			}
 #endif
+
+			TypeManager::Destroy();
 		}
 
 		TEST_METHOD(Constructor)

@@ -12,9 +12,10 @@
 namespace Library
 {
 #pragma region Instance Management
-	void TypeManager::Create()
+	void TypeManager::Create(const std::size_t capacity)
 	{
 		if (!mInstance) mInstance = new TypeManager();
+		mInstance->mRegistry.Rehash(capacity);
 	}
 
 	void TypeManager::Destroy()
@@ -30,55 +31,15 @@ namespace Library
 #pragma endregion Instance Management
 
 #pragma region Registry
-	TypeManager::SignatureListType TypeManager::Signatures(const IdType typeId)
+	const TypeManager::TypeInfo* TypeManager::Find(const IdType typeId) const
 	{
-		SList<SignatureListType*> signaturesLists;
-
-		IdType id = typeId;
-		std::size_t size = 0;
-
-		while (id != Attributed::TypeIdClass())
-		{
-			auto it = mRegistry.Find(id);
-
-			if (it == mRegistry.end()) return SignatureListType();
-			
-			signaturesLists.PushFront(&it->second.signatures);
-			id = it->second.parentTypeId;
-			size += it->second.signatures.Size();	
-		}
-
-		SignatureListType combinedSignatures(size);
-
-		for (const auto& signatures : signaturesLists)
-		{
-			for (const auto& signature : *signatures)
-			{
-				combinedSignatures.PushBack(signature);
-			}
-		}
-		
-		return combinedSignatures;
+		auto it = mRegistry.Find(typeId);
+		return it != mRegistry.end() ? &it->second : nullptr;
 	}
 
 	bool TypeManager::IsRegistered(const IdType typeId) const
 	{
 		return mRegistry.Find(typeId) != mRegistry.end();
-	}
-
-	void TypeManager::Register(const IdType typeId, SignatureListType&& signatures, const IdType parentTypeId)
-	{
-		if (parentTypeId != Attributed::TypeIdClass() && !mRegistry.ContainsKey(parentTypeId))
-		{
-			throw std::runtime_error("Parent type is not registered.");
-		}
-
-		auto [it, isNew] = mRegistry.Insert({ typeId, { std::move(signatures), parentTypeId } });
-
-		if (!isNew)
-		{
-			throw std::runtime_error("Type registered more than once.");
-		}
 	}
 	
 	void TypeManager::Deregister(const IdType typeId)
