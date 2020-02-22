@@ -548,6 +548,56 @@ namespace UnitTestLibraryDesktop
 			Assert::IsNull(constTmp);
 		}
 
+		TEST_METHOD(ForEachAttribute)
+		{
+			Datum datumInt = { 10, 20, 30 };
+			Datum datumFloat = { 10, 20, 30 };
+			Datum datumVector = { glm::vec4(10), glm::vec4(20), glm::vec4(30) };
+			Datum datumMatrix = { glm::mat4(10), glm::mat4(20), glm::mat4(30) };
+			Datum datumString = { "10", "20", "30" };
+
+			Foo a(10), b(20), c(30);
+			Datum datumRTTI = { &a, &b, &c };
+
+			Scope scope = { { "integers", datumInt }, { "floats", datumFloat }, { "vectors", datumVector },
+							{ "matrices", datumMatrix }, { "strings", datumString }, { "pointers", datumRTTI } };
+
+			Scope& child0_0 = scope.AppendScope("child0");
+			scope.AppendScope("child0");
+			scope.AppendScope("child1");
+			Scope& child0_0_0 = child0_0.AppendScope("child0_0");
+			child0_0.AppendScope("child0_0");
+			child0_0_0.AppendScope("child0_0_0");
+
+			const Scope constScope = scope;
+
+			bool isFound = false;
+			scope.ForEachAttribute([&](Scope::Attribute& attribute)
+				{
+					if (attribute.first == "integers")
+					{
+						isFound = true;
+						Assert::AreEqual(datumInt, attribute.second);
+						attribute.second.PushBack(40);
+						Assert::IsTrue(datumInt != attribute.second);
+					}
+				});
+
+			Assert::IsTrue(isFound);
+
+			isFound = false;
+			constScope.ForEachAttribute([&](const Scope::Attribute& attribute)
+				{
+					if (attribute.first == "child0")
+					{
+						isFound = true;
+						Assert::AreEqual(child0_0, attribute.second[0]);
+					}
+				});
+
+			Assert::IsTrue(isFound);
+		}
+
 		TEST_METHOD(Append)
 		{
 			Scope scope;

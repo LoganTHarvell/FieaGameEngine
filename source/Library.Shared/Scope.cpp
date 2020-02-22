@@ -389,6 +389,22 @@ namespace Library
 		Vector queue = { nonConstThis };
 		return nonConstThis->SearchChildrenHelper(queue, name, const_cast<Scope**>(scopePtrOut));
 	}
+
+	void Scope::ForEachAttribute(std::function<void(Attribute&)> functor)
+	{
+		for (auto& pair : mPairPtrs)
+		{
+			functor(*pair);
+		}
+	}
+
+	void Scope::ForEachAttribute(std::function<void(const Attribute&)> functor) const
+	{
+		for (const auto& pair : mPairPtrs)
+		{
+			functor(*pair);
+		}
+	}
 #pragma endregion Accessors
 
 #pragma region Modifiers

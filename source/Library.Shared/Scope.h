@@ -301,6 +301,18 @@ namespace Library
 		/// <param name="scopePtrOut">Output parameter that points to the Scope which owns the found TableEntry.</param>
 		/// <returns>If found, a pointer to the DataType value of the TableEntry. Otherwise, nullptr.</returns>
 		const DataType* SearchChildren(const NameType& name, const Scope** scopePtrOut=nullptr) const;
+
+		/// <summary>
+		/// Performs an action iteratively on each Attribute in the Scope.
+		/// </summary>
+		/// <param name="functor">Function object to be called on each Attribute.</param>
+		void ForEachAttribute(std::function<void(Attribute&)> functor);
+
+		/// <summary>
+		/// Performs an action iteratively on each Attribute in the Scope.
+		/// </summary>
+		/// <param name="functor">Function object to be called on each Attribute.</param>
+		void ForEachAttribute(std::function<void(const Attribute&)> functor) const;
 #pragma endregion Accessors
 
 #pragma region Modifiers
