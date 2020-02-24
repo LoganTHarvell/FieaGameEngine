@@ -87,6 +87,30 @@ namespace Library
 		/// <param name="name">Name to search for in the instance.</param>
 		/// <returns>True if associated with an attribute. Otherwise, false.</returns>
 		bool IsAuxiliaryAttribute(const NameType& name);
+
+		/// <summary>
+		/// Gets the list of prescribed Attribute values.
+		/// </summary>
+		/// <returns>List of pointers to all prescribed Attribute values.</returns>
+		Vector<Attribute*> PrescribedAttributes();
+
+		/// <summary>
+		/// Gets the list of prescribed Attribute values.
+		/// </summary>
+		/// <returns>List of pointers to all prescribed Attribute values.</returns>
+		Vector<const Attribute*> PrescribedAttributes() const;
+
+		/// <summary>
+		/// Gets the list of auxiliary Attribute values.
+		/// </summary>
+		/// <returns>List of pointers to all auxiliary Attribute values.</returns>
+		Vector<Attribute*> AuxiliaryAttributes();
+
+		/// <summary>
+		/// Gets the list of prescribed Attribute values.
+		/// </summary>
+		/// <returns>List of pointers to all auxiliary Attribute values.</returns>
+		Vector<const Attribute*> AuxiliaryAttributes() const;
 #pragma endregion Accessors
 		
 #pragma region Modifiers
@@ -124,5 +148,18 @@ namespace Library
 		/// <returns>Pointer to a newly heap allocated copy of the instance.</returns>
 		virtual gsl::owner<Scope*> Clone() const override = 0;
 #pragma endregion Pure Virtual Methods
+
+#pragma region Data Members
+	private:
+		/// <summary>
+		/// List of pointers to the prescribed Attribute values.
+		/// </summary>
+		Vector<Attribute*> mPrescribedAttributes;
+
+		/// <summary>
+		/// List of pointers to the auxiliary Attribute values.
+		/// </summary>
+		Vector<Attribute*> mAuxiliaryAttributes;
+#pragma endregion Data Members
 	};
 }

@@ -5,6 +5,7 @@
 // Header
 #include "Attributed.h"
 
+// Third Party
 #include <gsl/span>
 #pragma endregion Includes
 
@@ -16,9 +17,10 @@ namespace Library
 	{	
 		(*this)["this"] = this->As<RTTI>();
 		Populate(TypeManager::Instance()->Find(typeId));
+		mPrescribedAttributes = mPairPtrs;
 	}
 
-	Attributed::Attributed(const Attributed& rhs) : Scope(rhs)
+	Attributed::Attributed(const Attributed& rhs) : Scope(rhs), mPrescribedAttributes(rhs.mPrescribedAttributes)
 	{
 		(*this)["this"] = this->As<RTTI>();
 		UpdateExternalStorage(TypeManager::Instance()->Find(rhs.TypeIdInstance()));
@@ -28,13 +30,15 @@ namespace Library
 	{
 		Scope::operator=(rhs);
 
+		mPrescribedAttributes = rhs.mPrescribedAttributes;
+
 		(*this)["this"] = this->As<RTTI>();
 		UpdateExternalStorage(TypeManager::Instance()->Find(rhs.TypeIdInstance()));
 
 		return *this;
 	}
 
-	Attributed::Attributed(Attributed&& rhs) noexcept : Scope(std::move(rhs))
+	Attributed::Attributed(Attributed&& rhs) noexcept : Scope(std::move(rhs)), mPrescribedAttributes(std::move(rhs.mPrescribedAttributes))
 	{
 		(*this)["this"] = this->As<RTTI>();
 		UpdateExternalStorage(TypeManager::Instance()->Find(rhs.TypeIdInstance()));
@@ -43,6 +47,8 @@ namespace Library
 	Attributed& Attributed::operator=(Attributed&& rhs) noexcept
 	{
 		Scope::operator=(std::move(rhs));
+
+		mPrescribedAttributes = std::move(rhs.mPrescribedAttributes);
 
 		(*this)["this"] = this->As<RTTI>();
 		UpdateExternalStorage(TypeManager::Instance()->Find(rhs.TypeIdInstance()));
@@ -61,14 +67,51 @@ namespace Library
 	{
 		if (Find(name) == nullptr) return false;
 
-		auto typeInfo = TypeManager::Instance()->Find(TypeIdInstance());
-		auto equalityFunctor = [&name](Signature signature) { return signature.Name == name; };
-		return std::find_if(typeInfo->signatures.begin(), typeInfo->signatures.end(), equalityFunctor) != typeInfo->signatures.end();
+		for (const auto& attribute : mPrescribedAttributes)
+		{
+			if (attribute->first == name) return true;
+		}
+
+		return false;
 	}
 
 	bool Attributed::IsAuxiliaryAttribute(const NameType& name)
 	{
 		return !IsPrescribedAttribute(name);
+	}
+
+	Vector<Scope::Attribute*> Attributed::PrescribedAttributes()
+	{
+		return mPrescribedAttributes;
+	}
+
+	Vector<const Scope::Attribute*> Attributed::PrescribedAttributes() const
+	{
+		Vector<const Attribute*> constAttributesCopy;
+
+		for (const auto& attribute : mPrescribedAttributes)
+		{
+			constAttributesCopy.PushBack(attribute);
+		}
+
+		return constAttributesCopy;
+	}
+
+	Vector<Scope::Attribute*> Attributed::AuxiliaryAttributes()
+	{
+		return mAuxiliaryAttributes;
+	}
+
+	Vector<const Scope::Attribute*> Attributed::AuxiliaryAttributes() const
+	{
+		Vector<const Attribute*> constAttributesCopy;
+
+		for (const auto& attribute : mAuxiliaryAttributes)
+		{
+			constAttributesCopy.PushBack(attribute);
+		}
+
+		return constAttributesCopy;
 	}
 
 	Attributed::DataType& Attributed::AppendAuxiliaryAttribute(const NameType& name)
@@ -77,10 +120,17 @@ namespace Library
 		{
 			throw std::runtime_error("Attribute is prescribed.");
 		}
-		
-		return Append(name);
-	}
 
+		std::size_t prevNumAttributes = Size();
+		DataType& data = Append(name);
+
+		if (Size() > prevNumAttributes)
+		{
+			mAuxiliaryAttributes.PushBack(mPairPtrs.Back());
+		}
+
+		return data;
+	}
 #pragma endregion Accessors
 
 #pragma region Helper Methods

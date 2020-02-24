@@ -159,6 +159,142 @@ namespace UnitTestLibraryDesktop
 
 			Assert::IsFalse(a.IsPrescribedAttribute("auxScope"));
 			Assert::IsTrue(a.IsAuxiliaryAttribute("auxScope"));
+
+			AttributedFoo b(a);
+
+			Assert::IsFalse(b.IsAttribute("null"));
+			Assert::IsTrue(b.IsAttribute("integer"));
+			Assert::IsTrue(b.IsAttribute("float"));
+			Assert::IsTrue(b.IsAttribute("vector"));
+			Assert::IsTrue(b.IsAttribute("matrix"));
+			Assert::IsTrue(b.IsAttribute("string"));
+			Assert::IsTrue(b.IsAttribute("scope"));
+			Assert::IsTrue(b.IsAttribute("rttiPtr"));
+
+			Assert::IsTrue(b.IsPrescribedAttribute("integer"));
+			Assert::IsTrue(b.IsPrescribedAttribute("float"));
+			Assert::IsTrue(b.IsPrescribedAttribute("vector"));
+			Assert::IsTrue(b.IsPrescribedAttribute("matrix"));
+			Assert::IsTrue(b.IsPrescribedAttribute("string"));
+			Assert::IsTrue(b.IsPrescribedAttribute("scope"));
+			Assert::IsTrue(b.IsPrescribedAttribute("rttiPtr"));
+
+			Assert::IsFalse(b.IsAuxiliaryAttribute("integer"));
+			Assert::IsFalse(b.IsAuxiliaryAttribute("float"));
+			Assert::IsFalse(b.IsAuxiliaryAttribute("vector"));
+			Assert::IsFalse(b.IsAuxiliaryAttribute("matrix"));
+			Assert::IsFalse(b.IsAuxiliaryAttribute("string"));
+			Assert::IsFalse(b.IsAuxiliaryAttribute("scope"));
+			Assert::IsFalse(b.IsAuxiliaryAttribute("rttiPtr"));
+
+			Assert::IsFalse(b.IsPrescribedAttribute("auxInteger"));
+			Assert::IsTrue(b.IsAuxiliaryAttribute("auxInteger"));
+
+			Assert::IsFalse(b.IsPrescribedAttribute("auxScope"));
+			Assert::IsTrue(b.IsAuxiliaryAttribute("auxScope"));
+
+
+			DerivedAttributedFoo derivedA(10);
+
+			Assert::IsFalse(derivedA.IsAttribute("null"));
+			Assert::IsTrue(derivedA.IsAttribute("integer"));
+			Assert::IsTrue(derivedA.IsAttribute("float"));
+			Assert::IsTrue(derivedA.IsAttribute("vector"));
+			Assert::IsTrue(derivedA.IsAttribute("matrix"));
+			Assert::IsTrue(derivedA.IsAttribute("string"));
+			Assert::IsTrue(derivedA.IsAttribute("scope"));
+			Assert::IsTrue(derivedA.IsAttribute("rttiPtr"));
+
+			Assert::IsTrue(derivedA.IsPrescribedAttribute("integer"));
+			Assert::IsTrue(derivedA.IsPrescribedAttribute("float"));
+			Assert::IsTrue(derivedA.IsPrescribedAttribute("vector"));
+			Assert::IsTrue(derivedA.IsPrescribedAttribute("matrix"));
+			Assert::IsTrue(derivedA.IsPrescribedAttribute("string"));
+			Assert::IsTrue(derivedA.IsPrescribedAttribute("scope"));
+			Assert::IsTrue(derivedA.IsPrescribedAttribute("rttiPtr"));
+
+			Assert::IsFalse(derivedA.IsAuxiliaryAttribute("integer"));
+			Assert::IsFalse(derivedA.IsAuxiliaryAttribute("float"));
+			Assert::IsFalse(derivedA.IsAuxiliaryAttribute("vector"));
+			Assert::IsFalse(derivedA.IsAuxiliaryAttribute("matrix"));
+			Assert::IsFalse(derivedA.IsAuxiliaryAttribute("string"));
+			Assert::IsFalse(derivedA.IsAuxiliaryAttribute("scope"));
+			Assert::IsFalse(derivedA.IsAuxiliaryAttribute("rttiPtr"));
+
+			derivedA.AppendAuxiliaryAttribute("auxInteger") = 20;
+			Assert::IsFalse(derivedA.IsPrescribedAttribute("auxInteger"));
+			Assert::IsTrue(derivedA.IsAuxiliaryAttribute("auxInteger"));
+
+			derivedA.AppendAuxiliaryAttribute("auxScope");
+			derivedA.AppendScope("auxScope");
+
+			Assert::IsFalse(derivedA.IsPrescribedAttribute("auxScope"));
+			Assert::IsTrue(derivedA.IsAuxiliaryAttribute("auxScope"));
+
+			DerivedAttributedFoo derivedB(derivedA);
+
+			Assert::IsFalse(derivedB.IsAttribute("null"));
+			Assert::IsTrue(derivedB.IsAttribute("integer"));
+			Assert::IsTrue(derivedB.IsAttribute("float"));
+			Assert::IsTrue(derivedB.IsAttribute("vector"));
+			Assert::IsTrue(derivedB.IsAttribute("matrix"));
+			Assert::IsTrue(derivedB.IsAttribute("string"));
+			Assert::IsTrue(derivedB.IsAttribute("scope"));
+			Assert::IsTrue(derivedB.IsAttribute("rttiPtr"));
+
+			Assert::IsTrue(derivedB.IsPrescribedAttribute("integer"));
+			Assert::IsTrue(derivedB.IsPrescribedAttribute("float"));
+			Assert::IsTrue(derivedB.IsPrescribedAttribute("vector"));
+			Assert::IsTrue(derivedB.IsPrescribedAttribute("matrix"));
+			Assert::IsTrue(derivedB.IsPrescribedAttribute("string"));
+			Assert::IsTrue(derivedB.IsPrescribedAttribute("scope"));
+			Assert::IsTrue(derivedB.IsPrescribedAttribute("rttiPtr"));
+
+			Assert::IsFalse(derivedB.IsAuxiliaryAttribute("integer"));
+			Assert::IsFalse(derivedB.IsAuxiliaryAttribute("float"));
+			Assert::IsFalse(derivedB.IsAuxiliaryAttribute("vector"));
+			Assert::IsFalse(derivedB.IsAuxiliaryAttribute("matrix"));
+			Assert::IsFalse(derivedB.IsAuxiliaryAttribute("string"));
+			Assert::IsFalse(derivedB.IsAuxiliaryAttribute("scope"));
+			Assert::IsFalse(derivedB.IsAuxiliaryAttribute("rttiPtr"));
+
+			Assert::IsFalse(derivedB.IsPrescribedAttribute("auxInteger"));
+			Assert::IsTrue(derivedB.IsAuxiliaryAttribute("auxInteger"));
+
+			Assert::IsFalse(derivedB.IsPrescribedAttribute("auxScope"));
+			Assert::IsTrue(derivedB.IsAuxiliaryAttribute("auxScope"));
+		}
+
+		TEST_METHOD(Accessors)
+		{
+			AttributedFoo a(10);
+
+			Vector<Attributed::Attribute*> prescribed = a.PrescribedAttributes();
+			Vector<Attributed::Attribute*> auxiliary = a.AuxiliaryAttributes();
+
+			Assert::AreEqual(TypeManager::Instance()->Find(a.TypeIdInstance())->signatures.Size()+1, prescribed.Size());
+			
+			for (const auto& attribute : prescribed)
+			{
+				Assert::IsNotNull(a.Find(attribute->first));
+			}
+
+			Assert::AreEqual(0_z, auxiliary.Size());
+
+			a.AppendAuxiliaryAttribute("auxInteger") = 20;
+			a.AppendAuxiliaryAttribute("auxString") = { "20", "30", "40" };
+			a.AppendAuxiliaryAttribute("auxScope");
+			a.AppendScope("auxScope");
+
+			auxiliary = a.AuxiliaryAttributes();
+			Assert::AreEqual(3_z, auxiliary.Size());
+
+			for (const auto& attribute : auxiliary)
+			{
+				Assert::IsNotNull(a.Find(attribute->first));
+			}
+
+			Assert::AreEqual(a.Size(), prescribed.Size() + auxiliary.Size());
 		}
 
 		TEST_METHOD(AppendAttribute)
