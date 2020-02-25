@@ -124,6 +124,10 @@ namespace Library
 
 #pragma region RTTI Overrides
 	public:
+		/// <summary>
+		/// RTTI override that returns a string representation of the Attributed class.
+		/// </summary>
+		/// <returns>String representation of the Attributed class.</returns>
 		virtual std::string ToString() const override;
 #pragma endregion RTTI Overrides
 
@@ -156,6 +160,9 @@ namespace Library
 
 #pragma region Data Members
 	private:
+		/// <summary>
+		/// Number of prescribed Attributes.
+		/// </summary>
 		inline static std::size_t mNumPrescribed;
 #pragma endregion Data Members
 	};
