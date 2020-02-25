@@ -250,20 +250,6 @@ namespace Library
 		const DataType* Find(const NameType& name) const;
 
 		/// <summary>
-		/// Finds the Attribute with the given NameType value, if it exists.
-		/// </summary>
-		/// <param name="name">NameType value associated with the Attribute to be found.</param>
-		/// <returns>If found, a pointer to the Attribute value. Otherwise, nullptr.</returns>
-		Attribute* FindAttribute(const NameType& name);
-
-		/// <summary>
-		/// Finds the Attribute with the given NameType value, if it exists.
-		/// </summary>
-		/// <param name="name">TableEntry name associated with the Attribute to be found.</param>
-		/// <returns>If found, a pointer to the Attribute value. Otherwise, nullptr.</returns>
-		const Attribute* FindAttribute(const NameType& name) const;
-
-		/// <summary>
 		/// Gets a pointer to the constant NameType value for the TableEntry at the given index, if it exists.
 		/// </summary>
 		/// <param name="index">Index of the TableEntry with the name to be found.</param>

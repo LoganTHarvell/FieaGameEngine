@@ -62,7 +62,9 @@ namespace UnitTests
 
 	std::string Foo::ToString() const
 	{
-		return "Foo: " + std::to_string(*mData);
+		std::ostringstream oss;
+		oss << "Foo(" << *mData << ")";
+		return oss.str();
 	}
 
 	int& Foo::Data()

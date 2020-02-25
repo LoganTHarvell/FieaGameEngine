@@ -307,18 +307,6 @@ namespace Library
 		return it != mTable.end() ? &it->second : nullptr;
 	}
 
-	Scope::Attribute* Scope::FindAttribute(const NameType& name)
-	{
-		Table::Iterator it = mTable.Find(name);
-		return it != mTable.end() ? &*it : nullptr;
-	}
-
-	const Scope::Attribute* Scope::FindAttribute(const NameType& name) const
-	{
-		Table::ConstIterator it = mTable.Find(name);
-		return it != mTable.end() ? &*it : nullptr;
-	}
-
 	std::pair<Scope::DataType*, std::size_t> Scope::FindScope(const Scope& scope)
 	{
 		for (auto& pairPtr : mPairPtrs)
@@ -554,21 +542,24 @@ namespace Library
 		std::ostringstream oss;
 		oss << "Scope(";
 
-		for (const auto& pairPtr : mPairPtrs)
+		for (std::size_t pairIndex = 0; pairIndex < mPairPtrs.Size(); ++pairIndex)
 		{
-			oss << "'" << pairPtr->first << "':";
+			const auto& pairPtr = mPairPtrs[pairIndex];
 
-			for (std::size_t i = 0; i < pairPtr->second.Size(); ++i)
+			oss << "'" << pairPtr->first << "':{ ";
+
+			for (std::size_t dataIndex = 0; dataIndex < pairPtr->second.Size(); ++dataIndex)
 			{
-				oss << pairPtr->second.ToString(i);
+				oss << pairPtr->second.ToString(dataIndex);
 
-				if (i < pairPtr->second.Size() - 1)
-				{
-					oss << ",";
-				}
+				if (dataIndex < pairPtr->second.Size() - 1) oss << ",";
 			}
+			
+			oss << " }";
+
+			if (pairIndex < pairPtr->second.Size() - 1) oss << ",";
 		}
-		
+
 		oss << ")";
 
 		return oss.str();

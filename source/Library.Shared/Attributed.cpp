@@ -5,6 +5,9 @@
 // Header
 #include "Attributed.h"
 
+// Standard
+#include <sstream>
+
 // Third Party
 #include <gsl/span>
 #pragma endregion Includes
@@ -15,14 +18,14 @@ namespace Library
 #pragma region Constructors, Destructor, Assignment
 	Attributed::Attributed(const RTTI::IdType typeId)
 	{	
-		(*this)["this"] = this->As<RTTI>();
+		(*this)["this"] = static_cast<RTTI*>(this);
 		Populate(TypeManager::Instance()->Find(typeId));
-		mPrescribedAttributes = mPairPtrs;
+		mNumPrescribed = mPairPtrs.Size();
 	}
 
-	Attributed::Attributed(const Attributed& rhs) : Scope(rhs), mPrescribedAttributes(rhs.mPrescribedAttributes)
+	Attributed::Attributed(const Attributed& rhs) : Scope(rhs)
 	{
-		(*this)["this"] = this->As<RTTI>();
+		(*this)["this"] = static_cast<RTTI*>(this);
 		UpdateExternalStorage(TypeManager::Instance()->Find(rhs.TypeIdInstance()));
 	}
 
@@ -30,17 +33,15 @@ namespace Library
 	{
 		Scope::operator=(rhs);
 
-		mPrescribedAttributes = rhs.mPrescribedAttributes;
-
-		(*this)["this"] = this->As<RTTI>();
+		(*this)["this"] = static_cast<RTTI*>(this);
 		UpdateExternalStorage(TypeManager::Instance()->Find(rhs.TypeIdInstance()));
 
 		return *this;
 	}
 
-	Attributed::Attributed(Attributed&& rhs) noexcept : Scope(std::move(rhs)), mPrescribedAttributes(std::move(rhs.mPrescribedAttributes))
+	Attributed::Attributed(Attributed&& rhs) noexcept : Scope(std::move(rhs))
 	{
-		(*this)["this"] = this->As<RTTI>();
+		(*this)["this"] = static_cast<RTTI*>(this);
 		UpdateExternalStorage(TypeManager::Instance()->Find(rhs.TypeIdInstance()));
 	}
 
@@ -48,9 +49,7 @@ namespace Library
 	{
 		Scope::operator=(std::move(rhs));
 
-		mPrescribedAttributes = std::move(rhs.mPrescribedAttributes);
-
-		(*this)["this"] = this->As<RTTI>();
+		(*this)["this"] = static_cast<RTTI*>(this);
 		UpdateExternalStorage(TypeManager::Instance()->Find(rhs.TypeIdInstance()));
 
 		return *this;
@@ -65,11 +64,9 @@ namespace Library
 
 	bool Attributed::IsPrescribedAttribute(const NameType& name)
 	{
-		if (Find(name) == nullptr) return false;
-
-		for (const auto& attribute : mPrescribedAttributes)
+		for (std::size_t i = 0; i < mNumPrescribed; ++i)
 		{
-			if (attribute->first == name) return true;
+			if (mPairPtrs[i]->first == name) return true;
 		}
 
 		return false;
@@ -80,40 +77,38 @@ namespace Library
 		return !IsPrescribedAttribute(name);
 	}
 
-	Vector<Scope::Attribute*> Attributed::PrescribedAttributes()
+	void Attributed::ForEachPrescribed(std::function<void(Attribute&)> functor)
 	{
-		return mPrescribedAttributes;
-	}
-
-	Vector<const Scope::Attribute*> Attributed::PrescribedAttributes() const
-	{
-		Vector<const Attribute*> constAttributesCopy;
-
-		for (const auto& attribute : mPrescribedAttributes)
+		for (std::size_t i = 0; i < mNumPrescribed; ++i)
 		{
-			constAttributesCopy.PushBack(attribute);
+			functor(*mPairPtrs[i]);
 		}
-
-		return constAttributesCopy;
 	}
 
-	Vector<Scope::Attribute*> Attributed::AuxiliaryAttributes()
+	void Attributed::ForEachPrescribed(std::function<void(const Attribute&)> functor) const
 	{
-		return mAuxiliaryAttributes;
-	}
-
-	Vector<const Scope::Attribute*> Attributed::AuxiliaryAttributes() const
-	{
-		Vector<const Attribute*> constAttributesCopy;
-
-		for (const auto& attribute : mAuxiliaryAttributes)
+		for (std::size_t i = 0; i < mNumPrescribed; ++i)
 		{
-			constAttributesCopy.PushBack(attribute);
+			functor(*mPairPtrs[i]);
 		}
-
-		return constAttributesCopy;
 	}
 
+	void Attributed::ForEachAuxiliary(std::function<void(Attribute&)> functor)
+	{
+		for (std::size_t i = mNumPrescribed; i < mPairPtrs.Size(); ++i)
+		{
+			functor(*mPairPtrs[i]);
+		}
+	}
+
+	void Attributed::ForEachAuxiliary(std::function<void(const Attribute&)> functor) const
+	{
+		for (std::size_t i = mNumPrescribed; i < mPairPtrs.Size(); ++i)
+		{
+			functor(*mPairPtrs[i]);
+		}
+	}
+	
 	Attributed::DataType& Attributed::AppendAuxiliaryAttribute(const NameType& name)
 	{
 		if (IsPrescribedAttribute(name))
@@ -121,23 +116,47 @@ namespace Library
 			throw std::runtime_error("Attribute is prescribed.");
 		}
 
-		std::size_t prevNumAttributes = Size();
-		DataType& data = Append(name);
-
-		if (Size() > prevNumAttributes)
-		{
-			mAuxiliaryAttributes.PushBack(mPairPtrs.Back());
-		}
-
-		return data;
+		return Append(name);
 	}
 #pragma endregion Accessors
+
+#pragma region RTTI Overrides
+	std::string Attributed::ToString() const
+	{
+		std::ostringstream oss;
+		oss << "Attributed(";
+
+		for (std::size_t pairIndex = 1; pairIndex < mPairPtrs.Size(); ++pairIndex)
+		{
+			const auto& pairPtr = mPairPtrs[pairIndex];
+
+			oss << "'" << pairPtr->first << "':{";
+
+			for (std::size_t dataIndex = 0; dataIndex < pairPtr->second.Size(); ++dataIndex)
+			{
+				oss << pairPtr->second.ToString(dataIndex);
+
+				if (dataIndex < pairPtr->second.Size() - 1) oss << ",";
+			}
+
+			oss << "}";
+
+			if (pairIndex < mPairPtrs.Size() - 1) oss << ",";
+		}
+
+		oss << ")";
+
+		return oss.str();
+	}
+#pragma endregion RTTI Overrides
 
 #pragma region Helper Methods
 	void Attributed::Populate(const TypeManager::TypeInfo* typeInfo)
 	{
 		auto parentTypeInfo = TypeManager::Instance()->Find(typeInfo->parentTypeId);
 		if (parentTypeInfo) Populate(parentTypeInfo);
+
+		mPairPtrs.Reserve(typeInfo->signatures.Size() + mPairPtrs.Size());
 
 		for (const auto& signature : typeInfo->signatures)
 		{
@@ -161,12 +180,13 @@ namespace Library
 		auto parentTypeInfo = TypeManager::Instance()->Find(typeInfo->parentTypeId);
 		if (parentTypeInfo) UpdateExternalStorage(parentTypeInfo);
 
+		std::size_t index = 1;
 		for (const auto& signature : typeInfo->signatures)
 		{
 			if (!signature.IsInternal)
 			{
 				std::byte* address = reinterpret_cast<std::byte*>(this) + signature.Offset;
-				Find(signature.Name)->SetStorage(signature.Type, gsl::span(address, signature.Size));
+				mPairPtrs[index++]->second.SetStorage(signature.Type, gsl::span(address, signature.Size));
 			}
 		}
 	}

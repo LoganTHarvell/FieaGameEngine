@@ -20,7 +20,7 @@ namespace Library
 	class Attributed : public Scope
 	{
 #pragma region Constructors, Destructor, Assignment
-	public:
+	protected:
 		/// <summary>
 		/// Main constructor.
 		/// Populates the scope with attributes associated with the passed RTTI::IdType.
@@ -92,25 +92,25 @@ namespace Library
 		/// Gets the list of prescribed Attribute values.
 		/// </summary>
 		/// <returns>List of pointers to all prescribed Attribute values.</returns>
-		Vector<Attribute*> PrescribedAttributes();
+		void ForEachPrescribed(std::function<void(Attribute&)> functor);
 
 		/// <summary>
 		/// Gets the list of prescribed Attribute values.
 		/// </summary>
 		/// <returns>List of pointers to all prescribed Attribute values.</returns>
-		Vector<const Attribute*> PrescribedAttributes() const;
+		void ForEachPrescribed(std::function<void(const Attribute&)> functor) const;
 
 		/// <summary>
 		/// Gets the list of auxiliary Attribute values.
 		/// </summary>
 		/// <returns>List of pointers to all auxiliary Attribute values.</returns>
-		Vector<Attribute*> AuxiliaryAttributes();
+		void ForEachAuxiliary(std::function<void(Attribute&)> functor);
 
 		/// <summary>
 		/// Gets the list of prescribed Attribute values.
 		/// </summary>
 		/// <returns>List of pointers to all auxiliary Attribute values.</returns>
-		Vector<const Attribute*> AuxiliaryAttributes() const;
+		void ForEachAuxiliary(std::function<void(const Attribute&)> functor) const;
 #pragma endregion Accessors
 		
 #pragma region Modifiers
@@ -121,6 +121,11 @@ namespace Library
 		/// <returns>Reference to the DataType value associated with the name.</returns>
 		DataType& AppendAuxiliaryAttribute(const NameType& name);
 #pragma endregion Modifiers
+
+#pragma region RTTI Overrides
+	public:
+		virtual std::string ToString() const override;
+#pragma endregion RTTI Overrides
 
 #pragma region Helper Methods
 	private:
@@ -151,15 +156,7 @@ namespace Library
 
 #pragma region Data Members
 	private:
-		/// <summary>
-		/// List of pointers to the prescribed Attribute values.
-		/// </summary>
-		Vector<Attribute*> mPrescribedAttributes;
-
-		/// <summary>
-		/// List of pointers to the auxiliary Attribute values.
-		/// </summary>
-		Vector<Attribute*> mAuxiliaryAttributes;
+		inline static std::size_t mNumPrescribed;
 #pragma endregion Data Members
 	};
 }

@@ -48,18 +48,31 @@ namespace UnitTestLibraryDesktop
 		TEST_METHOD(Constructor)
 		{
 			AttributedFoo a;
-			Assert::AreEqual(0, a.Data());
+			Assert::AreEqual(0, a.Find("integer")->Get<int>());
+			Assert::AreEqual(0.0f, a.Find("float")->Get<float>());
+			Assert::AreEqual(glm::vec4(0.0f), a.Find("vector")->Get<glm::vec4>());
+			Assert::AreEqual(glm::mat4(0.0f), a.Find("matrix")->Get<glm::mat4>());
+			Assert::AreEqual("0"s, a.Find("string")->Get<std::string>());
 
 			AttributedFoo b(10);
-			Assert::AreEqual(10, b.Data());
+			Assert::AreEqual(10, b.Find("integer")->Get<int>());
+			Assert::AreEqual(10.0f, b.Find("float")->Get<float>());
+			Assert::AreEqual(glm::vec4(10.0f), b.Find("vector")->Get<glm::vec4>());
+			Assert::AreEqual(glm::mat4(10.0f), b.Find("matrix")->Get<glm::mat4>());
+			Assert::AreEqual("10"s, b.Find("string")->Get<std::string>());
 
-			AttributedFoo c = AttributedFoo(20);
+			AttributedFoo c = AttributedFoo(10);
+			Assert::AreEqual(b, c);
 		}
 
 		TEST_METHOD(CopySemantics)
 		{
 			AttributedFoo a(10);
-			Assert::AreEqual(10, a.Data());
+
+			a.AppendAuxiliaryAttribute("auxInteger") = 20;
+			a.AppendAuxiliaryAttribute("auxString") = { "20", "30", "40" };
+			a.AppendAuxiliaryAttribute("auxScope");
+			a.AppendScope("auxScope");
 
 			AttributedFoo b(a);
 			Assert::AreEqual(a, b);
@@ -75,36 +88,42 @@ namespace UnitTestLibraryDesktop
 		TEST_METHOD(EqualityOperators)
 		{
 			AttributedFoo a(10);
+
+			const auto& auxInteger = a.AppendAuxiliaryAttribute("auxInteger") = 20;
+			const auto& auxString = a.AppendAuxiliaryAttribute("auxString") = { "20", "30", "40" };
+			const auto& auxScope = a.AppendAuxiliaryAttribute("auxScope");
+			a.AppendScope("auxScope");
+			
 			AttributedFoo b(a);
-			Assert::AreEqual(a, b);
 
-			AttributedFoo c;
-			Assert::IsTrue(c != a); // Assert::AreNotEqual does not invoke operator!=
-		}
+			Assert::AreEqual(0, b.Find("integer")->Get<int>());
+			Assert::AreEqual(0.0f, b.Find("float")->Get<float>());
+			Assert::AreEqual(glm::vec4(0.0f), b.Find("vector")->Get<glm::vec4>());
+			Assert::AreEqual(glm::mat4(0.0f), b.Find("matrix")->Get<glm::mat4>());
+			Assert::AreEqual("0"s, b.Find("string")->Get<std::string>());
+			Assert::IsNull(b.Find("rttiPtr")->Get<RTTI*>());
 
-		TEST_METHOD(SetData)
-		{
-			AttributedFoo a;
-			Assert::AreEqual(0, a.Data());
-
-			const int data = 10;
-			a.SetData(data);
-			Assert::AreEqual(data, a.Data());
+			Assert::AreEqual(auxInteger, *b.Find("auxInteger"));
+			Assert::AreEqual(auxString, *b.Find("auxString"));
+			Assert::AreEqual(auxScope, *b.Find("auxScope"));
 		}
 
 		TEST_METHOD(MoveSemantics)
 		{
-			const int data = 10;
-			AttributedFoo a(data);
-			Assert::AreEqual(data, a.Data());
+			AttributedFoo a(10);
+			Assert::AreEqual(10, a.Find("integer")->Get<int>());
+			Assert::AreEqual(10.0f, a.Find("float")->Get<float>());
+			Assert::AreEqual(glm::vec4(10.0f), a.Find("vector")->Get<glm::vec4>());
+			Assert::AreEqual(glm::mat4(10.0f), a.Find("matrix")->Get<glm::mat4>());
+			Assert::AreEqual("10"s, a.Find("string")->Get<std::string>());
 
+			AttributedFoo copy(a);
 			AttributedFoo b(std::move(a));
-			Assert::AreEqual(data, b.Data());
+			Assert::AreEqual(copy, b);
 
 			AttributedFoo c;
-			Assert::AreEqual(0, c.Data());
 			c = std::move(b);
-			Assert::AreEqual(data, c.Data());
+			Assert::AreEqual(copy, c);
 		}
 
 		TEST_METHOD(RTTITest)
@@ -118,7 +137,16 @@ namespace UnitTestLibraryDesktop
 
 		TEST_METHOD(ToString)
 		{
-			Assert::AreEqual("AttributedFoo: 0", AttributedFoo().ToString().c_str());
+			AttributedFoo a(10);
+
+			a.AppendAuxiliaryAttribute("auxInteger") = 20;
+			a.AppendAuxiliaryAttribute("auxString") = { "20", "30", "40" };
+			a.AppendAuxiliaryAttribute("auxScope");
+			a.AppendScope("auxScope");
+
+			std::string str = "Foo Attributed('integer':{10},'float':{10.000000},'vector':{vec4(10.000000, 10.000000, 10.000000, 10.000000)},'matrix':{mat4x4((10.000000, 0.000000, 0.000000, 0.000000), (0.000000, 10.000000, 0.000000, 0.000000), (0.000000, 0.000000, 10.000000, 0.000000), (0.000000, 0.000000, 0.000000, 10.000000))},'string':{10},'scope':{},'rttiPtr':{nullptr},'auxInteger':{20},'auxString':{20,30,40},'auxScope':{Scope()})"s;
+
+			Assert::AreEqual(str, a.ToString());
 		}
 
 		TEST_METHOD(QueryAttributes)
@@ -269,32 +297,43 @@ namespace UnitTestLibraryDesktop
 		{
 			AttributedFoo a(10);
 
-			Vector<Attributed::Attribute*> prescribed = a.PrescribedAttributes();
-			Vector<Attributed::Attribute*> auxiliary = a.AuxiliaryAttributes();
-
-			Assert::AreEqual(TypeManager::Instance()->Find(a.TypeIdInstance())->signatures.Size()+1, prescribed.Size());
-			
-			for (const auto& attribute : prescribed)
+			std::size_t count = 0;
+			auto functor = [&a, &count](const Attributed::Attribute& attribute)
 			{
-				Assert::IsNotNull(a.Find(attribute->first));
-			}
+				count++;
+				Assert::IsNotNull(a.Find(attribute.first));
+			};
 
-			Assert::AreEqual(0_z, auxiliary.Size());
+			a.ForEachPrescribed(functor);
 
+			Assert::AreEqual(TypeManager::Instance()->Find(a.TypeIdInstance())->signatures.Size()+1, count);
+			
 			a.AppendAuxiliaryAttribute("auxInteger") = 20;
 			a.AppendAuxiliaryAttribute("auxString") = { "20", "30", "40" };
 			a.AppendAuxiliaryAttribute("auxScope");
 			a.AppendScope("auxScope");
 
-			auxiliary = a.AuxiliaryAttributes();
-			Assert::AreEqual(3_z, auxiliary.Size());
+			a.ForEachAuxiliary(functor);
 
-			for (const auto& attribute : auxiliary)
+			Assert::AreEqual(a.Size(), count);
+
+
+			const AttributedFoo constA(a);
+
+			count = 0;
+			auto constFunctor = [&constA, &count](const Attributed::Attribute& attribute)
 			{
-				Assert::IsNotNull(a.Find(attribute->first));
-			}
+				count++;
+				Assert::IsNotNull(constA.Find(attribute.first));
+			};
 
-			Assert::AreEqual(a.Size(), prescribed.Size() + auxiliary.Size());
+			constA.ForEachPrescribed(constFunctor);
+
+			Assert::AreEqual(TypeManager::Instance()->Find(constA.TypeIdInstance())->signatures.Size() + 1, count);
+
+			constA.ForEachAuxiliary(constFunctor);
+
+			Assert::AreEqual(constA.Size(), count);
 		}
 
 		TEST_METHOD(AppendAttribute)

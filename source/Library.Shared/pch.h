@@ -9,7 +9,7 @@
 #include <cassert>
 #include <functional>
 #include <algorithm>
-
+#include <sstream>
 
 // GSL Library
 #include <gsl/gsl>

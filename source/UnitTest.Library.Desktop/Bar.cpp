@@ -52,7 +52,9 @@ namespace UnitTests
 
 	std::string Bar::ToString() const
 	{
-		return "Bar: " + std::to_string(*mData);
+		std::ostringstream oss;
+		oss << "Bar(" << *mData << ")";
+		return oss.str();
 	}
 
 	int& Bar::Data()

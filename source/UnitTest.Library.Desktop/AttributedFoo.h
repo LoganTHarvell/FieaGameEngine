@@ -14,32 +14,25 @@ namespace UnitTests
 	public:
 		explicit AttributedFoo(int data = 0);
 		AttributedFoo(const AttributedFoo& rhs);
-		AttributedFoo(AttributedFoo&& rhs) noexcept;
+		AttributedFoo(AttributedFoo&& rhs) noexcept = default;
 		AttributedFoo& operator=(const AttributedFoo& rhs);
-		AttributedFoo& operator=(AttributedFoo&& rhs) noexcept;
+		AttributedFoo& operator=(AttributedFoo&& rhs) noexcept = default;
 		virtual ~AttributedFoo() = default;
 
-		bool operator==(const AttributedFoo& rhs) const noexcept;
-		bool operator!=(const AttributedFoo& rhs) const noexcept;
-
-		int& Data();
-		int Data() const;
-		void SetData(int data);
-
-		virtual bool Equals(const RTTI* rhs) const override;
 		virtual std::string ToString() const override;
 
 		virtual gsl::owner<Library::Scope*> Clone() const override;
 		static const Library::TypeManager::TypeInfo& TypeInfo();
 
 	private:
-		std::unique_ptr<int> mIntData;
-		std::unique_ptr<float> mFloatData;
-		std::unique_ptr<glm::vec4> mVectorData;
-		std::unique_ptr<glm::mat4> mMatrixData;
-		std::unique_ptr<std::string> mStringData;
-		std::unique_ptr<RTTI> mRttiData;
+		int mIntData{ 0 };
+		float mFloatData{ 0.0f };
+		glm::vec4 mVectorData{ 0.0f };
+		glm::mat4 mMatrixData{ 0.0f };
+		std::string mStringData{ "0" };
+		
+		Foo foo{ 0 };
+		RTTI* mRttiData;
 
-		Foo foo;
 	};
 }

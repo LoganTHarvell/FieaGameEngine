@@ -116,7 +116,7 @@ namespace UnitTestLibraryDesktop
 			TestAs<Foo, Bar>(&foo);
 
 			Bar bar(10);
-			TestToString<Bar>(&bar, "Bar: 10");
+			TestAs<Bar, Foo>(&bar);
 			
 			Scope scope;
 			TestAs<Scope, Bar>(&scope);
@@ -125,10 +125,10 @@ namespace UnitTestLibraryDesktop
 		TEST_METHOD(ToString)
 		{
 			Foo foo(10);
-			TestToString<Foo>(&foo, "Foo: 10");
+			TestToString<Foo>(&foo, "Foo(10)");
 
 			Bar bar(10);
-			TestToString<Bar>(&bar, "Bar: 10");
+			TestToString<Bar>(&bar, "Bar(10)");
 
 			Scope scope;
 			TestToString<Scope>(&scope, "Scope()");

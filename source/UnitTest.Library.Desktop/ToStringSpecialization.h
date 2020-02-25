@@ -106,7 +106,7 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 	template<>
 	inline std::wstring ToString<AttributedFoo>(const AttributedFoo& t)
 	{
-		RETURN_WIDE_STRING(t.Data());
+		RETURN_WIDE_STRING(t.ToString().c_str());
 	}
 
 	template<>
