@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Datum.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)pch.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Scope.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Utility.cpp">
@@ -9,21 +8,19 @@
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Attributed.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)TypeManager.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Datum.cpp">
+      <Filter>Containers\Datum</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)IJsonParseHelper.cpp">
+      <Filter>JSON Parser</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)JsonParseMaster.cpp">
+      <Filter>JSON Parser</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Datum.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)RTTI.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Scope.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)SList.h">
-      <Filter>Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Vector.h">
-      <Filter>Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)HashMap.h">
-      <Filter>Containers</Filter>
-    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Utility.h">
       <Filter>Utility</Filter>
     </ClInclude>
@@ -35,19 +32,30 @@
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Attributed.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)TypeManager.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)RTTI.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Datum.h">
+      <Filter>Containers\Datum</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)HashMap.h">
+      <Filter>Containers\HashMap</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)SList.h">
+      <Filter>Containers\SList</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Vector.h">
+      <Filter>Containers\Vector</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)IJsonParseHelper.h">
+      <Filter>JSON Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)JsonParseMaster.h">
+      <Filter>JSON Parser</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)Datum.inl" />
     <None Include="$(MSBuildThisFileDirectory)Scope.inl" />
-    <None Include="$(MSBuildThisFileDirectory)SList.inl">
-      <Filter>Containers</Filter>
-    </None>
-    <None Include="$(MSBuildThisFileDirectory)Vector.inl">
-      <Filter>Containers</Filter>
-    </None>
-    <None Include="$(MSBuildThisFileDirectory)HashMap.inl">
-      <Filter>Containers</Filter>
-    </None>
     <None Include="$(MSBuildThisFileDirectory)DefaultHash.inl">
       <Filter>Utility</Filter>
     </None>
@@ -55,6 +63,21 @@
       <Filter>Utility</Filter>
     </None>
     <None Include="$(MSBuildThisFileDirectory)TypeManager.inl" />
+    <None Include="$(MSBuildThisFileDirectory)Datum.inl">
+      <Filter>Containers\Datum</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)HashMap.inl">
+      <Filter>Containers\HashMap</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)SList.inl">
+      <Filter>Containers\SList</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Vector.inl">
+      <Filter>Containers\Vector</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)JsonParseMaster.inl">
+      <Filter>JSON Parser</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Containers">
@@ -62,6 +85,21 @@
     </Filter>
     <Filter Include="Utility">
       <UniqueIdentifier>{2f6f67e5-19b1-465b-a10a-d413f9a12d48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Containers\Datum">
+      <UniqueIdentifier>{ba00a61c-058c-4031-af9f-5be588c0ae86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Containers\SList">
+      <UniqueIdentifier>{7f894690-b53f-467f-8152-34d593bb2926}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Containers\Vector">
+      <UniqueIdentifier>{65e56c70-4f5f-4e3b-b5fb-fbce7e929e27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Containers\HashMap">
+      <UniqueIdentifier>{87b9de7d-298d-4497-81db-52956c8c344c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="JSON Parser">
+      <UniqueIdentifier>{cb52c9b0-32c6-480a-a0f2-20ac7613b4c0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

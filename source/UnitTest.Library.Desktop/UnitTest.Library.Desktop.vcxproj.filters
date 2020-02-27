@@ -5,30 +5,56 @@
     <ClCompile Include="Foo.cpp">
       <Filter>Support Code</Filter>
     </ClCompile>
-    <ClCompile Include="FooTest.cpp" />
-    <ClCompile Include="SListTest.cpp" />
     <ClCompile Include="Bar.cpp">
       <Filter>Support Code</Filter>
     </ClCompile>
-    <ClCompile Include="VectorTest.cpp" />
-    <ClCompile Include="BarTest.cpp" />
-    <ClCompile Include="DefaultEqualityTest.cpp" />
-    <ClCompile Include="DefaultHashTest.cpp" />
-    <ClCompile Include="HashMapTest.cpp" />
-    <ClCompile Include="DatumTest.cpp" />
-    <ClCompile Include="ScopeTest.cpp" />
-    <ClCompile Include="RTTITest.cpp" />
-    <ClCompile Include="AttributedBar.cpp">
-      <Filter>Support Code</Filter>
+    <ClCompile Include="HashMapTest.cpp">
+      <Filter>Container Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="VectorTest.cpp">
+      <Filter>Container Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="SListTest.cpp">
+      <Filter>Container Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="DatumTest.cpp">
+      <Filter>Container Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="BarTest.cpp">
+      <Filter>Support Code Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="FooTest.cpp">
+      <Filter>Support Code Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="DefaultEqualityTest.cpp">
+      <Filter>Utility Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="DefaultHashTest.cpp">
+      <Filter>Utility Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="RTTITest.cpp">
+      <Filter>Utility Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="AttributedFooTest.cpp">
+      <Filter>Attributed Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="AttributedBarTest .cpp">
+      <Filter>Attributed Tests</Filter>
     </ClCompile>
     <ClCompile Include="AttributedFoo.cpp">
-      <Filter>Support Code</Filter>
+      <Filter>Attributed Tests</Filter>
     </ClCompile>
-    <ClCompile Include="AttributedFooTest.cpp" />
-    <ClCompile Include="AttributedBarTest .cpp" />
-    <ClCompile Include="TypeManagerTest.cpp" />
+    <ClCompile Include="AttributedBar.cpp">
+      <Filter>Attributed Tests</Filter>
+    </ClCompile>
     <ClCompile Include="DerivedAttributedFoo.cpp">
-      <Filter>Support Code</Filter>
+      <Filter>Attributed Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="TypeManagerTest.cpp">
+      <Filter>Attributed Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="ScopeTest.cpp">
+      <Filter>Attributed Tests</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -43,18 +69,30 @@
       <Filter>Support Code</Filter>
     </ClInclude>
     <ClInclude Include="AttributedBar.h">
-      <Filter>Support Code</Filter>
+      <Filter>Attributed Tests</Filter>
     </ClInclude>
     <ClInclude Include="AttributedFoo.h">
-      <Filter>Support Code</Filter>
+      <Filter>Attributed Tests</Filter>
     </ClInclude>
     <ClInclude Include="DerivedAttributedFoo.h">
-      <Filter>Support Code</Filter>
+      <Filter>Attributed Tests</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Support Code">
       <UniqueIdentifier>{cb92ebec-90e8-4542-8efe-4690f20fc191}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Container Tests">
+      <UniqueIdentifier>{baf04301-e9bb-4af7-9984-1eaafbf44244}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Support Code Tests">
+      <UniqueIdentifier>{03f82542-212a-4fae-8644-5b1c0589d18f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility Tests">
+      <UniqueIdentifier>{18e39828-51fc-423c-8aeb-ddceb560a31b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Attributed Tests">
+      <UniqueIdentifier>{89ca14ab-61f6-4885-a5ad-66ab9007c3f6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

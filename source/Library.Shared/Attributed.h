@@ -65,6 +65,16 @@ namespace Library
 		Attributed& operator=(Attributed&& rhs) noexcept;
 #pragma endregion Constructors, Destructor, Assignment
 		
+#pragma region Pure Virtual Constructor
+	public:
+		/// <summary>
+		/// Pure virtual method signature for the Clone method inherited from Scope.
+		/// Creates an instance copy of a Scope derived class.
+		/// </summary>
+		/// <returns>Pointer to a newly heap allocated copy of the instance.</returns>
+		virtual gsl::owner<Scope*> Clone() const override = 0;
+#pragma endregion Pure Virtual Constructor
+
 #pragma region Accessors
 	public:
 		/// <summary>
@@ -147,16 +157,6 @@ namespace Library
 		/// <param name="typeInfo">TypeInfo associated with the Attributed class.</param>
 		void UpdateExternalStorage(const TypeManager::TypeInfo* typeInfo);
 #pragma endregion Helper Methods
-
-#pragma region Pure Virtual Methods
-	public:
-		/// <summary>
-		/// Pure virtual method signature for the Clone method inherited from Scope.
-		/// Creates an instance copy of a Scope derived class.
-		/// </summary>
-		/// <returns>Pointer to a newly heap allocated copy of the instance.</returns>
-		virtual gsl::owner<Scope*> Clone() const override = 0;
-#pragma endregion Pure Virtual Methods
 
 #pragma region Data Members
 	private:
