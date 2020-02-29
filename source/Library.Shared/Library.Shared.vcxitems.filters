@@ -11,9 +11,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Datum.cpp">
       <Filter>Containers\Datum</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)IJsonParseHelper.cpp">
-      <Filter>JSON Parser</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)JsonParseMaster.cpp">
       <Filter>JSON Parser</Filter>
     </ClCompile>
@@ -53,6 +50,9 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)JsonParseMaster.h">
       <Filter>JSON Parser</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Stack.h">
+      <Filter>Containers\Stack</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)Scope.inl" />
@@ -78,6 +78,9 @@
     <None Include="$(MSBuildThisFileDirectory)JsonParseMaster.inl">
       <Filter>JSON Parser</Filter>
     </None>
+    <None Include="$(MSBuildThisFileDirectory)Stack.inl">
+      <Filter>Containers\Stack</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Containers">
@@ -100,6 +103,9 @@
     </Filter>
     <Filter Include="JSON Parser">
       <UniqueIdentifier>{cb52c9b0-32c6-480a-a0f2-20ac7613b4c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Containers\Stack">
+      <UniqueIdentifier>{b76401fc-c5b1-4d3c-aa7b-afcba3c7a565}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

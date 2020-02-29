@@ -6,26 +6,31 @@
 
 // Third Party
 #pragma warning(disable : 26812)
-#include "json/json.h"
+#include <json/json.h>
 #pragma warning(default : 26812)
+
+#include <gsl/gsl>
 
 // First Party
 #include "RTTI.h"
+#include "Vector.h"
 #pragma endregion Includes
 
 namespace Library
 {
+	class IJsonParseHelper;
+	
 	/// <summary>
 	/// JSON parser master class for managing IJsonParserHelper handles and parsing JSON data.
 	/// </summary>
 	class JsonParseMaster final
 	{
-		class IJsonParseHelper;
-
 #pragma region Shared Data
 public:
-		class SharedData : RTTI
+		class SharedData : public RTTI
 		{
+			RTTI_DECLARATIONS(SharedData, RTTI)
+
 			friend JsonParseMaster;
 
 		public:
@@ -38,8 +43,10 @@ public:
 			SharedData& operator=(SharedData&& rhs) = delete;
 
 		public:
-			virtual SharedData* Create() = 0;
+			virtual gsl::owner<SharedData*> Create() const = 0;
 			
+			virtual void Initialize() {};
+
 			JsonParseMaster* GetJsonParseMaster();
 			const JsonParseMaster* GetJsonParseMaster() const;
 
@@ -57,7 +64,7 @@ public:
 #pragma endregion Shared Data
 
 	public:
-		JsonParseMaster();
+		JsonParseMaster(SharedData* sharedData=nullptr);
 		~JsonParseMaster();
 
 		JsonParseMaster(const JsonParseMaster& rhs) = delete;
@@ -65,28 +72,31 @@ public:
 		JsonParseMaster(JsonParseMaster&& rhs) = default;
 		JsonParseMaster& operator=( JsonParseMaster&& rhs) = default;
 
-		JsonParseMaster& Clone() const;
+		gsl::owner<JsonParseMaster*> Clone() const;
 
 	public:
 		void AddHelper(IJsonParseHelper& helper);
 		bool RemoveHelper(IJsonParseHelper& helper);
 		
-		bool Parse(const std::string& string);
-		bool ParseFromFile(const std::string& filename);
-		bool Parse(const std::istream& inputStream);
+		void Parse(const std::string& string);
+		void Parse(std::istream& inputStream);
+		void ParseFromFile(const std::string& filename);
 
 		const std::string& GetFilename();
 
-		void SetSharedData(SharedData* sharedData);
+		void SetSharedData(SharedData& sharedData);
 		SharedData* GetSharedData();
 
 	private:
-		bool ParseMembers(const Json::Value& value);
-		bool Parse(const std::string& key, Json::Value& value, bool isArray);
+		void ParseMembers(const Json::Value& value);
+		void Parse(const std::string& key, const Json::Value& value, bool isArray);
 
 	private:
-		SharedData* mSharedData{ nullptr };
-		const std::string& mFilename;
+		SharedData* mSharedData;
+		Vector<IJsonParseHelper*> mHelpers;
+		bool mIsClone{ false };
+
+		const std::string* mFilename{ nullptr };
 	};
 }
 

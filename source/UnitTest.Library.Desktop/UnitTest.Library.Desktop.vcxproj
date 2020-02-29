@@ -175,6 +175,8 @@
     <ClCompile Include="Foo.cpp" />
     <ClCompile Include="FooTest.cpp" />
     <ClCompile Include="HashMapTest.cpp" />
+    <ClCompile Include="JsonParseTestHelper.cpp" />
+    <ClCompile Include="JsonParseTest.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -184,6 +186,7 @@
     <ClCompile Include="RTTITest.cpp" />
     <ClCompile Include="ScopeTest.cpp" />
     <ClCompile Include="SListTest.cpp" />
+    <ClCompile Include="StackTest.cpp" />
     <ClCompile Include="TypeManagerTest.cpp" />
     <ClCompile Include="VectorTest.cpp" />
   </ItemGroup>
@@ -198,6 +201,7 @@
     <ClInclude Include="Bar.h" />
     <ClInclude Include="DerivedAttributedFoo.h" />
     <ClInclude Include="Foo.h" />
+    <ClInclude Include="JsonParseTestHelper.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="ToStringSpecialization.h" />
   </ItemGroup>

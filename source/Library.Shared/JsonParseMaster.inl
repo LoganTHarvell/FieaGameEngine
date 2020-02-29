@@ -35,4 +35,28 @@ namespace Library
 		mMaster = master;
 	}
 #pragma endregion Shared Data
+
+#pragma region Constructor
+	inline JsonParseMaster::JsonParseMaster(SharedData* sharedData)
+	{
+		mSharedData = sharedData;
+	}
+#pragma endregion Constructor
+
+#pragma region Accessors
+	inline const std::string& JsonParseMaster::GetFilename()
+	{
+		return *mFilename;
+	}
+
+	inline void JsonParseMaster::SetSharedData(SharedData& sharedData)
+	{
+		mSharedData = &sharedData;
+	}
+
+	inline JsonParseMaster::SharedData* JsonParseMaster::GetSharedData()
+	{
+		return mSharedData;
+	}
+#pragma endregion Accessors
 }

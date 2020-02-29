@@ -56,6 +56,15 @@
     <ClCompile Include="ScopeTest.cpp">
       <Filter>Attributed Tests</Filter>
     </ClCompile>
+    <ClCompile Include="StackTest.cpp">
+      <Filter>Container Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="JsonParseTest.cpp">
+      <Filter>JSON Parser Test</Filter>
+    </ClCompile>
+    <ClCompile Include="JsonParseTestHelper.cpp">
+      <Filter>JSON Parser Test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -77,6 +86,9 @@
     <ClInclude Include="DerivedAttributedFoo.h">
       <Filter>Attributed Tests</Filter>
     </ClInclude>
+    <ClInclude Include="JsonParseTestHelper.h">
+      <Filter>JSON Parser Test</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Support Code">
@@ -93,6 +105,9 @@
     </Filter>
     <Filter Include="Attributed Tests">
       <UniqueIdentifier>{89ca14ab-61f6-4885-a5ad-66ab9007c3f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="JSON Parser Test">
+      <UniqueIdentifier>{e8149a2f-8b57-469f-b5fb-5e87426c5d65}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -60,6 +60,24 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 	{
 		RETURN_WIDE_STRING(t);
 	}
+
+	template<>
+	inline std::wstring ToString<gsl::span<int>>(const gsl::span<int>& t)
+	{
+		RETURN_WIDE_STRING(t.size());
+	}
+
+	template<>
+	inline std::wstring ToString<gsl::span<int>>(const gsl::span<int>* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<gsl::span<int>>(gsl::span<int>* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
 #pragma endregion ThirdParty
 
 #pragma region Foo

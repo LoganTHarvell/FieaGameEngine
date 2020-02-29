@@ -429,6 +429,12 @@ namespace Library
 		explicit Vector(const std::size_t capacity=0, const EqualityFunctor equalityFunctor=DefaultEquality<T>(), const ReserveFunctor reserveFunctor=DefaultReserveFunctor());
 
 		/// <summary>
+		/// Specialized constructor that takes a single equality functor parameter.
+		/// </summary>
+		/// <param name="equalityFunctor">Default equality functor.</param>
+		explicit Vector(const EqualityFunctor equalityFunctor);
+
+		/// <summary>
 		/// Destructor. 
 		/// Clears all existing elements.
 		/// </summary>

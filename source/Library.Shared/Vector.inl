@@ -314,6 +314,11 @@ namespace Library
 	}
 
 	template<typename T>
+	inline Vector<T>::Vector(const EqualityFunctor equalityFunctor) : mEqualityFunctor(equalityFunctor)
+	{
+	}
+
+	template<typename T>
 	inline Vector<T>::~Vector()
 	{
 		Clear();
