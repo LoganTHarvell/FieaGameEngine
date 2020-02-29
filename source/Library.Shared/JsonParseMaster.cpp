@@ -17,44 +17,52 @@ namespace Library
 {
 	RTTI_DEFINITIONS(JsonParseMaster::SharedData)
 
+#pragma region Destructor
 	JsonParseMaster::~JsonParseMaster()
 	{
-		if (!mIsClone) return;
+		if (!mOwnsSharedData && mOwnedHelperIndices.IsEmpty()) return;
 
-		if (mSharedData)
+		if (mOwnsSharedData)
 		{
 			delete mSharedData;
 			mSharedData = nullptr;
+			mOwnsSharedData = false;
 		}
 
-		for (auto helper : mHelpers)
+		for (auto index : mOwnedHelperIndices)
 		{
-			delete helper;
+			delete mHelpers[index];
 		}
 
 		mHelpers.Clear();
-
-		mIsClone = false;
-
-		if (mFilename)
-		{
-			delete mFilename;
-			mFilename = nullptr;
-		}
+		mOwnedHelperIndices.Clear();
 	}
+#pragma endregion Destructor
 
+#pragma region Virtual Constructor
 	gsl::owner<JsonParseMaster*> JsonParseMaster::Clone() const
 	{
-		JsonParseMaster* clone = new JsonParseMaster(mSharedData->Create());
+		JsonParseMaster* clone = new JsonParseMaster();
 		
-		for (auto& helper : mHelpers)
+		if (mSharedData)
 		{
-			clone->AddHelper(*helper->Create());
+			clone->SetSharedData(*mSharedData->Create());
+			clone->mOwnsSharedData = true;
+		}
+
+		clone->mOwnedHelperIndices.Reserve(mHelpers.Size());
+
+		for (std::size_t i = 0; i < mHelpers.Size(); ++i)
+		{
+			clone->AddHelper(*mHelpers[i]->Create());
+			clone->mOwnedHelperIndices.PushBack(i);
 		}
 
 		return clone;
 	}
+#pragma endregion Virtual Constructor
 
+#pragma region Modifiers
 	void JsonParseMaster::AddHelper(IJsonParseHelper& helper)
 	{
 		mHelpers.PushBack(&helper);
@@ -62,9 +70,20 @@ namespace Library
 
 	bool JsonParseMaster::RemoveHelper(IJsonParseHelper& helper)
 	{
+		for (auto index : mOwnedHelperIndices)
+		{
+			if (mHelpers[index] == &helper)
+			{
+				delete mHelpers[index];
+				return mHelpers.Remove(mHelpers.begin()[index]);
+			}
+		}
+
 		return mHelpers.Remove(&helper);
 	}
+#pragma endregion Modifiers
 
+#pragma region Parse Methods
 	void JsonParseMaster::Parse(const std::string& string)
 	{
 		mSharedData->Initialize();
@@ -101,11 +120,15 @@ namespace Library
 		std::filebuf fb;
 		if (fb.open(filename, std::ios::in))
 		{
+			mFilename = &filename;
+
 			std::istream input(&fb);
 			Parse(input);
 		}
 	}
+#pragma endregion Parse Methods
 
+#pragma region Parse Helper Methods
 	void Library::JsonParseMaster::ParseMembers(const Json::Value& value)
 	{
 		for (const auto& member : value.getMemberNames())
@@ -120,9 +143,12 @@ namespace Library
 		{
 			if (helper->StartHandler(*mSharedData, key, value, isArray))
 			{
+				mSharedData->IncrementDepth();
 				helper->EndHandler(*mSharedData, key);
+				mSharedData->DecrementDepth();
 				break;
 			}
 		}
 	}
+#pragma endregion Parse Helper Methods
 }

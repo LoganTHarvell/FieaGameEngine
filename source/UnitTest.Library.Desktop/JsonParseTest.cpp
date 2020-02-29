@@ -53,11 +53,11 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(10.0f, sharedData.GetFloat());
 			Assert::AreEqual("10"s, sharedData.GetString());
 			
-// 			gsl::span array = sharedData.GetArray();
-// 			for (ptrdiff_t i = 0; i < array.size(); ++i)
-// 			{
-// 				Assert::IsTrue(i == array[i]);
-// 			}
+ 			gsl::span array = sharedData.GetArray();
+ 			for (ptrdiff_t i = 0; i < array.size(); ++i)
+ 			{
+ 				Assert::AreEqual(static_cast<int>(i+1), array[i]);
+ 			}
 		}
 
 	private:

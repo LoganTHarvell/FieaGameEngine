@@ -12,11 +12,6 @@ namespace UnitTests
 		return new SharedData();
 	}
 
-	void JsonParseTestHelper::SharedData::Initialize()
-	{
-		arrayFillCount = 0;
-	}
-
 	int JsonParseTestHelper::SharedData::GetInt()
 	{
 		return mInt;
@@ -44,17 +39,19 @@ namespace UnitTests
 	
 	bool JsonParseTestHelper::StartHandler(Library::JsonParseMaster::SharedData& data, const std::string& key, const Json::Value& value, bool isArray)
 	{
-		if (!data.Is(SharedData::TypeIdClass())) return false;
+		SharedData* testHelperData = data.As<SharedData>();
+		if (testHelperData == nullptr) return false;
 		
 		bool handled = false;
 
 		if (isArray)
 		{
-			for (Json::ArrayIndex i = value.size(); i > 0; --i)
+			for (Json::ArrayIndex i = 0; i < value.size(); ++i)
 			{
-				if (value[i-1].isInt())
+				if (value[i].isInt())
 				{
-					mStack.Push({ key, value[i-1] });
+					mStack.Push({ key, value[i] });
+					++testHelperData->arrayFillCount;
 					handled = true;
 				}
 			}
@@ -71,29 +68,36 @@ namespace UnitTests
 	
 	bool JsonParseTestHelper::EndHandler(Library::JsonParseMaster::SharedData& data, const std::string& key)
 	{
-		assert(data.Is(SharedData::TypeIdClass()));
-		SharedData& testHelperData = *data.As<SharedData>();
+		SharedData* testHelperData = data.As<SharedData>();
+		assert(testHelperData != nullptr);
 		
 		auto& pair = mStack.Top();
-		assert(pair.first == key);
+		assert(&pair.first == &key);
 
 		bool handled = true;
 
 		if (key == "mInt" && pair.second.isInt())
 		{
-			testHelperData.mInt = pair.second.asInt();
+			testHelperData->mInt = pair.second.asInt();
 		}
 		else if (key == "mFloat" && pair.second.isDouble())
 		{
-			testHelperData.mFloat = static_cast<float>(pair.second.asDouble());
+			testHelperData->mFloat = static_cast<float>(pair.second.asDouble());
 		}
 		else if (key == "mString" && pair.second.isString()) 
 		{
-			testHelperData.mString = pair.second.asString();
+			testHelperData->mString = pair.second.asString();
 		}
-		else if (key == "mArray" && pair.second.isInt() && testHelperData.arrayFillCount < 3)
+		else if (key == "mArray")
 		{
-			testHelperData.mArray[testHelperData.arrayFillCount] = pair.second.asInt();
+			while (testHelperData->arrayFillCount > 0)
+			{
+				auto& element = mStack.Top();
+				testHelperData->mArray[testHelperData->arrayFillCount-1] = element.second.asInt();
+				--testHelperData->arrayFillCount;
+
+				if (testHelperData->arrayFillCount > 0) mStack.Pop();
+			}
 		}
 		else
 		{
@@ -104,4 +108,14 @@ namespace UnitTests
 
 		return handled;
 	}	
+
+	void JsonParseTestHelper::SharedData::Initialize()
+	{
+		mInt = 0;
+		mFloat = 0;
+		mString.clear();
+		mArray[0] = mArray[1] = mArray[2] = 0;
+
+		arrayFillCount = 0;
+	}
 }
