@@ -10,6 +10,8 @@
 #include <functional>
 #include <algorithm>
 #include <sstream>
+#include <istream>
+#include <fstream>
 
 // GSL Library
 #include <gsl/gsl>

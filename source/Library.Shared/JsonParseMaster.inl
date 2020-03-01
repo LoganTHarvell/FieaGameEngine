@@ -6,17 +6,12 @@ namespace Library
 {
 #pragma region Shared Data
 #pragma region Accessors
-	inline JsonParseMaster* JsonParseMaster::SharedData::GetJsonParseMaster()
-	{
-		return mMaster;
-	}
-
 	inline const JsonParseMaster* JsonParseMaster::SharedData::GetJsonParseMaster() const
 	{
 		return mMaster;
 	}
 
-	inline std::uint16_t JsonParseMaster::SharedData::Depth() const
+	inline std::size_t JsonParseMaster::SharedData::Depth() const
 	{
 		return mDepth;
 	}
@@ -48,14 +43,9 @@ namespace Library
 #pragma endregion Constructor
 
 #pragma region Accessors
-	inline const std::string& JsonParseMaster::GetFilename() const
+	inline const std::string* JsonParseMaster::GetFilename() const
 	{
-		return *mFilename;
-	}
-
-	inline JsonParseMaster::SharedData* JsonParseMaster::GetSharedData()
-	{
-		return mSharedData;
+		return mFilename;
 	}
 
 	inline const JsonParseMaster::SharedData* JsonParseMaster::GetSharedData() const
@@ -67,7 +57,15 @@ namespace Library
 #pragma region Modifiers
 	inline void JsonParseMaster::SetSharedData(SharedData& sharedData)
 	{
+		if (mSharedData)
+		{
+			mSharedData->SetJsonParseMaster(nullptr);
+
+			if (mOwnsSharedData) delete mSharedData;
+		}
+
 		mSharedData = &sharedData;
+		mSharedData->SetJsonParseMaster(this);
 	}
 #pragma endregion Modifiers
 }

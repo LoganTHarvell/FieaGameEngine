@@ -15,9 +15,30 @@
 
 namespace Library
 {
-	RTTI_DEFINITIONS(JsonParseMaster::SharedData)
+#pragma region Shared Data
+	JsonParseMaster::SharedData::SharedData(SharedData&& rhs) : mMaster(rhs.mMaster), mDepth(rhs.mDepth)
+	{
+		if (mMaster) mMaster->SetSharedData(*this);
 
-#pragma region Destructor
+		rhs.mMaster = nullptr;
+		rhs.mDepth = 0;
+	}
+
+	JsonParseMaster::SharedData& JsonParseMaster::SharedData::operator=(SharedData&& rhs)
+	{
+		mMaster = rhs.mMaster;
+		mDepth = rhs.mDepth;
+		
+		if (mMaster) mMaster->SetSharedData(*this);
+
+		rhs.mMaster = nullptr;
+		rhs.mDepth = 0;
+
+		return *this;
+	}
+#pragma endregion Shared Data
+
+#pragma region Special Member Functions
 	JsonParseMaster::~JsonParseMaster()
 	{
 		if (!mOwnsSharedData && mOwnedHelperIndices.IsEmpty()) return;
@@ -37,7 +58,35 @@ namespace Library
 		mHelpers.Clear();
 		mOwnedHelperIndices.Clear();
 	}
-#pragma endregion Destructor
+
+	JsonParseMaster::JsonParseMaster(JsonParseMaster&& rhs) : 
+		mSharedData(rhs.mSharedData), mHelpers(std::move(rhs.mHelpers)), mFilename(rhs.mFilename), 
+		mOwnsSharedData(rhs.mOwnsSharedData), mOwnedHelperIndices(std::move(rhs.mOwnedHelperIndices))
+	{
+		mSharedData->SetJsonParseMaster(this);
+
+		rhs.mSharedData = nullptr;
+		rhs.mFilename = nullptr;
+		rhs.mOwnsSharedData = false;
+	}
+
+	JsonParseMaster& JsonParseMaster::operator=(JsonParseMaster&& rhs)
+	{
+		mSharedData = rhs.mSharedData;
+		mHelpers = std::move(rhs.mHelpers);
+		mFilename = rhs.mFilename;
+		mOwnsSharedData = rhs.mOwnsSharedData;
+		mOwnedHelperIndices = std::move(rhs.mOwnedHelperIndices);
+	
+		mSharedData->SetJsonParseMaster(this);
+
+		rhs.mSharedData = nullptr;
+		rhs.mFilename = nullptr;
+		rhs.mOwnsSharedData = false;
+
+		return *this;
+	}
+#pragma endregion Special Member Functions
 
 #pragma region Virtual Constructor
 	gsl::owner<JsonParseMaster*> JsonParseMaster::Clone() const
@@ -70,36 +119,11 @@ namespace Library
 
 	bool JsonParseMaster::RemoveHelper(IJsonParseHelper& helper)
 	{
-		for (auto index : mOwnedHelperIndices)
-		{
-			if (mHelpers[index] == &helper)
-			{
-				delete mHelpers[index];
-				return mHelpers.Remove(mHelpers.begin()[index]);
-			}
-		}
-
 		return mHelpers.Remove(&helper);
 	}
 #pragma endregion Modifiers
 
 #pragma region Parse Methods
-	void JsonParseMaster::Parse(const std::string& string)
-	{
-		mSharedData->Initialize();
-
-		for (auto helper : mHelpers)
-		{
-			helper->Initialize();
-		}
-
-		Json::Value root;
-		std::istringstream input(string);
-		input >> root;
-
-		return ParseMembers(root);
-	}
-
 	void JsonParseMaster::Parse(std::istream& inputStream)
 	{
 		mSharedData->Initialize();
@@ -109,21 +133,30 @@ namespace Library
 			helper->Initialize();
 		}
 
+		if (!mSharedData || mHelpers.Size() == 0) return;
+
 		Json::Value root;
 		inputStream >> root;
 
-		return ParseMembers(root);
+		ParseMembers(root);
+	}
+
+	void JsonParseMaster::Parse(const std::string& string)
+	{
+		std::istringstream input(string);
+		Parse(input);
 	}
 
 	void JsonParseMaster::ParseFromFile(const std::string& filename)
 	{
-		std::filebuf fb;
-		if (fb.open(filename, std::ios::in))
+		std::ifstream fb;
+		fb.open(filename);
+
+		if (fb.is_open())
 		{
 			mFilename = &filename;
-
-			std::istream input(&fb);
-			Parse(input);
+			Parse(fb);
+			fb.close();
 		}
 	}
 #pragma endregion Parse Methods

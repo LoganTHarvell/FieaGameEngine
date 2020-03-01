@@ -26,14 +26,13 @@ namespace Library
 	class JsonParseMaster final
 	{
 #pragma region Shared Data
-public:
+	public:
+		/// <summary>
+		/// Abstract base class for data to be filled with parsed Json data.
+		/// </summary>
 		class SharedData : public RTTI
 		{
-			RTTI_DECLARATIONS(SharedData, RTTI)
-
-			friend JsonParseMaster;
-
-#pragma region Special Member Functions
+#pragma region Shared Data Special Member Functions
 		public:
 			/// <summary>
 			/// Default constructor.
@@ -48,25 +47,29 @@ public:
 			/// <summary>
 			/// Copy constructor.
 			/// </summary>
-			SharedData(const SharedData&) = delete;
+			SharedData(const SharedData& rhs) = default;
 
 			/// <summary>
 			/// Copy assignment operator.
 			/// </summary>
-			SharedData& operator=(const SharedData&) = delete;
+			SharedData& operator=(const SharedData& rhs) = default;
 
 			/// <summary>
 			/// Move constructor.
 			/// </summary>
-			SharedData(SharedData&&) = delete;
+			/// <param name="rhs">Shared to be moved.</param>
+			/// <remarks>Sets SharedData for moved instance's master to this instance, if it exists.</remarks>
+			SharedData(SharedData&& rhs);
 
 			/// <summary>
 			/// Move assignment operator.
 			/// </summary>
-			SharedData& operator=(SharedData&&) = delete;
-#pragma endregion Special Member Functions
+			/// <param name="rhs">Shared to be moved.</param>
+			/// <remarks>Sets SharedData for moved instance's master to this instance, if it exists.</remarks>
+			SharedData& operator=(SharedData&& rhs);
+#pragma endregion Shared Data Special Member Functions
 
-#pragma region Virtual Constructor
+#pragma region Shared Data Virtual Constructor
 		public:
 			/// <summary>
 			/// Virtual constructor.
@@ -74,27 +77,58 @@ public:
 			/// </summary>
 			/// <returns>Pointer to the new SharedData instance.</returns>
 			virtual gsl::owner<SharedData*> Create() const = 0;
-#pragma endregion Virtual Constructor
+#pragma endregion Shared Data Virtual Constructor
 			
-#pragma region Accessors
-			JsonParseMaster* GetJsonParseMaster();
+#pragma region Shared Data Accessors
+			/// <summary>
+			/// Gets the JsonParseMaster this SharedData is associated with.
+			/// </summary>
+			/// <returns>Pointer to the JsonParseMaster instance associated with this SharedData.</returns>
 			const JsonParseMaster* GetJsonParseMaster() const;
-			std::uint16_t Depth() const;
-#pragma endregion Accessors
 
-#pragma region Modifiers
+			/// <summary>
+			/// Gets the depth of the current depth of the SharedData as it is being filled during parsing.
+			/// </summary>
+			/// <returns>Depth of the JSON data being parsed into the SharedData.</returns>
+			std::size_t Depth() const;
+#pragma endregion Shared Data Accessors
+
+#pragma region Shared Data Modifiers
 		public:
-			void SetJsonParseMaster(JsonParseMaster* master);
+			/// <summary>
+			/// Virtual initializer method called before parsing to perform any needed steps.
+			/// </summary>
 			virtual void Initialize() {};
+
+			/// <summary>
+			/// Sets the JsonParseMaster associated with this SharedData.
+			/// </summary>
+			/// <param name="master">Pointer to the JsonParseMaster instance to be set.</param>
+			void SetJsonParseMaster(JsonParseMaster* master);
+
+			/// <summary>
+			/// Increments the Json parse depth counter.
+			/// </summary>
 			void IncrementDepth();
+
+			/// <summary>
+			/// Decrements the Json parse depth counter.
+			/// </summary>
 			void DecrementDepth();
-#pragma endregion Modifiers
+#pragma endregion Shared Data Modifiers
 					
-#pragma region Data Members
+#pragma region Shared Data Data Members
 		private:
+			/// <summary>
+			/// JsonParseMaster instance associated with the SharedData instance.
+			/// </summary>
 			JsonParseMaster* mMaster{ nullptr };
-			std::uint16_t mDepth{ 0 };
-#pragma endregion Data Members
+
+			/// <summary>
+			/// Current depth level of the Json data as it is parsed into the SharedData.
+			/// </summary>
+			std::size_t mDepth{ 0 };
+#pragma endregion Shared Data Data Members
 		};
 #pragma endregion Shared Data
 
@@ -125,13 +159,13 @@ public:
 		/// Move constructor.
 		/// </summary>
 		/// <param name="rhs">JsonParseMaster to be moved.</param>
-		JsonParseMaster(JsonParseMaster&& rhs) = default;
+		JsonParseMaster(JsonParseMaster&& rhs);
 
 		/// <summary>
 		/// Move assignment operator.
 		/// </summary>
 		/// <param name="rhs">JsonParseMaster to be moved.</param>
-		JsonParseMaster& operator=( JsonParseMaster&& rhs) = default;
+		JsonParseMaster& operator=( JsonParseMaster&& rhs);
 #pragma endregion Special Member Functions
 
 #pragma region Virtual Copy Constructor
@@ -150,13 +184,7 @@ public:
 		/// Gets the filename of the last file parsed.
 		/// </summary>
 		/// <returns>Reference to the filename std::string instance.</returns>
-		const std::string& GetFilename() const;
-
-		/// <summary>
-		/// Gets the SharedData instance associated with the JsonParseMaster.
-		/// </summary>
-		/// <returns>Pointer to the SharedData instance.</returns>
-		SharedData* GetSharedData();
+		const std::string* GetFilename() const;
 
 		/// <summary>
 		/// Gets the SharedData instance associated with the JsonParseMaster.

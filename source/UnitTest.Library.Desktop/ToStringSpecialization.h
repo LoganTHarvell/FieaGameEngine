@@ -16,6 +16,7 @@
 #include "Datum.h"
 #include "Scope.h"
 #include "TypeManager.h"
+#include "JsonParseMaster.h"
 
 
 using namespace UnitTests;
@@ -1370,4 +1371,42 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 		RETURN_WIDE_STRING(t);
 	}
 #pragma endregion TypeManager
+
+#pragma region JSON Parser
+	template<>
+	inline std::wstring ToString<JsonParseMaster::SharedData>(const JsonParseMaster::SharedData& t)
+	{
+		RETURN_WIDE_STRING(&t);
+	}
+
+	template<>
+	inline std::wstring ToString<JsonParseMaster::SharedData>(const JsonParseMaster::SharedData* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<JsonParseMaster::SharedData>(JsonParseMaster::SharedData* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<JsonParseMaster>(const JsonParseMaster& t)
+	{
+		RETURN_WIDE_STRING(&t);
+	}
+
+	template<>
+	inline std::wstring ToString<JsonParseMaster>(const JsonParseMaster* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<JsonParseMaster>(JsonParseMaster* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+#pragma endregion JSON Parser
 }

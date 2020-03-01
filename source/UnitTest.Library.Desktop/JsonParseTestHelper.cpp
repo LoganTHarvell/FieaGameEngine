@@ -7,27 +7,37 @@ namespace UnitTests
 {
 	RTTI_DEFINITIONS(JsonParseTestHelper::SharedData)
 
+	JsonParseTestHelper::SharedData::SharedData(SharedData&& rhs) : JsonParseMaster::SharedData(std::move(rhs))
+	{
+	}
+
+	JsonParseTestHelper::SharedData& JsonParseTestHelper::SharedData::operator=(SharedData&& rhs)
+	{
+		JsonParseMaster::SharedData::operator=(std::move(rhs));
+		return *this;
+	}
+
 	gsl::owner<JsonParseMaster::SharedData*> JsonParseTestHelper::SharedData::Create() const
 	{
 		return new SharedData();
 	}
 
-	int JsonParseTestHelper::SharedData::GetInt()
+	int JsonParseTestHelper::SharedData::GetInt() const
 	{
 		return mInt;
 	}
 
-	float JsonParseTestHelper::SharedData::GetFloat()
+	float JsonParseTestHelper::SharedData::GetFloat() const
 	{
 		return mFloat;
 	}
 
-	const std::string& JsonParseTestHelper::SharedData::GetString()
+	const std::string& JsonParseTestHelper::SharedData::GetString() const
 	{
 		return mString;
 	}
 
-	const gsl::span<int> JsonParseTestHelper::SharedData::GetArray()
+	const gsl::span<const int> JsonParseTestHelper::SharedData::GetArray() const
 	{
 		return gsl::span(mArray);
 	}
@@ -44,7 +54,7 @@ namespace UnitTests
 		
 		bool handled = false;
 
-		if (isArray)
+		if (key == "mArray" && isArray && value.size() == 3)
 		{
 			for (Json::ArrayIndex i = 0; i < value.size(); ++i)
 			{
@@ -57,7 +67,7 @@ namespace UnitTests
 			}
 		}
 
-		if (value.isInt() || value.isDouble() || value.isString())
+		if ((key == "mInt" && value.isInt()) || (key == "mFloat" && value.isDouble()) || (key == "mString" && value.isString()))
 		{
 			mStack.Push({ key, value });
 			handled = true;
@@ -111,6 +121,8 @@ namespace UnitTests
 
 	void JsonParseTestHelper::SharedData::Initialize()
 	{
+		JsonParseMaster::SharedData::Initialize();
+
 		mInt = 0;
 		mFloat = 0;
 		mString.clear();
