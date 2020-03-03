@@ -213,6 +213,9 @@ namespace UnitTestLibraryDesktop
 
 			parser.Parse(R"({ "array": [[[1,2]], [[2,3,4]], [[3,4]]] })");
 			Assert::AreEqual(7_z, sharedData.GetSize("array"));
+
+			parser.Parse(R"({ "array": [ { "int": [10,20] }, { "float": [10.0,20.0] }, { "string": ["10","20","30"] } ] })");
+			Assert::AreEqual(7_z, sharedData.GetSize("array"));
 		}
 
 		TEST_METHOD(ParseObject)

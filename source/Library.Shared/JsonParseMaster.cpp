@@ -185,9 +185,7 @@ namespace Library
 	}
 
 	void JsonParseMaster::Parse(const std::string& key, const Json::Value& value, bool isArray)
-	{
-		bool handled = false;
-		
+	{		
 		for (auto helper : mHelpers)
 		{
 			if (value.isObject())
@@ -198,42 +196,33 @@ namespace Library
 					ParseMembers(value);
 					helper->EndHandler(*mSharedData, key);
 					mSharedData->DecrementDepth();
-					handled = true;
+					break;
 				}
 			}
 			else if (value.isArray())
 			{
-				for (const auto& element : value)
+				if (helper->StartHandler(*mSharedData, key, value, true))
 				{
-					if (element.isObject())
+					for (const auto& element : value)
 					{
-						if (helper->StartHandler(*mSharedData, key, value, true))
+						if (element.isObject())
 						{
 							mSharedData->IncrementDepth();
 							ParseMembers(element);
-							helper->EndHandler(*mSharedData, key);
 							mSharedData->DecrementDepth();
-							handled = true;
 						}
-					}
-					else if (element.isArray())
-					{
-						if (helper->StartHandler(*mSharedData, key, value, true))
+						else if (element.isArray())
 						{
 							Parse(key, element, true);
-							helper->EndHandler(*mSharedData, key);
-							handled = true;
 						}
-					}
-					else
-					{
-						if (helper->StartHandler(*mSharedData, key, value, true))
+						else
 						{
-							helper->EndHandler(*mSharedData, key);
-							handled = true;
 							break;
 						}
 					}
+
+					helper->EndHandler(*mSharedData, key);
+					break;
 				}
 			}
 			else
@@ -241,11 +230,9 @@ namespace Library
 				if (helper->StartHandler(*mSharedData, key, value, isArray))
 				{
 					helper->EndHandler(*mSharedData, key);
-					handled = true;
+					break;
 				}
 			}
-
-			if (handled) break;
 		}
 	}
 #pragma endregion Parse Helper Methods
