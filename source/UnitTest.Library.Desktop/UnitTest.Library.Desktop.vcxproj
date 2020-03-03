@@ -163,7 +163,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AttributedBar.cpp" />
-    <ClCompile Include="AttributedBarTest .cpp" />
+    <ClCompile Include="AttributedBarTest.cpp" />
     <ClCompile Include="AttributedFoo.cpp" />
     <ClCompile Include="AttributedFooTest.cpp" />
     <ClCompile Include="Bar.cpp" />

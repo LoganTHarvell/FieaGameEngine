@@ -14,6 +14,14 @@ using namespace Library;
 
 namespace UnitTestLibraryDesktop
 {
+	class TestSharedData : public JsonParseMaster::SharedData
+	{
+		virtual gsl::owner<JsonParseMaster::SharedData*> Create() const override
+		{
+			return new TestSharedData();
+		}
+	};
+
 	TEST_CLASS(JsonParseTest)
 	{
 	public:
@@ -203,6 +211,13 @@ namespace UnitTestLibraryDesktop
 			JsonParseMaster parser;
 
 			parser.AddHelper(helper);
+
+			TestSharedData wrongTestData;
+			parser.SetSharedData(wrongTestData);
+
+			parser.Parse(R"({ "array": [1,2,3,4,5] })");
+			Assert::AreEqual(0_z, sharedData.GetSize("array"));
+
 			parser.SetSharedData(sharedData);
 
 			parser.Parse(R"({ "array": [1,2,3,4,5] })");
@@ -225,10 +240,22 @@ namespace UnitTestLibraryDesktop
 			JsonParseMaster parser;
 
 			parser.AddHelper(helper);
-			parser.SetSharedData(sharedData);
+
+			TestSharedData wrongTestData;
+			parser.SetSharedData(wrongTestData);
+			
+			parser.Parse(R"({ "null": { } })");
+			Assert::AreEqual(0_z, sharedData.GetSize("mObject"));
+
+			parser.SetSharedData(sharedData);			
+
+			parser.Parse(R"({ "mObject": { "member1": 10, "member2": 20.0, "member3": "30" } })");
+			Assert::AreEqual(3_z, sharedData.GetSize("mObject"));
+
+			parser.Parse(R"({ "mObject": { "member1": [10], "member2": [20.0, 30.0], "member3": ["40","50","60"] } })");
+			Assert::AreEqual(6_z, sharedData.GetSize("mObject"));
 
 			parser.Parse(R"({ "mObject": { "member1": 1, "member2": [2, 3], "member3": "hello", "member4": { "nestedObject1": 1, "nestedObject2": [1,2] } } })");
-
 			Assert::AreEqual(7_z, sharedData.GetSize("mObject"));
 		}
 
