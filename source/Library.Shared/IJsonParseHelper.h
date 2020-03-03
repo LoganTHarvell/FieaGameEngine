@@ -7,6 +7,7 @@
 #pragma warning(default : 26812)
 
 // First Party
+#include "RTTI.h"
 #include "JsonParseMaster.h"
 #pragma endregion Includes
 
@@ -15,8 +16,10 @@ namespace Library
 	/// <summary>
 	/// Parse helper interface class for JSON to data conversions.
 	/// </summary>
-	class IJsonParseHelper
+	class IJsonParseHelper : public RTTI
 	{
+		RTTI_DECLARATIONS(IJsonParseHelper, RTTI)
+
 #pragma region Special Member Functions
 	protected:
 		/// <summary>

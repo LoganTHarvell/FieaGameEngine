@@ -47,8 +47,6 @@ namespace UnitTestLibraryDesktop
 			parser.AddHelper(helper);
 			parser.SetSharedData(sharedData);
 
-			parser.Parse(R"({ "mTypo": 10, "mFloat": 10, "mString": "10", "mTypo": [ 1, 2, 3 ] })");
-
 			JsonParseMaster moveConstructed(std::move(parser));
 			Assert::IsNull(parser.GetSharedData());
 
@@ -57,17 +55,9 @@ namespace UnitTestLibraryDesktop
 				Assert::AreEqual(sharedDataPtr, moveConstructed.GetSharedData());
 			}
 
-			moveConstructed.Parse(R"({ "mInt": 10, "mFloat": 10, "mString": "10", "mArray": [ 1, 2, 3 ] })");
+			moveConstructed.Parse(R"({ "mInt": 10 })");
 
-			Assert::AreEqual(10, sharedData.GetInt());
-			Assert::AreEqual(10.0f, sharedData.GetFloat());
-			Assert::AreEqual("10"s, sharedData.GetString());
-
-			gsl::span array = sharedData.GetArray();
-			for (ptrdiff_t i = 0; i < array.size(); ++i)
-			{
-				Assert::AreEqual(static_cast<int>(i + 1), array[i]);
-			}
+			Assert::AreEqual(1_z, sharedData.GetSize("mInt"));
 
 			JsonParseMaster moveAssigned;
 			moveAssigned = std::move(moveConstructed);
@@ -79,17 +69,9 @@ namespace UnitTestLibraryDesktop
 				Assert::AreEqual(sharedDataPtr, moveAssigned.GetSharedData());
 			}
 
-			moveAssigned.Parse(R"({ "mInt": 10, "mFloat": 10, "mString": "10", "mArray": [ 1, 2, 3 ] })");
+			moveAssigned.Parse(R"({ "mInt": 10 })");
 
-			Assert::AreEqual(10, sharedData.GetInt());
-			Assert::AreEqual(10.0f, sharedData.GetFloat());
-			Assert::AreEqual("10"s, sharedData.GetString());
-
-			array = sharedData.GetArray();
-			for (ptrdiff_t i = 0; i < array.size(); ++i)
-			{
-				Assert::AreEqual(static_cast<int>(i + 1), array[i]);
-			}
+			Assert::AreEqual(1_z, sharedData.GetSize("mInt"));
 
 			JsonParseTestHelper::SharedData moveConstructedSharedData(std::move(sharedData));
 			{
@@ -109,16 +91,6 @@ namespace UnitTestLibraryDesktop
 		{
 			JsonParseTestHelper::SharedData sharedData;
 
-			Assert::AreEqual(0, sharedData.GetInt());
-			Assert::AreEqual(0.0f, sharedData.GetFloat());
-			Assert::AreEqual(std::string(), sharedData.GetString());
-
-			gsl::span array = sharedData.GetArray();
-			for (ptrdiff_t i = 0; i < array.size(); ++i)
-			{
-				Assert::AreEqual(0, array[i]);
-			}
-
 			JsonParseTestHelper helper;
 			JsonParseMaster parser;
 
@@ -126,7 +98,7 @@ namespace UnitTestLibraryDesktop
 			Assert::IsNull(parser.GetSharedData());
 			parser.SetSharedData(sharedData);
 			Assert::IsNotNull(sharedData.GetJsonParseMaster());
-			Assert::IsNotNull(parser.GetSharedData());
+			Assert::IsNotNull(parser.GetSharedData());			
 
 			{
 				const JsonParseTestHelper::SharedData constSharedData;
@@ -149,45 +121,22 @@ namespace UnitTestLibraryDesktop
 
 			parser.SetSharedData(sharedData);
 
-			parser.Parse(R"({ "mInt": 10, "mFloat": 10, "mString": "10", "mArray": [ 1, 2, 3 ] })");
+			parser.Parse(R"({ "mInt": 10 })");
 
-			Assert::AreEqual(0, sharedData.GetInt());
-			Assert::AreEqual(0.0f, sharedData.GetFloat());
-			Assert::AreEqual(std::string(), sharedData.GetString());
-
-			gsl::span array = sharedData.GetArray();
-			for (ptrdiff_t i = 0; i < array.size(); ++i)
-			{
-				Assert::AreEqual(0, array[i]);
-			}
+			Assert::AreEqual(0_z, sharedData.GetSize("mInt"));
 
 			parser.AddHelper(helper);
+			Assert::ExpectException<std::runtime_error>([&parser, &helper] { parser.AddHelper(helper); });
 
-			parser.Parse(R"({ "mInt": 10, "mFloat": 10, "mString": "10", "mArray": [ 1, 2, 3 ] })");
+			parser.Parse(R"({ "mInt": 10, "null": null })");
 
-			Assert::AreEqual(10, sharedData.GetInt());
-			Assert::AreEqual(10.0f, sharedData.GetFloat());
-			Assert::AreEqual("10"s, sharedData.GetString());
-
-			array = sharedData.GetArray();
-			for (ptrdiff_t i = 0; i < array.size(); ++i)
-			{
-				Assert::AreEqual(static_cast<int>(i + 1), array[i]);
-			}
+			Assert::AreEqual(1_z, sharedData.GetSize("mInt"));
 
 			Assert::IsTrue(parser.RemoveHelper(helper));
 
-			parser.Parse(R"({ "mInt": 10, "mFloat": 10, "mString": "10", "mArray": [ 1, 2, 3 ] })");
+			parser.Parse(R"({ "mInt": 10 })");
 
-			Assert::AreEqual(0, sharedData.GetInt());
-			Assert::AreEqual(0.0f, sharedData.GetFloat());
-			Assert::AreEqual(std::string(), sharedData.GetString());
-
-			array = sharedData.GetArray();
-			for (ptrdiff_t i = 0; i < array.size(); ++i)
-			{
-				Assert::AreEqual(0, array[i]);
-			}
+			Assert::AreEqual(0_z, sharedData.GetSize("mInt"));
 
 			JsonParseTestHelper::SharedData sharedData2;
 			parser.SetSharedData(sharedData2);
@@ -207,22 +156,14 @@ namespace UnitTestLibraryDesktop
 
  			Assert::IsNotNull(clone->GetSharedData());
  
- 			clone->Parse(R"({ "mInt": 10, "mFloat": 10, "mString": "10", "mArray": [ 1, 2, 3 ] })");
+ 			clone->Parse(R"({ "mInt": 10 })");
 
- 			Assert::AreEqual(10, clone->GetSharedData()->As<JsonParseTestHelper::SharedData>()->GetInt());
- 			Assert::AreEqual(10.0f, clone->GetSharedData()->As<JsonParseTestHelper::SharedData>()->GetFloat());
- 			Assert::AreEqual("10"s, clone->GetSharedData()->As<JsonParseTestHelper::SharedData>()->GetString());
- 
- 			gsl::span array = clone->GetSharedData()->As<JsonParseTestHelper::SharedData>()->GetArray();
- 			for (ptrdiff_t i = 0; i < array.size(); ++i)
- 			{
- 				Assert::AreEqual(static_cast<int>(i + 1), array[i]);
- 			}
+ 			Assert::AreEqual(1_z, clone->GetSharedData()->As<JsonParseTestHelper::SharedData>()->GetSize("mInt"));
 
 			delete clone;
 		}
 
-		TEST_METHOD(Parse)
+		TEST_METHOD(ParsePrimitives)
 		{
 			JsonParseTestHelper::SharedData sharedData;
 			JsonParseTestHelper helper;
@@ -231,52 +172,83 @@ namespace UnitTestLibraryDesktop
 			parser.AddHelper(helper);
 			parser.SetSharedData(sharedData);
 
-			parser.Parse(R"({ "mTypo": 10, "mFloat": 10, "mString": "10", "mTypo": [ 1, 2, 3 ] })");
+			parser.Parse(R"({ "mInt": 10, "mFloat": 10, "mString": "10" })");
 
-			Assert::AreEqual(0, sharedData.GetInt());
-			Assert::AreEqual(10.0f, sharedData.GetFloat());
-			Assert::AreEqual("10"s, sharedData.GetString());
-
-			gsl::span array = sharedData.GetArray();
-			for (ptrdiff_t i = 0; i < array.size(); ++i)
-			{
-				Assert::AreEqual(0, array[i]);
-			}
-
-			parser.Parse(R"({ "mInt": 10, "mFloat": 10, "mString": "10", "mArray": [ 1, 2, 3 ] })");
-
-			Assert::AreEqual(10, sharedData.GetInt());
-			Assert::AreEqual(10.0f, sharedData.GetFloat());
-			Assert::AreEqual("10"s, sharedData.GetString());
-			
- 			array = sharedData.GetArray();
- 			for (ptrdiff_t i = 0; i < array.size(); ++i)
- 			{
- 				Assert::AreEqual(static_cast<int>(i+1), array[i]);
- 			}
+			Assert::AreEqual(1_z, sharedData.GetSize("mInt"));
+			Assert::AreEqual(1_z, sharedData.GetSize("mFloat"));
+			Assert::AreEqual(1_z, sharedData.GetSize("mString"));
 
 			std::string filename("JsonTest.json");
 			std::ofstream fileTest;
 			fileTest.open(filename);
-			fileTest << R"({ "mInt": 10, "mFloat": 10, "mString": "10", "mArray": [ 1, 2, 3 ] })";
+			fileTest << R"({ "mInt": 10, "mFloat": 10, "mString": "10" })";
 			fileTest.close();
 
-			Assert::IsNull(parser.GetFilename());
+			Assert::AreEqual(std::string(), parser.GetFilename());
 			
 			parser.ParseFromFile(filename);
 
-			Assert::AreEqual(filename, *parser.GetFilename());
+			Assert::AreEqual(filename, parser.GetFilename());
 			std::remove(filename.c_str());
 
-			Assert::AreEqual(10, sharedData.GetInt());
-			Assert::AreEqual(10.0f, sharedData.GetFloat());
-			Assert::AreEqual("10"s, sharedData.GetString());
+			Assert::AreEqual(1_z, sharedData.GetSize("mInt"));
+			Assert::AreEqual(1_z, sharedData.GetSize("mFloat"));
+			Assert::AreEqual(1_z, sharedData.GetSize("mString"));
+		}
+
+		TEST_METHOD(ParseArray)
+		{
+			JsonParseTestHelper::SharedData sharedData;
+			JsonParseTestHelper helper;
+			JsonParseMaster parser;
+
+			parser.AddHelper(helper);
+			parser.SetSharedData(sharedData);
+
+			parser.Parse(R"({ "array": [1,2,3,4,5] })");
+			Assert::AreEqual(5_z, sharedData.GetSize("array"));
+
+			parser.Parse(R"({ "array": [ { "int": 10 }, { "float": 10.0 }, { "string": "10" } ] })");
+			Assert::AreEqual(3_z, sharedData.GetSize("array"));
+
+			parser.Parse(R"({ "array": [[[1,2]], [[2,3,4]], [[3,4]]] })");
+			Assert::AreEqual(7_z, sharedData.GetSize("array"));
+		}
+
+		TEST_METHOD(ParseObject)
+		{
+			JsonParseTestHelper::SharedData sharedData;
+			JsonParseTestHelper helper;
+			JsonParseMaster parser;
+
+			parser.AddHelper(helper);
+			parser.SetSharedData(sharedData);
+
+			parser.Parse(R"({ "mObject": { "member1": 1, "member2": [2, 3], "member3": "hello", "member4": { "nestedObject1": 1, "nestedObject2": [1,2] } } })");
+
+			Assert::AreEqual(7_z, sharedData.GetSize("mObject"));
+		}
+
+		TEST_METHOD(RTTITest)
+		{
+			std::shared_ptr<JsonParseTestHelper> derivedHelper = std::make_shared<JsonParseTestHelper>();
+
+			Assert::IsTrue(derivedHelper->Is(IJsonParseHelper::TypeIdClass()));
+			Assert::IsNotNull(derivedHelper->As<JsonParseTestHelper>());
+
+			std::shared_ptr<IJsonParseHelper> helper = derivedHelper;
+			Assert::IsTrue(helper->Is(JsonParseTestHelper::TypeIdClass()));
+			Assert::IsNotNull(helper->As<JsonParseTestHelper>());
 			
- 			array = sharedData.GetArray();
- 			for (ptrdiff_t i = 0; i < array.size(); ++i)
- 			{
- 				Assert::AreEqual(static_cast<int>(i+1), array[i]);
- 			}
+			std::shared_ptr<JsonParseTestHelper::SharedData> derivedSharedData = std::make_shared<JsonParseTestHelper::SharedData>();
+
+			Assert::IsTrue(derivedSharedData->Is(JsonParseMaster::SharedData::TypeIdClass()));
+			Assert::IsNotNull(derivedSharedData->As<JsonParseMaster::SharedData>());
+
+			std::shared_ptr<JsonParseMaster::SharedData> sharedData = derivedSharedData;
+
+			Assert::IsTrue(sharedData->Is(JsonParseTestHelper::SharedData::TypeIdClass()));
+			Assert::IsNotNull(sharedData->As<JsonParseTestHelper::SharedData>());
 		}
 
 	private:

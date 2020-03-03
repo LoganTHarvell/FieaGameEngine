@@ -32,6 +32,10 @@ namespace Library
 		/// </summary>
 		class SharedData : public RTTI
 		{
+			RTTI_DECLARATIONS(SharedData, RTTI)
+			
+			friend JsonParseMaster;
+
 #pragma region Shared Data Special Member Functions
 		public:
 			/// <summary>
@@ -59,14 +63,14 @@ namespace Library
 			/// </summary>
 			/// <param name="rhs">Shared to be moved.</param>
 			/// <remarks>Sets SharedData for moved instance's master to this instance, if it exists.</remarks>
-			SharedData(SharedData&& rhs);
+			SharedData(SharedData&& rhs) noexcept;
 
 			/// <summary>
 			/// Move assignment operator.
 			/// </summary>
 			/// <param name="rhs">Shared to be moved.</param>
 			/// <remarks>Sets SharedData for moved instance's master to this instance, if it exists.</remarks>
-			SharedData& operator=(SharedData&& rhs);
+			SharedData& operator=(SharedData&& rhs) noexcept;
 #pragma endregion Shared Data Special Member Functions
 
 #pragma region Shared Data Virtual Constructor
@@ -80,6 +84,7 @@ namespace Library
 #pragma endregion Shared Data Virtual Constructor
 			
 #pragma region Shared Data Accessors
+		public:
 			/// <summary>
 			/// Gets the JsonParseMaster this SharedData is associated with.
 			/// </summary>
@@ -106,6 +111,7 @@ namespace Library
 			/// <param name="master">Pointer to the JsonParseMaster instance to be set.</param>
 			void SetJsonParseMaster(JsonParseMaster* master);
 
+		private:
 			/// <summary>
 			/// Increments the Json parse depth counter.
 			/// </summary>
@@ -138,7 +144,7 @@ namespace Library
 		/// Default constructor.
 		/// </summary>
 		/// <param name="sharedData">Pointer to an instance of a SharedData subclass.</param>
-		JsonParseMaster(SharedData* sharedData=nullptr);
+		explicit JsonParseMaster(SharedData* sharedData=nullptr);
 
 		/// <summary>
 		/// Default destructor.
@@ -159,13 +165,13 @@ namespace Library
 		/// Move constructor.
 		/// </summary>
 		/// <param name="rhs">JsonParseMaster to be moved.</param>
-		JsonParseMaster(JsonParseMaster&& rhs);
+		JsonParseMaster(JsonParseMaster&& rhs) noexcept;
 
 		/// <summary>
 		/// Move assignment operator.
 		/// </summary>
 		/// <param name="rhs">JsonParseMaster to be moved.</param>
-		JsonParseMaster& operator=( JsonParseMaster&& rhs);
+		JsonParseMaster& operator=( JsonParseMaster&& rhs) noexcept;
 #pragma endregion Special Member Functions
 
 #pragma region Virtual Copy Constructor
@@ -184,7 +190,7 @@ namespace Library
 		/// Gets the filename of the last file parsed.
 		/// </summary>
 		/// <returns>Reference to the filename std::string instance.</returns>
-		const std::string* GetFilename() const;
+		const std::string& GetFilename() const;
 
 		/// <summary>
 		/// Gets the SharedData instance associated with the JsonParseMaster.
@@ -232,7 +238,7 @@ namespace Library
 		/// Parses a JSON file.
 		/// </summary>
 		/// <param name="filename">Filename of the JSON file to be parsed.</param>
-		void ParseFromFile(const std::string& filename);
+		void ParseFromFile(std::string filename);
 #pragma endregion Parse Methods
 
 #pragma region Parse Helper Methods
@@ -267,7 +273,7 @@ namespace Library
 		/// <summary>
 		/// Filename of the last file parsed.
 		/// </summary>
-		const std::string* mFilename{ nullptr };
+		std::string mFilename;
 
 		/// <summary>
 		/// Describes if the SharedData is owned by the JsonParseMaster due to cloning.

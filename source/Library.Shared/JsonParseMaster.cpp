@@ -16,7 +16,9 @@
 namespace Library
 {
 #pragma region Shared Data
-	JsonParseMaster::SharedData::SharedData(SharedData&& rhs) : mMaster(rhs.mMaster), mDepth(rhs.mDepth)
+	RTTI_DEFINITIONS(JsonParseMaster::SharedData)
+
+	JsonParseMaster::SharedData::SharedData(SharedData&& rhs) noexcept : mMaster(rhs.mMaster), mDepth(rhs.mDepth)
 	{
 		if (mMaster) mMaster->SetSharedData(*this);
 
@@ -24,7 +26,7 @@ namespace Library
 		rhs.mDepth = 0;
 	}
 
-	JsonParseMaster::SharedData& JsonParseMaster::SharedData::operator=(SharedData&& rhs)
+	JsonParseMaster::SharedData& JsonParseMaster::SharedData::operator=(SharedData&& rhs) noexcept
 	{
 		mMaster = rhs.mMaster;
 		mDepth = rhs.mDepth;
@@ -59,18 +61,18 @@ namespace Library
 		mOwnedHelperIndices.Clear();
 	}
 
-	JsonParseMaster::JsonParseMaster(JsonParseMaster&& rhs) : 
+	JsonParseMaster::JsonParseMaster(JsonParseMaster&& rhs) noexcept : 
 		mSharedData(rhs.mSharedData), mHelpers(std::move(rhs.mHelpers)), mFilename(rhs.mFilename), 
 		mOwnsSharedData(rhs.mOwnsSharedData), mOwnedHelperIndices(std::move(rhs.mOwnedHelperIndices))
 	{
 		mSharedData->SetJsonParseMaster(this);
 
 		rhs.mSharedData = nullptr;
-		rhs.mFilename = nullptr;
+		rhs.mFilename.clear();
 		rhs.mOwnsSharedData = false;
 	}
 
-	JsonParseMaster& JsonParseMaster::operator=(JsonParseMaster&& rhs)
+	JsonParseMaster& JsonParseMaster::operator=(JsonParseMaster&& rhs) noexcept
 	{
 		mSharedData = rhs.mSharedData;
 		mHelpers = std::move(rhs.mHelpers);
@@ -81,7 +83,7 @@ namespace Library
 		mSharedData->SetJsonParseMaster(this);
 
 		rhs.mSharedData = nullptr;
-		rhs.mFilename = nullptr;
+		rhs.mFilename.clear();
 		rhs.mOwnsSharedData = false;
 
 		return *this;
@@ -114,6 +116,16 @@ namespace Library
 #pragma region Modifiers
 	void JsonParseMaster::AddHelper(IJsonParseHelper& helper)
 	{
+		auto helperTypeCheck = [&helper](IJsonParseHelper* currentHelper) 
+		{
+			return helper.TypeIdInstance() == currentHelper->TypeIdInstance(); 
+		};
+
+		if (std::find_if(mHelpers.begin(), mHelpers.end(), helperTypeCheck) != mHelpers.end())
+		{
+			throw std::runtime_error("Multiple helpers of the same type.");
+		}
+
 		mHelpers.PushBack(&helper);
 	}
 
@@ -138,7 +150,9 @@ namespace Library
 		Json::Value root;
 		inputStream >> root;
 
+		mSharedData->IncrementDepth();
 		ParseMembers(root);
+		mSharedData->DecrementDepth();
 	}
 
 	void JsonParseMaster::Parse(const std::string& string)
@@ -147,16 +161,16 @@ namespace Library
 		Parse(input);
 	}
 
-	void JsonParseMaster::ParseFromFile(const std::string& filename)
+	void JsonParseMaster::ParseFromFile(std::string filename)
 	{
-		std::ifstream fb;
-		fb.open(filename);
+		std::ifstream filestream;
+		filestream.open(filename);
 
-		if (fb.is_open())
+		if (filestream.good())
 		{
-			mFilename = &filename;
-			Parse(fb);
-			fb.close();
+			mFilename = std::move(filename);
+			Parse(filestream);
+			filestream.close();
 		}
 	}
 #pragma endregion Parse Methods
@@ -172,15 +186,66 @@ namespace Library
 
 	void JsonParseMaster::Parse(const std::string& key, const Json::Value& value, bool isArray)
 	{
+		bool handled = false;
+		
 		for (auto helper : mHelpers)
 		{
-			if (helper->StartHandler(*mSharedData, key, value, isArray))
+			if (value.isObject())
 			{
-				mSharedData->IncrementDepth();
-				helper->EndHandler(*mSharedData, key);
-				mSharedData->DecrementDepth();
-				break;
+				if (helper->StartHandler(*mSharedData, key, value, false))
+				{
+					mSharedData->IncrementDepth();
+					ParseMembers(value);
+					helper->EndHandler(*mSharedData, key);
+					mSharedData->DecrementDepth();
+					handled = true;
+				}
 			}
+			else if (value.isArray())
+			{
+				for (const auto& element : value)
+				{
+					if (element.isObject())
+					{
+						if (helper->StartHandler(*mSharedData, key, value, true))
+						{
+							mSharedData->IncrementDepth();
+							ParseMembers(element);
+							helper->EndHandler(*mSharedData, key);
+							mSharedData->DecrementDepth();
+							handled = true;
+						}
+					}
+					else if (element.isArray())
+					{
+						if (helper->StartHandler(*mSharedData, key, value, true))
+						{
+							Parse(key, element, true);
+							helper->EndHandler(*mSharedData, key);
+							handled = true;
+						}
+					}
+					else
+					{
+						if (helper->StartHandler(*mSharedData, key, value, true))
+						{
+							helper->EndHandler(*mSharedData, key);
+							handled = true;
+							break;
+						}
+					}
+				}
+			}
+			else
+			{
+				if (helper->StartHandler(*mSharedData, key, value, isArray))
+				{
+					helper->EndHandler(*mSharedData, key);
+					handled = true;
+				}
+			}
+
+			if (handled) break;
 		}
 	}
 #pragma endregion Parse Helper Methods

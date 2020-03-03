@@ -43,7 +43,7 @@ namespace Library
 #pragma endregion Constructor
 
 #pragma region Accessors
-	inline const std::string* JsonParseMaster::GetFilename() const
+	inline const std::string& JsonParseMaster::GetFilename() const
 	{
 		return mFilename;
 	}
