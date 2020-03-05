@@ -18,6 +18,24 @@ using namespace Library;
 namespace UnitTests
 {
 	template<typename TDerived>
+	void TestCreate(RTTI* derivedAsBase)
+	{
+		RTTI* tmp = derivedAsBase->Create();
+		Assert::IsNotNull(tmp);
+		Assert::IsTrue(tmp->Is(TDerived::TypeIdClass()));
+		delete tmp;
+	}
+
+	template<typename TDerived, typename TBase>
+	void TestCreateAs(RTTI* derivedAsBase)
+	{
+		TBase* tmp = derivedAsBase->CreateAs<TBase>();
+		Assert::IsNotNull(tmp);
+		Assert::IsTrue(tmp->Is(TDerived::TypeIdClass()));
+		delete tmp;
+	}
+
+	template<typename TDerived>
 	void TestQueryInterface(RTTI* derivedAsBase)
 	{
 		Assert::IsNull(derivedAsBase->RTTI::QueryInterface(TDerived::TypeIdClass()));
@@ -87,6 +105,14 @@ namespace UnitTestLibraryDesktop
 				Assert::Fail(L"Memory Leaks!");
 			}
 #endif
+		}
+
+		TEST_METHOD(Create)
+		{
+			Foo foo(10);
+			TestCreate<Foo>(&foo);
+
+			Assert::IsNull(foo.RTTI::Create());
 		}
 
 		TEST_METHOD(QueryInterface)

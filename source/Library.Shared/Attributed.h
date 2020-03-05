@@ -22,7 +22,7 @@ namespace Library
 		RTTI_DECLARATIONS_ABSTRACT(Attributed, Scope)
 
 #pragma region Constructors, Destructor, Assignment
-	protected:
+	public:
 		/// <summary>
 		/// Main constructor.
 		/// Populates the scope with attributes associated with the passed RTTI::IdType.
