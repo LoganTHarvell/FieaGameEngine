@@ -3,9 +3,7 @@
 
 namespace UnitTests
 {
-	RTTI_DEFINITIONS(DerivedAttributedFoo)
-
-		DerivedAttributedFoo::DerivedAttributedFoo(int data) :
+	DerivedAttributedFoo::DerivedAttributedFoo(int data) :
 		AttributedFoo(data)
 	{
 	}

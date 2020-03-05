@@ -16,8 +16,6 @@
 namespace Library
 {
 #pragma region Shared Data
-	RTTI_DEFINITIONS(JsonParseMaster::SharedData)
-
 	JsonParseMaster::SharedData::SharedData(SharedData&& rhs) noexcept : mMaster(rhs.mMaster), mDepth(rhs.mDepth)
 	{
 		if (mMaster) mMaster->SetSharedData(*this);
@@ -97,7 +95,7 @@ namespace Library
 		
 		if (mSharedData)
 		{
-			clone->SetSharedData(*mSharedData->Create());
+			clone->SetSharedData(*mSharedData->CreateAs<JsonParseMaster::SharedData>());
 			clone->mOwnsSharedData = true;
 		}
 
@@ -105,7 +103,7 @@ namespace Library
 
 		for (std::size_t i = 0; i < mHelpers.Size(); ++i)
 		{
-			clone->AddHelper(*mHelpers[i]->Create());
+			clone->AddHelper(*mHelpers[i]->CreateAs<IJsonParseHelper>());
 			clone->mOwnedHelperIndices.PushBack(i);
 		}
 

@@ -8,7 +8,7 @@ namespace UnitTests
 {
 	class AttributedBar final : public Library::Attributed
 	{
-		RTTI_DECLARATIONS(AttributedBar, Library::Attributed);
+		RTTI_DECLARATIONS(AttributedBar, Library::Attributed)
 
 	public:
 		explicit AttributedBar(int data = 0);

@@ -15,8 +15,6 @@
 
 namespace Library
 {
-	RTTI_DEFINITIONS(Attributed)
-
 #pragma region Constructors, Destructor, Assignment
 	Attributed::Attributed(const RTTI::IdType typeId)
 	{	

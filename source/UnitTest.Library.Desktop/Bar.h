@@ -8,7 +8,7 @@ namespace UnitTests
 {
 	class Bar final : public Library::RTTI
 	{
-		RTTI_DECLARATIONS(Foo, Library::RTTI);
+		RTTI_DECLARATIONS(Bar, Library::RTTI)
 
 	public:
 		explicit Bar(int data = 0);

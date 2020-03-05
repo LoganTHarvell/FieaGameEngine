@@ -25,13 +25,10 @@ namespace UnitTests
 	}
 
 	template<typename TDerived, typename TUnrelated>
-	void TestIs(RTTI* derivedAsBase, const std::string& derivedTypename, const std::string& unrelatedTypename)
+	void TestIs(RTTI* derivedAsBase)
 	{
 		Assert::IsTrue(derivedAsBase->Is(TDerived::TypeIdClass()));
 		Assert::IsFalse(derivedAsBase->Is(TUnrelated::TypeIdClass()));
-
-		Assert::IsTrue(derivedAsBase->Is(std::string(derivedTypename)));
-		Assert::IsFalse(derivedAsBase->Is(std::string(unrelatedTypename)));
 
 		const RTTI* copy = derivedAsBase;
 		Assert::IsTrue(copy->Is(TDerived::TypeIdClass()));
@@ -104,10 +101,10 @@ namespace UnitTestLibraryDesktop
 		TEST_METHOD(Is)
 		{
 			Foo foo(10);
-			TestIs<Foo, Bar>(&foo, "Foo", "Bar");
+			TestIs<Foo, Bar>(&foo);
 
 			Scope scope;
-			TestIs<Scope, Bar>(&scope, "Scope", "Bar");
+			TestIs<Scope, Bar>(&scope);
 		}
 
 		TEST_METHOD(As)

@@ -14,9 +14,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)JsonParseMaster.cpp">
       <Filter>JSON Parser</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)IJsonParseHelper.cpp">
-      <Filter>JSON Parser</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />

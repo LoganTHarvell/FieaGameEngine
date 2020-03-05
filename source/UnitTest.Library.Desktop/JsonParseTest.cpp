@@ -16,10 +16,7 @@ namespace UnitTestLibraryDesktop
 {
 	class TestSharedData : public JsonParseMaster::SharedData
 	{
-		virtual gsl::owner<JsonParseMaster::SharedData*> Create() const override
-		{
-			return new TestSharedData();
-		}
+		RTTI_DECLARATIONS(TestSharedData, JsonParseMaster::SharedData)
 	};
 
 	TEST_CLASS(JsonParseTest)

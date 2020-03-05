@@ -3,8 +3,6 @@
 
 namespace UnitTests
 {
-	RTTI_DEFINITIONS(Bar);
-
 	Bar::Bar(int data) :
 		mData(std::make_unique<int>(data))
 	{

@@ -3,7 +3,6 @@
 
 namespace UnitTests
 {
-	RTTI_DEFINITIONS(AttributedBar);
 
 	AttributedBar::AttributedBar(int data) :
 		Attributed(AttributedBar::TypeIdClass()), mIntData(std::make_unique<int>(data))

@@ -14,8 +14,6 @@
 
 namespace Library
 {
-	RTTI_DEFINITIONS(Scope)
-
 #pragma region Constructors, Destructor, Assignment
 	Scope::Scope(const std::size_t capacity) :
 		mTable(std::max(Table::DefaultBucketCount, Math::FindNextPrime(capacity))), mPairPtrs(capacity)

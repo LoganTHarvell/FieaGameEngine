@@ -9,7 +9,7 @@ namespace UnitTests
 {
 	class AttributedFoo : public Library::Attributed
 	{
-		RTTI_DECLARATIONS(AttributedFoo, Library::Attributed);
+		RTTI_DECLARATIONS(AttributedFoo, Library::Attributed)
 
 	public:
 		explicit AttributedFoo(int data = 0);

@@ -64,7 +64,6 @@ namespace UnitTests
 #pragma endregion Shared Data Special Member Functions
 
 		public:
-			virtual gsl::owner<Library::JsonParseMaster::SharedData*> Create() const override;
 			virtual void Initialize() override;
 
 			std::size_t GetSize(const std::string& key) const;
@@ -74,7 +73,6 @@ namespace UnitTests
 		};
 
 	public:
-		virtual gsl::owner<IJsonParseHelper*> Create() const override;
 		virtual bool StartHandler(Library::JsonParseMaster::SharedData& data, const std::string& key, const Json::Value& value, bool) override;
 		virtual bool EndHandler(Library::JsonParseMaster::SharedData& data, const std::string& key) override;
 

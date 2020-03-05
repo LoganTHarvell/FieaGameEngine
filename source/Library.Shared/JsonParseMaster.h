@@ -32,7 +32,7 @@ namespace Library
 		/// </summary>
 		class SharedData : public RTTI
 		{
-			RTTI_DECLARATIONS(SharedData, RTTI)
+			RTTI_DECLARATIONS_ABSTRACT(SharedData, RTTI)
 			
 			friend JsonParseMaster;
 
@@ -72,16 +72,6 @@ namespace Library
 			/// <remarks>Sets SharedData for moved instance's master to this instance, if it exists.</remarks>
 			SharedData& operator=(SharedData&& rhs) noexcept;
 #pragma endregion Shared Data Special Member Functions
-
-#pragma region Shared Data Virtual Constructor
-		public:
-			/// <summary>
-			/// Virtual constructor.
-			/// Creates a heap allocated instance of SharedData.
-			/// </summary>
-			/// <returns>Pointer to the new SharedData instance.</returns>
-			virtual gsl::owner<SharedData*> Create() const = 0;
-#pragma endregion Shared Data Virtual Constructor
 			
 #pragma region Shared Data Accessors
 		public:

@@ -5,10 +5,7 @@ using namespace Library;
 
 namespace UnitTests
 {
-	RTTI_DEFINITIONS(JsonParseTestHelper)
-		RTTI_DEFINITIONS(JsonParseTestHelper::SharedData)
-
-		JsonParseTestHelper::SharedData::SharedData(SharedData&& rhs) noexcept : JsonParseMaster::SharedData(std::move(rhs))
+	JsonParseTestHelper::SharedData::SharedData(SharedData&& rhs) noexcept : JsonParseMaster::SharedData(std::move(rhs))
 	{
 	}
 
@@ -16,11 +13,6 @@ namespace UnitTests
 	{
 		JsonParseMaster::SharedData::operator=(std::move(rhs));
 		return *this;
-	}
-
-	gsl::owner<JsonParseMaster::SharedData*> JsonParseTestHelper::SharedData::Create() const
-	{
-		return new SharedData();
 	}
 
 	void JsonParseTestHelper::SharedData::Initialize()
@@ -34,11 +26,6 @@ namespace UnitTests
 	{
 		auto it = mDataSizes.Find(key);
 		return it != mDataSizes.end() ? it->second : 0;
-	}
-
-	gsl::owner<IJsonParseHelper*> JsonParseTestHelper::Create() const
-	{
-		return new JsonParseTestHelper();
 	}
 
 	bool JsonParseTestHelper::StartHandler(Library::JsonParseMaster::SharedData& data, const std::string& key, const Json::Value& value, bool)

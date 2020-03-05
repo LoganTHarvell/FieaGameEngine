@@ -18,7 +18,7 @@ namespace Library
 	/// </summary>
 	class IJsonParseHelper : public RTTI
 	{
-		RTTI_DECLARATIONS(IJsonParseHelper, RTTI)
+		RTTI_DECLARATIONS_ABSTRACT(IJsonParseHelper, RTTI)
 
 #pragma region Special Member Functions
 	protected:
@@ -56,13 +56,6 @@ namespace Library
 
 #pragma region Virtual Methods
 	public:
-		/// <summary>
-		/// Virtual constructor.
-		/// Creates an instance of the IJsonParseHelper subclass.
-		/// </summary>
-		/// <returns>Pointer to the new subclass instance as a IJsonParseHelper.</returns>
-		virtual gsl::owner<IJsonParseHelper*> Create() const = 0;
-
 		/// <summary>
 		/// Virtual handler method for determining how the helper will respond to a given JSON::Value.
 		/// </summary>

@@ -19,7 +19,7 @@ namespace Library
 	/// </remarks>
 	class Attributed : public Scope
 	{
-		RTTI_DECLARATIONS(Attributed, Scope)
+		RTTI_DECLARATIONS_ABSTRACT(Attributed, Scope)
 
 #pragma region Constructors, Destructor, Assignment
 	protected:

@@ -8,7 +8,7 @@ namespace UnitTests
 {
 	class Foo final : public Library::RTTI
 	{
-		RTTI_DECLARATIONS(Foo, Library::RTTI);
+		RTTI_DECLARATIONS(Foo, Library::RTTI)
 
 	public:
 		explicit Foo(int data = 0);

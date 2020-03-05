@@ -3,8 +3,6 @@
 
 namespace UnitTests
 {
-	RTTI_DEFINITIONS(AttributedFoo);
-
 	AttributedFoo::AttributedFoo(int data) : Attributed(TypeIdClass()),
 		mIntData(data), mFloatData(static_cast<float>(data)), 
 		mVectorData(static_cast<float>(data)), mMatrixData(static_cast<float>(data)), 
