@@ -59,11 +59,11 @@
     <ClCompile Include="JsonParseTest.cpp">
       <Filter>JSON Parser Test</Filter>
     </ClCompile>
-    <ClCompile Include="JsonParseTestHelper.cpp">
-      <Filter>JSON Parser Test</Filter>
-    </ClCompile>
     <ClCompile Include="AttributedBarTest.cpp">
       <Filter>Attributed Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="JsonTestParseHelper.cpp">
+      <Filter>JSON Parser Test</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -86,7 +86,7 @@
     <ClInclude Include="DerivedAttributedFoo.h">
       <Filter>Attributed Tests</Filter>
     </ClInclude>
-    <ClInclude Include="JsonParseTestHelper.h">
+    <ClInclude Include="JsonTestParseHelper.h">
       <Filter>JSON Parser Test</Filter>
     </ClInclude>
   </ItemGroup>

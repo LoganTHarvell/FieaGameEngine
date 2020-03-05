@@ -8,9 +8,9 @@
 
 namespace UnitTests
 {
-	class JsonParseTestHelper : public Library::IJsonParseHelper
+	class JsonTestParseHelper : public Library::IJsonParseHelper
 	{
-		RTTI_DECLARATIONS(JsonParseTestHelper, Library::IJsonParseHelper)
+		RTTI_DECLARATIONS(JsonTestParseHelper, Library::IJsonParseHelper)
 
 	public:
 		struct StackFrame
@@ -24,7 +24,7 @@ namespace UnitTests
 		{
 			RTTI_DECLARATIONS(SharedData, Library::JsonParseMaster::SharedData)
 
-				friend JsonParseTestHelper;
+				friend JsonTestParseHelper;
 
 #pragma region Shared Data Special Member Functions
 		public:

@@ -2,7 +2,7 @@
 
 #include "ToStringSpecialization.h"
 #include "JsonParseMaster.h"
-#include "JsonParseTestHelper.h"
+#include "JsonTestParseHelper.h"
 
 
 using namespace std::string_literals;
@@ -45,8 +45,8 @@ namespace UnitTestLibraryDesktop
 
 		TEST_METHOD(Move)
 		{
-			JsonParseTestHelper::SharedData sharedData;
-			JsonParseTestHelper helper;
+			JsonTestParseHelper::SharedData sharedData;
+			JsonTestParseHelper helper;
 			JsonParseMaster parser;
 
 			parser.AddHelper(helper);
@@ -78,13 +78,13 @@ namespace UnitTestLibraryDesktop
 
 			Assert::AreEqual(1_z, sharedData.GetSize("mInt"));
 
-			JsonParseTestHelper::SharedData moveConstructedSharedData(std::move(sharedData));
+			JsonTestParseHelper::SharedData moveConstructedSharedData(std::move(sharedData));
 			{
 				const JsonParseMaster::SharedData* sharedDataPtr = &moveConstructedSharedData;
 				Assert::AreEqual(sharedDataPtr, moveAssigned.GetSharedData());
 			}
 
-			JsonParseTestHelper::SharedData moveAssignedSharedData;
+			JsonTestParseHelper::SharedData moveAssignedSharedData;
 			moveAssignedSharedData = std::move(moveConstructedSharedData);
 			{
 				const JsonParseMaster::SharedData* sharedDataPtr = &moveAssignedSharedData;
@@ -94,9 +94,9 @@ namespace UnitTestLibraryDesktop
 
 		TEST_METHOD(Accessors)
 		{
-			JsonParseTestHelper::SharedData sharedData;
+			JsonTestParseHelper::SharedData sharedData;
 
-			JsonParseTestHelper helper;
+			JsonTestParseHelper helper;
 			JsonParseMaster parser;
 
 			Assert::IsNull(sharedData.GetJsonParseMaster());
@@ -106,11 +106,11 @@ namespace UnitTestLibraryDesktop
 			Assert::IsNotNull(parser.GetSharedData());			
 
 			{
-				const JsonParseTestHelper::SharedData constSharedData;
+				const JsonTestParseHelper::SharedData constSharedData;
 				Assert::IsNull(constSharedData.GetJsonParseMaster());
 			}
 			{
-				const JsonParseTestHelper::SharedData constSharedData = sharedData;
+				const JsonTestParseHelper::SharedData constSharedData = sharedData;
 				Assert::AreEqual(sharedData.GetJsonParseMaster(), constSharedData.GetJsonParseMaster());
 			}
 
@@ -120,8 +120,8 @@ namespace UnitTestLibraryDesktop
 
 		TEST_METHOD(Modifiers)
 		{
-			JsonParseTestHelper::SharedData sharedData;
-			JsonParseTestHelper helper;
+			JsonTestParseHelper::SharedData sharedData;
+			JsonTestParseHelper helper;
 			JsonParseMaster parser;
 
 			parser.SetSharedData(sharedData);
@@ -143,15 +143,15 @@ namespace UnitTestLibraryDesktop
 
 			Assert::AreEqual(0_z, sharedData.GetSize("mInt"));
 
-			JsonParseTestHelper::SharedData sharedData2;
+			JsonTestParseHelper::SharedData sharedData2;
 			parser.SetSharedData(sharedData2);
 			Assert::IsNull(sharedData.GetJsonParseMaster());
 		}
 
 		TEST_METHOD(Clone)
 		{
-			JsonParseTestHelper::SharedData sharedData;
-			JsonParseTestHelper helper;
+			JsonTestParseHelper::SharedData sharedData;
+			JsonTestParseHelper helper;
 			JsonParseMaster parser;
 
  			parser.AddHelper(helper);
@@ -163,15 +163,15 @@ namespace UnitTestLibraryDesktop
  
  			clone->Parse(R"({ "mInt": 10 })");
 
- 			Assert::AreEqual(1_z, clone->GetSharedData()->As<JsonParseTestHelper::SharedData>()->GetSize("mInt"));
+ 			Assert::AreEqual(1_z, clone->GetSharedData()->As<JsonTestParseHelper::SharedData>()->GetSize("mInt"));
 
 			delete clone;
 		}
 
 		TEST_METHOD(ParsePrimitives)
 		{
-			JsonParseTestHelper::SharedData sharedData;
-			JsonParseTestHelper helper;
+			JsonTestParseHelper::SharedData sharedData;
+			JsonTestParseHelper helper;
 			JsonParseMaster parser;
 
 			parser.AddHelper(helper);
@@ -203,8 +203,8 @@ namespace UnitTestLibraryDesktop
 
 		TEST_METHOD(ParseArray)
 		{
-			JsonParseTestHelper::SharedData sharedData;
-			JsonParseTestHelper helper;
+			JsonTestParseHelper::SharedData sharedData;
+			JsonTestParseHelper helper;
 			JsonParseMaster parser;
 
 			parser.AddHelper(helper);
@@ -232,8 +232,8 @@ namespace UnitTestLibraryDesktop
 
 		TEST_METHOD(ParseObject)
 		{
-			JsonParseTestHelper::SharedData sharedData;
-			JsonParseTestHelper helper;
+			JsonTestParseHelper::SharedData sharedData;
+			JsonTestParseHelper helper;
 			JsonParseMaster parser;
 
 			parser.AddHelper(helper);
@@ -258,24 +258,24 @@ namespace UnitTestLibraryDesktop
 
 		TEST_METHOD(RTTITest)
 		{
-			std::shared_ptr<JsonParseTestHelper> derivedHelper = std::make_shared<JsonParseTestHelper>();
+			std::shared_ptr<JsonTestParseHelper> derivedHelper = std::make_shared<JsonTestParseHelper>();
 
 			Assert::IsTrue(derivedHelper->Is(IJsonParseHelper::TypeIdClass()));
-			Assert::IsNotNull(derivedHelper->As<JsonParseTestHelper>());
+			Assert::IsNotNull(derivedHelper->As<JsonTestParseHelper>());
 
 			std::shared_ptr<IJsonParseHelper> helper = derivedHelper;
-			Assert::IsTrue(helper->Is(JsonParseTestHelper::TypeIdClass()));
-			Assert::IsNotNull(helper->As<JsonParseTestHelper>());
+			Assert::IsTrue(helper->Is(JsonTestParseHelper::TypeIdClass()));
+			Assert::IsNotNull(helper->As<JsonTestParseHelper>());
 			
-			std::shared_ptr<JsonParseTestHelper::SharedData> derivedSharedData = std::make_shared<JsonParseTestHelper::SharedData>();
+			std::shared_ptr<JsonTestParseHelper::SharedData> derivedSharedData = std::make_shared<JsonTestParseHelper::SharedData>();
 
 			Assert::IsTrue(derivedSharedData->Is(JsonParseMaster::SharedData::TypeIdClass()));
 			Assert::IsNotNull(derivedSharedData->As<JsonParseMaster::SharedData>());
 
 			std::shared_ptr<JsonParseMaster::SharedData> sharedData = derivedSharedData;
 
-			Assert::IsTrue(sharedData->Is(JsonParseTestHelper::SharedData::TypeIdClass()));
-			Assert::IsNotNull(sharedData->As<JsonParseTestHelper::SharedData>());
+			Assert::IsTrue(sharedData->Is(JsonTestParseHelper::SharedData::TypeIdClass()));
+			Assert::IsNotNull(sharedData->As<JsonTestParseHelper::SharedData>());
 		}
 
 	private:

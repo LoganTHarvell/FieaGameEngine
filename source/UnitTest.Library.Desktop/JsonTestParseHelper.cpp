@@ -1,37 +1,36 @@
 #include "pch.h"
-#include "JsonParseTestHelper.h"
+#include "JsonTestParseHelper.h"
 
 using namespace Library;
 
 namespace UnitTests
 {
-	JsonParseTestHelper::SharedData::SharedData(SharedData&& rhs) noexcept : JsonParseMaster::SharedData(std::move(rhs))
+	JsonTestParseHelper::SharedData::SharedData(SharedData&& rhs) noexcept : JsonParseMaster::SharedData(std::move(rhs))
 	{
 	}
 
-	JsonParseTestHelper::SharedData& JsonParseTestHelper::SharedData::operator=(SharedData&& rhs) noexcept
+	JsonTestParseHelper::SharedData& JsonTestParseHelper::SharedData::operator=(SharedData&& rhs) noexcept
 	{
 		JsonParseMaster::SharedData::operator=(std::move(rhs));
 		return *this;
 	}
 
-	void JsonParseTestHelper::SharedData::Initialize()
+	void JsonTestParseHelper::SharedData::Initialize()
 	{
 		JsonParseMaster::SharedData::Initialize();
 
 		mDataSizes.Clear();
 	}
 
-	std::size_t JsonParseTestHelper::SharedData::GetSize(const std::string& key) const
+	std::size_t JsonTestParseHelper::SharedData::GetSize(const std::string& key) const
 	{
 		auto it = mDataSizes.Find(key);
 		return it != mDataSizes.end() ? it->second : 0;
 	}
 
-	bool JsonParseTestHelper::StartHandler(Library::JsonParseMaster::SharedData& data, const std::string& key, const Json::Value& value, bool)
+	bool JsonTestParseHelper::StartHandler(Library::JsonParseMaster::SharedData& data, const std::string& key, const Json::Value& value, bool)
 	{
-		SharedData* testHelperData = data.As<SharedData>();
-		if (testHelperData == nullptr) return false;
+		if (!data.Is(SharedData::TypeIdClass())) return false;
 
 		bool handled;
 
@@ -58,10 +57,11 @@ namespace UnitTests
 		return handled;
 	}
 
-	bool JsonParseTestHelper::EndHandler(Library::JsonParseMaster::SharedData& data, const std::string& key)
+	bool JsonTestParseHelper::EndHandler(Library::JsonParseMaster::SharedData& data, const std::string& key)
 	{
+		assert(data.Is(SharedData::TypeIdClass()));
+
 		SharedData* testHelperData = data.As<SharedData>();
-		assert(testHelperData != nullptr);
 
 		auto& pair = mStack.Top();
 		assert(&pair.first == &key);
