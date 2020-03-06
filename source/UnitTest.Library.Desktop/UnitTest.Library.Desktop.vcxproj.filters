@@ -123,7 +123,11 @@
     <None Include="Content\ScopeOfArrays.json">
       <Filter>Content</Filter>
     </None>
-    <None Include="Content\ScopeOfScopes.json" />
-    <None Include="Content\ScopeOfArrayOfScopes.json" />
+    <None Include="Content\ScopeOfScopes.json">
+      <Filter>Content</Filter>
+    </None>
+    <None Include="Content\ScopeOfScopeArray.json">
+      <Filter>Content</Filter>
+    </None>
   </ItemGroup>
 </Project>

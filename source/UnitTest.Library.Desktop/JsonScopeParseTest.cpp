@@ -235,6 +235,39 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(glm::mat4(10), nestedScope2->Find("Matrix")->Get<glm::mat4>());
 		}
 
+		TEST_METHOD(ParseNestedScopesArray)
+		{
+			JsonScopeParseHelper::SharedData sharedData;
+			JsonScopeParseHelper helper;
+			JsonParseMaster parser;
+
+			parser.AddHelper(helper);
+			parser.SetSharedData(sharedData);
+
+			std::string filename("Content/ScopeOfScopeArray.json");
+			parser.ParseFromFile(filename);
+
+			const Scope& scope = sharedData.GetScope();
+			const Scope::DataType* nestedScopeData = scope.Find("NestedScopes");
+
+			Assert::IsNotNull(nestedScopeData);
+
+			const Scope* nestedScope1 = nestedScopeData->Get<Scope*>(0);
+			const Scope* nestedScope2 = nestedScopeData->Get<Scope*>(1);
+
+			Assert::AreEqual(10, nestedScope1->Find("Integer")->Get<int>());
+			Assert::AreEqual(10.0f, nestedScope1->Find("Float")->Get<float>());
+			Assert::AreEqual("10"s, nestedScope1->Find("String")->Get<std::string>());
+			Assert::AreEqual(glm::vec4(10), nestedScope1->Find("Vector")->Get<glm::vec4>());
+			Assert::AreEqual(glm::mat4(10), nestedScope1->Find("Matrix")->Get<glm::mat4>());
+
+			Assert::AreEqual(10, nestedScope2->Find("Integer")->Get<int>());
+			Assert::AreEqual(10.0f, nestedScope2->Find("Float")->Get<float>());
+			Assert::AreEqual("10"s, nestedScope2->Find("String")->Get<std::string>());
+			Assert::AreEqual(glm::vec4(10), nestedScope2->Find("Vector")->Get<glm::vec4>());
+			Assert::AreEqual(glm::mat4(10), nestedScope2->Find("Matrix")->Get<glm::mat4>());
+		}
+
 		TEST_METHOD(RTTITest)
 		{
 			std::shared_ptr<JsonScopeParseHelper> derivedHelper = std::make_shared<JsonScopeParseHelper>();
