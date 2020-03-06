@@ -63,6 +63,11 @@ namespace Library
 		/// Pops an element from the top of the Stack.
 		/// </summary>
 		void Pop();
+
+		/// <summary>
+		/// Clears all elements from the Stack.
+		/// </summary>
+		void Clear();
 #pragma endregion Modifiers
 
 #pragma region Data Members

@@ -1,30 +1,65 @@
+#pragma region Includes
+// Pre-compiled Header
 #include "pch.h"
+
+// Header
 #include "Utility.h"
 
-namespace Library::Math
+// Standard
+#include <string>
+#include <algorithm>
+#pragma endregion Includes
+
+namespace Library
 {
-	bool IsPrime(std::size_t value)
+	namespace String
 	{
-		if (value <= 1)							return false;
-		if (value <= 3)							return true;
-		if (value % 2 == 0 || value % 3 == 0)	return false;
-
-		std::size_t divisor = 6;
-		while ((divisor * divisor) - (2 * divisor) + std::size_t(1) <= value)
+		std::string ToLower(const std::string& str)
 		{
-			if (value % (divisor - std::size_t(1)) == 0) return false;
-			if (value % (divisor + std::size_t(1)) == 0) return false;
+			std::string lowercaseString = str;
+			
+			auto toLower = [](unsigned char c) { return static_cast<unsigned char>(std::tolower(c)); };
+			std::transform(lowercaseString.begin(), lowercaseString.end(), lowercaseString.begin(), toLower);
 
-			divisor += 6;
+			return lowercaseString;
 		}
 
-		return true;
+		std::string ToUpper(const std::string& str)
+		{
+			std::string uppercaseString = str;
+			
+			auto toUpper = [](unsigned char c) { return static_cast<unsigned char>(std::toupper(c)); };
+			std::transform(uppercaseString.begin(), uppercaseString.end(), uppercaseString.begin(), toUpper);
+
+			return uppercaseString;
+		}
 	}
 
-	std::size_t FindNextPrime(const std::size_t value)
+	namespace Math
 	{
-		std::size_t prime = value;
-		while (!IsPrime(++prime));
-		return prime;
+		bool IsPrime(std::size_t value)
+		{
+			if (value <= 1)							return false;
+			if (value <= 3)							return true;
+			if (value % 2 == 0 || value % 3 == 0)	return false;
+	
+			std::size_t divisor = 6;
+			while ((divisor * divisor) - (2 * divisor) + std::size_t(1) <= value)
+			{
+				if (value % (divisor - std::size_t(1)) == 0) return false;
+				if (value % (divisor + std::size_t(1)) == 0) return false;
+	
+				divisor += 6;
+			}
+	
+			return true;
+		}
+	
+		std::size_t FindNextPrime(const std::size_t value)
+		{
+			std::size_t prime = value;
+			while (!IsPrime(++prime));
+			return prime;
+		}
 	}
 }

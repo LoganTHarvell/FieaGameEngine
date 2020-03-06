@@ -107,6 +107,10 @@
       <Profile>true</Profile>
       <OptimizeReferences>false</OptimizeReferences>
     </Link>
+    <PreBuildEvent>
+      <Command>mkdir "$(OutDir)Content"
+xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -175,6 +179,7 @@
     <ClCompile Include="Foo.cpp" />
     <ClCompile Include="FooTest.cpp" />
     <ClCompile Include="HashMapTest.cpp" />
+    <ClCompile Include="JsonScopeParseTest.cpp" />
     <ClCompile Include="JsonTestParseHelper.cpp" />
     <ClCompile Include="JsonParseTest.cpp" />
     <ClCompile Include="pch.cpp">
@@ -204,6 +209,9 @@
     <ClInclude Include="JsonTestParseHelper.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="ToStringSpecialization.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Content\ScopePrimitives.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

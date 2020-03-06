@@ -37,6 +37,11 @@ namespace Library
 		using DataType = Datum;
 
 		/// <summary>
+		/// Types supported by DataType values.
+		/// </summary>
+		using Types = DataType::Types;
+
+		/// <summary>
 		/// Table type defining a mapping names to data values.
 		/// </summary>
 		using Table = HashMap<NameType, DataType>;

@@ -65,6 +65,9 @@
     <ClCompile Include="JsonTestParseHelper.cpp">
       <Filter>JSON Parser Test</Filter>
     </ClCompile>
+    <ClCompile Include="JsonScopeParseTest.cpp">
+      <Filter>JSON Parser Test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -109,5 +112,13 @@
     <Filter Include="JSON Parser Test">
       <UniqueIdentifier>{e8149a2f-8b57-469f-b5fb-5e87426c5d65}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Content">
+      <UniqueIdentifier>{7c84e84d-c64a-45c5-9935-43b0c86deccd}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Content\ScopePrimitives.json">
+      <Filter>Content</Filter>
+    </None>
   </ItemGroup>
 </Project>

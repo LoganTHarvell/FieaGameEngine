@@ -54,5 +54,11 @@ namespace Library
 	{
 		mContainer.PopBack();
 	}
+
+	template<typename T, typename Container>
+	inline void Stack<T, Container>::Clear()
+	{
+		mContainer.Clear();
+	}
 #pragma endregion Modifiers
 }
