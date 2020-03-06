@@ -26,7 +26,7 @@ namespace Library
 		{
 			const std::string& Key;
 			const Json::Value* Value;
-			Scope::DataType::Types Type;
+			Scope::Types Type;
 			Scope& Context;
 		};
 
@@ -34,7 +34,7 @@ namespace Library
 		/// <summary>
 		/// Mapping of string values to Scope data types.
 		/// </summary>
-		static const HashMap<std::string, Scope::DataType::Types> TypeStringMap;
+		static const HashMap<std::string, Scope::Types> TypeStringMap;
 #pragma endregion Type Definitions and Constants
 
 #pragma region Shared Data

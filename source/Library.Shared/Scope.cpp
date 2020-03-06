@@ -30,10 +30,10 @@ namespace Library
 	{
 		for (auto& tableEntryPtr : rhs.mPairPtrs)
 		{
-			if (tableEntryPtr->second.Type() == DataType::Types::Scope)
+			if (tableEntryPtr->second.Type() == Types::Scope)
 			{
 				DataType data;
-				data.SetType(DataType::Types::Scope);
+				data.SetType(Types::Scope);
 				
 				for (std::size_t i = 0; i < tableEntryPtr->second.Size(); ++i)
 				{
@@ -62,10 +62,10 @@ namespace Library
 
 		for (auto& tableEntryPtr : rhs.mPairPtrs)
 		{
-			if (tableEntryPtr->second.Type() == DataType::Types::Scope)
+			if (tableEntryPtr->second.Type() == Types::Scope)
 			{
 				DataType data;
-				data.SetType(DataType::Types::Scope);
+				data.SetType(Types::Scope);
 				
 				for (std::size_t i = 0; i < tableEntryPtr->second.Size(); ++i)
 				{
@@ -148,10 +148,10 @@ namespace Library
 				throw std::runtime_error("Duplicate names found in the initializer list.");
 			}
 
-			if (tableEntry.second.Type() == DataType::Types::Scope)
+			if (tableEntry.second.Type() == Types::Scope)
 			{
 				DataType data;
-				data.SetType(DataType::Types::Scope);
+				data.SetType(Types::Scope);
 
 				for (std::size_t i = 0; i < tableEntry.second.Size(); ++i)
 				{
@@ -187,10 +187,10 @@ namespace Library
 				throw std::runtime_error("Duplicate names found in the initializer list.");
 			}
 
-			if (tableEntry.second.Type() == DataType::Types::Scope)
+			if (tableEntry.second.Type() == Types::Scope)
 			{
 				DataType data;
-				data.SetType(DataType::Types::Scope);
+				data.SetType(Types::Scope);
 
 				for (std::size_t i = 0; i < tableEntry.second.Size(); ++i)
 				{
@@ -309,7 +309,7 @@ namespace Library
 	{
 		for (auto& pairPtr : mPairPtrs)
 		{
-			if (pairPtr->second.Type() == DataType::Types::Scope)
+			if (pairPtr->second.Type() == Types::Scope)
 			{
 				for (std::size_t i = 0; i < pairPtr->second.Size(); ++i)
 				{
@@ -328,7 +328,7 @@ namespace Library
 	{
 		for (auto& pairPtr : mPairPtrs)
 		{
-			if (pairPtr->second.Type() == DataType::Types::Scope)
+			if (pairPtr->second.Type() == Types::Scope)
 			{
 				for (std::size_t i = 0; i < pairPtr->second.Size(); ++i)
 				{
@@ -422,7 +422,7 @@ namespace Library
 
 		DataType* data = Find(name);
 
-		if (data && data->Type() != DataType::Types::Unknown && data->Type() != DataType::Types::Scope)
+		if (data && data->Type() != Types::Unknown && data->Type() != Types::Scope)
 		{
 			throw std::runtime_error("Table entry already exists with a non-Scope type.");
 		}
@@ -464,7 +464,7 @@ namespace Library
 
 		DataType* data = Find(name);
 
-		if (data && data->Type() != DataType::Types::Unknown && data->Type() != DataType::Types::Scope)
+		if (data && data->Type() != Types::Unknown && data->Type() != Types::Scope)
 		{
 			throw std::runtime_error("Table entry already exists with a non-Scope type.");
 		}

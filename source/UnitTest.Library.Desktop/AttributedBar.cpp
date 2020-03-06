@@ -83,7 +83,7 @@ namespace UnitTests
 		static Library::TypeManager::TypeInfo typeInfo
 		{
 			{
-				{ "integer", DataType::Types::Integer, false, 1, offsetof(AttributedBar, mIntData) }
+				{ "integer", Types::Integer, false, 1, offsetof(AttributedBar, mIntData) }
 			},
 		
 			Attributed::TypeIdClass()

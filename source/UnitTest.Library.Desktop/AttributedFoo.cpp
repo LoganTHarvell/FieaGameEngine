@@ -38,13 +38,13 @@ namespace UnitTests
 		static const Library::TypeManager::TypeInfo typeInfo
 		{
 			{
-				{ "integer", DataType::Types::Integer, false, 1, offsetof(AttributedFoo, mIntData) },
-				{ "float", DataType::Types::Float, false, 1, offsetof(AttributedFoo, mFloatData) },
-				{ "vector", DataType::Types::Vector, false, 1, offsetof(AttributedFoo, mVectorData) },
-				{ "matrix", DataType::Types::Matrix, false, 1, offsetof(AttributedFoo, mMatrixData) },
-				{ "string", DataType::Types::String, false, 1, offsetof(AttributedFoo, mStringData) },
-				{ "scope", DataType::Types::Scope, true, 1 , 0},
-				{ "rttiPtr", DataType::Types::Pointer, false, 1, offsetof(AttributedFoo, mRttiData) }
+				{ "integer", Types::Integer, false, 1, offsetof(AttributedFoo, mIntData) },
+				{ "float", Types::Float, false, 1, offsetof(AttributedFoo, mFloatData) },
+				{ "vector", Types::Vector, false, 1, offsetof(AttributedFoo, mVectorData) },
+				{ "matrix", Types::Matrix, false, 1, offsetof(AttributedFoo, mMatrixData) },
+				{ "string", Types::String, false, 1, offsetof(AttributedFoo, mStringData) },
+				{ "scope", Types::Scope, true, 1 , 0},
+				{ "rttiPtr", Types::Pointer, false, 1, offsetof(AttributedFoo, mRttiData) }
 			},
 
 			Attributed::TypeIdClass()
