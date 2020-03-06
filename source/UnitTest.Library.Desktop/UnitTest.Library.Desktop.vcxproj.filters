@@ -117,8 +117,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Content\ScopePrimitives.json">
+    <None Include="Content\ScopeOfPrimitives.json">
       <Filter>Content</Filter>
     </None>
+    <None Include="Content\ScopeOfArrays.json">
+      <Filter>Content</Filter>
+    </None>
+    <None Include="Content\ScopeOfScopes.json" />
+    <None Include="Content\ScopeOfArrayOfScopes.json" />
   </ItemGroup>
 </Project>

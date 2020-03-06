@@ -211,7 +211,10 @@ xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
     <ClInclude Include="ToStringSpecialization.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Content\ScopePrimitives.json" />
+    <None Include="Content\ScopeOfArrayOfScopes.json" />
+    <None Include="Content\ScopeOfArrays.json" />
+    <None Include="Content\ScopeOfPrimitives.json" />
+    <None Include="Content\ScopeOfScopes.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

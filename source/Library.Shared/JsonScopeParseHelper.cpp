@@ -12,14 +12,14 @@
 namespace Library
 {
 #pragma region Constants
-	const HashMap<std::string, Scope::DataType::Types> JsonScopeParseHelper::TypeStringMap =
+	const HashMap<std::string, Scope::Types> JsonScopeParseHelper::TypeStringMap =
 	{
-		{ "integer", Scope::DataType::Types::Integer },
-		{ "float", Scope::DataType::Types::Float },
-		{ "vector", Scope::DataType::Types::Vector },
-		{ "matrix", Scope::DataType::Types::Matrix },
-		{ "string", Scope::DataType::Types::String },
-		{ "scope", Scope::DataType::Types::Scope },
+		{ "integer", Scope::Types::Integer },
+		{ "float", Scope::Types::Float },
+		{ "vector", Scope::Types::Vector },
+		{ "matrix", Scope::Types::Matrix },
+		{ "string", Scope::Types::String },
+		{ "scope", Scope::Types::Scope },
 	};
 #pragma endregion Constants
 
@@ -134,12 +134,29 @@ namespace Library
 			assert(stackFrame);
 
 			stackFrame->Value = &value;
+
+			if (value.isObject())
+			{
+				stackFrame->Context.AppendScope(stackFrame->Key);
+			}
+
 			handled = true;
 		}
 		else if (value.isObject())
 		{
-			Scope& scope = stackFrame ? stackFrame->Context.AppendScope(key) : *testHelperData->mRootScope;
-			testHelperData->mStack.Push({ key, &value, Scope::DataType::Types::Unknown, scope });
+			Scope* scope;
+
+			if (stackFrame)
+			{
+				Scope::DataType& scopeData = *stackFrame->Context.Find(stackFrame->Key);
+				scope = &scopeData[scopeData.Size() - 1];
+			}
+			else
+			{
+				scope = testHelperData->mRootScope;
+			}
+
+			testHelperData->mStack.Push({ key, &value, Scope::Types::Unknown, *scope });
 			handled = true;
 		}
 
@@ -174,13 +191,36 @@ namespace Library
  				}
 				else if (!v.isArray())
 				{
-					if (v.isInt()) stackFrame.Context[stackFrame.Key].PushBack(v.asInt());
-					else if (v.isDouble()) stackFrame.Context[stackFrame.Key].PushBack(static_cast<float>(v.asDouble()));
-					else if (v.isString())
+					if (stackFrame.Type != Scope::Types::Unknown)
 					{
-						auto uninitialized = stackFrame.Context[stackFrame.Key];
-						uninitialized.SetType(stackFrame.Type);
-						uninitialized.SetFromString(v.asString(), uninitialized.Size()-1);
+						auto& scopeData = stackFrame.Context[stackFrame.Key];
+
+						if (scopeData.Type() == Scope::Types::Unknown)
+						{
+							scopeData.SetType(stackFrame.Type);
+						}
+
+						scopeData.Resize(scopeData.Size() + 1);
+
+						if (stackFrame.Type == Scope::Types::Integer)
+						{
+							scopeData.Set(v.asInt(), scopeData.Size() - 1);
+							handled = true;
+						}
+						else if (stackFrame.Type == Scope::Types::Float)
+						{
+							scopeData.Set(static_cast<float>(v.asDouble()), scopeData.Size() - 1);
+							handled = true;
+						}
+						else if (v.isString())
+						{
+							scopeData.SetFromString(v.asString(), scopeData.Size() - 1);
+							handled = true;
+						}
+						else
+						{
+							break;
+						}
 					}
 					else
 					{
@@ -191,23 +231,23 @@ namespace Library
 				}
  			}
  		}
-		else if (stackFrame.Type != Scope::DataType::Types::Unknown)
+		else if (stackFrame.Type != Scope::Types::Unknown)
 		{
 			auto& scopeData = stackFrame.Context[stackFrame.Key];
 			
-			if (scopeData.Type() == Scope::DataType::Types::Unknown)
+			if (scopeData.Type() == Scope::Types::Unknown)
 			{
 				scopeData.SetType(stackFrame.Type);
 			}
 
 			scopeData.Resize(scopeData.Size() + 1);
 
-			if (stackFrame.Type == Scope::DataType::Types::Integer)
+			if (stackFrame.Type == Scope::Types::Integer)
 			{
 				scopeData.Set(stackFrame.Value->asInt(), scopeData.Size() - 1);
 				handled = true;
 			}
-			else if (stackFrame.Type == Scope::DataType::Types::Float)
+			else if (stackFrame.Type == Scope::Types::Float)
 			{
 				scopeData.Set(static_cast<float>(stackFrame.Value->asDouble()), scopeData.Size() - 1);
 				handled = true;
@@ -218,6 +258,7 @@ namespace Library
 				handled = true;
 			}
 		}
+
  		testHelperData->mStack.Pop();
 
 		return handled;
