@@ -42,7 +42,7 @@ namespace Library
 	}
 
 	JsonScopeParseHelper::SharedData::SharedData(SharedData&& rhs) noexcept : 
-		mRootScope(rhs.mRootScope), mOwnsScope(rhs.mOwnsScope), mStack(std::move(rhs.mStack))
+		mRootScope(rhs.mRootScope), mOwnsScope(rhs.mOwnsScope), mStack(std::move(rhs.mStack)), JsonParseMaster::SharedData(std::move(rhs))
 	{
 		rhs.mRootScope = nullptr;
 		rhs.mOwnsScope = false;
@@ -53,6 +53,8 @@ namespace Library
 		mRootScope = rhs.mRootScope;
 		mOwnsScope = rhs.mOwnsScope;
 		mStack = std::move(rhs.mStack);
+
+		JsonParseMaster::SharedData::operator=(std::move(rhs));
 
 		rhs.mRootScope = nullptr;
 		rhs.mOwnsScope = false;
@@ -98,9 +100,12 @@ namespace Library
 	{
 		if (!mOwnsScope) return nullptr;
 		
+		gsl::owner<Scope*> disownedScope = mRootScope;
+		
 		mRootScope = nullptr;
 		mOwnsScope = false;
-		return mRootScope;
+
+		return disownedScope;
 	}
 #pragma endregion Shared Data Accessors
 
@@ -129,18 +134,52 @@ namespace Library
 				handled = true;
 			}
 		}
-		else if (formattedKey == "value" && (value.isString() || value.isObject() || value.isInt() || value.isDouble() || value.isArray()))
+		else if (formattedKey == "value")
 		{
 			assert(stackFrame);
 
-			stackFrame->Value = &value;
-
-			if (value.isObject())
+			if (value.isString() || value.isObject() || value.isInt() || value.isDouble())
 			{
-				stackFrame->Context.AppendScope(stackFrame->Key);
-			}
+				stackFrame->Value = &value;
 
-			handled = true;
+				if (value.isObject())
+				{
+					stackFrame->Context.AppendScope(stackFrame->Key);
+				}
+
+				handled = true;
+			}
+			else if (value.isArray() && value.size() > 0)
+			{
+				handled = true;
+
+				for (const auto& v1 : value)
+				{
+					if (!v1.isString() && !v1.isObject() && !v1.isInt() && !v1.isDouble())
+					{
+						handled = false;
+						break;
+					}
+
+					for (const auto& v2 : value)
+					{
+						if (v1.type() != v2.type())
+						{
+							handled = false;
+							break;
+						}
+					}
+				}
+
+				if (handled)
+				{
+					stackFrame->Value = &value;
+				}
+			}
+			else
+			{
+				stackFrame->Type = Scope::Types::Unknown;
+			}
 		}
 		else if (value.isObject())
 		{
@@ -156,7 +195,7 @@ namespace Library
 				scope = testHelperData->mRootScope;
 			}
 
-			testHelperData->mStack.Push({ key, &value, Scope::Types::Unknown, *scope });
+			testHelperData->mStack.Push({ key, nullptr, Scope::Types::Unknown, *scope });
 			handled = true;
 		}
 
@@ -177,21 +216,17 @@ namespace Library
 		
 		bool handled = false;
 
- 		if (stackFrame.Value->isObject())
- 		{
-			handled = true;
- 		}
- 		if (stackFrame.Value->isArray())
- 		{
- 			for (const auto& v : *stackFrame.Value)
- 			{
- 				if (v.isObject())
- 				{
-					handled = true;
- 				}
-				else if (!v.isArray())
+		if (stackFrame.Type != Scope::Types::Unknown && stackFrame.Value != nullptr)
+		{
+			if (stackFrame.Value->isObject())
+			{
+				handled = true;
+			}
+			else if (stackFrame.Value->isArray())
+			{
+				for (const auto& v : *stackFrame.Value)
 				{
-					if (stackFrame.Type != Scope::Types::Unknown)
+					if (!v.isArray())
 					{
 						auto& scopeData = stackFrame.Context[stackFrame.Key];
 
@@ -205,62 +240,51 @@ namespace Library
 						if (stackFrame.Type == Scope::Types::Integer)
 						{
 							scopeData.Set(v.asInt(), scopeData.Size() - 1);
-							handled = true;
 						}
 						else if (stackFrame.Type == Scope::Types::Float)
 						{
 							scopeData.Set(static_cast<float>(v.asDouble()), scopeData.Size() - 1);
-							handled = true;
-						}
-						else if (v.isString())
-						{
-							scopeData.SetFromString(v.asString(), scopeData.Size() - 1);
-							handled = true;
 						}
 						else
 						{
-							break;
+							assert(v.isString());
+							scopeData.SetFromString(v.asString(), scopeData.Size() - 1);
 						}
+						
+						handled = true;
 					}
-					else
-					{
-						break;
-					}
-					
-					handled = true;
 				}
- 			}
- 		}
-		else if (stackFrame.Type != Scope::Types::Unknown)
-		{
-			auto& scopeData = stackFrame.Context[stackFrame.Key];
-			
-			if (scopeData.Type() == Scope::Types::Unknown)
-			{
-				scopeData.SetType(stackFrame.Type);
 			}
+			else
+			{
+				auto& scopeData = stackFrame.Context[stackFrame.Key];
 
-			scopeData.Resize(scopeData.Size() + 1);
+				if (scopeData.Type() == Scope::Types::Unknown)
+				{
+					scopeData.SetType(stackFrame.Type);
+				}
 
-			if (stackFrame.Type == Scope::Types::Integer)
-			{
-				scopeData.Set(stackFrame.Value->asInt(), scopeData.Size() - 1);
-				handled = true;
-			}
-			else if (stackFrame.Type == Scope::Types::Float)
-			{
-				scopeData.Set(static_cast<float>(stackFrame.Value->asDouble()), scopeData.Size() - 1);
-				handled = true;
-			}
-			else if (stackFrame.Value->isString())
-			{
-				scopeData.SetFromString(stackFrame.Value->asString(), scopeData.Size() - 1);
+				scopeData.Resize(scopeData.Size() + 1);
+
+				if (stackFrame.Type == Scope::Types::Integer)
+				{
+					scopeData.Set(stackFrame.Value->asInt(), scopeData.Size() - 1);
+				}
+				else if (stackFrame.Type == Scope::Types::Float)
+				{
+					scopeData.Set(static_cast<float>(stackFrame.Value->asDouble()), scopeData.Size() - 1);
+				}
+				else
+				{
+					assert(stackFrame.Value->isString());
+					scopeData.SetFromString(stackFrame.Value->asString(), scopeData.Size() - 1);
+				}
+
 				handled = true;
 			}
 		}
 
  		testHelperData->mStack.Pop();
-
 		return handled;
 	}
 #pragma endregion Handlers

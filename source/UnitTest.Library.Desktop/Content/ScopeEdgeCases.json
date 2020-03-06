@@ -1,0 +1,41 @@
+{
+  "InvalidType": {
+    "type": "invalid",
+    "value": 10
+  },
+  "NullValue": {
+    "type": "integer",
+    "value": null
+  },
+  "Array2D": {
+    "type": "integer",
+    "value": [ [10] ]
+  },
+  "MismatchedArray": {
+    "type": "integer",
+    "value": [ 10, "10" ]
+  },
+  "NestedScopesArray": {
+    "type": "scope",
+    "value": [
+      {
+        "type": "scope",
+        "value": {
+          "Integer": {
+            "type": "integer",
+            "value": 10
+          }
+        }
+      },
+      {
+        "type": "scope",
+        "value": {
+          "Float": {
+            "type": "float",
+            "value": 10.0
+          }
+        }
+      }
+    ]
+  }
+}

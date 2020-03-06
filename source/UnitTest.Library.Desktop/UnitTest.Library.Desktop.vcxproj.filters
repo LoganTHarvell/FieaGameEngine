@@ -68,6 +68,9 @@
     <ClCompile Include="JsonScopeParseTest.cpp">
       <Filter>JSON Parser Test</Filter>
     </ClCompile>
+    <ClCompile Include="UtilityTest.cpp">
+      <Filter>Utility Tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -127,6 +130,9 @@
       <Filter>Content</Filter>
     </None>
     <None Include="Content\ScopeOfScopeArray.json">
+      <Filter>Content</Filter>
+    </None>
+    <None Include="Content\ScopeEdgeCases.json">
       <Filter>Content</Filter>
     </None>
   </ItemGroup>

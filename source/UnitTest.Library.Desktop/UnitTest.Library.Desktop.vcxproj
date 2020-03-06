@@ -128,6 +128,10 @@ xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
       <Profile>true</Profile>
       <OptimizeReferences>false</OptimizeReferences>
     </Link>
+    <PreBuildEvent>
+      <Command>mkdir "$(OutDir)Content"
+xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -146,6 +150,10 @@ xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <PreBuildEvent>
+      <Command>mkdir "$(OutDir)Content"
+xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -164,6 +172,10 @@ xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <PreBuildEvent>
+      <Command>mkdir "$(OutDir)Content"
+xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AttributedBar.cpp" />
@@ -192,6 +204,7 @@ xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
     <ClCompile Include="ScopeTest.cpp" />
     <ClCompile Include="SListTest.cpp" />
     <ClCompile Include="StackTest.cpp" />
+    <ClCompile Include="UtilityTest.cpp" />
     <ClCompile Include="TypeManagerTest.cpp" />
     <ClCompile Include="VectorTest.cpp" />
   </ItemGroup>
@@ -211,9 +224,10 @@ xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
     <ClInclude Include="ToStringSpecialization.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Content\ScopeOfScopeArray.json" />
+    <None Include="Content\ScopeEdgeCases.json" />
     <None Include="Content\ScopeOfArrays.json" />
     <None Include="Content\ScopeOfPrimitives.json" />
+    <None Include="Content\ScopeOfScopeArray.json" />
     <None Include="Content\ScopeOfScopes.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

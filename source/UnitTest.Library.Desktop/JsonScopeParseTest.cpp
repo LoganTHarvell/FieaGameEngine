@@ -40,7 +40,8 @@ namespace UnitTestLibraryDesktop
 
 		TEST_METHOD(Move)
 		{
-			JsonScopeParseHelper::SharedData sharedData;
+			Scope scope;
+			JsonScopeParseHelper::SharedData sharedData(scope);
 			JsonScopeParseHelper helper;
 			JsonParseMaster parser;
 
@@ -62,25 +63,23 @@ namespace UnitTestLibraryDesktop
 			Assert::IsNull(parser.GetSharedData());
 			Assert::IsNull(moveConstructed.GetSharedData());
 
-// 			{
-// 				const JsonParseMaster::SharedData* sharedDataPtr = &sharedData;
-// 				Assert::AreEqual(sharedDataPtr, moveAssigned.GetSharedData());
-// 			}
-// 
-// 			moveAssigned.Parse(R"({ "mInt": 10 })");
-// 
-// 			JsonScopeParseHelper::SharedData moveConstructedSharedData(std::move(sharedData));
-// 			{
-// 				const JsonParseMaster::SharedData* sharedDataPtr = &moveConstructedSharedData;
-// 				Assert::AreEqual(sharedDataPtr, moveAssigned.GetSharedData());
-// 			}
-// 
-// 			JsonScopeParseHelper::SharedData moveAssignedSharedData;
-// 			moveAssignedSharedData = std::move(moveConstructedSharedData);
-// 			{
-// 				const JsonParseMaster::SharedData* sharedDataPtr = &moveAssignedSharedData;
-// 				Assert::AreEqual(sharedDataPtr, moveAssigned.GetSharedData());
-// 			}
+			{
+				const JsonParseMaster::SharedData* sharedDataPtr = &sharedData;
+				Assert::AreEqual(sharedDataPtr, moveAssigned.GetSharedData());
+			}
+
+			JsonScopeParseHelper::SharedData moveConstructedSharedData(std::move(sharedData));
+			{
+				const JsonParseMaster::SharedData* sharedDataPtr = &moveConstructedSharedData;
+				Assert::AreEqual(sharedDataPtr, moveAssigned.GetSharedData());
+			}
+
+			JsonScopeParseHelper::SharedData moveAssignedSharedData;
+			moveAssignedSharedData = std::move(moveConstructedSharedData);
+			{
+				const JsonParseMaster::SharedData* sharedDataPtr = &moveAssignedSharedData;
+				Assert::AreEqual(sharedDataPtr, moveAssigned.GetSharedData());
+			}
 		}
 
 		TEST_METHOD(Accessors)
@@ -116,20 +115,47 @@ namespace UnitTestLibraryDesktop
 			JsonParseMaster parser;
 
 			parser.SetSharedData(sharedData);
-
-			parser.Parse(R"({ "mInt": 10 })");
-
 			parser.AddHelper(helper);
+
+			std::string filename("Content/ScopeOfPrimitives.json");
+			parser.ParseFromFile(filename);
+
+			const Scope& scope = sharedData.GetScope();
+
+			Assert::AreEqual(10, scope.Find("Integer")->Get<int>());
+			Assert::AreEqual(10.0f, scope.Find("Float")->Get<float>());
+			Assert::AreEqual("10"s, scope.Find("String")->Get<std::string>());
+			Assert::AreEqual(glm::vec4(10), scope.Find("Vector")->Get<glm::vec4>());
+			Assert::AreEqual(glm::mat4(10), scope.Find("Matrix")->Get<glm::mat4>());
+
 			Assert::ExpectException<std::runtime_error>([&parser, &helper] { parser.AddHelper(helper); });
 
-			parser.Parse(R"({ "mInt": 10, "null": null })");
+			Scope* transferredScope = sharedData.TransferScope();
+
+			parser.ParseFromFile(filename);
+
+			Assert::AreEqual(10, transferredScope->Find("Integer")->Get<int>());
+			Assert::AreEqual(10.0f, transferredScope->Find("Float")->Get<float>());
+			Assert::AreEqual("10"s, transferredScope->Find("String")->Get<std::string>());
+			Assert::AreEqual(glm::vec4(10), transferredScope->Find("Vector")->Get<glm::vec4>());
+			Assert::AreEqual(glm::mat4(10), transferredScope->Find("Matrix")->Get<glm::mat4>());
 
 			Assert::IsTrue(parser.RemoveHelper(helper));
 
-			parser.Parse(R"({ "mInt": 10 })");
+			transferredScope->Clear();
+			parser.ParseFromFile(filename);
+			Assert::IsTrue(transferredScope->IsEmpty());
 
 			JsonScopeParseHelper::SharedData sharedData2;
 			parser.SetSharedData(sharedData2);
+			parser.ParseFromFile(filename);
+
+			sharedData2.SetScope(*transferredScope);
+			Assert::AreEqual(*transferredScope, sharedData2.GetScope());
+
+			delete transferredScope;
+
+
 			Assert::IsNull(sharedData.GetJsonParseMaster());
 		}
 
@@ -146,8 +172,16 @@ namespace UnitTestLibraryDesktop
 
 			Assert::IsNotNull(clone->GetSharedData());
 
-			clone->Parse(R"({ "mInt": 10 })");
+			std::string filename("Content/ScopeOfPrimitives.json");
+			clone->ParseFromFile(filename);
 
+			const Scope& scope = clone->GetSharedData()->As<JsonScopeParseHelper::SharedData>()->GetScope();
+
+			Assert::AreEqual(10, scope.Find("Integer")->Get<int>());
+			Assert::AreEqual(10.0f, scope.Find("Float")->Get<float>());
+			Assert::AreEqual("10"s, scope.Find("String")->Get<std::string>());
+			Assert::AreEqual(glm::vec4(10), scope.Find("Vector")->Get<glm::vec4>());
+			Assert::AreEqual(glm::mat4(10), scope.Find("Matrix")->Get<glm::mat4>());
 
 			delete clone;
 		}
@@ -266,6 +300,37 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual("10"s, nestedScope2->Find("String")->Get<std::string>());
 			Assert::AreEqual(glm::vec4(10), nestedScope2->Find("Vector")->Get<glm::vec4>());
 			Assert::AreEqual(glm::mat4(10), nestedScope2->Find("Matrix")->Get<glm::mat4>());
+		}
+
+		TEST_METHOD(ParseEdgeCases)
+		{
+			JsonScopeParseHelper::SharedData sharedData;
+			JsonScopeParseHelper helper;
+			JsonParseMaster parser;
+
+			parser.AddHelper(helper);
+			parser.SetSharedData(sharedData);
+
+			std::string filename("Content/ScopeEdgeCases.json");
+			parser.ParseFromFile(filename);
+
+			const Scope& scope = sharedData.GetScope();
+
+			Assert::IsNull(scope.Find("InvalidType"));
+			Assert::IsNull(scope.Find("NullValue"));
+			Assert::IsNull(scope.Find("Array2D"));
+			Assert::IsNull(scope.Find("MismatchedArray"));
+
+			const Scope::DataType* nestedScopeData = scope.Find("NestedScopesArray");
+			Assert::IsNotNull(nestedScopeData);
+
+			const Scope* nestedScope1 = nestedScopeData->Get<Scope*>(0);
+			Assert::AreEqual(10, nestedScope1->Find("Integer")->Get<int>(0));
+
+			const Scope* nestedScope2 = nestedScopeData->Get<Scope*>(1);
+			Assert::AreEqual(10.0f, nestedScope2->Find("Float")->Get<float>(0));
+
+			Assert::AreEqual(1_z, scope.Size());
 		}
 
 		TEST_METHOD(RTTITest)
