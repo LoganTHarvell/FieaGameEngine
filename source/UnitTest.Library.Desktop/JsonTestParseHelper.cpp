@@ -64,6 +64,7 @@ namespace UnitTests
 		SharedData* testHelperData = data.As<SharedData>();
 
 		auto& pair = mStack.Top();
+		key; // UNREFERENCED PARAMETER
 		assert(&pair.first == &key);
 
 		bool handled = true;
