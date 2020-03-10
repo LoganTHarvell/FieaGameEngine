@@ -39,6 +39,9 @@ namespace Library
 
 #pragma region Shared Data
 	public:
+		/// <summary>
+		/// Represents the SharedData needed to parse a Scope.
+		/// </summary>
 		class SharedData : public JsonParseMaster::SharedData
 		{
 			RTTI_DECLARATIONS(SharedData, JsonParseMaster::SharedData)
@@ -92,7 +95,7 @@ namespace Library
 		public:
 			/// <summary>
 			/// Called before every parse to initialize SharedData.
-			/// If there is no Scope associated with the SharedData, one is heap allocated for it.
+			/// If there is no Scope associated with the SharedData, a base Scope class instance is heap allocated to use.
 			/// </summary>
 			virtual void Initialize() override;
 #pragma endregion Parser Methods

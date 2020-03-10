@@ -224,36 +224,38 @@ namespace Library
 			}
 			else if (stackFrame.Value->isArray())
 			{
-				for (const auto& v : *stackFrame.Value)
+				auto& scopeData = stackFrame.Context[stackFrame.Key];
+
+				if (scopeData.Type() == Scope::Types::Unknown)
 				{
-					if (!v.isArray())
+					scopeData.SetType(stackFrame.Type);
+				}
+
+				if (scopeData.Size() != stackFrame.Value->size())
+				{
+					scopeData.Resize(stackFrame.Value->size());
+				}
+				
+				for (Json::Value::ArrayIndex i = 0; i < stackFrame.Value->size(); ++i)
+				{
+					const auto& v = stackFrame.Value->get(i, 0);
+
+					if (stackFrame.Type == Scope::Types::Integer)
 					{
-						auto& scopeData = stackFrame.Context[stackFrame.Key];
-
-						if (scopeData.Type() == Scope::Types::Unknown)
-						{
-							scopeData.SetType(stackFrame.Type);
-						}
-
-						scopeData.Resize(scopeData.Size() + 1);
-
-						if (stackFrame.Type == Scope::Types::Integer)
-						{
-							scopeData.Set(v.asInt(), scopeData.Size() - 1);
-						}
-						else if (stackFrame.Type == Scope::Types::Float)
-						{
-							scopeData.Set(static_cast<float>(v.asDouble()), scopeData.Size() - 1);
-						}
-						else
-						{
-							assert(v.isString());
-							scopeData.SetFromString(v.asString(), scopeData.Size() - 1);
-						}
-						
-						handled = true;
+						scopeData.Set(v.asInt(), i);
+					}
+					else if (stackFrame.Type == Scope::Types::Float)
+					{
+						scopeData.Set(static_cast<float>(v.asDouble()), i);
+					}
+					else
+					{
+						assert(v.isString());
+						scopeData.SetFromString(v.asString(), i);
 					}
 				}
+				
+				handled = true;
 			}
 			else
 			{
