@@ -518,7 +518,7 @@ namespace Library
 	void Datum::Resize(std::size_t size)
 	{
 		if (mType == Types::Unknown)	throw std::runtime_error("Data type unknown.");
-		if (!mInternalStorage)				throw std::runtime_error("Cannot modify external storage.");
+		if (!mInternalStorage)			throw std::runtime_error("Cannot modify external storage.");
 
 		if (size > mSize)
 		{

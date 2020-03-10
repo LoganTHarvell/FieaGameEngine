@@ -615,6 +615,12 @@ namespace Library
 		void SetType(Types type);
 
 		/// <summary>
+		/// Determines if the data is stored internally.
+		/// </summary>
+		/// <returns>True if the data is stored internally. Otherwise, when external, returns false.</returns>
+		bool HasInternalStorage();
+
+		/// <summary>
 		/// Gets the number of elements.
 		/// </summary>
 		/// <returns>Current number of elements.</returns>

@@ -75,6 +75,11 @@ namespace Library
 		mType = type;
 	}
 
+	inline bool Datum::HasInternalStorage()
+	{
+		return mInternalStorage;
+	}
+
 	inline std::size_t Datum::Size() const
 	{
 		return mSize;
