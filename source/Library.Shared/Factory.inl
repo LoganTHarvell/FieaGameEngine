@@ -4,6 +4,7 @@
 
 namespace Library
 {
+#pragma region Static Methods
 	template<typename T>
 	inline gsl::owner<T*> Factory<T>::Create(const std::string& className)
 	{
@@ -30,4 +31,5 @@ namespace Library
 	{
 		return mRegistry.Remove(factory.ClassName());
 	}
+#pragma endregion Static Methods
 }

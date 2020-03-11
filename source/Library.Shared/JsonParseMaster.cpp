@@ -178,17 +178,17 @@ namespace Library
 	{
 		for (const auto& member : value.getMemberNames())
 		{
-			Parse(member, value[member], value[member].isArray());
+			Parse(member, value[member]);
 		}
 	}
 
-	void JsonParseMaster::Parse(const std::string& key, const Json::Value& value, bool isArray)
+	void JsonParseMaster::Parse(const std::string& key, const Json::Value& value)
 	{		
 		for (auto helper : mHelpers)
 		{
 			if (value.isObject())
 			{
-				if (helper->StartHandler(*mSharedData, key, value, false))
+				if (helper->StartHandler(*mSharedData, key, value))
 				{
 					mSharedData->IncrementDepth();
 					ParseMembers(value);
@@ -199,7 +199,7 @@ namespace Library
 			}
 			else if (value.isArray())
 			{
-				if (helper->StartHandler(*mSharedData, key, value, true))
+				if (helper->StartHandler(*mSharedData, key, value))
 				{
 					for (const auto& element : value)
 					{
@@ -211,7 +211,7 @@ namespace Library
 						}
 						else if (element.isArray())
 						{
-							Parse(key, element, true);
+							Parse(key, element);
 						}
 						else
 						{
@@ -225,7 +225,7 @@ namespace Library
 			}
 			else
 			{
-				if (helper->StartHandler(*mSharedData, key, value, isArray))
+				if (helper->StartHandler(*mSharedData, key, value))
 				{
 					helper->EndHandler(*mSharedData, key);
 					break;

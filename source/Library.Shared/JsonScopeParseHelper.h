@@ -13,7 +13,7 @@
 
 namespace Library
 {
-	class JsonScopeParseHelper : public IJsonParseHelper
+	class JsonScopeParseHelper final : public IJsonParseHelper
 	{
 		RTTI_DECLARATIONS(JsonScopeParseHelper, IJsonParseHelper)
 
@@ -42,7 +42,7 @@ namespace Library
 		/// <summary>
 		/// Represents the SharedData needed to parse a Scope.
 		/// </summary>
-		class SharedData : public JsonParseMaster::SharedData
+		class SharedData final : public JsonParseMaster::SharedData
 		{
 			RTTI_DECLARATIONS(SharedData, JsonParseMaster::SharedData)
 
@@ -151,7 +151,7 @@ namespace Library
 		/// Verifies a value can be handled and then sets the SharedData context for a subsequent EndHandler call.
 		/// </summary>
 		/// <returns>True if handled. Otherwise, false.</returns>
-		virtual bool StartHandler(JsonParseMaster::SharedData& data, const std::string& key, const Json::Value& value, bool) override;
+		virtual bool StartHandler(JsonParseMaster::SharedData& data, const std::string& key, const Json::Value& value) override;
 
 		/// <summary>
 		/// Called by the associated JsonParseMaster during final parsing of a value.

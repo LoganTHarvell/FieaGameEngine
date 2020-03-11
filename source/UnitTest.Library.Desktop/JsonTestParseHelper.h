@@ -73,7 +73,7 @@ namespace UnitTests
 		};
 
 	public:
-		virtual bool StartHandler(Library::JsonParseMaster::SharedData& data, const std::string& key, const Json::Value& value, bool) override;
+		virtual bool StartHandler(Library::JsonParseMaster::SharedData& data, const std::string& key, const Json::Value& value) override;
 		virtual bool EndHandler(Library::JsonParseMaster::SharedData& data, const std::string& key) override;
 
 	private:

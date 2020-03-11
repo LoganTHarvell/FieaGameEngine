@@ -62,9 +62,8 @@ namespace Library
 		/// <param name="data">Reference to the SharedData instance to be filled with parsed data.</param>
 		/// <param name="key">A const reference to the key string associated witht the JSON::Value.</param>
 		/// <param name="value">The JSON::Value to be parsed.</param>
-		/// <param name="isArray">Boolean describing if the value is an array.</param>
 		/// <returns>True if the value is handled by the helper. Otherwise, false.</returns>
-		virtual bool StartHandler(JsonParseMaster::SharedData& data, const std::string& key, const Json::Value& value, bool isArray) = 0;
+		virtual bool StartHandler(JsonParseMaster::SharedData& data, const std::string& key, const Json::Value& value) = 0;
 
 		/// <summary>
 		/// Virtual handler method for determining how the helper will react to a handled JSON::Value.

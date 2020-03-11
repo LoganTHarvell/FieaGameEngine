@@ -28,7 +28,7 @@ namespace UnitTests
 		return it != mDataSizes.end() ? it->second : 0;
 	}
 
-	bool JsonTestParseHelper::StartHandler(Library::JsonParseMaster::SharedData& data, const std::string& key, const Json::Value& value, bool)
+	bool JsonTestParseHelper::StartHandler(Library::JsonParseMaster::SharedData& data, const std::string& key, const Json::Value& value)
 	{
 		if (!data.Is(SharedData::TypeIdClass())) return false;
 

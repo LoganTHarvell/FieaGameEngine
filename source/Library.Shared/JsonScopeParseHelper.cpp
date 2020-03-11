@@ -110,7 +110,7 @@ namespace Library
 #pragma endregion Shared Data Accessors
 
 #pragma region Handlers
-	bool JsonScopeParseHelper::StartHandler(JsonParseMaster::SharedData& data, const std::string& key, const Json::Value& value, bool)
+	bool JsonScopeParseHelper::StartHandler(JsonParseMaster::SharedData& data, const std::string& key, const Json::Value& value)
 	{
 		SharedData* testHelperData = data.As<SharedData>();
 		if (testHelperData == nullptr) return false;
@@ -235,10 +235,6 @@ namespace Library
 				{
 					scopeData.Resize(stackFrame.Value->size());
 				}
-				else if (scopeData.Size() < stackFrame.Value->size())
-				{
-					throw std::runtime_error(stackFrame.Key + " array has too many elements.");
-				}
 				
 				for (Json::Value::ArrayIndex i = 0; i < stackFrame.Value->size(); ++i)
 				{
@@ -273,10 +269,6 @@ namespace Library
 				if (scopeData.HasInternalStorage())
 				{
 					scopeData.Resize(1);
-				}
-				else if (scopeData.Size() < 1)
-				{
-					throw std::runtime_error(stackFrame.Key + " has too many elements.");
 				}
 
 				if (stackFrame.Type == Scope::Types::Integer)
