@@ -21,6 +21,14 @@ namespace Library
 	template<typename T>
 	class Factory
 	{
+#pragma region Type Definitions
+	public:
+		/// <summary>
+		/// Typed definition for registries of class names to factories that create the classes.
+		/// </summary>
+		using Registry = HashMap<const std::string&, const Factory&>;
+#pragma endregion Type Definitions
+
 #pragma region Static Members
 	public:
 		/// <summary>
@@ -32,6 +40,22 @@ namespace Library
 		/// Returned as the base class type T associated with the static Factory class.
 		/// </returns>
 		static gsl::owner<T*> Create(const std::string& className);
+
+		/// <summary>
+		/// Gets the current load factor of the factories registry.
+		/// </summary>
+		/// <returns>Float representing the load factor of the factories registry.</returns>
+		static float RegistryLoadFactor();
+
+		/// <summary>
+		/// Rehashes the factories registry with the specified size.
+		/// </summary>
+		/// <param name="size">Bucket count for the rehashed registry.</param>
+		/// <remarks>
+		/// Best called before factories are instantiated to a size larger than the number of expected registered factories.
+		/// Registry size is not equivalent to the max number of factories that can be registered.
+		/// </remarks>
+		static void RegistryRehash(const std::size_t size);
 
 	protected:
 		/// <summary>
@@ -45,21 +69,46 @@ namespace Library
 		/// </summary>
 		/// <param name="factory">Derived factory class instance to be removed from the static class registry.</param>
 		static bool Deregister(const Factory& factory);
-
-	private:
-		/// <summary>
-		/// Finds a factory reference registered with the static class that creates class with the given class name.
-		/// </summary>
-		/// <param name="className">Name of the class whose factory should be found.</param>
-		/// <returns>If found, a pointer to the factory that can create the class with the given class name. Otherwise, false.</returns>
-		static const Factory* const Find(const std::string& className);
 	
 	private:
 		/// <summary>
 		/// Mapping of class names to factories that can create the class instances.
 		/// </summary>
-		inline static HashMap<const std::string&, const Factory&> mRegistry;
+		inline static Registry mRegistry;
 #pragma endregion Static Members
+
+#pragma region Special Members
+	public:
+		/// <summary>
+		/// Default constructor.
+		/// </summary>
+		Factory() = default;
+
+		/// <summary>
+		/// Default destructor.
+		/// </summary>
+		virtual ~Factory() = default;
+
+		/// <summary>
+		/// Copy constructor.
+		/// </summary>
+		Factory(const Factory&) = delete;
+
+		/// <summary>
+		/// Copy assignment operator.
+		/// </summary>
+		Factory& operator=(const Factory&) = delete;
+
+		/// <summary>
+		/// Move constructor.
+		/// </summary>
+		Factory(Factory&&) = delete;
+
+		/// <summary>
+		/// Move assignment operator.
+		/// </summary>
+		Factory& operator=(Factory&&) = delete;
+#pragma endregion Special Members
 
 #pragma region Virtual Interface
 	private:
@@ -87,8 +136,8 @@ namespace Library
 	class ConcreteProductType##Factory final : public Factory<AbstractProductType>								\
 	{																											\
 	public:																										\
-		ConcreteProductType##Factory() { Factory<AbstractProductType>::Register(*this); }							\
-		~ConcreteProductType##Factory() { Factory<AbstractProductType>::Deregister(*this); }						\
+		ConcreteProductType##Factory() { Factory<AbstractProductType>::Register(*this); }						\
+		virtual ~ConcreteProductType##Factory() override { Factory<AbstractProductType>::Deregister(*this); }	\
 																												\
 		ConcreteProductType##Factory(const ConcreteProductType##Factory&) = delete;								\
 		ConcreteProductType##Factory& operator=(const ConcreteProductType##Factory&) = delete;					\

@@ -39,17 +39,47 @@ namespace UnitTestLibraryDesktop
 #endif
 		}
 
-		TEST_METHOD(CreateFactory)
+		TEST_METHOD(RehashRegistry)
 		{
 			ConcreteFactory(DerivedFoo, Foo)
 
-			DerivedFooFactory derivedFooFactory;
+			Factory<Foo>* derivedFooFactory = new DerivedFooFactory();
+
+			Factory<Foo>::RegistryRehash(10);
+			Assert::AreEqual(1/10.0f, Factory<Foo>::RegistryLoadFactor());
+
+			Factory<Foo>::RegistryRehash(Factory<Foo>::Registry::DefaultBucketCount);
+			Assert::AreEqual(1.0f/Factory<Foo>::Registry::DefaultBucketCount, Factory<Foo>::RegistryLoadFactor());
+
+			delete derivedFooFactory;
+		}
+
+		TEST_METHOD(RegisterFactory)
+		{
+			ConcreteFactory(DerivedFoo, Foo)
+
+			Factory<Foo>* derivedFooFactory = new DerivedFooFactory();
+
 			Foo* foo = Factory<Foo>::Create("DerivedFoo");
-			
 			Assert::IsNotNull(foo);
 			Assert::IsTrue(foo->Is(DerivedFoo::TypeIdClass()));
-
 			if (foo != nullptr) delete foo;
+			
+			delete derivedFooFactory;
+		}
+
+		TEST_METHOD(DeregisterFactory)
+		{
+			ConcreteFactory(DerivedFoo, Foo)
+
+			Factory<Foo>* derivedFooFactory = new DerivedFooFactory();
+
+			Foo* foo = Factory<Foo>::Create("DerivedFoo");
+			if (foo != nullptr) delete foo;
+			
+			delete derivedFooFactory;
+
+			Assert::IsNull(Factory<Foo>::Create("DerivedFoo"));
 		}
 
 	private:

@@ -55,10 +55,10 @@ namespace Library
 		/// <summary>
 		/// Registry type for containing TypeInfo.
 		/// </summary>
-		using RegistryType = HashMap<IdType, const TypeInfo&>;
+		using Registry = HashMap<IdType, const TypeInfo&>;
 #pragma endregion Type Definitions
 
-#pragma region Constructors, Destructor, Assignment
+#pragma region Special Members
 	private:
 		TypeManager() = default;
 		~TypeManager() = default;
@@ -68,7 +68,7 @@ namespace Library
 		TypeManager(TypeManager&&) = delete;
 		TypeManager& operator=(const TypeManager&) = delete;
 		TypeManager& operator=(TypeManager&&) = delete;
-#pragma endregion Constructors, Destructor, Assignment
+#pragma endregion Special Members
 
 #pragma region Instance Management
 	public:
@@ -76,7 +76,7 @@ namespace Library
 		/// Initializes the TypeManager instance, if necessary.
 		/// </summary>
 		/// <param name="capacity">Initial capacity for the registry, not a max size.</param>
-		static void Create(const std::size_t capacity=RegistryType::DefaultBucketCount);
+		static void Create(const std::size_t capacity=Registry::DefaultBucketCount);
 
 		/// <summary>
 		/// Deletes the TypeManager instance, if necessary.
@@ -138,7 +138,7 @@ namespace Library
 		/// <summary>
 		/// Registry of IdType keys and TypeInfo values, containing a SignatureListType value and the parent IdType value.
 		/// </summary>
-		RegistryType mRegistry;
+		Registry mRegistry;
 #pragma endregion Data Members
 	};
 

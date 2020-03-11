@@ -53,6 +53,7 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(glm::vec4(0.0f), a.Find("Vector")->Get<glm::vec4>());
 			Assert::AreEqual(glm::mat4(0.0f), a.Find("Matrix")->Get<glm::mat4>());
 			Assert::AreEqual("0"s, a.Find("String")->Get<std::string>());
+			Assert::AreEqual(0, a.Find("Rtti")->Get<RTTI*>()->As<Foo>()->Data());
 
 			AttributedFoo b(10);
 			Assert::AreEqual(10, b.Find("Integer")->Get<int>());
@@ -60,9 +61,15 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(glm::vec4(10.0f), b.Find("Vector")->Get<glm::vec4>());
 			Assert::AreEqual(glm::mat4(10.0f), b.Find("Matrix")->Get<glm::mat4>());
 			Assert::AreEqual("10"s, b.Find("String")->Get<std::string>());
+			Assert::AreEqual(10, b.Find("Rtti")->Get<RTTI*>()->As<Foo>()->Data());
 
 			AttributedFoo c = AttributedFoo(10);
-			Assert::AreEqual(b, c);
+			Assert::AreEqual(10, c.Find("Integer")->Get<int>());
+			Assert::AreEqual(10.0f, c.Find("Float")->Get<float>());
+			Assert::AreEqual(glm::vec4(10.0f), c.Find("Vector")->Get<glm::vec4>());
+			Assert::AreEqual(glm::mat4(10.0f), c.Find("Matrix")->Get<glm::mat4>());
+			Assert::AreEqual("10"s, c.Find("String")->Get<std::string>());
+			Assert::AreEqual(10, c.Find("Rtti")->Get<RTTI*>()->As<Foo>()->Data());
 		}
 
 		TEST_METHOD(CopySemantics)
@@ -100,24 +107,12 @@ namespace UnitTestLibraryDesktop
 		TEST_METHOD(EqualityOperators)
 		{
 			AttributedFoo a(10);
+			AttributedFoo b(10);
+			AttributedFoo c(20);
 
-			const auto& auxInteger = a.AppendAuxiliaryAttribute("auxInteger") = 20;
-			const auto& auxString = a.AppendAuxiliaryAttribute("auxString") = { "20", "30", "40" };
-			const auto& auxScope = a.AppendAuxiliaryAttribute("auxScope");
-			a.AppendScope("auxScope");
-			
-			AttributedFoo b(a);
-
-			Assert::AreEqual(0, b.Find("Integer")->Get<int>());
-			Assert::AreEqual(0.0f, b.Find("Float")->Get<float>());
-			Assert::AreEqual(glm::vec4(0.0f), b.Find("Vector")->Get<glm::vec4>());
-			Assert::AreEqual(glm::mat4(0.0f), b.Find("Matrix")->Get<glm::mat4>());
-			Assert::AreEqual("0"s, b.Find("String")->Get<std::string>());
-			Assert::AreEqual(0, b.Find("Rtti")->Get<RTTI*>()->As<Foo>()->Data());
-
-			Assert::AreEqual(auxInteger, *b.Find("auxInteger"));
-			Assert::AreEqual(auxString, *b.Find("auxString"));
-			Assert::AreEqual(auxScope, *b.Find("auxScope"));
+			Assert::AreEqual(a, b);
+			Assert::IsFalse(a != b);
+			Assert::IsTrue(a != c);
 		}
 
 		TEST_METHOD(MoveSemantics)

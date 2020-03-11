@@ -1,5 +1,6 @@
 #pragma once
 
+// Header File
 #include "Factory.h"
 
 namespace Library
@@ -8,15 +9,20 @@ namespace Library
 	template<typename T>
 	inline gsl::owner<T*> Factory<T>::Create(const std::string& className)
 	{
-		const Factory<T>* const factoryPtr = Find(className);
-		return factoryPtr ? factoryPtr->Create() : nullptr;
+		auto factoryIt = mRegistry.Find(className);
+		return factoryIt != mRegistry.end() ? factoryIt->second.Create() : nullptr;
 	}
 
 	template<typename T>
-	inline const Factory<T>* const Factory<T>::Find(const std::string& className)
+	inline float Factory<T>::RegistryLoadFactor()
 	{
-		auto it = mRegistry.Find(className);
-		return it != mRegistry.end() ? &it->second : nullptr;
+		return mRegistry.LoadFactor();
+	}
+
+	template<typename T>
+	inline void Factory<T>::RegistryRehash(const std::size_t size)
+	{
+		mRegistry.Rehash(size);
 	}
 
 	template<typename T>
