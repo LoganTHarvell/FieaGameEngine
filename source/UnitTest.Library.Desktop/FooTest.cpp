@@ -2,6 +2,7 @@
 
 #include "ToStringSpecialization.h"
 #include "Foo.h"
+#include "DerivedFoo.h"
 
 
 using namespace std::string_literals;
@@ -106,6 +107,14 @@ namespace UnitTestLibraryDesktop
 
 			Assert::IsTrue(a.Is(Foo::TypeIdClass()));
 			Assert::IsTrue(a.Equals(&b));
+
+			DerivedFoo aDerived;
+			aDerived.SetData(10);
+			DerivedFoo bDerived;
+			bDerived.SetData(10);
+
+			Assert::IsTrue(aDerived.Is(DerivedFoo::TypeIdClass()));
+			Assert::IsTrue(aDerived.Equals(&bDerived));
 		}
 
 	private:

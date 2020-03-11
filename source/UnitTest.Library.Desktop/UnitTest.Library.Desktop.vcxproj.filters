@@ -71,6 +71,12 @@
     <ClCompile Include="UtilityTest.cpp">
       <Filter>Utility Tests</Filter>
     </ClCompile>
+    <ClCompile Include="FactoryTest.cpp">
+      <Filter>Utility Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="DerivedFoo.cpp">
+      <Filter>Support Code</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -94,6 +100,9 @@
     </ClInclude>
     <ClInclude Include="JsonTestParseHelper.h">
       <Filter>JSON Parser Test</Filter>
+    </ClInclude>
+    <ClInclude Include="DerivedFoo.h">
+      <Filter>Support Code</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

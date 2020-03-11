@@ -6,7 +6,7 @@
 
 namespace UnitTests
 {
-	class Foo final : public Library::RTTI
+	class Foo : public Library::RTTI
 	{
 		RTTI_DECLARATIONS(Foo, Library::RTTI)
 
@@ -16,7 +16,7 @@ namespace UnitTests
 		Foo(Foo&& rhs) noexcept;
 		Foo& operator=(const Foo& rhs);
 		Foo& operator=(Foo&& rhs) noexcept;
-		~Foo() = default;
+		virtual ~Foo() = default;
 
 
 		bool operator==(const Foo& rhs) const noexcept;

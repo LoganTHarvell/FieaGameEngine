@@ -59,6 +59,9 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)JsonScopeParseHelper.h">
       <Filter>JSON Parser</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Factory.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)Scope.inl" />
@@ -86,6 +89,9 @@
     </None>
     <None Include="$(MSBuildThisFileDirectory)Stack.inl">
       <Filter>Containers\Stack</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Factory.inl">
+      <Filter>Utility</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

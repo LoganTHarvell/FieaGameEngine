@@ -3,18 +3,15 @@
 
 namespace UnitTests
 {
-	Foo::Foo(int data) :
-		mData(std::make_unique<int>(data))
+	Foo::Foo(int data) : mData(std::make_unique<int>(data))
 	{
 	}
 
-	Foo::Foo(const Foo& rhs) :
-		mData(std::make_unique<int>(*rhs.mData))
+	Foo::Foo(const Foo& rhs) : mData(std::make_unique<int>(*rhs.mData))
 	{
 	}
 
-	Foo::Foo(Foo&& rhs) noexcept :
-		mData(std::move(rhs.mData))
+	Foo::Foo(Foo&& rhs) noexcept : mData(std::move(rhs.mData))
 	{
 		rhs.mData = nullptr;
 	}

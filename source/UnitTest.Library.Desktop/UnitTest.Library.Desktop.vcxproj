@@ -188,6 +188,8 @@ xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
     <ClCompile Include="DefaultEqualityTest.cpp" />
     <ClCompile Include="DefaultHashTest.cpp" />
     <ClCompile Include="DerivedAttributedFoo.cpp" />
+    <ClCompile Include="DerivedFoo.cpp" />
+    <ClCompile Include="FactoryTest.cpp" />
     <ClCompile Include="Foo.cpp" />
     <ClCompile Include="FooTest.cpp" />
     <ClCompile Include="HashMapTest.cpp" />
@@ -218,6 +220,7 @@ xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
     <ClInclude Include="AttributedFoo.h" />
     <ClInclude Include="Bar.h" />
     <ClInclude Include="DerivedAttributedFoo.h" />
+    <ClInclude Include="DerivedFoo.h" />
     <ClInclude Include="Foo.h" />
     <ClInclude Include="JsonTestParseHelper.h" />
     <ClInclude Include="pch.h" />
