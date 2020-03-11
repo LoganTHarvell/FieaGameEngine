@@ -38,15 +38,6 @@
     <ClCompile Include="AttributedFooTest.cpp">
       <Filter>Attributed Tests</Filter>
     </ClCompile>
-    <ClCompile Include="AttributedFoo.cpp">
-      <Filter>Attributed Tests</Filter>
-    </ClCompile>
-    <ClCompile Include="AttributedBar.cpp">
-      <Filter>Attributed Tests</Filter>
-    </ClCompile>
-    <ClCompile Include="DerivedAttributedFoo.cpp">
-      <Filter>Attributed Tests</Filter>
-    </ClCompile>
     <ClCompile Include="TypeManagerTest.cpp">
       <Filter>Attributed Tests</Filter>
     </ClCompile>
@@ -77,6 +68,15 @@
     <ClCompile Include="DerivedFoo.cpp">
       <Filter>Support Code</Filter>
     </ClCompile>
+    <ClCompile Include="AttributedBar.cpp">
+      <Filter>Support Code\Attributed Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="AttributedFoo.cpp">
+      <Filter>Support Code\Attributed Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="DerivedAttributedFoo.cpp">
+      <Filter>Support Code\Attributed Classes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -89,20 +89,20 @@
     <ClInclude Include="Bar.h">
       <Filter>Support Code</Filter>
     </ClInclude>
-    <ClInclude Include="AttributedBar.h">
-      <Filter>Attributed Tests</Filter>
-    </ClInclude>
-    <ClInclude Include="AttributedFoo.h">
-      <Filter>Attributed Tests</Filter>
-    </ClInclude>
-    <ClInclude Include="DerivedAttributedFoo.h">
-      <Filter>Attributed Tests</Filter>
-    </ClInclude>
     <ClInclude Include="JsonTestParseHelper.h">
       <Filter>JSON Parser Test</Filter>
     </ClInclude>
     <ClInclude Include="DerivedFoo.h">
       <Filter>Support Code</Filter>
+    </ClInclude>
+    <ClInclude Include="AttributedBar.h">
+      <Filter>Support Code\Attributed Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="AttributedFoo.h">
+      <Filter>Support Code\Attributed Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="DerivedAttributedFoo.h">
+      <Filter>Support Code\Attributed Classes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -126,6 +126,9 @@
     </Filter>
     <Filter Include="Content">
       <UniqueIdentifier>{7c84e84d-c64a-45c5-9935-43b0c86deccd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Support Code\Attributed Classes">
+      <UniqueIdentifier>{ad1ac5c6-b7b7-49d2-8bb9-2b78a080db17}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

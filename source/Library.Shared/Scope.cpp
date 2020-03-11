@@ -226,7 +226,7 @@ namespace Library
 
 		for (const auto& pairPtr : mPairPtrs)
 		{
-			const DataType* rhsData = Find(pairPtr->first);
+			const DataType* rhsData = rhs.Find(pairPtr->first);
 			if (!rhsData || pairPtr->second != *rhsData) return false;
 		}
 

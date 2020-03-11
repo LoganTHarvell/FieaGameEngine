@@ -63,7 +63,8 @@ namespace Library
 		/// Move assignment operator.
 		/// </summary>
 		/// <param name="rhs">Right hand side Attributed class to be moved.</param>
-		/// <returns></returns>
+		/// <returns>Reference to the newly modified Attributed instance.</returns>
+		/// <remarks>The right hand side Attributed instance is now completely empty.</remarks>
 		Attributed& operator=(Attributed&& rhs) noexcept;
 #pragma endregion Constructors, Destructor, Assignment
 		
@@ -76,6 +77,25 @@ namespace Library
 		/// <returns>Pointer to a newly heap allocated copy of the instance.</returns>
 		virtual gsl::owner<Scope*> Clone() const override = 0;
 #pragma endregion Pure Virtual Constructor
+
+#pragma region Boolean Operators
+	public:
+		/// <summary>
+		/// Equals operator. 
+		/// Checks if the size of the Scope and the data values are equal to the right hand side Scope.
+		/// </summary>
+		/// <param name="rhs">Scope on the right hand side to be compared to the left.</param>
+		/// <returns>True when Scope values are equivalent, otherwise false.</returns>
+		bool operator==(const Attributed& rhs) const noexcept;
+
+		/// <summary>
+		/// Not equal operator. 
+		/// Checks if the size of the Scope and the data values are not equal to the right hand side Scope.
+		/// </summary>
+		/// <param name="rhs">Scope on the right hand side to be compared to the left.</param>
+		/// <returns>True when Scope values are not equivalent, otherwise false.</returns>
+		bool operator!=(const Attributed& rhs) const noexcept;
+#pragma endregion Boolean Operators
 
 #pragma region Accessors
 	public:
@@ -141,6 +161,13 @@ namespace Library
 		/// </summary>
 		/// <returns>String representation of the Attributed class.</returns>
 		virtual std::string ToString() const override;
+
+		/// <summary>
+		/// RTTI override that determines if the Attributed instance is equal to a given RTTI derived class instance.
+		/// </summary>
+		/// <param name="rhs">RTTI derived class instance to be compared against.</param>
+		/// <returns>True if the Attributed instance is equivalent to the given RTTI derived class instance.</returns>
+		bool Equals(const RTTI* rhs) const;
 #pragma endregion RTTI Overrides
 
 #pragma region Helper Methods

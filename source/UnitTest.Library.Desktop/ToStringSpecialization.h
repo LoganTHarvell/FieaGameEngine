@@ -121,6 +121,26 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 	}
 #pragma endregion Bar
 
+#pragma region Attributed
+	template<>
+	inline std::wstring ToString<Attributed>(const Attributed& t)
+	{
+		RETURN_WIDE_STRING(t.ToString().c_str());
+	}
+
+	template<>
+	inline std::wstring ToString<Attributed>(const Attributed* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<Attributed>(Attributed* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+#pragma endregion Attributed
+
 #pragma region AttributedFoo
 	template<>
 	inline std::wstring ToString<AttributedFoo>(const AttributedFoo& t)

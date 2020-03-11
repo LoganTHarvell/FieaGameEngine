@@ -121,9 +121,9 @@ namespace UnitTestLibraryDesktop
 
 		TEST_METHOD(Clone)
 		{
-			Scope* scope = new AttributedBar();
+			Attributed* scope = new AttributedBar(10);
 			Scope* tmp = scope->Clone();
-			Assert::AreEqual(*AttributedBar().As<Scope>(), *tmp);
+			Assert::AreEqual(10, tmp->Find("integer")->Get<int>());
 			delete scope;
 			delete tmp;
 		}

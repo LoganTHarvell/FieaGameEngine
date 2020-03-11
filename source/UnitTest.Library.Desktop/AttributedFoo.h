@@ -25,14 +25,24 @@ namespace UnitTests
 		static const Library::TypeManager::TypeInfo& TypeInfo();
 
 	private:
-		int mIntData{ 0 };
-		float mFloatData{ 0.0f };
-		glm::vec4 mVectorData{ 0.0f };
-		glm::mat4 mMatrixData{ 0.0f };
-		std::string mStringData{ "0" };
-		
-		Foo foo{ 0 };
-		RTTI* mRttiData;
+		int mInt{ 0 };
+		float mFloat{ 0.0f };
+		glm::vec4 mVector{ 0.0f };
+		glm::mat4 mMatrix{ 0.0f };
+		std::string mString{ "0" };
 
+		Foo foo{ 0 };
+		RTTI* mRtti{ &foo };
+
+		int mIntArray[2]{ 0 };
+		float mFloatArray[2]{ 0.0f };
+		glm::vec4 mVectorArray[2]{	{ 0.0f, 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 0.0f }	};
+		glm::mat4 mMatrixArray[2]{	{{ 0.0f, 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 0.0f }},
+									{{ 0.0f, 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 0.0f }}	};
+		std::string mStringArray[2]{ "0", "0" };
+		
+		Foo foo1{ 0 };
+		Foo foo2{ 0 };
+		RTTI* mRttiArray[2]{ &foo1, &foo2 };
 	};
 }

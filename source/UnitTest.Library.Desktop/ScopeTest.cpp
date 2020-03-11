@@ -699,6 +699,8 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(copyChild1_0, adopter.Adopt(child1_0, "child0"));
 			Assert::AreEqual(copyChild0_1, adopter.Adopt(child0_1, "child0"));
 			Assert::AreEqual(copyChild0_0_0, adopter.Adopt(child0_0_0, "child0"));
+
+			delete copyChild0_0.Orphan(*copyChild0_0.Find("child0_0")->Get<Scope*>());
 			Assert::AreEqual(copyChild0_0, adopter.Adopt(child0_0, "child0"));
 
 			Assert::AreEqual(4_z, adopter.Find("child0")->Size());

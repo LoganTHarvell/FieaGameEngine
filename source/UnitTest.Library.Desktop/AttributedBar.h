@@ -29,6 +29,6 @@ namespace UnitTests
 		static const Library::TypeManager::TypeInfo& TypeInfo();
 
 	private:
-		std::unique_ptr<int> mIntData;
+		int mIntData;
 	};
 }

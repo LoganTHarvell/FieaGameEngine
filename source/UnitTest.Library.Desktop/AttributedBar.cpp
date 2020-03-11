@@ -5,19 +5,19 @@ namespace UnitTests
 {
 
 	AttributedBar::AttributedBar(int data) :
-		Attributed(AttributedBar::TypeIdClass()), mIntData(std::make_unique<int>(data))
+		Attributed(AttributedBar::TypeIdClass()), mIntData(data)
 	{
 	}
 
 	AttributedBar::AttributedBar(const AttributedBar& rhs) :
-		Attributed(rhs), mIntData(std::make_unique<int>(*rhs.mIntData))
+		Attributed(rhs), mIntData(rhs.mIntData)
 	{
 	}
 
 	AttributedBar::AttributedBar(AttributedBar&& rhs) noexcept :
-		Attributed(std::move(rhs)), mIntData(std::move(rhs.mIntData))
+		Attributed(std::move(rhs)), mIntData(rhs.mIntData)
 	{
-		rhs.mIntData = nullptr;
+		rhs.mIntData = 0;
 	}
 
 	AttributedBar& AttributedBar::operator=(const AttributedBar& rhs)
@@ -26,7 +26,7 @@ namespace UnitTests
 
 		if (this != &rhs)
 		{
-			*mIntData = *rhs.mIntData;
+			mIntData = rhs.mIntData;
 		}
 
 		return *this;
@@ -38,8 +38,8 @@ namespace UnitTests
 
 		if (this != &rhs)
 		{
-			mIntData = std::move(rhs.mIntData);
-			rhs.mIntData = nullptr;
+			mIntData = rhs.mIntData;
+			rhs.mIntData = 0;
 		}
 
 		return *this;
@@ -47,17 +47,17 @@ namespace UnitTests
 
 	int& AttributedBar::Data()
 	{
-		return *mIntData;
+		return mIntData;
 	}
 
 	int AttributedBar::Data() const
 	{
-		return *mIntData;
+		return mIntData;
 	}
 	
 	void AttributedBar::SetData(int data)
 	{
-		*mIntData = data;
+		mIntData = data;
 	}
 
 	bool AttributedBar::Equals(const RTTI* rhs) const
@@ -65,12 +65,12 @@ namespace UnitTests
 		if (!rhs) return false;
 
 		const AttributedBar* rhsFoo = rhs->As<AttributedBar>();
-		return rhsFoo ? *mIntData == rhsFoo->Data() : false;
+		return rhsFoo ? mIntData == rhsFoo->Data() : false;
 	}
 
 	std::string AttributedBar::ToString() const
 	{
-		return "AttributedBar: " + std::to_string(*mIntData);
+		return "AttributedBar: " + std::to_string(mIntData);
 	}
 
 	gsl::owner<Library::Scope*> AttributedBar::Clone() const

@@ -56,6 +56,29 @@ namespace Library
 	}
 #pragma endregion Constructors, Destructor, Assignment
 
+#pragma region Boolean Operators
+	bool Attributed::operator==(const Attributed& rhs) const noexcept
+	{
+		if (this == &rhs)								return true;
+		if (mPairPtrs.Size() != rhs.mPairPtrs.Size())	return false;
+
+		for (std::size_t i = 1; i < mPairPtrs.Size(); ++i)
+		{
+			const auto& pairPtr = mPairPtrs[i];
+
+			const DataType* rhsData = rhs.Find(pairPtr->first);
+			if (!rhsData || pairPtr->second != *rhsData) return false;
+		}
+
+		return true;
+	}
+
+	bool Attributed::operator!=(const Attributed& rhs) const noexcept
+	{
+		return !(operator==(rhs));
+	}
+#pragma endregion Boolean Operators
+
 #pragma region Accessors
 	bool Attributed::IsAttribute(const NameType& name)
 	{
@@ -148,6 +171,15 @@ namespace Library
 
 		return oss.str();
 	}
+
+	bool Attributed::Equals(const RTTI* rhs) const
+	{
+		if (this == rhs)	return true;
+		if (!rhs)			return false;
+
+		const Attributed* rhsAttributedPtr = rhs->As<Attributed>();
+		return rhsAttributedPtr ? operator==(*rhsAttributedPtr) : false;
+	}
 #pragma endregion RTTI Overrides
 
 #pragma region Helper Methods
@@ -186,8 +218,10 @@ namespace Library
 			if (!signature.HasInternalStorage)
 			{
 				std::byte* address = reinterpret_cast<std::byte*>(this) + signature.Offset;
-				mPairPtrs[index++]->second.SetStorage(signature.Type, gsl::span(address, signature.Size));
+				mPairPtrs[index]->second.SetStorage(signature.Type, gsl::span(address, signature.Size));
 			}
+
+			++index;
 		}
 	}
 #pragma endregion Helper Methods

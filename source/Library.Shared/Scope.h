@@ -385,7 +385,7 @@ namespace Library
 		/// RTTI override that determines if the Scope is equal to a given RTTI derived class instance.
 		/// </summary>
 		/// <param name="rhs">RTTI derived class instance to be compared against.</param>
-		/// <returns>True if the the Scope is equivalent to the given RTTI derived class instance.</returns>
+		/// <returns>True if the Scope is equivalent to the given RTTI derived class instance.</returns>
 		virtual bool Equals(const RTTI* rhs) const override;
 #pragma endregion RTTI Overrides
 

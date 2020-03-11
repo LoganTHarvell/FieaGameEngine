@@ -235,6 +235,10 @@ namespace Library
 				{
 					scopeData.Resize(stackFrame.Value->size());
 				}
+				else if (scopeData.Size() < stackFrame.Value->size())
+				{
+					throw std::runtime_error(stackFrame.Key + " array has too many elements.");
+				}
 				
 				for (Json::Value::ArrayIndex i = 0; i < stackFrame.Value->size(); ++i)
 				{
@@ -269,6 +273,10 @@ namespace Library
 				if (scopeData.HasInternalStorage())
 				{
 					scopeData.Resize(1);
+				}
+				else if (scopeData.Size() < 1)
+				{
+					throw std::runtime_error(stackFrame.Key + " has too many elements.");
 				}
 
 				if (stackFrame.Type == Scope::Types::Integer)
