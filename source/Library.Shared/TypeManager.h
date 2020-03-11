@@ -123,6 +123,22 @@ namespace Library
 		void Deregister(const IdType typeId);
 
 		/// <summary>
+		/// Gets the current load factor of the type registry.
+		/// </summary>
+		/// <returns>Float representing the load factor of the type registry.</returns>
+		float RegistryLoadFactor();
+
+		/// <summary>
+		/// Rehashes the type registry with the specified size.
+		/// </summary>
+		/// <param name="size">Bucket count for the rehashed registry.</param>
+		/// <remarks>
+		/// Best called before types are instantiated to a size larger than the number of expected registered types.
+		/// Registry size is not equivalent to the max number of types that can be registered.
+		/// </remarks>
+		void RegistryRehash(const std::size_t size);
+
+		/// <summary>
 		/// Removes all Attributed types from the registry.
 		/// </summary>
 		void Clear();

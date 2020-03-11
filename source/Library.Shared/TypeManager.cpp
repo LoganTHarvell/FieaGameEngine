@@ -47,6 +47,11 @@ namespace Library
 		mRegistry.Remove(typeId);
 	}
 
+	void TypeManager::RegistryRehash(const std::size_t size)
+	{
+		mRegistry.Rehash(size);
+	}
+
 	void TypeManager::Clear()
 	{
 		mRegistry.Clear();

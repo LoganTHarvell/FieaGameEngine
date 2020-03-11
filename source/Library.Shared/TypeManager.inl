@@ -23,6 +23,11 @@ namespace Library
 			throw std::runtime_error("Type registered more than once.");
 		}
 	}
+
+	inline float TypeManager::RegistryLoadFactor()
+	{
+		return mRegistry.LoadFactor();
+	}
 #pragma endregion Registry
 
 #pragma region Global Registry Function

@@ -78,6 +78,20 @@ namespace UnitTestLibraryDesktop
 			Assert::IsFalse(TypeManager::Instance()->IsRegistered(AttributedBar::TypeIdClass()));
 		}
 
+		TEST_METHOD(RehashRegistry)
+		{
+			TypeManager::Create();
+			TypeManager* instance = TypeManager::Instance();
+
+			instance->RegistryRehash(10);
+			Assert::AreEqual(0.0f, instance->RegistryLoadFactor());
+
+			instance->Register<AttributedFoo>();
+			Assert::AreEqual(1 / 10.0f, instance->RegistryLoadFactor());
+
+			instance->RegistryRehash(TypeManager::Registry::DefaultBucketCount);
+			Assert::AreEqual(1.0f / TypeManager::Registry::DefaultBucketCount, instance->RegistryLoadFactor());
+		}
 
 	private:
 		static _CrtMemState sStartMemState;

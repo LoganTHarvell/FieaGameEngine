@@ -43,9 +43,10 @@ namespace UnitTestLibraryDesktop
 		{
 			ConcreteFactory(DerivedFoo, Foo)
 
-			Factory<Foo>* derivedFooFactory = new DerivedFooFactory();
-
 			Factory<Foo>::RegistryRehash(10);
+			Assert::AreEqual(0.0f, Factory<Foo>::RegistryLoadFactor());
+
+			Factory<Foo>* derivedFooFactory = new DerivedFooFactory();
 			Assert::AreEqual(1/10.0f, Factory<Foo>::RegistryLoadFactor());
 
 			Factory<Foo>::RegistryRehash(Factory<Foo>::Registry::DefaultBucketCount);
