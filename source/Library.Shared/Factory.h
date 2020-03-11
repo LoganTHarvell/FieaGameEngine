@@ -35,16 +35,16 @@ namespace Library
 
 	protected:
 		/// <summary>
-		/// Registers a derived factory to the static Factory class.
+		/// Registers a derived factory to the static Factory class registry.
 		/// </summary>
 		/// <param name="factory">Derived factory class instance to be added to the static class registry.</param>
-		static void Add(const Factory& factory);
+		static void Register(const Factory& factory);
 
 		/// <summary>
-		/// Removes a derived factory from the static Factory class.
+		/// Removes a derived factory from the static Factory class registry.
 		/// </summary>
 		/// <param name="factory">Derived factory class instance to be removed from the static class registry.</param>
-		static bool Remove(const Factory& factory);
+		static bool Deregister(const Factory& factory);
 
 	private:
 		/// <summary>
@@ -87,8 +87,8 @@ namespace Library
 	class ConcreteProductType##Factory final : public Factory<AbstractProductType>								\
 	{																											\
 	public:																										\
-		ConcreteProductType##Factory() { Factory<AbstractProductType>::Add(*this); }							\
-		~ConcreteProductType##Factory() { Factory<AbstractProductType>::Remove(*this); }						\
+		ConcreteProductType##Factory() { Factory<AbstractProductType>::Register(*this); }							\
+		~ConcreteProductType##Factory() { Factory<AbstractProductType>::Deregister(*this); }						\
 																												\
 		ConcreteProductType##Factory(const ConcreteProductType##Factory&) = delete;								\
 		ConcreteProductType##Factory& operator=(const ConcreteProductType##Factory&) = delete;					\

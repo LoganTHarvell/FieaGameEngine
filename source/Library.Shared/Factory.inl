@@ -20,14 +20,14 @@ namespace Library
 	}
 
 	template<typename T>
-	inline void Factory<T>::Add(const Factory& factory)
+	inline void Factory<T>::Register(const Factory& factory)
 	{
 		auto [it, isNew] = mRegistry.Insert({ factory.ClassName(), factory });
 		if (!isNew) throw std::runtime_error("Factory registered more than once.");
 	}
 
 	template<typename T>
-	inline bool Factory<T>::Remove(const Factory& factory)
+	inline bool Factory<T>::Deregister(const Factory& factory)
 	{
 		return mRegistry.Remove(factory.ClassName());
 	}
