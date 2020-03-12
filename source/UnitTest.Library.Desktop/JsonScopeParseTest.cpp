@@ -3,7 +3,7 @@
 #include "ToStringSpecialization.h"
 #include "JsonParseMaster.h"
 #include "JsonScopeParseHelper.h"
-
+#include "AttributedFoo.h"
 
 using namespace std::string_literals;
 
@@ -331,6 +331,45 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(10.0f, nestedScope2->Find("Float")->Get<float>(0));
 
 			Assert::AreEqual(1_z, scope.Size());
+		}
+
+		TEST_METHOD(ParseAttributed)
+		{
+			TypeManager::Create();
+			RegisterType<AttributedFoo>();
+
+			AttributedFoo foo;
+
+			JsonScopeParseHelper::SharedData sharedData(foo);
+			JsonScopeParseHelper helper;
+			JsonParseMaster parser;
+
+			parser.AddHelper(helper);
+			parser.SetSharedData(sharedData);
+
+			std::string filename("Content/AttributedFoo.json");
+			parser.ParseFromFile(filename);
+
+			foo.Find("Rtti")->Get<RTTI*>()->As<Foo>()->SetData(10);
+
+			auto rttiArray = foo.Find("RttiArray");
+			rttiArray->Get<RTTI*>(0)->As<Foo>()->SetData(10);
+			rttiArray->Get<RTTI*>(1)->As<Foo>()->SetData(10);
+
+			AttributedFoo fooTen(10);
+			fooTen.AppendScope("Scope").Append("Integer") = 10;
+			fooTen.AppendScope("ScopeArray").Append("Integer") = 10;
+			fooTen.AppendScope("ScopeArray").Append("Float") = 10.0f;
+
+			Assert::AreEqual(fooTen, foo);
+
+			Assert::ExpectException<std::runtime_error>([&parser] 
+			{ 
+				std::string invalidIntegerArray = R"({ "IntegerArray": { "type": "integer", "value": [ 20, 20, 20 ] }})"s;
+				parser.Parse(invalidIntegerArray); 
+			});
+			
+			TypeManager::Destroy();
 		}
 
 		TEST_METHOD(RTTITest)

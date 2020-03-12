@@ -39,9 +39,11 @@ namespace UnitTests
 		glm::vec4 mVectorArray[2];
 		glm::mat4 mMatrixArray[2];
 		std::string mStringArray[2];
-		
+
 		Foo foo1;
 		Foo foo2;
 		RTTI* mRttiArray[2]{ &foo1, &foo2 };
+
+		int* mInvalidInt{ nullptr };
 	};
 }

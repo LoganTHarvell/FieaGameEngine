@@ -227,6 +227,7 @@ xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
     <ClInclude Include="ToStringSpecialization.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Content\AttributedFoo.json" />
     <None Include="Content\ScopeEdgeCases.json" />
     <None Include="Content\ScopeOfArrays.json" />
     <None Include="Content\ScopeOfPrimitives.json" />

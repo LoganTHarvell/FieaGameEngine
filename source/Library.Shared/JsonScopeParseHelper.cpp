@@ -274,10 +274,6 @@ namespace Library
 				{
 					scopeData.Resize(1);
 				}
-				else if (scopeData.Size() < 1)
-				{
-					throw std::runtime_error(stackFrame.Key + " has too many elements.");
-				}
 
 				if (stackFrame.Type == Scope::Types::Integer)
 				{
