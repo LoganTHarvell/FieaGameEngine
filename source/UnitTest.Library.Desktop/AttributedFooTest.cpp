@@ -79,29 +79,17 @@ namespace UnitTestLibraryDesktop
 			a.AppendAuxiliaryAttribute("auxInteger") = 20;
 			a.AppendAuxiliaryAttribute("auxString") = { "20", "30", "40" };
 			a.AppendAuxiliaryAttribute("auxScope");
-			Scope& auxScope = a.AppendScope("auxScope");
+			a.AppendScope("auxScope");
 
 			AttributedFoo b(a);
-			Assert::AreEqual(20, b.Find("auxInteger")->Get<int>());
-			Assert::AreEqual("20"s, b.Find("auxString")->Get<std::string>(0));
-			Assert::AreEqual("30"s, b.Find("auxString")->Get<std::string>(1));
-			Assert::AreEqual("40"s, b.Find("auxString")->Get<std::string>(2));
-			Assert::AreEqual(auxScope, *b.Find("auxScope")->Get<Scope*>());
+			Assert::AreEqual(a, b);
 
 			AttributedFoo c;
 			c = a;
-			Assert::AreEqual(20, c.Find("auxInteger")->Get<int>());
-			Assert::AreEqual("20"s, c.Find("auxString")->Get<std::string>(0));
-			Assert::AreEqual("30"s, c.Find("auxString")->Get<std::string>(1));
-			Assert::AreEqual("40"s, c.Find("auxString")->Get<std::string>(2));
-			Assert::AreEqual(auxScope, *c.Find("auxScope")->Get<Scope*>());
+			Assert::AreEqual(a, c);
 
 			AttributedFoo d(a);
-			Assert::AreEqual(20, d.Find("auxInteger")->Get<int>());
-			Assert::AreEqual("20"s, d.Find("auxString")->Get<std::string>(0));
-			Assert::AreEqual("30"s, d.Find("auxString")->Get<std::string>(1));
-			Assert::AreEqual("40"s, d.Find("auxString")->Get<std::string>(2));
-			Assert::AreEqual(auxScope, *d.Find("auxScope")->Get<Scope*>());
+			Assert::AreEqual(a, d);
 		}
 
 		TEST_METHOD(EqualityOperators)
@@ -122,42 +110,18 @@ namespace UnitTestLibraryDesktop
 			a.AppendAuxiliaryAttribute("auxInteger") = 20;
 			a.AppendAuxiliaryAttribute("auxString") = { "20", "30", "40" };
 			a.AppendAuxiliaryAttribute("auxScope");
-			Scope& auxScope = a.AppendScope("auxScope");
+			a.AppendScope("auxScope");
+
+			AttributedFoo copy(a);
 
 			AttributedFoo b(std::move(a));
-
-			Assert::AreEqual(10, b.Find("Integer")->Get<int>());
-			Assert::AreEqual(10.0f, b.Find("Float")->Get<float>());
-			Assert::AreEqual(glm::vec4(10.0f), b.Find("Vector")->Get<glm::vec4>());
-			Assert::AreEqual(glm::mat4(10.0f), b.Find("Matrix")->Get<glm::mat4>());
-			Assert::AreEqual("10"s, b.Find("String")->Get<std::string>());
-			//Assert::AreEqual(10, b.Find("Rtti")->Get<RTTI*>()->As<Foo>()->Data());
-
-			Assert::AreEqual(20, b.Find("auxInteger")->Get<int>());
-			Assert::AreEqual("20"s, b.Find("auxString")->Get<std::string>(0));
-			Assert::AreEqual("30"s, b.Find("auxString")->Get<std::string>(1));
-			Assert::AreEqual("40"s, b.Find("auxString")->Get<std::string>(2));
-			Assert::AreEqual(auxScope, *b.Find("auxScope")->Get<Scope*>());
-
+			Assert::AreEqual(copy, b);
 			Assert::IsTrue(a.IsEmpty());
 			Assert::AreEqual(0_z, a.Capacity());
 
 			AttributedFoo c;
 			c = std::move(b);
-
-			Assert::AreEqual(10, c.Find("Integer")->Get<int>());
-			Assert::AreEqual(10.0f, c.Find("Float")->Get<float>());
-			Assert::AreEqual(glm::vec4(10.0f), c.Find("Vector")->Get<glm::vec4>());
-			Assert::AreEqual(glm::mat4(10.0f), c.Find("Matrix")->Get<glm::mat4>());
-			Assert::AreEqual("10"s, c.Find("String")->Get<std::string>());
-			//Assert::AreEqual(10, c.Find("Rtti")->Get<RTTI*>()->As<Foo>()->Data());
-
-			Assert::AreEqual(20, c.Find("auxInteger")->Get<int>());
-			Assert::AreEqual("20"s, c.Find("auxString")->Get<std::string>(0));
-			Assert::AreEqual("30"s, c.Find("auxString")->Get<std::string>(1));
-			Assert::AreEqual("40"s, c.Find("auxString")->Get<std::string>(2));
-			Assert::AreEqual(auxScope, *c.Find("auxScope")->Get<Scope*>());
-
+			Assert::AreEqual(copy, c);
 			Assert::IsTrue(b.IsEmpty());
 			Assert::AreEqual(0_z, b.Capacity());
 		}
@@ -180,7 +144,7 @@ namespace UnitTestLibraryDesktop
 			a.AppendAuxiliaryAttribute("auxScope");
 			a.AppendScope("auxScope");
 
-			std::string str = "Foo Attributed('Integer':{10},'Float':{10.000000},'Vector':{vec4(10.000000, 10.000000, 10.000000, 10.000000)},'Matrix':{mat4x4((10.000000, 0.000000, 0.000000, 0.000000), (0.000000, 10.000000, 0.000000, 0.000000), (0.000000, 0.000000, 10.000000, 0.000000), (0.000000, 0.000000, 0.000000, 10.000000))},'String':{10},'Scope':{},'Rtti':{Foo(10)},'IntegerArray':{10,10},'FloatArray':{10.000000,0.000000},'VectorArray':{vec4(10.000000, 10.000000, 10.000000, 10.000000),vec4(10.000000, 10.000000, 10.000000, 10.000000)},'MatrixArray':{mat4x4((10.000000, 0.000000, 0.000000, 0.000000), (0.000000, 10.000000, 0.000000, 0.000000), (0.000000, 0.000000, 10.000000, 0.000000), (0.000000, 0.000000, 0.000000, 10.000000)),mat4x4((10.000000, 0.000000, 0.000000, 0.000000), (0.000000, 10.000000, 0.000000, 0.000000), (0.000000, 0.000000, 10.000000, 0.000000), (0.000000, 0.000000, 0.000000, 10.000000))},'StringArray':{10,10},'ScopeArray':{},'RttiArray':{Foo(10),Foo(10)},'auxInteger':{20},'auxString':{20,30,40},'auxScope':{Scope()})"s;
+			std::string str = "Foo Attributed('Integer':{10},'Float':{10.000000},'Vector':{vec4(10.000000, 10.000000, 10.000000, 10.000000)},'Matrix':{mat4x4((10.000000, 0.000000, 0.000000, 0.000000), (0.000000, 10.000000, 0.000000, 0.000000), (0.000000, 0.000000, 10.000000, 0.000000), (0.000000, 0.000000, 0.000000, 10.000000))},'String':{10},'Scope':{},'Rtti':{Foo(10)},'IntegerArray':{10,10},'FloatArray':{10.000000,10.000000},'VectorArray':{vec4(10.000000, 10.000000, 10.000000, 10.000000),vec4(10.000000, 10.000000, 10.000000, 10.000000)},'MatrixArray':{mat4x4((10.000000, 0.000000, 0.000000, 0.000000), (0.000000, 10.000000, 0.000000, 0.000000), (0.000000, 0.000000, 10.000000, 0.000000), (0.000000, 0.000000, 0.000000, 10.000000)),mat4x4((10.000000, 0.000000, 0.000000, 0.000000), (0.000000, 10.000000, 0.000000, 0.000000), (0.000000, 0.000000, 10.000000, 0.000000), (0.000000, 0.000000, 0.000000, 10.000000))},'StringArray':{10,10},'ScopeArray':{},'RttiArray':{Foo(10),Foo(10)},'auxInteger':{20},'auxString':{20,30,40},'auxScope':{Scope()})"s;
 
 			Assert::AreEqual(str, a.ToString());
 		}
@@ -391,26 +355,26 @@ namespace UnitTestLibraryDesktop
 		TEST_METHOD(Clone)
 		{
 			Attributed* scope = new AttributedFoo(10);
-			Scope* derived = new DerivedAttributedFoo();
+			Scope* derived = new DerivedAttributedFoo(20);
 
 			Scope* tmp = scope->Clone();
-			Assert::AreEqual(0, tmp->Find("Integer")->Get<int>());
-			Assert::AreEqual(0.0f, tmp->Find("Float")->Get<float>());
-			Assert::AreEqual(glm::vec4(0.0f), tmp->Find("Vector")->Get<glm::vec4>());
-			Assert::AreEqual(glm::mat4(0.0f), tmp->Find("Matrix")->Get<glm::mat4>());
-			Assert::AreEqual("0"s, tmp->Find("String")->Get<std::string>());
-			Assert::AreEqual(0, tmp->Find("Rtti")->Get<RTTI*>()->As<Foo>()->Data());			
+			Assert::AreEqual(10, tmp->Find("Integer")->Get<int>());
+			Assert::AreEqual(10.0f, tmp->Find("Float")->Get<float>());
+			Assert::AreEqual(glm::vec4(10.0f), tmp->Find("Vector")->Get<glm::vec4>());
+			Assert::AreEqual(glm::mat4(10.0f), tmp->Find("Matrix")->Get<glm::mat4>());
+			Assert::AreEqual("10"s, tmp->Find("String")->Get<std::string>());
+			Assert::AreEqual(10, tmp->Find("Rtti")->Get<RTTI*>()->As<Foo>()->Data());			
 			delete tmp;
 
 			tmp = derived->Clone();
-			Assert::AreEqual(0, tmp->Find("Integer")->Get<int>());
-			Assert::AreEqual(0.0f, tmp->Find("Float")->Get<float>());
-			Assert::AreEqual(glm::vec4(0.0f), tmp->Find("Vector")->Get<glm::vec4>());
-			Assert::AreEqual(glm::mat4(0.0f), tmp->Find("Matrix")->Get<glm::mat4>());
-			Assert::AreEqual("0"s, tmp->Find("String")->Get<std::string>());
-			Assert::AreEqual(0, tmp->Find("Rtti")->Get<RTTI*>()->As<Foo>()->Data());	
+			Assert::AreEqual(20, tmp->Find("Integer")->Get<int>());
+			Assert::AreEqual(20.0f, tmp->Find("Float")->Get<float>());
+			Assert::AreEqual(glm::vec4(20.0f), tmp->Find("Vector")->Get<glm::vec4>());
+			Assert::AreEqual(glm::mat4(20.0f), tmp->Find("Matrix")->Get<glm::mat4>());
+			Assert::AreEqual("20"s, tmp->Find("String")->Get<std::string>());
+			Assert::AreEqual(20, tmp->Find("Rtti")->Get<RTTI*>()->As<Foo>()->Data());
 			delete tmp;
-			
+
 			delete scope;
 			delete derived;
 		}

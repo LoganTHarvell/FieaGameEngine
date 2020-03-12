@@ -14,9 +14,9 @@ namespace UnitTests
 	public:
 		explicit AttributedFoo(int data = 0);
 		AttributedFoo(const AttributedFoo& rhs);
-		AttributedFoo(AttributedFoo&& rhs) noexcept = default;
+		AttributedFoo(AttributedFoo&& rhs) noexcept;
 		AttributedFoo& operator=(const AttributedFoo& rhs);
-		AttributedFoo& operator=(AttributedFoo&& rhs) noexcept = default;
+		AttributedFoo& operator=(AttributedFoo&& rhs) noexcept;
 		virtual ~AttributedFoo() = default;
 
 		virtual std::string ToString() const override;
@@ -25,24 +25,23 @@ namespace UnitTests
 		static const Library::TypeManager::TypeInfo& TypeInfo();
 
 	private:
-		int mInt{ 0 };
-		float mFloat{ 0.0f };
-		glm::vec4 mVector{ 0.0f };
-		glm::mat4 mMatrix{ 0.0f };
-		std::string mString{ "0" };
+		int mInt;
+		float mFloat;
+		glm::vec4 mVector;
+		glm::mat4 mMatrix;
+		std::string mString;
 
-		Foo foo{ 0 };
+		Foo foo;
 		RTTI* mRtti{ &foo };
 
-		int mIntArray[2]{ 0 };
-		float mFloatArray[2]{ 0.0f };
-		glm::vec4 mVectorArray[2]{	{ 0.0f, 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 0.0f }	};
-		glm::mat4 mMatrixArray[2]{	{{ 0.0f, 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 0.0f }},
-									{{ 0.0f, 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 0.0f }}	};
-		std::string mStringArray[2]{ "0", "0" };
+		int mIntArray[2];
+		float mFloatArray[2];
+		glm::vec4 mVectorArray[2];
+		glm::mat4 mMatrixArray[2];
+		std::string mStringArray[2];
 		
-		Foo foo1{ 0 };
-		Foo foo2{ 0 };
+		Foo foo1;
+		Foo foo2;
 		RTTI* mRttiArray[2]{ &foo1, &foo2 };
 	};
 }
