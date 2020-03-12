@@ -14,6 +14,12 @@ namespace Library
 	}
 
 	template<typename T>
+	inline bool Factory<T>::IsRegistered(const std::string& className)
+	{
+		return mRegistry.Find(className) != mRegistry.end();
+	}
+
+	template<typename T>
 	inline float Factory<T>::RegistryLoadFactor()
 	{
 		return mRegistry.LoadFactor();

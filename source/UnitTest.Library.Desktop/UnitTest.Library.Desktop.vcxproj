@@ -230,6 +230,7 @@ xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
     <None Include="Content\AttributedFoo.json" />
     <None Include="Content\ScopeEdgeCases.json" />
     <None Include="Content\ScopeOfArrays.json" />
+    <None Include="Content\ScopeOfAttributedFoo.json" />
     <None Include="Content\ScopeOfPrimitives.json" />
     <None Include="Content\ScopeOfScopeArray.json" />
     <None Include="Content\ScopeOfScopes.json" />

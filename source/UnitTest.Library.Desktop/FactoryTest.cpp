@@ -59,9 +59,11 @@ namespace UnitTestLibraryDesktop
 		{
 			ConcreteFactory(DerivedFoo, Foo)
 
+			Assert::IsFalse(Factory<Foo>::IsRegistered("DerivedFoo"s));
 			Factory<Foo>* derivedFooFactory = new DerivedFooFactory();
+			Assert::IsTrue(Factory<Foo>::IsRegistered("DerivedFoo"s));
 
-			Foo* foo = Factory<Foo>::Create("DerivedFoo");
+			Foo* foo = Factory<Foo>::Create("DerivedFoo"s);
 			Assert::IsNotNull(foo);
 			Assert::IsTrue(foo->Is(DerivedFoo::TypeIdClass()));
 			if (foo != nullptr) delete foo;
@@ -78,7 +80,9 @@ namespace UnitTestLibraryDesktop
 			Foo* foo = Factory<Foo>::Create("DerivedFoo");
 			if (foo != nullptr) delete foo;
 			
+			Assert::IsTrue(Factory<Foo>::IsRegistered("DerivedFoo"s));
 			delete derivedFooFactory;
+			Assert::IsFalse(Factory<Foo>::IsRegistered("DerivedFoo"s));
 
 			Assert::IsNull(Factory<Foo>::Create("DerivedFoo"));
 		}

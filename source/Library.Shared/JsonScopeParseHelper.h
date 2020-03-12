@@ -25,8 +25,9 @@ namespace Library
 		struct StackFrame
 		{
 			const std::string& Key;
-			const Json::Value* Value;
 			Scope::Types Type;
+			std::string ClassName;
+			const Json::Value* Value;
 			Scope& Context;
 		};
 

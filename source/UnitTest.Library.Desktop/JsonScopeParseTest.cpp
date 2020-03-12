@@ -4,6 +4,7 @@
 #include "JsonParseMaster.h"
 #include "JsonScopeParseHelper.h"
 #include "AttributedFoo.h"
+#include "Factory.h"
 
 using namespace std::string_literals;
 
@@ -369,6 +370,46 @@ namespace UnitTestLibraryDesktop
 				parser.Parse(invalidIntegerArray); 
 			});
 			
+			TypeManager::Destroy();
+		}
+
+		TEST_METHOD(ParseScopeOfAttributed)
+		{
+			ConcreteFactory(AttributedFoo, Scope)
+			AttributedFooFactory attributedFooFactory;
+			
+			TypeManager::Create();
+			RegisterType<AttributedFoo>();
+
+			JsonScopeParseHelper::SharedData sharedData;
+			JsonScopeParseHelper helper;
+			JsonParseMaster parser;
+
+			parser.AddHelper(helper);
+			parser.SetSharedData(sharedData);
+
+			std::string filename("Content/ScopeOfAttributedFoo.json");
+			parser.ParseFromFile(filename);
+
+			auto tmp = sharedData.GetScope().Find("FancyFoo");
+			Assert::IsNotNull(tmp);
+
+			AttributedFoo* fancyFoo = tmp->Get<Scope*>()->As<AttributedFoo>();
+			Assert::IsNotNull(fancyFoo);
+
+			fancyFoo->Find("Rtti")->Get<RTTI*>()->As<Foo>()->SetData(10);
+
+			auto rttiArray = fancyFoo->Find("RttiArray");
+			rttiArray->Get<RTTI*>(0)->As<Foo>()->SetData(10);
+			rttiArray->Get<RTTI*>(1)->As<Foo>()->SetData(10);
+
+			AttributedFoo fooTen(10);
+			fooTen.AppendScope("Scope").Append("Integer") = 10;
+			fooTen.AppendScope("ScopeArray").Append("Integer") = 10;
+			fooTen.AppendScope("ScopeArray").Append("Float") = 10.0f;
+
+			Assert::AreEqual(fooTen, *fancyFoo);
+
 			TypeManager::Destroy();
 		}
 

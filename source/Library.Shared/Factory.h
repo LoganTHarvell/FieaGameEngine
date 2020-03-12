@@ -42,6 +42,13 @@ namespace Library
 		static gsl::owner<T*> Create(const std::string& className);
 
 		/// <summary>
+		/// Checks whether a class name is registered to a factory instance.
+		/// </summary>
+		/// <param name="className">Class name to be checked in the registry.</param>
+		/// <returns>True if the class name is registered. Otherwise, false.</returns>
+		static bool IsRegistered(const std::string& className);
+
+		/// <summary>
 		/// Gets the current load factor of the factories registry.
 		/// </summary>
 		/// <returns>Float representing the load factor of the factories registry.</returns>

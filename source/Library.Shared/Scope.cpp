@@ -469,7 +469,7 @@ namespace Library
 			throw std::runtime_error("Table entry already exists with a non-Scope type.");
 		}
 	
-		Scope* orphan = child.mParent->Orphan(child);
+		Scope* orphan = child.mParent ? child.mParent->Orphan(child) : &child;
 		orphan->mParent = this;
 		mChildren.PushBack(orphan);
 

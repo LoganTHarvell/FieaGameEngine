@@ -2,15 +2,28 @@
 // Pre-compiled Header
 #include "pch.h"
 
+// Standard
+#include <string>
+
 // Header
 #include "JsonScopeParseHelper.h"
 
 // First Party
 #include "Utility.h"
+#include "Factory.h"
 #pragma endregion Includes
+
+
+using namespace std::string_literals;
+
 
 namespace Library
 {
+#pragma region Scope Factory Declaration and Instantiation
+	ConcreteFactory(Scope, Scope)
+	ScopeFactory scopeFactory;
+#pragma endregion Scope Factory Declaration and Instantiation
+
 #pragma region Constants
 	const HashMap<std::string, Scope::Types> JsonScopeParseHelper::TypeStringMap =
 	{
@@ -124,13 +137,19 @@ namespace Library
 
 		if (formattedKey == "type" && value.isString())
 		{
-			auto it = TypeStringMap.Find(value.asString());
+			const std::string& valueStr = value.asString();
+			auto it = TypeStringMap.Find(valueStr);
 
 			if (it != TypeStringMap.end())
 			{
 				assert(stackFrame);
 
 				stackFrame->Type = it->second;
+				handled = true;
+			}
+			else if (Factory<Scope>::IsRegistered(valueStr))
+			{
+				stackFrame->ClassName = valueStr;
 				handled = true;
 			}
 		}
@@ -144,7 +163,7 @@ namespace Library
 
 				if (value.isObject())
 				{
-					stackFrame->Context.AppendScope(stackFrame->Key);
+					stackFrame->Context.Adopt(*Factory<Scope>::Create(stackFrame->ClassName), stackFrame->Key);
 				}
 
 				handled = true;
@@ -195,7 +214,7 @@ namespace Library
 				scope = testHelperData->mRootScope;
 			}
 
-			testHelperData->mStack.Push({ key, nullptr, Scope::Types::Unknown, *scope });
+			testHelperData->mStack.Push({ key, Scope::Types::Unknown, "Scope"s, nullptr, *scope });
 			handled = true;
 		}
 
