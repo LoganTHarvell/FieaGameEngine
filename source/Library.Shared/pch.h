@@ -12,6 +12,7 @@
 #include <sstream>
 #include <istream>
 #include <fstream>
+#include <chrono>
 
 // GSL Library
 #include <gsl/gsl>
