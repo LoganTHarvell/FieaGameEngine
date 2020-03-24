@@ -81,7 +81,7 @@ namespace Library
 		/// <summary>
 		/// Mapping of class names to factories that can create the class instances.
 		/// </summary>
-		inline static Registry mRegistry;
+		inline static Registry sRegistry;
 #pragma endregion Static Members
 
 #pragma region Special Members

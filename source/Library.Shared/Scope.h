@@ -392,16 +392,16 @@ namespace Library
 #pragma region Data Members
 	protected:
 		/// <summary>
+		/// Pointer to the parent Scope instance, if a child.
+		/// </summary>
+		Scope* mParent{ nullptr };
+
+		/// <summary>
 		/// Vector of references to the TableEntryType values.
 		/// </summary>
 		Vector<Attribute*> mPairPtrs;
 
 	private:
-		/// <summary>
-		/// Pointer to the parent Scope instance, if a child.
-		/// </summary>
-		Scope* mParent{ nullptr };
-
 		/// <summary>
 		/// Table containing TableEntryType values.
 		/// </summary>

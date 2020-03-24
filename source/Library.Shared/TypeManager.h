@@ -18,7 +18,7 @@ namespace Library
 	{
 		std::string Name;
 		Datum::Types Type;
-		bool HasInternalStorage;
+		bool IsInternal;
 		std::size_t Size;
 		std::size_t Offset;
 

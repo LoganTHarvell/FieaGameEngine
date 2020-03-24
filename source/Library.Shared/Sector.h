@@ -1,48 +1,166 @@
 #pragma once
 
+#pragma region Includes
 // First Party
 #include "Attributed.h"
 #include "WorldState.h"
+#include "Factory.h"
+#pragma endregion Includes
 
 namespace Library
 {
+	// Forwarded Classes
+	class World;
 	class Entity;
 
+	/// <summary>
+	/// Represents an contained collection of Entity objects, analogous to a package or level.
+	/// </summary>
 	class Sector final : public Attributed
 	{
-	public:
-		static const Library::TypeManager::TypeInfo& TypeInfo();
+		RTTI_DECLARATIONS(Sector, Attributed)
 
+#pragma region TypeInfo
 	public:
+		/// <summary>
+		/// Getter for the class TypeInfo, used for registration with the TypeManager.
+		/// </summary>
+		static const TypeManager::TypeInfo& TypeInfo();
+#pragma endregion TypeInfo
+
+#pragma region Special Members
+	public:
+		/// <summary>
+		/// Default constructor.
+		/// </summary>
 		Sector();
-		~Sector();
-		Sector(const Sector& rhs);
-		Sector& operator=(const Sector& rhs);
-		Sector(Sector&& rhs);
-		Sector& operator=(Sector&& rhs);
 
-		virtual gsl::owner<Library::Scope*> Clone() const override;
+		/// <summary>
+		/// Default destructor.
+		/// </summary>
+		~Sector() = default;
 
+		/// <summary>
+		/// Copy constructor.
+		/// </summary>
+		/// <param name="rhs">Sector to be copied.</param>
+		Sector(const Sector & rhs) = default;
+
+		/// <summary>
+		/// Copy assignment operator.
+		/// </summary>
+		/// <param name="rhs">Sector to be copied.</param>
+		/// <returns>Newly copied into left hand side Sector.</returns>
+		Sector& operator=(const Sector & rhs) = default;
+
+		/// <summary>
+		/// Move constructor.
+		/// </summary>
+		/// <param name="rhs">Sector to be moved.</param>
+		Sector(Sector && rhs) = default;
+
+		/// <summary>
+		/// Move assignment operator.
+		/// </summary>
+		/// <param name="rhs">Sector to be moved.</param>
+		/// <returns>Newly moved into left hand side Sector.</returns>
+		Sector& operator=(Sector && rhs) = default;
+#pragma endregion Special Members
+
+#pragma region Virtual Copy Constructor
 	public:
+		/// <summary>
+		/// Virtual copy constructor.
+		/// </summary>
+		/// <returns>Owning pointer to a newly heap allocated copy of the Sector.</returns>
+		virtual gsl::owner<Library::Scope*> Clone() const override;
+#pragma endregion Virtual Copy Constructor
+
+#pragma region Accessors
+	public:
+		/// <summary>
+		/// Name of the Sector.
+		/// </summary>
+		/// <returns>Name of the Sector as a std::string.</returns>
 		const std::string& Name() const;
+
+		/// <summary>
+		/// Sets the name of the Sector.
+		/// </summary>
+		/// <param name="name">String to use as the name of the Sector.</param>
 		void SetName(const std::string& name);
 
-		const World* GetWorld() const;
-		void SetWorld(World& sector);
 
+		/// <summary>
+		/// Gets the World that owns this Sector.
+		/// </summary>
+		/// <returns>Pointer to the World that owns this Sector.</returns>
+		const World* GetWorld() const;
+
+		/// <summary>
+		/// Sets the World that owns this Sector.
+		/// </summary>
+		/// <param name="world">World to adopt this Sector.</param>
+		void SetWorld(World& world);
+
+		/// <summary>
+		/// Gets the data handle to the Entity objects contained in this Sector.
+		/// </summary>
+		/// <returns>Reference to the Entity objects.</returns>
 		DataType& Entities();
+
+		/// <summary>
+		/// Gets the data handle to the Entity objects contained in this Sector.
+		/// </summary>
+		/// <returns>Reference to the Entity objects.</returns>
 		const DataType& Entities() const;
 
+		/// <summary>
+		/// Generates an Entity class and adopts it into this Sector.
+		/// </summary>
+		/// <param name="className">Class name of an Entity or Entity subclass to be instantiated.</param>
+		/// <param name="name">Name of the newly created Entity.</param>
+		/// <returns>Reference to the newly heap allocated Entity.</returns>
 		Entity* CreateEntity(const std::string& className, const std::string& name);
+#pragma endregion Accessors
 
-		void Update(WorldState& worldState);
+#pragma region Game Loop
+	public:
+		/// <summary>
+		/// Virtual update method to be called every frame.
+		/// </summary>
+		/// <param name="worldState">WorldState context for the current processing step.</param>
+		virtual void Update(WorldState & worldState);
+#pragma endregion Game Loop
 
+#pragma region RTTI Overrides
+	public:
+		/// <summary>
+		/// Virtual override for representing the Entity as a std::string.
+		/// </summary>
+		/// <returns></returns>
 		virtual std::string ToString() const override;
+#pragma endregion RTTI Overrides
 
+#pragma region Data Members
 	private:
-		class World* mWorld{ nullptr };
-
+		/// <summary>
+		/// Name of the Sector, reflected as a prescribed attribute.
+		/// </summary>
 		std::string mName;
+
+		/// <summary>
+		/// Collection of Entity objects within the Entities prescribed attribute.
+		/// </summary>
+		DataType& mEntities;
+#pragma endregion Data Members
 	};
+
+#pragma region Factory
+	/// <summary>
+	/// EntityFactory class declaration.
+	/// </summary>
+	ConcreteFactory(Sector, Scope)
+#pragma endregion Factory
 }
 

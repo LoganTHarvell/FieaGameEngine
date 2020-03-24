@@ -194,7 +194,7 @@ namespace Library
 		{
 			DataType& data = Append(signature.Name);
 
-			if (!signature.HasInternalStorage)
+			if (!signature.IsInternal)
 			{
 				std::byte* address = reinterpret_cast<std::byte*>(this) + signature.Offset;
 				data.SetStorage(signature.Type, gsl::span(address, signature.Size));
@@ -215,7 +215,7 @@ namespace Library
 		std::size_t index = 1;
 		for (const auto& signature : typeInfo->signatures)
 		{
-			if (!signature.HasInternalStorage)
+			if (!signature.IsInternal)
 			{
 				std::byte* address = reinterpret_cast<std::byte*>(this) + signature.Offset;
 				mPairPtrs[index]->second.SetStorage(signature.Type, gsl::span(address, signature.Size));
