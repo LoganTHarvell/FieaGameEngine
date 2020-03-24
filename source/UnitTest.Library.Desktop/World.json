@@ -1,0 +1,20 @@
+{
+  "Name": {
+    "type": "string",
+    "value": "Test World"
+  },
+  "Sectors": {
+    "type": "Sector",
+    "value": [
+      {
+        "type": "Sector",
+        "value": {
+          "Name": {
+            "type": "string",
+            "value": "Sector 1"
+          }
+        }
+      }
+    ]
+  }
+}

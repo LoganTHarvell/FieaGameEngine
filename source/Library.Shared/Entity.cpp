@@ -46,8 +46,11 @@ namespace Library
 
 	const Sector* Entity::GetSector() const
 	{
-		assert(mParent->Is(Sector::TypeIdClass()));
-		return static_cast<Sector*>(mParent);
+		const Scope* parent = GetParent();
+		if (!parent) return nullptr;
+
+		assert(parent->Is(Sector::TypeIdClass()));
+		return static_cast<const Sector*>(parent);
 	}
 
 	void Entity::SetSector(Sector& sector)
@@ -55,8 +58,13 @@ namespace Library
 		sector.Adopt(*this, mName);
 	}
 
-	void Entity::Update(WorldState&)
+	void Entity::Update(WorldState& worldState)
 	{
+		worldState.Entity = this;
+
+		// TODO Action Update calls...
+
+		worldState.Entity = nullptr;
 	}
 
 	std::string Entity::ToString() const

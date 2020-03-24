@@ -48,8 +48,11 @@ namespace Library
 
 	const World* Sector::GetWorld() const
 	{
-		assert(mParent->Is(World::TypeIdClass()));
-		return static_cast<World*>(mParent);
+		const Scope* parent = GetParent();
+		if (!parent) return nullptr;
+
+		assert(parent->Is(World::TypeIdClass()));
+		return static_cast<const World*>(parent);
 	}
 
 	void Sector::SetWorld(World& world)
@@ -87,11 +90,15 @@ namespace Library
 
 	void Sector::Update(WorldState& worldState)
 	{
+		worldState.Sector = this;
+
 		for (std::size_t i = 0; i < mEntities.Size(); ++i)
 		{
 			assert(mEntities[i].Is(Entity::TypeIdClass()));
 			static_cast<Entity*>(mEntities.Get<Scope*>(i))->Update(worldState);
 		}
+
+		worldState.Sector = nullptr;
 	}
 
 	std::string Sector::ToString() const

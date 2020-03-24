@@ -153,5 +153,8 @@
     <None Include="Content\ScopeOfAttributedFoo.json">
       <Filter>Content</Filter>
     </None>
+    <None Include="World.json">
+      <Filter>Content</Filter>
+    </None>
   </ItemGroup>
 </Project>

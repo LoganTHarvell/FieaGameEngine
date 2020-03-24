@@ -28,6 +28,7 @@ namespace Library
 
 	World::World() : Attributed(TypeIdClass()), mSectors(mPairPtrs[2]->second)
 	{
+		mWorldState.World = this;
 	}
 
 	gsl::owner<Library::Scope*> World::Clone() const

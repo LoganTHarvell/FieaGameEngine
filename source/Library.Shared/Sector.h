@@ -20,13 +20,13 @@ namespace Library
 	{
 		RTTI_DECLARATIONS(Sector, Attributed)
 
-#pragma region TypeInfo
+#pragma region Static Methods
 	public:
 		/// <summary>
 		/// Getter for the class TypeInfo, used for registration with the TypeManager.
 		/// </summary>
 		static const TypeManager::TypeInfo& TypeInfo();
-#pragma endregion TypeInfo
+#pragma endregion Static Methods
 
 #pragma region Special Members
 	public:
