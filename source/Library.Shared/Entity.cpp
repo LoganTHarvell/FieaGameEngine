@@ -29,6 +29,10 @@ namespace Library
 	{
 	}
 
+	Entity::Entity(const RTTI::IdType typeId) : Attributed(typeId)
+	{
+	}
+
 	gsl::owner<Library::Scope*> Entity::Clone() const
 	{
 		return new Entity(*this);

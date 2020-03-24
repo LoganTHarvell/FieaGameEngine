@@ -139,24 +139,24 @@ namespace Library
 /// </summary>
 /// <param name="ConcreteProductType">Type which the factory will create.</param>
 /// <param name="AbstractProductType">Factory type which the derived Factory instance is registered.</param>
-#define ConcreteFactory(ConcreteProductType, AbstractProductType)												\
-	class ConcreteProductType##Factory final : public Factory<AbstractProductType>								\
-	{																											\
-	public:																										\
-		ConcreteProductType##Factory() { Factory<AbstractProductType>::Register(*this); }						\
-		virtual ~ConcreteProductType##Factory() override { Factory<AbstractProductType>::Deregister(*this); }	\
-																												\
-		ConcreteProductType##Factory(const ConcreteProductType##Factory&) = delete;								\
-		ConcreteProductType##Factory& operator=(const ConcreteProductType##Factory&) = delete;					\
-		ConcreteProductType##Factory(ConcreteProductType##Factory&&) noexcept = delete;							\
-		ConcreteProductType##Factory& operator=(ConcreteProductType##Factory&&) noexcept = delete;				\
-																												\
-	private:																									\
-		virtual gsl::owner<ConcreteProductType*> Create() const override { return new ConcreteProductType(); }	\
-		virtual const std::string& ClassName() const override { return mClassName; }							\
-																												\
-	private:																									\
-		const std::string mClassName{ #ConcreteProductType };													\
+#define ConcreteFactory(ConcreteProductType, AbstractProductType)														\
+	class ConcreteProductType##Factory final : public Library::Factory<AbstractProductType>								\
+	{																													\
+	public:																												\
+		ConcreteProductType##Factory() { Library::Factory<AbstractProductType>::Register(*this); }						\
+		virtual ~ConcreteProductType##Factory() override { Library::Factory<AbstractProductType>::Deregister(*this); }	\
+																														\
+		ConcreteProductType##Factory(const ConcreteProductType##Factory&) = delete;										\
+		ConcreteProductType##Factory& operator=(const ConcreteProductType##Factory&) = delete;							\
+		ConcreteProductType##Factory(ConcreteProductType##Factory&&) noexcept = delete;									\
+		ConcreteProductType##Factory& operator=(ConcreteProductType##Factory&&) noexcept = delete;						\
+																														\
+	private:																											\
+		virtual gsl::owner<ConcreteProductType*> Create() const override { return new ConcreteProductType(); }			\
+		virtual const std::string& ClassName() const override { return mClassName; }									\
+																														\
+	private:																											\
+		const std::string mClassName{ #ConcreteProductType };															\
 	};	
 #pragma endregion Concrete Factory Convenience Macro											
 }

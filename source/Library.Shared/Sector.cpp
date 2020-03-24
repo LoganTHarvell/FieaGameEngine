@@ -18,7 +18,7 @@ namespace Library
 		{
 			{
 				{ "Name", Types::String, false, 1, offsetof(Sector, mName) },
-				{ "Entities", Types::Scope, true, 0, 0 }
+				{ "Entities", Types::Scope, true, 1, 0 }
 			},
 
 			Attributed::TypeIdClass()

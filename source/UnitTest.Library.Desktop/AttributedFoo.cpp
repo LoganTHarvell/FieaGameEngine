@@ -168,4 +168,17 @@ namespace UnitTests
 
 		return typeInfo;
 	}
+
+	AttributedFoo::AttributedFoo(const RTTI::IdType typeId, int data) : Attributed(typeId),
+		mInt(data), mFloat(static_cast<float>(data)),
+		mVector(static_cast<float>(data)), mMatrix(static_cast<float>(data)),
+		mString(std::to_string(data)), foo(data), mIntArray{ data, data },
+		mFloatArray{ static_cast<float>(data), static_cast<float>(data) },
+		mVectorArray{ { data, data, data, data }, { data, data, data, data } },
+		mMatrixArray{	{{ data, 0, 0, 0 }, { 0, data, 0, 0 }, { 0, 0, data, 0 }, { 0, 0, 0, data }},
+						{{ data, 0, 0, 0 }, { 0, data, 0, 0 }, { 0, 0, data, 0 }, { 0, 0, 0, data }} },
+		mStringArray{ std::to_string(data), std::to_string(data) },
+		foo1(data), foo2(data)
+	{
+	}
 }

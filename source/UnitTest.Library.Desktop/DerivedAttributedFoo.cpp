@@ -3,8 +3,7 @@
 
 namespace UnitTests
 {
-	DerivedAttributedFoo::DerivedAttributedFoo(int data) :
-		AttributedFoo(data)
+	DerivedAttributedFoo::DerivedAttributedFoo(int data) : AttributedFoo(TypeIdClass(), data)
 	{
 	}
 

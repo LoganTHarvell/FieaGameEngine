@@ -65,6 +65,13 @@ namespace Library
 		/// <param name="rhs">Entity to be moved.</param>
 		/// <returns>Newly moved into left hand side Entity.</returns>
 		Entity& operator=(Entity&& rhs) = default;
+
+	protected:
+		/// <summary>
+		/// Specialized constructor for use by derived classes to ensure correct attribute population.
+		/// </summary>
+		/// <param name="typeId">Type ID of the derived class.</param>
+		explicit Entity(const RTTI::IdType typeId);
 #pragma endregion Special Members
 
 #pragma region Virtual Copy Constructor

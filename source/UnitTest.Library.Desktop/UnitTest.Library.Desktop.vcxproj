@@ -191,6 +191,7 @@ xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
     <ClCompile Include="DerivedFoo.cpp" />
     <ClCompile Include="FactoryTest.cpp" />
     <ClCompile Include="Foo.cpp" />
+    <ClCompile Include="FooEntity.cpp" />
     <ClCompile Include="FooTest.cpp" />
     <ClCompile Include="HashMapTest.cpp" />
     <ClCompile Include="JsonScopeParseTest.cpp" />
@@ -205,6 +206,7 @@ xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
     <ClCompile Include="RTTITest.cpp" />
     <ClCompile Include="ScopeTest.cpp" />
     <ClCompile Include="SListTest.cpp" />
+    <ClCompile Include="EntityTest.cpp" />
     <ClCompile Include="StackTest.cpp" />
     <ClCompile Include="UtilityTest.cpp" />
     <ClCompile Include="TypeManagerTest.cpp" />
@@ -222,6 +224,7 @@ xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
     <ClInclude Include="DerivedAttributedFoo.h" />
     <ClInclude Include="DerivedFoo.h" />
     <ClInclude Include="Foo.h" />
+    <ClInclude Include="FooEntity.h" />
     <ClInclude Include="JsonTestParseHelper.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="ToStringSpecialization.h" />
@@ -234,6 +237,7 @@ xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
     <None Include="Content\ScopeOfPrimitives.json" />
     <None Include="Content\ScopeOfScopeArray.json" />
     <None Include="Content\ScopeOfScopes.json" />
+    <None Include="Entity.json" />
     <None Include="World.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

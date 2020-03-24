@@ -9,6 +9,9 @@ namespace Library
 	// Forwarded Classes
 	class Sector;
 
+	/// <summary>
+	/// Represents the global scope for a simulation, containing sectors and their entities.
+	/// </summary>
 	class World final : public Attributed
 	{
 		RTTI_DECLARATIONS(World, Attributed)

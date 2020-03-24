@@ -69,13 +69,19 @@
       <Filter>Support Code</Filter>
     </ClCompile>
     <ClCompile Include="AttributedBar.cpp">
-      <Filter>Support Code\Attributed Classes</Filter>
+      <Filter>Support Code\Attributed</Filter>
     </ClCompile>
     <ClCompile Include="AttributedFoo.cpp">
-      <Filter>Support Code\Attributed Classes</Filter>
+      <Filter>Support Code\Attributed</Filter>
     </ClCompile>
     <ClCompile Include="DerivedAttributedFoo.cpp">
-      <Filter>Support Code\Attributed Classes</Filter>
+      <Filter>Support Code\Attributed</Filter>
+    </ClCompile>
+    <ClCompile Include="FooEntity.cpp">
+      <Filter>Support Code\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityTest.cpp">
+      <Filter>Entity Tests</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -96,13 +102,16 @@
       <Filter>Support Code</Filter>
     </ClInclude>
     <ClInclude Include="AttributedBar.h">
-      <Filter>Support Code\Attributed Classes</Filter>
+      <Filter>Support Code\Attributed</Filter>
     </ClInclude>
     <ClInclude Include="AttributedFoo.h">
-      <Filter>Support Code\Attributed Classes</Filter>
+      <Filter>Support Code\Attributed</Filter>
     </ClInclude>
     <ClInclude Include="DerivedAttributedFoo.h">
-      <Filter>Support Code\Attributed Classes</Filter>
+      <Filter>Support Code\Attributed</Filter>
+    </ClInclude>
+    <ClInclude Include="FooEntity.h">
+      <Filter>Support Code\Entity</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -127,8 +136,14 @@
     <Filter Include="Content">
       <UniqueIdentifier>{7c84e84d-c64a-45c5-9935-43b0c86deccd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Support Code\Attributed Classes">
+    <Filter Include="Support Code\Entity">
+      <UniqueIdentifier>{767465cd-7442-452c-8903-60620b40d12a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Support Code\Attributed">
       <UniqueIdentifier>{ad1ac5c6-b7b7-49d2-8bb9-2b78a080db17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entity Tests">
+      <UniqueIdentifier>{bd2439d4-7db9-4537-9865-77b749a06bf6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -154,6 +169,9 @@
       <Filter>Content</Filter>
     </None>
     <None Include="World.json">
+      <Filter>Content</Filter>
+    </None>
+    <None Include="Entity.json">
       <Filter>Content</Filter>
     </None>
   </ItemGroup>

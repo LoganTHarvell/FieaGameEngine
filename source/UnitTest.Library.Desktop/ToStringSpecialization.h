@@ -17,6 +17,7 @@
 #include "Scope.h"
 #include "TypeManager.h"
 #include "JsonParseMaster.h"
+#include "Sector.h"
 
 
 using namespace UnitTests;
@@ -1429,4 +1430,24 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 		RETURN_WIDE_STRING(t);
 	}
 #pragma endregion JSON Parser
+
+#pragma region Sector
+	template<>
+	inline std::wstring ToString<Sector>(const Sector& t)
+	{
+		RETURN_WIDE_STRING(t.GetParent());
+	}
+
+	template<>
+	inline std::wstring ToString<Sector>(const Sector* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+
+	template<>
+	inline std::wstring ToString<Sector>(Sector* t)
+	{
+		RETURN_WIDE_STRING(t);
+	}
+#pragma endregion Sector
 }

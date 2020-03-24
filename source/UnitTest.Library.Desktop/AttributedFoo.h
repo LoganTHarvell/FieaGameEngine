@@ -24,6 +24,9 @@ namespace UnitTests
 		virtual gsl::owner<Library::Scope*> Clone() const override;
 		static const Library::TypeManager::TypeInfo& TypeInfo();
 
+	protected:
+		explicit AttributedFoo(const RTTI::IdType typeId, int data = 0);
+
 	private:
 		int mInt;
 		float mFloat;
