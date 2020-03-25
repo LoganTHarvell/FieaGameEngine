@@ -56,22 +56,15 @@ namespace Library
 		return mSectors;
 	}
 
-	Sector* World::CreateSector(const std::string& className, const std::string& name)
+	Sector* World::CreateSector(const std::string& name)
 	{
-		Scope* newScope = Factory<Scope>::Create(className);
+		Sector* newSector = new Sector();
+		assert(newSector);
 
-		if (newScope)
-		{
-			assert(newScope->Is(Sector::TypeIdClass()));
+		newSector->SetName(name);
 
-			Sector* newEntity = static_cast<Sector*>(newScope);
-			newEntity->SetName(name);
-
-			Adopt(*newScope, "Sectors");
-			return newEntity;
-		}
-
-		return nullptr;
+		Adopt(*newSector, "Sectors");
+		return newSector;
 	}
 
 	void World::Update(WorldState& worldState)

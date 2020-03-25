@@ -81,7 +81,10 @@
       <Filter>Support Code\Entity</Filter>
     </ClCompile>
     <ClCompile Include="EntityTest.cpp">
-      <Filter>Entity Tests</Filter>
+      <Filter>Entity System Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="SectorTest.cpp">
+      <Filter>Entity System Tests</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -142,7 +145,7 @@
     <Filter Include="Support Code\Attributed">
       <UniqueIdentifier>{ad1ac5c6-b7b7-49d2-8bb9-2b78a080db17}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Entity Tests">
+    <Filter Include="Entity System Tests">
       <UniqueIdentifier>{bd2439d4-7db9-4537-9865-77b749a06bf6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -169,9 +172,6 @@
       <Filter>Content</Filter>
     </None>
     <None Include="World.json">
-      <Filter>Content</Filter>
-    </None>
-    <None Include="Entity.json">
       <Filter>Content</Filter>
     </None>
   </ItemGroup>

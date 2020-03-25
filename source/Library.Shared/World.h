@@ -101,10 +101,9 @@ namespace Library
 		/// <summary>
 		/// Generates an Sector class and adopts it into this World.
 		/// </summary>
-		/// <param name="className">Class name of an Sector or Sector subclass to be instantiated.</param>
 		/// <param name="name">Name of the newly created Sector.</param>
 		/// <returns>Reference to the newly heap allocated Sector.</returns>
-		Sector* CreateSector(const std::string & className, const std::string & name);
+		Sector* CreateSector(const std::string& name);
 #pragma endregion Accessors
 
 #pragma region Game Loop

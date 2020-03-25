@@ -50,9 +50,11 @@ namespace UnitTestLibraryDesktop
 		{
 			Entity entity;
 			Assert::IsNotNull(entity.Find("Name"));
+			Assert::AreEqual(std::string(), entity.Find("Name")->Get<std::string>());
 
 			FooEntity fooEntity;
 			Assert::IsNotNull(fooEntity.Find("Name"));
+			Assert::AreEqual(std::string(), fooEntity.Find("Name")->Get<std::string>());
 			Assert::IsNotNull(fooEntity.Find("Data"));
 			Assert::AreEqual(0, fooEntity.Find("Data")->Get<int>());
 		}
@@ -106,8 +108,6 @@ namespace UnitTestLibraryDesktop
 
 			Sector sector;
 			Entity* entity = sector.CreateEntity("Entity", "BaseEntity");
-
-			entity->SetName("BaseEntity");
 			Assert::AreEqual("BaseEntity"s, entity->Name());
 			Assert::AreEqual(sector, *entity->GetSector());
 

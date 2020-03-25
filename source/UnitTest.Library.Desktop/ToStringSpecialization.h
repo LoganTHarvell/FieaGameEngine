@@ -17,7 +17,9 @@
 #include "Scope.h"
 #include "TypeManager.h"
 #include "JsonParseMaster.h"
+#include "Entity.h"
 #include "Sector.h"
+#include "World.h"
 
 
 using namespace UnitTests;
@@ -1431,23 +1433,105 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 	}
 #pragma endregion JSON Parser
 
+#pragma region Entity
+	template<>
+	inline std::wstring ToString<Entity>(const Entity& t)
+	{
+		RETURN_WIDE_STRING(t.Name().c_str());
+	}
+
+	template<>
+	inline std::wstring ToString<Entity>(const Entity* t)
+	{
+		try 
+		{
+			RETURN_WIDE_STRING(t->Name().c_str());
+		}
+		catch (const std::exception&)
+		{
+			RETURN_WIDE_STRING(t);
+		}
+	}
+
+	template<>
+	inline std::wstring ToString<Entity>(Entity* t)
+	{
+		try
+		{
+			RETURN_WIDE_STRING(t->Name().c_str());
+		}
+		catch (const std::exception&)
+		{
+			RETURN_WIDE_STRING(t);
+		}
+	}
+#pragma endregion Entity
+
 #pragma region Sector
 	template<>
 	inline std::wstring ToString<Sector>(const Sector& t)
 	{
-		RETURN_WIDE_STRING(t.GetParent());
+		RETURN_WIDE_STRING(t.Name().c_str());
 	}
 
 	template<>
 	inline std::wstring ToString<Sector>(const Sector* t)
 	{
-		RETURN_WIDE_STRING(t);
+		try 
+		{
+			RETURN_WIDE_STRING(t->Name().c_str());
+		}
+		catch (const std::exception&)
+		{
+			RETURN_WIDE_STRING(t);
+		}
 	}
 
 	template<>
 	inline std::wstring ToString<Sector>(Sector* t)
 	{
-		RETURN_WIDE_STRING(t);
+		try
+		{
+			RETURN_WIDE_STRING(t->Name().c_str());
+		}
+		catch (const std::exception&)
+		{
+			RETURN_WIDE_STRING(t);
+		}
 	}
 #pragma endregion Sector
+
+#pragma region World
+	template<>
+	inline std::wstring ToString<World>(const World& t)
+	{
+		RETURN_WIDE_STRING(t.Name().c_str());
+	}
+
+	template<>
+	inline std::wstring ToString<World>(const World* t)
+	{
+		try
+		{
+			RETURN_WIDE_STRING(t->Name().c_str());
+		}
+		catch (const std::exception&)
+		{
+			RETURN_WIDE_STRING(t);
+		}
+	}
+
+	template<>
+	inline std::wstring ToString<World>(World* t)
+	{
+		try
+		{
+			RETURN_WIDE_STRING(t->Name().c_str());
+		}
+		catch (const std::exception&)
+		{
+			RETURN_WIDE_STRING(t);
+		}
+	}
+#pragma endregion World
 }

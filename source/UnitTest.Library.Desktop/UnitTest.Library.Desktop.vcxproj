@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -205,6 +205,7 @@ xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
     </ClCompile>
     <ClCompile Include="RTTITest.cpp" />
     <ClCompile Include="ScopeTest.cpp" />
+    <ClCompile Include="SectorTest.cpp" />
     <ClCompile Include="SListTest.cpp" />
     <ClCompile Include="EntityTest.cpp" />
     <ClCompile Include="StackTest.cpp" />
@@ -237,7 +238,6 @@ xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
     <None Include="Content\ScopeOfPrimitives.json" />
     <None Include="Content\ScopeOfScopeArray.json" />
     <None Include="Content\ScopeOfScopes.json" />
-    <None Include="Entity.json" />
     <None Include="World.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
