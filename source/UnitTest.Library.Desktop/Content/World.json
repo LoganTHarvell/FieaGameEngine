@@ -1,0 +1,91 @@
+{
+  "Name": {
+    "type": "string",
+    "value": "World"
+  },
+  "Sectors": {
+    "type": "Sector",
+    "value": [
+      {
+        "type": "Sector",
+        "value": {
+          "Name": {
+            "type": "string",
+            "value": "Sector1"
+          },
+          "Entities": {
+            "type": "Entity",
+            "value": [
+              {
+                "type": "Entity",
+                "value": {
+                  "Name": {
+                    "type": "string",
+                    "value": "Entity1"
+                  },
+                  "AuxiliaryInt": {
+                    "type": "integer",
+                    "value": 10
+                  }
+                }
+              },
+              {
+                "type": "Entity",
+                "value": {
+                  "Name": {
+                    "type": "string",
+                    "value": "Entity2"
+                  },
+                  "AuxiliaryInt": {
+                    "type": "integer",
+                    "value": 20
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "type": "Sector",
+        "value": {
+          "Name": {
+            "type": "string",
+            "value": "Sector2"
+          },
+          "Entities": {
+            "type": "Entity",
+            "value": [
+              {
+                "type": "Entity",
+                "value": {
+                  "Name": {
+                    "type": "string",
+                    "value": "Entity1"
+                  },
+                  "AuxiliaryInt": {
+                    "type": "integer",
+                    "value": 10
+                  }
+                }
+              },
+              {
+                "type": "Entity",
+                "value": {
+                  "Name": {
+                    "type": "string",
+                    "value": "Entity2"
+                  },
+                  "AuxiliaryInt": {
+                    "type": "integer",
+                    "value": 20
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+}
