@@ -86,6 +86,9 @@
     <ClCompile Include="SectorTest.cpp">
       <Filter>Entity System Tests</Filter>
     </ClCompile>
+    <ClCompile Include="WorldTest.cpp">
+      <Filter>Entity System Tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

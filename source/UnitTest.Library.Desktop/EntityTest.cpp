@@ -103,7 +103,6 @@ namespace UnitTestLibraryDesktop
 		TEST_METHOD(Accessors)
 		{
 			Entity emptyEntity;
-			Assert::AreEqual(std::string(), emptyEntity.Name());
 			Assert::IsNull(emptyEntity.GetSector());
 
 			Sector sector;

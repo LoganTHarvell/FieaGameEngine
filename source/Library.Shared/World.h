@@ -103,7 +103,7 @@ namespace Library
 		/// </summary>
 		/// <param name="name">Name of the newly created Sector.</param>
 		/// <returns>Reference to the newly heap allocated Sector.</returns>
-		Sector* CreateSector(const std::string& name);
+		Sector& CreateSector(const std::string& name);
 #pragma endregion Accessors
 
 #pragma region Game Loop
@@ -112,7 +112,7 @@ namespace Library
 		/// Virtual update method to be called every frame.
 		/// </summary>
 		/// <param name="worldState">WorldState context for the current processing step.</param>
-		virtual void Update(WorldState & worldState);
+		virtual void Update();
 #pragma endregion Game Loop
 
 #pragma region RTTI Overrides

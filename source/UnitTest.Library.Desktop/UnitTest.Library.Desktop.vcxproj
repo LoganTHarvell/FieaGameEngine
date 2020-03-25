@@ -212,6 +212,7 @@ xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
     <ClCompile Include="UtilityTest.cpp" />
     <ClCompile Include="TypeManagerTest.cpp" />
     <ClCompile Include="VectorTest.cpp" />
+    <ClCompile Include="WorldTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Library.Desktop\Library.Desktop.vcxproj">

@@ -89,32 +89,31 @@ namespace UnitTestLibraryDesktop
 
 		TEST_METHOD(Accessors)
 		{
-			Sector emptyEntity;
-			Assert::AreEqual(std::string(), emptyEntity.Name());
-			Assert::IsNull(emptyEntity.GetWorld());
+			Sector emptySector;
+			Assert::IsNull(emptySector.GetWorld());
 
 			World world;
-			Sector* sector = world.CreateSector("Sector");
+			Sector& sector = world.CreateSector("Sector");
 
-			Assert::AreEqual("Sector"s, sector->Name());
-			Assert::AreEqual(world, *sector->GetWorld());
+			Assert::AreEqual("Sector"s, sector.Name());
+			Assert::AreEqual(world, *sector.GetWorld());
 
 			World adopter;
-			sector->SetWorld(adopter);
-			Assert::IsNotNull(sector->GetWorld());
-			Assert::AreEqual(adopter, *sector->GetWorld());
-			Assert::IsNull(world.FindScope(*sector).first);
+			sector.SetWorld(adopter);
+			Assert::IsNotNull(sector.GetWorld());
+			Assert::AreEqual(adopter, *sector.GetWorld());
+			Assert::IsNull(world.FindScope(sector).first);
 
-			Assert::IsNull(sector->CreateEntity("Invalid", "Name"));
+			Assert::IsNull(sector.CreateEntity("Invalid", "Name"));
 
-			Entity* entity1 = sector->CreateEntity("Entity", "Entity1");
-			Entity* entity2 = sector->CreateEntity("Entity", "Entity2");
+			Entity* entity1 = sector.CreateEntity("Entity", "Entity1");
+			Entity* entity2 = sector.CreateEntity("Entity", "Entity2");
 			
-			Assert::AreEqual(2_z, sector->Entities().Size());
-			Assert::AreEqual(entity1, sector->Entities().Get<Scope*>(0)->As<Entity>());
-			Assert::AreEqual(entity2, sector->Entities().Get<Scope*>(1)->As<Entity>());
+			Assert::AreEqual(2_z, sector.Entities().Size());
+			Assert::AreEqual(entity1, sector.Entities().Get<Scope*>(0)->As<Entity>());
+			Assert::AreEqual(entity2, sector.Entities().Get<Scope*>(1)->As<Entity>());
 
-			const Sector copy = *sector;
+			const Sector copy = sector;
 
 			Assert::AreEqual(2_z, copy.Entities().Size());
 			Assert::AreEqual(entity1, copy.Entities().Get<Scope*>(0)->As<Entity>());

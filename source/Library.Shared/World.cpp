@@ -56,7 +56,7 @@ namespace Library
 		return mSectors;
 	}
 
-	Sector* World::CreateSector(const std::string& name)
+	Sector& World::CreateSector(const std::string& name)
 	{
 		Sector* newSector = new Sector();
 		assert(newSector);
@@ -64,19 +64,19 @@ namespace Library
 		newSector->SetName(name);
 
 		Adopt(*newSector, "Sectors");
-		return newSector;
+		return *newSector;
 	}
 
-	void World::Update(WorldState& worldState)
+	void World::Update()
 	{
-		GameTime currentGameTime = worldState.GetGameTime();
+		GameTime currentGameTime = mWorldState.GetGameTime();
 		mGameClock.UpdateGameTime(currentGameTime);
-		worldState.SetGameTime(currentGameTime);
+		mWorldState.SetGameTime(currentGameTime);
 
 		for (std::size_t i = 0; i < mSectors.Size(); ++i)
 		{
 			assert(mSectors[i].Is(Sector::TypeIdClass()));
-			static_cast<Sector*>(mSectors.Get<Scope*>(i))->Update(worldState);
+			static_cast<Sector*>(mSectors.Get<Scope*>(i))->Update(mWorldState);
 		}
 	}
 
