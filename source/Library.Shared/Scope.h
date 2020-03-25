@@ -184,13 +184,7 @@ namespace Library
 		/// Gets a pointer to the parent Scope, if it exists.
 		/// </summary>
 		/// <returns>If a child, the pointer to the parent Scope. Otherwise, nullptr.</returns>
-		Scope* GetParent();
-
-		/// <summary>
-		/// Gets a pointer to the parent Scope, if it exists.
-		/// </summary>
-		/// <returns>If a child, the pointer to the parent Scope. Otherwise, nullptr.</returns>
-		const Scope* GetParent() const;
+		Scope* GetParent() const;
 
 		/// <summary>
 		/// Checks if the Scope instance is a parent of the given Scope or any of its parents.

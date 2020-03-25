@@ -17,8 +17,8 @@ namespace Library
 		static const TypeManager::TypeInfo typeInfo
 		{
 			{
-				{ "Name", Types::String, false, 1, offsetof(Sector, mName) },
-				{ "Entities", Types::Scope, true, 1, 0 }
+				{ NameKey, Types::String, false, 1, offsetof(Sector, mName) },
+				{ EntitiesKey, Types::Scope, true, 1, 0 }
 			},
 
 			Attributed::TypeIdClass()
@@ -27,7 +27,7 @@ namespace Library
 		return typeInfo;
 	}
 
-	Sector::Sector() : Attributed(TypeIdClass()), mEntities(mPairPtrs[2]->second)
+	Sector::Sector() : Attributed(TypeIdClass()), mEntities(mPairPtrs[EntitiesIndex]->second)
 	{
 	}
 
@@ -46,18 +46,26 @@ namespace Library
 		mName = name;
 	}
 
-	const World* Sector::GetWorld() const
+	World* Sector::GetWorld() const
 	{
-		const Scope* parent = GetParent();
+		Scope* parent = GetParent();
 		if (!parent) return nullptr;
 
 		assert(parent->Is(World::TypeIdClass()));
-		return static_cast<const World*>(parent);
+		return static_cast<World*>(parent);
 	}
 
-	void Sector::SetWorld(World& world)
+	void Sector::SetWorld(World* world)
 	{
-		world.Adopt(*this, mName);
+		if (world == nullptr)
+		{
+			World* parent = GetWorld();
+			if (parent) parent->Orphan(*this);
+		}
+		else
+		{
+			world->Adopt(*this, mName);
+		}
 	}
 
 	Entity::DataType& Sector::Entities()

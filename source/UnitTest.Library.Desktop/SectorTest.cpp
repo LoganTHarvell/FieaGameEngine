@@ -99,7 +99,7 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(world, *sector.GetWorld());
 
 			World adopter;
-			sector.SetWorld(adopter);
+			sector.SetWorld(&adopter);
 			Assert::IsNotNull(sector.GetWorld());
 			Assert::AreEqual(adopter, *sector.GetWorld());
 			Assert::IsNull(world.FindScope(sector).first);
@@ -118,6 +118,10 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(2_z, copy.Entities().Size());
 			Assert::AreEqual(entity1, copy.Entities().Get<Scope*>(0)->As<Entity>());
 			Assert::AreEqual(entity2, copy.Entities().Get<Scope*>(1)->As<Entity>());
+
+			sector.SetWorld(nullptr);
+			Assert::IsNull(sector.GetWorld());
+			delete &sector;
 		}
 
 		TEST_METHOD(Update)

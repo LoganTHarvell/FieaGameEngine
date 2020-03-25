@@ -22,12 +22,7 @@ namespace Library
 #pragma endregion Size and Capacity
 
 #pragma region Accessors
-	inline Scope* Scope::GetParent()
-	{
-		return mParent;
-	}
-
-	inline const Scope* Scope::GetParent() const
+	inline Scope* Scope::GetParent() const
 	{
 		return mParent;
 	}

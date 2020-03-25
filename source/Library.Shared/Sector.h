@@ -20,13 +20,29 @@ namespace Library
 	{
 		RTTI_DECLARATIONS(Sector, Attributed)
 
-#pragma region Static Methods
+#pragma region Static Members
+	public:
+		/// <summary>
+		/// Key for the Name attribute in the Sector.
+		/// </summary>
+		inline static const std::string NameKey = "Name";
+
+		/// <summary>
+		/// Key for the Entities attribute in the Sector.
+		/// </summary>
+		inline static const std::string EntitiesKey = "Entities";
+
+		/// <summary>
+		/// Index of the Entities attribute in the Sector.
+		/// </summary>
+		inline static const std::size_t EntitiesIndex = 2;
+
 	public:
 		/// <summary>
 		/// Getter for the class TypeInfo, used for registration with the TypeManager.
 		/// </summary>
 		static const TypeManager::TypeInfo& TypeInfo();
-#pragma endregion Static Methods
+#pragma endregion Static Members
 
 #pragma region Special Members
 	public:
@@ -90,18 +106,17 @@ namespace Library
 		/// <param name="name">String to use as the name of the Sector.</param>
 		void SetName(const std::string& name);
 
-
 		/// <summary>
 		/// Gets the World that owns this Sector.
 		/// </summary>
 		/// <returns>Pointer to the World that owns this Sector.</returns>
-		const World* GetWorld() const;
+		World* GetWorld() const;
 
 		/// <summary>
 		/// Sets the World that owns this Sector.
 		/// </summary>
 		/// <param name="world">World to adopt this Sector.</param>
-		void SetWorld(World& world);
+		void SetWorld(World* world);
 
 		/// <summary>
 		/// Gets the data handle to the Entity objects contained in this Sector.

@@ -20,13 +20,19 @@ namespace Library
 	{
 		RTTI_DECLARATIONS(Entity, Attributed)
 
-#pragma region TypeInfo
+#pragma region Static Members
+	public:
+		/// <summary>
+		/// Key for the Name attribute in the Entity.
+		/// </summary>
+		inline static const std::string NameKey = "Name";
+
 	public:
 		/// <summary>
 		/// Getter for the class TypeInfo, used for registration with the TypeManager.
 		/// </summary>
 		static const TypeManager::TypeInfo& TypeInfo();
-#pragma endregion TypeInfo
+#pragma endregion Static Members
 
 #pragma region Special Members
 	public:
@@ -101,13 +107,13 @@ namespace Library
 		/// Gets the Sector that owns this Entity.
 		/// </summary>
 		/// <returns>Pointer to the Sector that owns this Entity.</returns>
-		const Sector* GetSector() const;
+		Sector* GetSector() const;
 
 		/// <summary>
 		/// Sets the Sector that owns this Entity.
 		/// </summary>
 		/// <param name="sector">Sector to adopt this Entity.</param>
-		void SetSector(Sector& sector);
+		void SetSector(Sector* sector);
 #pragma endregion Accessors
 
 #pragma region Game Loop

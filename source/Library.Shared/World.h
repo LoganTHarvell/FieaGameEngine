@@ -19,6 +19,22 @@ namespace Library
 #pragma region TypeInfo
 	public:
 		/// <summary>
+		/// Key for the Name attribute in the World.
+		/// </summary>
+		inline static const std::string NameKey = "Name";
+
+		/// <summary>
+		/// Key for the Sectors attribute in the World.
+		/// </summary>
+		inline static const std::string SectorsKey = "Sectors";
+
+		/// <summary>
+		/// Index of the Sectors attribute in the World.
+		/// </summary>
+		inline static const std::size_t SectorsIndex = 2;
+
+	public:
+		/// <summary>
 		/// Getter for the class TypeInfo, used for registration with the TypeManager.
 		/// </summary>
 		static const TypeManager::TypeInfo& TypeInfo();

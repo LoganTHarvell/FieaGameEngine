@@ -16,7 +16,7 @@ namespace Library
 		static const TypeManager::TypeInfo typeInfo
 		{
 			{
-				{ "Name", Types::String, false, 1, offsetof(Entity, mName) }
+				{ NameKey, Types::String, false, 1, offsetof(Entity, mName) }
 			},
 
 			Attributed::TypeIdClass()
@@ -48,18 +48,26 @@ namespace Library
 		mName = name;
 	}
 
-	const Sector* Entity::GetSector() const
+	Sector* Entity::GetSector() const
 	{
-		const Scope* parent = GetParent();
+		Scope* parent = GetParent();
 		if (!parent) return nullptr;
 
 		assert(parent->Is(Sector::TypeIdClass()));
-		return static_cast<const Sector*>(parent);
+		return static_cast<Sector*>(parent);
 	}
 
-	void Entity::SetSector(Sector& sector)
+	void Entity::SetSector(Sector* sector)
 	{
-		sector.Adopt(*this, mName);
+		if (sector == nullptr)
+		{
+			Sector* parent = GetSector();
+			if (parent) parent->Orphan(*this);
+		}
+		else
+		{
+			sector->Adopt(*this, mName);
+		}
 	}
 
 	void Entity::Update(WorldState& worldState)

@@ -111,10 +111,14 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(sector, *entity->GetSector());
 
 			Sector adopter;
-			entity->SetSector(adopter);
+			entity->SetSector(&adopter);
 			Assert::IsNotNull(entity->GetSector());
 			Assert::AreEqual(adopter, *entity->GetSector());
 			Assert::IsNull(sector.FindScope(*entity).first);
+
+			entity->SetSector(nullptr);
+			Assert::IsNull(entity->GetSector());
+			delete entity;
 		}
 
 		TEST_METHOD(Update)

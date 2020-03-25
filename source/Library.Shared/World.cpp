@@ -16,8 +16,8 @@ namespace Library
 		static const TypeManager::TypeInfo typeInfo
 		{
 			{
-				{ "Name", Types::String, false, 1, offsetof(World, mName) },
-				{ "Sectors", Types::Scope, true, 1, 0 }
+				{ NameKey, Types::String, false, 1, offsetof(World, mName) },
+				{ SectorsKey, Types::Scope, true, 1, 0 }
 			},
 
 			Attributed::TypeIdClass()
@@ -26,7 +26,7 @@ namespace Library
 		return typeInfo;
 	}
 
-	World::World() : Attributed(TypeIdClass()), mSectors(mPairPtrs[2]->second)
+	World::World() : Attributed(TypeIdClass()), mSectors(mPairPtrs[SectorsIndex]->second)
 	{
 		mWorldState.World = this;
 	}

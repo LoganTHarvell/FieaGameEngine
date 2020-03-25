@@ -163,7 +163,10 @@ namespace Library
 
 				if (value.isObject())
 				{
-					stackFrame->Context.Adopt(*Factory<Scope>::Create(stackFrame->ClassName), stackFrame->Key);
+					Scope* newScope = Factory<Scope>::Create(stackFrame->ClassName);
+					assert(newScope != nullptr);
+
+					stackFrame->Context.Adopt(*newScope, stackFrame->Key);
 				}
 
 				handled = true;
