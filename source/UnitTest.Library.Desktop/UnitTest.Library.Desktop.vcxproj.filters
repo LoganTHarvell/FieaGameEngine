@@ -89,6 +89,9 @@
     <ClCompile Include="WorldTest.cpp">
       <Filter>Entity System Tests</Filter>
     </ClCompile>
+    <ClCompile Include="JsonEntitySystemParseTest.cpp">
+      <Filter>Entity System Tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -174,7 +177,7 @@
     <None Include="Content\ScopeOfAttributedFoo.json">
       <Filter>Content</Filter>
     </None>
-    <None Include="World.json">
+    <None Include="Content\World.json">
       <Filter>Content</Filter>
     </None>
   </ItemGroup>

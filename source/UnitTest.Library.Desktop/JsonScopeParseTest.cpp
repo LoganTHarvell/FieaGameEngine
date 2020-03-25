@@ -28,6 +28,8 @@ namespace UnitTestLibraryDesktop
 
 		TEST_METHOD_CLEANUP(Cleanup)
 		{
+			TypeManager::Destroy();
+
 #if defined(DEBUG) || defined(_DEBUG)
 			_CrtMemState endMemState, diffMemState;
 			_CrtMemCheckpoint(&endMemState);
@@ -369,8 +371,6 @@ namespace UnitTestLibraryDesktop
 				std::string invalidIntegerArray = R"({ "IntegerArray": { "type": "integer", "value": [ 20, 20, 20 ] }})"s;
 				parser.Parse(invalidIntegerArray); 
 			});
-			
-			TypeManager::Destroy();
 		}
 
 		TEST_METHOD(ParseScopeOfAttributed)
@@ -409,8 +409,6 @@ namespace UnitTestLibraryDesktop
 			fooTen.AppendScope("ScopeArray").Append("Float") = 10.0f;
 
 			Assert::AreEqual(fooTen, *fancyFoo);
-
-			TypeManager::Destroy();
 		}
 
 		TEST_METHOD(RTTITest)
