@@ -49,7 +49,7 @@ namespace Library
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
-		Sector();
+		explicit Sector(const std::string& name=std::string());
 
 		/// <summary>
 		/// Default destructor.

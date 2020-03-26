@@ -39,7 +39,8 @@ namespace Library
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
-		Entity();
+		/// <param name="name">Name of the Entity.</param>
+		explicit Entity(const std::string& name=std::string());
 
 		/// <summary>
 		/// Default destructor.
@@ -77,7 +78,7 @@ namespace Library
 		/// Specialized constructor for use by derived classes to ensure correct attribute population.
 		/// </summary>
 		/// <param name="typeId">Type ID of the derived class.</param>
-		explicit Entity(const RTTI::IdType typeId);
+		explicit Entity(const RTTI::IdType typeId, const std::string& name=std::string());
 #pragma endregion Special Members
 
 #pragma region Virtual Copy Constructor

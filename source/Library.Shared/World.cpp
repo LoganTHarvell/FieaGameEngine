@@ -26,7 +26,8 @@ namespace Library
 		return typeInfo;
 	}
 
-	World::World() : Attributed(TypeIdClass()), mSectors(mPairPtrs[SectorsIndex]->second)
+	World::World(const std::string& name) : Attributed(TypeIdClass()), 
+		mName(name), mSectors(mPairPtrs[SectorsIndex]->second)
 	{
 		mWorldState.World = this;
 	}

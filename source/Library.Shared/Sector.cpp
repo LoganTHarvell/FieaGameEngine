@@ -27,7 +27,8 @@ namespace Library
 		return typeInfo;
 	}
 
-	Sector::Sector() : Attributed(TypeIdClass()), mEntities(mPairPtrs[EntitiesIndex]->second)
+	Sector::Sector(const std::string& name) : Attributed(TypeIdClass()), 
+		mName(name), mEntities(mPairPtrs[EntitiesIndex]->second)
 	{
 	}
 

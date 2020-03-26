@@ -25,11 +25,11 @@ namespace Library
 		return typeInfo;
 	}
 
-	Entity::Entity() : Attributed(TypeIdClass())
+	Entity::Entity(const std::string& name) : Attributed(TypeIdClass()), mName(name)
 	{
 	}
 
-	Entity::Entity(const RTTI::IdType typeId) : Attributed(typeId)
+	Entity::Entity(const RTTI::IdType typeId, const std::string& name) : Attributed(typeId), mName(name)
 	{
 	}
 

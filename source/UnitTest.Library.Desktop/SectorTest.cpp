@@ -49,9 +49,10 @@ namespace UnitTestLibraryDesktop
 
 		TEST_METHOD(Constructor)
 		{
-			Sector sector;
+			Sector sector("Sector");
+			Assert::AreEqual("Sector"s, sector.Name());
 			Assert::IsNotNull(sector.Find("Name"));
-			Assert::AreEqual(std::string(), sector.Find("Name")->Get<std::string>());
+			Assert::AreEqual("Sector"s, sector.Find("Name")->Get<std::string>());
 			Assert::IsNotNull(sector.Find("Entities"));
 			Assert::AreEqual(0_z, sector.Find("Entities")->Size());
 		}
@@ -82,14 +83,15 @@ namespace UnitTestLibraryDesktop
 
 		TEST_METHOD(ToString)
 		{
-			Sector sector;
-			sector.SetName("Sector");
+			Sector sector("Sector");
 			Assert::AreEqual("Sector (Sector)"s, sector.ToString());
 		}
 
 		TEST_METHOD(Accessors)
 		{
 			Sector emptySector;
+			emptySector.SetName("EmptySector");
+			Assert::AreEqual("EmptySector"s, emptySector.Name());
 			Assert::IsNull(emptySector.GetWorld());
 
 			World world;

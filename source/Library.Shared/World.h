@@ -45,7 +45,8 @@ namespace Library
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
-		World();
+		/// <param name="name">Name of the World.</param>
+		explicit World(const std::string& name=std::string());
 
 		/// <summary>
 		/// Default destructor.

@@ -17,7 +17,7 @@ namespace UnitTests
 		return typeInfo;
 	}
 
-	FooEntity::FooEntity() : Entity(TypeIdClass())
+	FooEntity::FooEntity(const std::string& name) : Entity(TypeIdClass(), name)
 	{
 	}
 

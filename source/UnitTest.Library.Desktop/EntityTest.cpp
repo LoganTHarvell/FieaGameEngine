@@ -48,13 +48,15 @@ namespace UnitTestLibraryDesktop
 
 		TEST_METHOD(Constructor)
 		{
-			Entity entity;
+			Entity entity("Entity");
+			Assert::AreEqual("Entity"s, entity.Name());
 			Assert::IsNotNull(entity.Find("Name"));
-			Assert::AreEqual(std::string(), entity.Find("Name")->Get<std::string>());
+			Assert::AreEqual("Entity"s, entity.Find("Name")->Get<std::string>());
 
-			FooEntity fooEntity;
+			FooEntity fooEntity("FooEntity");
+			Assert::AreEqual("FooEntity"s, fooEntity.Name());
 			Assert::IsNotNull(fooEntity.Find("Name"));
-			Assert::AreEqual(std::string(), fooEntity.Find("Name")->Get<std::string>());
+			Assert::AreEqual("FooEntity"s, fooEntity.Find("Name")->Get<std::string>());
 			Assert::IsNotNull(fooEntity.Find("Data"));
 			Assert::AreEqual(0, fooEntity.Find("Data")->Get<int>());
 		}
@@ -91,18 +93,18 @@ namespace UnitTestLibraryDesktop
 
 		TEST_METHOD(ToString)
 		{
-			Entity entity;
-			entity.SetName("BaseEntity");
+			Entity entity("BaseEntity");
 			Assert::AreEqual("BaseEntity (Entity)"s, entity.ToString());
 
-			FooEntity fooEntity;
-			fooEntity.SetName("Foo");
+			FooEntity fooEntity("Foo");
 			Assert::AreEqual("Foo (FooEntity)"s, fooEntity.ToString());
 		}
 
 		TEST_METHOD(Accessors)
 		{
 			Entity emptyEntity;
+			emptyEntity.SetName("EmptyEntity");
+			Assert::AreEqual("EmptyEntity"s, emptyEntity.Name());
 			Assert::IsNull(emptyEntity.GetSector());
 
 			Sector sector;

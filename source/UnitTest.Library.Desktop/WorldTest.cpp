@@ -49,9 +49,10 @@ namespace UnitTestLibraryDesktop
 
 		TEST_METHOD(Constructor)
 		{
-			World world;
+			World world("World");
+			Assert::AreEqual("World"s, world.Name());
 			Assert::IsNotNull(world.Find("Name"));
-			Assert::AreEqual(std::string(), world.Find("Name")->Get<std::string>());
+			Assert::AreEqual("World"s, world.Find("Name")->Get<std::string>());
 			Assert::IsNotNull(world.Find("Sectors"));
 			Assert::AreEqual(0_z, world.Find("Sectors")->Size());
 		}
@@ -82,8 +83,7 @@ namespace UnitTestLibraryDesktop
 
 		TEST_METHOD(ToString)
 		{
-			World world;
-			world.SetName("World");
+			World world("World");
 			Assert::AreEqual("World (World)"s, world.ToString());
 		}
 
