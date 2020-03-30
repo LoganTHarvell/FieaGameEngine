@@ -99,15 +99,15 @@ namespace Library
 
 	void Sector::Update(WorldState& worldState)
 	{
-		worldState.Sector = this;
-
 		for (std::size_t i = 0; i < mEntities.Size(); ++i)
 		{
 			assert(mEntities[i].Is(Entity::TypeIdClass()));
-			static_cast<Entity*>(mEntities.Get<Scope*>(i))->Update(worldState);
+
+			worldState.Entity = static_cast<Entity*>(mEntities.Get<Scope*>(i));
+			worldState.Entity->Update(worldState);
 		}
 
-		worldState.Sector = nullptr;
+		worldState.Entity = nullptr;
 	}
 
 	std::string Sector::ToString() const

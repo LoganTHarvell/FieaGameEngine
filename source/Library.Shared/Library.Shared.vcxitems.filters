@@ -38,6 +38,12 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)World.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Action.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)ActionList.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
@@ -105,6 +111,12 @@
       <Filter>Utility</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)World.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Action.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)ActionList.h">
       <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>

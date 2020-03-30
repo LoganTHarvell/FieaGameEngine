@@ -77,8 +77,12 @@ namespace Library
 		for (std::size_t i = 0; i < mSectors.Size(); ++i)
 		{
 			assert(mSectors[i].Is(Sector::TypeIdClass()));
-			static_cast<Sector*>(mSectors.Get<Scope*>(i))->Update(mWorldState);
+
+			mWorldState.Sector = static_cast<Sector*>(mSectors.Get<Scope*>(i));
+			mWorldState.Sector->Update(mWorldState);
 		}
+
+		mWorldState.Sector = nullptr;
 	}
 
 	std::string World::ToString() const

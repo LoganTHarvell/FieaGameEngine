@@ -12,7 +12,7 @@ namespace UnitTests
 		static const Library::TypeManager::TypeInfo& TypeInfo();
 
 		explicit FooEntity(const std::string& name=std::string());
-		~FooEntity() = default;
+		virtual ~FooEntity() = default;
 		FooEntity(const FooEntity & rhs) = default;
 		FooEntity& operator=(const FooEntity & rhs) = default;
 		FooEntity(FooEntity && rhs) noexcept = default;

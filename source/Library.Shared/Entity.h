@@ -9,9 +9,9 @@
 
 namespace Library
 {
-#pragma region Forward Class Declarations
+	// Forwarded Classes
 	class Sector;
-#pragma endregion Forward Class Declarations
+	class Action;
 
 	/// <summary>
 	/// Represents a base object within the reflection system.
@@ -26,6 +26,16 @@ namespace Library
 		/// Key for the Name attribute in the Entity.
 		/// </summary>
 		inline static const std::string NameKey = "Name";
+
+		/// <summary>
+		/// Key for the Actions attribute in the ActionList.
+		/// </summary>
+		inline static const std::string ActionsKey = "Actions";
+
+		/// <summary>
+		/// Index of the Actions attribute in the ActionList.
+		/// </summary>
+		inline static const std::size_t ActionsIndex = 2;
 
 	public:
 		/// <summary>
@@ -45,7 +55,7 @@ namespace Library
 		/// <summary>
 		/// Default destructor.
 		/// </summary>
-		~Entity() = default;
+		virtual ~Entity() = default;
 
 		/// <summary>
 		/// Copy constructor.
@@ -115,6 +125,26 @@ namespace Library
 		/// </summary>
 		/// <param name="sector">Sector to adopt this Entity.</param>
 		void SetSector(Sector* sector);
+
+		/// <summary>
+		/// Gets the data handle to the Action objects contained in this Entity.
+		/// </summary>
+		/// <returns>Reference to the Action objects.</returns>
+		DataType& Actions();
+
+		/// <summary>
+		/// Gets the data handle to the Action objects contained in this Entity.
+		/// </summary>
+		/// <returns>Reference to the Action objects.</returns>
+		const DataType& Actions() const;
+
+		/// <summary>
+		/// Generates an Action class and adopts it into this Sector.
+		/// </summary>
+		/// <param name="className">Class name of an Action or Action subclass to be instantiated.</param>
+		/// <param name="name">Name of the newly created Action.</param>
+		/// <returns>Reference to the newly heap allocated Action.</returns>
+		Action* CreateAction(const std::string& className, const std::string& name);
 #pragma endregion Accessors
 
 #pragma region Game Loop
@@ -141,6 +171,11 @@ namespace Library
 		/// Name of the Entity, reflected as a prescribed attribute.
 		/// </summary>
 		std::string mName;
+
+		/// <summary>
+		/// Collection of Action objects within the Actions prescribed attribute.
+		/// </summary>
+		DataType& mActions;
 #pragma endregion Data Members
 	};
 

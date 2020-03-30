@@ -76,7 +76,7 @@ namespace UnitTestLibraryDesktop
 
 			parser.Parse(json);
 
-			Assert::AreEqual(3_z, entity.Size());
+			Assert::AreEqual(4_z, entity.Size());
 
 			Assert::AreEqual("Entity"s, entity.Name());
 

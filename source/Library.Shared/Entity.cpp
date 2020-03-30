@@ -7,6 +7,7 @@
 
 //First Party
 #include "Sector.h"
+#include "Action.h"
 #pragma endregion Includes
 
 namespace Library
@@ -16,7 +17,8 @@ namespace Library
 		static const TypeManager::TypeInfo typeInfo
 		{
 			{
-				{ NameKey, Types::String, false, 1, offsetof(Entity, mName) }
+				{ NameKey, Types::String, false, 1, offsetof(Entity, mName) },
+				{ ActionsKey, Types::Scope, true, 1, 0 }
 			},
 
 			Attributed::TypeIdClass()
@@ -25,11 +27,13 @@ namespace Library
 		return typeInfo;
 	}
 
-	Entity::Entity(const std::string& name) : Attributed(TypeIdClass()), mName(name)
+	Entity::Entity(const std::string& name) : Attributed(TypeIdClass()), 
+		mName(name), mActions(mPairPtrs[ActionsIndex]->second)
 	{
 	}
 
-	Entity::Entity(const RTTI::IdType typeId, const std::string& name) : Attributed(typeId), mName(name)
+	Entity::Entity(const RTTI::IdType typeId, const std::string& name) : Attributed(typeId), 
+		mName(name), mActions(mPairPtrs[ActionsIndex]->second)
 	{
 	}
 
@@ -70,13 +74,45 @@ namespace Library
 		}
 	}
 
+	Entity::DataType& Entity::Actions()
+	{
+		return mActions;
+	}
+
+	const Entity::DataType& Entity::Actions() const
+	{
+		return mActions;
+	}
+
+	Action* Entity::CreateAction(const std::string& className, const std::string& name)
+	{
+		Scope* newScope = Factory<Scope>::Create(className);
+
+		if (newScope)
+		{
+			assert(newScope->Is(Action::TypeIdClass()));
+
+			Action* newAction = static_cast<Action*>(newScope);
+			newAction->SetName(name);
+
+			Adopt(*newScope, "Actions");
+			return newAction;
+		}
+
+		return nullptr;
+	}
+
 	void Entity::Update(WorldState& worldState)
 	{
-		worldState.Entity = this;
+		for (std::size_t i = 0; i < mActions.Size(); ++i)
+		{
+			assert(mActions[i].Is(Action::TypeIdClass()));
 
-		// TODO Action Update calls...
+			worldState.Action = static_cast<Action*>(mActions.Get<Scope*>(i));
+			worldState.Action->Update(worldState);
+		}
 
-		worldState.Entity = nullptr;
+		worldState.Action = nullptr;
 	}
 
 	std::string Entity::ToString() const

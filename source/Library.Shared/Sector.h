@@ -14,7 +14,7 @@ namespace Library
 	class Entity;
 
 	/// <summary>
-	/// Represents an contained collection of Entity objects, analogous to a package or level.
+	/// Represents a contained collection of Entity objects, analogous to a package or level.
 	/// </summary>
 	class Sector final : public Attributed
 	{
