@@ -150,7 +150,12 @@ namespace Library
 			else if (Factory<Scope>::IsRegistered(valueStr))
 			{
 				stackFrame->ClassName = valueStr;
+				stackFrame->Type = Scope::Types::Scope;
 				handled = true;
+			}
+			else
+			{
+				throw std::runtime_error("\"" + valueStr + "\" is not a valid type.");
 			}
 		}
 		else if (formattedKey == "value")
@@ -173,34 +178,28 @@ namespace Library
 			}
 			else if (value.isArray() && value.size() > 0)
 			{
-				handled = true;
-
 				for (const auto& v1 : value)
 				{
 					if (!v1.isString() && !v1.isObject() && !v1.isInt() && !v1.isDouble())
 					{
-						handled = false;
-						break;
+						throw std::runtime_error("Invalid array value type.");
 					}
 
 					for (const auto& v2 : value)
 					{
 						if (v1.type() != v2.type())
 						{
-							handled = false;
-							break;
+							throw std::runtime_error("Mismatched array value types.");
 						}
 					}
 				}
 
-				if (handled)
-				{
-					stackFrame->Value = &value;
-				}
+				stackFrame->Value = &value;				
+				handled = true;
 			}
 			else
 			{
-				stackFrame->Type = Scope::Types::Unknown;
+				throw std::runtime_error("Invalid value type.");
 			}
 		}
 		else if (value.isObject())
@@ -238,9 +237,20 @@ namespace Library
 		
 		bool handled = false;
 
-		if (stackFrame.Type != Scope::Types::Unknown && stackFrame.Value != nullptr)
+		if (stackFrame.Type != Scope::Types::Unknown)
 		{
-			if (stackFrame.Value->isObject())
+			if (stackFrame.Value == nullptr)
+			{
+				auto& scopeData = stackFrame.Context[stackFrame.Key];
+
+				if (scopeData.Type() == Scope::Types::Unknown)
+				{
+					scopeData.SetType(stackFrame.Type);
+				}
+
+				handled = true;
+			}
+			else if (stackFrame.Value->isObject())
 			{
 				handled = true;
 			}
@@ -259,7 +269,7 @@ namespace Library
 				}
 				else if (scopeData.Size() < stackFrame.Value->size())
 				{
-					throw std::runtime_error(stackFrame.Key + " array has too many elements.");
+					throw std::runtime_error("\"" + stackFrame.Key + "\" array has too many elements.");
 				}
 				
 				for (Json::Value::ArrayIndex i = 0; i < stackFrame.Value->size(); ++i)

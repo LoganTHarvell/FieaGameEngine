@@ -108,9 +108,17 @@
       <OptimizeReferences>false</OptimizeReferences>
     </Link>
     <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+    <CustomBuildStep>
       <Command>mkdir "$(OutDir)Content"
 xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
-    </PreBuildEvent>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Message>Copy Content Directory</Message>
+      <Outputs>$(OutDir)Content/*</Outputs>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -129,9 +137,17 @@ xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
       <OptimizeReferences>false</OptimizeReferences>
     </Link>
     <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+    <CustomBuildStep>
       <Command>mkdir "$(OutDir)Content"
 xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
-    </PreBuildEvent>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Message>Copy Content Directory</Message>
+      <Outputs>$(OutDir)Content/*</Outputs>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -151,9 +167,17 @@ xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
       <AdditionalLibraryDirectories>$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+    <CustomBuildStep>
       <Command>mkdir "$(OutDir)Content"
 xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
-    </PreBuildEvent>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Message>Copy Content Directory</Message>
+      <Outputs>$(OutDir)Content/*</Outputs>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -173,9 +197,17 @@ xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
       <AdditionalLibraryDirectories>$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+    <CustomBuildStep>
       <Command>mkdir "$(OutDir)Content"
 xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
-    </PreBuildEvent>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Message>Copy Content Directory</Message>
+      <Outputs>$(OutDir)Content/*</Outputs>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AttributedBar.cpp" />
@@ -234,7 +266,6 @@ xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\AttributedFoo.json" />
-    <None Include="Content\ScopeEdgeCases.json" />
     <None Include="Content\ScopeOfArrays.json" />
     <None Include="Content\ScopeOfAttributedFoo.json" />
     <None Include="Content\ScopeOfPrimitives.json" />

@@ -13,6 +13,9 @@
 
 namespace Library
 {
+	/// <summary>
+	/// Helper that handles parsing JSON into a Scope.
+	/// </summary>
 	class JsonScopeParseHelper final : public IJsonParseHelper
 	{
 		RTTI_DECLARATIONS(JsonScopeParseHelper, IJsonParseHelper)
@@ -152,12 +155,17 @@ namespace Library
 		/// Verifies a value can be handled and then sets the SharedData context for a subsequent EndHandler call.
 		/// </summary>
 		/// <returns>True if handled. Otherwise, false.</returns>
+		/// <exception cref="std::runtime_error">"" is not a valid type.</exception>
+		/// <exception cref="std::runtime_error">Invalid value type.</exception>
+		/// <exception cref="std::runtime_error">Invalid array value type.</exception>
+		/// <exception cref="std::runtime_error">Invalid mismatched array value types.</exception>
 		virtual bool StartHandler(JsonParseMaster::SharedData& data, const std::string& key, const Json::Value& value) override;
 
 		/// <summary>
 		/// Called by the associated JsonParseMaster during final parsing of a value.
 		/// Sets the SharedData with the values from the SharedData context setup by a previous StartHandler call.
 		/// </summary>
+		/// <exception cref="std::runtime_error">"" array has too many elements.</exception>
 		virtual bool EndHandler(JsonParseMaster::SharedData& data, const std::string& key) override;
 #pragma endregion Parse Handlers
 	};

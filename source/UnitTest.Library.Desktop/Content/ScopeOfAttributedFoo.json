@@ -1,4 +1,8 @@
 {
+  "EmptyFoo": {
+    "type": "AttributedFoo",
+    "value": {}
+  },
   "FancyFoo": {
     "type": "AttributedFoo",
     "value": {

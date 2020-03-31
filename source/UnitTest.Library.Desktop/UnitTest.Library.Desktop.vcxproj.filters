@@ -168,9 +168,6 @@
     <None Include="Content\ScopeOfScopeArray.json">
       <Filter>Content</Filter>
     </None>
-    <None Include="Content\ScopeEdgeCases.json">
-      <Filter>Content</Filter>
-    </None>
     <None Include="Content\AttributedFoo.json">
       <Filter>Content</Filter>
     </None>

@@ -307,33 +307,107 @@ namespace UnitTestLibraryDesktop
 
 		TEST_METHOD(ParseEdgeCases)
 		{
-			JsonScopeParseHelper::SharedData sharedData;
+			Scope scope;
+			JsonScopeParseHelper::SharedData sharedData(scope);
 			JsonScopeParseHelper helper;
 			JsonParseMaster parser;
 
 			parser.AddHelper(helper);
 			parser.SetSharedData(sharedData);
 
-			std::string filename("Content/ScopeEdgeCases.json");
-			parser.ParseFromFile(filename);
+			Assert::ExpectException<std::runtime_error>([&parser]
+			{
+				std::string json = R"({
+					"InvalidType": {
+					  "type": "invalid",
+					  "value": 10
+					}
+				})"s;
 
-			const Scope& scope = sharedData.GetScope();
+				parser.Parse(json);
+			});
 
-			Assert::IsNull(scope.Find("InvalidType"));
-			Assert::IsNull(scope.Find("NullValue"));
-			Assert::IsNull(scope.Find("Array2D"));
-			Assert::IsNull(scope.Find("MismatchedArray"));
+			Assert::ExpectException<std::runtime_error>([&parser]
+			{
+				std::string json = R"({
+					"NullValue": {
+					  "type": "integer",
+					  "value": null
+					}
+				})"s;
+
+				parser.Parse(json);
+			});
+
+			Assert::ExpectException<std::runtime_error>([&parser]
+			{
+				std::string json = R"({
+					"Array2D": {
+					  "type": "integer",
+					  "value": [ [ 10 ] ]
+					}
+				})"s;
+
+				parser.Parse(json);
+			});
+
+			Assert::ExpectException<std::runtime_error>([&parser]
+			{
+				std::string json = R"({
+					"MismatchedArray": {
+					  "type": "integer",
+					  "value": [ 10, "10" ]
+					}
+				})"s;
+
+				parser.Parse(json);
+			});
+
+			std::string json = R"({
+				"IntegerNoValue": {
+				  "type": "integer"
+				},
+				"NestedScopesArray": {
+				  "type": "scope",
+				  "value": [
+				    {
+				      "type": "scope",
+				      "value": {
+				        "Integer": {
+				          "type": "integer",
+				          "value": 10
+				        }
+				      }
+				    },
+				    {
+				      "type": "scope",
+				      "value": {
+				        "Float": {
+				          "type": "float",
+				          "value": 10.0
+				        }
+				      }
+				    }
+				  ]
+				}
+			})"s;
+
+			parser.Parse(json);
+
+			Assert::AreEqual(2_z, scope.Size());
+
+			Assert::AreEqual(Scope::Types::Integer, scope.Find("IntegerNoValue")->Type());
+			Assert::AreEqual(0_z, scope.Find("IntegerNoValue")->Size());
 
 			const Scope::DataType* nestedScopeData = scope.Find("NestedScopesArray");
 			Assert::IsNotNull(nestedScopeData);
+			Assert::AreEqual(2_z, nestedScopeData->Size());
 
 			const Scope* nestedScope1 = nestedScopeData->Get<Scope*>(0);
 			Assert::AreEqual(10, nestedScope1->Find("Integer")->Get<int>(0));
 
 			const Scope* nestedScope2 = nestedScopeData->Get<Scope*>(1);
 			Assert::AreEqual(10.0f, nestedScope2->Find("Float")->Get<float>(0));
-
-			Assert::AreEqual(1_z, scope.Size());
 		}
 
 		TEST_METHOD(ParseAttributed)
@@ -391,7 +465,22 @@ namespace UnitTestLibraryDesktop
 			std::string filename("Content/ScopeOfAttributedFoo.json");
 			parser.ParseFromFile(filename);
 
-			auto tmp = sharedData.GetScope().Find("FancyFoo");
+			auto tmp = sharedData.GetScope().Find("EmptyFoo");
+			Assert::IsNotNull(tmp);
+
+			AttributedFoo* emptyFoo = tmp->Get<Scope*>()->As<AttributedFoo>();
+			Assert::IsNotNull(emptyFoo);
+
+			emptyFoo->Find("Rtti")->Get<RTTI*>()->As<Foo>()->SetData(0);
+
+			auto rttiArray = emptyFoo->Find("RttiArray");
+			rttiArray->Get<RTTI*>(0)->As<Foo>()->SetData(0);
+			rttiArray->Get<RTTI*>(1)->As<Foo>()->SetData(0);
+
+			AttributedFoo defaultFoo;
+			Assert::AreEqual(defaultFoo, *emptyFoo);
+
+			tmp = sharedData.GetScope().Find("FancyFoo");
 			Assert::IsNotNull(tmp);
 
 			AttributedFoo* fancyFoo = tmp->Get<Scope*>()->As<AttributedFoo>();
@@ -399,7 +488,7 @@ namespace UnitTestLibraryDesktop
 
 			fancyFoo->Find("Rtti")->Get<RTTI*>()->As<Foo>()->SetData(10);
 
-			auto rttiArray = fancyFoo->Find("RttiArray");
+			rttiArray = fancyFoo->Find("RttiArray");
 			rttiArray->Get<RTTI*>(0)->As<Foo>()->SetData(10);
 			rttiArray->Get<RTTI*>(1)->As<Foo>()->SetData(10);
 

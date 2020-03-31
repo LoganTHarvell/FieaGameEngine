@@ -72,7 +72,7 @@ namespace UnitTestLibraryDesktop
 				  "type": "integer",
 				  "value": 10
 				}
-			})";
+			})"s;
 
 			parser.Parse(json);
 
@@ -133,7 +133,7 @@ namespace UnitTestLibraryDesktop
 				    }
 				  ]
 				}
-			})";
+			})"s;
 
 			parser.Parse(json);
 
