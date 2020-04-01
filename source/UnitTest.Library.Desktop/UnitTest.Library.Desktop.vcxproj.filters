@@ -95,6 +95,12 @@
     <ClCompile Include="ActionTest.cpp">
       <Filter>Entity System Tests\Action Tests</Filter>
     </ClCompile>
+    <ClCompile Include="ActionIncrementTest.cpp">
+      <Filter>Entity System Tests\Action Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="ActionListTest.cpp">
+      <Filter>Entity System Tests\Action Tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

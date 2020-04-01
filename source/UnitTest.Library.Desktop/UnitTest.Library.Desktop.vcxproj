@@ -210,6 +210,8 @@ xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ActionIncrementTest.cpp" />
+    <ClCompile Include="ActionListTest.cpp" />
     <ClCompile Include="ActionTest.cpp" />
     <ClCompile Include="AttributedBar.cpp" />
     <ClCompile Include="AttributedBarTest.cpp" />
