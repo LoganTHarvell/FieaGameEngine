@@ -51,27 +51,27 @@ namespace Library
 		/// Copy constructor.
 		/// </summary>
 		/// <param name="rhs">ActionList to be copied.</param>
-		ActionList(const ActionList & rhs) = default;
+		ActionList(const ActionList& rhs) = default;
 
 		/// <summary>
 		/// Copy assignment operator.
 		/// </summary>
 		/// <param name="rhs">ActionList to be copied.</param>
 		/// <returns>Newly copied into left hand side ActionList.</returns>
-		ActionList& operator=(const ActionList & rhs) = default;
+		ActionList& operator=(const ActionList& rhs) = default;
 
 		/// <summary>
 		/// Move constructor.
 		/// </summary>
 		/// <param name="rhs">ActionList to be moved.</param>
-		ActionList(ActionList && rhs) = default;
+		ActionList(ActionList&& rhs) noexcept = default;
 
 		/// <summary>
 		/// Move assignment operator.
 		/// </summary>
 		/// <param name="rhs">ActionList to be moved.</param>
 		/// <returns>Newly moved into left hand side ActionList.</returns>
-		ActionList& operator=(ActionList && rhs) = default;
+		ActionList& operator=(ActionList&& rhs) = default;
 #pragma endregion Special Members
 
 #pragma region Virtual Copy Constructor

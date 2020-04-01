@@ -74,14 +74,14 @@ namespace Library
 		/// Move constructor.
 		/// </summary>
 		/// <param name="rhs">Entity to be moved.</param>
-		Entity(Entity&& rhs) = default;
+		Entity(Entity&& rhs) noexcept = default;
 
 		/// <summary>
 		/// Move assignment operator.
 		/// </summary>
 		/// <param name="rhs">Entity to be moved.</param>
 		/// <returns>Newly moved into left hand side Entity.</returns>
-		Entity& operator=(Entity&& rhs) = default;
+		Entity& operator=(Entity&& rhs) noexcept = default;
 
 	protected:
 		/// <summary>

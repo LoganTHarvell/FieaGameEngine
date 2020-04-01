@@ -70,14 +70,14 @@ namespace Library
 		/// Move constructor.
 		/// </summary>
 		/// <param name="rhs">World to be moved.</param>
-		World(World && rhs) = default;
+		World(World && rhs) noexcept = default;
 
 		/// <summary>
 		/// Move assignment operator.
 		/// </summary>
 		/// <param name="rhs">World to be moved.</param>
 		/// <returns>Newly moved into left hand side World.</returns>
-		World& operator=(World && rhs) = default;
+		World& operator=(World && rhs) noexcept = default;
 #pragma endregion Special Members
 
 #pragma region Virtual Copy Constructor

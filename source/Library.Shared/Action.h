@@ -64,14 +64,14 @@ namespace Library
 		/// Move constructor.
 		/// </summary>
 		/// <param name="rhs">Action to be moved.</param>
-		Action(Action&& rhs) = default;
+		Action(Action&& rhs) noexcept = default;
 
 		/// <summary>
 		/// Move assignment operator.
 		/// </summary>
 		/// <param name="rhs">Action to be moved.</param>
 		/// <returns>Newly moved into left hand side Action.</returns>
-		Action& operator=(Action&& rhs) = default;
+		Action& operator=(Action&& rhs) noexcept = default;
 
 	protected:
 		/// <summary>

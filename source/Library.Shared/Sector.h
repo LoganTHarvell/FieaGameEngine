@@ -73,14 +73,14 @@ namespace Library
 		/// Move constructor.
 		/// </summary>
 		/// <param name="rhs">Sector to be moved.</param>
-		Sector(Sector && rhs) = default;
+		Sector(Sector && rhs) noexcept = default;
 
 		/// <summary>
 		/// Move assignment operator.
 		/// </summary>
 		/// <param name="rhs">Sector to be moved.</param>
 		/// <returns>Newly moved into left hand side Sector.</returns>
-		Sector& operator=(Sector && rhs) = default;
+		Sector& operator=(Sector && rhs) noexcept = default;
 #pragma endregion Special Members
 
 #pragma region Virtual Copy Constructor
