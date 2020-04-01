@@ -47,6 +47,9 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)ActionCreateAction.cpp">
       <Filter>Core\Actions</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)ActionDestroyAction.cpp">
+      <Filter>Core\Actions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
@@ -123,6 +126,9 @@
       <Filter>Core\Actions</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)ActionCreateAction.h">
+      <Filter>Core\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)ActionDestroyAction.h">
       <Filter>Core\Actions</Filter>
     </ClInclude>
   </ItemGroup>

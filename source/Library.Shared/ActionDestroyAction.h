@@ -10,23 +10,18 @@
 namespace Library
 {
 	/// <summary>
-	/// Represents an Action for creating Action attributes.
+	/// Represents an Action for destroying Action objects.
 	/// </summary>
-	class ActionCreateAction final : public Action
+	class ActionDestroyAction final : public Action
 	{
-		RTTI_DECLARATIONS(ActionCreateAction, Action)
+		RTTI_DECLARATIONS(ActionDestroyAction, Action)
 
 #pragma region Static Members
 	public:
 		/// <summary>
-		/// Key for the name of the Action attribute to create.
+		/// Key for the name of the Action attribute to destroy.
 		/// </summary>
 		inline static const std::string ActionNameKey = "ActionName";
-
-		/// <summary>
-		/// Key for the created Action attribute.
-		/// </summary>
-		inline static const std::string ActionKey = "Action";
 
 	public:
 		/// <summary>
@@ -40,38 +35,38 @@ namespace Library
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
-		explicit ActionCreateAction(const std::string& name=std::string());
+		explicit ActionDestroyAction(const std::string& name=std::string());
 
 		/// <summary>
 		/// Default destructor.
 		/// </summary>
-		~ActionCreateAction() = default;
+		~ActionDestroyAction() = default;
 
 		/// <summary>
 		/// Copy constructor.
 		/// </summary>
-		/// <param name="rhs">ActionCreateAction to be copied.</param>
-		ActionCreateAction(const ActionCreateAction& rhs) = default;
+		/// <param name="rhs">ActionDestroyAction to be copied.</param>
+		ActionDestroyAction(const ActionDestroyAction& rhs) = default;
 
 		/// <summary>
 		/// Copy assignment operator.
 		/// </summary>
-		/// <param name="rhs">ActionCreateAction to be copied.</param>
-		/// <returns>Newly copied into left hand side ActionCreateAction.</returns>
-		ActionCreateAction& operator=(const ActionCreateAction& rhs) = default;
+		/// <param name="rhs">ActionDestroyAction to be copied.</param>
+		/// <returns>Newly copied into left hand side ActionDestroyAction.</returns>
+		ActionDestroyAction& operator=(const ActionDestroyAction& rhs) = default;
 
 		/// <summary>
 		/// Move constructor.
 		/// </summary>
-		/// <param name="rhs">ActionCreateAction to be moved.</param>
-		ActionCreateAction(ActionCreateAction&& rhs) noexcept = default;
+		/// <param name="rhs">ActionDestroyAction to be moved.</param>
+		ActionDestroyAction(ActionDestroyAction&& rhs) noexcept = default;
 
 		/// <summary>
 		/// Move assignment operator.
 		/// </summary>
-		/// <param name="rhs">ActionCreateAction to be moved.</param>
-		/// <returns>Newly moved into left hand side ActionCreateAction.</returns>
-		ActionCreateAction& operator=(ActionCreateAction&& rhs) noexcept = default;
+		/// <param name="rhs">ActionDestroyAction to be moved.</param>
+		/// <returns>Newly moved into left hand side ActionDestroyAction.</returns>
+		ActionDestroyAction& operator=(ActionDestroyAction&& rhs) noexcept = default;
 #pragma endregion Special Members
 
 #pragma region Virtual Copy Constructor
@@ -79,7 +74,7 @@ namespace Library
 		/// <summary>
 		/// Virtual copy constructor.
 		/// </summary>
-		/// <returns>Owning pointer to a newly heap allocated copy of the ActionCreateAction.</returns>
+		/// <returns>Owning pointer to a newly heap allocated copy of the ActionDestroyAction.</returns>
 		virtual gsl::owner<Library::Scope*> Clone() const override;
 #pragma endregion Virtual Copy Constructor
 
@@ -104,7 +99,7 @@ namespace Library
 #pragma region Data Members
 	private:
 		/// <summary>
-		/// Name for the Action to create.
+		/// Name of the Action to be destroyed.
 		/// </summary>
 		std::string mActionName;
 #pragma endregion Data Members
@@ -112,9 +107,9 @@ namespace Library
 
 #pragma region Factory
 	/// <summary>
-	/// ActionCreateActionFactory class declaration.
+	/// ActionDestroyActionFactory class declaration.
 	/// </summary>
-	ConcreteFactory(ActionCreateAction, Scope)
+	ConcreteFactory(ActionDestroyAction, Scope)
 #pragma endregion Factory
 }
 

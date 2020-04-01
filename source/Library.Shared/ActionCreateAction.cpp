@@ -16,7 +16,7 @@ namespace Library
 		static const TypeManager::TypeInfo typeInfo
 		{
 			{
-				{ TargetKey, Types::String, false, 1, offsetof(ActionCreateAction, mTarget) },
+				{ ActionNameKey, Types::String, false, 1, offsetof(ActionCreateAction, mActionName) },
 				{ ActionKey, Types::Scope, true, 1, 0 }
 			},
 
@@ -45,7 +45,7 @@ namespace Library
 			{
 				assert(action->Get<Scope*>()->Is(Action::TypeIdClass()));
 
-				worldState.Entity->Actions().PushBack(action->Get<Scope*>());
+				worldState.Entity->Adopt(*action->Get<Scope*>()->Clone(), worldState.Entity->ActionsKey);
 			}
 		}
 	}

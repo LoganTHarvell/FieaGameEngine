@@ -111,7 +111,7 @@ namespace Library
 #pragma region Game Loop
 	public:
 		/// <summary>
-		/// Pure virtual update method to be called every frame.
+		/// Virtual update method called by the containing object.
 		/// </summary>
 		/// <param name="worldState">WorldState context for the current processing step.</param>
 		/// <remarks>
