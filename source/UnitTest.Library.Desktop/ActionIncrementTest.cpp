@@ -71,8 +71,6 @@ namespace UnitTestLibraryDesktop
 
 		TEST_METHOD(Constructor)
 		{
-			/* ActionIncrement */
-
 			ActionIncrement actionIncrement("ActionIncrement");
 			Assert::AreEqual("ActionIncrement"s, actionIncrement.Name());
 			Assert::IsNotNull(actionIncrement.Find("Name"));
@@ -134,15 +132,16 @@ namespace UnitTestLibraryDesktop
 			Assert::AreEqual(1, integer1);
 			Assert::AreEqual(1, integer2);
 
+			*castedIncrement->Find(castedIncrement->IncrementStepKey) = -1;
 			entity.Update(worldState);
 
 			Assert::AreEqual(2, integer1);
-			Assert::AreEqual(2, integer2);
+			Assert::AreEqual(0, integer2);
 
 			castedIncrement->Update(worldState);
 
 			Assert::AreEqual(2, integer1);
-			Assert::AreEqual(3, integer2);
+			Assert::AreEqual(-1, integer2);
 		}
 
 		TEST_METHOD(ToString)
