@@ -173,7 +173,7 @@ namespace Library
 
 #pragma region Factory
 	/// <summary>
-	/// EntityFactory class declaration.
+	/// SectorFactory class declaration.
 	/// </summary>
 	ConcreteFactory(Sector, Scope)
 #pragma endregion Factory

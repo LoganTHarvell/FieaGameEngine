@@ -12,21 +12,21 @@ namespace Library
 	/// <summary>
 	/// Represents a contained collection of Action objects.
 	/// </summary>
-	class ActionList final : public Action
+	class ActionCreateAction final : public Action
 	{
-		RTTI_DECLARATIONS(ActionList, Action)
+		RTTI_DECLARATIONS(ActionCreateAction, Action)
 
 #pragma region Static Members
 	public:
 		/// <summary>
-		/// Key for the Actions attribute in the ActionList.
+		/// Key for the name of the Target for the created Action attribute.
 		/// </summary>
-		inline static const std::string ActionsKey = "Actions";
+		inline static const std::string TargetKey = "Target";
 
 		/// <summary>
-		/// Index of the Actions attribute in the ActionList.
+		/// Key for the created Action attribute.
 		/// </summary>
-		inline static const std::size_t ActionsIndex = 2;
+		inline static const std::string ActionKey = "Action";
 
 	public:
 		/// <summary>
@@ -40,38 +40,38 @@ namespace Library
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
-		explicit ActionList(const std::string& name=std::string());
+		explicit ActionCreateAction(const std::string& name=std::string());
 
 		/// <summary>
 		/// Default destructor.
 		/// </summary>
-		~ActionList() = default;
+		~ActionCreateAction() = default;
 
 		/// <summary>
 		/// Copy constructor.
 		/// </summary>
-		/// <param name="rhs">ActionList to be copied.</param>
-		ActionList(const ActionList& rhs) = default;
+		/// <param name="rhs">ActionCreateAction to be copied.</param>
+		ActionCreateAction(const ActionCreateAction& rhs) = default;
 
 		/// <summary>
 		/// Copy assignment operator.
 		/// </summary>
-		/// <param name="rhs">ActionList to be copied.</param>
-		/// <returns>Newly copied into left hand side ActionList.</returns>
-		ActionList& operator=(const ActionList& rhs) = default;
+		/// <param name="rhs">ActionCreateAction to be copied.</param>
+		/// <returns>Newly copied into left hand side ActionCreateAction.</returns>
+		ActionCreateAction& operator=(const ActionCreateAction& rhs) = default;
 
 		/// <summary>
 		/// Move constructor.
 		/// </summary>
-		/// <param name="rhs">ActionList to be moved.</param>
-		ActionList(ActionList&& rhs) noexcept = default;
+		/// <param name="rhs">ActionCreateAction to be moved.</param>
+		ActionCreateAction(ActionCreateAction&& rhs) noexcept = default;
 
 		/// <summary>
 		/// Move assignment operator.
 		/// </summary>
-		/// <param name="rhs">ActionList to be moved.</param>
-		/// <returns>Newly moved into left hand side ActionList.</returns>
-		ActionList& operator=(ActionList&& rhs) = default;
+		/// <param name="rhs">ActionCreateAction to be moved.</param>
+		/// <returns>Newly moved into left hand side ActionCreateAction.</returns>
+		ActionCreateAction& operator=(ActionCreateAction&& rhs) noexcept = default;
 #pragma endregion Special Members
 
 #pragma region Virtual Copy Constructor
@@ -79,24 +79,9 @@ namespace Library
 		/// <summary>
 		/// Virtual copy constructor.
 		/// </summary>
-		/// <returns>Owning pointer to a newly heap allocated copy of the ActionList.</returns>
+		/// <returns>Owning pointer to a newly heap allocated copy of the ActionCreateAction.</returns>
 		virtual gsl::owner<Library::Scope*> Clone() const override;
 #pragma endregion Virtual Copy Constructor
-
-#pragma region Accessors
-	public:
-		/// <summary>
-		/// Gets the data handle to the Action objects contained in this ActionList.
-		/// </summary>
-		/// <returns>Reference to the Action objects.</returns>
-		DataType& Actions();
-
-		/// <summary>
-		/// Gets the data handle to the Action objects contained in this ActionList.
-		/// </summary>
-		/// <returns>Reference to the Action objects.</returns>
-		const DataType& Actions() const;
-#pragma endregion Accessors
 
 #pragma region Game Loop
 	public:
@@ -119,17 +104,17 @@ namespace Library
 #pragma region Data Members
 	private:
 		/// <summary>
-		/// Collection of Action objects within the Actions prescribed attribute.
+		/// Name of an attribute where the created Action should be added.
 		/// </summary>
-		DataType& mActions;
+		std::string mTarget;
 #pragma endregion Data Members
 	};
 
 #pragma region Factory
 	/// <summary>
-	/// ActionListFactory class declaration.
+	/// ActionCreateActionFactory class declaration.
 	/// </summary>
-	ConcreteFactory(ActionList, Scope)
+	ConcreteFactory(ActionCreateAction, Scope)
 #pragma endregion Factory
 }
 

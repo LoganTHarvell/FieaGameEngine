@@ -39,10 +39,13 @@
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Action.cpp">
-      <Filter>Core</Filter>
+      <Filter>Core\Actions</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)ActionList.cpp">
-      <Filter>Core</Filter>
+      <Filter>Core\Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)ActionCreateAction.cpp">
+      <Filter>Core\Actions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -113,11 +116,14 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)World.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Action.h">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)ActionList.h">
-      <Filter>Core</Filter>
+      <Filter>Core\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Action.h">
+      <Filter>Core\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)ActionCreateAction.h">
+      <Filter>Core\Actions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -185,6 +191,9 @@
     </Filter>
     <Filter Include="Core">
       <UniqueIdentifier>{f8346060-d4cd-4e79-830a-f01c0f376ad2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Actions">
+      <UniqueIdentifier>{ea3462ea-d32e-475a-9e02-f3f12b5435d9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
