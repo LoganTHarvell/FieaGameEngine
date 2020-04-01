@@ -634,13 +634,15 @@ namespace Library
 	std::string Datum::ToString(const std::size_t index) const
 	{
 		if (mType == Types::Unknown) throw std::runtime_error("Data type unknown.");
-		
+		if (index >= mSize)			 throw std::out_of_range("Index out of bounds.");
+
 		return ToStringLUT[static_cast<std::size_t>(mType)](mData.voidPtr, index);
 	}
 
 	void Datum::SetFromString(const std::string& str, const std::size_t index)
 	{
 		if (mType == Types::Unknown) throw std::runtime_error("Data type unknown.");
+		if (index >= mSize)			 throw std::out_of_range("Index out of bounds.");
 
 		FromStringLUT[static_cast<std::size_t>(mType)](str, mData.voidPtr, index);
 	}

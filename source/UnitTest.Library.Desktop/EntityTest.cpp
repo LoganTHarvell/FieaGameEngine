@@ -4,6 +4,7 @@
 #include "Entity.h"
 #include "FooEntity.h"
 #include "Sector.h"
+#include "ActionIncrement.h"
 
 using namespace std::string_literals;
 
@@ -20,9 +21,11 @@ namespace UnitTestLibraryDesktop
 		TEST_METHOD_INITIALIZE(Initialize)
 		{
 			TypeManager::Create();
+			RegisterType<Sector>();
 			RegisterType<Entity>();
 			RegisterType<FooEntity>();
-			RegisterType<Sector>();
+			RegisterType<Action>();
+			RegisterType<ActionIncrement>();
 
 #if defined(DEBUG) || defined(_DEBUG)
 			_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF);
@@ -109,6 +112,7 @@ namespace UnitTestLibraryDesktop
 
 			Sector sector;
 			Entity* entity = sector.CreateEntity("Entity", "BaseEntity");
+			Assert::IsNotNull(entity);
 			Assert::AreEqual("BaseEntity"s, entity->Name());
 			Assert::AreEqual(sector, *entity->GetSector());
 
@@ -117,6 +121,21 @@ namespace UnitTestLibraryDesktop
 			Assert::IsNotNull(entity->GetSector());
 			Assert::AreEqual(adopter, *entity->GetSector());
 			Assert::IsNull(sector.FindScope(*entity).first);
+
+			Assert::IsNull(entity->CreateAction("Invalid", "Name"));
+
+			Action* entity1 = entity->CreateAction("ActionIncrement", "ActionIncrement1");
+			Action* entity2 = entity->CreateAction("ActionIncrement", "ActionIncrement2");
+
+			Assert::AreEqual(2_z, entity->Actions().Size());
+			Assert::AreEqual(entity1, entity->Actions().Get<Scope*>(0)->As<Action>());
+			Assert::AreEqual(entity2, entity->Actions().Get<Scope*>(1)->As<Action>());
+
+			const Entity copy = *entity;
+
+			Assert::AreEqual(2_z, copy.Actions().Size());
+			Assert::AreEqual(entity1, copy.Actions().Get<Scope*>(0)->As<Action>());
+			Assert::AreEqual(entity2, copy.Actions().Get<Scope*>(1)->As<Action>());
 
 			entity->SetSector(nullptr);
 			Assert::IsNull(entity->GetSector());
@@ -181,6 +200,7 @@ namespace UnitTestLibraryDesktop
 		EntityFactory entityFactory;
 		FooEntityFactory fooEntityFactory;
 		SectorFactory sectorFactory;
+		ActionIncrementFactory actionIncrementFactory;
 	};
 
 	_CrtMemState EntityTest::sStartMemState;

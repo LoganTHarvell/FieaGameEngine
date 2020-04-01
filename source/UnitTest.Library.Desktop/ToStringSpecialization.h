@@ -17,9 +17,10 @@
 #include "Scope.h"
 #include "TypeManager.h"
 #include "JsonParseMaster.h"
-#include "Entity.h"
-#include "Sector.h"
 #include "World.h"
+#include "Sector.h"
+#include "Entity.h"
+#include "Action.h"
 
 
 using namespace UnitTests;
@@ -1254,7 +1255,7 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 		}
 		catch (const std::exception&)
 		{
-			return L"DataType Unknown"s;
+			return L"DataType Unknown or empty."s;
 		}
 	}
 
@@ -1432,6 +1433,40 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 		RETURN_WIDE_STRING(t);
 	}
 #pragma endregion JSON Parser
+
+#pragma region Action
+	template<>
+	inline std::wstring ToString<Action>(const Action& t)
+	{
+		RETURN_WIDE_STRING(t.Name().c_str());
+	}
+
+	template<>
+	inline std::wstring ToString<Action>(const Action* t)
+	{
+		try 
+		{
+			RETURN_WIDE_STRING(t->Name().c_str());
+		}
+		catch (const std::exception&)
+		{
+			RETURN_WIDE_STRING(t);
+		}
+	}
+
+	template<>
+	inline std::wstring ToString<Action>(Action* t)
+	{
+		try
+		{
+			RETURN_WIDE_STRING(t->Name().c_str());
+		}
+		catch (const std::exception&)
+		{
+			RETURN_WIDE_STRING(t);
+		}
+	}
+#pragma endregion Action
 
 #pragma region Entity
 	template<>

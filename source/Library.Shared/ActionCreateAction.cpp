@@ -20,7 +20,7 @@ namespace Library
 				{ ActionKey, Types::Scope, true, 1, 0 }
 			},
 
-			Attributed::TypeIdClass()
+			Action::TypeIdClass()
 		};
 
 		return typeInfo;

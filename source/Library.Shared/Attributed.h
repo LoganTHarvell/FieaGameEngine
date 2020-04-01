@@ -184,7 +184,8 @@ namespace Library
 		/// Recursively called to update any parent attributes registered.
 		/// </summary>
 		/// <param name="typeInfo">TypeInfo associated with the Attributed class.</param>
-		void UpdateExternalStorage(const TypeManager::TypeInfo* typeInfo);
+		/// <returns>Next prescribed attribute index to be updated, used by recursive calls.</returns>
+		std::size_t UpdateExternalStorage(const TypeManager::TypeInfo* typeInfo);
 #pragma endregion Helper Methods
 
 #pragma region Data Members

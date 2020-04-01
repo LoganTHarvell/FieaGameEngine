@@ -19,7 +19,7 @@ namespace Library
 				{ ActionNameKey, Types::String, false, 1, offsetof(ActionDestroyAction, mActionName) },
 			},
 
-			Attributed::TypeIdClass()
+			Action::TypeIdClass()
 		};
 
 		return typeInfo;

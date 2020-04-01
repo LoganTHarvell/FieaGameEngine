@@ -39,8 +39,7 @@ namespace Library
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
-		/// <param name="name">Name of the Action.</param>
-		explicit Action(const std::string& name=std::string());
+		Action() = delete;
 
 		/// <summary>
 		/// Default destructor.

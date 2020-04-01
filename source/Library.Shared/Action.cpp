@@ -25,10 +25,6 @@ namespace Library
 		return typeInfo;
 	}
 
-	Action::Action(const std::string& name) : Attributed(TypeIdClass()), mName(name)
-	{
-	}
-
 	Action::Action(const RTTI::IdType typeId, const std::string& name) : Attributed(typeId), mName(name)
 	{
 	}

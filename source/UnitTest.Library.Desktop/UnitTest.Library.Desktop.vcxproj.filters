@@ -2,12 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="Foo.cpp">
-      <Filter>Support Code</Filter>
-    </ClCompile>
-    <ClCompile Include="Bar.cpp">
-      <Filter>Support Code</Filter>
-    </ClCompile>
     <ClCompile Include="HashMapTest.cpp">
       <Filter>Container Tests</Filter>
     </ClCompile>
@@ -65,9 +59,6 @@
     <ClCompile Include="FactoryTest.cpp">
       <Filter>Utility Tests</Filter>
     </ClCompile>
-    <ClCompile Include="DerivedFoo.cpp">
-      <Filter>Support Code</Filter>
-    </ClCompile>
     <ClCompile Include="AttributedBar.cpp">
       <Filter>Support Code\Attributed</Filter>
     </ClCompile>
@@ -78,7 +69,7 @@
       <Filter>Support Code\Attributed</Filter>
     </ClCompile>
     <ClCompile Include="FooEntity.cpp">
-      <Filter>Support Code\Entity</Filter>
+      <Filter>Support Code\Core</Filter>
     </ClCompile>
     <ClCompile Include="EntityTest.cpp">
       <Filter>Entity System Tests</Filter>
@@ -92,23 +83,26 @@
     <ClCompile Include="JsonEntitySystemParseTest.cpp">
       <Filter>Entity System Tests</Filter>
     </ClCompile>
+    <ClCompile Include="Bar.cpp">
+      <Filter>Support Code\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="DerivedFoo.cpp">
+      <Filter>Support Code\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="Foo.cpp">
+      <Filter>Support Code\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="ActionTest.cpp">
+      <Filter>Entity System Tests\Action Tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
-    <ClInclude Include="Foo.h">
-      <Filter>Support Code</Filter>
-    </ClInclude>
     <ClInclude Include="ToStringSpecialization.h">
-      <Filter>Support Code</Filter>
-    </ClInclude>
-    <ClInclude Include="Bar.h">
       <Filter>Support Code</Filter>
     </ClInclude>
     <ClInclude Include="JsonTestParseHelper.h">
       <Filter>JSON Parser Test</Filter>
-    </ClInclude>
-    <ClInclude Include="DerivedFoo.h">
-      <Filter>Support Code</Filter>
     </ClInclude>
     <ClInclude Include="AttributedBar.h">
       <Filter>Support Code\Attributed</Filter>
@@ -120,7 +114,16 @@
       <Filter>Support Code\Attributed</Filter>
     </ClInclude>
     <ClInclude Include="FooEntity.h">
-      <Filter>Support Code\Entity</Filter>
+      <Filter>Support Code\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Bar.h">
+      <Filter>Support Code\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="DerivedFoo.h">
+      <Filter>Support Code\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="Foo.h">
+      <Filter>Support Code\Basic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -145,14 +148,20 @@
     <Filter Include="Content">
       <UniqueIdentifier>{7c84e84d-c64a-45c5-9935-43b0c86deccd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Support Code\Entity">
-      <UniqueIdentifier>{767465cd-7442-452c-8903-60620b40d12a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Support Code\Attributed">
       <UniqueIdentifier>{ad1ac5c6-b7b7-49d2-8bb9-2b78a080db17}</UniqueIdentifier>
     </Filter>
     <Filter Include="Entity System Tests">
       <UniqueIdentifier>{bd2439d4-7db9-4537-9865-77b749a06bf6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Support Code\Basic">
+      <UniqueIdentifier>{4d5447e3-1e4e-4ef9-b62e-6cfb0c47b6ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Support Code\Core">
+      <UniqueIdentifier>{767465cd-7442-452c-8903-60620b40d12a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entity System Tests\Action Tests">
+      <UniqueIdentifier>{830b286f-9457-4087-9008-28c1783b99a8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

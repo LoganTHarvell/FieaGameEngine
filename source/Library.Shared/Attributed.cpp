@@ -207,12 +207,13 @@ namespace Library
 		}
 	}
 
-	void Attributed::UpdateExternalStorage(const TypeManager::TypeInfo* typeInfo)
+	std::size_t Attributed::UpdateExternalStorage(const TypeManager::TypeInfo* typeInfo)
 	{
-		auto parentTypeInfo = TypeManager::Instance()->Find(typeInfo->parentTypeId);
-		if (parentTypeInfo) UpdateExternalStorage(parentTypeInfo);
-
 		std::size_t index = 1;
+
+		auto parentTypeInfo = TypeManager::Instance()->Find(typeInfo->parentTypeId);
+		if (parentTypeInfo) index = UpdateExternalStorage(parentTypeInfo);
+
 		for (const auto& signature : typeInfo->signatures)
 		{
 			if (!signature.IsInternal)
@@ -223,6 +224,8 @@ namespace Library
 
 			++index;
 		}
+
+		return index;
 	}
 #pragma endregion Helper Methods
 }
