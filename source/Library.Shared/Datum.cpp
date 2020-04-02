@@ -64,6 +64,22 @@ namespace Library
 			}
 			
 			return true;
+		},
+		[](void* lhs, void* rhs, std::size_t size) 
+		{
+			DatumPointer* lhsDatum = reinterpret_cast<DatumPointer*>(lhs);
+			DatumPointer* rhsDatum = reinterpret_cast<DatumPointer*>(rhs);
+
+			for (std::size_t i = 0; i < size; ++i)
+			{
+				if (!lhsDatum[i] && !rhsDatum[i]) continue;
+				if (!lhsDatum[i] || !rhsDatum[i] || lhsDatum[i] != rhsDatum[i])
+				{
+					return false;
+				}
+			}
+			
+			return true;
 		}
 	};
 
@@ -85,6 +101,12 @@ namespace Library
 			RTTIPointer* lhsRTTI = reinterpret_cast<RTTIPointer*>(lhs);
 			RTTIPointer* rhsRTTI = reinterpret_cast<RTTIPointer*>(rhs);
 			return ((!*lhsRTTI && !*rhsRTTI) || (*lhsRTTI && (*lhsRTTI)->Equals(*rhsRTTI)));
+		},
+		[](void* lhs, void* rhs) 
+		{
+			DatumPointer* lhsDatum = reinterpret_cast<DatumPointer*>(lhs);
+			DatumPointer* rhsDatum = reinterpret_cast<DatumPointer*>(rhs);
+			return ((!*lhsDatum && !*rhsDatum) || (*lhsDatum && *rhsDatum && **lhsDatum == **rhsDatum));
 		}
 	};
 
@@ -96,7 +118,8 @@ namespace Library
 		[](void* data, std::size_t index) { new(reinterpret_cast<glm::mat4*>(data) + index)glm::mat4(0.0f); },
 		[](void* data, std::size_t index) { new(reinterpret_cast<std::string*>(data) + index)std::string(); },
 		[](void* data, std::size_t index) { new(reinterpret_cast<ScopePointer*>(data) + index)ScopePointer(nullptr); },
-		[](void* data, std::size_t index) { new(reinterpret_cast<RTTIPointer*>(data) + index)RTTIPointer(nullptr); }
+		[](void* data, std::size_t index) { new(reinterpret_cast<RTTIPointer*>(data) + index)RTTIPointer(nullptr); },
+		[](void* data, std::size_t index) { new(reinterpret_cast<DatumPointer*>(data) + index)DatumPointer(nullptr); }
 	};
 
 	const Datum::ToStringFunctor Datum::ToStringLUT[static_cast<std::size_t>(Types::End)] =
@@ -107,7 +130,8 @@ namespace Library
 		[](void* data, std::size_t index) { return glm::to_string(reinterpret_cast<glm::mat4*>(data)[index]); },
 		[](void* data, std::size_t index) { return reinterpret_cast<std::string*>(data)[index]; },
 		[](void* data, std::size_t index) { ScopePointer ptr = reinterpret_cast<ScopePointer*>(data)[index]; return ptr ? ptr->ToString() : "nullptr";  },
-		[](void* data, std::size_t index) { RTTIPointer ptr = reinterpret_cast<RTTIPointer*>(data)[index]; return ptr ? ptr->ToString() : "nullptr";  }
+		[](void* data, std::size_t index) { RTTIPointer ptr = reinterpret_cast<RTTIPointer*>(data)[index]; return ptr ? ptr->ToString() : "nullptr";  },
+		[](void* data, std::size_t index) { DatumPointer ptr = reinterpret_cast<DatumPointer*>(data)[index]; return ptr ? ptr->ToString() : "nullptr";  }
 	};
 
 	const Datum::FromStringFunctor Datum::FromStringLUT[static_cast<std::size_t>(Types::End)] =
@@ -129,6 +153,7 @@ namespace Library
 						&matrix[12], &matrix[13], &matrix[14], &matrix[15]);
 		},
 		[](std::string str, void* data, std::size_t index) { reinterpret_cast<std::string*>(data)[index] = str; },
+		[](std::string, void*, std::size_t) {},
 		[](std::string, void*, std::size_t) {},
 		[](std::string, void*, std::size_t) {}
 	};
@@ -259,144 +284,164 @@ namespace Library
 #pragma region Scalar/Initializer List Constructors
 	Datum::Datum(const int rhs)
 	{
-		ConstructorAssignmentHelper({ rhs });
+		ScalarInitializationHelper(rhs);
 	}
 
 	Datum::Datum(const float rhs)
 	{
-		ConstructorAssignmentHelper({ rhs });
+		ScalarInitializationHelper(rhs);
 	}
 
 	Datum::Datum(const glm::vec4& rhs)
 	{
-		ConstructorAssignmentHelper({ rhs });
+		ScalarInitializationHelper(rhs);
 	}
 
 	Datum::Datum(const glm::mat4& rhs)
 	{
-		ConstructorAssignmentHelper({ rhs });
+		ScalarInitializationHelper(rhs);
 	}
 
 	Datum::Datum(const std::string& rhs)
 	{
-		ConstructorAssignmentHelper({ rhs });
+		ScalarInitializationHelper(rhs);
 	}
 
 	Datum::Datum(const ScopePointer& rhs)
 	{
-		ConstructorAssignmentHelper({ rhs });
+		ScalarInitializationHelper(rhs);
 	}
 
 	Datum::Datum(const RTTIPointer& rhs)
 	{
-		ConstructorAssignmentHelper({ rhs });
+		ScalarInitializationHelper(rhs);
+	}
+
+	Datum::Datum(const DatumPointer& rhs)
+	{
+		ScalarInitializationHelper(rhs);
 	}
 
 	Datum::Datum(const std::initializer_list<int> rhs)
 	{
-		ConstructorAssignmentHelper(rhs);
+		ListInitializationHelper(rhs);
 	}
 
 	Datum::Datum(const std::initializer_list<float> rhs)
 	{
-		ConstructorAssignmentHelper(rhs);
+		ListInitializationHelper(rhs);
 	}
 
 	Datum::Datum(const std::initializer_list<glm::vec4> rhs)
 	{
-		ConstructorAssignmentHelper(rhs);
+		ListInitializationHelper(rhs);
 	}
 
 	Datum::Datum(const std::initializer_list<glm::mat4> rhs)
 	{
-		ConstructorAssignmentHelper(rhs);
+		ListInitializationHelper(rhs);
 	}
 
 	Datum::Datum(const std::initializer_list<std::string> rhs)
 	{
-		ConstructorAssignmentHelper(rhs);
+		ListInitializationHelper(rhs);
 	}
 
 	Datum::Datum(const std::initializer_list<ScopePointer> rhs)
 	{
-		ConstructorAssignmentHelper(rhs);
+		ListInitializationHelper(rhs);
 	}
 
 	Datum::Datum(const std::initializer_list<RTTIPointer> rhs)
 	{
-		ConstructorAssignmentHelper(rhs);
+		ListInitializationHelper(rhs);
+	}
+
+	Datum::Datum(const std::initializer_list<DatumPointer> rhs)
+	{
+		ListInitializationHelper(rhs);
 	}
 #pragma endregion Scalar/List Constructors
 
 #pragma region Scalar/Initializer List Assignment
 	Datum& Datum::operator=(const int rhs)
 	{
-		return ConstructorAssignmentHelper({ rhs });
+		return ScalarInitializationHelper(rhs);
 	}
 
 	Datum& Datum::operator=(const float rhs)
 	{
-		return ConstructorAssignmentHelper({ rhs });
+		return ScalarInitializationHelper(rhs);
 	}
 
 	Datum& Datum::operator=(const glm::vec4& rhs)
 	{
-		return ConstructorAssignmentHelper({ rhs });
+		return ScalarInitializationHelper(rhs);
 	}
 
 	Datum& Datum::operator=(const glm::mat4& rhs)
 	{
-		return ConstructorAssignmentHelper({ rhs });
+		return ScalarInitializationHelper(rhs);
 	}
 
 	Datum& Datum::operator=(const std::string& rhs)
 	{
-		return ConstructorAssignmentHelper({ rhs });
+		return ScalarInitializationHelper(rhs);
 	}
 
 	Datum& Datum::operator=(const ScopePointer& rhs)
 	{
-		return ConstructorAssignmentHelper({ rhs });
+		return ScalarInitializationHelper(rhs);
 	}
 
 	Datum& Datum::operator=(const RTTIPointer& rhs)
 	{
-		return ConstructorAssignmentHelper({ rhs });
+		return ScalarInitializationHelper(rhs);
+	}
+
+	Datum& Datum::operator=(const DatumPointer& rhs)
+	{
+		return ScalarInitializationHelper(rhs);
 	}
 
 	Datum& Datum::operator=(const std::initializer_list<int> rhs)
 	{
-		return ConstructorAssignmentHelper(rhs);
+		return ListInitializationHelper(rhs);
 	}
 
 	Datum& Datum::operator=(const std::initializer_list<float> rhs)
 	{
-		return ConstructorAssignmentHelper(rhs);
+		return ListInitializationHelper(rhs);
 	}
 
 	Datum& Datum::operator=(const std::initializer_list<glm::vec4> rhs)
 	{
-		return ConstructorAssignmentHelper(rhs);
+		return ListInitializationHelper(rhs);
 	}
 
 	Datum& Datum::operator=(const std::initializer_list<glm::mat4> rhs)
 	{
-		return ConstructorAssignmentHelper(rhs);
+		return ListInitializationHelper(rhs);
 	}
 
 	Datum& Datum::operator=(const std::initializer_list<std::string> rhs)
 	{
-		return ConstructorAssignmentHelper(rhs);
+		return ListInitializationHelper(rhs);
 	}
 
 	Datum& Datum::operator=(const std::initializer_list<ScopePointer> rhs)
 	{
-		return ConstructorAssignmentHelper(rhs);
+		return ListInitializationHelper(rhs);
 	}
 
 	Datum& Datum::operator=(const std::initializer_list<RTTIPointer> rhs)
 	{
-		return ConstructorAssignmentHelper(rhs);
+		return ListInitializationHelper(rhs);
+	}
+
+	Datum& Datum::operator=(const std::initializer_list<DatumPointer> rhs)
+	{
+		return ListInitializationHelper(rhs);
 	}
 #pragma endregion Scalar/List Assignment
 #pragma endregion Constructors, Destructor, Assignment
@@ -458,6 +503,12 @@ namespace Library
 		assert(mData.rttiPtr != nullptr);
 		return ((!mData.rttiPtr[0] && !rhs) || (mData.rttiPtr[0] && mData.rttiPtr[0]->Equals(rhs)));
 	}
+
+	bool Datum::operator==(const DatumPointer& rhs) const noexcept
+	{
+		assert(mData.datumPtr != nullptr);
+		return ((!mData.datumPtr[0] && !rhs) || (mData.datumPtr[0] && *mData.datumPtr[0] == *rhs));
+	}
 #pragma endregion Equals Scalar
 
 #pragma region Not Equals Scalar
@@ -492,6 +543,11 @@ namespace Library
 	}
 
 	bool Datum::operator!=(const RTTIPointer& rhs) const noexcept
+	{
+		return !(operator==(rhs));
+	}
+
+	bool Datum::operator!=(const DatumPointer& rhs) const noexcept
 	{
 		return !(operator==(rhs));
 	}
@@ -650,7 +706,32 @@ namespace Library
 
 #pragma region Helper Methods
 	template<typename T>
-	Datum& Datum::ConstructorAssignmentHelper(const std::initializer_list<T> rhs)
+	Datum& Datum::ScalarInitializationHelper(const T& rhs)
+	{
+		if (mType == Types::Unknown)
+		{
+			mType = TypeOf<T>();
+		}
+		else if (mType != TypeOf<T>())
+		{
+			throw std::runtime_error("Mismatched types.");
+		}
+
+		if (mInternalStorage && mSize < 1)
+		{
+			Resize(1);
+		}
+		else if (mSize < 1)
+		{
+			throw std::runtime_error("External storage has insufficient memory.");
+		}
+
+		Set(rhs);		
+		return *this;
+	}
+
+	template<typename T>
+	Datum& Datum::ListInitializationHelper(const std::initializer_list<T> rhs)
 	{
 		if (mType == Types::Unknown)
 		{

@@ -42,6 +42,11 @@ namespace Library
 		using RTTIPointer = RTTI*;
 
 		/// <summary>
+		/// Alias for a pointer to an Datum class instance.
+		/// </summary>
+		using DatumPointer = Datum*;
+
+		/// <summary>
 		/// Reserve strategy functor type used during resize on insertion.
 		/// </summary>
 		using ReserveFunctor = std::function<std::size_t(const std::size_t, const std::size_t)>;
@@ -60,6 +65,7 @@ namespace Library
 			String,
 			Scope,
 			Pointer,
+			Reference,
 			
 			End
 		};
@@ -77,6 +83,7 @@ namespace Library
 			std::string* stringPtr;
 			ScopePointer* scopePtr;
 			RTTIPointer* rttiPtr;
+			DatumPointer* datumPtr;
 
 			// Convenience Pointers
 			void* voidPtr;
@@ -91,7 +98,7 @@ namespace Library
 			sizeof(int), sizeof(float),
 			sizeof(glm::vec4), sizeof(glm::mat4),
 			sizeof(std::string), sizeof(ScopePointer), 
-			sizeof(RTTIPointer) 
+			sizeof(RTTIPointer), sizeof(DatumPointer)
 		};
 
 		/// <summary>
@@ -192,6 +199,12 @@ namespace Library
 		/// </summary>
 		template<>
 		static constexpr Types TypeOf<RTTIPointer>();
+
+		/// <summary>
+		/// Returns the DatumTypes value associated with a DatumPointer type.
+		/// </summary>
+		template<>
+		static constexpr Types TypeOf<DatumPointer>();
 #pragma endregion TypeOf Static Method
 
 #pragma region Constructors, Destructor, Assignment
@@ -289,6 +302,14 @@ namespace Library
 		/// <exception cref="runtime_error">Mismatched types.</exception>
 		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
 		Datum(const RTTIPointer& rhs);
+		
+		/// <summary>
+		/// Scalar constructor overloads for assigning Datum to an DatumPointer.
+		/// </summary>
+		/// <param name="rhs">An DatumPointer for initializing mData.</param>
+		/// <exception cref="runtime_error">Mismatched types.</exception>
+		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
+		Datum(const DatumPointer& rhs);
 
 		/// <summary>
 		/// Initializer list constructor overloads for assigning Datum to a list of int values.
@@ -345,6 +366,14 @@ namespace Library
 		/// <exception cref="runtime_error">Mismatched types.</exception>
 		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
 		Datum(const std::initializer_list<RTTIPointer> rhs);
+
+		/// <summary>
+		/// Initializer list constructor overloads for assigning Datum to a list of DatumPointer values.
+		/// </summary>
+		/// <param name="rhs">A list of DatumPointer values for initializing mData.</param>
+		/// <exception cref="runtime_error">Mismatched types.</exception>
+		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
+		Datum(const std::initializer_list<DatumPointer> rhs);
 #pragma endregion Scalar/List Constructors
 
 #pragma region Scalar/Initializer List Assignment
@@ -406,6 +435,14 @@ namespace Library
 		Datum& operator=(const RTTIPointer& rhs);
 
 		/// <summary>
+		/// Scalar assignment overloads for assigning Datum to an DatumPointer.
+		/// </summary>
+		/// <param name="rhs">An DatumPointer for assigning to mData.</param>
+		/// <exception cref="runtime_error">Mismatched types.</exception>
+		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
+		Datum& operator=(const DatumPointer& rhs);
+
+		/// <summary>
 		/// Initializer list assignment overloads for assigning Datum to a list of int values.
 		/// </summary>
 		/// <param name="rhs">A list of int values for assigning to mData.</param>
@@ -460,6 +497,14 @@ namespace Library
 		/// <exception cref="runtime_error">Mismatched types.</exception>
 		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
 		Datum& operator=(const std::initializer_list<RTTIPointer> rhs);
+
+		/// <summary>
+		/// Initializer list assignment overloads for assigning Datum to a list of DatumPointer values.
+		/// </summary>
+		/// <param name="rhs">A list of DatumPointer values for assigning to mData.</param>
+		/// <exception cref="runtime_error">Mismatched types.</exception>
+		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
+		Datum& operator=(const std::initializer_list<DatumPointer> rhs);
 #pragma endregion Scalar/Initializer List Assignment
 #pragma endregion Constructors, Destructor, Assignment
 
@@ -537,6 +582,14 @@ namespace Library
 		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
 		/// <returns>True when Datum and scalar are equivalent, otherwise false.</returns>
 		bool operator==(const RTTIPointer& rhs) const noexcept;
+
+		/// <summary>
+		/// Scalar equals operator. 
+		/// Checks if the Datum contains only one element that is equal to the right hand side value.
+		/// </summary>
+		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
+		/// <returns>True when Datum and scalar are equivalent, otherwise false.</returns>
+		bool operator==(const DatumPointer& rhs) const noexcept;
 #pragma endregion Equals Scalar
 
 #pragma region Not Equals Scalar
@@ -595,6 +648,14 @@ namespace Library
 		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
 		/// <returns>True when Datum and scalar are not equivalent, otherwise false.</returns>
 		bool operator!=(const RTTIPointer& rhs) const noexcept;
+
+		/// <summary>
+		/// Scalar not equals operator. 
+		/// Checks if the Datum contains only one element that is not equal to the right hand side value.
+		/// </summary>
+		/// <param name="rhs">Scalar value on the right hand side to be compared to the Datum value.</param>
+		/// <returns>True when Datum and scalar are not equivalent, otherwise false.</returns>
+		bool operator!=(const DatumPointer& rhs) const noexcept;
 #pragma endregion Not Equals Scalar
 #pragma endregion Boolean Operators
 
@@ -865,7 +926,15 @@ namespace Library
 		/// <typeparam name="T">Type of elements to fill the Datum.</typeparam>
 		/// <param name="rhs">List of values to fill the Datum.</param>
 		template<typename T>
-		Datum& ConstructorAssignmentHelper(const std::initializer_list<T> rhs);
+		Datum& ScalarInitializationHelper(const T& rhs);
+
+		/// <summary>
+		/// Constructor and assignment helper that initializes Datum with values from an initializer list.
+		/// </summary>
+		/// <typeparam name="T">Type of elements to fill the Datum.</typeparam>
+		/// <param name="rhs">List of values to fill the Datum.</param>
+		template<typename T>
+		Datum& ListInitializationHelper(const std::initializer_list<T> rhs);
 #pragma endregion Helper Methods
 
 #pragma region Data Members

@@ -367,7 +367,7 @@ namespace UnitTests
 			datumToSet.SetFromString(datum.ToString(i), i);
 		}
 
-		if (Datum::TypeOf<T>() != Datum::Types::Pointer)
+		if (Datum::TypeOf<T>() != Datum::Types::Pointer && Datum::TypeOf<T>() != Datum::Types::Reference)
 		{
 			Assert::AreEqual(datum, datumToSet);
 		}
@@ -409,6 +409,7 @@ namespace ContainerTests
 			Assert::AreEqual(Datum::Types::Matrix, Datum::TypeOf<glm::mat4>());
 			Assert::AreEqual(Datum::Types::String, Datum::TypeOf<std::string>());
 			Assert::AreEqual(Datum::Types::Pointer, Datum::TypeOf<RTTI*>());
+			Assert::AreEqual(Datum::Types::Reference, Datum::TypeOf<Datum*>());
 		}
 
  		TEST_METHOD(Constructors)
@@ -422,6 +423,10 @@ namespace ContainerTests
 			Foo a(10), b(20), c(30);
 			TestConstructors<RTTI*>({ &a, &b, &c });
 			TestConstructors<RTTI*>({ nullptr, nullptr, nullptr });
+
+			Datum aDatum(10), bDatum(20), cDatum(30);
+			TestConstructors<Datum*>({ &aDatum, &bDatum, &cDatum });
+			TestConstructors<Datum*>({ nullptr, nullptr, nullptr });
 		}
 
  		TEST_METHOD(Copy)
@@ -435,6 +440,10 @@ namespace ContainerTests
 			Foo a(10), b(20), c(30);
 			TestCopy<RTTI*>({ &a, &b, &c });
 			TestCopy<RTTI*>({ nullptr, nullptr, nullptr });
+
+			Datum aDatum(10), bDatum(20), cDatum(30);
+			TestCopy<Datum*>({ &aDatum, &bDatum, &cDatum });
+			TestCopy<Datum*>({ nullptr, nullptr, nullptr });
 		}
 
 		TEST_METHOD(Move)
@@ -448,6 +457,10 @@ namespace ContainerTests
 			Foo a(10), b(20), c(30);
 			TestMove<RTTI*>({ &a, &b, &c });
 			TestMove<RTTI*>({ nullptr, nullptr, nullptr });
+
+			Datum aDatum(10), bDatum(20), cDatum(30);
+			TestMove<Datum*>({ &aDatum, &bDatum, &cDatum });
+			TestMove<Datum*>({ nullptr, nullptr, nullptr });
 		}
 
 		TEST_METHOD(Equality)
@@ -461,6 +474,10 @@ namespace ContainerTests
  			Foo a(10), b(20), c(30);
  			TestEquality<RTTI*>({ &a, &b, &c }, nullptr);
  			TestEquality<RTTI*>({ nullptr, nullptr, nullptr }, &a);
+
+			Datum aDatum(10), bDatum(20), cDatum(30);
+			TestEquality<Datum*>({ &aDatum, &bDatum, &cDatum }, nullptr);
+			TestEquality<Datum*>({ nullptr, nullptr, nullptr }, &aDatum);
 
 			Datum datumInt = { 10, 20, 30 };
 			Datum datumFloat = { 10, 20, 30 };
@@ -497,6 +514,10 @@ namespace ContainerTests
 			Foo a(10), b(20), c(30);
 			TestTypeSizeCapacity<RTTI*>({ &a, &b, &c });
 			TestTypeSizeCapacity<RTTI*>({ nullptr, nullptr, nullptr });
+
+			Datum aDatum(10), bDatum(20), cDatum(30);
+			TestTypeSizeCapacity<Datum*>({ &aDatum, &bDatum, &cDatum });
+			TestTypeSizeCapacity<Datum*>({ nullptr, nullptr, nullptr });
 		}
 
 		TEST_METHOD(Resize)
@@ -510,6 +531,10 @@ namespace ContainerTests
 			Foo a(10), b(20), c(30);
 			TestResize<RTTI*>({ &a, &b, &c });
 			TestResize<RTTI*>({ nullptr, nullptr, nullptr });
+
+			Datum aDatum(10), bDatum(20), cDatum(30);
+			TestResize<Datum*>({ &aDatum, &bDatum, &cDatum });
+			TestResize<Datum*>({ nullptr, nullptr, nullptr });
 		}
 
 		TEST_METHOD(ShrinkToFit)
@@ -523,6 +548,10 @@ namespace ContainerTests
 			Foo a(10), b(20), c(30);
 			TestShrinkToFit<RTTI*>({ &a, &b, &c });
 			TestShrinkToFit<RTTI*>({ nullptr, nullptr, nullptr });
+
+			Datum aDatum(10), bDatum(20), cDatum(30);
+			TestShrinkToFit<Datum*>({ &aDatum, &bDatum, &cDatum });
+			TestShrinkToFit<Datum*>({ nullptr, nullptr, nullptr });
 		}
 
 		TEST_METHOD(ElementAccessors)
@@ -536,6 +565,10 @@ namespace ContainerTests
 			Foo a(10), b(20), c(30);
 			TestElementAccessors<RTTI*>({ &a, &b, &c }, nullptr);
 			TestElementAccessors<RTTI*>({ nullptr, nullptr, nullptr }, &a);
+
+			Datum aDatum(10), bDatum(20), cDatum(30);
+			TestElementAccessors<Datum*>({ &aDatum, &bDatum, &cDatum }, nullptr);
+			TestElementAccessors<Datum*>({ nullptr, nullptr, nullptr }, &aDatum);
 
 			Datum datumInt = { 10, 20, 30 };
 			Datum datumFloat = { 10, 20, 30 };
@@ -606,11 +639,17 @@ namespace ContainerTests
 			RTTI* dataFoo[10] = { &a, &b, &c, &d, &e, &f, &g, &h, &i, &j };
 			RTTI* dataNullptr[10] = { nullptr, nullptr, nullptr, nullptr, nullptr };
 
+			Datum aDatum(1), bDatum(2), cDatum(3), dDatum(4), eDatum(5), fDatum(6), gDatum(7), hDatum(8), iDatum(9), jDatum(10);
+			Datum* dataDatum[10] = { &aDatum, &bDatum, &cDatum, &dDatum, &eDatum, &fDatum, &gDatum, &hDatum, &iDatum, &jDatum };
+			Datum* datumNullptr[10] = { nullptr, nullptr, nullptr, nullptr, nullptr };
+
 			TestSetStorage<int>(dataInt);
 			TestSetStorage<float>(dataFloat);
 			TestSetStorage<std::string>(dataString);
 			TestSetStorage<RTTI*>(dataFoo);
 			TestSetStorage<RTTI*>(dataNullptr);
+			TestSetStorage<Datum*>(dataDatum);
+			TestSetStorage<Datum*>(datumNullptr);
 		}
 
 		TEST_METHOD(PushBack)
@@ -624,6 +663,10 @@ namespace ContainerTests
 			Foo a(1), b(2), c(3), d(4), e(5), f(6), g(7), h(8), i(9), j(10);
 			TestPushBack<RTTI*>({ &a, &b, &c, &d, &e, &f, &g, &h, &i, &j });
 			TestPushBack<RTTI*>({ nullptr, nullptr, nullptr, nullptr, nullptr });
+
+			Datum aDatum(1), bDatum(2), cDatum(3), dDatum(4), eDatum(5), fDatum(6), gDatum(7), hDatum(8), iDatum(9), jDatum(10);
+			TestPushBack<Datum*>({ &aDatum, &bDatum, &cDatum, &dDatum, &eDatum, &fDatum, &gDatum, &hDatum, &iDatum, &jDatum });
+			TestPushBack<Datum*>({ nullptr, nullptr, nullptr, nullptr, nullptr });
 		}
 
 		TEST_METHOD(PopBack)
@@ -637,6 +680,10 @@ namespace ContainerTests
 			Foo a(10), b(20), c(30);
 			TestPopBack<RTTI*>({ &a, &b, &c });
 			TestPopBack<RTTI*>({ nullptr, nullptr, nullptr });
+
+			Datum aDatum(10), bDatum(20), cDatum(30);
+			TestPopBack<Datum*>({ &aDatum, &bDatum, &cDatum });
+			TestPopBack<Datum*>({ nullptr, nullptr, nullptr });
 		}
 
 		TEST_METHOD(Remove)
@@ -650,6 +697,10 @@ namespace ContainerTests
 			Foo a(10), b(20), c(30);
 			TestRemove<RTTI*>({ &a, &b, &c }, nullptr);
 			TestRemove<RTTI*>({ nullptr, nullptr, nullptr }, &a);
+
+			Datum aDatum(10), bDatum(20), cDatum(30);
+			TestRemove<Datum*>({ &aDatum, &bDatum, &cDatum }, nullptr);
+			TestRemove<Datum*>({ nullptr, nullptr, nullptr }, &aDatum);
 		}
 
 		TEST_METHOD(Clear)
@@ -663,6 +714,10 @@ namespace ContainerTests
 			Foo a(10), b(20), c(30);
 			TestClear<RTTI*>({ &a, &b, &c });
 			TestClear<RTTI*>({ nullptr, nullptr, nullptr });
+
+			Datum aDatum(10), bDatum(20), cDatum(30);
+			TestClear<Datum*>({ &aDatum, &bDatum, &cDatum });
+			TestClear<Datum*>({ nullptr, nullptr, nullptr });
 		}
 
 		TEST_METHOD(StringConversion)
@@ -676,6 +731,10 @@ namespace ContainerTests
 			Foo a(10), b(20), c(30);
 			TestStringConversion<RTTI*>({ &a, &b, &c });
 			TestStringConversion<RTTI*>({ nullptr, nullptr, nullptr });
+
+			Datum aDatum(10), bDatum(20), cDatum(30);
+			TestStringConversion<Datum*>({ &aDatum, &bDatum, &cDatum });
+			TestStringConversion<Datum*>({ nullptr, nullptr, nullptr });
 		}
 
 	private:

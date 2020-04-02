@@ -59,6 +59,12 @@ namespace Library
 	{
 		return Types::Pointer;
 	}
+
+	template<>
+	inline constexpr Datum::Types Datum::TypeOf<Datum::DatumPointer>()
+	{
+		return Types::Reference;
+	}
 #pragma endregion TypeOf Static Method
 
 #pragma region Type, Size, Capacity
