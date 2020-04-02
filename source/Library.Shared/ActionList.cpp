@@ -27,6 +27,11 @@ namespace Library
 	{
 	}
 
+	ActionList::ActionList(const RTTI::IdType typeId, const std::string& name) : Action(typeId, name),
+		mActions(mPairPtrs[ActionsIndex]->second)
+	{
+	}
+
 	gsl::owner<Library::Scope*> ActionList::Clone() const
 	{
 		return new ActionList(*this);

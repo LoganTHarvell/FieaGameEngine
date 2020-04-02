@@ -47,10 +47,13 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)ActionIncrement.cpp">
       <Filter>Core\Actions</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Dev\Students\CH16\Logan.Harvell\Prog2\fieagameengine\source\Library.Shared\ActionCreate.cpp">
+    <ClCompile Include="$(MSBuildThisFileDirectory)ActionCreate.cpp">
       <Filter>Core\Actions</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Dev\Students\CH16\Logan.Harvell\Prog2\fieagameengine\source\Library.Shared\ActionDestroy.cpp">
+    <ClCompile Include="$(MSBuildThisFileDirectory)ActionDestroy.cpp">
+      <Filter>Core\Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)ActionListWhile.cpp">
       <Filter>Core\Actions</Filter>
     </ClCompile>
   </ItemGroup>
@@ -131,10 +134,13 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)ActionIncrement.h">
       <Filter>Core\Actions</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Dev\Students\CH16\Logan.Harvell\Prog2\fieagameengine\source\Library.Shared\ActionCreate.h">
+    <ClInclude Include="$(MSBuildThisFileDirectory)ActionDestroy.h">
       <Filter>Core\Actions</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Dev\Students\CH16\Logan.Harvell\Prog2\fieagameengine\source\Library.Shared\ActionDestroy.h">
+    <ClInclude Include="$(MSBuildThisFileDirectory)ActionCreate.h">
+      <Filter>Core\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)ActionListWhile.h">
       <Filter>Core\Actions</Filter>
     </ClInclude>
   </ItemGroup>

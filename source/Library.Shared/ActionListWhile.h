@@ -2,7 +2,7 @@
 
 #pragma region Includes
 // First Party
-#include "Action.h"
+#include "ActionList.h"
 #include "WorldState.h"
 #include "Factory.h"
 #pragma endregion Includes
@@ -10,23 +10,18 @@
 namespace Library
 {
 	/// <summary>
-	/// Represents an Action for incrementing an integer attribute.
+	/// Represents an Action for looping while a condition is true.
 	/// </summary>
-	class ActionIncrement final : public Action
+	class ActionListWhile final : public ActionList
 	{
-		RTTI_DECLARATIONS(ActionIncrement, Action)
+		RTTI_DECLARATIONS(ActionListWhile, ActionList)
 
 #pragma region Type Definitions, Constants
 	public:
 		/// <summary>
-		/// Key for the name of the integer attribute to increment.
+		/// Key for the loop condition.
 		/// </summary>
-		inline static const std::string OperandKey = "Operand";
-
-		/// <summary>
-		/// Key for the increment step amount.
-		/// </summary>
-		inline static const std::string IncrementStepKey = "IncrementStep";
+		inline static const std::string ConditionKey = "Condition";
 
 	public:
 		/// <summary>
@@ -40,38 +35,38 @@ namespace Library
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
-		explicit ActionIncrement(const std::string& name=std::string());
+		explicit ActionListWhile(const std::string& name=std::string());
 
 		/// <summary>
 		/// Default destructor.
 		/// </summary>
-		~ActionIncrement() = default;
+		~ActionListWhile() = default;
 
 		/// <summary>
 		/// Copy constructor.
 		/// </summary>
-		/// <param name="rhs">ActionIncrement to be copied.</param>
-		ActionIncrement(const ActionIncrement& rhs) = default;
+		/// <param name="rhs">ActionListWhile to be copied.</param>
+		ActionListWhile(const ActionListWhile& rhs) = default;
 
 		/// <summary>
 		/// Copy assignment operator.
 		/// </summary>
-		/// <param name="rhs">ActionIncrement to be copied.</param>
-		/// <returns>Newly copied into left hand side ActionIncrement.</returns>
-		ActionIncrement& operator=(const ActionIncrement& rhs) = default;
+		/// <param name="rhs">ActionListWhile to be copied.</param>
+		/// <returns>Newly copied into left hand side ActionListWhile.</returns>
+		ActionListWhile& operator=(const ActionListWhile& rhs) = default;
 
 		/// <summary>
 		/// Move constructor.
 		/// </summary>
-		/// <param name="rhs">ActionIncrement to be moved.</param>
-		ActionIncrement(ActionIncrement&& rhs) noexcept = default;
+		/// <param name="rhs">ActionListWhile to be moved.</param>
+		ActionListWhile(ActionListWhile&& rhs) noexcept = default;
 
 		/// <summary>
 		/// Move assignment operator.
 		/// </summary>
-		/// <param name="rhs">ActionIncrement to be moved.</param>
-		/// <returns>Newly moved into left hand side ActionIncrement.</returns>
-		ActionIncrement& operator=(ActionIncrement&& rhs) noexcept = default;
+		/// <param name="rhs">ActionListWhile to be moved.</param>
+		/// <returns>Newly moved into left hand side ActionListWhile.</returns>
+		ActionListWhile& operator=(ActionListWhile&& rhs) noexcept = default;
 #pragma endregion Special Members
 
 #pragma region Virtual Copy Constructor
@@ -79,7 +74,7 @@ namespace Library
 		/// <summary>
 		/// Virtual copy constructor.
 		/// </summary>
-		/// <returns>Owning pointer to a newly heap allocated copy of the ActionIncrement.</returns>
+		/// <returns>Owning pointer to a newly heap allocated copy of the ActionListWhile.</returns>
 		virtual gsl::owner<Library::Scope*> Clone() const override;
 #pragma endregion Virtual Copy Constructor
 
@@ -89,7 +84,7 @@ namespace Library
 		/// Virtual update method called by the containing object.
 		/// </summary>
 		/// <param name="worldState">WorldState context for the current processing step.</param>
-		virtual void Update(WorldState&);
+		virtual void Update(WorldState& worldState);
 #pragma endregion Game Loop
 
 #pragma region RTTI Overrides
@@ -104,22 +99,17 @@ namespace Library
 #pragma region Data Members
 	private:
 		/// <summary>
-		/// Name for the integer attribute to increment.
-		/// </summary>
-		std::string mOperand;
-
-		/// <summary>
 		/// Amount to increment the integer attribute.
 		/// </summary>
-		int mIncrementStep{ 1 };
+		int mCondition{ 0 };
 #pragma endregion Data Members
 	};
 
 #pragma region Factory
 	/// <summary>
-	/// ActionIncrementFactory class declaration.
+	/// ActionListWhileFactory class declaration.
 	/// </summary>
-	ConcreteFactory(ActionIncrement, Scope)
+	ConcreteFactory(ActionListWhile, Scope)
 #pragma endregion Factory
 }
 

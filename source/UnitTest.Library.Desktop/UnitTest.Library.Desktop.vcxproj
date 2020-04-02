@@ -214,6 +214,7 @@ xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
     <ClCompile Include="ActionDestroyTest.cpp" />
     <ClCompile Include="ActionIncrementTest.cpp" />
     <ClCompile Include="ActionListTest.cpp" />
+    <ClCompile Include="ActionListWhileTest.cpp" />
     <ClCompile Include="ActionTest.cpp" />
     <ClCompile Include="AttributedBar.cpp" />
     <ClCompile Include="AttributedBarTest.cpp" />

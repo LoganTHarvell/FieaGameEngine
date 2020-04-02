@@ -12,7 +12,7 @@ namespace Library
 	/// <summary>
 	/// Represents a contained collection of Action objects.
 	/// </summary>
-	class ActionList final : public Action
+	class ActionList : public Action
 	{
 		RTTI_DECLARATIONS(ActionList, Action)
 
@@ -72,6 +72,13 @@ namespace Library
 		/// <param name="rhs">ActionList to be moved.</param>
 		/// <returns>Newly moved into left hand side ActionList.</returns>
 		ActionList& operator=(ActionList&& rhs) = default;
+
+	protected:
+		/// <summary>
+		/// Specialized constructor for use by derived classes to ensure correct attribute population.
+		/// </summary>
+		/// <param name="typeId">Type ID of the derived class.</param>
+		explicit ActionList(const RTTI::IdType typeId, const std::string& name = std::string());
 #pragma endregion Special Members
 
 #pragma region Virtual Copy Constructor

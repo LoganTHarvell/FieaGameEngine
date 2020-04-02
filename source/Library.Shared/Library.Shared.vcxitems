@@ -19,6 +19,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)ActionDestroy.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)ActionIncrement.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)ActionList.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ActionListWhile.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Attributed.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Datum.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Entity.cpp" />
@@ -48,6 +49,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)ActionDestroy.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ActionIncrement.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ActionList.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ActionListWhile.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Attributed.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Datum.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)DefaultEquality.h" />

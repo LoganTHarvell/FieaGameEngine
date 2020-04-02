@@ -35,16 +35,13 @@ namespace Library
 		return new ActionIncrement(*this);
 	}
 
-	void ActionIncrement::Update(WorldState& worldState)
+	void ActionIncrement::Update(WorldState&)
 	{
-		if (worldState.Entity)
-		{
-			DataType* operand = Search(mOperand);
+		DataType* operand = Search(mOperand);
 
-			if (operand && operand->Type() == Types::Integer && operand->Size() > 0)
-			{
-				operand->Get<int>() += mIncrementStep;
-			}
+		if (operand && operand->Type() == Types::Integer && operand->Size() > 0)
+		{
+			operand->Get<int>() += mIncrementStep;
 		}
 	}
 
