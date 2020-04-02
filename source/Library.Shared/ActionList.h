@@ -45,7 +45,7 @@ namespace Library
 		/// <summary>
 		/// Default destructor.
 		/// </summary>
-		~ActionList() = default;
+		virtual ~ActionList() = default;
 
 		/// <summary>
 		/// Copy constructor.

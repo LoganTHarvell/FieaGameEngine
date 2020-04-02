@@ -56,6 +56,9 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)ActionListWhile.cpp">
       <Filter>Core\Actions</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)ActionExpression.cpp">
+      <Filter>Core\Actions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
@@ -141,6 +144,9 @@
       <Filter>Core\Actions</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)ActionListWhile.h">
+      <Filter>Core\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)ActionExpression.h">
       <Filter>Core\Actions</Filter>
     </ClInclude>
   </ItemGroup>
