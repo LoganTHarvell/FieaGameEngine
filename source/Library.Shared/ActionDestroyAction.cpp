@@ -17,7 +17,8 @@ namespace Library
 		static const TypeManager::TypeInfo typeInfo
 		{
 			{
-				{ ActionNameKey, Types::String, false, 1, offsetof(ActionDestroyAction, mActionName) },
+				{ AttributeNameKey, Types::String, false, 1, offsetof(ActionDestroyAction, mAttributeName) },
+				{ TargetKey, Types::String, false, 1, offsetof(ActionDestroyAction, mTargetName) }
 			},
 
 			Action::TypeIdClass()
@@ -39,25 +40,27 @@ namespace Library
 	{
 		if (worldState.Entity)
 		{
-			DataType& actions = worldState.Entity->Actions();
-			
-			for (std::size_t i = 0; i < actions.Size(); ++i)
+			DataType* attribute = worldState.Entity->Find(mAttributeName);
+
+			if (attribute)
 			{
-				assert(actions[i].Is(Action::TypeIdClass()));
-
-				Action* action = static_cast<Action*>(&actions[i]);
-
-				if (action->Name() == mActionName)
+				for (std::size_t i = 0; i < attribute->Size(); ++i)
 				{
-					World::PendingChild childToRemove =
-					{
-						*action,
-						World::PendingChild::State::ToRemove,
-						*worldState.Entity,
-						nullptr
-					};
+					Scope& scope = (*attribute)[i];
+					DataType* name = scope.Find("Name");
 
-					worldState.World->PendingChildren().PushBack(childToRemove);
+					if (name && *name == mTargetName)
+					{
+						World::PendingChild childToRemove =
+						{
+							scope,
+							World::PendingChild::State::ToRemove,
+							*worldState.Entity,
+							nullptr
+						};
+
+						worldState.World->PendingChildren().PushBack(childToRemove);
+					}
 				}
 			}
 		}

@@ -111,11 +111,6 @@ namespace Library
 			switch (pendingChild.ChildState)
 			{
 			case PendingChild::State::ToAdd:
-				if (pendingChild.AttributeName == nullptr)
-				{
-					throw std::runtime_error("Missing pending child attribute name.");
-				}
-
 				pendingChild.Target.Adopt(pendingChild.Child, *pendingChild.AttributeName);
 				break;
 

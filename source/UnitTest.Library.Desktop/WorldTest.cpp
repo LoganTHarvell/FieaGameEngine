@@ -50,6 +50,7 @@ namespace EntitySystemTests
 		TEST_METHOD(Constructor)
 		{
 			World world("World");
+			Assert::AreEqual(0_z, world.PendingChildren().Size());
 			Assert::AreEqual("World"s, world.Name());
 			Assert::IsNotNull(world.Find("Name"));
 			Assert::AreEqual("World"s, world.Find("Name")->Get<std::string>());
@@ -92,6 +93,7 @@ namespace EntitySystemTests
 			World world;
 			world.SetName("World");
 			Assert::AreEqual("World"s, world.Name());
+			Assert::AreEqual(0_z, world.PendingChildren().Size());
 
 			Sector& sector1 = world.CreateSector("Sector1");
 			Sector& sector2 = world.CreateSector("Sector2");
@@ -111,6 +113,7 @@ namespace EntitySystemTests
 			Assert::AreEqual(2_z, copy.Sectors().Size());
 			Assert::AreEqual(sector1, *copy.Sectors().Get<Scope*>(0)->As<Sector>());
 			Assert::AreEqual(sector2, *copy.Sectors().Get<Scope*>(1)->As<Sector>());
+			Assert::AreEqual(0_z, copy.PendingChildren().Size());
 		}
 
 		TEST_METHOD(Update)

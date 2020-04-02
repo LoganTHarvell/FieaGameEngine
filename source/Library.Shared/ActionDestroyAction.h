@@ -19,9 +19,14 @@ namespace Library
 #pragma region Type Definitions, Constants
 	public:
 		/// <summary>
-		/// Key for the name of the Action attribute to destroy.
+		/// Key for the name of the attribute to destroy the Target.
 		/// </summary>
-		inline static const std::string ActionNameKey = "ActionName";
+		inline static const std::string AttributeNameKey = "AttributeName";
+
+		/// <summary>
+		/// Key for the name of the Target to destroy.
+		/// </summary>
+		inline static const std::string TargetKey = "Target";
 
 	public:
 		/// <summary>
@@ -101,7 +106,12 @@ namespace Library
 		/// <summary>
 		/// Name of the Action to be destroyed.
 		/// </summary>
-		std::string mActionName;
+		std::string mAttributeName;
+
+		/// <summary>
+		/// Name for the attribute of the attribute to create.
+		/// </summary>
+		std::string mTargetName;
 #pragma endregion Data Members
 	};
 

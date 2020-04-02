@@ -10,23 +10,23 @@
 namespace Library
 {
 	/// <summary>
-	/// Represents an Action for creating Action attributes.
+	/// Represents an Action for creating Scopes.
 	/// </summary>
-	class ActionCreateAction final : public Action
+	class ActionCreate final : public Action
 	{
-		RTTI_DECLARATIONS(ActionCreateAction, Action)
+		RTTI_DECLARATIONS(ActionCreate, Action)
 
 #pragma region Type Definitions, Constants
 	public:
 		/// <summary>
-		/// Key for the name of the Action attribute to create.
+		/// Key for the name of the attribute to append the created attribute onto.
 		/// </summary>
-		inline static const std::string ActionNameKey = "ActionName";
+		inline static const std::string AttributeNameKey = "AttributeName";
 
 		/// <summary>
-		/// Key for the created Action attribute.
+		/// Key for the created attribute.
 		/// </summary>
-		inline static const std::string ActionKey = "Action";
+		inline static const std::string NewScopeKey = "NewScope";
 
 	public:
 		/// <summary>
@@ -40,38 +40,38 @@ namespace Library
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
-		explicit ActionCreateAction(const std::string& name=std::string());
+		explicit ActionCreate(const std::string& name=std::string());
 
 		/// <summary>
 		/// Default destructor.
 		/// </summary>
-		~ActionCreateAction() = default;
+		~ActionCreate() = default;
 
 		/// <summary>
 		/// Copy constructor.
 		/// </summary>
-		/// <param name="rhs">ActionCreateAction to be copied.</param>
-		ActionCreateAction(const ActionCreateAction& rhs) = default;
+		/// <param name="rhs">ActionCreate to be copied.</param>
+		ActionCreate(const ActionCreate& rhs) = default;
 
 		/// <summary>
 		/// Copy assignment operator.
 		/// </summary>
-		/// <param name="rhs">ActionCreateAction to be copied.</param>
-		/// <returns>Newly copied into left hand side ActionCreateAction.</returns>
-		ActionCreateAction& operator=(const ActionCreateAction& rhs) = default;
+		/// <param name="rhs">ActionCreate to be copied.</param>
+		/// <returns>Newly copied into left hand side ActionCreate.</returns>
+		ActionCreate& operator=(const ActionCreate& rhs) = default;
 
 		/// <summary>
 		/// Move constructor.
 		/// </summary>
-		/// <param name="rhs">ActionCreateAction to be moved.</param>
-		ActionCreateAction(ActionCreateAction&& rhs) noexcept = default;
+		/// <param name="rhs">ActionCreate to be moved.</param>
+		ActionCreate(ActionCreate&& rhs) noexcept = default;
 
 		/// <summary>
 		/// Move assignment operator.
 		/// </summary>
-		/// <param name="rhs">ActionCreateAction to be moved.</param>
-		/// <returns>Newly moved into left hand side ActionCreateAction.</returns>
-		ActionCreateAction& operator=(ActionCreateAction&& rhs) noexcept = default;
+		/// <param name="rhs">ActionCreate to be moved.</param>
+		/// <returns>Newly moved into left hand side ActionCreate.</returns>
+		ActionCreate& operator=(ActionCreate&& rhs) noexcept = default;
 #pragma endregion Special Members
 
 #pragma region Virtual Copy Constructor
@@ -79,7 +79,7 @@ namespace Library
 		/// <summary>
 		/// Virtual copy constructor.
 		/// </summary>
-		/// <returns>Owning pointer to a newly heap allocated copy of the ActionCreateAction.</returns>
+		/// <returns>Owning pointer to a newly heap allocated copy of the ActionCreate.</returns>
 		virtual gsl::owner<Library::Scope*> Clone() const override;
 #pragma endregion Virtual Copy Constructor
 
@@ -104,17 +104,17 @@ namespace Library
 #pragma region Data Members
 	private:
 		/// <summary>
-		/// Name for the Action to create.
+		/// Name for the attribute of the attribute to create.
 		/// </summary>
-		std::string mActionName;
+		std::string mAttributeName;
 #pragma endregion Data Members
 	};
 
 #pragma region Factory
 	/// <summary>
-	/// ActionCreateActionFactory class declaration.
+	/// ActionCreateFactory class declaration.
 	/// </summary>
-	ConcreteFactory(ActionCreateAction, Scope)
+	ConcreteFactory(ActionCreate, Scope)
 #pragma endregion Factory
 }
 

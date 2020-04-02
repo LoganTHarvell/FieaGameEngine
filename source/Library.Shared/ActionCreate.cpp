@@ -3,7 +3,7 @@
 #include "pch.h"
 
 // Header
-#include "ActionCreateAction.h"
+#include "ActionCreate.h"
 
 // First Party
 #include "World.h"
@@ -12,13 +12,13 @@
 
 namespace Library
 {
-	const TypeManager::TypeInfo& ActionCreateAction::TypeInfo()
+	const TypeManager::TypeInfo& ActionCreate::TypeInfo()
 	{
 		static const TypeManager::TypeInfo typeInfo
 		{
 			{
-				{ ActionNameKey, Types::String, false, 1, offsetof(ActionCreateAction, mActionName) },
-				{ ActionKey, Types::Scope, true, 1, 0 }
+				{ AttributeNameKey, Types::String, false, 1, offsetof(ActionCreate, mAttributeName) },
+				{ NewScopeKey, Types::Scope, true, 1, 0 }
 			},
 
 			Action::TypeIdClass()
@@ -27,31 +27,29 @@ namespace Library
 		return typeInfo;
 	}
 
-	ActionCreateAction::ActionCreateAction(const std::string& name) : Action(TypeIdClass(), name)
+	ActionCreate::ActionCreate(const std::string& name) : Action(TypeIdClass(), name)
 	{
 	}
 
-	gsl::owner<Library::Scope*> ActionCreateAction::Clone() const
+	gsl::owner<Library::Scope*> ActionCreate::Clone() const
 	{
-		return new ActionCreateAction(*this);
+		return new ActionCreate(*this);
 	}
 
-	void ActionCreateAction::Update(WorldState& worldState)
+	void ActionCreate::Update(WorldState& worldState)
 	{
 		if (worldState.World && worldState.Entity)
 		{
-			DataType* action = Find(ActionKey);
+			DataType* action = Find(NewScopeKey);
 
 			if (action && action->Type() == Types::Scope && action->Size() > 0)
 			{
-				assert(action->Get<Scope*>()->Is(Action::TypeIdClass()));
-
 				World::PendingChild childToAdd =
 				{
 					*action->Get<Scope*>()->Clone(),
 					World::PendingChild::State::ToAdd,
 					*worldState.Entity,
-					&worldState.Entity->ActionsKey
+					&mAttributeName
 				};
 
 				worldState.World->PendingChildren().PushBack(childToAdd);
@@ -59,10 +57,10 @@ namespace Library
 		}
 	}
 
-	std::string ActionCreateAction::ToString() const
+	std::string ActionCreate::ToString() const
 	{
 		std::ostringstream oss;
-		oss << Name() << " (ActionCreateAction)";
+		oss << Name() << " (ActionCreate)";
 		return oss.str();
 	}
 }
