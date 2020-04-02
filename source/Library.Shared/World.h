@@ -186,7 +186,7 @@ namespace Library
 		/// Virtual update method to be called every frame.
 		/// </summary>
 		/// <param name="worldState">WorldState context for the current processing step.</param>
-		virtual void Update();
+		void Update();
 #pragma endregion Game Loop
 
 #pragma region RTTI Overrides
