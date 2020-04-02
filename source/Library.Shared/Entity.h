@@ -20,7 +20,7 @@ namespace Library
 	{
 		RTTI_DECLARATIONS(Entity, Attributed)
 
-#pragma region Static Members
+#pragma region Type Definitions, Constants
 	public:
 		/// <summary>
 		/// Key for the Name attribute in the Entity.
@@ -42,7 +42,7 @@ namespace Library
 		/// Getter for the class TypeInfo, used for registration with the TypeManager.
 		/// </summary>
 		static const TypeManager::TypeInfo& TypeInfo();
-#pragma endregion Static Members
+#pragma endregion Type Definitions, Constants
 
 #pragma region Special Members
 	public:

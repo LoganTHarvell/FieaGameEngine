@@ -16,7 +16,52 @@ namespace Library
 	{
 		RTTI_DECLARATIONS(World, Attributed)
 
-#pragma region TypeInfo
+#pragma region Type Definitions, Constants
+	public:
+		/// <summary>
+		/// Data structure for performing an action on a given Scope at the end of an Update call.
+		/// </summary>
+		struct PendingChild final
+		{
+			/// <summary>
+			/// Defines the state delimiting which action is to be performed on the PendingChild.
+			/// </summary>
+			enum class State
+			{
+				Invalid = -1,
+
+				ToAdd,
+				ToRemove,
+
+				End
+			};
+
+			/// <summary>
+			/// Child Scope pending an action.
+			/// </summary>
+			Scope& Child;
+			
+			/// <summary>
+			/// Child pending State delimiting which action is to be performed on the Child.
+			/// </summary>
+			const State ChildState;
+			
+			/// <summary>
+			/// Target Scope of the performed action.
+			/// </summary>
+			Scope& Target;
+
+			/// <summary>
+			/// Name of the Target attribute of the performed action.
+			/// </summary>
+			const NameType* const AttributeName;
+		};
+
+		/// <summary>
+		/// Type definition for a list of PendingChild data.
+		/// </summary>
+		using PendingChildList = Vector<PendingChild>;
+
 	public:
 		/// <summary>
 		/// Key for the Name attribute in the World.
@@ -38,7 +83,7 @@ namespace Library
 		/// Getter for the class TypeInfo, used for registration with the TypeManager.
 		/// </summary>
 		static const TypeManager::TypeInfo& TypeInfo();
-#pragma endregion TypeInfo
+#pragma endregion Type Definitions, Constants
 
 #pragma region Special Members
 	public:
@@ -92,6 +137,18 @@ namespace Library
 #pragma region Accessors
 	public:
 		/// <summary>
+		/// Gets the list of PendingChild data.
+		/// </summary>
+		/// <returns>Current PendingChild data.</returns>
+		PendingChildList& PendingChildren();
+
+		/// <summary>
+		/// Gets the list of PendingChild data.
+		/// </summary>
+		/// <returns>Current PendingChild data.</returns>
+		const PendingChildList& PendingChildren() const;
+
+		/// <summary>
 		/// Name of the World.
 		/// </summary>
 		/// <returns>Name of the World as a std::string.</returns>
@@ -141,6 +198,14 @@ namespace Library
 		virtual std::string ToString() const override;
 #pragma endregion RTTI Overrides
 
+#pragma region Helper Methods
+	private:
+		/// <summary>
+		/// Performs pending actions of the child Scopes.
+		/// </summary>
+		void UpdatePendingChildren();
+#pragma endregion Helper Methods
+
 #pragma region Data Members
 	private:
 		/// <summary>
@@ -152,6 +217,11 @@ namespace Library
 		/// Convenience struct for passing the WorldState data in cascaded Update calls.
 		/// </summary>
 		WorldState mWorldState;
+
+ 		/// <summary>
+ 		/// Pending children to have an action performed during the end of an Update call.
+ 		/// </summary>
+ 		PendingChildList mPendingChildren{ PendingChildList(PendingChildList::EqualityFunctor()) };
 
 		/// <summary>
 		/// Name of the World, reflected as a prescribed attribute.

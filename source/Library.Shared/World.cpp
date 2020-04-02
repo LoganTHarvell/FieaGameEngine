@@ -37,6 +37,16 @@ namespace Library
 		return new World(*this);
 	}
 
+	World::PendingChildList& World::PendingChildren()
+	{
+		return mPendingChildren;
+	}
+
+	const World::PendingChildList& World::PendingChildren() const
+	{
+		return mPendingChildren;
+	}
+
 	const std::string& World::Name() const
 	{
 		return mName;
@@ -83,6 +93,8 @@ namespace Library
 		}
 
 		mWorldState.Sector = nullptr;
+
+		UpdatePendingChildren();
 	}
 
 	std::string World::ToString() const
@@ -90,5 +102,32 @@ namespace Library
 		std::ostringstream oss;
 		oss << mName << " (World)";
 		return oss.str();
+	}
+
+	void World::UpdatePendingChildren()
+	{
+		for (PendingChild& pendingChild : mPendingChildren)
+		{
+			switch (pendingChild.ChildState)
+			{
+			case PendingChild::State::ToAdd:
+				if (pendingChild.AttributeName == nullptr)
+				{
+					throw std::runtime_error("Missing pending child attribute name.");
+				}
+
+				pendingChild.Target.Adopt(pendingChild.Child, *pendingChild.AttributeName);
+				break;
+
+			case PendingChild::State::ToRemove:
+				delete pendingChild.Target.Orphan(pendingChild.Child);
+				break;
+
+			default:
+				break;
+			}
+		}
+
+		mPendingChildren.Clear();
 	}
 }

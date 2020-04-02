@@ -29,7 +29,7 @@ namespace Library
 	{
 		friend class Attributed;
 
-#pragma region Type Definitions and Constants
+#pragma region Type Definitions, Constants
 	public:
 		/// <summary>
 		/// Alias for a pointer to a Scope class instance.
@@ -123,7 +123,7 @@ namespace Library
 		/// </summary>
 		using FromStringFunctor = std::function<void(std::string, void*, std::size_t)>;
 		static const FromStringFunctor FromStringLUT[static_cast<std::size_t>(Types::End)];
-#pragma endregion Type Definitions and Constants
+#pragma endregion Type Definitions, Constants
 
 #pragma region Default Functors
 	public:

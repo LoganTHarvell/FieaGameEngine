@@ -6,6 +6,7 @@
 #include "ActionDestroyAction.h"
 
 // First Party
+#include "World.h"
 #include "Entity.h"
 #pragma endregion Includes
 
@@ -38,7 +39,7 @@ namespace Library
 	{
 		if (worldState.Entity)
 		{
-			Scope::DataType& actions = worldState.Entity->Actions();
+			DataType& actions = worldState.Entity->Actions();
 			
 			for (std::size_t i = 0; i < actions.Size(); ++i)
 			{
@@ -48,7 +49,15 @@ namespace Library
 
 				if (action->Name() == mActionName)
 				{
-					delete action->GetParent()->Orphan(*action);
+					World::PendingChild childToRemove =
+					{
+						*action,
+						World::PendingChild::State::ToRemove,
+						*worldState.Entity,
+						nullptr
+					};
+
+					worldState.World->PendingChildren().PushBack(childToRemove);
 				}
 			}
 		}

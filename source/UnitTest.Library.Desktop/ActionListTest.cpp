@@ -88,8 +88,8 @@ namespace UnitTestLibraryDesktop
 		TEST_METHOD(Clone)
 		{
 			ActionList actionList;
-			ActionIncrement actionIncrement;
-			actionList.Actions().PushBack(actionIncrement.As<Scope>());
+			ActionIncrement* actionIncrement = new ActionIncrement();
+			actionList.Adopt(*actionIncrement, ActionList::ActionsKey);
 
 			Scope* clone = actionList.Clone();
 			bool notNull = clone;
@@ -108,8 +108,8 @@ namespace UnitTestLibraryDesktop
 			Assert::IsNotNull(action);
 			Assert::AreEqual(0_z, action->As<ActionList>()->Actions().Size());
 
-			ActionIncrement increment;
-			action->As<ActionList>()->Actions().PushBack(increment.As<Scope>());
+			ActionIncrement* actionIncrement = new ActionIncrement();
+			action->Adopt(*actionIncrement, ActionList::ActionsKey);
 
 			const ActionList copy = *action->As<ActionList>();
 
@@ -128,7 +128,7 @@ namespace UnitTestLibraryDesktop
 			int& integer2 = (entity.Append("Integer2") = 0).Get<int>();
 			int& integer3 = (entity.Append("Integer3") = 0).Get<int>();
 
-			Action* actionList = entity.CreateAction("ActionList"s, "List");
+			/* Action Increment */
 
 			Action* increment = entity.CreateAction("ActionIncrement"s, "Increment1"s);
 			Assert::IsNotNull(increment);
@@ -137,14 +137,19 @@ namespace UnitTestLibraryDesktop
 			ActionIncrement* castedIncrement = static_cast<ActionIncrement*>(increment);
 			*castedIncrement->Find(castedIncrement->OperandKey) = "Integer1"s;
 
-			ActionIncrement increment2("Increment2");
-			*increment2.Find(increment2.OperandKey) = "Integer2";
-			actionList->As<ActionList>()->Actions().PushBack(increment2.As<Scope>());
+			/* Action List */
 
-			ActionIncrement increment3("Increment3");
-			*increment3.Find(increment3.OperandKey) = "Integer3";
-			actionList->As<ActionList>()->Actions().PushBack(increment3.As<Scope>());
+			Action* actionList = entity.CreateAction("ActionList"s, "List");
 
+			ActionIncrement* increment2 = new ActionIncrement("Increment2");
+			*increment2->Find(increment2->OperandKey) = "Integer2";
+			actionList->Adopt(*increment2->As<Scope>(), ActionList::ActionsKey);
+
+			ActionIncrement* increment3 = new ActionIncrement("Increment3");
+			*increment3->Find(increment3->OperandKey) = "Integer3";
+			actionList->Adopt(*increment3->As<Scope>(), ActionList::ActionsKey);
+
+			/* Updates */
 
 			WorldState worldState;
 			worldState.Entity = &entity;

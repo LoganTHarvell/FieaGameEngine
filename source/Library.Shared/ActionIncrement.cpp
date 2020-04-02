@@ -39,7 +39,7 @@ namespace Library
 	{
 		if (worldState.Entity)
 		{
-			Scope::DataType* operand = worldState.Entity->Search(mOperand);
+			DataType* operand = Search(mOperand);
 
 			if (operand && operand->Type() == Types::Integer && operand->Size() > 0)
 			{

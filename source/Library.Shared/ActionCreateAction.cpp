@@ -6,6 +6,7 @@
 #include "ActionCreateAction.h"
 
 // First Party
+#include "World.h"
 #include "Entity.h"
 #pragma endregion Includes
 
@@ -37,15 +38,23 @@ namespace Library
 
 	void ActionCreateAction::Update(WorldState& worldState)
 	{
-		if (worldState.Entity)
+		if (worldState.World && worldState.Entity)
 		{
-			Scope::DataType* action = Find(ActionKey);
+			DataType* action = Find(ActionKey);
 
 			if (action && action->Type() == Types::Scope && action->Size() > 0)
 			{
 				assert(action->Get<Scope*>()->Is(Action::TypeIdClass()));
 
-				worldState.Entity->Adopt(*action->Get<Scope*>()->Clone(), worldState.Entity->ActionsKey);
+				World::PendingChild childToAdd =
+				{
+					*action->Get<Scope*>()->Clone(),
+					World::PendingChild::State::ToAdd,
+					*worldState.Entity,
+					&worldState.Entity->ActionsKey
+				};
+
+				worldState.World->PendingChildren().PushBack(childToAdd);
 			}
 		}
 	}

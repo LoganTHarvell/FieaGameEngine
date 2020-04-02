@@ -16,7 +16,7 @@ namespace Library
 	{
 		RTTI_DECLARATIONS(ActionCreateAction, Action)
 
-#pragma region Static Members
+#pragma region Type Definitions, Constants
 	public:
 		/// <summary>
 		/// Key for the name of the Action attribute to create.
@@ -33,7 +33,7 @@ namespace Library
 		/// Getter for the class TypeInfo, used for registration with the TypeManager.
 		/// </summary>
 		static const TypeManager::TypeInfo& TypeInfo();
-#pragma endregion Static Members
+#pragma endregion Type Definitions, Constants
 
 #pragma region Special Members
 	public:
