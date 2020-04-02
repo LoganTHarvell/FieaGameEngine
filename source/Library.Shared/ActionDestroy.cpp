@@ -3,7 +3,7 @@
 #include "pch.h"
 
 // Header
-#include "ActionDestroyAction.h"
+#include "ActionDestroy.h"
 
 // First Party
 #include "World.h"
@@ -12,13 +12,13 @@
 
 namespace Library
 {
-	const TypeManager::TypeInfo& ActionDestroyAction::TypeInfo()
+	const TypeManager::TypeInfo& ActionDestroy::TypeInfo()
 	{
 		static const TypeManager::TypeInfo typeInfo
 		{
 			{
-				{ AttributeNameKey, Types::String, false, 1, offsetof(ActionDestroyAction, mAttributeName) },
-				{ TargetKey, Types::String, false, 1, offsetof(ActionDestroyAction, mTargetName) }
+				{ AttributeNameKey, Types::String, false, 1, offsetof(ActionDestroy, mAttributeName) },
+				{ TargetKey, Types::String, false, 1, offsetof(ActionDestroy, mTargetName) }
 			},
 
 			Action::TypeIdClass()
@@ -27,16 +27,16 @@ namespace Library
 		return typeInfo;
 	}
 
-	ActionDestroyAction::ActionDestroyAction(const std::string& name) : Action(TypeIdClass(), name)
+	ActionDestroy::ActionDestroy(const std::string& name) : Action(TypeIdClass(), name)
 	{
 	}
 
-	gsl::owner<Library::Scope*> ActionDestroyAction::Clone() const
+	gsl::owner<Library::Scope*> ActionDestroy::Clone() const
 	{
-		return new ActionDestroyAction(*this);
+		return new ActionDestroy(*this);
 	}
 
-	void ActionDestroyAction::Update(WorldState& worldState)
+	void ActionDestroy::Update(WorldState& worldState)
 	{
 		if (worldState.Entity)
 		{
@@ -66,10 +66,10 @@ namespace Library
 		}
 	}
 
-	std::string ActionDestroyAction::ToString() const
+	std::string ActionDestroy::ToString() const
 	{
 		std::ostringstream oss;
-		oss << Name() << " (ActionDestroyAction)";
+		oss << Name() << " (ActionDestroy)";
 		return oss.str();
 	}
 }

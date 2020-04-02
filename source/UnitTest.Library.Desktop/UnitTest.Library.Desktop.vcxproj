@@ -211,7 +211,7 @@ xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ActionCreateTest.cpp" />
-    <ClCompile Include="ActionDestroyActionTest.cpp" />
+    <ClCompile Include="ActionDestroyTest.cpp" />
     <ClCompile Include="ActionIncrementTest.cpp" />
     <ClCompile Include="ActionListTest.cpp" />
     <ClCompile Include="ActionTest.cpp" />

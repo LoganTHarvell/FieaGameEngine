@@ -101,10 +101,10 @@
     <ClCompile Include="ActionListTest.cpp">
       <Filter>Entity System Tests\Action Tests</Filter>
     </ClCompile>
-    <ClCompile Include="ActionDestroyActionTest.cpp">
+    <ClCompile Include="ActionCreateTest.cpp">
       <Filter>Entity System Tests\Action Tests</Filter>
     </ClCompile>
-    <ClCompile Include="ActionCreateTest.cpp">
+    <ClCompile Include="ActionDestroyTest.cpp">
       <Filter>Entity System Tests\Action Tests</Filter>
     </ClCompile>
   </ItemGroup>

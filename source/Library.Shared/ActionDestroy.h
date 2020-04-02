@@ -10,11 +10,11 @@
 namespace Library
 {
 	/// <summary>
-	/// Represents an Action for destroying Action objects.
+	/// Represents an Action for destroying Scope objects.
 	/// </summary>
-	class ActionDestroyAction final : public Action
+	class ActionDestroy final : public Action
 	{
-		RTTI_DECLARATIONS(ActionDestroyAction, Action)
+		RTTI_DECLARATIONS(ActionDestroy, Action)
 
 #pragma region Type Definitions, Constants
 	public:
@@ -40,38 +40,38 @@ namespace Library
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
-		explicit ActionDestroyAction(const std::string& name=std::string());
+		explicit ActionDestroy(const std::string& name=std::string());
 
 		/// <summary>
 		/// Default destructor.
 		/// </summary>
-		~ActionDestroyAction() = default;
+		~ActionDestroy() = default;
 
 		/// <summary>
 		/// Copy constructor.
 		/// </summary>
-		/// <param name="rhs">ActionDestroyAction to be copied.</param>
-		ActionDestroyAction(const ActionDestroyAction& rhs) = default;
+		/// <param name="rhs">ActionDestroy to be copied.</param>
+		ActionDestroy(const ActionDestroy& rhs) = default;
 
 		/// <summary>
 		/// Copy assignment operator.
 		/// </summary>
-		/// <param name="rhs">ActionDestroyAction to be copied.</param>
-		/// <returns>Newly copied into left hand side ActionDestroyAction.</returns>
-		ActionDestroyAction& operator=(const ActionDestroyAction& rhs) = default;
+		/// <param name="rhs">ActionDestroy to be copied.</param>
+		/// <returns>Newly copied into left hand side ActionDestroy.</returns>
+		ActionDestroy& operator=(const ActionDestroy& rhs) = default;
 
 		/// <summary>
 		/// Move constructor.
 		/// </summary>
-		/// <param name="rhs">ActionDestroyAction to be moved.</param>
-		ActionDestroyAction(ActionDestroyAction&& rhs) noexcept = default;
+		/// <param name="rhs">ActionDestroy to be moved.</param>
+		ActionDestroy(ActionDestroy&& rhs) noexcept = default;
 
 		/// <summary>
 		/// Move assignment operator.
 		/// </summary>
-		/// <param name="rhs">ActionDestroyAction to be moved.</param>
-		/// <returns>Newly moved into left hand side ActionDestroyAction.</returns>
-		ActionDestroyAction& operator=(ActionDestroyAction&& rhs) noexcept = default;
+		/// <param name="rhs">ActionDestroy to be moved.</param>
+		/// <returns>Newly moved into left hand side ActionDestroy.</returns>
+		ActionDestroy& operator=(ActionDestroy&& rhs) noexcept = default;
 #pragma endregion Special Members
 
 #pragma region Virtual Copy Constructor
@@ -79,7 +79,7 @@ namespace Library
 		/// <summary>
 		/// Virtual copy constructor.
 		/// </summary>
-		/// <returns>Owning pointer to a newly heap allocated copy of the ActionDestroyAction.</returns>
+		/// <returns>Owning pointer to a newly heap allocated copy of the ActionDestroy.</returns>
 		virtual gsl::owner<Library::Scope*> Clone() const override;
 #pragma endregion Virtual Copy Constructor
 
@@ -117,9 +117,9 @@ namespace Library
 
 #pragma region Factory
 	/// <summary>
-	/// ActionDestroyActionFactory class declaration.
+	/// ActionDestroyFactory class declaration.
 	/// </summary>
-	ConcreteFactory(ActionDestroyAction, Scope)
+	ConcreteFactory(ActionDestroy, Scope)
 #pragma endregion Factory
 }
 
