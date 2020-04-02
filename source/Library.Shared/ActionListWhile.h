@@ -99,7 +99,7 @@ namespace Library
 #pragma region Data Members
 	private:
 		/// <summary>
-		/// Amount to increment the integer attribute.
+		/// Condition determining whether the loop runs. Runs while condition is not zero.
 		/// </summary>
 		int mCondition{ 0 };
 #pragma endregion Data Members
