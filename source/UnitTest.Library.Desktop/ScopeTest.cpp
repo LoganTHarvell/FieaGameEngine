@@ -13,7 +13,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace UnitTests;
 using namespace Library;
 
-namespace UnitTestLibraryDesktop
+namespace ReflectionSystemTests
 {
 	TEST_CLASS(ScopeTest)
 	{

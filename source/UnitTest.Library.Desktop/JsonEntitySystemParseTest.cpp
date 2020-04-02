@@ -15,7 +15,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace UnitTests;
 using namespace Library;
 
-namespace UnitTestLibraryDesktop
+namespace EntitySystemTests
 {
 	TEST_CLASS(JsonEntitySystemParseTest)
 	{

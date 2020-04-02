@@ -12,7 +12,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace UnitTests;
 
 
-namespace UnitTestLibraryDesktop
+namespace ReflectionSystemTests
 {
 	TEST_CLASS(AttributedFooTest)
 	{

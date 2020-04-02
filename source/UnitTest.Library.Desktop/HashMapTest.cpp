@@ -367,7 +367,7 @@ namespace UnitTests
 	}
 }
 
-namespace UnitTestLibraryDesktop
+namespace ContainerTests
 {
 	TEST_CLASS(HashMapTest)
 	{

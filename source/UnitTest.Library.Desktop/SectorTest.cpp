@@ -12,7 +12,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace UnitTests;
 
 
-namespace UnitTestLibraryDesktop
+namespace EntitySystemTests
 {
 	TEST_CLASS(SectorTest)
 	{

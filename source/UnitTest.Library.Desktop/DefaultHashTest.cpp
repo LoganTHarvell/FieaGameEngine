@@ -48,7 +48,7 @@ namespace Library
 }
 
 
-namespace UnitTestLibraryDesktop
+namespace UtilityTests
 {
 	TEST_CLASS(DefaultHashTest)
 	{

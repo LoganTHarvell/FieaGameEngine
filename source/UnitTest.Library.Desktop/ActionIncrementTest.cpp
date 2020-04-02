@@ -11,7 +11,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace UnitTests;
 
 
-namespace UnitTestLibraryDesktop
+namespace EntitySystemTests::ActionTests
 {
 	TEST_CLASS(ActionIncrementTest)
 	{

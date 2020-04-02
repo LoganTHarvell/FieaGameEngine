@@ -11,7 +11,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace UnitTests;
 
 
-namespace UnitTestLibraryDesktop
+namespace SupportCodeTests
 {
 	TEST_CLASS(BarTest)
 	{

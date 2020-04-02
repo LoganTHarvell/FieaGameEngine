@@ -14,7 +14,7 @@ using namespace UnitTests;
 using namespace Library;
 
 
-namespace UnitTestLibraryDesktop
+namespace ContainerTests
 {
 	TEST_CLASS(SListTest)
 	{

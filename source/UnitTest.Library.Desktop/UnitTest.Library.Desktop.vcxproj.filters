@@ -30,13 +30,13 @@
       <Filter>Utility Tests</Filter>
     </ClCompile>
     <ClCompile Include="AttributedFooTest.cpp">
-      <Filter>Attributed Tests</Filter>
+      <Filter>Reflection System Tests</Filter>
     </ClCompile>
     <ClCompile Include="TypeManagerTest.cpp">
-      <Filter>Attributed Tests</Filter>
+      <Filter>Reflection System Tests</Filter>
     </ClCompile>
     <ClCompile Include="ScopeTest.cpp">
-      <Filter>Attributed Tests</Filter>
+      <Filter>Reflection System Tests</Filter>
     </ClCompile>
     <ClCompile Include="StackTest.cpp">
       <Filter>Container Tests</Filter>
@@ -45,7 +45,7 @@
       <Filter>JSON Parser Test</Filter>
     </ClCompile>
     <ClCompile Include="AttributedBarTest.cpp">
-      <Filter>Attributed Tests</Filter>
+      <Filter>Reflection System Tests</Filter>
     </ClCompile>
     <ClCompile Include="JsonTestParseHelper.cpp">
       <Filter>JSON Parser Test</Filter>
@@ -101,6 +101,9 @@
     <ClCompile Include="ActionListTest.cpp">
       <Filter>Entity System Tests\Action Tests</Filter>
     </ClCompile>
+    <ClCompile Include="ActionCreateActionTest.cpp">
+      <Filter>Entity System Tests\Action Tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -145,9 +148,6 @@
     <Filter Include="Utility Tests">
       <UniqueIdentifier>{18e39828-51fc-423c-8aeb-ddceb560a31b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Attributed Tests">
-      <UniqueIdentifier>{89ca14ab-61f6-4885-a5ad-66ab9007c3f6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="JSON Parser Test">
       <UniqueIdentifier>{e8149a2f-8b57-469f-b5fb-5e87426c5d65}</UniqueIdentifier>
     </Filter>
@@ -168,6 +168,9 @@
     </Filter>
     <Filter Include="Entity System Tests\Action Tests">
       <UniqueIdentifier>{830b286f-9457-4087-9008-28c1783b99a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Reflection System Tests">
+      <UniqueIdentifier>{89ca14ab-61f6-4885-a5ad-66ab9007c3f6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

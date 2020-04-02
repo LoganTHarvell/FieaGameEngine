@@ -1,7 +1,6 @@
  #include "pch.h"
 
 #include "ToStringSpecialization.h"
-#include "Action.h"
 #include "ActionIncrement.h"
 #include "Entity.h"
 
@@ -14,7 +13,7 @@ using namespace UnitTests;
 
 namespace EntitySystemTests::ActionTests
 {
-	TEST_CLASS(ActionTest)
+	TEST_CLASS(ActionCreateActionTest)
 	{
 	public:
 		TEST_METHOD_INITIALIZE(Initialize)
@@ -54,7 +53,20 @@ namespace EntitySystemTests::ActionTests
 			ActionIncrement incrementB;
 
 			Assert::IsTrue(incrementA.Is(Action::TypeIdClass()));
-			Assert::IsTrue(incrementA.Action::Equals(incrementB.As<Action>()));
+			Assert::IsTrue(incrementA.Equals(&incrementB));
+
+			Action* newIncrement = new ActionIncrement();
+			bool isAction = newIncrement->Is(Action::TypeIdClass());
+
+			Action* createdActionIncrement = isAction ? createdActionIncrement = newIncrement->CreateAs<Action>() : nullptr;
+			bool wasCreated = createdActionIncrement != nullptr;
+
+			bool  isActionIncrement = wasCreated ? createdActionIncrement->Is(ActionIncrement::TypeIdClass()) : false;
+
+			delete newIncrement;
+			delete createdActionIncrement;
+
+			Assert::IsTrue(isAction && wasCreated && isActionIncrement);
 		}
 
 		TEST_METHOD(Constructor)
@@ -63,32 +75,30 @@ namespace EntitySystemTests::ActionTests
 			Assert::AreEqual("ActionIncrement"s, actionIncrement.Name());
 			Assert::IsNotNull(actionIncrement.Find("Name"));
 			Assert::AreEqual("ActionIncrement"s, actionIncrement.Find("Name")->Get<std::string>());
+
+			auto operand = actionIncrement.Find(actionIncrement.OperandKey);
+			Assert::IsNotNull(operand);
+			Assert::AreEqual(Scope::Types::String, operand->Type());
+			Assert::AreEqual(std::string(), operand->Get<std::string>());
+
+			auto incrementStep = actionIncrement.Find(actionIncrement.IncrementStepKey);
+			Assert::IsNotNull(incrementStep);
+			Assert::AreEqual(Scope::Types::Integer, incrementStep->Type());
+			Assert::AreEqual(1, incrementStep->Get<int>());
 		}
 
-		TEST_METHOD(Accessors)
+		TEST_METHOD(Clone)
 		{
-			ActionIncrement emptyAction;
-			emptyAction.SetName("EmptyAction");
-			Assert::AreEqual("EmptyAction"s, emptyAction.Name());
-			Assert::IsNull(emptyAction.GetEntity());
+			ActionIncrement actionIncrement;
+			Scope* clone = actionIncrement.Clone();
 
-			Entity entity;
-			Action* action = entity.CreateAction("ActionIncrement", "Increment");
-			Assert::AreEqual("Increment"s, action->Name());
-			Assert::AreEqual(entity, *action->GetEntity());
+			bool notNull = clone;
+			bool isActionIncrement = notNull ? clone->Is(ActionIncrement::TypeIdClass()) : false;
+			bool equal = *actionIncrement.As<Action>() == *clone->As<Action>();
 
-			Entity adopter;
-			action->SetEntity(&adopter);
-			Assert::IsNotNull(action->GetEntity());
-			Assert::AreEqual(adopter, *action->GetEntity());
-			Assert::IsNull(entity.FindScope(*action).first);
+			delete clone;
 
-			const ActionIncrement copy = *action->As<ActionIncrement>();
-			Assert::AreEqual(*action, *copy.As<Action>());
-
-			action->SetEntity(nullptr);
-			Assert::IsNull(action->GetEntity());
-			delete action;
+			Assert::IsTrue(notNull && isActionIncrement && equal);
 		}
 
 		TEST_METHOD(Update)
@@ -122,21 +132,22 @@ namespace EntitySystemTests::ActionTests
 			Assert::AreEqual(1, integer1);
 			Assert::AreEqual(1, integer2);
 
+			*castedIncrement->Find(castedIncrement->IncrementStepKey) = -1;
 			entity.Update(worldState);
 
 			Assert::AreEqual(2, integer1);
-			Assert::AreEqual(2, integer2);
+			Assert::AreEqual(0, integer2);
 
 			castedIncrement->Update(worldState);
 
 			Assert::AreEqual(2, integer1);
-			Assert::AreEqual(3, integer2);
+			Assert::AreEqual(-1, integer2);
 		}
 
 		TEST_METHOD(ToString)
 		{
 			ActionIncrement actionIncrement("Increment");
-			Assert::AreEqual("Increment (Action)"s, actionIncrement.Action::ToString());
+			Assert::AreEqual("Increment (ActionIncrement)"s, actionIncrement.ToString());
 		}
 
 	private:
@@ -146,5 +157,5 @@ namespace EntitySystemTests::ActionTests
 		EntityFactory entityFactory;
 	};
 
-	_CrtMemState ActionTest::sStartMemState;
+	_CrtMemState ActionCreateActionTest::sStartMemState;
 }

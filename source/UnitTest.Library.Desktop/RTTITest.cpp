@@ -81,7 +81,7 @@ namespace UnitTests
 	}
 }
 
-namespace UnitTestLibraryDesktop
+namespace UtilityTests
 {
 	TEST_CLASS(RTTITest)
 	{

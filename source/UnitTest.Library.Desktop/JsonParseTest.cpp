@@ -12,7 +12,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace UnitTests;
 using namespace Library;
 
-namespace UnitTestLibraryDesktop
+namespace JsonParseTests
 {
 	class TestSharedData : public JsonParseMaster::SharedData
 	{

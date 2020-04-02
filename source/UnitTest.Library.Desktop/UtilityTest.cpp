@@ -11,7 +11,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace UnitTests;
 using namespace Library;
 
-namespace UnitTestLibraryDesktop
+namespace UtilityTests
 {
 	TEST_CLASS(UtilityTest)
 	{

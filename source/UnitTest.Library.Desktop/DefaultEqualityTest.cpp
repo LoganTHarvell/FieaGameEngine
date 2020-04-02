@@ -12,7 +12,7 @@ using namespace Library;
 using namespace Library::Equality;
 
 
-namespace UnitTestLibraryDesktop
+namespace UtilityTests
 {
 	TEST_CLASS(DefaultEqualityTest)
 	{

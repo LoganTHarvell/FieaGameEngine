@@ -13,7 +13,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace UnitTests;
 using namespace Library;
 
-namespace UnitTestLibraryDesktop
+namespace ContainerTests
 {
 	template<typename T>
 	void TestPush(std::initializer_list<T> data)
