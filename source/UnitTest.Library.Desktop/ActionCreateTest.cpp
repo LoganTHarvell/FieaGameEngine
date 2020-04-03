@@ -79,7 +79,7 @@ namespace EntitySystemTests::ActionTests
 			Assert::IsNotNull(actionCreate.Find("Name"));
 			Assert::AreEqual("ActionCreate"s, actionCreate.Find("Name")->Get<std::string>());
 
-			auto actionAttributeName = actionCreate.Find(actionCreate.AttributeNameKey);
+			auto actionAttributeName = actionCreate.Find(actionCreate.AttributeKey);
 			Assert::IsNotNull(actionAttributeName);
 			Assert::AreEqual(Scope::Types::String, actionAttributeName->Type());
 			Assert::AreEqual(std::string(), actionAttributeName->Get<std::string>());
@@ -115,7 +115,7 @@ namespace EntitySystemTests::ActionTests
 			Assert::IsTrue(create->Is(ActionCreate::TypeIdClass()));
 
 			Entity addedEntity("Added");
-			*create->As<ActionCreate>()->Find(ActionCreate::AttributeNameKey) = "NewEntity";
+			*create->As<ActionCreate>()->Find(ActionCreate::AttributeKey) = "NewEntity";
 			*create->As<ActionCreate>()->Find(ActionCreate::NewScopeKey) = addedEntity.As<Scope>();
 
 			world.Update();
@@ -134,7 +134,7 @@ namespace EntitySystemTests::ActionTests
 			Assert::IsTrue(create->Is(ActionCreate::TypeIdClass()));
 
 			ActionCreate addedAction("Added");
-			*create->As<ActionCreate>()->Find(ActionCreate::AttributeNameKey) = Entity::ActionsKey;
+			*create->As<ActionCreate>()->Find(ActionCreate::AttributeKey) = Entity::ActionsKey;
 			*create->As<ActionCreate>()->Find(ActionCreate::NewScopeKey) = addedAction.As<Scope>();
 
 			Assert::AreEqual(1_z, entity->Actions().Size());

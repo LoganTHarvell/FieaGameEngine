@@ -79,7 +79,7 @@ namespace EntitySystemTests::ActionTests
 			Assert::IsNotNull(actionDestroy.Find("Name"));
 			Assert::AreEqual("ActionDestroy"s, actionDestroy.Find("Name")->Get<std::string>());
 
-			auto actionName = actionDestroy.Find(actionDestroy.AttributeNameKey);
+			auto actionName = actionDestroy.Find(actionDestroy.AttributeKey);
 			Assert::IsNotNull(actionName);
 			Assert::AreEqual(Scope::Types::String, actionName->Type());
 			Assert::AreEqual(std::string(), actionName->Get<std::string>());
@@ -111,14 +111,14 @@ namespace EntitySystemTests::ActionTests
 			Assert::IsNotNull(destroy);
 			Assert::IsTrue(destroy->Is(ActionDestroy::TypeIdClass()));
 
-			*destroy->As<ActionDestroy>()->Find(ActionDestroy::AttributeNameKey) = "EntityList"s;
+			*destroy->As<ActionDestroy>()->Find(ActionDestroy::AttributeKey) = "EntityList"s;
 			*destroy->As<ActionDestroy>()->Find(ActionDestroy::TargetKey) = "EntityToDestroy"s;
 
 			destroy = entity->CreateAction("ActionDestroy"s, "DestroyAction"s);
 			Assert::IsNotNull(destroy);
 			Assert::IsTrue(destroy->Is(ActionDestroy::TypeIdClass()));
 
-			*destroy->As<ActionDestroy>()->Find(ActionDestroy::AttributeNameKey) = Entity::ActionsKey;
+			*destroy->As<ActionDestroy>()->Find(ActionDestroy::AttributeKey) = Entity::ActionsKey;
 			*destroy->As<ActionDestroy>()->Find(ActionDestroy::TargetKey) = "DestroyEntity"s;
 
 			Assert::AreEqual(2_z, entity->Actions().Size());

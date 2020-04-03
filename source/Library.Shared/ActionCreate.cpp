@@ -17,7 +17,7 @@ namespace Library
 		static const TypeManager::TypeInfo typeInfo
 		{
 			{
-				{ AttributeNameKey, Types::String, false, 1, offsetof(ActionCreate, mAttributeName) },
+				{ AttributeKey, Types::String, false, 1, offsetof(ActionCreate, mAttributeName) },
 				{ NewScopeKey, Types::Scope, true, 1, 0 }
 			},
 
@@ -40,13 +40,13 @@ namespace Library
 	{
 		if (worldState.World && worldState.Entity)
 		{
-			DataType* action = Find(NewScopeKey);
+			DataType* scope = Find(NewScopeKey);
 
-			if (action && action->Type() == Types::Scope && action->Size() > 0)
+			if (scope && scope->Type() == Types::Scope && scope->Size() > 0)
 			{
 				World::PendingChild childToAdd =
 				{
-					*action->Get<Scope*>()->Clone(),
+					*scope->Get<Scope*>()->Clone(),
 					World::PendingChild::State::ToAdd,
 					*worldState.Entity,
 					&mAttributeName

@@ -17,7 +17,7 @@ namespace Library
 		static const TypeManager::TypeInfo typeInfo
 		{
 			{
-				{ AttributeNameKey, Types::String, false, 1, offsetof(ActionDestroy, mAttributeName) },
+				{ AttributeKey, Types::String, false, 1, offsetof(ActionDestroy, mAttributeName) },
 				{ TargetKey, Types::String, false, 1, offsetof(ActionDestroy, mTargetName) }
 			},
 

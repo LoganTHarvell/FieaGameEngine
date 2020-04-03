@@ -21,12 +21,12 @@ namespace Library
 		/// <summary>
 		/// Key for the name of the attribute to append the created attribute onto.
 		/// </summary>
-		inline static const std::string AttributeNameKey = "AttributeName";
+		inline static const std::string AttributeKey = "Attribute";
 
 		/// <summary>
 		/// Key for the created attribute.
 		/// </summary>
-		inline static const std::string NewScopeKey = "NewScope";
+		inline static const std::string NewScopeKey = "Scope";
 
 	public:
 		/// <summary>
