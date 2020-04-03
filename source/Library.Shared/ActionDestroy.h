@@ -21,7 +21,7 @@ namespace Library
 		/// <summary>
 		/// Key for the name of the attribute to destroy the Target.
 		/// </summary>
-		inline static const std::string AttributeKey = "AttributeName";
+		inline static const std::string AttributeKey = "Attribute";
 
 		/// <summary>
 		/// Key for the name of the Target to destroy.
