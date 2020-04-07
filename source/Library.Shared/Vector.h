@@ -96,7 +96,7 @@ namespace Library
 			/// <summary>
 			/// Iterator category for std::iterator_trait.
 			/// </summary>
-			using iterator_category = std::bidirectional_iterator_tag;
+			using iterator_category = std::random_access_iterator_tag;
 #pragma endregion Iterator Traits
 
 		public:
@@ -213,12 +213,19 @@ namespace Library
 			Iterator& operator+=(const std::size_t rhs);
 
 			/// <summary>
-			/// Addition operator.
+			/// Integral addition operator.
 			/// </summary>
 			/// <param name="rhs">Value to offset the Iterator.</param>
 			/// <returns>Iterator at the given offset from this Iterator.</returns>
 			/// <exception cref="out_of_range">Iterator out of bounds.</exception>
 			Iterator operator+(const std::size_t rhs) const;
+
+			/// <summary>
+			/// Iterator addition operator.
+			/// </summary>
+			/// <param name="rhs">Reference to an Iterator whose offset will be added.</param>
+			/// <returns>Added offset of this Iterator and the rhs.</returns>
+			difference_type operator+(const Iterator& rhs) const;
 
 			/// <summary>
 			/// Pre-decrement operator.
@@ -246,13 +253,20 @@ namespace Library
 			Iterator& operator-=(const std::size_t rhs);
 
 			/// <summary>
-			/// Subtraction operator.
+			/// Integral subtraction operator.
 			/// </summary>
 			/// <param name="rhs">Value to offset the Iterator.</param>
 			/// <returns>Iterator at the given offset from this Iterator.</returns>
 			/// <exception cref="runtime_error">Iterator invalid.</exception>
 			/// <exception cref="out_of_range">Iterator out of bounds.</exception>
 			Iterator operator-(const std::size_t rhs) const;
+
+			/// <summary>
+			/// Iterator subtraction operator.
+			/// </summary>
+			/// <param name="rhs">Reference to an Iterator whose offset will be subtracted.</param>
+			/// <returns>Subtracted offset of this Iterator and the rhs.</returns>
+			difference_type operator-(const Iterator& rhs) const;
 #pragma endregion Arithmetic Operators
 
 		private:
@@ -307,7 +321,7 @@ namespace Library
 			/// <summary>
 			/// Iterator category for std::iterator_trait.
 			/// </summary>
-			using iterator_category = std::bidirectional_iterator_tag;
+			using iterator_category = std::random_access_iterator_tag;
 #pragma endregion Iterator Traits
 
 		public:
@@ -430,13 +444,20 @@ namespace Library
 			ConstIterator& operator+=(const std::size_t rhs);
 
 			/// <summary>
-			/// Addition operator.
+			/// Integral addition operator.
 			/// </summary>
 			/// <param name="rhs">Value to offset the ConstIterator.</param>
 			/// <returns>ConstIterator at the given offset from this ConstIterator.</returns>
 			/// <exception cref="runtime_error">ConstIterator invalid.</exception>
 			/// <exception cref="out_of_range">ConstIterator out of bounds.</exception>
 			ConstIterator operator+(const std::size_t rhs) const;
+
+			/// <summary>
+			/// Iterator addition operator.
+			/// </summary>
+			/// <param name="rhs">Reference to an Iterator whose offset will be added.</param>
+			/// <returns>Added offset of this Iterator and the rhs.</returns>
+			difference_type operator+(const ConstIterator& rhs) const;
 
 			/// <summary>
 			/// Pre-decrement operator.
@@ -464,13 +485,20 @@ namespace Library
 			ConstIterator& operator-=(const std::size_t rhs);
 
 			/// <summary>
-			/// Subtraction operator.
+			/// Integral subtraction operator.
 			/// </summary>
 			/// <param name="rhs">Value to offset the ConstIterator.</param>
 			/// <returns>ConstIterator at the given offset from this ConstIterator.</returns>
 			/// <exception cref="runtime_error">ConstIterator invalid.</exception>
 			/// <exception cref="out_of_range">ConstIterator out of bounds.</exception>
 			ConstIterator operator-(const std::size_t rhs) const;
+
+			/// <summary>
+			/// Iterator subtraction operator.
+			/// </summary>
+			/// <param name="rhs">Reference to an Iterator whose offset will be subtracted.</param>
+			/// <returns>Subtracted offset of this Iterator and the rhs.</returns>
+			difference_type operator-(const ConstIterator& rhs) const;
 #pragma endregion Arithmetic Operators
 
 		private:

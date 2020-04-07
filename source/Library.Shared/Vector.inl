@@ -132,6 +132,12 @@ namespace Library
 	}
 
 	template<typename T>
+	inline typename Vector<T>::Iterator::difference_type Vector<T>::Iterator::operator+(const Iterator& rhs) const
+	{
+		return mIndex + rhs.mIndex;
+	}
+
+	template<typename T>
 	inline typename Vector<T>::Iterator& Vector<T>::Iterator::operator--()
 	{
 		if (mOwner == nullptr)
@@ -179,6 +185,12 @@ namespace Library
 	inline typename Vector<T>::Iterator Vector<T>::Iterator::operator-(const std::size_t rhs) const
 	{
 		return Iterator(*this) -= rhs;
+	}
+	
+	template<typename T>
+	inline typename Vector<T>::Iterator::difference_type Vector<T>::Iterator::operator-(const Iterator& rhs) const
+	{
+		return mIndex - rhs.mIndex;
 	}
 #pragma endregion Arithmetic Operators
 #pragma endregion Iterator
@@ -309,6 +321,12 @@ namespace Library
 	{
 		return ConstIterator(*this) += rhs;
 	}
+	
+	template<typename T>
+	inline typename Vector<T>::ConstIterator::difference_type Vector<T>::ConstIterator::operator+(const ConstIterator& rhs) const
+	{
+		return mIndex + rhs.mIndex;
+	}
 
 	template<typename T>
 	inline typename Vector<T>::ConstIterator& Vector<T>::ConstIterator::operator--()
@@ -358,6 +376,12 @@ namespace Library
 	inline typename Vector<T>::ConstIterator Vector<T>::ConstIterator::operator-(const std::size_t rhs) const
 	{
 		return ConstIterator(*this) -= rhs;
+	}
+
+	template<typename T>
+	inline typename Vector<T>::ConstIterator::difference_type Vector<T>::ConstIterator::operator-(const ConstIterator& rhs) const
+	{
+		return mIndex - rhs.mIndex;
 	}
 #pragma endregion Arithmetic Operators
 #pragma endregion ConstIterator
