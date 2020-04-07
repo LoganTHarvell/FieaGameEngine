@@ -1,10 +1,4 @@
-#pragma region Inlcudes
-// Pre-compiled Header
-#include "pch.h"
-
-// Header
 #include "Stack.h"
-#pragma endregion Inlcudes
 
 namespace Library
 {

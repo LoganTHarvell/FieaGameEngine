@@ -1,5 +1,3 @@
-#pragma once
-
 #include "DefaultHash.h"
 
 namespace Library::Hash

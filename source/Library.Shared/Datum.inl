@@ -1,5 +1,3 @@
-#pragma once
-
 #include "Datum.h"
 
 namespace Library

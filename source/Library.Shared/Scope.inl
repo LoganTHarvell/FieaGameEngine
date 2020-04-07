@@ -1,5 +1,3 @@
-#pragma once
-
 #include "Scope.h"
 
 namespace Library

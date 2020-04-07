@@ -9,6 +9,11 @@
 #include <cassert>
 #include <functional>
 #include <algorithm>
+#include <sstream>
+#include <istream>
+#include <fstream>
+#include <chrono>
+
 #include <crtdbg.h>
 
 // GSL Library

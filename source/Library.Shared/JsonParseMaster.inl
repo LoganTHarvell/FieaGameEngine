@@ -1,5 +1,3 @@
-#pragma once
-
 #include "JsonParseMaster.h"
 
 namespace Library

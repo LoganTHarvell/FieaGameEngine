@@ -1,5 +1,3 @@
-#pragma once
-
 #include "TypeManager.h"
 
 namespace Library

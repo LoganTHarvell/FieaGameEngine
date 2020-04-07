@@ -1,5 +1,3 @@
-#pragma once
-
 #include "DefaultEquality.h"
 
 namespace Library::Equality

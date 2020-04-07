@@ -1,5 +1,3 @@
-#pragma once
-
 // Header File
 #include "Factory.h"
 

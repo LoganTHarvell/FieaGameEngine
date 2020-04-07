@@ -1,5 +1,3 @@
-#pragma once
-
 #include "HashMap.h"
 
 namespace Library
