@@ -17,6 +17,7 @@ namespace Library
 	{
 	}
 
+#pragma region Dereference Operators
 	template<typename T>
 	inline T& Vector<T>::Iterator::operator*() const
 	{
@@ -35,17 +36,51 @@ namespace Library
 	}
 
 	template<typename T>
+	inline T& Vector<T>::Iterator::operator[](const std::size_t rhs)
+	{
+		return mOwner->At(mIndex + rhs);
+	}
+#pragma endregion Dereference Operators
+
+#pragma region Relational Operators
+	template<typename T>
 	inline bool Vector<T>::Iterator::operator==(const Iterator& rhs) const noexcept
 	{
-		return !(operator!=(rhs));
+		return mOwner == rhs.mOwner && mIndex == rhs.mIndex;
 	}
 
 	template<typename T>
 	inline bool Vector<T>::Iterator::operator!=(const Iterator& rhs) const noexcept
 	{
-		return (mOwner != rhs.mOwner || mIndex != rhs.mIndex);
+		return !(operator==(rhs));
 	}
 
+	template<typename T>
+	inline bool Vector<T>::Iterator::operator<(const Iterator& rhs) const noexcept
+	{
+		return mOwner == rhs.mOwner && mIndex < rhs.mIndex;
+	}
+
+	template<typename T>
+	inline bool Vector<T>::Iterator::operator>(const Iterator& rhs) const noexcept
+	{
+		return mOwner == rhs.mOwner && mIndex > rhs.mIndex;
+	}
+
+	template<typename T>
+	inline bool Vector<T>::Iterator::operator<=(const Iterator& rhs) const noexcept
+	{
+		return mOwner == rhs.mOwner && mIndex <= rhs.mIndex;
+	}
+
+	template<typename T>
+	inline bool Vector<T>::Iterator::operator>=(const Iterator& rhs) const noexcept
+	{
+		return mOwner == rhs.mOwner && mIndex >= rhs.mIndex;
+	}
+#pragma endregion Relational Operators
+
+#pragma region Arithmetic Operators
 	template<typename T>
 	inline typename Vector<T>::Iterator& Vector<T>::Iterator::operator++()
 	{
@@ -145,12 +180,7 @@ namespace Library
 	{
 		return Iterator(*this) -= rhs;
 	}
-
-	template<typename T>
-	inline typename Vector<T>::Iterator Vector<T>::Iterator::operator[](const std::size_t rhs) const
-	{
-		return Iterator(*this) + rhs;
-	}
+#pragma endregion Arithmetic Operators
 #pragma endregion Iterator
 
 #pragma region ConstIterator
@@ -166,6 +196,7 @@ namespace Library
 	{
 	}
 
+#pragma region Dereference Operators
 	template<typename T>
 	inline const T& Vector<T>::ConstIterator::operator*() const
 	{
@@ -184,17 +215,51 @@ namespace Library
 	}
 
 	template<typename T>
+	inline const T& Vector<T>::ConstIterator::operator[](const std::size_t rhs) const
+	{
+		return mOwner->At(mIndex + rhs);
+	}
+#pragma endregion Dereference Operators
+
+#pragma region Relational Operators
+	template<typename T>
 	inline bool Vector<T>::ConstIterator::operator==(const ConstIterator& rhs) const noexcept
 	{
-		return !operator!=(rhs);
+		return mOwner == rhs.mOwner && mIndex == rhs.mIndex;
 	}
 
 	template<typename T>
 	inline bool Vector<T>::ConstIterator::operator!=(const ConstIterator& rhs) const noexcept
 	{
-		return (mOwner != rhs.mOwner || mIndex != rhs.mIndex);
+		return !(operator==(rhs));
 	}
 
+	template<typename T>
+	inline bool Vector<T>::ConstIterator::operator<(const ConstIterator& rhs) const noexcept
+	{
+		return mOwner == rhs.mOwner && mIndex < rhs.mIndex;
+	}
+
+	template<typename T>
+	inline bool Vector<T>::ConstIterator::operator>(const ConstIterator& rhs) const noexcept
+	{
+		return mOwner == rhs.mOwner && mIndex > rhs.mIndex;
+	}
+
+	template<typename T>
+	inline bool Vector<T>::ConstIterator::operator<=(const ConstIterator& rhs) const noexcept
+	{
+		return mOwner == rhs.mOwner && mIndex <= rhs.mIndex;
+	}
+
+	template<typename T>
+	inline bool Vector<T>::ConstIterator::operator>=(const ConstIterator& rhs) const noexcept
+	{
+		return mOwner == rhs.mOwner && mIndex >= rhs.mIndex;
+	}
+#pragma endregion Relational Operators
+
+#pragma region Arithmetic Operators
 	template<typename T>
 	inline typename Vector<T>::ConstIterator& Vector<T>::ConstIterator::operator++()
 	{
@@ -294,12 +359,7 @@ namespace Library
 	{
 		return ConstIterator(*this) -= rhs;
 	}
-
-	template<typename T>
-	inline typename Vector<T>::ConstIterator Vector<T>::ConstIterator::operator[](const std::size_t rhs) const
-	{
-		return ConstIterator(*this) + rhs;
-	}
+#pragma endregion Arithmetic Operators
 #pragma endregion ConstIterator
 
 #pragma region Constructors, Destructor, Assignment
@@ -757,6 +817,31 @@ namespace Library
 		}
 
 		return isRemoved;
+	}
+
+	template<typename T>
+	inline typename Vector<T>::Iterator Vector<T>::Erase(ConstIterator first)
+	{
+		return Erase(first, cend());
+	}
+
+	template<typename T>
+	inline typename Vector<T>::Iterator Vector<T>::Erase(ConstIterator first, ConstIterator last)
+	{
+		if (first.mOwner != this || last.mOwner != this)
+		{
+			throw std::runtime_error("Invalid iterator.");
+		}
+
+		Iterator it = Iterator(*this, first.mIndex);
+		Iterator lastIt = Iterator(*this, last.mIndex);
+
+		while (it < lastIt)
+		{
+			Remove(it++);
+		}
+
+		return it;
 	}
 
 	template<typename T>

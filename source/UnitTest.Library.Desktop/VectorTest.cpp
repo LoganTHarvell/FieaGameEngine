@@ -260,13 +260,13 @@ namespace ContainerTests
 			Assert::AreEqual(*doubleConstIterator, 10.0);
 			Assert::AreEqual(*fooConstIterator, Foo(10));
 
-			Assert::AreEqual(*(intIterator[2]), 30);
-			Assert::AreEqual(*(doubleIterator[2]), 30.0);
-			Assert::AreEqual(*(fooIterator[2]), Foo(30));
+			Assert::AreEqual(intIterator[2], 30);
+			Assert::AreEqual(doubleIterator[2], 30.0);
+			Assert::AreEqual(fooIterator[2], Foo(30));
 
-			Assert::AreEqual(*(intConstIterator[2]), 30);
-			Assert::AreEqual(*(doubleConstIterator[2]), 30.0);
-			Assert::AreEqual(*(fooConstIterator[2]), Foo(30));
+			Assert::AreEqual(intConstIterator[2], 30);
+			Assert::AreEqual(doubleConstIterator[2], 30.0);
+			Assert::AreEqual(fooConstIterator[2], Foo(30));
 
 			Vector<int>::Iterator intPrevIterator = intIterator++;
 			Vector<double>::Iterator doublePrevIterator = doubleIterator++;

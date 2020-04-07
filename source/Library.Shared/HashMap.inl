@@ -408,7 +408,7 @@ namespace Library
 		
 		if (!alreadyExists)
 		{
-			it.mBucketIterator = mBuckets.begin()[index];
+			it.mBucketIterator = mBuckets.begin() + index;
 			it.mChainIterator = mBuckets[index].InsertAfter(mBuckets[index].end(), entry);
 			++mSize;
 		}
@@ -463,7 +463,7 @@ namespace Library
 
 		if (chainIterator != chain.end())
 		{
-			return Iterator(*this, mBuckets.begin()[indexOut], chainIterator);
+			return Iterator(*this, mBuckets.begin() + indexOut, chainIterator);
 		}
 
 		return end();

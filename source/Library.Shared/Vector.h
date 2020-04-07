@@ -117,6 +117,7 @@ namespace Library
 			Iterator(Vector& vector, const std::size_t index=0);
 
 		public:
+#pragma region Dereference Operators
 			/// <summary>
 			/// Dereference operator.
 			/// </summary>
@@ -132,19 +133,60 @@ namespace Library
 			T* operator->() const;
 
 			/// <summary>
+			/// Subscript operator.
+			/// </summary>
+			/// <param name="rhs">Value to offset the Iterator.</param>
+			/// <returns>Element at the given offset from the Iterator element.</returns>
+			/// <exception cref="runtime_error">Iterator invalid.</exception>
+			/// <exception cref="out_of_range">Iterator out of bounds.</exception>
+			T& operator[](const std::size_t rhs);
+#pragma endregion Dereference Operators
+
+#pragma region Relational Operators
+			/// <summary>
 			/// Equal operator.
 			/// </summary>
-			/// <param name="rhs">Right hand side Iterator to be compared against for equality.</param>
-			/// <returns>True when the rhs owner Vector and element are equal to the left, false otherwise.</returns>
+			/// <param name="rhs">Right hand side Iterator to be compared against.</param>
+			/// <returns>True if the lhs and rhs Iterator point to the same Vector element, false otherwise.</returns>
 			bool operator==(const Iterator& rhs) const noexcept;
 
 			/// <summary>
 			/// Not equal operator.
 			/// </summary>
-			/// <param name="rhs">Right hand side Iterator to be compared against for equality.</param>
-			/// <returns>True when the rhs owner Vector and element are inequal to the left, false otherwise.</returns>
+			/// <param name="rhs">Right hand side Iterator to be compared against.</param>
+			/// <returns>True if the lhs and rhs Iterator point to different Vector elements, false otherwise.</returns>
 			bool operator!=(const Iterator& rhs) const noexcept;
 
+			/// <summary>
+			/// Less than operator.
+			/// </summary>
+			/// <param name="rhs">Right hand side Iterator to be compared against.</param>
+			/// <returns>True if the rhs Iterator points to an element preceeding the lhs, false otherwise.</returns>
+			bool operator<(const Iterator& rhs) const noexcept;
+
+			/// <summary>
+			/// Greater than operator.
+			/// </summary>
+			/// <param name="rhs">Right hand side Iterator to be compared against.</param>
+			/// <returns>True if the rhs Iterator points to an element succeeding the lhs, false otherwise.</returns>
+			bool operator>(const Iterator& rhs) const noexcept;
+
+			/// <summary>
+			/// Less than or equal operator.
+			/// </summary>
+			/// <param name="rhs">Right hand side Iterator to be compared against.</param>
+			/// <returns>True if the rhs Iterator points to an element preceeding or the same as the lhs, false otherwise.</returns>
+			bool operator<=(const Iterator& rhs) const noexcept;
+
+			/// <summary>
+			/// Greater than or equal operator.
+			/// </summary>
+			/// <param name="rhs">Right hand side Iterator to be compared against.</param>
+			/// <returns>True if the rhs Iterator points to an element succeeding or the same as the lhs, false otherwise.</returns>
+			bool operator>=(const Iterator& rhs) const noexcept;
+#pragma endregion Relational Operators
+
+#pragma region Arithmetic Operators
 			/// <summary>
 			/// Pre-increment operator.
 			/// </summary>
@@ -211,15 +253,7 @@ namespace Library
 			/// <exception cref="runtime_error">Iterator invalid.</exception>
 			/// <exception cref="out_of_range">Iterator out of bounds.</exception>
 			Iterator operator-(const std::size_t rhs) const;
-
-			/// <summary>
-			/// Subscript operator.
-			/// </summary>
-			/// <param name="rhs">Value to offset the Iterator.</param>
-			/// <returns>Iterator at the given offset from this Iterator.</returns>
-			/// <exception cref="runtime_error">Iterator invalid.</exception>
-			/// <exception cref="out_of_range">Iterator out of bounds.</exception>
-			Iterator operator[](const std::size_t rhs) const;
+#pragma endregion Arithmetic Operators
 
 		private:
 			/// <summary>
@@ -300,6 +334,7 @@ namespace Library
 			ConstIterator(const Vector& vector, const std::size_t index=0);
 
 		public:
+#pragma region Dereference Operators
 			/// <summary>
 			/// Dereference operator.
 			/// </summary>
@@ -311,23 +346,64 @@ namespace Library
 			/// Member access operator.
 			/// </summary>
 			/// <returns>Pointer to the value of the current element of the Vector.</returns>
-			/// <exception cref="runtime_error">Invalid ConstIterator.</exception>
+			/// <exception cref="runtime_error">ConstIterator invalid.</exception>
 			const T* operator->() const;
 
 			/// <summary>
-			/// Equal operator.
+			/// Subscript operator.
 			/// </summary>
-			/// <param name="rhs">Right hand side ConstIterator to be compared against for equality.</param>
-			/// <returns>True when the rhs owner Vector and element are equal to the left, false otherwise.</returns>
-			bool operator==(const ConstIterator& rhs) const noexcept;
+			/// <param name="rhs">Value to offset the ConstIterator.</param>
+			/// <returns>Element at the given offset from the ConstIterator element.</returns>
+			/// <exception cref="runtime_error">ConstIterator invalid.</exception>
+			/// <exception cref="out_of_range">ConstIterator out of bounds.</exception>
+			const T& operator[](const std::size_t rhs) const;
+#pragma endregion Dereference Operators
 
+#pragma region Relational Operators
 			/// <summary>
 			/// Equal operator.
 			/// </summary>
-			/// <param name="rhs">Right hand side ConstIterator to be compared against for equality.</param>
-			/// <returns>True when the rhs owner Vector and element are inequal to the left, false otherwise.</returns>
+			/// <param name="rhs">Right hand side ConstIterator to be compared against.</param>
+			/// <returns>True if the lhs and rhs ConstIterator point to the same Vector element, false otherwise.</returns>
+			bool operator==(const ConstIterator& rhs) const noexcept;
+
+			/// <summary>
+			/// Not equal operator.
+			/// </summary>
+			/// <param name="rhs">Right hand side ConstIterator to be compared against.</param>
+			/// <returns>True if the lhs and rhs ConstIterator point to different Vector elements, false otherwise.</returns>
 			bool operator!=(const ConstIterator& rhs) const noexcept;
 
+			/// <summary>
+			/// Less than operator.
+			/// </summary>
+			/// <param name="rhs">Right hand side ConstIterator to be compared against.</param>
+			/// <returns>True if the rhs ConstIterator points to an element preceeding the lhs, false otherwise.</returns>
+			bool operator<(const ConstIterator& rhs) const noexcept;
+
+			/// <summary>
+			/// Greater than operator.
+			/// </summary>
+			/// <param name="rhs">Right hand side ConstIterator to be compared against.</param>
+			/// <returns>True if the rhs ConstIterator points to an element succeeding the lhs, false otherwise.</returns>
+			bool operator>(const ConstIterator& rhs) const noexcept;
+
+			/// <summary>
+			/// Less than or equal operator.
+			/// </summary>
+			/// <param name="rhs">Right hand side ConstIterator to be compared against.</param>
+			/// <returns>True if the rhs ConstIterator points to an element preceeding or the same as the lhs, false otherwise.</returns>
+			bool operator<=(const ConstIterator& rhs) const noexcept;
+
+			/// <summary>
+			/// Greater than or equal operator.
+			/// </summary>
+			/// <param name="rhs">Right hand side ConstIterator to be compared against.</param>
+			/// <returns>True if the rhs ConstIterator points to an element succeeding or the same as the lhs, false otherwise.</returns>
+			bool operator>=(const ConstIterator& rhs) const noexcept;
+#pragma endregion Relational Operators
+
+#pragma region Arithmetic Operators
 			/// <summary>
 			/// Pre-increment operator.
 			/// </summary>
@@ -395,16 +471,8 @@ namespace Library
 			/// <exception cref="runtime_error">ConstIterator invalid.</exception>
 			/// <exception cref="out_of_range">ConstIterator out of bounds.</exception>
 			ConstIterator operator-(const std::size_t rhs) const;
+#pragma endregion Arithmetic Operators
 
-			/// <summary>
-			/// Subscript operator.
-			/// </summary>
-			/// <param name="rhs">Value to offset the ConstIterator.</param>
-			/// <returns>Iterator at the given offset from this ConstIterator.</returns>
-			/// <exception cref="runtime_error">ConstIterator invalid.</exception>
-			/// <exception cref="out_of_range">ConstIterator out of bounds.</exception>
-			ConstIterator operator[](const std::size_t rhs) const;
-		
 		private:
 			/// <summary>
 			/// Owner Vector that is able to be traversed by the ConstIterator instance.
@@ -700,6 +768,23 @@ namespace Library
 		/// <returns>True on successful remove, false otherwise.</returns>
 		/// <exception cref="runtime_error">Invalid Iterator.</exception>
 		bool Remove(const Iterator& it);
+
+		/// <summary>
+		/// Removes all elements from the Vector from element pointed at by the given Iterator to the end of the Vector.
+		/// </summary>
+		/// <param name="position">ConstIterator to the first element to be removed.</param>
+		/// <returns>Iterator pointing to the Vector end.</returns>
+		/// <exception cref="std::runtime_error">Invalid iterator.</exception>
+		Iterator Erase(ConstIterator position);
+
+		/// <summary>
+		/// Removed elements from the Vector in the range [first, last).
+		/// </summary>
+		/// <param name="first">ConstIterator to the first element to be removed.</param>
+		/// <param name="last">ConstIterator to the element where removal stops.</param>
+		/// <returns>Iterator pointing to the next element after the last element removed.</returns>
+		/// <exception cref="std::runtime_error">Invalid iterator.</exception>
+		Iterator Erase(ConstIterator first, ConstIterator last);
 
 		/// <summary>
 		/// Removes all elements from the Vector and resets the size to zero.
