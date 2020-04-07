@@ -59,6 +59,12 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)ActionExpression.cpp">
       <Filter>Core\Actions</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)EventQueue.cpp">
+      <Filter>Core\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)EventPublisher.cpp">
+      <Filter>Core\Events</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
@@ -149,6 +155,18 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)ActionExpression.h">
       <Filter>Core\Actions</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)EventPublisher.h">
+      <Filter>Core\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Event.h">
+      <Filter>Core\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)EventQueue.h">
+      <Filter>Core\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Dev\Students\CH16\Logan.Harvell\Prog2\fieagameengine\source\Library.Shared\IEventSubscriber.h">
+      <Filter>Core\Events</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)DefaultHash.inl">
@@ -184,6 +202,15 @@
     <None Include="$(MSBuildThisFileDirectory)TypeManager.inl">
       <Filter>Reflection</Filter>
     </None>
+    <None Include="$(MSBuildThisFileDirectory)Event.inl">
+      <Filter>Core\Events</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)EventQueue.inl">
+      <Filter>Core\Events</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)EventPublisher.inl">
+      <Filter>Core\Events</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Containers">
@@ -218,6 +245,9 @@
     </Filter>
     <Filter Include="Core\Actions">
       <UniqueIdentifier>{ea3462ea-d32e-475a-9e02-f3f12b5435d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Events">
+      <UniqueIdentifier>{6f061f23-0bac-472e-bdbb-a48f46a4bf26}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
