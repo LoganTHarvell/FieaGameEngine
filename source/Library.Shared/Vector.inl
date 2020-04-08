@@ -868,7 +868,7 @@ namespace Library
 		memmove(&mData[first.mIndex], &mData[it.mIndex], sizeof(T) * (mSize - it.mIndex));
 		mSize -= last.mIndex - first.mIndex;
 
-		return lastIt;
+		return Iterator(*this, first.mIndex);
 	}
 
 	template<typename T>

@@ -721,10 +721,8 @@ namespace Library
 		{
 			Resize(1);
 		}
-		else if (mSize < 1)
-		{
-			throw std::runtime_error("External storage has insufficient memory.");
-		}
+
+		assert(mSize >= 1);
 
 		Set(rhs);		
 		return *this;

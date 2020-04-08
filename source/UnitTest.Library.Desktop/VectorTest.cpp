@@ -1336,6 +1336,54 @@ namespace ContainerTests
 			Assert::ExpectException<std::runtime_error>([&fooVector] { fooVector.Remove(Foo(10)); });
 		}
 
+		TEST_METHOD(Erase)
+		{
+			/* Integer Data */
+
+			Vector<int> intVector = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+			auto intIt = intVector.Erase(intVector.Find(5));
+
+			Assert::AreEqual(5_z, intVector.Size());
+			Assert::AreEqual(intVector.end(), intIt);
+
+			intIt = intVector.Erase(intVector.Find(1), intVector.Find(3));
+			Assert::AreEqual(3_z, intVector.Size());
+			Assert::AreEqual(intVector.Find(3), intIt);
+
+			/* Double Data */
+
+			Vector<double> doubleVector = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+			auto doubleIt = doubleVector.Erase(doubleVector.Find(5));
+
+			Assert::AreEqual(5_z, doubleVector.Size());
+			Assert::AreEqual(doubleVector.end(), doubleIt);
+
+			doubleIt = doubleVector.Erase(doubleVector.Find(1), doubleVector.Find(3));
+			Assert::AreEqual(3_z, doubleVector.Size());
+			Assert::AreEqual(doubleVector.Find(3), doubleIt);
+
+
+			/* Foo Data */
+
+			Vector<Foo> fooVector = { Foo(0), Foo(1), Foo(2), Foo(3), Foo(4), Foo(5), Foo(6), Foo(7), Foo(8), Foo(9) };
+
+			auto fooIt = fooVector.Erase(fooVector.Find(Foo(5)));
+
+			Assert::AreEqual(5_z, fooVector.Size());
+			Assert::AreEqual(fooVector.end(), fooIt);
+
+			fooIt = fooVector.Erase(fooVector.Find(Foo(1)), fooVector.Find(Foo(3)));
+			Assert::AreEqual(3_z, fooVector.Size());
+			Assert::AreEqual(fooVector.Find(Foo(3)), fooIt);
+
+			Assert::ExpectException<std::runtime_error>([&intVector] { intVector.Erase(Vector<int>::Iterator()); });
+			Assert::ExpectException<std::runtime_error>([&doubleVector] { doubleVector.Erase(Vector<double>::Iterator()); });
+			Assert::ExpectException<std::runtime_error>([&fooVector] { fooVector.Erase(Vector<Foo>::Iterator()); });
+
+		}
+
 		TEST_METHOD(Clear)
 		{
 			/* Integer Data */

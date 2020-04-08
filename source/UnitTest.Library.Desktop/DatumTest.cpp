@@ -46,10 +46,12 @@ namespace UnitTests
 		if (Datum::TypeOf<T>() != Datum::Types::Integer)
 		{
 			Assert::ExpectException<std::runtime_error>([&datum1] { datum1 = int(); });
+			Assert::ExpectException<std::runtime_error>([&datum1] { datum1 = { int(), int() }; });
 		}
 		else
 		{
 			Assert::ExpectException<std::runtime_error>([&datum1] { datum1 = float(); });
+			Assert::ExpectException<std::runtime_error>([&datum1] { datum1 = { float(), float() }; });
 		}
 
 		T tmp[1] = { T() };
