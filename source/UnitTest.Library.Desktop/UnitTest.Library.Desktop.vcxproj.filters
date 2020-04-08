@@ -116,6 +116,9 @@
     <ClCompile Include="EventQueueTest.cpp">
       <Filter>Core Tests\Event Tests</Filter>
     </ClCompile>
+    <ClCompile Include="GameClockTimeTest.cpp">
+      <Filter>Utility Tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

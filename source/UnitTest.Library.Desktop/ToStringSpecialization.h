@@ -1,10 +1,13 @@
 #pragma once
 
+#include "CppUnitTest.h"
+
+#include <chrono>
+
 #pragma warning(disable : 4201)
 #include <glm/gtx/string_cast.hpp>
 #pragma warning(default : 4201)
 
-#include "CppUnitTest.h"
 
 #include "Foo.h"
 #include "Bar.h"
@@ -23,12 +26,33 @@
 #include "Action.h"
 
 
+
 using namespace UnitTests;
 using namespace Library;
 using namespace std::string_literals;
 
 namespace Microsoft::VisualStudio::CppUnitTestFramework
 {
+#pragma region Standard Library
+	template<>
+	inline std::wstring ToString<std::chrono::milliseconds>(const std::chrono::milliseconds& t)
+	{
+		RETURN_WIDE_STRING(t.count());
+	}
+
+	template<>
+	inline std::wstring ToString<std::chrono::milliseconds>(const std::chrono::milliseconds* t)
+	{
+		RETURN_WIDE_STRING(t->count());
+	}
+
+	template<>
+	inline std::wstring ToString<std::chrono::milliseconds>(std::chrono::milliseconds* t)
+	{
+		RETURN_WIDE_STRING(t->count());
+	}
+#pragma endregion Standard Library
+
 #pragma region ThirdParty
 	template<>
 	inline std::wstring ToString<glm::vec4>(const glm::vec4& t)

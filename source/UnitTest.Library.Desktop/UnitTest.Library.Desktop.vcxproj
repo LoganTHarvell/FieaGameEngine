@@ -233,6 +233,7 @@ xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
     <ClCompile Include="Foo.cpp" />
     <ClCompile Include="FooEntity.cpp" />
     <ClCompile Include="FooTest.cpp" />
+    <ClCompile Include="GameClockTimeTest.cpp" />
     <ClCompile Include="HashMapTest.cpp" />
     <ClCompile Include="JsonEntitySystemParseTest.cpp" />
     <ClCompile Include="JsonScopeParseTest.cpp" />
