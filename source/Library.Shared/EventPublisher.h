@@ -30,7 +30,7 @@ namespace Library
 		using SubscriberList = Vector<IEventSubscriber*>;
 #pragma endregion Type Definitions
 
-#pragma region Special Member Functions
+#pragma region Special Members
 	public:
 		/// <summary>
 		/// Default constructor.
@@ -45,12 +45,12 @@ namespace Library
 		/// <summary>
 		/// Copy constructor.
 		/// </summary>
-		EventPublisher(const EventPublisher&) = delete;
+		EventPublisher(const EventPublisher&) = default;
 
 		/// <summary>
 		/// Copy assignment operator.
 		/// </summary>
-		EventPublisher& operator=(const EventPublisher&) = delete;
+		EventPublisher& operator=(const EventPublisher&) = default;
 
 		/// <summary>
 		/// Move constructor.
@@ -69,7 +69,7 @@ namespace Library
 		/// </summary>
 		/// <param name="subscribers">Reference to a list of subscribers.</param>
 		explicit EventPublisher(SubscriberList& subscribers);
-#pragma endregion Special Member Functions
+#pragma endregion Special Members
 
 #pragma region Event Publishing
 	public:
@@ -79,6 +79,15 @@ namespace Library
 		/// </summary>
 		void Publish();
 #pragma endregion Event Publishing
+
+#pragma region RTTI Overrides
+	public:
+		/// <summary>
+		/// Virtual override for representing the Entity as a std::string.
+		/// </summary>
+		/// <returns></returns>
+		virtual std::string ToString() const override;
+#pragma endregion RTTI Overrides
 
 #pragma region Data Members
 	private:

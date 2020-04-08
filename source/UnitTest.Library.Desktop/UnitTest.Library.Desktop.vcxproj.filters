@@ -71,18 +71,6 @@
     <ClCompile Include="FooEntity.cpp">
       <Filter>Support Code\Core</Filter>
     </ClCompile>
-    <ClCompile Include="EntityTest.cpp">
-      <Filter>Entity System Tests</Filter>
-    </ClCompile>
-    <ClCompile Include="SectorTest.cpp">
-      <Filter>Entity System Tests</Filter>
-    </ClCompile>
-    <ClCompile Include="WorldTest.cpp">
-      <Filter>Entity System Tests</Filter>
-    </ClCompile>
-    <ClCompile Include="JsonEntitySystemParseTest.cpp">
-      <Filter>Entity System Tests</Filter>
-    </ClCompile>
     <ClCompile Include="Bar.cpp">
       <Filter>Support Code\Basic</Filter>
     </ClCompile>
@@ -93,22 +81,40 @@
       <Filter>Support Code\Basic</Filter>
     </ClCompile>
     <ClCompile Include="ActionTest.cpp">
-      <Filter>Entity System Tests\Action Tests</Filter>
+      <Filter>Core Tests\Entity System Tests\Actions Tests</Filter>
     </ClCompile>
     <ClCompile Include="ActionIncrementTest.cpp">
-      <Filter>Entity System Tests\Action Tests</Filter>
+      <Filter>Core Tests\Entity System Tests\Actions Tests</Filter>
     </ClCompile>
     <ClCompile Include="ActionListTest.cpp">
-      <Filter>Entity System Tests\Action Tests</Filter>
+      <Filter>Core Tests\Entity System Tests\Actions Tests</Filter>
     </ClCompile>
     <ClCompile Include="ActionCreateTest.cpp">
-      <Filter>Entity System Tests\Action Tests</Filter>
+      <Filter>Core Tests\Entity System Tests\Actions Tests</Filter>
     </ClCompile>
     <ClCompile Include="ActionDestroyTest.cpp">
-      <Filter>Entity System Tests\Action Tests</Filter>
+      <Filter>Core Tests\Entity System Tests\Actions Tests</Filter>
     </ClCompile>
     <ClCompile Include="ActionListWhileTest.cpp">
-      <Filter>Entity System Tests\Action Tests</Filter>
+      <Filter>Core Tests\Entity System Tests\Actions Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldTest.cpp">
+      <Filter>Core Tests\Entity System Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="JsonEntitySystemParseTest.cpp">
+      <Filter>Core Tests\Entity System Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="SectorTest.cpp">
+      <Filter>Core Tests\Entity System Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityTest.cpp">
+      <Filter>Core Tests\Entity System Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="EventTest.cpp">
+      <Filter>Core Tests\Event Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="EventQueueTest.cpp">
+      <Filter>Core Tests\Event Tests</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -163,20 +169,26 @@
     <Filter Include="Support Code\Attributed">
       <UniqueIdentifier>{ad1ac5c6-b7b7-49d2-8bb9-2b78a080db17}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Entity System Tests">
-      <UniqueIdentifier>{bd2439d4-7db9-4537-9865-77b749a06bf6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Support Code\Basic">
       <UniqueIdentifier>{4d5447e3-1e4e-4ef9-b62e-6cfb0c47b6ad}</UniqueIdentifier>
     </Filter>
     <Filter Include="Support Code\Core">
       <UniqueIdentifier>{767465cd-7442-452c-8903-60620b40d12a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Entity System Tests\Action Tests">
-      <UniqueIdentifier>{830b286f-9457-4087-9008-28c1783b99a8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Reflection System Tests">
       <UniqueIdentifier>{89ca14ab-61f6-4885-a5ad-66ab9007c3f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core Tests">
+      <UniqueIdentifier>{bd2439d4-7db9-4537-9865-77b749a06bf6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core Tests\Entity System Tests">
+      <UniqueIdentifier>{da1b1a78-6d9f-4487-a994-028fa0387e33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core Tests\Entity System Tests\Actions Tests">
+      <UniqueIdentifier>{830b286f-9457-4087-9008-28c1783b99a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core Tests\Event Tests">
+      <UniqueIdentifier>{50c15955-0fa3-494f-8c45-4f0a6d7a9bbf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

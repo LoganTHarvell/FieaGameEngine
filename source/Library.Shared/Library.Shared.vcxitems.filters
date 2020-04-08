@@ -23,47 +23,47 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)TypeManager.cpp">
       <Filter>Reflection</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Entity.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Sector.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)GameClock.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)GameTime.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)World.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Action.cpp">
-      <Filter>Core\Actions</Filter>
+      <Filter>Core\Entity System\Actions</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)ActionList.cpp">
-      <Filter>Core\Actions</Filter>
+      <Filter>Core\Entity System\Actions</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)ActionIncrement.cpp">
-      <Filter>Core\Actions</Filter>
+      <Filter>Core\Entity System\Actions</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)ActionCreate.cpp">
-      <Filter>Core\Actions</Filter>
+      <Filter>Core\Entity System\Actions</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)ActionDestroy.cpp">
-      <Filter>Core\Actions</Filter>
+      <Filter>Core\Entity System\Actions</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)ActionListWhile.cpp">
-      <Filter>Core\Actions</Filter>
+      <Filter>Core\Entity System\Actions</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)ActionExpression.cpp">
-      <Filter>Core\Actions</Filter>
+      <Filter>Core\Entity System\Actions</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)EventQueue.cpp">
       <Filter>Core\Events</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)EventPublisher.cpp">
       <Filter>Core\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Entity.cpp">
+      <Filter>Core\Entity System</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Sector.cpp">
+      <Filter>Core\Entity System</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)World.cpp">
+      <Filter>Core\Entity System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -116,44 +116,32 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)TypeManager.h">
       <Filter>Reflection</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Entity.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Sector.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)WorldState.h">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)GameClock.h">
       <Filter>Utility</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)GameTime.h">
       <Filter>Utility</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)World.h">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)ActionList.h">
-      <Filter>Core\Actions</Filter>
+      <Filter>Core\Entity System\Actions</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Action.h">
-      <Filter>Core\Actions</Filter>
+      <Filter>Core\Entity System\Actions</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)ActionIncrement.h">
-      <Filter>Core\Actions</Filter>
+      <Filter>Core\Entity System\Actions</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)ActionDestroy.h">
-      <Filter>Core\Actions</Filter>
+      <Filter>Core\Entity System\Actions</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)ActionCreate.h">
-      <Filter>Core\Actions</Filter>
+      <Filter>Core\Entity System\Actions</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)ActionListWhile.h">
-      <Filter>Core\Actions</Filter>
+      <Filter>Core\Entity System\Actions</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)ActionExpression.h">
-      <Filter>Core\Actions</Filter>
+      <Filter>Core\Entity System\Actions</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)EventPublisher.h">
       <Filter>Core\Events</Filter>
@@ -166,6 +154,18 @@
     </ClInclude>
     <ClInclude Include="C:\Dev\Students\CH16\Logan.Harvell\Prog2\fieagameengine\source\Library.Shared\IEventSubscriber.h">
       <Filter>Core\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)WorldState.h">
+      <Filter>Core\Entity System</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Entity.h">
+      <Filter>Core\Entity System</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Sector.h">
+      <Filter>Core\Entity System</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)World.h">
+      <Filter>Core\Entity System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -243,11 +243,14 @@
     <Filter Include="Core">
       <UniqueIdentifier>{f8346060-d4cd-4e79-830a-f01c0f376ad2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Core\Actions">
-      <UniqueIdentifier>{ea3462ea-d32e-475a-9e02-f3f12b5435d9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Core\Events">
       <UniqueIdentifier>{6f061f23-0bac-472e-bdbb-a48f46a4bf26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Entity System">
+      <UniqueIdentifier>{62a21585-c056-47e6-a328-c0bbcabe4791}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Entity System\Actions">
+      <UniqueIdentifier>{ea3462ea-d32e-475a-9e02-f3f12b5435d9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

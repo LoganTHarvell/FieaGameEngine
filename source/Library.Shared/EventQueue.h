@@ -37,9 +37,42 @@ namespace Library
 		/// </summary>
 		struct EventEntry final
 		{
-			const std::weak_ptr<EventPublisher> EventPublisher;
-			const TimePoint ExpireTime;
+		public:
+			/// <summary>
+			/// Weak pointer to an Event as EventPublisher.
+			/// </summary>
+			std::weak_ptr<EventPublisher> EventPublisher;
+
+			/// <summary>
+			/// Time point at which the Event should be published.
+			/// </summary>
+			TimePoint ExpireTime;
+
+			/// <summary>
+			/// Boolean determining if the Event has been published.
+			/// </summary>
 			bool IsExpired;
+
+		public:
+			/// <summary>
+			/// Equal operator.
+			/// </summary>
+			/// <param name="rhs">Right hand side EventEntry to be compared against.</param>
+			/// <returns>
+			/// True if both EventEntry instance point to the same Event. Otherwise false.
+			/// Always returns false if either EventPublisher pointer is expired.
+			/// </returns>
+			bool operator==(const EventEntry& rhs) const noexcept;
+			
+			/// <summary>
+			/// Not equal operator.
+			/// </summary>
+			/// <param name="rhs">Right hand side EventEntry to be compared against.</param>
+			/// <returns>
+			/// True if both EventEntry instance point to the same Event. Otherwise false.
+			/// Always returns false if either EventPublisher pointer is expired.
+			/// </returns>
+			bool operator!=(const EventEntry& rhs) const noexcept;
 		};
 #pragma endregion Type Definitions, Constants
 
@@ -56,6 +89,12 @@ namespace Library
 		/// </summary>
 		/// <returns>True if the EventQueue contains no Event instances, otherwise false.</returns>
 		bool IsEmpty() const;
+
+		/// <summary>
+		/// Gets the max number of subscribers for which memory is already allocated.
+		/// </summary>
+		/// <returns>Max number of subscribers for which memory is already allocated.</returns>
+		std::size_t Capacity() const;
 #pragma endregion Accessors
 
 #pragma region Modifiers
@@ -79,6 +118,11 @@ namespace Library
 		/// Removes all EventEntry instances from the EventQueue, resetting the size to zero.
 		/// </summary>
 		void Clear();
+
+		/// <summary>
+		/// Resizes the capacity of the EventQueue to the size.
+		/// </summary>
+		void ShrinkToFit();
 #pragma endregion Modifiers
 
 #pragma region Data Members

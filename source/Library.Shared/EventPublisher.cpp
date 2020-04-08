@@ -20,4 +20,5 @@ namespace Library
 			subscriber->Notify(*this);
 		}
 	}
+
 }

@@ -227,6 +227,8 @@ xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
     <ClCompile Include="DefaultHashTest.cpp" />
     <ClCompile Include="DerivedAttributedFoo.cpp" />
     <ClCompile Include="DerivedFoo.cpp" />
+    <ClCompile Include="EventQueueTest.cpp" />
+    <ClCompile Include="EventTest.cpp" />
     <ClCompile Include="FactoryTest.cpp" />
     <ClCompile Include="Foo.cpp" />
     <ClCompile Include="FooEntity.cpp" />

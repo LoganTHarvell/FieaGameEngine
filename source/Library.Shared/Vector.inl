@@ -860,12 +860,15 @@ namespace Library
 		Iterator it = Iterator(*this, first.mIndex);
 		Iterator lastIt = Iterator(*this, last.mIndex);
 
-		while (it < lastIt)
+		for (it; it < lastIt; ++it)
 		{
-			Remove(it++);
+			mData[it.mIndex].~T();
 		}
 
-		return it;
+		memmove(&mData[first.mIndex], &mData[it.mIndex], sizeof(T) * (mSize - it.mIndex));
+		mSize -= last.mIndex - first.mIndex;
+
+		return lastIt;
 	}
 
 	template<typename T>

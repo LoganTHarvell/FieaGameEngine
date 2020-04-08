@@ -22,7 +22,7 @@ namespace Library
 
 			if (eventPublisher)
 			{
-				if (gameTime.CurrentTime() > entry.ExpireTime)
+				if (gameTime.CurrentTime() >= entry.ExpireTime)
 				{
 					eventPublisher->Publish();
 					entry.IsExpired = true;
@@ -39,7 +39,6 @@ namespace Library
 			return !eventEntry.IsExpired; 
 		};
 		
-		// TODO: Figure out how to get std::partition to work
-		//mQueue.Erase(std::partition(mQueue.begin(), mQueue.end(), isExpired));
+		mQueue.Erase(std::partition(mQueue.begin(), mQueue.end(), isExpired));
 	}
 }

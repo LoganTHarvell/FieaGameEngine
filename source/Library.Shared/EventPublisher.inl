@@ -20,4 +20,9 @@ namespace Library
 	{
 		mSubscribers = &subscribers;
 	}
+
+	inline std::string EventPublisher::ToString() const
+	{
+		return "EventPublisher";
+	}
 }
