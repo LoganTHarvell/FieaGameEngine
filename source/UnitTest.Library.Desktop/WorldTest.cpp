@@ -94,6 +94,8 @@ namespace EntitySystemTests
 			world.SetName("World");
 			Assert::AreEqual("World"s, world.Name());
 			Assert::AreEqual(0_z, world.PendingChildren().Size());
+			
+			Assert::AreEqual(&world, world.GetWorldState().World);
 
 			Sector& sector1 = world.CreateSector("Sector1");
 			Sector& sector2 = world.CreateSector("Sector2");
@@ -110,6 +112,7 @@ namespace EntitySystemTests
 
 			const World copy = world;
 
+			Assert::AreEqual(&world, copy.GetWorldState().World);
 			Assert::AreEqual(2_z, copy.Sectors().Size());
 			Assert::AreEqual(sector1, *copy.Sectors().Get<Scope*>(0)->As<Sector>());
 			Assert::AreEqual(sector2, *copy.Sectors().Get<Scope*>(1)->As<Sector>());

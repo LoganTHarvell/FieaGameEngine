@@ -137,6 +137,18 @@ namespace Library
 #pragma region Accessors
 	public:
 		/// <summary>
+		/// Gets the WorldState associated with the World.
+		/// </summary>
+		/// <returns>Reference to the WorldState associated with the World.</returns>
+		WorldState& GetWorldState();
+
+		/// <summary>
+		/// Gets the WorldState associated with the World.
+		/// </summary>
+		/// <returns>Reference to the WorldState associated with the World.</returns>
+		const WorldState& GetWorldState() const;
+
+		/// <summary>
 		/// Gets the list of PendingChild data.
 		/// </summary>
 		/// <returns>Current PendingChild data.</returns>

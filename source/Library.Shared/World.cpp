@@ -37,6 +37,16 @@ namespace Library
 		return new World(*this);
 	}
 
+	WorldState& World::GetWorldState()
+	{
+		return mWorldState;
+	}
+
+	const WorldState& World::GetWorldState() const
+	{
+		return mWorldState;
+	}
+
 	World::PendingChildList& World::PendingChildren()
 	{
 		return mPendingChildren;
