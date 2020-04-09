@@ -778,6 +778,18 @@ namespace Library
 		void PushBack(const T& data);
 
 		/// <summary>
+		/// Inserts elements in the range [first, last) before the given position.
+		/// </summary>
+		/// <param name="position">Iterator at the insertion point for new elements.</param>
+		/// <param name="first">Iterator to the first element to insert.</param>
+		/// <param name="last">Iterator marking the end of the range to insert. Its value is not inserted.</param>
+		/// <returns>
+		/// Iterator pointing to the first element inserted.
+		/// If no elements were inserted, position is returned.
+		/// </returns>
+		Iterator Insert(ConstIterator position, ConstIterator first, ConstIterator last);
+
+		/// <summary>
 		/// Removes the last element from the Vector.
 		/// </summary>
 		void PopBack();

@@ -14,11 +14,18 @@
 
 namespace Library
 {
+	void EventQueue::Publish(EventPublisher& event)
+	{
+		event.Publish();
+	}
+
 	void EventQueue::Update(const GameTime& gameTime)
 	{
+		mUpdating = true;
+
 		for (EventEntry& entry : mQueue)
 		{
-			auto eventPublisher = entry.EventPublisher.lock();
+			auto eventPublisher = entry.Publisher.lock();
 
 			if (eventPublisher)
 			{
@@ -34,11 +41,24 @@ namespace Library
 			}
 		}
 
+		mUpdating = false;
+
 		auto isExpired = [](const EventEntry& eventEntry) 
 		{ 
 			return !eventEntry.IsExpired; 
 		};
 		
-		mQueue.Erase(std::partition(mQueue.begin(), mQueue.end(), isExpired));
+		if (mPendingClear)
+		{
+			Clear();
+		}
+		else
+		{
+			mQueue.Erase(std::partition(mQueue.begin(), mQueue.end(), isExpired));
+			mQueue.Insert(mQueue.end(), mPendingQueue.begin(), mPendingQueue.end());
+			mPendingQueue.Clear();
+		}
+
+		if (mPendingShrinkToFit) ShrinkToFit();
 	}
 }

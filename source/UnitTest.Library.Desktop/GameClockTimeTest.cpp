@@ -52,8 +52,8 @@ namespace UtilityTests
 			Assert::AreEqual(std::chrono::duration_cast<std::chrono::milliseconds>(gameClock.CurrentTime() - gameClock.StartTime()).count(), gameTime.TotalGameTime().count());
 			Assert::AreEqual(std::chrono::duration_cast<std::chrono::milliseconds>(gameClock.CurrentTime() - gameClock.LastTime()).count(), gameTime.ElapsedGameTime().count());
 
-			Assert::IsTrue(std::chrono::duration_cast<std::chrono::duration<float>>(gameClock.CurrentTime() - gameClock.StartTime()).count() - gameTime.TotalGameTimeSeconds().count() < 0.001);
-			Assert::IsTrue(std::chrono::duration_cast<std::chrono::duration<float>>(gameClock.CurrentTime() - gameClock.LastTime()).count() - gameTime.ElapsedGameTimeSeconds().count() < 0.001);
+			Assert::IsTrue(std::chrono::duration_cast<std::chrono::duration<float>>((gameClock.CurrentTime() - gameClock.StartTime()) - gameTime.TotalGameTimeSeconds()).count() < 0.001);
+			Assert::IsTrue(std::chrono::duration_cast<std::chrono::duration<float>>((gameClock.CurrentTime() - gameClock.LastTime()) - gameTime.ElapsedGameTimeSeconds()).count() < 0.001);
 
 			const GameClock constGameClock = gameClock;
 			const GameTime constGameTime = gameTime;

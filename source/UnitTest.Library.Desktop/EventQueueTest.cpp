@@ -20,6 +20,50 @@ namespace EventTests
 		}
 	};
 
+	class TestUpdateEnqueue final : public Foo, public IEventSubscriber
+	{
+	public:
+		virtual void Notify(EventPublisher& eventPublisher) override
+		{
+			Data() = int(static_cast<Event<Foo>&>(eventPublisher).Message().Data());
+
+			auto fooEvent = std::make_shared<Event<Foo>>();
+			
+			GameTime gameTime;
+			queue->Enqueue(fooEvent, gameTime);
+		}
+
+	public:
+		EventQueue* queue{ nullptr };
+	};
+
+	class TestUpdateClear final : public Foo, public IEventSubscriber
+	{
+	public:
+		virtual void Notify(EventPublisher& eventPublisher) override
+		{
+			Data() = int(static_cast<Event<Foo>&>(eventPublisher).Message().Data());
+			queue->Clear();
+		}
+
+	public:
+		EventQueue* queue{ nullptr };
+	};
+
+	class TestUpdateShrinkToFit final : public Foo, public IEventSubscriber
+	{
+	public:
+		virtual void Notify(EventPublisher& eventPublisher) override
+		{
+			Data() = int(static_cast<Event<Foo>&>(eventPublisher).Message().Data());
+			queue->Clear();
+			queue->ShrinkToFit();
+		}
+
+	public:
+		EventQueue* queue{ nullptr };
+	};
+
 
 	TEST_CLASS(EventQueueTest)
 	{
@@ -67,7 +111,9 @@ namespace EventTests
 			
 			Assert::AreEqual(1_z, queue.Size());
 			Assert::IsFalse(queue.IsEmpty());
-			Assert::AreNotEqual(0_z, queue.Capacity());
+			Assert::AreEqual(1_z, queue.Capacity());
+
+			queue.Update(gameTime);
 		}
 
 		TEST_METHOD(Enqueue)
@@ -89,7 +135,6 @@ namespace EventTests
 		{
 			GameClock clock;
 			GameTime gameTime;
-
 			clock.UpdateGameTime(gameTime);
 
 			auto fooEvent1 = std::make_shared<Event<Foo>>(Foo(10));
@@ -120,6 +165,62 @@ namespace EventTests
 			Assert::IsTrue(queue.IsEmpty());
 
 			queue.ShrinkToFit();
+			Assert::AreEqual(0_z, queue.Capacity());
+		}
+
+		TEST_METHOD(EnqueueInUpdate)
+		{
+			GameClock clock;
+			GameTime gameTime;
+			clock.UpdateGameTime(gameTime);
+
+			auto fooEvent1 = std::make_shared<Event<Foo>>(Foo(10));
+			auto fooEvent2 = std::make_shared<Event<Foo>>(Foo(20));
+			queue.Enqueue(fooEvent1, gameTime);
+			queue.Enqueue(fooEvent2, gameTime, std::chrono::milliseconds(60 * 1000));
+
+			TestUpdateEnqueue subscriber;
+			subscriber.queue = &queue;
+			Event<Foo>::Subscribe(subscriber);
+
+			queue.Update(gameTime);
+			Assert::AreEqual(10, subscriber.Data());
+			Assert::AreEqual(2_z, queue.Size());
+		}
+
+		TEST_METHOD(ClearInUpdate)
+		{
+			GameClock clock;
+			GameTime gameTime;
+			clock.UpdateGameTime(gameTime);
+
+			auto fooEvent = std::make_shared<Event<Foo>>(Foo(10));
+			queue.Enqueue(fooEvent, gameTime);
+
+			TestUpdateClear subscriber;
+			subscriber.queue = &queue;
+			Event<Foo>::Subscribe(subscriber);
+
+			queue.Update(gameTime);
+			Assert::AreEqual(10, subscriber.Data());
+			Assert::AreEqual(0_z, queue.Size());
+		}
+
+		TEST_METHOD(ShrinkToFitInUpdate)
+		{
+			GameClock clock;
+			GameTime gameTime;
+			clock.UpdateGameTime(gameTime);
+
+			auto fooEvent = std::make_shared<Event<Foo>>(Foo(10));
+			queue.Enqueue(fooEvent, gameTime);
+
+			TestUpdateShrinkToFit subscriber;
+			subscriber.queue = &queue;
+			Event<Foo>::Subscribe(subscriber);
+
+			queue.Update(gameTime);
+			Assert::AreEqual(10, subscriber.Data());
 			Assert::AreEqual(0_z, queue.Capacity());
 		}
 

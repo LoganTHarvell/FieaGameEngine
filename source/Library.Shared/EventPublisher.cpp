@@ -13,12 +13,23 @@ namespace Library
 {
 	void EventPublisher::Publish()
 	{
-		assert(mSubscribers);
+		assert(mSubscriberList);
 
-		for (auto subscriber : *mSubscribers)
+		auto pendingRemove = [](const SubscriberEntry& entry)
 		{
-			subscriber->Notify(*this);
+			return !entry.PendingRemove;
+		};
+
+		mSubscriberList->Erase(std::partition(mSubscriberList->begin(), mSubscriberList->end(), pendingRemove));
+		
+		assert(mSubscribersPendingAdd);
+		mSubscriberList->Insert(mSubscriberList->end(), mSubscribersPendingAdd->begin(), mSubscribersPendingAdd->end());
+		mSubscribersPendingAdd->Clear();
+
+		for (auto entry : *mSubscriberList)
+		{
+			assert(entry.Subscriber);
+			entry.Subscriber->Notify(*this);
 		}
 	}
-
 }

@@ -6,48 +6,54 @@ namespace Library
 	template<typename MessageT>
 	inline std::size_t Event<MessageT>::SubscriberCount()
 	{
-		return sSubscribers.Size();
+		return sSubscriberList.Size() + sSubscribersPendingAdd.Size();
 	}
 
 	template<typename MessageT>
 	inline std::size_t Event<MessageT>::SubscriberCapacity()
 	{
-		return sSubscribers.Capacity();
+		return sSubscriberList.Capacity();
 	}
 
 	template<typename MessageT>
 	inline void Event<MessageT>::Subscribe(IEventSubscriber& eventSubscriber)
 	{
-		if (sSubscribers.Find(&eventSubscriber) != sSubscribers.end())
+		SubscriberEntry entry = { &eventSubscriber, false };
+
+		if ((sSubscriberList.Find(entry) != sSubscriberList.end() && !sSubscriberList.Find(entry)->PendingRemove) 
+		||	sSubscribersPendingAdd.Find(entry) != sSubscribersPendingAdd.end())
 		{
 			throw std::runtime_error("Subscriber already added.");
 		}
 
-		sSubscribers.PushBack(&eventSubscriber);
+		sSubscribersPendingAdd.PushBack(entry);
 	}
 
 	template<typename MessageT>
 	inline void Event<MessageT>::Unsubscribe(IEventSubscriber& eventSubscriber)
 	{
-		sSubscribers.Remove(&eventSubscriber);
+		auto entry = sSubscriberList.Find({ &eventSubscriber, false });
+		if (entry != sSubscriberList.end()) entry->PendingRemove = true;
 	}
 
 	template<typename MessageT>
 	inline void Event<MessageT>::UnsubscribeAll()
 	{
-		sSubscribers.Clear();
+		sSubscriberList.Clear();
+		sSubscribersPendingAdd.Clear();
 	}
 
 	template<typename MessageT>
 	inline void Event<MessageT>::SubscriberShrinkToFit()
 	{
-		sSubscribers.ShrinkToFit();
+		sSubscriberList.ShrinkToFit();
+		sSubscribersPendingAdd.ShrinkToFit();
 	}
 #pragma endregion Static Members
 
 #pragma region Special Members
 	template<typename MessageT>
-	inline Event<MessageT>::Event(MessageT message) : EventPublisher(sSubscribers),
+	inline Event<MessageT>::Event(MessageT message) : EventPublisher(sSubscriberList, sSubscribersPendingAdd),
 		mMessage(message)
 	{
 	}

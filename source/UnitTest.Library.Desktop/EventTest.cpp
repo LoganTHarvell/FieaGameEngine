@@ -34,6 +34,8 @@ namespace EventTests
 
 		TEST_METHOD_CLEANUP(Cleanup)
 		{
+			Event<Foo>::UnsubscribeAll();
+			Event<Foo>::SubscriberShrinkToFit();
 
 #if defined(DEBUG) || defined(_DEBUG)
 			_CrtMemState endMemState, diffMemState;
@@ -57,11 +59,21 @@ namespace EventTests
 
 			Event<Foo>::Subscribe(testEventSubscriber1);
 			Assert::AreEqual(1_z, Event<Foo>::SubscriberCount());
-			Assert::AreNotEqual(0_z, Event<Foo>::SubscriberCapacity());
+			Assert::AreEqual(0_z, Event<Foo>::SubscriberCapacity());
 
 			Assert::ExpectException<std::runtime_error>([&] 
 			{
 				Event<Foo>::Subscribe(testEventSubscriber1); 
+			});
+
+			Event<Foo> fooEvent;
+			EventQueue::Publish(fooEvent);
+			
+			Assert::AreNotEqual(0_z, Event<Foo>::SubscriberCapacity());
+
+			Assert::ExpectException<std::runtime_error>([&]
+			{
+				Event<Foo>::Subscribe(testEventSubscriber1);
 			});
 
 			Event<Foo>::Subscribe(testEventSubscriber2);
@@ -69,9 +81,14 @@ namespace EventTests
 			Event<Foo>::Subscribe(testEventSubscriber3);
 			Assert::AreEqual(3_z, Event<Foo>::SubscriberCount());
 
+			EventQueue::Publish(fooEvent);
 			std::size_t capacity = Event<Foo>::SubscriberCapacity();
 
 			Event<Foo>::Unsubscribe(testEventSubscriber1);
+			Assert::AreEqual(3_z, Event<Foo>::SubscriberCount());
+			Assert::AreEqual(capacity, Event<Foo>::SubscriberCapacity());
+
+			EventQueue::Publish(fooEvent);
 			Assert::AreEqual(2_z, Event<Foo>::SubscriberCount());
 			Assert::AreEqual(capacity, Event<Foo>::SubscriberCapacity());
 
@@ -104,11 +121,8 @@ namespace EventTests
 			Event<Foo>::Subscribe(subscriber);
 
 			Assert::AreEqual(0, subscriber.Data());
-			fooEvent.Publish();
+			EventQueue::Publish(fooEvent);
 			Assert::AreEqual(fooEvent.Message().Data(), subscriber.Data());
-
-			Event<Foo>::UnsubscribeAll();
-			Event<Foo>::SubscriberShrinkToFit();
 		}
 
 		TEST_METHOD(RTTITest)

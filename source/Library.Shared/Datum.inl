@@ -286,7 +286,7 @@ namespace Library
 				mData.stringPtr[index].~basic_string();
 			}
 
-			memmove(&data[index], &data[index + 1], sizeof(T) * (mSize - index));
+			std::memmove(&data[index], &data[index + 1], sizeof(T) * (mSize - index));
 
 			--mSize;
 			return true;

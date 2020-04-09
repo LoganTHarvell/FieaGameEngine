@@ -789,6 +789,33 @@ namespace Library
 	}
 
 	template<typename T>
+	inline typename Vector<T>::Iterator Vector<T>::Insert(ConstIterator position, ConstIterator first, ConstIterator last)
+	{
+		if (position.mOwner != this)		throw std::runtime_error("Invalid position iterator.");
+		if (first.mOwner != last.mOwner)	throw std::runtime_error("Invalid first or last iterator.");
+
+		if (first < last)
+		{
+			std::size_t insertCount = last.mIndex - first.mIndex;
+			std::size_t newSize = mSize + insertCount;
+		
+			Reserve(newSize);
+			std::memmove(&mData[position.mIndex + insertCount], &mData[position.mIndex], sizeof(T) * (mSize - position.mIndex));
+
+			std::size_t index = position.mIndex;
+
+			for (auto it = first; it != last; ++it)
+			{
+				new(&mData[index++])T(*it);
+			}
+
+			mSize = newSize;
+		}
+
+		return Iterator(*this, position.mIndex);
+	}
+
+	template<typename T>
 	inline void Vector<T>::PopBack()
 	{
 		if (mSize > 0)
@@ -807,7 +834,7 @@ namespace Library
 			if (mEqualityFunctor(mData[i], value))
 			{
 				mData[i].~T();
-				memmove(&mData[i], &mData[i + 1], sizeof(T) * (mSize - i));
+				std::memmove(&mData[i], &mData[i + 1], sizeof(T) * (mSize - i));
 
 				--mSize;
 				return true;
@@ -833,7 +860,7 @@ namespace Library
 			else
 			{
 				mData[it.mIndex].~T();
-				memmove(&mData[it.mIndex], &mData[it.mIndex + 1], sizeof(T) * (mSize - it.mIndex));
+				std::memmove(&mData[it.mIndex], &mData[it.mIndex + 1], sizeof(T) * (mSize - it.mIndex));
 				--mSize;
 			}
 
@@ -857,15 +884,12 @@ namespace Library
 			throw std::runtime_error("Invalid iterator.");
 		}
 
-		Iterator it = Iterator(*this, first.mIndex);
-		Iterator lastIt = Iterator(*this, last.mIndex);
-
-		for (it; it < lastIt; ++it)
+		for (auto it = first; it < last; ++it)
 		{
 			mData[it.mIndex].~T();
 		}
 
-		memmove(&mData[first.mIndex], &mData[it.mIndex], sizeof(T) * (mSize - it.mIndex));
+		std::memmove(&mData[first.mIndex], &mData[last.mIndex], sizeof(T) * (mSize - last.mIndex));
 		mSize -= last.mIndex - first.mIndex;
 
 		return Iterator(*this, first.mIndex);

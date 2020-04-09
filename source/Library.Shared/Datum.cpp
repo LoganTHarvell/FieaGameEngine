@@ -662,7 +662,7 @@ namespace Library
 		}
 
 		const std::size_t size = TypeSizeLUT[static_cast<std::size_t>(mType)];
-		memmove(&mData.bytePtr[index * size], &mData.bytePtr[(index * size) + size], size * (mSize - index));
+		std::memmove(&mData.bytePtr[index * size], &mData.bytePtr[(index * size) + size], size * (mSize - index));
 
 		--mSize;
 	}

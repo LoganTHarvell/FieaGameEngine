@@ -36,32 +36,40 @@ namespace Library
 		static std::size_t SubscriberCapacity();
 
 		/// <summary>
-		/// Subscribes an IEvenSubscriber instance to an Event type.
+		/// Subscribes an IEventSubscriber instance to an Event type.
 		/// </summary>
 		/// <param name="eventSubscriber">IEventSubscriber instance to add to the SubscriberList.</param>
 		static void Subscribe(IEventSubscriber& eventSubscriber);
 
 		/// <summary>
-		/// Unsubscribes an IEvenSubscriber instance to this Event type.
+		/// Unsubscribes an IEventSubscriber instance to this Event type.
 		/// </summary>
 		/// <param name="eventSubscriber">IEventSubscriber instance to remove from the SubscriberList.</param>
+		/// <remarks>Does not reduce the Subscriber count until an Event of this type is published.</remarks>
 		static void Unsubscribe(IEventSubscriber& eventSubscriber);
 
 		/// <summary>
-		/// Unsubscribes all IEvenSubscriber instances in the SubscriberList of an Event type.
+		/// Unsubscribes all IEventSubscriber instances in the SubscriberList of an Event type.
 		/// </summary>
+		/// <remarks>This should never be called during Publish.</remarks>
 		static void UnsubscribeAll();
 
 		/// <summary>
 		/// Resizes the capacity of the SubscriberList to the size.
 		/// </summary>
+		/// <remarks>This should never be called during Publish.</remarks>
 		static void SubscriberShrinkToFit();
 
 	private:
 		/// <summary>
 		/// Static list of IEventSubsriber instances associated with an Event type.
 		/// </summary>
-		inline static SubscriberList sSubscribers;
+		inline static SubscriberList sSubscriberList;
+
+		/// <summary>
+		/// Static list of IEventSubsriber instances pending addition to the SubscriberList.
+		/// </summary>
+		inline static SubscriberList sSubscribersPendingAdd;
 #pragma endregion Static Members
 
 #pragma region Special Members

@@ -22,12 +22,46 @@ namespace Library
 	{
 		RTTI_DECLARATIONS_ABSTRACT(EventPublisher, RTTI)
 
+		friend class EventQueue;
+
 #pragma region Type Definitions
 	protected:
 		/// <summary>
+		/// Represents data associated with an entry in SubscriberList.
+		/// </summary>
+		struct SubscriberEntry final
+		{
+			IEventSubscriber* Subscriber{ nullptr };
+			bool PendingRemove{ false };
+
+#pragma region Relational Operators
+		public:
+			/// <summary>
+			/// Equal operator.
+			/// </summary>
+			/// <param name="rhs">Right hand side EventEntry to be compared against.</param>
+			/// <returns>
+			/// True if both EventEntry instance point to the same Event. Otherwise false.
+			/// Always returns false if either EventPublisher pointer is expired.
+			/// </returns>
+			bool operator==(const SubscriberEntry& rhs) const noexcept;
+
+			/// <summary>
+			/// Not equal operator.
+			/// </summary>
+			/// <param name="rhs">Right hand side EventEntry to be compared against.</param>
+			/// <returns>
+			/// True if both EventEntry instance point to the same Event. Otherwise false.
+			/// Always returns false if either EventPublisher pointer is expired.
+			/// </returns>
+			bool operator!=(const SubscriberEntry& rhs) const noexcept;
+#pragma endregion Relational Operators
+		};
+
+		/// <summary>
 		/// List of subscribers to an Event subclass.
 		/// </summary>
-		using SubscriberList = Vector<IEventSubscriber*>;
+		using SubscriberList = Vector<SubscriberEntry>;
 #pragma endregion Type Definitions
 
 #pragma region Special Members
@@ -68,11 +102,11 @@ namespace Library
 		/// Meant to be called from within the Event subclass constructor.
 		/// </summary>
 		/// <param name="subscribers">Reference to a list of subscribers.</param>
-		explicit EventPublisher(SubscriberList& subscribers);
+		explicit EventPublisher(SubscriberList& subscribers, SubscriberList& subscribersPendingAdd);
 #pragma endregion Special Members
 
 #pragma region Event Publishing
-	public:
+	private:
 		/// <summary>
 		/// Delivers the underlying Event instance.
 		/// Calls Notify on each IEventSubscriber in the SubscriberList for this Event type.
@@ -95,7 +129,12 @@ namespace Library
 		/// A pointer to a static list of IEventSubscriber instances subscribed to the Event type
 		/// of the underlying Event instance for the underlying Event instance.
 		/// </summary>
-		SubscriberList* mSubscribers;
+		SubscriberList* mSubscriberList;
+
+		/// <summary>
+		/// A pointer to a static list of IEventSubscriber instances pending subscription.
+		/// </summary>
+		SubscriberList* mSubscribersPendingAdd;
 #pragma endregion Data Members
 	};
 }

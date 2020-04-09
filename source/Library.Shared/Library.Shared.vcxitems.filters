@@ -152,9 +152,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)EventQueue.h">
       <Filter>Core\Events</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Dev\Students\CH16\Logan.Harvell\Prog2\fieagameengine\source\Library.Shared\IEventSubscriber.h">
-      <Filter>Core\Events</Filter>
-    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)WorldState.h">
       <Filter>Core\Entity System</Filter>
     </ClInclude>
@@ -166,6 +163,9 @@
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)World.h">
       <Filter>Core\Entity System</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)IEventSubscriber.h">
+      <Filter>Core\Events</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
