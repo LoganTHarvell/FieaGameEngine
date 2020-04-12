@@ -19,12 +19,12 @@ namespace Library
 #pragma region Static Members
 	public:
 		/// <summary>
-		/// Key for the Actions attribute in the ActionList.
+		/// Key for the Actions Attribute in the ActionList.
 		/// </summary>
 		inline static const std::string ActionsKey = "Actions";
 
 		/// <summary>
-		/// Index of the Actions attribute in the ActionList.
+		/// Index of the Actions Attribute in the ActionList.
 		/// </summary>
 		inline static const std::size_t ActionsIndex = 2;
 
@@ -75,7 +75,7 @@ namespace Library
 
 	protected:
 		/// <summary>
-		/// Specialized constructor for use by derived classes to ensure correct attribute population.
+		/// Specialized constructor for use by derived classes to ensure correct Attribute population.
 		/// </summary>
 		/// <param name="typeId">Type ID of the derived class.</param>
 		explicit ActionList(const RTTI::IdType typeId, const std::string& name=std::string());
@@ -126,7 +126,7 @@ namespace Library
 #pragma region Data Members
 	private:
 		/// <summary>
-		/// Collection of Action objects within the Actions prescribed attribute.
+		/// Collection of Action objects within the Actions prescribed Attribute.
 		/// </summary>
 		DataType& mActions;
 #pragma endregion Data Members

@@ -100,24 +100,24 @@ namespace Library
 #pragma region Accessors
 	public:
 		/// <summary>
-		/// Checks if an attribute is associated with the given name.
+		/// Checks if an Attribute is associated with the given name.
 		/// </summary>
 		/// <param name="key">KeyType value to search for in the instance.</param>
-		/// <returns>True if associated with an attribute. Otherwise, false.</returns>
+		/// <returns>True if associated with an Attribute. Otherwise, false.</returns>
 		bool IsAttribute(const KeyType& key);
 
 		/// <summary>
-		/// Checks if a prescribed attribute is associated with the given name.
+		/// Checks if a prescribed Attribute is associated with the given name.
 		/// </summary>
 		/// <param name="key">KeyType value to search for in the instance.</param>
-		/// <returns>True if associated with an attribute. Otherwise, false.</returns>
+		/// <returns>True if associated with an Attribute. Otherwise, false.</returns>
 		bool IsPrescribedAttribute(const KeyType& key);
 
 		/// <summary>
-		/// Checks if an auxiliary attribute is associated with the given name.
+		/// Checks if an auxiliary Attribute is associated with the given name.
 		/// </summary>
 		/// <param name="key">KeyType value to search for in the instance.</param>
-		/// <returns>True if associated with an attribute. Otherwise, false.</returns>
+		/// <returns>True if associated with an Attribute. Otherwise, false.</returns>
 		bool IsAuxiliaryAttribute(const KeyType& key);
 
 		/// <summary>
@@ -147,9 +147,9 @@ namespace Library
 		
 #pragma region Modifiers
 		/// <summary>
-		/// Appends an empty DataType value to the instance as an auxiliary attribute.
+		/// Appends an empty DataType value to the instance as an auxiliary Attribute.
 		/// </summary>
-		/// <param name="key">KeyType value for the new attribute to append.</param>
+		/// <param name="key">KeyType value for the new Attribute to append.</param>
 		/// <returns>Reference to the DataType value associated with the name.</returns>
 		DataType& AppendAuxiliaryAttribute(const KeyType& key);
 #pragma endregion Modifiers
@@ -184,7 +184,7 @@ namespace Library
 		/// Recursively called to update any parent attributes registered.
 		/// </summary>
 		/// <param name="typeInfo">TypeInfo associated with the Attributed class.</param>
-		/// <returns>Next prescribed attribute index to be updated, used by recursive calls.</returns>
+		/// <returns>Next prescribed Attribute index to be updated, used by recursive calls.</returns>
 		std::size_t UpdateExternalStorage(const TypeManager::TypeInfo* typeInfo);
 #pragma endregion Helper Methods
 

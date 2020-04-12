@@ -20,12 +20,12 @@ namespace Library
 #pragma region Type Definitions, Constants
 	public:
 		/// <summary>
-		/// Key for the name of the string attribute representing the expression to evaluate.
+		/// Key for the name of the string Attribute representing the expression to evaluate.
 		/// </summary>
 		inline static const std::string ExpressionKey = "Expression";
 
 		/// <summary>
-		/// Key for the name of the string attribute representing the resulting evaluation of the expression.
+		/// Key for the name of the string Attribute representing the resulting evaluation of the expression.
 		/// </summary>
 		inline static const std::string ResultKey = "Result";
 

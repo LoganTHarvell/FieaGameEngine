@@ -10,7 +10,7 @@
 namespace Library
 {
 	/// <summary>
-	/// Represents an Action for incrementing an integer attribute.
+	/// Represents an Action for incrementing an integer Attribute.
 	/// </summary>
 	class ActionIncrement final : public Action
 	{
@@ -19,7 +19,7 @@ namespace Library
 #pragma region Type Definitions, Constants
 	public:
 		/// <summary>
-		/// Key for the name of the integer attribute to increment.
+		/// Key for the name of the integer Attribute to increment.
 		/// </summary>
 		inline static const std::string OperandKey = "Operand";
 
@@ -104,12 +104,12 @@ namespace Library
 #pragma region Data Members
 	private:
 		/// <summary>
-		/// Name for the integer attribute to increment.
+		/// Name for the integer Attribute to increment.
 		/// </summary>
 		std::string mOperand;
 
 		/// <summary>
-		/// Amount to increment the integer attribute.
+		/// Amount to increment the integer Attribute.
 		/// </summary>
 		int mIncrementStep{ 1 };
 #pragma endregion Data Members

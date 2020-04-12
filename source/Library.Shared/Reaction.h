@@ -58,7 +58,7 @@ namespace Library
 
 	protected:
 		/// <summary>
-		/// Specialized constructor for use by derived classes to ensure correct attribute population.
+		/// Specialized constructor for use by derived classes to ensure correct Attribute population.
 		/// </summary>
 		/// <param name="typeId">Type ID of the derived class.</param>
 		explicit Reaction(const RTTI::IdType typeId, const std::string& name=std::string());

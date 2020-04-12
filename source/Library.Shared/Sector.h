@@ -23,17 +23,17 @@ namespace Library
 #pragma region Static Members
 	public:
 		/// <summary>
-		/// Key for the Name attribute in the Sector.
+		/// Key for the Name Attribute in the Sector.
 		/// </summary>
 		inline static const KeyType NameKey = "Name";
 
 		/// <summary>
-		/// Key for the Entities attribute in the Sector.
+		/// Key for the Entities Attribute in the Sector.
 		/// </summary>
 		inline static const KeyType EntitiesKey = "Entities";
 
 		/// <summary>
-		/// Index of the Entities attribute in the Sector.
+		/// Index of the Entities Attribute in the Sector.
 		/// </summary>
 		inline static const std::size_t EntitiesIndex = 2;
 
@@ -160,12 +160,12 @@ namespace Library
 #pragma region Data Members
 	private:
 		/// <summary>
-		/// Name of the Sector, reflected as a prescribed attribute.
+		/// Name of the Sector, reflected as a prescribed Attribute.
 		/// </summary>
 		std::string mName;
 
 		/// <summary>
-		/// Collection of Entity objects within the Entities prescribed attribute.
+		/// Collection of Entity objects within the Entities prescribed Attribute.
 		/// </summary>
 		DataType& mEntities;
 #pragma endregion Data Members

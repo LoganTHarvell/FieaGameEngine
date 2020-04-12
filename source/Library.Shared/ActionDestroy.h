@@ -19,7 +19,7 @@ namespace Library
 #pragma region Type Definitions, Constants
 	public:
 		/// <summary>
-		/// Key for the name of the attribute to destroy the Target.
+		/// Key for the name of the Attribute to destroy the Target.
 		/// </summary>
 		inline static const std::string AttributeKey = "Attribute";
 
@@ -109,7 +109,7 @@ namespace Library
 		std::string mAttributeName;
 
 		/// <summary>
-		/// Name for the attribute of the attribute to create.
+		/// Name for the Attribute of the Attribute to create.
 		/// </summary>
 		std::string mTargetName;
 #pragma endregion Data Members

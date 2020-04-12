@@ -25,7 +25,7 @@ namespace Library
 #pragma region Static Members
 	public:
 		/// <summary>
-		/// Key value for the Subtype attribute.
+		/// Key value for the Subtype Attribute.
 		/// </summary>
 		inline static const KeyType SubtypeKey = "Subtype";
 

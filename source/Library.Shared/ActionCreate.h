@@ -19,12 +19,12 @@ namespace Library
 #pragma region Type Definitions, Constants
 	public:
 		/// <summary>
-		/// Key for the name of the attribute to append the created attribute onto.
+		/// Key for the name of the Attribute to append the created Attribute onto.
 		/// </summary>
 		inline static const std::string AttributeKey = "Attribute";
 
 		/// <summary>
-		/// Key for the created attribute.
+		/// Key for the created Attribute.
 		/// </summary>
 		inline static const std::string NewScopeKey = "Scope";
 
@@ -104,7 +104,7 @@ namespace Library
 #pragma region Data Members
 	private:
 		/// <summary>
-		/// Name for the attribute of the attribute to create.
+		/// Name for the Attribute of the Attribute to create.
 		/// </summary>
 		std::string mAttributeName;
 #pragma endregion Data Members

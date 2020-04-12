@@ -52,7 +52,7 @@ namespace Library
 			Scope& Target;
 
 			/// <summary>
-			/// Name of the Target attribute of the performed action.
+			/// Name of the Target Attribute of the performed action.
 			/// </summary>
 			const KeyType* const AttributeName;
 		};
@@ -66,17 +66,17 @@ namespace Library
 #pragma region Static Members
 	public:
 		/// <summary>
-		/// Key for the Name attribute in the World.
+		/// Key for the Name Attribute in the World.
 		/// </summary>
 		inline static const KeyType NameKey = "Name";
 
 		/// <summary>
-		/// Key for the Sectors attribute in the World.
+		/// Key for the Sectors Attribute in the World.
 		/// </summary>
 		inline static const KeyType SectorsKey = "Sectors";
 
 		/// <summary>
-		/// Index of the Sectors attribute in the World.
+		/// Index of the Sectors Attribute in the World.
 		/// </summary>
 		inline static const std::size_t SectorsIndex = 2;
 
@@ -238,12 +238,12 @@ namespace Library
  		PendingChildList mPendingChildren{ PendingChildList(PendingChildList::EqualityFunctor()) };
 
 		/// <summary>
-		/// Name of the World, reflected as a prescribed attribute.
+		/// Name of the World, reflected as a prescribed Attribute.
 		/// </summary>
 		std::string mName;
 
 		/// <summary>
-		/// Collection of World objects within the Sectors prescribed attribute.
+		/// Collection of World objects within the Sectors prescribed Attribute.
 		/// </summary>
 		DataType& mSectors;
 #pragma endregion Data Members

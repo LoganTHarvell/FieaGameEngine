@@ -23,7 +23,7 @@ namespace Library
 #pragma region Type Definitions, Constants
 	public:
 		/// <summary>
-		/// Key for the Name attribute in the Action.
+		/// Key for the Name Attribute in the Action.
 		/// </summary>
 		inline static const std::string NameKey = "Name";
 
@@ -74,7 +74,7 @@ namespace Library
 
 	protected:
 		/// <summary>
-		/// Specialized constructor for use by derived classes to ensure correct attribute population.
+		/// Specialized constructor for use by derived classes to ensure correct Attribute population.
 		/// </summary>
 		/// <param name="typeId">Type ID of the derived class.</param>
 		explicit Action(const RTTI::IdType typeId, const std::string& name=std::string());
@@ -129,7 +129,7 @@ namespace Library
 #pragma region Data Members
 	private:
 		/// <summary>
-		/// Name of the Action, reflected as a prescribed attribute.
+		/// Name of the Action, reflected as a prescribed Attribute.
 		/// </summary>
 		std::string mName;
 #pragma endregion Data Members
