@@ -90,7 +90,7 @@ namespace Library
 			Entity* newEntity = static_cast<Entity*>(newScope);
 			newEntity->SetName(name);
 			
-			Adopt(*newScope, "Entities");
+			Adopt(*newScope, EntitiesKey);
 			return newEntity;
 		}
 

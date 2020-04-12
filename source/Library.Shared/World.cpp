@@ -95,7 +95,7 @@ namespace Library
 
 		newSector->SetName(name);
 
-		Adopt(*newSector, "Sectors");
+		Adopt(*newSector, SectorsKey);
 		return *newSector;
 	}
 

@@ -95,7 +95,7 @@ namespace Library
 			Action* newAction = static_cast<Action*>(newScope);
 			newAction->SetName(name);
 
-			Adopt(*newScope, "Actions");
+			Adopt(*newScope, ActionsKey);
 			return newAction;
 		}
 
