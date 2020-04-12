@@ -46,7 +46,7 @@ namespace Library
 			/// <summary>
 			/// Default destructor.
 			/// </summary>
-			virtual ~SharedData() = default;
+			virtual ~SharedData() override = default;
 
 			/// <summary>
 			/// Copy constructor.

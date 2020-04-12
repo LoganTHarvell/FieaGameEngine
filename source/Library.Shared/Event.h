@@ -132,7 +132,7 @@ namespace Library
 		/// <summary>
 		/// Virtual override for representing the Entity as a std::string.
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>Representation of an Event as a std::string.</returns>
 		virtual std::string ToString() const override;
 
 		/// <summary>

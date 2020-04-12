@@ -20,17 +20,17 @@ namespace Library
 	{
 		RTTI_DECLARATIONS(Entity, Attributed)
 
-#pragma region Type Definitions, Constants
+#pragma region Static Members
 	public:
 		/// <summary>
 		/// Key for the Name attribute in the Entity.
 		/// </summary>
-		inline static const std::string NameKey = "Name";
+		inline static const KeyType NameKey = "Name";
 
 		/// <summary>
 		/// Key for the Actions attribute in the ActionList.
 		/// </summary>
-		inline static const std::string ActionsKey = "Actions";
+		inline static const KeyType ActionsKey = "Actions";
 
 		/// <summary>
 		/// Index of the Actions attribute in the ActionList.
@@ -42,7 +42,7 @@ namespace Library
 		/// Getter for the class TypeInfo, used for registration with the TypeManager.
 		/// </summary>
 		static const TypeManager::TypeInfo& TypeInfo();
-#pragma endregion Type Definitions, Constants
+#pragma endregion Static Members
 
 #pragma region Special Members
 	public:
@@ -55,7 +55,7 @@ namespace Library
 		/// <summary>
 		/// Default destructor.
 		/// </summary>
-		virtual ~Entity() = default;
+		virtual ~Entity() override = default;
 
 		/// <summary>
 		/// Copy constructor.
@@ -85,7 +85,7 @@ namespace Library
 
 	protected:
 		/// <summary>
-		/// Specialized constructor for use by derived classes to ensure correct attribute population.
+		/// Specialized constructor for use by derived classes to ensure correct Attribute population.
 		/// </summary>
 		/// <param name="typeId">Type ID of the derived class.</param>
 		explicit Entity(const RTTI::IdType typeId, const std::string& name=std::string());

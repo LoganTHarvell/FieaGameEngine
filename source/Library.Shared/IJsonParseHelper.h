@@ -31,7 +31,7 @@ namespace Library
 		/// <summary>
 		/// Virtual default destructor.
 		/// </summary>
-		virtual ~IJsonParseHelper() = default;
+		virtual ~IJsonParseHelper() override = default;
 
 		/// <summary>
 		/// Copy constructor.

@@ -38,7 +38,7 @@ namespace Library
 		/// <summary>
 		/// Virtual default destructor.
 		/// </summary>
-		virtual ~Attributed() = default;
+		virtual ~Attributed() override = default;
 
 		/// <summary>
 		/// Copy constructor.
@@ -104,21 +104,21 @@ namespace Library
 		/// </summary>
 		/// <param name="name">Name to search for in the instance.</param>
 		/// <returns>True if associated with an attribute. Otherwise, false.</returns>
-		bool IsAttribute(const NameType& name);
+		bool IsAttribute(const KeyType& name);
 
 		/// <summary>
 		/// Checks if a prescribed attribute is associated with the given name.
 		/// </summary>
 		/// <param name="name">Name to search for in the instance.</param>
 		/// <returns>True if associated with an attribute. Otherwise, false.</returns>
-		bool IsPrescribedAttribute(const NameType& name);
+		bool IsPrescribedAttribute(const KeyType& name);
 
 		/// <summary>
 		/// Checks if an auxiliary attribute is associated with the given name.
 		/// </summary>
 		/// <param name="name">Name to search for in the instance.</param>
 		/// <returns>True if associated with an attribute. Otherwise, false.</returns>
-		bool IsAuxiliaryAttribute(const NameType& name);
+		bool IsAuxiliaryAttribute(const KeyType& name);
 
 		/// <summary>
 		/// Gets the list of prescribed Attribute values.
@@ -151,7 +151,7 @@ namespace Library
 		/// </summary>
 		/// <param name="name">Name for the new attribute to append.</param>
 		/// <returns>Reference to the DataType value associated with the name.</returns>
-		DataType& AppendAuxiliaryAttribute(const NameType& name);
+		DataType& AppendAuxiliaryAttribute(const KeyType& name);
 #pragma endregion Modifiers
 
 #pragma region RTTI Overrides

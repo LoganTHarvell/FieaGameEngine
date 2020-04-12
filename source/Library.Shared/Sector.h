@@ -20,17 +20,17 @@ namespace Library
 	{
 		RTTI_DECLARATIONS(Sector, Attributed)
 
-#pragma region Type Definitions, Constants
+#pragma region Static Members
 	public:
 		/// <summary>
 		/// Key for the Name attribute in the Sector.
 		/// </summary>
-		inline static const std::string NameKey = "Name";
+		inline static const KeyType NameKey = "Name";
 
 		/// <summary>
 		/// Key for the Entities attribute in the Sector.
 		/// </summary>
-		inline static const std::string EntitiesKey = "Entities";
+		inline static const KeyType EntitiesKey = "Entities";
 
 		/// <summary>
 		/// Index of the Entities attribute in the Sector.
@@ -42,7 +42,7 @@ namespace Library
 		/// Getter for the class TypeInfo, used for registration with the TypeManager.
 		/// </summary>
 		static const TypeManager::TypeInfo& TypeInfo();
-#pragma endregion Type Definitions, Constants
+#pragma endregion Static Members
 
 #pragma region Special Members
 	public:

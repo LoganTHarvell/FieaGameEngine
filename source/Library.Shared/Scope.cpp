@@ -280,12 +280,12 @@ namespace Library
 #pragma endregion Size and Capacity
 
 #pragma region Accessors
-	Scope::DataType& Scope::operator[](const NameType& name)
+	Scope::DataType& Scope::operator[](const KeyType& name)
 	{
 		return Append(name);
 	}
 
-	const Scope::DataType& Scope::operator[](const NameType& name) const
+	const Scope::DataType& Scope::operator[](const KeyType& name) const
 	{
 		const DataType* entry = Find(name);
 		if (entry == nullptr) throw std::runtime_error("Name not found.");
@@ -293,13 +293,13 @@ namespace Library
 		return *entry;
 	}
 
-	Scope::DataType* Scope::Find(const NameType& name)
+	Scope::DataType* Scope::Find(const KeyType& name)
 	{
 		Table::Iterator it = mTable.Find(name);
 		return it != mTable.end() ? &it->second : nullptr;
 	}
 
-	const Scope::DataType* Scope::Find(const NameType& name) const
+	const Scope::DataType* Scope::Find(const KeyType& name) const
 	{
 		Table::ConstIterator it = mTable.Find(name);
 		return it != mTable.end() ? &it->second : nullptr;
@@ -343,7 +343,7 @@ namespace Library
 		return { nullptr, 0 };
 	}
 
-	Scope::DataType* Scope::Search(const NameType& name, Scope** scopePtrOut)
+	Scope::DataType* Scope::Search(const KeyType& name, Scope** scopePtrOut)
 	{
 		DataType* result = Find(name);
 
@@ -359,7 +359,7 @@ namespace Library
 		return nullptr;
 	}
 
-	const Scope::DataType* Scope::Search(const NameType& name, const Scope** scopePtrOut) const
+	const Scope::DataType* Scope::Search(const KeyType& name, const Scope** scopePtrOut) const
 	{
 		const DataType* result = Find(name);
 
@@ -375,13 +375,13 @@ namespace Library
 		return nullptr;
 	}
 
-	Scope::DataType* Scope::SearchChildren(const NameType& name, Scope** scopePtrOut)
+	Scope::DataType* Scope::SearchChildren(const KeyType& name, Scope** scopePtrOut)
 	{
 		Vector queue = { this };
 		return SearchChildrenHelper(queue, name, scopePtrOut);
 	}
 
-	const Scope::DataType* Scope::SearchChildren(const NameType& name, const Scope** scopePtrOut) const
+	const Scope::DataType* Scope::SearchChildren(const KeyType& name, const Scope** scopePtrOut) const
 	{
 		Scope* nonConstThis = const_cast<Scope*>(this);
 		Vector queue = { nonConstThis };
@@ -406,7 +406,7 @@ namespace Library
 #pragma endregion Accessors
 
 #pragma region Modifiers
-	Scope::DataType& Scope::Append(const NameType& name)
+	Scope::DataType& Scope::Append(const KeyType& name)
 	{
 		if (name.empty()) throw std::runtime_error("Name cannot be empty.");
 
@@ -416,7 +416,7 @@ namespace Library
 		return it->second;
 	}
 
-	Scope& Scope::AppendScope(const NameType& name, const std::size_t capacity)
+	Scope& Scope::AppendScope(const KeyType& name, const std::size_t capacity)
 	{
 		if (name.empty()) throw std::runtime_error("Name cannot be empty.");
 
@@ -456,7 +456,7 @@ namespace Library
 		return &child;
 	}
 
-	Scope& Scope::Adopt(Scope& child, const NameType& name)
+	Scope& Scope::Adopt(Scope& child, const KeyType& name)
 	{
 		if (this == &child)			throw std::runtime_error("Cannot adopt self.");
 		if (IsAncestorOf(child))	throw std::runtime_error("Cannot adopt descendant.");
@@ -505,7 +505,7 @@ namespace Library
 #pragma endregion Modifiers
 
 #pragma region Helper Methods
-	Scope::DataType* Scope::SearchChildrenHelper(const Vector<Scope*>& queue, const NameType& name, Scope** scopePtrOut)
+	Scope::DataType* Scope::SearchChildrenHelper(const Vector<Scope*>& queue, const KeyType& name, Scope** scopePtrOut)
 	{
 		Vector<Scope*> newQueue;
 

@@ -12,17 +12,54 @@ namespace Library
 {
 #pragma region Signature Type
 	/// <summary>
-	/// Represents signature information for instantiating an attribute for a Scope.
+	/// Represents signature information for instantiating an Attribute of an Attributed Scope.
 	/// </summary>
 	struct Signature
 	{
-		std::string Name;
-		Datum::Types Type;
-		bool IsInternal;
-		std::size_t Size;
-		std::size_t Offset;
+#pragma region Data Members
+	public:
+		/// <summary>
+		/// Key value of the Attribute.
+		/// </summary>
+		std::string Key;
 
+		/// <summary>
+		/// Type of the Attribute data value.
+		/// </summary>
+		Datum::Types Type;
+
+		/// <summary>
+		/// Type of storage for the Attribute data.
+		/// </summary>
+		bool IsInternal;
+
+		/// <summary>
+		/// Number of elements in the Attribute data.
+		/// </summary>
+		std::size_t Size;
+
+		/// <summary>
+		/// Offset of a class data member serving as external memory, if storage is external.
+		/// </summary>
+		std::size_t Offset;
+#pragma endregion Data Members
+
+#pragma region Relational Operators
+	public:
+		/// <summary>
+		/// Equal operator.
+		/// </summary>
+		/// <param name="rhs">Right hand side Signature to be compared against.</param>
+		/// <returns> True if all Signature members are equivalent.</returns>
 		bool operator==(const Signature& rhs) const noexcept = default;
+
+		/// <summary>
+		/// Not equal operator.
+		/// </summary>
+		/// <param name="rhs">Right hand side Signature to be compared against.</param>
+		/// <returns> True if any Signature members are not equivalent.</returns>
+		bool operator!=(const Signature& rhs) const noexcept = default;
+#pragma endregion Relational Operators
 	};
 
 	/// <summary>

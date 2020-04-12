@@ -45,7 +45,7 @@ namespace Library
 		/// <summary>
 		/// Default destructor.
 		/// </summary>
-		virtual ~ActionList() = default;
+		virtual ~ActionList() override = default;
 
 		/// <summary>
 		/// Copy constructor.
@@ -78,7 +78,7 @@ namespace Library
 		/// Specialized constructor for use by derived classes to ensure correct attribute population.
 		/// </summary>
 		/// <param name="typeId">Type ID of the derived class.</param>
-		explicit ActionList(const RTTI::IdType typeId, const std::string& name = std::string());
+		explicit ActionList(const RTTI::IdType typeId, const std::string& name=std::string());
 #pragma endregion Special Members
 
 #pragma region Virtual Copy Constructor

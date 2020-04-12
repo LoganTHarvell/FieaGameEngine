@@ -18,7 +18,7 @@
 namespace Library
 {
 	/// <summary>
-	/// Represents an ordered table of name and data value pairs.
+	/// Represents an ordered table of key and data value pairs.
 	/// </summary>
 	class Scope : public RTTI
 	{
@@ -27,9 +27,9 @@ namespace Library
 #pragma region Type Definitions and Constants
 	public:
 		/// <summary>
-		/// TableEntry name type.
+		/// TableEntry key type.
 		/// </summary>
-		using NameType = std::string;
+		using KeyType = std::string;
 
 		/// <summary>
 		/// TableEntry data type.
@@ -44,10 +44,10 @@ namespace Library
 		/// <summary>
 		/// Table type defining a mapping names to data values.
 		/// </summary>
-		using Table = HashMap<NameType, DataType>;
+		using Table = HashMap<KeyType, DataType>;
 
 		/// <summary>
-		/// Attribute type defining a name and data value pair.
+		/// Attribute type defining a key and data value pair.
 		/// </summary>
 		using Attribute = Table::PairType;
 #pragma endregion Type Definitions and Constants
@@ -57,7 +57,7 @@ namespace Library
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
-		/// <param name="capacity">Initial capacity of the Scope.</param>
+		/// <param key="capacity">Initial capacity of the Scope.</param>
 		explicit Scope(const std::size_t capacity=0);
 
 		/// <summary>
@@ -202,21 +202,21 @@ namespace Library
 
 		/// <summary>
 		/// Subscript operator.
-		/// Gets a reference to the DataType value of the given NameType value.
+		/// Gets a reference to the DataType value of the given KeyType value.
 		/// Appends a new default DataType value if one does not already exist.
 		/// </summary>
 		/// <param name="name">Name for the TableEntry to be accessed or appended.</param>
-		/// <returns>Reference to the DataType value of the TableEntry with the given NameType value.</returns>
-		DataType& operator[](const NameType& name);
+		/// <returns>Reference to the DataType value of the TableEntry with the given KeyType value.</returns>
+		DataType& operator[](const KeyType& name);
 
 		/// <summary>
 		/// Subscript operator.
-		/// Gets a reference to a constant DataType value of the given NameType value.
+		/// Gets a reference to a constant DataType value of the given KeyType value.
 		/// </summary>
 		/// <param name="name">Name for the TableEntry to be accessed.</param>
-		/// <returns>Reference to the constant DataType value of the TableEntry with the given NameType value.</returns>
+		/// <returns>Reference to the constant DataType value of the TableEntry with the given KeyType value.</returns>
 		/// <exception cref="std::runtime_error">Name not found.</exception>
-		const DataType& operator[](const NameType& name) const;
+		const DataType& operator[](const KeyType& name) const;
 
 		/// <summary>
 		/// Subscript operator.
@@ -235,25 +235,25 @@ namespace Library
 		const DataType& operator[](const std::size_t index) const;
 
 		/// <summary>
-		/// Finds the DataType value associated with the given NameType value, if it exists.
+		/// Finds the DataType value associated with the given KeyType value, if it exists.
 		/// </summary>
-		/// <param name="name">NameType value associated with the DataType value to be found.</param>
+		/// <param name="name">KeyType value associated with the DataType value to be found.</param>
 		/// <returns>If found, a pointer to the DataType value. Otherwise, nullptr.</returns>
-		DataType* Find(const NameType& name);
+		DataType* Find(const KeyType& name);
 
 		/// <summary>
-		/// Finds the DataType value associated with the given NameType value, if it exists.
+		/// Finds the DataType value associated with the given KeyType value, if it exists.
 		/// </summary>
-		/// <param name="name">TableEntry name associated with the data to be found.</param>
+		/// <param name="name">TableEntry key associated with the data to be found.</param>
 		/// <returns>If found, a pointer to the DataType value. Otherwise, nullptr.</returns>
-		const DataType* Find(const NameType& name) const;
+		const DataType* Find(const KeyType& name) const;
 
 		/// <summary>
-		/// Gets a pointer to the constant NameType value for the TableEntry at the given index, if it exists.
+		/// Gets a pointer to the constant KeyType value for the TableEntry at the given index, if it exists.
 		/// </summary>
-		/// <param name="index">Index of the TableEntry with the name to be found.</param>
-		/// <returns> If found, pointer to the constant NameType& value. Otherwise, nullptr.</returns>
-		const NameType* FindName(const std::size_t index) const;
+		/// <param name="index">Index of the TableEntry with the key to be found.</param>
+		/// <returns> If found, pointer to the constant KeyType& value. Otherwise, nullptr.</returns>
+		const KeyType* FindName(const std::size_t index) const;
 
 		/// <summary>
 		/// Gets the DataType value and index of a given Scope.
@@ -270,36 +270,36 @@ namespace Library
 		std::pair<const DataType*, std::size_t> FindScope(const Scope& scope) const;
 
 		/// <summary>
-		/// Performs a breadth-first search on the scope and its ancestors for a TableEntry with a matching NameType value.
+		/// Performs a breadth-first search on the scope and its ancestors for a TableEntry with a matching KeyType value.
 		/// </summary>
 		/// <param name="name">Name of the TableEntry to be found.</param>
 		/// <param name="scopePtrOut">Output parameter that points to the Scope which owns the found TableEntry.</param>
 		/// <returns>If found, a pointer to the DataType value of the TableEntry. Otherwise, nullptr.</returns>
-		DataType* Search(const NameType& name, Scope** scopePtrOut=nullptr);
+		DataType* Search(const KeyType& name, Scope** scopePtrOut=nullptr);
 
 		/// <summary>
-		/// Performs a breadth-first search on the scope and its ancestors for a TableEntry with a matching NameType value.
+		/// Performs a breadth-first search on the scope and its ancestors for a TableEntry with a matching KeyType value.
 		/// </summary>
 		/// <param name="name">Name of the TableEntry to be found.</param>
 		/// <param name="scopePtrOut">Output parameter that points to the Scope which owns the found TableEntry.</param>
 		/// <returns>If found, a pointer to the DataType value of the TableEntry. Otherwise, nullptr.</returns>
-		const DataType* Search(const NameType& name, const Scope** scopePtrOut=nullptr) const;
+		const DataType* Search(const KeyType& name, const Scope** scopePtrOut=nullptr) const;
 
 		/// <summary>
-		/// Performs a breadth-first search on the scope and its children for a TableEntry with a matching NameType value.
+		/// Performs a breadth-first search on the scope and its children for a TableEntry with a matching KeyType value.
 		/// </summary>
 		/// <param name="name">Name of the TableEntry to be found.</param>
 		/// <param name="scopePtrOut">Output parameter that points to the Scope which owns the found TableEntry.</param>
 		/// <returns>If found, a pointer to the DataType value of the TableEntry. Otherwise, nullptr.</returns>
-		DataType* SearchChildren(const NameType& name, Scope** scopePtrOut=nullptr);
+		DataType* SearchChildren(const KeyType& name, Scope** scopePtrOut=nullptr);
 
 		/// <summary>
-		/// Performs a breadth-first search on the scope and its children for a TableEntry with a matching NameType value.
+		/// Performs a breadth-first search on the scope and its children for a TableEntry with a matching KeyType value.
 		/// </summary>
 		/// <param name="name">Name of the TableEntry to be found.</param>
 		/// <param name="scopePtrOut">Output parameter that points to the Scope which owns the found TableEntry.</param>
 		/// <returns>If found, a pointer to the DataType value of the TableEntry. Otherwise, nullptr.</returns>
-		const DataType* SearchChildren(const NameType& name, const Scope** scopePtrOut=nullptr) const;
+		const DataType* SearchChildren(const KeyType& name, const Scope** scopePtrOut=nullptr) const;
 
 		/// <summary>
 		/// Performs an action iteratively on each Attribute in the Scope.
@@ -317,21 +317,21 @@ namespace Library
 #pragma region Modifiers
 	public:
 		/// <summary>
-		/// Appends a TableEntry to the Scope with the given name and a default data value.
+		/// Appends a TableEntry to the Scope with the given key and a default data value.
 		/// </summary>
 		/// <param name="name">Name for the TableEntry to be accessed or appended.</param>
 		/// <returns>Reference to the DataType value of the appended TableEntry.</returns>
 		/// <exception cref="std::runtime_error">Name cannot be empty.</exception>
-		DataType& Append(const NameType& name);
+		DataType& Append(const KeyType& name);
 
 		/// <summary>
-		/// Appends a TableEntry to the Scope with the given name and a default Scope value, as a child.
+		/// Appends a TableEntry to the Scope with the given key and a default Scope value, as a child.
 		/// </summary>
 		/// <param name="name">Name for the TableEntry to be accessed or appended with a child Scope.</param>
 		/// <returns>Reference to the DataType value of the appended TableEntry.</returns>
 		/// <exception cref="std::runtime_error">Name cannot be empty.</exception>
 		/// <exception cref="std::runtime_error">Table entry already exists with a non-Scope type.</exception>
-		Scope& AppendScope(const NameType& name, const std::size_t capacity=0);
+		Scope& AppendScope(const KeyType& name, const std::size_t capacity=0);
 
 		/// <summary>
 		/// Removes a child Scope, given its address.
@@ -344,9 +344,9 @@ namespace Library
 		/// Appends an existing Scope, calling Orphan as needed on the previous parent.
 		/// </summary>
 		/// <param name="child">Scope to copy and append.</param>
-		/// <param name="name">NameType value of the TableEntry that the child will be appended onto.</param>
+		/// <param name="name">KeyType value of the TableEntry that the child will be appended onto.</param>
 		/// <returns>Reference to the newly adopted Scope.</returns>
-		Scope& Adopt(Scope& child, const NameType& name);
+		Scope& Adopt(Scope& child, const KeyType& name);
 
 		/// <summary>
 		/// Clears all members of the scope.
@@ -358,13 +358,13 @@ namespace Library
 	private:
 		/// <summary>
 		/// SearchChildren helper method. 
-		/// Performs a breadth-first search on the Scope and its children for a TableEntry with a matching NameType value.
+		/// Performs a breadth-first search on the Scope and its children for a TableEntry with a matching KeyType value.
 		/// </summary>
 		/// <param name="queue">Queue of Scope values to be searched.</param>
 		/// <param name="name">Name of the TableEntry to be found.</param>
 		/// <param name="scopePtrOut">Output parameter that points to the Scope which owns the found TableEntry.</param>
 		/// <returns>If found, a pointer to the DataType value of the TableEntry. Otherwise, nullptr.</returns>
-		DataType* SearchChildrenHelper(const Vector<Scope*>& queue, const NameType& name, Scope** scopePtrOut=nullptr);
+		DataType* SearchChildrenHelper(const Vector<Scope*>& queue, const KeyType& name, Scope** scopePtrOut=nullptr);
 #pragma endregion Helper Methods
 
 #pragma region RTTI Overrides

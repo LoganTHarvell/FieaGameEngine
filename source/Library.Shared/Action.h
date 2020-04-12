@@ -44,7 +44,7 @@ namespace Library
 		/// <summary>
 		/// Default destructor.
 		/// </summary>
-		virtual ~Action() = default;
+		virtual ~Action() override = default;
 
 		/// <summary>
 		/// Copy constructor.

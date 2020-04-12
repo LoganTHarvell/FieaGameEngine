@@ -80,12 +80,12 @@ namespace Library
 #pragma endregion Boolean Operators
 
 #pragma region Accessors
-	bool Attributed::IsAttribute(const NameType& name)
+	bool Attributed::IsAttribute(const KeyType& name)
 	{
 		return Find(name) != nullptr;
 	}
 
-	bool Attributed::IsPrescribedAttribute(const NameType& name)
+	bool Attributed::IsPrescribedAttribute(const KeyType& name)
 	{
 		for (std::size_t i = 0; i < mNumPrescribed; ++i)
 		{
@@ -95,7 +95,7 @@ namespace Library
 		return false;
 	}
 
-	bool Attributed::IsAuxiliaryAttribute(const NameType& name)
+	bool Attributed::IsAuxiliaryAttribute(const KeyType& name)
 	{
 		return !IsPrescribedAttribute(name);
 	}
@@ -132,7 +132,7 @@ namespace Library
 		}
 	}
 	
-	Attributed::DataType& Attributed::AppendAuxiliaryAttribute(const NameType& name)
+	Attributed::DataType& Attributed::AppendAuxiliaryAttribute(const KeyType& name)
 	{
 		if (IsPrescribedAttribute(name))
 		{
@@ -192,7 +192,7 @@ namespace Library
 
 		for (const auto& signature : typeInfo->signatures)
 		{
-			DataType& data = Append(signature.Name);
+			DataType& data = Append(signature.Key);
 
 			if (!signature.IsInternal)
 			{

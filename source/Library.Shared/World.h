@@ -16,7 +16,7 @@ namespace Library
 	{
 		RTTI_DECLARATIONS(World, Attributed)
 
-#pragma region Type Definitions, Constants
+#pragma region Type Definitions
 	public:
 		/// <summary>
 		/// Data structure for performing an action on a given Scope at the end of an Update call.
@@ -54,24 +54,26 @@ namespace Library
 			/// <summary>
 			/// Name of the Target attribute of the performed action.
 			/// </summary>
-			const NameType* const AttributeName;
+			const KeyType* const AttributeName;
 		};
 
 		/// <summary>
 		/// Type definition for a list of PendingChild data.
 		/// </summary>
 		using PendingChildList = Vector<PendingChild>;
+#pragma endregion Type Definitions
 
+#pragma region Static Members
 	public:
 		/// <summary>
 		/// Key for the Name attribute in the World.
 		/// </summary>
-		inline static const std::string NameKey = "Name";
+		inline static const KeyType NameKey = "Name";
 
 		/// <summary>
 		/// Key for the Sectors attribute in the World.
 		/// </summary>
-		inline static const std::string SectorsKey = "Sectors";
+		inline static const KeyType SectorsKey = "Sectors";
 
 		/// <summary>
 		/// Index of the Sectors attribute in the World.
@@ -83,7 +85,7 @@ namespace Library
 		/// Getter for the class TypeInfo, used for registration with the TypeManager.
 		/// </summary>
 		static const TypeManager::TypeInfo& TypeInfo();
-#pragma endregion Type Definitions, Constants
+#pragma endregion Static Members
 
 #pragma region Special Members
 	public:

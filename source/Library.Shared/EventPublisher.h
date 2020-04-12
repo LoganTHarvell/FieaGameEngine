@@ -31,8 +31,18 @@ namespace Library
 		/// </summary>
 		struct SubscriberEntry final
 		{
+#pragma region Data Members
+		public:
+			/// <summary>
+			/// Pointer to an IEventSubscriber instance.
+			/// </summary>
 			IEventSubscriber* Subscriber{ nullptr };
+
+			/// <summary>
+			/// Represents if the Subscriber is pending to be removed.
+			/// </summary>
 			bool PendingRemove{ false };
+#pragma endregion Data Members
 
 #pragma region Relational Operators
 		public:
@@ -74,7 +84,7 @@ namespace Library
 		/// <summary>
 		/// Virtual default destructor.
 		/// </summary>
-		virtual ~EventPublisher() = default;
+		virtual ~EventPublisher() override = default;
 
 		/// <summary>
 		/// Copy constructor.

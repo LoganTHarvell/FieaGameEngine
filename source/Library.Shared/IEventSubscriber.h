@@ -13,48 +13,50 @@ namespace Library
 	/// </summary>
 	class IEventSubscriber
 	{
-#pragma region Special Member Functions
-	protected:
-		/// <summary>
-		/// Default constructor.
-		/// </summary>
-		IEventSubscriber() = default;
+		friend EventPublisher;
 
+#pragma region Special Member Functions
 	public:
 		/// <summary>
 		/// Virtual default destructor.
 		/// </summary>
 		virtual ~IEventSubscriber() = default;
 
+	protected:
+		/// <summary>
+		/// Default constructor.
+		/// </summary>
+		IEventSubscriber() = default;
+
 		/// <summary>
 		/// Copy constructor.
 		/// </summary>
-		IEventSubscriber(const IEventSubscriber&) = delete;
+		IEventSubscriber(const IEventSubscriber&) = default;
 
 		/// <summary>
 		/// Copy assignment operator.
 		/// </summary>
-		IEventSubscriber& operator=(const IEventSubscriber&) = delete;
+		IEventSubscriber& operator=(const IEventSubscriber&) = default;
 
 		/// <summary>
 		/// Move constructor.
 		/// </summary>
-		IEventSubscriber(IEventSubscriber&&) noexcept = delete;
+		IEventSubscriber(IEventSubscriber&&) noexcept = default;
 
 		/// <summary>
 		/// Move assignment operator.
 		/// </summary>
-		IEventSubscriber& operator=(IEventSubscriber&&) noexcept = delete;
+		IEventSubscriber& operator=(IEventSubscriber&&) noexcept = default;
 #pragma endregion Special Member Functions
 
-#pragma region Pure Virtual Methods
-	public:
+#pragma region Event Notification
+	protected:
 		/// <summary>
 		/// Pure virtual method called to receive a published Event.
 		/// Implement to customize the behavior that occurs when the Event is received.
 		/// </summary>
 		/// <param name="eventPublisher">Reference to an Event as an EventPublisher.</param>
 		virtual void Notify(EventPublisher& eventPublisher)=0;
-#pragma endregion Pure Virtual Methods
+#pragma endregion Event Notification
 	};
 }
