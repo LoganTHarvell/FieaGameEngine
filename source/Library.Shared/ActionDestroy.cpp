@@ -31,7 +31,7 @@ namespace Library
 	{
 	}
 
-	gsl::owner<Library::Scope*> ActionDestroy::Clone() const
+	gsl::owner<Scope*> ActionDestroy::Clone() const
 	{
 		return new ActionDestroy(*this);
 	}

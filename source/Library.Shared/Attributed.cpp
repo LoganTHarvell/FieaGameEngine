@@ -23,7 +23,8 @@ namespace Library
 		mNumPrescribed = mPairPtrs.Size();
 	}
 
-	Attributed::Attributed(const Attributed& rhs) : Scope(rhs)
+	Attributed::Attributed(const Attributed& rhs) : Scope(rhs), 
+		mNumPrescribed(rhs.mNumPrescribed)
 	{
 		(*this)["this"] = static_cast<RTTI*>(this);
 		UpdateExternalStorage(TypeManager::Instance()->Find(rhs.TypeIdInstance()));
@@ -32,6 +33,7 @@ namespace Library
 	Attributed& Attributed::operator=(const Attributed& rhs)
 	{
 		Scope::operator=(rhs);
+		mNumPrescribed = rhs.mNumPrescribed;
 
 		(*this)["this"] = static_cast<RTTI*>(this);
 		UpdateExternalStorage(TypeManager::Instance()->Find(rhs.TypeIdInstance()));
@@ -39,7 +41,8 @@ namespace Library
 		return *this;
 	}
 
-	Attributed::Attributed(Attributed&& rhs) noexcept : Scope(std::move(rhs))
+	Attributed::Attributed(Attributed&& rhs) noexcept : Scope(std::move(rhs)), 
+		mNumPrescribed(rhs.mNumPrescribed)
 	{
 		(*this)["this"] = static_cast<RTTI*>(this);
 		UpdateExternalStorage(TypeManager::Instance()->Find(rhs.TypeIdInstance()));
@@ -48,6 +51,7 @@ namespace Library
 	Attributed& Attributed::operator=(Attributed&& rhs) noexcept
 	{
 		Scope::operator=(std::move(rhs));
+		mNumPrescribed = rhs.mNumPrescribed;
 
 		(*this)["this"] = static_cast<RTTI*>(this);
 		UpdateExternalStorage(TypeManager::Instance()->Find(rhs.TypeIdInstance()));

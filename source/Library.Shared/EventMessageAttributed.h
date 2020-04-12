@@ -74,13 +74,6 @@ namespace Library
 		/// <param name="rhs">EventMessageAttributed to be moved.</param>
 		/// <returns>Newly moved into left hand side EventMessageAttributed.</returns>
 		EventMessageAttributed& operator=(EventMessageAttributed&& rhs) noexcept = default;
-
-	protected:
-		/// <summary>
-		/// Specialized constructor for use by derived classes to ensure correct Attribute population.
-		/// </summary>
-		/// <param name="typeId">Type ID of the derived class.</param>
-		explicit EventMessageAttributed(const RTTI::IdType typeId, World* world=nullptr, const Subtype& subtype=Subtype());
 #pragma endregion Special Members
 
 #pragma region Virtual Copy Constructor
@@ -89,7 +82,7 @@ namespace Library
 		/// Virtual copy constructor.
 		/// </summary>
 		/// <returns>Owning pointer to a newly heap allocated copy of the EventMessageAttributed.</returns>
-		virtual gsl::owner<Library::Scope*> Clone() const override;
+		virtual gsl::owner<Scope*> Clone() const override;
 #pragma endregion Virtual Copy Constructor
 
 #pragma region Accessors

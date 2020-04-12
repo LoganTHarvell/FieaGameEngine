@@ -30,7 +30,7 @@ namespace Library
 	{
 	}
 
-	gsl::owner<Library::Scope*> ActionIncrement::Clone() const
+	gsl::owner<Scope*> ActionIncrement::Clone() const
 	{
 		return new ActionIncrement(*this);
 	}

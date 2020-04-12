@@ -7,6 +7,7 @@
 
 // First Party
 #include "Sector.h"
+#include "EventQueue.h"
 #pragma endregion Includes
 
 namespace Library
@@ -32,7 +33,7 @@ namespace Library
 		mWorldState.World = this;
 	}
 
-	gsl::owner<Library::Scope*> World::Clone() const
+	gsl::owner<Scope*> World::Clone() const
 	{
 		return new World(*this);
 	}
@@ -45,6 +46,16 @@ namespace Library
 	const WorldState& World::GetWorldState() const
 	{
 		return mWorldState;
+	}
+
+	EventQueue& World::GetEventQueue()
+	{
+		return mEventQueue;
+	}
+
+	const EventQueue& World::GetEventQueue() const
+	{
+		return mEventQueue;
 	}
 
 	World::PendingChildList& World::PendingChildren()
@@ -93,6 +104,8 @@ namespace Library
 		GameTime currentGameTime = mWorldState.GetGameTime();
 		mGameClock.UpdateGameTime(currentGameTime);
 		mWorldState.SetGameTime(currentGameTime);
+
+		mEventQueue.Update(currentGameTime);
 
 		for (std::size_t i = 0; i < mSectors.Size(); ++i)
 		{

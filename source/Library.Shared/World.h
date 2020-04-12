@@ -1,8 +1,11 @@
 #pragma once
 
+#pragma region Includes
 // First Party
 #include "Attributed.h"
 #include "WorldState.h"
+#include "EventQueue.h"
+#pragma endregion Includes
 
 namespace Library
 {
@@ -133,7 +136,7 @@ namespace Library
 		/// Virtual copy constructor.
 		/// </summary>
 		/// <returns>Owning pointer to a newly heap allocated copy of the World.</returns>
-		virtual gsl::owner<Library::Scope*> Clone() const override;
+		virtual gsl::owner<Scope*> Clone() const override;
 #pragma endregion Virtual Copy Constructor
 
 #pragma region Accessors
@@ -149,6 +152,18 @@ namespace Library
 		/// </summary>
 		/// <returns>Reference to the WorldState associated with the World.</returns>
 		const WorldState& GetWorldState() const;
+
+		/// <summary>
+		/// Gets the EventQueue associated with the World.
+		/// </summary>
+		/// <returns>Reference to the EventQueue associated with the World.</returns>
+		EventQueue& GetEventQueue();
+
+		/// <summary>
+		/// Gets the EventQueue associated with the World.
+		/// </summary>
+		/// <returns>Reference to the EventQueue associated with the World.</returns>
+		const EventQueue& GetEventQueue() const;
 
 		/// <summary>
 		/// Gets the list of PendingChild data.
@@ -223,14 +238,19 @@ namespace Library
 #pragma region Data Members
 	private:
 		/// <summary>
+		/// Convenience struct for passing the WorldState data in cascaded Update calls.
+		/// </summary>
+		WorldState mWorldState;
+
+		/// <summary>
 		/// Clock that tracks the game start time, current time, and update delta time.
 		/// </summary>
 		GameClock mGameClock;
 
 		/// <summary>
-		/// Convenience struct for passing the WorldState data in cascaded Update calls.
+		/// Queue of Events that are to be processed during Update.
 		/// </summary>
-		WorldState mWorldState;
+		EventQueue mEventQueue;
 
  		/// <summary>
  		/// Pending children to have an action performed during the end of an Update call.

@@ -46,7 +46,7 @@ namespace Library
 		return *this;
 	}
 
-	gsl::owner<Library::Scope*> ActionExpression::Clone() const
+	gsl::owner<Scope*> ActionExpression::Clone() const
 	{
 		return new ActionExpression(*this);
 	}

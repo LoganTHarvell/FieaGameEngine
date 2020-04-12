@@ -37,7 +37,7 @@ namespace Library
 	{
 	}
 
-	gsl::owner<Library::Scope*> Entity::Clone() const
+	gsl::owner<Scope*> Entity::Clone() const
 	{
 		return new Entity(*this);
 	}

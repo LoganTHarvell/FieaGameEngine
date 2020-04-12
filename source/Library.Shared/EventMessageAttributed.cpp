@@ -32,15 +32,10 @@ namespace Library
 		mWorld(world), mSubtype(subtype)
 	{
 	}
-
-	EventMessageAttributed::EventMessageAttributed(const RTTI::IdType typeId, World* world, const Subtype& subtype) : Attributed(typeId),
-		mWorld(world), mSubtype(subtype)
-	{
-	}
 #pragma endregion Special Members
 
 #pragma region Virtual Copy Constructor
-	gsl::owner<Library::Scope*> EventMessageAttributed::Clone() const
+	gsl::owner<Scope*> EventMessageAttributed::Clone() const
 	{
 		return new EventMessageAttributed(*this);
 	}

@@ -32,7 +32,7 @@ namespace Library
 	{
 	}
 
-	gsl::owner<Library::Scope*> ActionList::Clone() const
+	gsl::owner<Scope*> ActionList::Clone() const
 	{
 		return new ActionList(*this);
 	}

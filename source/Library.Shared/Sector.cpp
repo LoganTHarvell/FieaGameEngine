@@ -32,7 +32,7 @@ namespace Library
 	{
 	}
 
-	gsl::owner<Library::Scope*> Sector::Clone() const
+	gsl::owner<Scope*> Sector::Clone() const
 	{
 		return new Sector(*this);
 	}

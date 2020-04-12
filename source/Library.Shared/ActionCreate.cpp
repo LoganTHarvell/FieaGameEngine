@@ -31,7 +31,7 @@ namespace Library
 	{
 	}
 
-	gsl::owner<Library::Scope*> ActionCreate::Clone() const
+	gsl::owner<Scope*> ActionCreate::Clone() const
 	{
 		return new ActionCreate(*this);
 	}

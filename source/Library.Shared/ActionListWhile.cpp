@@ -29,7 +29,7 @@ namespace Library
 	{
 	}
 
-	gsl::owner<Library::Scope*> ActionListWhile::Clone() const
+	gsl::owner<Scope*> ActionListWhile::Clone() const
 	{
 		return new ActionListWhile(*this);
 	}

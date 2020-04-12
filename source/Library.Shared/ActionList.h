@@ -87,7 +87,7 @@ namespace Library
 		/// Virtual copy constructor.
 		/// </summary>
 		/// <returns>Owning pointer to a newly heap allocated copy of the ActionList.</returns>
-		virtual gsl::owner<Library::Scope*> Clone() const override;
+		virtual gsl::owner<Scope*> Clone() const override;
 #pragma endregion Virtual Copy Constructor
 
 #pragma region Accessors

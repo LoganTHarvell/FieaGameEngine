@@ -80,7 +80,7 @@ namespace Library
 		/// Virtual copy constructor.
 		/// </summary>
 		/// <returns>Owning pointer to a newly heap allocated copy of the ActionCreate.</returns>
-		virtual gsl::owner<Library::Scope*> Clone() const override;
+		virtual gsl::owner<Scope*> Clone() const override;
 #pragma endregion Virtual Copy Constructor
 
 #pragma region Game Loop
@@ -104,7 +104,7 @@ namespace Library
 #pragma region Data Members
 	private:
 		/// <summary>
-		/// KeyType valuefor the Attribute of the Attribute to create.
+		/// KeyType value for the Attribute of the Attribute to create.
 		/// </summary>
 		std::string mAttributeKey;
 #pragma endregion Data Members

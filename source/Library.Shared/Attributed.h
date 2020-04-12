@@ -193,7 +193,7 @@ namespace Library
 		/// <summary>
 		/// Number of prescribed Attributes.
 		/// </summary>
-		inline static std::size_t mNumPrescribed;
+		std::size_t mNumPrescribed{ 0 };
 #pragma endregion Data Members
 	};
 }
