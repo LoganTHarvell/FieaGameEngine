@@ -121,7 +121,7 @@ namespace Library
 			switch (pendingChild.ChildState)
 			{
 			case PendingChild::State::ToAdd:
-				pendingChild.Target.Adopt(pendingChild.Child, *pendingChild.AttributeName);
+				pendingChild.Target.Adopt(pendingChild.Child, *pendingChild.AttributeKey);
 				break;
 
 			case PendingChild::State::ToRemove:

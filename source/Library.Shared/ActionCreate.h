@@ -104,9 +104,9 @@ namespace Library
 #pragma region Data Members
 	private:
 		/// <summary>
-		/// Name for the Attribute of the Attribute to create.
+		/// KeyType valuefor the Attribute of the Attribute to create.
 		/// </summary>
-		std::string mAttributeName;
+		std::string mAttributeKey;
 #pragma endregion Data Members
 	};
 

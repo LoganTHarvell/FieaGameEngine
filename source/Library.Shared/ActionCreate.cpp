@@ -17,7 +17,7 @@ namespace Library
 		static const TypeManager::TypeInfo typeInfo
 		{
 			{
-				{ AttributeKey, Types::String, false, 1, offsetof(ActionCreate, mAttributeName) },
+				{ AttributeKey, Types::String, false, 1, offsetof(ActionCreate, mAttributeKey) },
 				{ NewScopeKey, Types::Scope, true, 1, 0 }
 			},
 
@@ -49,7 +49,7 @@ namespace Library
 					*scope->Get<Scope*>()->Clone(),
 					World::PendingChild::State::ToAdd,
 					*worldState.Entity,
-					&mAttributeName
+					&mAttributeKey
 				};
 
 				worldState.World->PendingChildren().PushBack(childToAdd);

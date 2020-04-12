@@ -14,7 +14,7 @@ namespace Library
 #pragma region Static Members
 	const TypeManager::TypeInfo& EventMessageAttributed::TypeInfo()
 	{
-		static const TypeManager::TypeInfo typeInfo =
+		static const TypeManager::TypeInfo typeInfo
 		{
 			{
 				{ SubtypeKey, Types::String, false, 1, offsetof(EventMessageAttributed, mSubtype) }

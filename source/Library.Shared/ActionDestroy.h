@@ -104,9 +104,9 @@ namespace Library
 #pragma region Data Members
 	private:
 		/// <summary>
-		/// Name of the Action to be destroyed.
+		/// KeyType value of the Action to be destroyed.
 		/// </summary>
-		std::string mAttributeName;
+		KeyType mAttributeKey;
 
 		/// <summary>
 		/// Name for the Attribute of the Attribute to create.

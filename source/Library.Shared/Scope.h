@@ -272,7 +272,7 @@ namespace Library
 		/// <summary>
 		/// Performs a breadth-first search on the scope and its ancestors for a Attribute with a matching KeyType value.
 		/// </summary>
-		/// <param name="key">Name of the Attribute to be found.</param>
+		/// <param name="key">KeyType value of the Attribute to be found.</param>
 		/// <param name="scopePtrOut">Output parameter that points to the Scope which owns the found Attribute.</param>
 		/// <returns>If found, a pointer to the DataType value of the Attribute. Otherwise, nullptr.</returns>
 		virtual DataType* Search(const KeyType& key, Scope** scopePtrOut=nullptr);

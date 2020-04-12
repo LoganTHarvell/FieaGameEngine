@@ -52,9 +52,9 @@ namespace Library
 			Scope& Target;
 
 			/// <summary>
-			/// Name of the Target Attribute of the performed action.
+			/// KeyType value of the Target Attribute of the performed action.
 			/// </summary>
-			const KeyType* const AttributeName;
+			const KeyType* const AttributeKey;
 		};
 
 		/// <summary>

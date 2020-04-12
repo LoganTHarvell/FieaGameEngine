@@ -17,7 +17,7 @@ namespace Library
 		static const TypeManager::TypeInfo typeInfo
 		{
 			{
-				{ AttributeKey, Types::String, false, 1, offsetof(ActionDestroy, mAttributeName) },
+				{ AttributeKey, Types::String, false, 1, offsetof(ActionDestroy, mAttributeKey) },
 				{ TargetKey, Types::String, false, 1, offsetof(ActionDestroy, mTargetName) }
 			},
 
@@ -40,7 +40,7 @@ namespace Library
 	{
 		if (worldState.Entity)
 		{
-			DataType* attribute = worldState.Entity->Find(mAttributeName);
+			DataType* attribute = worldState.Entity->Find(mAttributeKey);
 
 			if (attribute)
 			{
