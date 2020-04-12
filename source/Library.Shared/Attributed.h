@@ -102,23 +102,23 @@ namespace Library
 		/// <summary>
 		/// Checks if an attribute is associated with the given name.
 		/// </summary>
-		/// <param name="name">Name to search for in the instance.</param>
+		/// <param name="key">KeyType value to search for in the instance.</param>
 		/// <returns>True if associated with an attribute. Otherwise, false.</returns>
-		bool IsAttribute(const KeyType& name);
+		bool IsAttribute(const KeyType& key);
 
 		/// <summary>
 		/// Checks if a prescribed attribute is associated with the given name.
 		/// </summary>
-		/// <param name="name">Name to search for in the instance.</param>
+		/// <param name="key">KeyType value to search for in the instance.</param>
 		/// <returns>True if associated with an attribute. Otherwise, false.</returns>
-		bool IsPrescribedAttribute(const KeyType& name);
+		bool IsPrescribedAttribute(const KeyType& key);
 
 		/// <summary>
 		/// Checks if an auxiliary attribute is associated with the given name.
 		/// </summary>
-		/// <param name="name">Name to search for in the instance.</param>
+		/// <param name="key">KeyType value to search for in the instance.</param>
 		/// <returns>True if associated with an attribute. Otherwise, false.</returns>
-		bool IsAuxiliaryAttribute(const KeyType& name);
+		bool IsAuxiliaryAttribute(const KeyType& key);
 
 		/// <summary>
 		/// Gets the list of prescribed Attribute values.
@@ -149,9 +149,9 @@ namespace Library
 		/// <summary>
 		/// Appends an empty DataType value to the instance as an auxiliary attribute.
 		/// </summary>
-		/// <param name="name">Name for the new attribute to append.</param>
+		/// <param name="key">KeyType value for the new attribute to append.</param>
 		/// <returns>Reference to the DataType value associated with the name.</returns>
-		DataType& AppendAuxiliaryAttribute(const KeyType& name);
+		DataType& AppendAuxiliaryAttribute(const KeyType& key);
 #pragma endregion Modifiers
 
 #pragma region RTTI Overrides

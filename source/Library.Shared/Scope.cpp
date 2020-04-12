@@ -280,28 +280,28 @@ namespace Library
 #pragma endregion Size and Capacity
 
 #pragma region Accessors
-	Scope::DataType& Scope::operator[](const KeyType& name)
+	Scope::DataType& Scope::operator[](const KeyType& key)
 	{
-		return Append(name);
+		return Append(key);
 	}
 
-	const Scope::DataType& Scope::operator[](const KeyType& name) const
+	const Scope::DataType& Scope::operator[](const KeyType& key) const
 	{
-		const DataType* entry = Find(name);
+		const DataType* entry = Find(key);
 		if (entry == nullptr) throw std::runtime_error("Name not found.");
 
 		return *entry;
 	}
 
-	Scope::DataType* Scope::Find(const KeyType& name)
+	Scope::DataType* Scope::Find(const KeyType& key)
 	{
-		Table::Iterator it = mTable.Find(name);
+		Table::Iterator it = mTable.Find(key);
 		return it != mTable.end() ? &it->second : nullptr;
 	}
 
-	const Scope::DataType* Scope::Find(const KeyType& name) const
+	const Scope::DataType* Scope::Find(const KeyType& key) const
 	{
-		Table::ConstIterator it = mTable.Find(name);
+		Table::ConstIterator it = mTable.Find(key);
 		return it != mTable.end() ? &it->second : nullptr;
 	}
 
@@ -343,49 +343,37 @@ namespace Library
 		return { nullptr, 0 };
 	}
 
-	Scope::DataType* Scope::Search(const KeyType& name, Scope** scopePtrOut)
+	Scope::DataType* Scope::Search(const KeyType& key, Scope** scopePtrOut)
 	{
-		DataType* result = Find(name);
+		DataType* result = nullptr;
+		Scope* parent = this;
 
-		if (result)
+		while (parent != nullptr)
 		{
-			if (scopePtrOut) *scopePtrOut = this;
-			return result;
+			result = parent->Find(key);
+			if (result) break;
+			
+			parent = parent->mParent;
 		}
 
-		if (mParent) return mParent->Search(name, scopePtrOut);
-		
-		if (scopePtrOut) *scopePtrOut = nullptr;
-		return nullptr;
+		if (scopePtrOut) *scopePtrOut = parent;
+		return result;
 	}
 
-	const Scope::DataType* Scope::Search(const KeyType& name, const Scope** scopePtrOut) const
+	const Scope::DataType* Scope::Search(const KeyType& key, const Scope** scopePtrOut) const
 	{
-		const DataType* result = Find(name);
-
-		if (result)
-		{
-			if (scopePtrOut) *scopePtrOut = this;
-			return result;
-		}
-
-		if (mParent) return mParent->Search(name, scopePtrOut);
-		
-		if (scopePtrOut) *scopePtrOut = nullptr;
-		return nullptr;
+		return const_cast<Scope*>(this)->Search(key, const_cast<Scope**>(scopePtrOut));
 	}
 
-	Scope::DataType* Scope::SearchChildren(const KeyType& name, Scope** scopePtrOut)
+	Scope::DataType* Scope::SearchChildren(const KeyType& key, Scope** scopePtrOut)
 	{
-		Vector queue = { this };
-		return SearchChildrenHelper(queue, name, scopePtrOut);
+		return SearchChildrenHelper({ this }, key, scopePtrOut);
 	}
 
-	const Scope::DataType* Scope::SearchChildren(const KeyType& name, const Scope** scopePtrOut) const
+	const Scope::DataType* Scope::SearchChildren(const KeyType& key, const Scope** scopePtrOut) const
 	{
-		Scope* nonConstThis = const_cast<Scope*>(this);
-		Vector queue = { nonConstThis };
-		return nonConstThis->SearchChildrenHelper(queue, name, const_cast<Scope**>(scopePtrOut));
+		Vector queue = { const_cast<Scope*>(this) };
+		return queue.Front()->SearchChildrenHelper(queue, key, const_cast<Scope**>(scopePtrOut));
 	}
 
 	void Scope::ForEachAttribute(std::function<void(Attribute&)> functor)
@@ -406,21 +394,21 @@ namespace Library
 #pragma endregion Accessors
 
 #pragma region Modifiers
-	Scope::DataType& Scope::Append(const KeyType& name)
+	Scope::DataType& Scope::Append(const KeyType& key)
 	{
-		if (name.empty()) throw std::runtime_error("Name cannot be empty.");
+		if (key.empty()) throw std::runtime_error("Name cannot be empty.");
 
-		auto [it, isNew] = mTable.Insert({ name, DataType() });
+		auto [it, isNew] = mTable.Insert({ key, DataType() });
 		if (isNew) mPairPtrs.PushBack(&(*it));
 
 		return it->second;
 	}
 
-	Scope& Scope::AppendScope(const KeyType& name, const std::size_t capacity)
+	Scope& Scope::AppendScope(const KeyType& key, const std::size_t capacity)
 	{
-		if (name.empty()) throw std::runtime_error("Name cannot be empty.");
+		if (key.empty()) throw std::runtime_error("Name cannot be empty.");
 
-		DataType* data = Find(name);
+		DataType* data = Find(key);
 
 		if (data && data->Type() != Types::Unknown && data->Type() != Types::Scope)
 		{
@@ -437,7 +425,7 @@ namespace Library
 		}
 		else
 		{
-			mPairPtrs.PushBack(&(*mTable.Insert({ name, DataType(mChildren.Back()) }).first));
+			mPairPtrs.PushBack(&(*mTable.Insert({ key, DataType(mChildren.Back()) }).first));
 		}
 
 		return *child;
@@ -456,13 +444,13 @@ namespace Library
 		return &child;
 	}
 
-	Scope& Scope::Adopt(Scope& child, const KeyType& name)
+	Scope& Scope::Adopt(Scope& child, const KeyType& key)
 	{
 		if (this == &child)			throw std::runtime_error("Cannot adopt self.");
 		if (IsAncestorOf(child))	throw std::runtime_error("Cannot adopt descendant.");
-		if (name.empty())			throw std::runtime_error("Name cannot be empty.");
+		if (key.empty())			throw std::runtime_error("Name cannot be empty.");
 
-		DataType* data = Find(name);
+		DataType* data = Find(key);
 
 		if (data && data->Type() != Types::Unknown && data->Type() != Types::Scope)
 		{
@@ -479,7 +467,7 @@ namespace Library
 		}
 		else
 		{
-			mPairPtrs.PushBack(&(*mTable.Insert({ name, DataType(mChildren.Back()) }).first));
+			mPairPtrs.PushBack(&(*mTable.Insert({ key, DataType(mChildren.Back()) }).first));
 		}
 
 		return *mChildren.Back();
@@ -505,13 +493,13 @@ namespace Library
 #pragma endregion Modifiers
 
 #pragma region Helper Methods
-	Scope::DataType* Scope::SearchChildrenHelper(const Vector<Scope*>& queue, const KeyType& name, Scope** scopePtrOut)
+	Scope::DataType* Scope::SearchChildrenHelper(const Vector<Scope*>& queue, const KeyType& key, Scope** scopePtrOut)
 	{
 		Vector<Scope*> newQueue;
 
 		for (auto& scopePtr : queue)
 		{
-			DataType* result = scopePtr->Find(name);
+			DataType* result = scopePtr->Find(key);
 
 			if (result)
 			{
@@ -527,7 +515,7 @@ namespace Library
 			}
 		}
 
-		if (newQueue.Size() > 0) return SearchChildrenHelper(newQueue, name, scopePtrOut);
+		if (newQueue.Size() > 0) return SearchChildrenHelper(newQueue, key, scopePtrOut);
 
 		if (scopePtrOut) *scopePtrOut = nullptr;
 		return nullptr;

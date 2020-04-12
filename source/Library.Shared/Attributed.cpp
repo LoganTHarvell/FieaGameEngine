@@ -80,24 +80,24 @@ namespace Library
 #pragma endregion Boolean Operators
 
 #pragma region Accessors
-	bool Attributed::IsAttribute(const KeyType& name)
+	bool Attributed::IsAttribute(const KeyType& key)
 	{
-		return Find(name) != nullptr;
+		return Find(key) != nullptr;
 	}
 
-	bool Attributed::IsPrescribedAttribute(const KeyType& name)
+	bool Attributed::IsPrescribedAttribute(const KeyType& key)
 	{
 		for (std::size_t i = 0; i < mNumPrescribed; ++i)
 		{
-			if (mPairPtrs[i]->first == name) return true;
+			if (mPairPtrs[i]->first == key) return true;
 		}
 
 		return false;
 	}
 
-	bool Attributed::IsAuxiliaryAttribute(const KeyType& name)
+	bool Attributed::IsAuxiliaryAttribute(const KeyType& key)
 	{
-		return !IsPrescribedAttribute(name);
+		return !IsPrescribedAttribute(key);
 	}
 
 	void Attributed::ForEachPrescribed(std::function<void(Attribute&)> functor)
@@ -132,14 +132,14 @@ namespace Library
 		}
 	}
 	
-	Attributed::DataType& Attributed::AppendAuxiliaryAttribute(const KeyType& name)
+	Attributed::DataType& Attributed::AppendAuxiliaryAttribute(const KeyType& key)
 	{
-		if (IsPrescribedAttribute(name))
+		if (IsPrescribedAttribute(key))
 		{
 			throw std::runtime_error("Attribute is prescribed.");
 		}
 
-		return Append(name);
+		return Append(key);
 	}
 #pragma endregion Accessors
 
