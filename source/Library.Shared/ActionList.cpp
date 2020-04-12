@@ -47,6 +47,24 @@ namespace Library
 		return mActions;
 	}
 
+	Action* ActionList::CreateAction(const std::string& className, const std::string& name)
+	{
+		Scope* newScope = Factory<Scope>::Create(className);
+
+		if (newScope)
+		{
+			assert(newScope->Is(Action::TypeIdClass()));
+
+			Action* newAction = static_cast<Action*>(newScope);
+			newAction->SetName(name);
+
+			Adopt(*newScope, ActionsKey);
+			return newAction;
+		}
+
+		return nullptr;
+	}
+
 	void ActionList::Update(WorldState& worldState)
 	{
 		for (std::size_t i = 0; i < mActions.Size(); ++i)

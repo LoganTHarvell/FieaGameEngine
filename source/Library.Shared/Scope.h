@@ -239,7 +239,7 @@ namespace Library
 		/// </summary>
 		/// <param name="key">KeyType value associated with the DataType value to be found.</param>
 		/// <returns>If found, a pointer to the DataType value. Otherwise, nullptr.</returns>
-		DataType* Find(const KeyType& key);
+		virtual DataType* Find(const KeyType& key);
 
 		/// <summary>
 		/// Finds the DataType value associated with the given KeyType value, if it exists.
@@ -275,7 +275,7 @@ namespace Library
 		/// <param name="key">KeyType value of the Attribute to be found.</param>
 		/// <param name="scopePtrOut">Output parameter that points to the Scope which owns the found Attribute.</param>
 		/// <returns>If found, a pointer to the DataType value of the Attribute. Otherwise, nullptr.</returns>
-		virtual DataType* Search(const KeyType& key, Scope** scopePtrOut=nullptr);
+		DataType* Search(const KeyType& key, Scope** scopePtrOut=nullptr);
 
 		/// <summary>
 		/// Performs a breadth-first search on the scope and its ancestors for a Attribute with a matching KeyType value.
@@ -283,7 +283,7 @@ namespace Library
 		/// <param name="key">Key value of the Attribute to be found.</param>
 		/// <param name="scopePtrOut">Output parameter that points to the Scope which owns the found Attribute.</param>
 		/// <returns>If found, a pointer to the DataType value of the Attribute. Otherwise, nullptr.</returns>
-		virtual const DataType* Search(const KeyType& key, const Scope** scopePtrOut=nullptr) const;
+		const DataType* Search(const KeyType& key, const Scope** scopePtrOut=nullptr) const;
 
 		/// <summary>
 		/// Performs a breadth-first search on the scope and its children for a Attribute with a matching KeyType value.

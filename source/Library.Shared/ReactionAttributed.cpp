@@ -17,14 +17,31 @@ namespace Library
 	ReactionAttributed::ReactionAttributed(const std::string& name, const Subtype& subtype) : Reaction(TypeIdClass(), name),
 		mSubtype(subtype)
 	{
+		Event<EventMessageAttributed>::Subscribe(*this);
+	}
+
+	ReactionAttributed::~ReactionAttributed()
+	{
+		Event<EventMessageAttributed>::Unsubscribe(*this);
+	}
+
+	ReactionAttributed::ReactionAttributed(const ReactionAttributed& rhs) : Reaction(rhs)
+	{
+		Event<EventMessageAttributed>::Subscribe(*this);
+	}
+
+	ReactionAttributed::ReactionAttributed(ReactionAttributed&& rhs) noexcept : Reaction(rhs)
+	{
+		Event<EventMessageAttributed>::Subscribe(*this);
 	}
 
 	ReactionAttributed::ReactionAttributed(const RTTI::IdType typeId, const std::string& name, const Subtype& subtype) : Reaction(typeId, name),
 		mSubtype(subtype)
 	{
+		Event<EventMessageAttributed>::Subscribe(*this);
 	}
 
-	gsl::owner<Library::Scope*> ReactionAttributed::Clone() const
+	gsl::owner<Scope*> ReactionAttributed::Clone() const
 	{
 		return new ReactionAttributed(*this);
 	}
@@ -49,16 +66,15 @@ namespace Library
 		}
 	}
 
-	ReactionAttributed::DataType* ReactionAttributed::Search(const KeyType& key, Scope** scopePtrOut)
+	ReactionAttributed::DataType* ReactionAttributed::Find(const KeyType& key)
 	{
 		DataType* result = nullptr;
 
 		if (!mParameterStack.IsEmpty())
 		{
 			result = mParameterStack.Top().Find(key);
-			if (scopePtrOut) scopePtrOut = nullptr;
 		}
 		
-		return result ? result : ActionList::Search(key, scopePtrOut);
+		return result ? result : ActionList::Find(key);
 	}
 }

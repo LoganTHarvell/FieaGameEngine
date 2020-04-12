@@ -9,10 +9,10 @@ namespace Library
 #pragma endregion Special Members
 
 #pragma region RTTI Overrides
-	std::string Reaction::ToString() const
+	inline std::string Reaction::ToString() const
 	{
 		std::ostringstream oss;
-		oss << "Reaction";
+		oss << Name() << "(Reaction)";
 		return oss.str();
 	}
 #pragma endregion RTTI Overrides

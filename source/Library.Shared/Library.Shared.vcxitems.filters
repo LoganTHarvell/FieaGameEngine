@@ -71,6 +71,9 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)EventMessageAttributed.cpp">
       <Filter>Core\Entity System\Actions\Reaction</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)ActionEvent.cpp">
+      <Filter>Core\Entity System\Actions\Reaction</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />

@@ -31,13 +31,13 @@ namespace Library
 		/// <summary>
 		/// Default destructor.
 		/// </summary>
-		virtual ~ReactionAttributed() override = default;
+		virtual ~ReactionAttributed() override;
 
 		/// <summary>
 		/// Copy constructor.
 		/// </summary>
 		/// <param name="rhs">ReactionAttributed to be copied.</param>
-		ReactionAttributed(const ReactionAttributed& rhs) = default;
+		ReactionAttributed(const ReactionAttributed& rhs);
 
 		/// <summary>
 		/// Copy assignment operator.
@@ -50,7 +50,7 @@ namespace Library
 		/// Move constructor.
 		/// </summary>
 		/// <param name="rhs">ReactionAttributed to be moved.</param>
-		ReactionAttributed(ReactionAttributed&& rhs) noexcept = default;
+		ReactionAttributed(ReactionAttributed&& rhs) noexcept;
 
 		/// <summary>
 		/// Move assignment operator.
@@ -73,7 +73,7 @@ namespace Library
 		/// Virtual copy constructor.
 		/// </summary>
 		/// <returns>Owning pointer to a newly heap allocated copy of the ReactionAttributed.</returns>
-		virtual gsl::owner<Library::Scope*> Clone() const override;
+		virtual gsl::owner<Scope*> Clone() const override;
 #pragma endregion Virtual Copy Constructor
 
 #pragma region Event Subscriber Overrides
@@ -88,13 +88,12 @@ namespace Library
 #pragma region Scope Overrides
 	public:
 		/// <summary>
-		/// Search override that first searches the top of the parameter stack, 
-		/// then performs the base class Search implementation.
+		/// Override for the Scope Find method to first look in the parameter stack for an Attribute.
+		/// Finds the DataType value associated with the given KeyType value, if it exists.
 		/// </summary>
-		/// <param name="key">KeyType value of the Attribute to be found.</param>
-		/// <param name="scopePtrOut">Output parameter that points to the Scope which owns the found Attribute.</param>
-		/// <returns>If found, a pointer to the DataType value of the Attribute. Otherwise, nullptr.</returns>
-		virtual DataType* Search(const KeyType& key, Scope** scopePtrOut=nullptr) override;
+		/// <param name="key">KeyType value associated with the DataType value to be found.</param>
+		/// <returns>If found, a pointer to the DataType value. Otherwise, nullptr.</returns>
+		virtual DataType* Find(const KeyType& key);
 #pragma endregion Scope Overrides
 
 #pragma region Data Members

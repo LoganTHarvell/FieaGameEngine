@@ -301,8 +301,7 @@ namespace Library
 
 	const Scope::DataType* Scope::Find(const KeyType& key) const
 	{
-		Table::ConstIterator it = mTable.Find(key);
-		return it != mTable.end() ? &it->second : nullptr;
+		return const_cast<Scope*>(this)->Find(key);
 	}
 
 	std::pair<Scope::DataType*, std::size_t> Scope::FindScope(const Scope& scope)

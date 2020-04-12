@@ -103,6 +103,14 @@ namespace Library
 		/// </summary>
 		/// <returns>Reference to the Action objects.</returns>
 		const DataType& Actions() const;
+
+		/// <summary>
+		/// Generates an Action class and adopts it into this Sector.
+		/// </summary>
+		/// <param name="className">Class name of an Action or Action subclass to be instantiated.</param>
+		/// <param name="name">Name of the newly created Action.</param>
+		/// <returns>Reference to the newly heap allocated Action.</returns>
+		Action* CreateAction(const std::string& className, const std::string& name);
 #pragma endregion Accessors
 
 #pragma region Game Loop
