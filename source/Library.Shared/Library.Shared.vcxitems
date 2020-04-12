@@ -24,12 +24,14 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Attributed.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Datum.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Entity.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)EventMessageAttributed.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)EventPublisher.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)EventQueue.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)GameClock.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)GameTime.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)JsonParseMaster.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)JsonScopeParseHelper.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ReactionAttributed.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Sector.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)TypeManager.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Utility.cpp" />
@@ -50,6 +52,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Action.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ActionCreate.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ActionDestroy.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ActionEvent.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ActionExpression.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ActionIncrement.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ActionList.h" />
@@ -60,6 +63,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)DefaultHash.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Entity.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Event.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)EventMessageAttributed.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)EventPublisher.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)EventQueue.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)IEventSubscriber.h" />
@@ -70,6 +74,8 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)IJsonParseHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)JsonParseMaster.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)JsonScopeParseHelper.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Reaction.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ReactionAttributed.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Sector.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Stack.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)TypeManager.h" />
@@ -92,11 +98,13 @@
     <None Include="$(MSBuildThisFileDirectory)DefaultEquality.inl" />
     <None Include="$(MSBuildThisFileDirectory)DefaultHash.inl" />
     <None Include="$(MSBuildThisFileDirectory)Event.inl" />
+    <None Include="$(MSBuildThisFileDirectory)EventMessageAttributed.inl" />
     <None Include="$(MSBuildThisFileDirectory)EventPublisher.inl" />
     <None Include="$(MSBuildThisFileDirectory)EventQueue.inl" />
     <None Include="$(MSBuildThisFileDirectory)Factory.inl" />
     <None Include="$(MSBuildThisFileDirectory)HashMap.inl" />
     <None Include="$(MSBuildThisFileDirectory)JsonParseMaster.inl" />
+    <None Include="$(MSBuildThisFileDirectory)Reaction.inl" />
     <None Include="$(MSBuildThisFileDirectory)Scope.inl" />
     <None Include="$(MSBuildThisFileDirectory)SList.inl" />
     <None Include="$(MSBuildThisFileDirectory)Stack.inl" />
