@@ -42,7 +42,7 @@ namespace Library
 			/// <summary>
 			/// Weak pointer to an Event as EventPublisher.
 			/// </summary>
-			std::weak_ptr<EventPublisher> Publisher;
+			std::shared_ptr<EventPublisher> Publisher;
 
 			/// <summary>
 			/// Time point at which the Event should be published.
@@ -99,7 +99,7 @@ namespace Library
 			/// <param name="publisher">Weak pointer to an Event as a EventPublisher.</param>
 			/// <param name="expireTime">TimePoint when the Event should expire.</param>
 			/// <param name="isExpired">Boolean denoting the EventEntry is expired.</param>
-			EventEntry(const std::weak_ptr<EventPublisher> publisher, const TimePoint expireTime, const bool isExpired);
+			EventEntry(const std::shared_ptr<EventPublisher> publisher, const TimePoint expireTime, const bool isExpired);
 #pragma endregion Special Members
 
 #pragma region Relational Operators
@@ -167,7 +167,7 @@ namespace Library
 		/// <param name="gameTime">Reference to a GameTime instance used to calculate the Event expire time.</param>
 		/// <param name="delay">Duration value in milliseconds to delay publishing the Event. Defaults to zero.</param>
 		/// <remarks>EventQueue capacity will not increase until the next call to Update.</remarks>
-		void Enqueue(const std::weak_ptr<EventPublisher> eventPublisher, const GameTime& gameTime, Duration delay=Duration(0));
+		void Enqueue(const std::shared_ptr<EventPublisher> eventPublisher, const GameTime& gameTime, Duration delay=Duration(0));
 
 		/// <summary>
 		/// Publishes all expired events, then dequeues expired EventEntry instances.

@@ -20,7 +20,7 @@ namespace Library
 	inline EventQueue::EventEntry::EventEntry(EventEntry&& rhs) noexcept : 
 		Publisher(rhs.Publisher), ExpireTime(rhs.ExpireTime), IsExpired(rhs.IsExpired)
 	{
-		rhs.Publisher.reset();
+		rhs.Publisher = nullptr;
 		rhs.ExpireTime = std::chrono::high_resolution_clock::time_point();
 		IsExpired = false;
 	}
@@ -31,22 +31,21 @@ namespace Library
 		ExpireTime = rhs.ExpireTime;
 		IsExpired = rhs.IsExpired;
 
-		rhs.Publisher.reset();
+		rhs.Publisher = nullptr;
 		rhs.ExpireTime = TimePoint();
 		IsExpired = false;
 
 		return *this;
 	}
 
-	inline EventQueue::EventEntry::EventEntry(const std::weak_ptr<EventPublisher> publisher, const TimePoint expireTime, const bool isExpired) :
+	inline EventQueue::EventEntry::EventEntry(const std::shared_ptr<EventPublisher> publisher, const TimePoint expireTime, const bool isExpired) :
 		Publisher(publisher), ExpireTime(expireTime), IsExpired(isExpired) 
 	{
 	}
 
 	inline bool EventQueue::EventEntry::operator==(const EventEntry& rhs) const noexcept
 	{
-		return !this->Publisher.expired() && !rhs.Publisher.expired()
-			&& this->Publisher.lock() == rhs.Publisher.lock();
+		return Publisher == rhs.Publisher;
 	}
 
 	inline bool EventQueue::EventEntry::operator!=(const EventEntry& rhs) const noexcept
@@ -73,7 +72,7 @@ namespace Library
 #pragma endregion Accessors
 	
 #pragma region Modifiers
-	inline void EventQueue::Enqueue(const std::weak_ptr<EventPublisher> eventPublisher, const GameTime& gameTime, Duration delay)
+	inline void EventQueue::Enqueue(const std::shared_ptr<EventPublisher> eventPublisher, const GameTime& gameTime, Duration delay)
 	{
 		EventEntry entry(eventPublisher, gameTime.CurrentTime() + delay, false);
 

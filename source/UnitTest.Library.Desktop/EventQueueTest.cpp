@@ -141,7 +141,6 @@ namespace EventTests
 			auto fooEvent2 = std::make_shared<Event<Foo>>(Foo(20));
 			queue.Enqueue(fooEvent1, gameTime);
 			queue.Enqueue(fooEvent2, gameTime, std::chrono::milliseconds(60 * 1000));
-			queue.Enqueue(std::make_shared<Event<Foo>>(Foo(30)), gameTime);
 
 			TestEventSubscriber subscriber;
 			Event<Foo>::Subscribe(subscriber);

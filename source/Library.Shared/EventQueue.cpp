@@ -25,18 +25,11 @@ namespace Library
 
 		for (EventEntry& entry : mQueue)
 		{
-			auto eventPublisher = entry.Publisher.lock();
+			assert(entry.Publisher);
 
-			if (eventPublisher)
+			if (gameTime.CurrentTime() >= entry.ExpireTime)
 			{
-				if (gameTime.CurrentTime() >= entry.ExpireTime)
-				{
-					eventPublisher->Publish();
-					entry.IsExpired = true;
-				}
-			}
-			else
-			{
+				entry.Publisher->Publish();
 				entry.IsExpired = true;
 			}
 		}
