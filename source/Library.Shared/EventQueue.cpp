@@ -25,10 +25,9 @@ namespace Library
 
 		for (EventEntry& entry : mQueue)
 		{
-			assert(entry.Publisher);
-
 			if (gameTime.CurrentTime() >= entry.ExpireTime)
 			{
+				assert(entry.Publisher);
 				entry.Publisher->Publish();
 				entry.IsExpired = true;
 			}

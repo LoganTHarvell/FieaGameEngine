@@ -18,20 +18,18 @@ namespace Library
 	}
 
 	inline EventQueue::EventEntry::EventEntry(EventEntry&& rhs) noexcept : 
-		Publisher(rhs.Publisher), ExpireTime(rhs.ExpireTime), IsExpired(rhs.IsExpired)
+		Publisher(std::move(rhs.Publisher)), ExpireTime(std::move(rhs.ExpireTime)), IsExpired(rhs.IsExpired)
 	{
-		rhs.Publisher = nullptr;
-		rhs.ExpireTime = std::chrono::high_resolution_clock::time_point();
+		rhs.ExpireTime = TimePoint();
 		IsExpired = false;
 	}
 
 	inline EventQueue::EventEntry& EventQueue::EventEntry::operator=(EventEntry&& rhs) noexcept
 	{
-		Publisher = rhs.Publisher;
-		ExpireTime = rhs.ExpireTime;
+		Publisher = std::move(rhs.Publisher);
+		ExpireTime = std::move(rhs.ExpireTime);
 		IsExpired = rhs.IsExpired;
 
-		rhs.Publisher = nullptr;
 		rhs.ExpireTime = TimePoint();
 		IsExpired = false;
 
@@ -74,6 +72,8 @@ namespace Library
 #pragma region Modifiers
 	inline void EventQueue::Enqueue(const std::shared_ptr<EventPublisher> eventPublisher, const GameTime& gameTime, Duration delay)
 	{
+		if (!eventPublisher) throw std::runtime_error("Attempted to Enqueue null pointer.");
+
 		EventEntry entry(eventPublisher, gameTime.CurrentTime() + delay, false);
 
 		if ((mQueue.Find(entry) != mQueue.end() && !mQueue.Find(entry)->IsExpired) || mPendingQueue.Find(entry) != mPendingQueue.end())
