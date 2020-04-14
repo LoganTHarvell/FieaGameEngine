@@ -9,6 +9,8 @@ using namespace std::string_literals;
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace UnitTests;
 
+using namespace std::chrono_literals;
+
 namespace EventTests
 {
 	class TestEventSubscriber final : public Foo, public IEventSubscriber
@@ -133,14 +135,12 @@ namespace EventTests
 
 		TEST_METHOD(Update)
 		{
-			GameClock clock;
 			GameTime gameTime;
-			clock.UpdateGameTime(gameTime);
 
 			auto fooEvent1 = std::make_shared<Event<Foo>>(Foo(10));
 			auto fooEvent2 = std::make_shared<Event<Foo>>(Foo(20));
 			queue.Enqueue(fooEvent1, gameTime);
-			queue.Enqueue(fooEvent2, gameTime, std::chrono::milliseconds(60 * 1000));
+			queue.Enqueue(fooEvent2, gameTime, 10ms);
 		
 			Assert::ExpectException<std::runtime_error>([&]
 			{
@@ -153,6 +153,16 @@ namespace EventTests
 			queue.Update(gameTime);
 			Assert::AreEqual(10, subscriber.Data());
 			Assert::AreEqual(1_z, queue.Size());
+
+			gameTime.SetCurrentTime(std::chrono::steady_clock::time_point(5ms));
+			queue.Update(gameTime);
+			Assert::AreEqual(10, subscriber.Data());
+			Assert::AreEqual(1_z, queue.Size());
+
+			gameTime.SetCurrentTime(std::chrono::steady_clock::time_point(10ms));
+			queue.Update(gameTime);
+			Assert::AreEqual(20, subscriber.Data());
+			Assert::AreEqual(0_z, queue.Size());
 		}
 
 		TEST_METHOD(ClearAndShrinkToFit)
@@ -174,14 +184,10 @@ namespace EventTests
 
 		TEST_METHOD(EnqueueInUpdate)
 		{
-			GameClock clock;
 			GameTime gameTime;
-			clock.UpdateGameTime(gameTime);
 
-			auto fooEvent1 = std::make_shared<Event<Foo>>(Foo(10));
-			auto fooEvent2 = std::make_shared<Event<Foo>>(Foo(20));
-			queue.Enqueue(fooEvent1, gameTime);
-			queue.Enqueue(fooEvent2, gameTime, std::chrono::milliseconds(60 * 1000));
+			auto fooEvent = std::make_shared<Event<Foo>>(Foo(10));
+			queue.Enqueue(fooEvent, gameTime);
 
 			TestUpdateEnqueue subscriber;
 			subscriber.queue = &queue;
@@ -189,7 +195,7 @@ namespace EventTests
 
 			queue.Update(gameTime);
 			Assert::AreEqual(10, subscriber.Data());
-			Assert::AreEqual(2_z, queue.Size());
+			Assert::AreEqual(1_z, queue.Size());
 		}
 
 		TEST_METHOD(ClearInUpdate)

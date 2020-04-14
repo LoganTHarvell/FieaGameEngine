@@ -1,6 +1,7 @@
 #include "pch.h"
 
 #include "ToStringSpecialization.h"
+
 #include "ReactionAttributed.h"
 #include "ActionEvent.h"
 #include "ActionIncrement.h"
@@ -146,7 +147,10 @@ namespace EntitySystemTests::ActionTests
 
 		TEST_METHOD(Update)
 		{
-			World world;
+			auto gameTime = std::make_shared<GameTime>();
+			auto eventQueue = std::make_shared<EventQueue>();
+
+			World world("World", gameTime.get(), eventQueue.get());
 			Entity* entity = world.CreateSector("Sector").CreateEntity("Entity", "Entity");
 
 			ReactionAttributed reaction;
@@ -159,21 +163,21 @@ namespace EntitySystemTests::ActionTests
 			ActionEvent* event = create->As<ActionEvent>();
 			auto parameter = event->AppendAuxiliaryAttribute("IntegerParameter") = 1;
 
-			Assert::AreEqual(0_z, world.GetEventQueue().Size());
+			Assert::AreEqual(0_z, world.GetWorldState().EventQueue->Size());
 
 			world.Update();
-			Assert::AreEqual(1_z, world.GetEventQueue().Size());
+			Assert::AreEqual(1_z, world.GetWorldState().EventQueue->Size());
 			Assert::IsNull(reaction.Search("IntegerParameter"));
 
 			world.Update();
-			Assert::AreEqual(1_z, world.GetEventQueue().Size());
+			Assert::AreEqual(1_z, world.GetWorldState().EventQueue->Size());
 			Assert::AreEqual(parameter, testReaction->As<ActionTestReaction>()->Data);
 
 			Event<EventMessageAttributed>::UnsubscribeAll();
 			Event<EventMessageAttributed>::SubscriberShrinkToFit();
 
-			world.GetEventQueue().Clear();
-			world.GetEventQueue().ShrinkToFit();
+			world.GetWorldState().EventQueue->Clear();
+			world.GetWorldState().EventQueue->ShrinkToFit();
 		}
 
 		TEST_METHOD(ToString)

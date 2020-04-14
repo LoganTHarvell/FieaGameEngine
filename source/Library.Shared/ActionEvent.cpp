@@ -38,19 +38,20 @@ namespace Library
 
 	void ActionEvent::Update(WorldState& worldState)
 	{
-		if (worldState.World)
+		const GameTime* gameTime = worldState.GameTime;
+
+		if (worldState.World && worldState.EventQueue && gameTime)
 		{
-			mEvent = std::make_shared<Event<EventMessageAttributed>>();
-			mEvent->Message().SetWorld(worldState.World);
-			mEvent->Message().SetSubtype(mSubtype);
+			auto event = std::make_shared<Event<EventMessageAttributed>>();
+			event->Message().SetWorld(worldState.World);
+			event->Message().SetSubtype(mSubtype);
 
 			ForEachAuxiliary([&](const Attribute& attribute)
 			{
-				mEvent->Message().AppendAuxiliaryAttribute(attribute.first) = attribute.second;
+				event->Message().AppendAuxiliaryAttribute(attribute.first) = attribute.second;
 			});
 
-			EventQueue& eventQueue = worldState.World->GetEventQueue();
-			eventQueue.Enqueue(mEvent, worldState.GetGameTime(), std::chrono::milliseconds(mDelay));
+			worldState.EventQueue->Enqueue(event, *gameTime, std::chrono::milliseconds(mDelay));
 		}
 	}
 

@@ -96,7 +96,9 @@ namespace Library
 		/// Default constructor.
 		/// </summary>
 		/// <param name="name">Name of the World.</param>
-		explicit World(const std::string& name=std::string());
+		/// <param name="gameTime">GameTime to be used in Update.</param>
+		/// <param name="eventQueue">EventQueue to be used in Update.</param>
+		explicit World(const std::string& name=std::string(), GameTime* gameTime=nullptr, EventQueue* eventQueue=nullptr);
 
 		/// <summary>
 		/// Default destructor.
@@ -107,27 +109,27 @@ namespace Library
 		/// Copy constructor.
 		/// </summary>
 		/// <param name="rhs">World to be copied.</param>
-		World(const World & rhs) = default;
+		World(const World& rhs) = default;
 
 		/// <summary>
 		/// Copy assignment operator.
 		/// </summary>
 		/// <param name="rhs">World to be copied.</param>
 		/// <returns>Newly copied into left hand side World.</returns>
-		World& operator=(const World & rhs) = default;
+		World& operator=(const World& rhs) = default;
 
 		/// <summary>
 		/// Move constructor.
 		/// </summary>
 		/// <param name="rhs">World to be moved.</param>
-		World(World && rhs) noexcept = default;
+		World(World&& rhs) noexcept;
 
 		/// <summary>
 		/// Move assignment operator.
 		/// </summary>
 		/// <param name="rhs">World to be moved.</param>
 		/// <returns>Newly moved into left hand side World.</returns>
-		World& operator=(World && rhs) noexcept = default;
+		World& operator=(World&& rhs) noexcept;
 #pragma endregion Special Members
 
 #pragma region Virtual Copy Constructor
@@ -152,18 +154,6 @@ namespace Library
 		/// </summary>
 		/// <returns>Reference to the WorldState associated with the World.</returns>
 		const WorldState& GetWorldState() const;
-
-		/// <summary>
-		/// Gets the EventQueue associated with the World.
-		/// </summary>
-		/// <returns>Reference to the EventQueue associated with the World.</returns>
-		EventQueue& GetEventQueue();
-
-		/// <summary>
-		/// Gets the EventQueue associated with the World.
-		/// </summary>
-		/// <returns>Reference to the EventQueue associated with the World.</returns>
-		const EventQueue& GetEventQueue() const;
 
 		/// <summary>
 		/// Gets the list of PendingChild data.
@@ -223,7 +213,7 @@ namespace Library
 		/// <summary>
 		/// Virtual override for representing the World as a std::string.
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>String representation of the World.</returns>
 		virtual std::string ToString() const override;
 #pragma endregion RTTI Overrides
 
@@ -238,19 +228,14 @@ namespace Library
 #pragma region Data Members
 	private:
 		/// <summary>
-		/// Convenience struct for passing the WorldState data in cascaded Update calls.
-		/// </summary>
-		WorldState mWorldState;
-
-		/// <summary>
 		/// Clock that tracks the game start time, current time, and update delta time.
 		/// </summary>
 		GameClock mGameClock;
 
 		/// <summary>
-		/// Queue of Events that are to be processed during Update.
+		/// Convenience struct for passing the WorldState data in cascaded Update calls.
 		/// </summary>
-		EventQueue mEventQueue;
+		WorldState mWorldState;
 
  		/// <summary>
  		/// Pending children to have an action performed during the end of an Update call.

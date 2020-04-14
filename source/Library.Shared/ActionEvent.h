@@ -106,11 +106,6 @@ namespace Library
 #pragma region Data Members
 	private:
 		/// <summary>
-		/// Pointer to an Event with an EventMessageAttributed message type to be Enqueued on Update.
-		/// </summary>
-		std::shared_ptr<Event<EventMessageAttributed>> mEvent;
-
-		/// <summary>
 		/// KeyType value for the Attribute of the Attribute to create.
 		/// </summary>
 		std::string mSubtype;

@@ -27,10 +27,42 @@ namespace Library
 		return typeInfo;
 	}
 
-	World::World(const std::string& name) : Attributed(TypeIdClass()), 
+	World::World(const std::string& name, GameTime* gameTime, EventQueue* eventQueue) : Attributed(TypeIdClass()), 
 		mName(name), mSectors(mPairPtrs[SectorsIndex]->second)
 	{
 		mWorldState.World = this;
+		mWorldState.GameTime = gameTime;
+		mWorldState.EventQueue = eventQueue;
+	}
+
+	World::World(World&& rhs) noexcept : Attributed(std::move(rhs)),
+		mName(rhs.mName), mSectors(mPairPtrs[SectorsIndex]->second)
+	{
+		mWorldState.World = this;
+		mWorldState.GameTime = rhs.mWorldState.GameTime;
+		mWorldState.EventQueue = rhs.mWorldState.EventQueue;
+
+		mName = std::move(rhs.mName);
+
+		rhs.mWorldState.GameTime = nullptr;
+		rhs.mWorldState.EventQueue = nullptr;
+	}
+
+	World& World::operator=(World&& rhs) noexcept
+	{
+		Attributed::operator=(std::move(rhs));
+		
+		mWorldState.World = this;
+		mWorldState.GameTime = rhs.mWorldState.GameTime;
+		mWorldState.EventQueue = rhs.mWorldState.EventQueue;
+
+		mName = std::move(rhs.mName);
+
+		rhs.mName.clear();
+		rhs.mWorldState.GameTime = nullptr;
+		rhs.mWorldState.EventQueue = nullptr;
+
+		return *this;
 	}
 
 	gsl::owner<Scope*> World::Clone() const
@@ -46,16 +78,6 @@ namespace Library
 	const WorldState& World::GetWorldState() const
 	{
 		return mWorldState;
-	}
-
-	EventQueue& World::GetEventQueue()
-	{
-		return mEventQueue;
-	}
-
-	const EventQueue& World::GetEventQueue() const
-	{
-		return mEventQueue;
 	}
 
 	World::PendingChildList& World::PendingChildren()
@@ -101,11 +123,15 @@ namespace Library
 
 	void World::Update()
 	{
-		GameTime currentGameTime = mWorldState.GetGameTime();
-		mGameClock.UpdateGameTime(currentGameTime);
-		mWorldState.SetGameTime(currentGameTime);
-
-		mEventQueue.Update(currentGameTime);
+		if (mWorldState.GameTime)
+		{
+			mGameClock.UpdateGameTime(*mWorldState.GameTime);
+		
+			if (mWorldState.EventQueue)
+			{
+				mWorldState.EventQueue->Update(*mWorldState.GameTime);
+			}
+		}
 
 		for (std::size_t i = 0; i < mSectors.Size(); ++i)
 		{
