@@ -39,7 +39,7 @@ namespace EntitySystemTests::ActionTests
 		}
 
 	public:
-		DataType Data{ 0 };
+		Data Data{ 0 };
 	};
 
 	ConcreteFactory(ActionTestReaction, Scope)
@@ -300,7 +300,7 @@ namespace EntitySystemTests::ActionTests
 
 			entity->Update(world.GetWorldState());
 			Assert::AreEqual(2_z, world.GetWorldState().EventQueue->Size());
-			Assert::AreEqual(Scope::DataType(0), testReaction->As<ActionTestReaction>()->Data);
+			Assert::AreEqual(Scope::Data(0), testReaction->As<ActionTestReaction>()->Data);
 
 			world.Update();
 			Assert::AreEqual(1_z, world.GetWorldState().EventQueue->Size());

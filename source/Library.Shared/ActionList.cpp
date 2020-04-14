@@ -37,12 +37,12 @@ namespace Library
 		return new ActionList(*this);
 	}
 
-	Action::DataType& ActionList::Actions()
+	Action::Data& ActionList::Actions()
 	{
 		return mActions;
 	}
 
-	const Action::DataType& ActionList::Actions() const
+	const Action::Data& ActionList::Actions() const
 	{
 		return mActions;
 	}

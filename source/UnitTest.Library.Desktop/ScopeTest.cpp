@@ -628,7 +628,7 @@ namespace ReflectionSystemTests
 			Scope copy = scope;
 
 			Scope& child0_0 = scope.AppendScope("child0") = copy;
-			Scope::DataType* data = scope.Find("child0");
+			Scope::Data* data = scope.Find("child0");
 			Assert::IsNotNull(data);
 
 			scope.AppendScope("child0") = copy;

@@ -154,7 +154,7 @@ namespace EntitySystemTests
 
 			bool isEntity = sectorClone->Is(Sector::TypeIdClass());
 
-			Sector::DataType* aux = sectorClone->Find("aux");
+			Sector::Data* aux = sectorClone->Find("aux");
 			int copiedAuxValue = aux ? aux->Get<int>() : 0;
 
 			delete sectorClone;

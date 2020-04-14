@@ -27,7 +27,7 @@ namespace Library
 		/// <summary>
 		/// Key value for the Subtype Attribute.
 		/// </summary>
-		inline static const KeyType SubtypeKey = "Subtype";
+		inline static const Key SubtypeKey = "Subtype";
 
 	public:
 		/// <summary>
@@ -114,7 +114,7 @@ namespace Library
 		/// Gets the Subtype value this message.
 		/// </summary>
 		/// <param name="subtype">World to be used to process this message.</param>
-		void SetSubtype(const KeyType& subtype);
+		void SetSubtype(const Key& subtype);
 #pragma endregion Accessors
 
 #pragma region Data Members

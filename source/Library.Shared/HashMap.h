@@ -22,42 +22,42 @@ namespace Library
 		/// <summary>
 		/// Pairs of TKey and TData values that make up the elements of the HashMap.
 		/// </summary>
-		using PairType = std::pair<const TKey, TData>;
+		using Pair = std::pair<const TKey, TData>;
 
 		/// <summary>
-		/// SList containing PairType values. Contains PairTypes that have hash collisions.
+		/// SList containing Pair values. Contains PairTypes that have hash collisions.
 		/// </summary>
-		using ChainType = SList<PairType>;
-
-		/// <summary>
-		/// Iterator for HashMap chains.
-		/// </summary>
-		using ChainIterator = typename ChainType::Iterator;
+		using Chain = SList<Pair>;
 
 		/// <summary>
 		/// Iterator for HashMap chains.
 		/// </summary>
-		using ChainConstIterator = typename ChainType::ConstIterator;
+		using ChainIterator = typename Chain::Iterator;
 
 		/// <summary>
-		/// Vector of ChainType elements hashed to an index, termed a bucket.
+		/// Iterator for HashMap chains.
 		/// </summary>
-		using BucketType = Vector<ChainType>;
+		using ChainConstIterator = typename Chain::ConstIterator;
+
+		/// <summary>
+		/// Vector of Chain elements hashed to an index, termed a bucket.
+		/// </summary>
+		using Bucket = Vector<Chain>;
 
 		/// <summary>
 		/// Iterator for HashMap buckets.
 		/// </summary>
-		using BucketIterator = typename BucketType::Iterator;
+		using BucketIterator = typename Bucket::Iterator;
 
 		/// <summary>
 		/// Iterator for HashMap buckets.
 		/// </summary>
-		using BucketConstIterator = typename BucketType::ConstIterator;
+		using BucketConstIterator = typename Bucket::ConstIterator;
 
 		/// <summary>
 		/// Value type for std::iterator_trait.
 		/// </summary>
-		using value_type = PairType;
+		using value_type = Pair;
 
 		/// <summary>
 		/// Hash functor type for computing hash codes from a TKey value.
@@ -100,17 +100,17 @@ namespace Library
 			/// <summary>
 			/// Value type for std::iterator_trait.
 			/// </summary>
-			using value_type = PairType;
+			using value_type = Pair;
 
 			/// <summary>
 			/// Pointer type for std::iterator_trait.
 			/// </summary>
-			using pointer = PairType*;
+			using pointer = Pair*;
 
 			/// <summary>
 			/// Reference type for std::iterator_trait.
 			/// </summary>
-			using reference = PairType&;
+			using reference = Pair&;
 
 			/// <summary>
 			/// Iterator category for std::iterator_trait.
@@ -132,8 +132,8 @@ namespace Library
 			/// Specialized constructor for creating an Iterator for a HashMap.
 			/// </summary>
 			/// <param name="HashMap">Source HashMap for the Iterator's values.</param>
-			/// <param name="bucketIterator">BucketIterator pointing to the target ChainType value.</param>
-			/// <param name="chainIterator">ChainIterator to the target PairType value.</param>
+			/// <param name="bucketIterator">BucketIterator pointing to the target Chain value.</param>
+			/// <param name="chainIterator">ChainIterator to the target Pair value.</param>
 			Iterator(HashMap& hashMap, const typename BucketIterator& bucketIterator=BucketIterator(), const typename ChainIterator& chainIterator=ChainIterator());
 
 		public:
@@ -143,7 +143,7 @@ namespace Library
 			/// <returns>Value of the current element of the HashMap.</returns>
 			/// <exception cref="runtime_error">Iterator invalid.</exception>
 			/// <exception cref="out_of_range">Iterator out of bounds.</exception>
-			PairType& operator*() const;
+			Pair& operator*() const;
 
 			/// <summary>
 			/// Member access operator.
@@ -151,7 +151,7 @@ namespace Library
 			/// <returns>Pointer to the value of the current element of the HashMap.</returns>
 			/// <exception cref="runtime_error">Invalid Iterator.</exception>
 			/// <exception cref="out_of_range">Iterator out of bounds.</exception>
-			PairType* operator->() const;
+			Pair* operator->() const;
 
 			/// <summary>
 			/// Equal operator.
@@ -190,12 +190,12 @@ namespace Library
 			HashMap* mOwner{ nullptr };
 
 			/// <summary>
-			/// Bucket iterator pointing to the current bucket with a chain of PairType entries.
+			/// Bucket iterator pointing to the current bucket with a chain of Pair entries.
 			/// </summary>
 			BucketIterator mBucketIterator;
 
 			/// <summary>
-			/// Chain iterator pointing to the current PairType in the chain of a bucket.
+			/// Chain iterator pointing to the current Pair in the chain of a bucket.
 			/// </summary>
 			ChainIterator mChainIterator;
 		};
@@ -224,17 +224,17 @@ namespace Library
 			/// <summary>
 			/// Value type for std::iterator_trait.
 			/// </summary>
-			using value_type = PairType;
+			using value_type = Pair;
 
 			/// <summary>
 			/// Pointer type for std::iterator_trait.
 			/// </summary>
-			using pointer = const PairType*;
+			using pointer = const Pair*;
 
 			/// <summary>
 			/// Reference type for std::iterator_trait.
 			/// </summary>
-			using reference = const PairType&;
+			using reference = const Pair&;
 
 			/// <summary>
 			/// Iterator category for std::iterator_trait.
@@ -262,8 +262,8 @@ namespace Library
 			/// Specialized constructor for creating an ConstIterator for a HashMap.
 			/// </summary>
 			/// <param name="HashMap">Source HashMap for the ConstIterator's values.</param>
-			/// <param name="bucketIterator">BucketIterator pointing to the target ChainType value.</param>
-			/// <param name="chainIterator">ChainIterator to the target PairType value.</param>
+			/// <param name="bucketIterator">BucketIterator pointing to the target Chain value.</param>
+			/// <param name="chainIterator">ChainIterator to the target Pair value.</param>
 			ConstIterator(const HashMap& hashMap, const typename BucketConstIterator& bucketIterator=BucketConstIterator(), const typename ChainConstIterator& chainIterator=ChainConstIterator());
 
 		public:
@@ -273,7 +273,7 @@ namespace Library
 			/// <returns>Value of the current element of the HashMap.</returns>
 			/// <exception cref="runtime_error">ConstIterator invalid.</exception>
 			/// <exception cref="out_of_range">ConstIterator out of bounds.</exception>
-			const PairType& operator*() const;
+			const Pair& operator*() const;
 
 			/// <summary>
 			/// Member access operator.
@@ -281,7 +281,7 @@ namespace Library
 			/// <returns>Pointer to the value of the current element of the HashMap.</returns>
 			/// <exception cref="runtime_error">Invalid ConstIterator.</exception>
 			/// <exception cref="out_of_range">ConstIterator out of bounds.</exception>
-			const PairType* operator->() const;
+			const Pair* operator->() const;
 
 			/// <summary>
 			/// Equal operator.
@@ -320,12 +320,12 @@ namespace Library
 			const HashMap* mOwner{ nullptr };
 
 			/// <summary>
-			/// Bucket iterator pointing to the current bucket with a chain of PairType entries.
+			/// Bucket iterator pointing to the current bucket with a chain of Pair entries.
 			/// </summary>
 			BucketConstIterator mBucketIterator;
 
 			/// <summary>
-			/// Chain iterator pointing to the current PairType in the chain of a bucket.
+			/// Chain iterator pointing to the current Pair in the chain of a bucket.
 			/// </summary>
 			ChainConstIterator mChainIterator;
 		};
@@ -381,26 +381,26 @@ namespace Library
 		/// <summary>
 		/// Initializer list constructor.
 		/// </summary>
-		/// <param name="rhs">List of PairType values for insertion.</param>
+		/// <param name="rhs">List of Pair values for insertion.</param>
 		/// <param name="bucketCount">Number of buckets to initialize for the HashMap. Cannot be zero.</param>
 		/// <param name="keyEqualityFunctor">Equality functor for comparing TKey values.</param>
 		/// <param name="hashFunctor">Hashing functor for creating hash codes from TKey values.</param>
 		/// <remarks cref="bucketCount">Asserts on zero bucketCount.</remarks>
-		HashMap(const std::initializer_list<PairType> rhs, const std::size_t bucketCount = DefaultBucketCount, KeyEqualityFunctor keyEqualityFunctor = DefaultEquality<TKey>(), const HashFunctor hashFunctor = DefaultHash<TKey>());
+		HashMap(const std::initializer_list<Pair> rhs, const std::size_t bucketCount = DefaultBucketCount, KeyEqualityFunctor keyEqualityFunctor = DefaultEquality<TKey>(), const HashFunctor hashFunctor = DefaultHash<TKey>());
 
 		/// <summary>
 		/// Initializer list assignment operator.
 		/// </summary>
 		/// <param name="rhs">List of values to be in the HashMap.</param>
 		/// <returns>Reference to the modified HashMap containing the new pairs.</returns>
-		HashMap& operator=(const std::initializer_list<PairType> rhs);
+		HashMap& operator=(const std::initializer_list<Pair> rhs);
 #pragma endregion Constructors, Destructor, and Assignment
 
 #pragma region Size and Capacity
 		/// <summary>
-		/// Getter method for the number of PairType values in the HashMap.
+		/// Getter method for the number of Pair values in the HashMap.
 		/// </summary>
-		/// <returns>Number of PairType values in the HashMap.</returns>
+		/// <returns>Number of Pair values in the HashMap.</returns>
 		std::size_t Size() const;
 
 		/// <summary>
@@ -515,14 +515,14 @@ namespace Library
 		const TData& operator[](const TKey& key) const;
 
 		/// <summary>
-		/// Checks if a PairType value with the given key is within the HashMap.
+		/// Checks if a Pair value with the given key is within the HashMap.
 		/// </summary>
 		/// <param name="key">Key of an element in the HashMap.</param>
 		/// <returns>True if the key exists in the HashMap, false otherwise.</returns>
 		bool ContainsKey(const TKey& key) const;
 
 		/// <summary>
-		/// Checks if a PairType value with the given key is within the HashMap.
+		/// Checks if a Pair value with the given key is within the HashMap.
 		/// </summary>
 		/// <param name="key">Key of an element in the HashMap.</param>
 		/// <param name="dataOut">Reference to be written with the associated TData value, if the key is found.</param>
@@ -532,23 +532,23 @@ namespace Library
 
 #pragma region Modifiers
 		/// <summary>
-		/// Attempts to insert a PairType
+		/// Attempts to insert a Pair
 		/// </summary>
-		/// <param name="entry">PairType element to be inserted.</param>
+		/// <param name="entry">Pair element to be inserted.</param>
 		/// <returns>As a pair, an Iterator to the entry matching the TKey value and a boolean indicating successful insertion.</returns>
-		std::pair<Iterator, bool> Insert(const PairType& entry);
+		std::pair<Iterator, bool> Insert(const Pair& entry);
 
 		/// <summary>
-		/// Removes a single PairType value from the HashMap given the corresponding TKey value.
+		/// Removes a single Pair value from the HashMap given the corresponding TKey value.
 		/// </summary>
 		/// <param name="key">TKey value to be searched for in the HashMap to be removed.</param>
 		/// <returns>True on successful remove, false otherwise.</returns>
 		bool Remove(const TKey& key);
 
 		/// <summary>
-		/// Removes a single PairType value from the HashMap given the corresponding TKey value.
+		/// Removes a single Pair value from the HashMap given the corresponding TKey value.
 		/// </summary>
-		/// <param name="it">Iterator pointing to the PairType value to be removed.</param>
+		/// <param name="it">Iterator pointing to the Pair value to be removed.</param>
 		/// <returns>True on successful remove, false otherwise.</returns>
 		bool Remove(const Iterator& it);
 
@@ -574,7 +574,7 @@ namespace Library
 		/// <summary>
 		/// HashMap of chain lists for storing key-value pairs according at a hashed index.
 		/// </summary>
-		BucketType mBuckets;
+		Bucket mBuckets;
 
 		/// <summary>
 		/// Number of elements in the HashMap.

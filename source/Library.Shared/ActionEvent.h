@@ -106,7 +106,7 @@ namespace Library
 #pragma region Data Members
 	private:
 		/// <summary>
-		/// KeyType value for the Attribute of the Attribute to create.
+		/// Key value for the Attribute of the Attribute to create.
 		/// </summary>
 		std::string mSubtype;
 

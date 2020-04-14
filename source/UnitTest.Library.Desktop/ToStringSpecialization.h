@@ -765,97 +765,97 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 	}
 #pragma endregion Vector ConstIterator
 
-#pragma region HashMap PairType
+#pragma region HashMap Pair
 	template<>
-	inline std::wstring ToString<HashMap<int, Foo>::PairType>(const HashMap<int, Foo>::PairType& t)
+	inline std::wstring ToString<HashMap<int, Foo>::Pair>(const HashMap<int, Foo>::Pair& t)
 	{
 		RETURN_WIDE_STRING(t.first);
 	}
 
 	template<>
-	inline std::wstring ToString<HashMap<int, Foo>::PairType>(const HashMap<int, Foo>::PairType* t)
+	inline std::wstring ToString<HashMap<int, Foo>::Pair>(const HashMap<int, Foo>::Pair* t)
 	{
 		RETURN_WIDE_STRING(t);
 	}
 
 	template<>
-	inline std::wstring ToString<HashMap<int, Foo>::PairType>(HashMap<int, Foo>::PairType* t)
+	inline std::wstring ToString<HashMap<int, Foo>::Pair>(HashMap<int, Foo>::Pair* t)
 	{
 		RETURN_WIDE_STRING(t);
 	}
 
 	template<>
-	inline std::wstring ToString<HashMap<double, Foo>::PairType>(const HashMap<double, Foo>::PairType& t)
+	inline std::wstring ToString<HashMap<double, Foo>::Pair>(const HashMap<double, Foo>::Pair& t)
 	{
 		RETURN_WIDE_STRING(t.first);
 	}
 
 	template<>
-	inline std::wstring ToString<HashMap<double, Foo>::PairType>(const HashMap<double, Foo>::PairType* t)
+	inline std::wstring ToString<HashMap<double, Foo>::Pair>(const HashMap<double, Foo>::Pair* t)
 	{
 		RETURN_WIDE_STRING(t);
 	}
 
 	template<>
-	inline std::wstring ToString<HashMap<double, Foo>::PairType>(HashMap<double, Foo>::PairType* t)
+	inline std::wstring ToString<HashMap<double, Foo>::Pair>(HashMap<double, Foo>::Pair* t)
 	{
 		RETURN_WIDE_STRING(t);
 	}
 
 	template<>
-	inline std::wstring ToString<HashMap<Foo, Foo>::PairType>(const HashMap<Foo, Foo>::PairType& t)
+	inline std::wstring ToString<HashMap<Foo, Foo>::Pair>(const HashMap<Foo, Foo>::Pair& t)
 	{
 		RETURN_WIDE_STRING(t.first.Data());
 	}
 
 	template<>
-	inline std::wstring ToString<HashMap<Foo, Foo>::PairType>(const HashMap<Foo, Foo>::PairType* t)
+	inline std::wstring ToString<HashMap<Foo, Foo>::Pair>(const HashMap<Foo, Foo>::Pair* t)
 	{
 		RETURN_WIDE_STRING(t);
 	}
 
 	template<>
-	inline std::wstring ToString<HashMap<Foo, Foo>::PairType>(HashMap<Foo, Foo>::PairType* t)
+	inline std::wstring ToString<HashMap<Foo, Foo>::Pair>(HashMap<Foo, Foo>::Pair* t)
 	{
 		RETURN_WIDE_STRING(t);
 	}
 
 	template<>
-	inline std::wstring ToString<HashMap<Bar, Foo>::PairType>(const HashMap<Bar, Foo>::PairType& t)
+	inline std::wstring ToString<HashMap<Bar, Foo>::Pair>(const HashMap<Bar, Foo>::Pair& t)
 	{
 		RETURN_WIDE_STRING(t.first.Data());
 	}
 
 	template<>
-	inline std::wstring ToString<HashMap<Bar, Foo>::PairType>(const HashMap<Bar, Foo>::PairType* t)
+	inline std::wstring ToString<HashMap<Bar, Foo>::Pair>(const HashMap<Bar, Foo>::Pair* t)
 	{
 		RETURN_WIDE_STRING(t);
 	}
 
 	template<>
-	inline std::wstring ToString<HashMap<Bar, Foo>::PairType>(HashMap<Bar, Foo>::PairType* t)
+	inline std::wstring ToString<HashMap<Bar, Foo>::Pair>(HashMap<Bar, Foo>::Pair* t)
 	{
 		RETURN_WIDE_STRING(t);
 	}
 
 	template<>
-	inline std::wstring ToString<HashMap<Bar, Bar>::PairType>(const HashMap<Bar, Bar>::PairType& t)
+	inline std::wstring ToString<HashMap<Bar, Bar>::Pair>(const HashMap<Bar, Bar>::Pair& t)
 	{
 		RETURN_WIDE_STRING(t.first.Data());
 	}
 
 	template<>
-	inline std::wstring ToString<HashMap<Bar, Bar>::PairType>(const HashMap<Bar, Bar>::PairType* t)
+	inline std::wstring ToString<HashMap<Bar, Bar>::Pair>(const HashMap<Bar, Bar>::Pair* t)
 	{
 		RETURN_WIDE_STRING(t);
 	}
 
 	template<>
-	inline std::wstring ToString<HashMap<Bar, Bar>::PairType>(HashMap<Bar, Bar>::PairType* t)
+	inline std::wstring ToString<HashMap<Bar, Bar>::Pair>(HashMap<Bar, Bar>::Pair* t)
 	{
 		RETURN_WIDE_STRING(t);
 	}
-#pragma endregion HashMap PairType
+#pragma endregion HashMap Pair
 
 #pragma region HashMap Iterator
 	template<>
@@ -1279,7 +1279,7 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 		}
 		catch (const std::exception&)
 		{
-			return L"DataType Unknown or empty."s;
+			return L"Data Unknown or empty."s;
 		}
 	}
 
@@ -1316,7 +1316,7 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 	}
 
 	template<>
-	inline std::wstring ToString<std::pair<Scope::DataType*, std::size_t>>(const std::pair<Scope::DataType*, std::size_t>& t)
+	inline std::wstring ToString<std::pair<Scope::Data*, std::size_t>>(const std::pair<Scope::Data*, std::size_t>& t)
 	{
 		try 
 		{
@@ -1325,12 +1325,12 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 		}
 		catch (const std::exception&)
 		{
-			return L"DataType Unknown"s;
+			return L"Data Unknown"s;
 		}
 	}
 
 	template<>
-	inline std::wstring ToString<std::pair<Scope::DataType*, std::size_t>>(const std::pair<Scope::DataType*, std::size_t>* t)
+	inline std::wstring ToString<std::pair<Scope::Data*, std::size_t>>(const std::pair<Scope::Data*, std::size_t>* t)
 	{
 		try
 		{
@@ -1339,12 +1339,12 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 		}
 		catch (const std::exception&)
 		{
-			return L"DataType Unknown"s;
+			return L"Data Unknown"s;
 		}
 	}
 
 	template<>
-	inline std::wstring ToString<std::pair<Scope::DataType*, std::size_t>>(std::pair<Scope::DataType*, std::size_t>* t)
+	inline std::wstring ToString<std::pair<Scope::Data*, std::size_t>>(std::pair<Scope::Data*, std::size_t>* t)
 	{
 		try
 		{
@@ -1353,12 +1353,12 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 		}
 		catch (const std::exception&)
 		{
-			return L"DataType Unknown"s;
+			return L"Data Unknown"s;
 		}
 	}
 
 	template<>
-	inline std::wstring ToString<std::pair<const Scope::DataType*, std::size_t>>(const std::pair<const Scope::DataType*, std::size_t>& t)
+	inline std::wstring ToString<std::pair<const Scope::Data*, std::size_t>>(const std::pair<const Scope::Data*, std::size_t>& t)
 	{
 		try 
 		{
@@ -1367,12 +1367,12 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 		}
 		catch (const std::exception&)
 		{
-			return L"DataType Unknown"s;
+			return L"Data Unknown"s;
 		}
 	}
 
 	template<>
-	inline std::wstring ToString<std::pair<const Scope::DataType*, std::size_t>>(const std::pair<const Scope::DataType*, std::size_t>* t)
+	inline std::wstring ToString<std::pair<const Scope::Data*, std::size_t>>(const std::pair<const Scope::Data*, std::size_t>* t)
 	{
 		try
 		{
@@ -1381,12 +1381,12 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 		}
 		catch (const std::exception&)
 		{
-			return L"DataType Unknown"s;
+			return L"Data Unknown"s;
 		}
 	}
 
 	template<>
-	inline std::wstring ToString<std::pair<const Scope::DataType*, std::size_t>>(std::pair<const Scope::DataType*, std::size_t>* t)
+	inline std::wstring ToString<std::pair<const Scope::Data*, std::size_t>>(std::pair<const Scope::Data*, std::size_t>* t)
 	{
 		try
 		{
@@ -1395,7 +1395,7 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 		}
 		catch (const std::exception&)
 		{
-			return L"DataType Unknown"s;
+			return L"Data Unknown"s;
 		}
 	}
 #pragma endregion Scope

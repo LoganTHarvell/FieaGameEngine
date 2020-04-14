@@ -32,7 +32,7 @@ namespace Library
 		{
 			if (tableEntryPtr->second.Type() == Types::Scope)
 			{
-				DataType data;
+				Data data;
 				data.SetType(Types::Scope);
 				
 				for (std::size_t i = 0; i < tableEntryPtr->second.Size(); ++i)
@@ -64,7 +64,7 @@ namespace Library
 		{
 			if (tableEntryPtr->second.Type() == Types::Scope)
 			{
-				DataType data;
+				Data data;
 				data.SetType(Types::Scope);
 				
 				for (std::size_t i = 0; i < tableEntryPtr->second.Size(); ++i)
@@ -150,7 +150,7 @@ namespace Library
 
 			if (tableEntry.second.Type() == Types::Scope)
 			{
-				DataType data;
+				Data data;
 				data.SetType(Types::Scope);
 
 				for (std::size_t i = 0; i < tableEntry.second.Size(); ++i)
@@ -159,7 +159,7 @@ namespace Library
 					mChildren.Back()->mParent = this;
 					data.PushBack(mChildren.Back());
 
-					auto [it, isNew] = mTable.Insert({ tableEntry.first, DataType(mChildren.Back()) });
+					auto [it, isNew] = mTable.Insert({ tableEntry.first, Data(mChildren.Back()) });
 					if (isNew) mPairPtrs.PushBack(&(*it));
 					else it->second.PushBack(mChildren.Back());
 				}
@@ -189,7 +189,7 @@ namespace Library
 
 			if (tableEntry.second.Type() == Types::Scope)
 			{
-				DataType data;
+				Data data;
 				data.SetType(Types::Scope);
 
 				for (std::size_t i = 0; i < tableEntry.second.Size(); ++i)
@@ -198,7 +198,7 @@ namespace Library
 					mChildren.Back()->mParent = this;
 					data.PushBack(mChildren.Back());
 
-					auto [it, isNew] = mTable.Insert({ tableEntry.first, DataType(mChildren.Back()) });
+					auto [it, isNew] = mTable.Insert({ tableEntry.first, Data(mChildren.Back()) });
 					if (isNew) mPairPtrs.PushBack(&(*it));
 					else it->second.PushBack(mChildren.Back());
 				}
@@ -226,7 +226,7 @@ namespace Library
 
 		for (const auto& pairPtr : mPairPtrs)
 		{
-			const DataType* rhsData = rhs.Find(pairPtr->first);
+			const Data* rhsData = rhs.Find(pairPtr->first);
 			if (!rhsData || pairPtr->second != *rhsData) return false;
 		}
 
@@ -280,31 +280,31 @@ namespace Library
 #pragma endregion Size and Capacity
 
 #pragma region Accessors
-	Scope::DataType& Scope::operator[](const KeyType& key)
+	Scope::Data& Scope::operator[](const Key& key)
 	{
 		return Append(key);
 	}
 
-	const Scope::DataType& Scope::operator[](const KeyType& key) const
+	const Scope::Data& Scope::operator[](const Key& key) const
 	{
-		const DataType* entry = Find(key);
+		const Data* entry = Find(key);
 		if (entry == nullptr) throw std::runtime_error("Name not found.");
 
 		return *entry;
 	}
 
-	Scope::DataType* Scope::Find(const KeyType& key)
+	Scope::Data* Scope::Find(const Key& key)
 	{
 		Table::Iterator it = mTable.Find(key);
 		return it != mTable.end() ? &it->second : nullptr;
 	}
 
-	const Scope::DataType* Scope::Find(const KeyType& key) const
+	const Scope::Data* Scope::Find(const Key& key) const
 	{
 		return const_cast<Scope*>(this)->Find(key);
 	}
 
-	std::pair<Scope::DataType*, std::size_t> Scope::FindScope(const Scope& scope)
+	std::pair<Scope::Data*, std::size_t> Scope::FindScope(const Scope& scope)
 	{
 		for (auto& pairPtr : mPairPtrs)
 		{
@@ -312,7 +312,7 @@ namespace Library
 			{
 				for (std::size_t i = 0; i < pairPtr->second.Size(); ++i)
 				{
-					if (&scope == pairPtr->second.Get<DataType::ScopePointer>(i))
+					if (&scope == pairPtr->second.Get<Data::ScopePointer>(i))
 					{
 						return { &pairPtr->second, i };
 					}
@@ -323,7 +323,7 @@ namespace Library
 		return { nullptr, 0 };
 	}
 
-	std::pair<const Scope::DataType*, std::size_t> Scope::FindScope(const Scope& scope) const
+	std::pair<const Scope::Data*, std::size_t> Scope::FindScope(const Scope& scope) const
 	{
 		for (auto& pairPtr : mPairPtrs)
 		{
@@ -331,7 +331,7 @@ namespace Library
 			{
 				for (std::size_t i = 0; i < pairPtr->second.Size(); ++i)
 				{
-					if (&scope == pairPtr->second.Get<DataType::ScopePointer>(i))
+					if (&scope == pairPtr->second.Get<Data::ScopePointer>(i))
 					{
 						return { &pairPtr->second, i };
 					}
@@ -342,9 +342,9 @@ namespace Library
 		return { nullptr, 0 };
 	}
 
-	Scope::DataType* Scope::Search(const KeyType& key, Scope** scopePtrOut)
+	Scope::Data* Scope::Search(const Key& key, Scope** scopePtrOut)
 	{
-		DataType* result = nullptr;
+		Data* result = nullptr;
 		Scope* parent = this;
 
 		while (parent != nullptr)
@@ -359,17 +359,17 @@ namespace Library
 		return result;
 	}
 
-	const Scope::DataType* Scope::Search(const KeyType& key, const Scope** scopePtrOut) const
+	const Scope::Data* Scope::Search(const Key& key, const Scope** scopePtrOut) const
 	{
 		return const_cast<Scope*>(this)->Search(key, const_cast<Scope**>(scopePtrOut));
 	}
 
-	Scope::DataType* Scope::SearchChildren(const KeyType& key, Scope** scopePtrOut)
+	Scope::Data* Scope::SearchChildren(const Key& key, Scope** scopePtrOut)
 	{
 		return SearchChildrenHelper({ this }, key, scopePtrOut);
 	}
 
-	const Scope::DataType* Scope::SearchChildren(const KeyType& key, const Scope** scopePtrOut) const
+	const Scope::Data* Scope::SearchChildren(const Key& key, const Scope** scopePtrOut) const
 	{
 		Vector queue = { const_cast<Scope*>(this) };
 		return queue.Front()->SearchChildrenHelper(queue, key, const_cast<Scope**>(scopePtrOut));
@@ -393,21 +393,21 @@ namespace Library
 #pragma endregion Accessors
 
 #pragma region Modifiers
-	Scope::DataType& Scope::Append(const KeyType& key)
+	Scope::Data& Scope::Append(const Key& key)
 	{
 		if (key.empty()) throw std::runtime_error("Name cannot be empty.");
 
-		auto [it, isNew] = mTable.Insert({ key, DataType() });
+		auto [it, isNew] = mTable.Insert({ key, Data() });
 		if (isNew) mPairPtrs.PushBack(&(*it));
 
 		return it->second;
 	}
 
-	Scope& Scope::AppendScope(const KeyType& key, const std::size_t capacity)
+	Scope& Scope::AppendScope(const Key& key, const std::size_t capacity)
 	{
 		if (key.empty()) throw std::runtime_error("Name cannot be empty.");
 
-		DataType* data = Find(key);
+		Data* data = Find(key);
 
 		if (data && data->Type() != Types::Unknown && data->Type() != Types::Scope)
 		{
@@ -424,7 +424,7 @@ namespace Library
 		}
 		else
 		{
-			mPairPtrs.PushBack(&(*mTable.Insert({ key, DataType(mChildren.Back()) }).first));
+			mPairPtrs.PushBack(&(*mTable.Insert({ key, Data(mChildren.Back()) }).first));
 		}
 
 		return *child;
@@ -443,13 +443,13 @@ namespace Library
 		return &child;
 	}
 
-	Scope& Scope::Adopt(Scope& child, const KeyType& key)
+	Scope& Scope::Adopt(Scope& child, const Key& key)
 	{
 		if (this == &child)			throw std::runtime_error("Cannot adopt self.");
 		if (IsAncestorOf(child))	throw std::runtime_error("Cannot adopt descendant.");
 		if (key.empty())			throw std::runtime_error("Name cannot be empty.");
 
-		DataType* data = Find(key);
+		Data* data = Find(key);
 
 		if (data && data->Type() != Types::Unknown && data->Type() != Types::Scope)
 		{
@@ -466,7 +466,7 @@ namespace Library
 		}
 		else
 		{
-			mPairPtrs.PushBack(&(*mTable.Insert({ key, DataType(mChildren.Back()) }).first));
+			mPairPtrs.PushBack(&(*mTable.Insert({ key, Data(mChildren.Back()) }).first));
 		}
 
 		return *mChildren.Back();
@@ -492,13 +492,13 @@ namespace Library
 #pragma endregion Modifiers
 
 #pragma region Helper Methods
-	Scope::DataType* Scope::SearchChildrenHelper(const Vector<Scope*>& queue, const KeyType& key, Scope** scopePtrOut)
+	Scope::Data* Scope::SearchChildrenHelper(const Vector<Scope*>& queue, const Key& key, Scope** scopePtrOut)
 	{
 		Vector<Scope*> newQueue;
 
 		for (auto& scopePtr : queue)
 		{
-			DataType* result = scopePtr->Find(key);
+			Data* result = scopePtr->Find(key);
 
 			if (result)
 			{

@@ -102,23 +102,23 @@ namespace Library
 		/// <summary>
 		/// Checks if an Attribute is associated with the given name.
 		/// </summary>
-		/// <param name="key">KeyType value to search for in the instance.</param>
+		/// <param name="key">Key value to search for in the instance.</param>
 		/// <returns>True if associated with an Attribute. Otherwise, false.</returns>
-		bool IsAttribute(const KeyType& key);
+		bool IsAttribute(const Key& key);
 
 		/// <summary>
 		/// Checks if a prescribed Attribute is associated with the given name.
 		/// </summary>
-		/// <param name="key">KeyType value to search for in the instance.</param>
+		/// <param name="key">Key value to search for in the instance.</param>
 		/// <returns>True if associated with an Attribute. Otherwise, false.</returns>
-		bool IsPrescribedAttribute(const KeyType& key);
+		bool IsPrescribedAttribute(const Key& key);
 
 		/// <summary>
 		/// Checks if an auxiliary Attribute is associated with the given name.
 		/// </summary>
-		/// <param name="key">KeyType value to search for in the instance.</param>
+		/// <param name="key">Key value to search for in the instance.</param>
 		/// <returns>True if associated with an Attribute. Otherwise, false.</returns>
-		bool IsAuxiliaryAttribute(const KeyType& key);
+		bool IsAuxiliaryAttribute(const Key& key);
 
 		/// <summary>
 		/// Gets the list of prescribed Attribute values.
@@ -147,11 +147,11 @@ namespace Library
 		
 #pragma region Modifiers
 		/// <summary>
-		/// Appends an empty DataType value to the instance as an auxiliary Attribute.
+		/// Appends an empty Data value to the instance as an auxiliary Attribute.
 		/// </summary>
-		/// <param name="key">KeyType value for the new Attribute to append.</param>
-		/// <returns>Reference to the DataType value associated with the name.</returns>
-		DataType& AppendAuxiliaryAttribute(const KeyType& key);
+		/// <param name="key">Key value for the new Attribute to append.</param>
+		/// <returns>Reference to the Data value associated with the name.</returns>
+		Data& AppendAuxiliaryAttribute(const Key& key);
 #pragma endregion Modifiers
 
 #pragma region RTTI Overrides
@@ -180,7 +180,7 @@ namespace Library
 		void Populate(const TypeManager::TypeInfo* typeInfo);
 
 		/// <summary>
-		/// Updates storage for all DataType values in the Scope with external storage.
+		/// Updates storage for all Data values in the Scope with external storage.
 		/// Recursively called to update any parent attributes registered.
 		/// </summary>
 		/// <param name="typeInfo">TypeInfo associated with the Attributed class.</param>

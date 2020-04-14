@@ -55,9 +55,9 @@ namespace Library
 			Scope& Target;
 
 			/// <summary>
-			/// KeyType value of the Target Attribute of the performed action.
+			/// Key value of the Target Attribute of the performed action.
 			/// </summary>
-			const KeyType* const AttributeKey;
+			const Key* const AttributeKey;
 		};
 
 		/// <summary>
@@ -71,12 +71,12 @@ namespace Library
 		/// <summary>
 		/// Key for the Name Attribute in the World.
 		/// </summary>
-		inline static const KeyType NameKey = "Name";
+		inline static const Key NameKey = "Name";
 
 		/// <summary>
 		/// Key for the Sectors Attribute in the World.
 		/// </summary>
-		inline static const KeyType SectorsKey = "Sectors";
+		inline static const Key SectorsKey = "Sectors";
 
 		/// <summary>
 		/// Index of the Sectors Attribute in the World.
@@ -183,13 +183,13 @@ namespace Library
 		/// Gets the data handle to the Sector objects contained in this World.
 		/// </summary>
 		/// <returns>Reference to the Sector objects.</returns>
-		DataType& Sectors();
+		Data& Sectors();
 
 		/// <summary>
 		/// Gets the data handle to the Sector objects contained in this World.
 		/// </summary>
 		/// <returns>Reference to the Sector objects.</returns>
-		const DataType& Sectors() const;
+		const Data& Sectors() const;
 
 		/// <summary>
 		/// Generates an Sector class and adopts it into this World.
@@ -250,7 +250,7 @@ namespace Library
 		/// <summary>
 		/// Collection of World objects within the Sectors prescribed Attribute.
 		/// </summary>
-		DataType& mSectors;
+		Data& mSectors;
 #pragma endregion Data Members
 	};
 }

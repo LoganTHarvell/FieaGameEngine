@@ -44,12 +44,12 @@ namespace Library
 		return scope.IsAncestorOf(*this);
 	}
 
-	inline Scope::DataType& Scope::operator[](const std::size_t index)
+	inline Scope::Data& Scope::operator[](const std::size_t index)
 	{
 		return mPairPtrs[index]->second;
 	}
 
-	inline const Scope::DataType& Scope::operator[](const std::size_t index) const
+	inline const Scope::Data& Scope::operator[](const std::size_t index) const
 	{
 		return mPairPtrs[index]->second;
 	}

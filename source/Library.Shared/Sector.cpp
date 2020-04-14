@@ -69,12 +69,12 @@ namespace Library
 		}
 	}
 
-	Entity::DataType& Sector::Entities()
+	Entity::Data& Sector::Entities()
 	{
 		return mEntities;
 	}
 
-	const Entity::DataType& Sector::Entities() const
+	const Entity::Data& Sector::Entities() const
 	{
 		return mEntities;
 	}

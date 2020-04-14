@@ -25,12 +25,12 @@ namespace Library
 		/// <summary>
 		/// Key for the Name Attribute in the Sector.
 		/// </summary>
-		inline static const KeyType NameKey = "Name";
+		inline static const Key NameKey = "Name";
 
 		/// <summary>
 		/// Key for the Entities Attribute in the Sector.
 		/// </summary>
-		inline static const KeyType EntitiesKey = "Entities";
+		inline static const Key EntitiesKey = "Entities";
 
 		/// <summary>
 		/// Index of the Entities Attribute in the Sector.
@@ -122,13 +122,13 @@ namespace Library
 		/// Gets the data handle to the Entity objects contained in this Sector.
 		/// </summary>
 		/// <returns>Reference to the Entity objects.</returns>
-		DataType& Entities();
+		Data& Entities();
 
 		/// <summary>
 		/// Gets the data handle to the Entity objects contained in this Sector.
 		/// </summary>
 		/// <returns>Reference to the Entity objects.</returns>
-		const DataType& Entities() const;
+		const Data& Entities() const;
 
 		/// <summary>
 		/// Generates an Entity class and adopts it into this Sector.
@@ -167,7 +167,7 @@ namespace Library
 		/// <summary>
 		/// Collection of Entity objects within the Entities prescribed Attribute.
 		/// </summary>
-		DataType& mEntities;
+		Data& mEntities;
 #pragma endregion Data Members
 	};
 

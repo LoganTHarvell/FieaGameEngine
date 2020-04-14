@@ -40,7 +40,7 @@ namespace Library
 	{
 		if (worldState.World && worldState.Entity)
 		{
-			DataType* scope = Find(NewScopeKey);
+			Data* scope = Find(NewScopeKey);
 
 			if (scope && scope->Type() == Types::Scope && scope->Size() > 0)
 			{

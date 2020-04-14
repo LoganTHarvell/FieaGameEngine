@@ -70,7 +70,7 @@ namespace Library
 		{
 			const auto& pairPtr = mPairPtrs[i];
 
-			const DataType* rhsData = rhs.Find(pairPtr->first);
+			const Data* rhsData = rhs.Find(pairPtr->first);
 			if (!rhsData || pairPtr->second != *rhsData) return false;
 		}
 
@@ -84,12 +84,12 @@ namespace Library
 #pragma endregion Boolean Operators
 
 #pragma region Accessors
-	bool Attributed::IsAttribute(const KeyType& key)
+	bool Attributed::IsAttribute(const Key& key)
 	{
 		return Find(key) != nullptr;
 	}
 
-	bool Attributed::IsPrescribedAttribute(const KeyType& key)
+	bool Attributed::IsPrescribedAttribute(const Key& key)
 	{
 		for (std::size_t i = 0; i < mNumPrescribed; ++i)
 		{
@@ -99,7 +99,7 @@ namespace Library
 		return false;
 	}
 
-	bool Attributed::IsAuxiliaryAttribute(const KeyType& key)
+	bool Attributed::IsAuxiliaryAttribute(const Key& key)
 	{
 		return !IsPrescribedAttribute(key);
 	}
@@ -136,7 +136,7 @@ namespace Library
 		}
 	}
 	
-	Attributed::DataType& Attributed::AppendAuxiliaryAttribute(const KeyType& key)
+	Attributed::Data& Attributed::AppendAuxiliaryAttribute(const Key& key)
 	{
 		if (IsPrescribedAttribute(key))
 		{
@@ -196,7 +196,7 @@ namespace Library
 
 		for (const auto& signature : typeInfo->signatures)
 		{
-			DataType& data = Append(signature.Key);
+			Data& data = Append(signature.Key);
 
 			if (!signature.IsInternal)
 			{

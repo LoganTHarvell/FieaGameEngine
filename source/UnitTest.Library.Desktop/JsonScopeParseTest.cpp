@@ -254,8 +254,8 @@ namespace JsonParseTests
 			parser.ParseFromFile(filename);
 
 			const Scope& scope = sharedData.GetScope();
-			const Scope::DataType* nestedScopeData1 = scope.Find("NestedScope1");
-			const Scope::DataType* nestedScopeData2 = scope.Find("NestedScope2");
+			const Scope::Data* nestedScopeData1 = scope.Find("NestedScope1");
+			const Scope::Data* nestedScopeData2 = scope.Find("NestedScope2");
 
 			Assert::IsNotNull(nestedScopeData1);
 			Assert::IsNotNull(nestedScopeData2);
@@ -289,7 +289,7 @@ namespace JsonParseTests
 			parser.ParseFromFile(filename);
 
 			const Scope& scope = sharedData.GetScope();
-			const Scope::DataType* nestedScopeData = scope.Find("NestedScopes");
+			const Scope::Data* nestedScopeData = scope.Find("NestedScopes");
 
 			Assert::IsNotNull(nestedScopeData);
 
@@ -403,7 +403,7 @@ namespace JsonParseTests
 			Assert::AreEqual(Scope::Types::Integer, scope.Find("IntegerNoValue")->Type());
 			Assert::AreEqual(0_z, scope.Find("IntegerNoValue")->Size());
 
-			const Scope::DataType* nestedScopeData = scope.Find("NestedScopesArray");
+			const Scope::Data* nestedScopeData = scope.Find("NestedScopesArray");
 			Assert::IsNotNull(nestedScopeData);
 			Assert::AreEqual(2_z, nestedScopeData->Size());
 

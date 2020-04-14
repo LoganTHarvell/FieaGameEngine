@@ -25,12 +25,12 @@ namespace Library
 		/// <summary>
 		/// Key for the Name Attribute in the Entity.
 		/// </summary>
-		inline static const KeyType NameKey = "Name";
+		inline static const Key NameKey = "Name";
 
 		/// <summary>
 		/// Key for the Actions Attribute in the ActionList.
 		/// </summary>
-		inline static const KeyType ActionsKey = "Actions";
+		inline static const Key ActionsKey = "Actions";
 
 		/// <summary>
 		/// Index of the Actions Attribute in the ActionList.
@@ -130,13 +130,13 @@ namespace Library
 		/// Gets the data handle to the Action objects contained in this Entity.
 		/// </summary>
 		/// <returns>Reference to the Action objects.</returns>
-		DataType& Actions();
+		Data& Actions();
 
 		/// <summary>
 		/// Gets the data handle to the Action objects contained in this Entity.
 		/// </summary>
 		/// <returns>Reference to the Action objects.</returns>
-		const DataType& Actions() const;
+		const Data& Actions() const;
 
 		/// <summary>
 		/// Generates an Action class and adopts it into this Sector.
@@ -175,7 +175,7 @@ namespace Library
 		/// <summary>
 		/// Collection of Action objects within the Actions prescribed Attribute.
 		/// </summary>
-		DataType& mActions;
+		Data& mActions;
 #pragma endregion Data Members
 	};
 

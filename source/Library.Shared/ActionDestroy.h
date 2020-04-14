@@ -104,9 +104,9 @@ namespace Library
 #pragma region Data Members
 	private:
 		/// <summary>
-		/// KeyType value of the Action to be destroyed.
+		/// Key value of the Action to be destroyed.
 		/// </summary>
-		KeyType mAttributeKey;
+		Key mAttributeKey;
 
 		/// <summary>
 		/// Name for the Attribute of the Attribute to create.

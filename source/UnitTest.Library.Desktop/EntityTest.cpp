@@ -166,7 +166,7 @@ namespace EntitySystemTests
 
 			bool isEntity = entityClone->Is(Entity::TypeIdClass());
 
-			Entity::DataType* aux = entityClone->Find("aux");
+			Entity::Data* aux = entityClone->Find("aux");
 			int copiedAuxValue = aux ? aux->Get<int>() : 0;
 
 			delete entityClone;

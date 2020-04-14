@@ -98,12 +98,12 @@ namespace Library
 		mName = name;
 	}
 
-	Sector::DataType& World::Sectors()
+	Sector::Data& World::Sectors()
 	{
 		return mSectors;
 	}
 
-	const Sector::DataType& World::Sectors() const
+	const Sector::Data& World::Sectors() const
 	{
 		return mSectors;
 	}

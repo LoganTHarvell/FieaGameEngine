@@ -74,12 +74,12 @@ namespace Library
 		}
 	}
 
-	Entity::DataType& Entity::Actions()
+	Entity::Data& Entity::Actions()
 	{
 		return mActions;
 	}
 
-	const Entity::DataType& Entity::Actions() const
+	const Entity::Data& Entity::Actions() const
 	{
 		return mActions;
 	}

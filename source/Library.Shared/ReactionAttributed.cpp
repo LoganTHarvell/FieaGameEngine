@@ -67,9 +67,9 @@ namespace Library
 #pragma endregion Event Subscriber Overrides
 
 #pragma region Scope Overrides
-	ReactionAttributed::DataType* ReactionAttributed::Find(const KeyType& key)
+	ReactionAttributed::Data* ReactionAttributed::Find(const Key& key)
 	{
-		DataType* result = nullptr;
+		Data* result = nullptr;
 
 		if (!mParameterStack.IsEmpty())
 		{

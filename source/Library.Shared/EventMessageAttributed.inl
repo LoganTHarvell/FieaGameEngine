@@ -23,7 +23,7 @@ namespace Library
 		return mSubtype;
 	}
 
-	inline void EventMessageAttributed::SetSubtype(const KeyType& subtype)
+	inline void EventMessageAttributed::SetSubtype(const Key& subtype)
 	{
 		mSubtype = subtype;
 	}

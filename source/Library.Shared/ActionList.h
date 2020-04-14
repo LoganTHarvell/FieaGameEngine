@@ -96,13 +96,13 @@ namespace Library
 		/// Gets the data handle to the Action objects contained in this ActionList.
 		/// </summary>
 		/// <returns>Reference to the Action objects.</returns>
-		DataType& Actions();
+		Data& Actions();
 
 		/// <summary>
 		/// Gets the data handle to the Action objects contained in this ActionList.
 		/// </summary>
 		/// <returns>Reference to the Action objects.</returns>
-		const DataType& Actions() const;
+		const Data& Actions() const;
 
 		/// <summary>
 		/// Generates an Action class and adopts it into this Sector.
@@ -136,7 +136,7 @@ namespace Library
 		/// <summary>
 		/// Collection of Action objects within the Actions prescribed Attribute.
 		/// </summary>
-		DataType& mActions;
+		Data& mActions;
 #pragma endregion Data Members
 	};
 

@@ -10,7 +10,7 @@ namespace Library
 	}
 
 	template<typename TKey, typename TData>
-	inline typename HashMap<TKey, TData>::PairType& HashMap<TKey, TData>::Iterator::operator*() const
+	inline typename HashMap<TKey, TData>::Pair& HashMap<TKey, TData>::Iterator::operator*() const
 	{
 		if (mOwner == nullptr)
 		{
@@ -21,7 +21,7 @@ namespace Library
 	}
 
 	template<typename TKey, typename TData>
-	inline typename HashMap<TKey, TData>::PairType* HashMap<TKey, TData>::Iterator::operator->() const
+	inline typename HashMap<TKey, TData>::Pair* HashMap<TKey, TData>::Iterator::operator->() const
 	{
 		return &(this->operator*());
 	}
@@ -96,7 +96,7 @@ namespace Library
 	}
 
 	template<typename TKey, typename TData>
-	inline typename const HashMap<TKey, TData>::PairType& HashMap<TKey, TData>::ConstIterator::operator*() const
+	inline typename const HashMap<TKey, TData>::Pair& HashMap<TKey, TData>::ConstIterator::operator*() const
 	{
 		if (mOwner == nullptr)
 		{
@@ -107,7 +107,7 @@ namespace Library
 	}
 
 	template<typename TKey, typename TData>
-	inline typename const HashMap<TKey, TData>::PairType* HashMap<TKey, TData>::ConstIterator::operator->() const
+	inline typename const HashMap<TKey, TData>::Pair* HashMap<TKey, TData>::ConstIterator::operator->() const
 	{
 		return &(this->operator*());
 	}
@@ -171,11 +171,11 @@ namespace Library
 #pragma region Constructors, Destructor, Assignment
 	template<typename TKey, typename TData>
 	inline HashMap<TKey, TData>::HashMap(const size_t bucketCount, const KeyEqualityFunctor keyEqualityFunctor, const HashFunctor hashFunctor) :
-		mBuckets(0, BucketType::EqualityFunctor()), mKeyEqualityFunctor(keyEqualityFunctor), mHashFunctor(hashFunctor)
+		mBuckets(0, Bucket::EqualityFunctor()), mKeyEqualityFunctor(keyEqualityFunctor), mHashFunctor(hashFunctor)
 	{		
 		assert(bucketCount > 0);
 
-		mBuckets.Resize(bucketCount, ChainType(ChainType::EqualityFunctor()));
+		mBuckets.Resize(bucketCount, Chain(Chain::EqualityFunctor()));
 	}
 
 	template<typename TKey, typename TData>
@@ -199,12 +199,12 @@ namespace Library
 	}
 
 	template<typename TKey, typename TData>
-	inline HashMap<TKey, TData>::HashMap(const std::initializer_list<PairType> rhs, const size_t bucketCount, const KeyEqualityFunctor keyEqualityFunctor, const HashFunctor hashFunctor) :
-		mBuckets(0, BucketType::EqualityFunctor()), mKeyEqualityFunctor(keyEqualityFunctor), mHashFunctor(hashFunctor)
+	inline HashMap<TKey, TData>::HashMap(const std::initializer_list<Pair> rhs, const size_t bucketCount, const KeyEqualityFunctor keyEqualityFunctor, const HashFunctor hashFunctor) :
+		mBuckets(0, Bucket::EqualityFunctor()), mKeyEqualityFunctor(keyEqualityFunctor), mHashFunctor(hashFunctor)
 	{
 		assert(bucketCount > 0);
 
-		mBuckets.Resize(bucketCount, ChainType(ChainType::EqualityFunctor()));
+		mBuckets.Resize(bucketCount, Chain(Chain::EqualityFunctor()));
 
 		for (auto pair : rhs)
 		{
@@ -213,7 +213,7 @@ namespace Library
 	}
 
 	template<typename TKey, typename TData>
-	inline HashMap<TKey, TData>& HashMap<TKey, TData>::operator=(const std::initializer_list<PairType> rhs)
+	inline HashMap<TKey, TData>& HashMap<TKey, TData>::operator=(const std::initializer_list<Pair> rhs)
 	{
 		Clear();
 
@@ -399,7 +399,7 @@ namespace Library
 
 #pragma region Modifiers
 	template<typename TKey, typename TData>
-	inline std::pair<typename HashMap<TKey, TData>::Iterator, bool> HashMap<TKey, TData>::Insert(const PairType& entry)
+	inline std::pair<typename HashMap<TKey, TData>::Iterator, bool> HashMap<TKey, TData>::Insert(const Pair& entry)
 	{
 		std::size_t index;
 		auto it = Find(entry.first, index);
@@ -435,7 +435,7 @@ namespace Library
 	template<typename TKey, typename TData>
 	inline void HashMap<TKey, TData>::Clear()
 	{
-		for (ChainType& chain : mBuckets)
+		for (Chain& chain : mBuckets)
 		{
 			chain.Clear();
 		}
@@ -450,7 +450,7 @@ namespace Library
 	{
 		indexOut = mHashFunctor(key) % mBuckets.Capacity();
 
-		ChainType& chain = mBuckets[indexOut];
+		Chain& chain = mBuckets[indexOut];
 
 		ChainIterator chainIterator = chain.begin();
 		for (; chainIterator != chain.end(); ++chainIterator)

@@ -208,7 +208,7 @@ namespace Library
 
 			if (stackFrame)
 			{
-				Scope::DataType& scopeData = *stackFrame->Context.Find(stackFrame->Key);
+				Scope::Data& scopeData = *stackFrame->Context.Find(stackFrame->Key);
 				scope = &scopeData[scopeData.Size() - 1];
 			}
 			else

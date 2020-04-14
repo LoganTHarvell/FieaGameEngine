@@ -112,7 +112,7 @@ namespace Library
 		/// <summary>
 		/// Algebraic expression evaluation result.
 		/// </summary>
-		DataType mResult;
+		Data mResult;
 
 		Stack<std::string> mTokenStack;
 
@@ -126,7 +126,7 @@ namespace Library
 		/// <summary>
 		/// Algebraic expression evaluation result pointer.
 		/// </summary>
-		DataType* mResultPtr{ &mResult };
+		Data* mResultPtr{ &mResult };
 #pragma endregion Prescribed Attributes
 #pragma endregion Data Members
 	};

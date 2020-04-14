@@ -40,14 +40,14 @@ namespace Library
 	{
 		if (worldState.Entity)
 		{
-			DataType* attribute = worldState.Entity->Find(mAttributeKey);
+			Data* attribute = worldState.Entity->Find(mAttributeKey);
 
 			if (attribute)
 			{
 				for (std::size_t i = 0; i < attribute->Size(); ++i)
 				{
 					Scope& scope = (*attribute)[i];
-					DataType* name = scope.Find("Name");
+					Data* name = scope.Find("Name");
 
 					if (name && *name == mTargetName)
 					{

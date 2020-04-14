@@ -37,7 +37,7 @@ namespace Library
 
 	void ActionIncrement::Update(WorldState&)
 	{
-		DataType* operand = Search(mOperand);
+		Data* operand = Search(mOperand);
 
 		if (operand && operand->Type() == Types::Integer && operand->Size() > 0)
 		{

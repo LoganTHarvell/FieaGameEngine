@@ -29,27 +29,27 @@ namespace Library
 		/// <summary>
 		/// Attribute key type.
 		/// </summary>
-		using KeyType = std::string;
+		using Key = std::string;
 
 		/// <summary>
 		/// Attribute data type.
 		/// </summary>
-		using DataType = Datum;
+		using Data = Datum;
 
 		/// <summary>
-		/// Types supported by DataType values.
+		/// Types supported by Data values.
 		/// </summary>
-		using Types = DataType::Types;
+		using Types = Data::Types;
 
 		/// <summary>
 		/// Table type defining a mapping names to data values.
 		/// </summary>
-		using Table = HashMap<KeyType, DataType>;
+		using Table = HashMap<Key, Data>;
 
 		/// <summary>
 		/// Attribute type defining a key and data value pair.
 		/// </summary>
-		using Attribute = Table::PairType;
+		using Attribute = Table::Pair;
 #pragma endregion Type Definitions and Constants
 
 #pragma region Constructors, Destructor, Assignment
@@ -100,10 +100,10 @@ namespace Library
 		/// <summary>
 		/// Initializer list constructor.
 		/// </summary>
-		/// <param name="rhs">List of PairType values for insertion.</param>
+		/// <param name="rhs">List of Pair values for insertion.</param>
 		/// <param name="capacity">Capacity to initialize for the Scope.</param>
 		/// <exception cref="std::runtime_error">Duplicate names found in the initializer list.</exception>
-		/// <remarks>DataType values are copied.</remarks>
+		/// <remarks>Data values are copied.</remarks>
 		Scope(const std::initializer_list<Attribute> rhs, const std::size_t capacity=0);
 
 		/// <summary>
@@ -112,7 +112,7 @@ namespace Library
 		/// <param name="rhs">List of values to be in the Scope.</param>
 		/// <returns>Reference to the modified Scope containing the new pairs.</returns>
 		/// <exception cref="std::runtime_error">Duplicate names found in the initializer list.</exception>
-		/// <remarks>DataType values are copied.</remarks>
+		/// <remarks>Data values are copied.</remarks>
 		Scope& operator=(const std::initializer_list<Attribute> rhs);
 
 		/// <summary>
@@ -202,104 +202,104 @@ namespace Library
 
 		/// <summary>
 		/// Subscript operator.
-		/// Gets a reference to the DataType value of the given KeyType value.
-		/// Appends a new default DataType value if one does not already exist.
+		/// Gets a reference to the Data value of the given Key value.
+		/// Appends a new default Data value if one does not already exist.
 		/// </summary>
 		/// <param name="key">Key value for the Attribute to be accessed or appended.</param>
-		/// <returns>Reference to the DataType value of the Attribute with the given KeyType value.</returns>
-		DataType& operator[](const KeyType& key);
+		/// <returns>Reference to the Data value of the Attribute with the given Key value.</returns>
+		Data& operator[](const Key& key);
 
 		/// <summary>
 		/// Subscript operator.
-		/// Gets a reference to a constant DataType value of the given KeyType value.
+		/// Gets a reference to a constant Data value of the given Key value.
 		/// </summary>
 		/// <param name="key">Key value for the Attribute to be accessed.</param>
-		/// <returns>Reference to the constant DataType value of the Attribute with the given KeyType value.</returns>
+		/// <returns>Reference to the constant Data value of the Attribute with the given Key value.</returns>
 		/// <exception cref="std::runtime_error">Key value not found.</exception>
-		const DataType& operator[](const KeyType& key) const;
+		const Data& operator[](const Key& key) const;
 
 		/// <summary>
 		/// Subscript operator.
-		/// Gets a reference to the DataType value at the given index.
+		/// Gets a reference to the Data value at the given index.
 		/// </summary>
 		/// <param name="index">Index for the Attribute to be accessed.</param>
-		/// <returns>Reference to the DataType value of the Attribute at the given index.</returns>
-		DataType& operator[](const std::size_t index);
+		/// <returns>Reference to the Data value of the Attribute at the given index.</returns>
+		Data& operator[](const std::size_t index);
 
 		/// <summary>
 		/// Subscript operator.
-		/// Gets a reference to the constant DataType value at the given index.
+		/// Gets a reference to the constant Data value at the given index.
 		/// </summary>
 		/// <param name="index">Index for the Attribute to be accessed.</param>
-		/// <returns>Reference to the constant DataType value of the Attribute at the given index.</returns>
-		const DataType& operator[](const std::size_t index) const;
+		/// <returns>Reference to the constant Data value of the Attribute at the given index.</returns>
+		const Data& operator[](const std::size_t index) const;
 
 		/// <summary>
-		/// Finds the DataType value associated with the given KeyType value, if it exists.
+		/// Finds the Data value associated with the given Key value, if it exists.
 		/// </summary>
-		/// <param name="key">KeyType value associated with the DataType value to be found.</param>
-		/// <returns>If found, a pointer to the DataType value. Otherwise, nullptr.</returns>
-		virtual DataType* Find(const KeyType& key);
+		/// <param name="key">Key value associated with the Data value to be found.</param>
+		/// <returns>If found, a pointer to the Data value. Otherwise, nullptr.</returns>
+		virtual Data* Find(const Key& key);
 
 		/// <summary>
-		/// Finds the DataType value associated with the given KeyType value, if it exists.
+		/// Finds the Data value associated with the given Key value, if it exists.
 		/// </summary>
 		/// <param name="key">Attribute key associated with the data to be found.</param>
-		/// <returns>If found, a pointer to the DataType value. Otherwise, nullptr.</returns>
-		const DataType* Find(const KeyType& key) const;
+		/// <returns>If found, a pointer to the Data value. Otherwise, nullptr.</returns>
+		const Data* Find(const Key& key) const;
 
 		/// <summary>
-		/// Gets a pointer to the constant KeyType value for the Attribute at the given index, if it exists.
+		/// Gets a pointer to the constant Key value for the Attribute at the given index, if it exists.
 		/// </summary>
 		/// <param name="index">Index of the Attribute with the key to be found.</param>
-		/// <returns> If found, pointer to the constant KeyType& value. Otherwise, nullptr.</returns>
-		const KeyType* FindName(const std::size_t index) const;
+		/// <returns> If found, pointer to the constant Key& value. Otherwise, nullptr.</returns>
+		const Key* FindName(const std::size_t index) const;
 
 		/// <summary>
-		/// Gets the DataType value and index of a given Scope.
+		/// Gets the Data value and index of a given Scope.
 		/// </summary>
 		/// <param name="scope">Scope to be found.</param>
-		/// <returns>If found, a pair of a pointer to the DataType value and the index within. Otherwise, nullptr and 0.</returns>
-		std::pair<DataType*, std::size_t> FindScope(const Scope& scope);
+		/// <returns>If found, a pair of a pointer to the Data value and the index within. Otherwise, nullptr and 0.</returns>
+		std::pair<Data*, std::size_t> FindScope(const Scope& scope);
 
 		/// <summary>
-		/// Gets the DataType value and index of a given Scope.
+		/// Gets the Data value and index of a given Scope.
 		/// </summary>
 		/// <param name="scope">Scope to be found.</param>
-		/// <returns>If found, a pair of a pointer to the DataType value and the index within. Otherwise, nullptr and 0.</returns>
-		std::pair<const DataType*, std::size_t> FindScope(const Scope& scope) const;
+		/// <returns>If found, a pair of a pointer to the Data value and the index within. Otherwise, nullptr and 0.</returns>
+		std::pair<const Data*, std::size_t> FindScope(const Scope& scope) const;
 
 		/// <summary>
-		/// Performs a breadth-first search on the scope and its ancestors for a Attribute with a matching KeyType value.
-		/// </summary>
-		/// <param name="key">KeyType value of the Attribute to be found.</param>
-		/// <param name="scopePtrOut">Output parameter that points to the Scope which owns the found Attribute.</param>
-		/// <returns>If found, a pointer to the DataType value of the Attribute. Otherwise, nullptr.</returns>
-		DataType* Search(const KeyType& key, Scope** scopePtrOut=nullptr);
-
-		/// <summary>
-		/// Performs a breadth-first search on the scope and its ancestors for a Attribute with a matching KeyType value.
+		/// Performs a breadth-first search on the scope and its ancestors for a Attribute with a matching Key value.
 		/// </summary>
 		/// <param name="key">Key value of the Attribute to be found.</param>
 		/// <param name="scopePtrOut">Output parameter that points to the Scope which owns the found Attribute.</param>
-		/// <returns>If found, a pointer to the DataType value of the Attribute. Otherwise, nullptr.</returns>
-		const DataType* Search(const KeyType& key, const Scope** scopePtrOut=nullptr) const;
+		/// <returns>If found, a pointer to the Data value of the Attribute. Otherwise, nullptr.</returns>
+		Data* Search(const Key& key, Scope** scopePtrOut=nullptr);
 
 		/// <summary>
-		/// Performs a breadth-first search on the scope and its children for a Attribute with a matching KeyType value.
+		/// Performs a breadth-first search on the scope and its ancestors for a Attribute with a matching Key value.
 		/// </summary>
 		/// <param name="key">Key value of the Attribute to be found.</param>
 		/// <param name="scopePtrOut">Output parameter that points to the Scope which owns the found Attribute.</param>
-		/// <returns>If found, a pointer to the DataType value of the Attribute. Otherwise, nullptr.</returns>
-		DataType* SearchChildren(const KeyType& key, Scope** scopePtrOut=nullptr);
+		/// <returns>If found, a pointer to the Data value of the Attribute. Otherwise, nullptr.</returns>
+		const Data* Search(const Key& key, const Scope** scopePtrOut=nullptr) const;
 
 		/// <summary>
-		/// Performs a breadth-first search on the scope and its children for a Attribute with a matching KeyType value.
+		/// Performs a breadth-first search on the scope and its children for a Attribute with a matching Key value.
 		/// </summary>
 		/// <param name="key">Key value of the Attribute to be found.</param>
 		/// <param name="scopePtrOut">Output parameter that points to the Scope which owns the found Attribute.</param>
-		/// <returns>If found, a pointer to the DataType value of the Attribute. Otherwise, nullptr.</returns>
-		const DataType* SearchChildren(const KeyType& key, const Scope** scopePtrOut=nullptr) const;
+		/// <returns>If found, a pointer to the Data value of the Attribute. Otherwise, nullptr.</returns>
+		Data* SearchChildren(const Key& key, Scope** scopePtrOut=nullptr);
+
+		/// <summary>
+		/// Performs a breadth-first search on the scope and its children for a Attribute with a matching Key value.
+		/// </summary>
+		/// <param name="key">Key value of the Attribute to be found.</param>
+		/// <param name="scopePtrOut">Output parameter that points to the Scope which owns the found Attribute.</param>
+		/// <returns>If found, a pointer to the Data value of the Attribute. Otherwise, nullptr.</returns>
+		const Data* SearchChildren(const Key& key, const Scope** scopePtrOut=nullptr) const;
 
 		/// <summary>
 		/// Performs an action iteratively on each Attribute in the Scope.
@@ -320,18 +320,18 @@ namespace Library
 		/// Appends a Attribute to the Scope with the given key and a default data value.
 		/// </summary>
 		/// <param name="key">Key value for the Attribute to be accessed or appended.</param>
-		/// <returns>Reference to the DataType value of the appended Attribute.</returns>
+		/// <returns>Reference to the Data value of the appended Attribute.</returns>
 		/// <exception cref="std::runtime_error">Key value cannot be empty.</exception>
-		DataType& Append(const KeyType& key);
+		Data& Append(const Key& key);
 
 		/// <summary>
 		/// Appends a Attribute to the Scope with the given key and a default Scope value, as a child.
 		/// </summary>
 		/// <param name="key">Key value for the Attribute to be accessed or appended with a child Scope.</param>
-		/// <returns>Reference to the DataType value of the appended Attribute.</returns>
+		/// <returns>Reference to the Data value of the appended Attribute.</returns>
 		/// <exception cref="std::runtime_error">Name cannot be empty.</exception>
 		/// <exception cref="std::runtime_error">Table entry already exists with a non-Scope type.</exception>
-		Scope& AppendScope(const KeyType& key, const std::size_t capacity=0);
+		Scope& AppendScope(const Key& key, const std::size_t capacity=0);
 
 		/// <summary>
 		/// Removes a child Scope, given its address.
@@ -344,9 +344,9 @@ namespace Library
 		/// Appends an existing Scope, calling Orphan as needed on the previous parent.
 		/// </summary>
 		/// <param name="child">Scope to copy and append.</param>
-		/// <param name="key">KeyType value of the Attribute that the child will be appended onto.</param>
+		/// <param name="key">Key value of the Attribute that the child will be appended onto.</param>
 		/// <returns>Reference to the newly adopted Scope.</returns>
-		Scope& Adopt(Scope& child, const KeyType& key);
+		Scope& Adopt(Scope& child, const Key& key);
 
 		/// <summary>
 		/// Clears all members of the scope.
@@ -358,13 +358,13 @@ namespace Library
 	private:
 		/// <summary>
 		/// SearchChildren helper method. 
-		/// Performs a breadth-first search on the Scope and its children for a Attribute with a matching KeyType value.
+		/// Performs a breadth-first search on the Scope and its children for a Attribute with a matching Key value.
 		/// </summary>
 		/// <param name="queue">Queue of Scope values to be searched.</param>
-		/// <param name="key">KeyType value of the Attribute to be found.</param>
+		/// <param name="key">Key value of the Attribute to be found.</param>
 		/// <param name="scopePtrOut">Output parameter that points to the Scope which owns the found Attribute.</param>
-		/// <returns>If found, a pointer to the DataType value of the Attribute. Otherwise, nullptr.</returns>
-		DataType* SearchChildrenHelper(const Vector<Scope*>& queue, const KeyType& key, Scope** scopePtrOut=nullptr);
+		/// <returns>If found, a pointer to the Data value of the Attribute. Otherwise, nullptr.</returns>
+		Data* SearchChildrenHelper(const Vector<Scope*>& queue, const Key& key, Scope** scopePtrOut=nullptr);
 #pragma endregion Helper Methods
 
 #pragma region RTTI Overrides

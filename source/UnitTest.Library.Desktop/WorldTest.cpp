@@ -181,7 +181,7 @@ namespace EntitySystemTests
 
 			bool isEntity = sectorClone->Is(World::TypeIdClass());
 
-			World::DataType* aux = sectorClone->Find("aux");
+			World::Data* aux = sectorClone->Find("aux");
 			int copiedAuxValue = aux ? aux->Get<int>() : 0;
 
 			delete sectorClone;

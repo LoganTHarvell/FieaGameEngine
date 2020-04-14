@@ -82,11 +82,11 @@ namespace Library
 	public:
 		/// <summary>
 		/// Override for the Scope Find method to first look in the parameter stack for an Attribute.
-		/// Finds the DataType value associated with the given KeyType value, if it exists.
+		/// Finds the Data value associated with the given Key value, if it exists.
 		/// </summary>
-		/// <param name="key">KeyType value associated with the DataType value to be found.</param>
-		/// <returns>If found, a pointer to the DataType value. Otherwise, nullptr.</returns>
-		virtual DataType* Find(const KeyType& key);
+		/// <param name="key">Key value associated with the Data value to be found.</param>
+		/// <returns>If found, a pointer to the Data value. Otherwise, nullptr.</returns>
+		virtual Data* Find(const Key& key);
 #pragma endregion Scope Overrides
 
 #pragma region Data Members
