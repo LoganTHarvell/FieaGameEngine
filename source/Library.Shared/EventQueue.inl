@@ -3,52 +3,9 @@
 namespace Library
 {
 #pragma region Event Entry
-	inline EventQueue::EventEntry::EventEntry(const EventEntry& rhs) :
-		Publisher(rhs.Publisher), ExpireTime(rhs.ExpireTime), IsExpired(rhs.IsExpired)
+	inline EventQueue::EventEntry::EventEntry(const std::shared_ptr<EventPublisher> publisher, const TimePoint& expireTime) :
+		Publisher(publisher), ExpireTime(expireTime)
 	{
-	}
-
-	inline EventQueue::EventEntry& EventQueue::EventEntry::operator=(const EventEntry& rhs)
-	{
-		Publisher = rhs.Publisher;
-		ExpireTime = rhs.ExpireTime;
-		IsExpired = rhs.IsExpired;
-
-		return *this;
-	}
-
-	inline EventQueue::EventEntry::EventEntry(EventEntry&& rhs) noexcept : 
-		Publisher(std::move(rhs.Publisher)), ExpireTime(std::move(rhs.ExpireTime)), IsExpired(rhs.IsExpired)
-	{
-		rhs.ExpireTime = TimePoint();
-		IsExpired = false;
-	}
-
-	inline EventQueue::EventEntry& EventQueue::EventEntry::operator=(EventEntry&& rhs) noexcept
-	{
-		Publisher = std::move(rhs.Publisher);
-		ExpireTime = std::move(rhs.ExpireTime);
-		IsExpired = rhs.IsExpired;
-
-		rhs.ExpireTime = TimePoint();
-		IsExpired = false;
-
-		return *this;
-	}
-
-	inline EventQueue::EventEntry::EventEntry(const std::shared_ptr<EventPublisher> publisher, const TimePoint expireTime, const bool isExpired) :
-		Publisher(publisher), ExpireTime(expireTime), IsExpired(isExpired) 
-	{
-	}
-
-	inline bool EventQueue::EventEntry::operator==(const EventEntry& rhs) const noexcept
-	{
-		return Publisher == rhs.Publisher;
-	}
-
-	inline bool EventQueue::EventEntry::operator!=(const EventEntry& rhs) const noexcept
-	{
-		return !operator==(rhs);
 	}
 #pragma endregion Event Entry
 
@@ -70,17 +27,11 @@ namespace Library
 #pragma endregion Accessors
 	
 #pragma region Modifiers
-	inline void EventQueue::Enqueue(const std::shared_ptr<EventPublisher> eventPublisher, const GameTime& gameTime, Duration delay)
+	inline void EventQueue::Enqueue(const std::shared_ptr<EventPublisher> eventPublisher, const TimePoint& expireTime)
 	{
 		if (!eventPublisher) throw std::runtime_error("Attempted to Enqueue null pointer.");
 
-		EventEntry entry(eventPublisher, gameTime.CurrentTime() + delay, false);
-
-		if ((mQueue.Find(entry) != mQueue.end() && !mQueue.Find(entry)->IsExpired) || mPendingQueue.Find(entry) != mPendingQueue.end())
-		{
-			throw std::runtime_error("Event already added.");
-		}
-
+		EventEntry entry(eventPublisher, expireTime);
 		mUpdating ? mPendingQueue.PushBack(entry) : mQueue.PushBack(entry);
 	}
 

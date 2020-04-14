@@ -121,6 +121,19 @@ namespace EntitySystemTests::ActionTests
 			delete action;
 		}
 
+		TEST_METHOD(CreateAction)
+		{
+			ActionList actionList;
+			
+			Assert::IsNull(actionList.CreateAction("", "Null"));
+			Assert::AreEqual(0_z, actionList.Actions().Size());
+
+			Action* created;
+			Assert::IsNotNull(created = actionList.CreateAction("ActionList", "NotNull"));
+			Assert::AreEqual(1_z, actionList.Actions().Size());
+			Assert::AreEqual(created, actionList.Actions()[0].As<Action>());
+		}
+
 		TEST_METHOD(Update)
 		{
 			Entity entity;

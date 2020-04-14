@@ -51,7 +51,7 @@ namespace Library
 				event->Message().AppendAuxiliaryAttribute(attribute.first) = attribute.second;
 			});
 
-			worldState.EventQueue->Enqueue(event, *gameTime, std::chrono::milliseconds(mDelay));
+			worldState.EventQueue->Enqueue(event, gameTime->CurrentTime() + std::chrono::milliseconds(mDelay));
 		}
 	}
 

@@ -52,13 +52,11 @@ namespace Library
 	{
 		Attributed::operator=(std::move(rhs));
 		
-		mWorldState.World = this;
 		mWorldState.GameTime = rhs.mWorldState.GameTime;
 		mWorldState.EventQueue = rhs.mWorldState.EventQueue;
 
 		mName = std::move(rhs.mName);
 
-		rhs.mName.clear();
 		rhs.mWorldState.GameTime = nullptr;
 		rhs.mWorldState.EventQueue = nullptr;
 

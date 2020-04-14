@@ -33,7 +33,20 @@ namespace Library
 	inline void Event<MessageT>::Unsubscribe(IEventSubscriber& eventSubscriber)
 	{
 		auto entry = sSubscriberList.Find({ &eventSubscriber, false });
-		if (entry != sSubscriberList.end()) entry->PendingRemove = true;
+	
+		if (entry != sSubscriberList.end())
+		{
+			entry->PendingRemove = true;
+		}
+		else
+		{
+			entry = sSubscribersPendingAdd.Find({ &eventSubscriber, false });
+			
+			if (entry != sSubscribersPendingAdd.end())
+			{
+				entry->PendingRemove = true;
+			}
+		}		
 	}
 
 	template<typename MessageT>

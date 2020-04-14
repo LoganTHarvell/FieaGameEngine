@@ -58,6 +58,41 @@ namespace EntitySystemTests
 			Assert::AreEqual(0_z, world.Find("Sectors")->Size());
 		}
 
+		TEST_METHOD(Move)
+		{
+			GameTime gameTime;
+			EventQueue eventQueue;
+			World world("World", &gameTime, &eventQueue);
+
+			World moveConstructed(std::move(world));
+			Assert::AreEqual("World"s, moveConstructed.Name());
+			Assert::IsNotNull(moveConstructed.GetWorldState().World);
+			Assert::AreEqual(&moveConstructed, moveConstructed.GetWorldState().World);
+			Assert::IsNotNull(moveConstructed.GetWorldState().GameTime);
+			Assert::AreEqual(&gameTime, moveConstructed.GetWorldState().GameTime);
+			Assert::IsNotNull(moveConstructed.GetWorldState().EventQueue);
+			Assert::AreEqual(&eventQueue, moveConstructed.GetWorldState().EventQueue);
+
+			Assert::IsTrue(world.Name().empty());
+			Assert::IsNull(world.GetWorldState().GameTime);
+			Assert::IsNull(world.GetWorldState().EventQueue);
+
+			World moveAssigned;
+			moveAssigned = std::move(moveConstructed);
+
+			Assert::AreEqual("World"s, moveAssigned.Name());
+			Assert::IsNotNull(moveAssigned.GetWorldState().World);
+			Assert::AreEqual(&moveAssigned, moveAssigned.GetWorldState().World);
+			Assert::IsNotNull(moveAssigned.GetWorldState().GameTime);
+			Assert::AreEqual(&gameTime, moveAssigned.GetWorldState().GameTime);
+			Assert::IsNotNull(moveAssigned.GetWorldState().EventQueue);
+			Assert::AreEqual(&eventQueue, moveAssigned.GetWorldState().EventQueue);
+
+			Assert::IsTrue(moveConstructed.Name().empty());
+			Assert::IsNull(moveConstructed.GetWorldState().GameTime);
+			Assert::IsNull(moveConstructed.GetWorldState().EventQueue);
+		}
+
 		TEST_METHOD(RTTITest)
 		{
 			World a;

@@ -28,11 +28,7 @@ namespace EventTests
 		virtual void Notify(EventPublisher& eventPublisher) override
 		{
 			Data() = int(static_cast<Event<Foo>&>(eventPublisher).Message().Data());
-
-			auto fooEvent = std::make_shared<Event<Foo>>();
-			
-			GameTime gameTime;
-			queue->Enqueue(fooEvent, gameTime);
+			queue->Enqueue(std::make_shared<Event<Foo>>());
 		}
 
 	public:
@@ -109,7 +105,7 @@ namespace EventTests
 			clock.UpdateGameTime(gameTime);
 
 			auto fooEvent = std::make_shared<Event<Foo>>();
-			queue.Enqueue(fooEvent, gameTime);
+			queue.Enqueue(fooEvent);
 			
 			Assert::AreEqual(1_z, queue.Size());
 			Assert::IsFalse(queue.IsEmpty());
@@ -124,13 +120,8 @@ namespace EventTests
 			gameTime.SetCurrentTime(std::chrono::high_resolution_clock::now());
 
 			auto fooEvent = std::make_shared<Event<Foo>>();
-			queue.Enqueue(fooEvent, gameTime);
+			queue.Enqueue(fooEvent);
 			Assert::AreEqual(1_z, queue.Size());
-
-			Assert::ExpectException<std::runtime_error>([&]
-			{
-				queue.Enqueue(fooEvent, gameTime);
-			});
 		}
 
 		TEST_METHOD(Update)
@@ -139,12 +130,12 @@ namespace EventTests
 
 			auto fooEvent1 = std::make_shared<Event<Foo>>(Foo(10));
 			auto fooEvent2 = std::make_shared<Event<Foo>>(Foo(20));
-			queue.Enqueue(fooEvent1, gameTime);
-			queue.Enqueue(fooEvent2, gameTime, 10ms);
+			queue.Enqueue(fooEvent1);
+			queue.Enqueue(fooEvent2, gameTime.CurrentTime() + 10ms);
 		
 			Assert::ExpectException<std::runtime_error>([&]
 			{
-				queue.Enqueue(nullptr, gameTime);
+				queue.Enqueue(nullptr);
 			});
 
 			TestEventSubscriber subscriber;
@@ -172,8 +163,8 @@ namespace EventTests
 
 			auto fooEvent1 = std::make_shared<Event<Foo>>();
 			auto fooEvent2 = std::make_shared<Event<Foo>>();
-			queue.Enqueue(fooEvent1, gameTime);
-			queue.Enqueue(fooEvent2, gameTime);
+			queue.Enqueue(fooEvent1);
+			queue.Enqueue(fooEvent2);
 			
 			queue.Clear();
 			Assert::IsTrue(queue.IsEmpty());
@@ -187,7 +178,7 @@ namespace EventTests
 			GameTime gameTime;
 
 			auto fooEvent = std::make_shared<Event<Foo>>(Foo(10));
-			queue.Enqueue(fooEvent, gameTime);
+			queue.Enqueue(fooEvent);
 
 			TestUpdateEnqueue subscriber;
 			subscriber.queue = &queue;
@@ -205,7 +196,7 @@ namespace EventTests
 			clock.UpdateGameTime(gameTime);
 
 			auto fooEvent = std::make_shared<Event<Foo>>(Foo(10));
-			queue.Enqueue(fooEvent, gameTime);
+			queue.Enqueue(fooEvent);
 
 			TestUpdateClear subscriber;
 			subscriber.queue = &queue;
@@ -223,7 +214,7 @@ namespace EventTests
 			clock.UpdateGameTime(gameTime);
 
 			auto fooEvent = std::make_shared<Event<Foo>>(Foo(10));
-			queue.Enqueue(fooEvent, gameTime);
+			queue.Enqueue(fooEvent);
 
 			TestUpdateShrinkToFit subscriber;
 			subscriber.queue = &queue;

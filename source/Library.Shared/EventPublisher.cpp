@@ -21,6 +21,7 @@ namespace Library
 		};
 
 		mSubscriberList->Erase(std::partition(mSubscriberList->begin(), mSubscriberList->end(), pendingRemove));
+		mSubscribersPendingAdd->Erase(std::partition(mSubscribersPendingAdd->begin(), mSubscribersPendingAdd->end(), pendingRemove));
 		
 		assert(mSubscribersPendingAdd);
 		mSubscriberList->Insert(mSubscriberList->end(), mSubscribersPendingAdd->begin(), mSubscribersPendingAdd->end());

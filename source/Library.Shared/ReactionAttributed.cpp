@@ -14,6 +14,7 @@
 
 namespace Library
 {
+#pragma region Special Members
 	ReactionAttributed::ReactionAttributed(const std::string& name, const Subtype& subtype) : Reaction(TypeIdClass(), name),
 		mSubtype(subtype)
 	{
@@ -34,18 +35,16 @@ namespace Library
 	{
 		Event<EventMessageAttributed>::Subscribe(*this);
 	}
+#pragma endregion Special Members
 
-	ReactionAttributed::ReactionAttributed(const RTTI::IdType typeId, const std::string& name, const Subtype& subtype) : Reaction(typeId, name),
-		mSubtype(subtype)
-	{
-		Event<EventMessageAttributed>::Subscribe(*this);
-	}
-
+#pragma region Virtual Copy Constructor
 	gsl::owner<Scope*> ReactionAttributed::Clone() const
 	{
 		return new ReactionAttributed(*this);
 	}
+#pragma endregion Virtual Copy Constructor
 
+#pragma region Event Subscriber Overrides
 	void ReactionAttributed::Notify(EventPublisher& eventPublisher)
 	{
 		assert(eventPublisher.Is(Event<EventMessageAttributed>::TypeIdClass()));
@@ -65,7 +64,9 @@ namespace Library
 			mParameterStack.Pop();
 		}
 	}
+#pragma endregion Event Subscriber Overrides
 
+#pragma region Scope Overrides
 	ReactionAttributed::DataType* ReactionAttributed::Find(const KeyType& key)
 	{
 		DataType* result = nullptr;
@@ -77,4 +78,5 @@ namespace Library
 		
 		return result ? result : ActionList::Find(key);
 	}
+#pragma endregion Scope Overrides
 }

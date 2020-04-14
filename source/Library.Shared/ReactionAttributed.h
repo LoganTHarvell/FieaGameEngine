@@ -58,13 +58,6 @@ namespace Library
 		/// <param name="rhs">ReactionAttributed to be moved.</param>
 		/// <returns>Newly moved into left hand side ReactionAttributed.</returns>
 		ReactionAttributed& operator=(ReactionAttributed&& rhs) noexcept = default;
-
-	protected:
-		/// <summary>
-		/// Specialized constructor for use by derived classes to ensure correct Attribute population.
-		/// </summary>
-		/// <param name="typeId">Type ID of the derived class.</param>
-		explicit ReactionAttributed(const RTTI::IdType typeId, const std::string& name=std::string(), const Subtype& subtype=Subtype());
 #pragma endregion Special Members
 
 #pragma region Virtual Copy Constructor

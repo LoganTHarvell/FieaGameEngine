@@ -1593,4 +1593,72 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 		}
 	}
 #pragma endregion World
+
+#pragma region GameTime
+	template<>
+	inline std::wstring ToString<GameTime>(const GameTime& t)
+	{
+		RETURN_WIDE_STRING(t.ElapsedGameTime().count());
+	}
+
+	template<>
+	inline std::wstring ToString<GameTime>(const GameTime* t)
+	{
+		try
+		{
+			RETURN_WIDE_STRING(t->ElapsedGameTime().count());
+		}
+		catch (const std::exception&)
+		{
+			RETURN_WIDE_STRING(t);
+		}
+	}
+
+	template<>
+	inline std::wstring ToString<GameTime>(GameTime* t)
+	{
+		try
+		{
+			RETURN_WIDE_STRING(t->ElapsedGameTime().count());
+		}
+		catch (const std::exception&)
+		{
+			RETURN_WIDE_STRING(t);
+		}
+	}
+#pragma endregion GameTime
+
+#pragma region EventQueue
+	template<>
+	inline std::wstring ToString<EventQueue>(const EventQueue& t)
+	{
+		RETURN_WIDE_STRING(t.Size());
+	}
+
+	template<>
+	inline std::wstring ToString<EventQueue>(const EventQueue* t)
+	{
+		try
+		{
+			RETURN_WIDE_STRING(t->Size());
+		}
+		catch (const std::exception&)
+		{
+			RETURN_WIDE_STRING(t);
+		}
+	}
+
+	template<>
+	inline std::wstring ToString<EventQueue>(EventQueue* t)
+	{
+		try
+		{
+			RETURN_WIDE_STRING(t->Size());
+		}
+		catch (const std::exception&)
+		{
+			RETURN_WIDE_STRING(t);
+		}
+	}
+#pragma endregion EventQueue
 }

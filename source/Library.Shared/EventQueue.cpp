@@ -29,15 +29,14 @@ namespace Library
 			{
 				assert(entry.Publisher);
 				entry.Publisher->Publish();
-				entry.IsExpired = true;
 			}
 		}
 
 		mUpdating = false;
 
-		auto isExpired = [](const EventEntry& eventEntry) 
+		auto isExpired = [&gameTime](const EventEntry& eventEntry) 
 		{ 
-			return !eventEntry.IsExpired; 
+			return gameTime.CurrentTime() < eventEntry.ExpireTime; 
 		};
 		
 		if (mPendingClear)

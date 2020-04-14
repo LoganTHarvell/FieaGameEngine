@@ -37,6 +37,48 @@ namespace Library
 		/// </summary>
 		struct EventEntry final
 		{
+#pragma region Special Members
+		public:
+			/// <summary>
+			/// Default constructor.
+			/// </summary>
+			/// <param name="publisher">Weak pointer to an Event as a EventPublisher.</param>
+			/// <param name="expireTime">TimePoint when the Event should expire.</param>
+			/// <param name="isExpired">Boolean denoting the EventEntry is expired.</param>
+			explicit EventEntry(const std::shared_ptr<EventPublisher> publisher=std::shared_ptr<EventPublisher>(), const TimePoint& expireTime=TimePoint());
+
+			/// <summary>
+			/// Default destructor.
+			/// </summary>
+			~EventEntry() = default;
+
+			/// <summary>
+			/// Copy constructor.
+			/// </summary>
+			/// <param name="rhs">EventEntry to be copied.</param>
+			EventEntry(const EventEntry& rhs) = default;
+
+			/// <summary>
+			/// Copy assignment operator.
+			/// </summary>
+			/// <param name="rhs">EventEntry to be copied.</param>
+			/// <returns>Newly copied into EventEntry.</returns>
+			EventEntry& operator=(const EventEntry& rhs) = default;
+
+			/// <summary>
+			/// Move constructor.
+			/// </summary>
+			/// <param name="rhs">Event Entry to be moved.</param>
+			EventEntry(EventEntry&& rhs) noexcept = default;
+
+			/// <summary>
+			/// Move assignment operator.
+			/// </summary>
+			/// <param name="rhs">EventEntry to be moved.</param>
+			/// <returns>Newly moved into EventEntry.</returns>
+			EventEntry& operator=(EventEntry&& rhs) noexcept = default;
+#pragma endregion Special Members
+
 #pragma region Data Members
 		public:
 			/// <summary>
@@ -48,82 +90,8 @@ namespace Library
 			/// Time point at which the Event should be published.
 			/// </summary>
 			TimePoint ExpireTime;
-
-			/// <summary>
-			/// Boolean determining if the Event has been published.
-			/// </summary>
-			bool IsExpired;
 #pragma endregion Data Members
 
-#pragma region Special Members
-		public:
-			/// <summary>
-			/// Default constructor.
-			/// </summary>
-			EventEntry() = default;
-
-			/// <summary>
-			/// Default destructor.
-			/// </summary>
-			~EventEntry() = default;
-
-			/// <summary>
-			/// Copy constructor.
-			/// </summary>
-			/// <param name="rhs">EventEntry to be copied.</param>
-			EventEntry(const EventEntry& rhs);
-
-			/// <summary>
-			/// Copy assignment operator.
-			/// </summary>
-			/// <param name="rhs">EventEntry to be copied.</param>
-			/// <returns>Newly copied into EventEntry.</returns>
-			EventEntry& operator=(const EventEntry& rhs);
-
-			/// <summary>
-			/// Move constructor.
-			/// </summary>
-			/// <param name="rhs">Event Entry to be moved.</param>
-			EventEntry(EventEntry&& rhs) noexcept;
-
-			/// <summary>
-			/// Move assignment operator.
-			/// </summary>
-			/// <param name="rhs">EventEntry to be moved.</param>
-			/// <returns>Newly moved into EventEntry.</returns>
-			EventEntry& operator=(EventEntry&& rhs) noexcept;
-
-			/// <summary>
-			/// Specialized constructor for initializing data members.
-			/// </summary>
-			/// <param name="publisher">Weak pointer to an Event as a EventPublisher.</param>
-			/// <param name="expireTime">TimePoint when the Event should expire.</param>
-			/// <param name="isExpired">Boolean denoting the EventEntry is expired.</param>
-			EventEntry(const std::shared_ptr<EventPublisher> publisher, const TimePoint expireTime, const bool isExpired);
-#pragma endregion Special Members
-
-#pragma region Relational Operators
-		public:
-			/// <summary>
-			/// Equal operator.
-			/// </summary>
-			/// <param name="rhs">Right hand side EventEntry to be compared against.</param>
-			/// <returns>
-			/// True if both EventEntry instance point to the same Event. Otherwise false.
-			/// Always returns false if either EventPublisher pointer is expired.
-			/// </returns>
-			bool operator==(const EventEntry& rhs) const noexcept;
-			
-			/// <summary>
-			/// Not equal operator.
-			/// </summary>
-			/// <param name="rhs">Right hand side EventEntry to be compared against.</param>
-			/// <returns>
-			/// True if both EventEntry instance point to the same Event. Otherwise false.
-			/// Always returns false if either EventPublisher pointer is expired.
-			/// </returns>
-			bool operator!=(const EventEntry& rhs) const noexcept;
-#pragma endregion Relational Operators
 		};
 #pragma endregion Type Definitions, Constants
 
@@ -166,8 +134,9 @@ namespace Library
 		/// <param name="eventPublisher">EventPublisher reference to the Event instance to be queued.</param>
 		/// <param name="gameTime">Reference to a GameTime instance used to calculate the Event expire time.</param>
 		/// <param name="delay">Duration value in milliseconds to delay publishing the Event. Defaults to zero.</param>
+		/// <exception cref="std::runtime_error">Attempted to Enqueue null pointer.</exception>
 		/// <remarks>EventQueue capacity will not increase until the next call to Update.</remarks>
-		void Enqueue(const std::shared_ptr<EventPublisher> eventPublisher, const GameTime& gameTime, Duration delay=Duration(0));
+		void Enqueue(const std::shared_ptr<EventPublisher> eventPublisher, const TimePoint& expireTime=TimePoint());
 
 		/// <summary>
 		/// Publishes all expired events, then dequeues expired EventEntry instances.
@@ -192,12 +161,12 @@ namespace Library
 		/// <summary>
 		/// Queue of EventEntry data used to publish Event instances to their EventSubscriber lists.
 		/// </summary>
-		Vector<EventEntry> mQueue;
+		Vector<EventEntry> mQueue{ Vector(Vector<EventEntry>::EqualityFunctor()) };
 
 		/// <summary>
 		/// Queue of EventEntry data pending to be Enqueued during the next Update call.
 		/// </summary>
-		Vector<EventEntry> mPendingQueue;
+		Vector<EventEntry> mPendingQueue{ Vector(Vector<EventEntry>::EqualityFunctor()) };
 
 		/// <summary>
 		/// Represents when a call to Update is currently in progress.

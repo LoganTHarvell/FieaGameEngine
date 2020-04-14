@@ -12,7 +12,7 @@ namespace Library
 	inline std::string Reaction::ToString() const
 	{
 		std::ostringstream oss;
-		oss << Name() << "(Reaction)";
+		oss << Name() << " (Reaction)";
 		return oss.str();
 	}
 #pragma endregion RTTI Overrides
