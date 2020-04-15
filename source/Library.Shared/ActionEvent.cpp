@@ -42,16 +42,17 @@ namespace Library
 
 		if (worldState.World && worldState.EventQueue && gameTime)
 		{
-			auto event = std::make_shared<Event<EventMessageAttributed>>();
-			event->Message().SetWorld(worldState.World);
-			event->Message().SetSubtype(mSubtype);
+			EventMessageAttributed message;
+			message.SetWorld(worldState.World);
+			message.SetSubtype(mSubtype);
 
 			ForEachAuxiliary([&](const Attribute& attribute)
 			{
-				event->Message().AppendAuxiliaryAttribute(attribute.first) = attribute.second;
+				message.AppendAuxiliaryAttribute(attribute.first) = attribute.second;
 			});
 
-			worldState.EventQueue->Enqueue(event, gameTime->CurrentTime() + std::chrono::milliseconds(mDelay));
+			worldState.EventQueue->Enqueue(std::make_shared<Event<EventMessageAttributed>>(message),
+										   gameTime->CurrentTime() + std::chrono::milliseconds(mDelay));
 		}
 	}
 

@@ -154,8 +154,8 @@ namespace Library
 
 #pragma region Constructors, Destructor, Assignment
 	template<typename T>
-	inline SList<T>::SList(const EqualityFunctor equalityFunctor) :
-		mEqualityFunctor(equalityFunctor)
+	inline SList<T>::SList(EqualityFunctor equalityFunctor) :
+		mEqualityFunctor(std::move(equalityFunctor))
 	{
 	}
 
@@ -223,8 +223,8 @@ namespace Library
 	}
 
 	template<typename T>
-	inline SList<T>::SList(const std::initializer_list<T> rhs, const EqualityFunctor equalityFunctor) :
-		mEqualityFunctor(equalityFunctor)
+	inline SList<T>::SList(const std::initializer_list<T> rhs, EqualityFunctor equalityFunctor) :
+		mEqualityFunctor(std::move(equalityFunctor))
 	{
 		for (const auto& value : rhs)
 		{

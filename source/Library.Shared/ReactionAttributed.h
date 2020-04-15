@@ -20,6 +20,20 @@ namespace Library
 		using Subtype = std::string;
 #pragma endregion Type Definitions
 
+#pragma region Static Members
+	public:
+		/// <summary>
+		/// Key for the Subtype Attribute used to set the created EventMessageAttributed Subtype.
+		/// </summary>
+		inline static const std::string SubtypeKey = "Subtype";
+
+	public:
+		/// <summary>
+		/// Getter for the class TypeInfo, used for registration with the TypeManager.
+		/// </summary>
+		static const TypeManager::TypeInfo& TypeInfo();
+#pragma endregion Static Members
+
 #pragma region Special Members
 	public:
 		/// <summary>

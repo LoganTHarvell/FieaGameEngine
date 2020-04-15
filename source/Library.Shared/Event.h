@@ -113,20 +113,6 @@ namespace Library
 		Event& operator=(Event&& rhs) noexcept = default;
 #pragma endregion Special Members
 
-#pragma region Accessors
-		/// <summary>
-		/// Gets a reference to the data contained by the Event instance.
-		/// </summary>
-		/// <returns>Reference to the MessageT data contained by the Event instance.</returns>
-		MessageT& Message();
-
-		/// <summary>
-		/// Gets a reference to the data contained by the Event instance.
-		/// </summary>
-		/// <returns>Reference to the MessageT data contained by the Event instance.</returns>
-		const MessageT& Message() const;
-#pragma endregion Accessors
-
 #pragma region RTTI Overrides
 	public:
 		/// <summary>
@@ -134,21 +120,14 @@ namespace Library
 		/// </summary>
 		/// <returns>Representation of an Event as a std::string.</returns>
 		virtual std::string ToString() const override;
-
-		/// <summary>
-		/// RTTI override that determines if the Scope is equal to a given RTTI derived class instance.
-		/// </summary>
-		/// <param name="rhs">RTTI derived class instance to be compared against.</param>
-		/// <returns>True if the Scope is equivalent to the given RTTI derived class instance.</returns>
-		virtual bool Equals(const RTTI* rhs) const override;
 #pragma endregion RTTI Overrides
 
 #pragma region Data Members
-	private:
+	public:
 		/// <summary>
 		/// Data contained by the Event.
 		/// </summary>
-		MessageT mMessage;
+		const MessageT Message;
 #pragma endregion Data Members
 	};
 }

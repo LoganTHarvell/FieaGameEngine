@@ -293,7 +293,7 @@ namespace Library
 		/// </summary>
 		/// <param name="equalityFunctor">Equality functor for comparing SList elements.</param>
 		/// <remarks>If no EqualityFunctor is passed and no valid DefaultEquality exists, then a compiler error will occur.</remarks>
-		SList(const EqualityFunctor equalityFunctor=DefaultEquality<T>());
+		SList(EqualityFunctor equalityFunctor=DefaultEquality<T>());
 
 		/// <summary>
 		/// Destructor. 
@@ -337,7 +337,7 @@ namespace Library
 		/// <param name="rhs">Value SList for initializing a new SList.</param>
 		/// <param name="equalityFunctor">Equality functor for comparing SList elements.</param>
 		/// <remarks>May require an EqualityFunctor passed using constructor syntax, if no suitable DefaultEquality exists.</remarks>
-		SList(const std::initializer_list<T> rhs, const EqualityFunctor equalityFunctor=DefaultEquality<T>());
+		SList(const std::initializer_list<T> rhs, EqualityFunctor equalityFunctor=DefaultEquality<T>());
 
 		/// <summary>
 		/// Initializer SList assignment operator.

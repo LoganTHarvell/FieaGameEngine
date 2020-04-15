@@ -16,7 +16,7 @@ namespace EventTests
 	public:
 		virtual void Notify(EventPublisher& eventPublisher) override
 		{
-			Data() = static_cast<Event<Foo>&>(eventPublisher).Message().Data();
+			Data() = static_cast<Event<Foo>&>(eventPublisher).Message.Data();
 		}
 	};
 
@@ -104,14 +104,14 @@ namespace EventTests
 		{
 			{
 				Event<Foo> fooEvent;
-				Assert::AreEqual(Foo(), fooEvent.Message());
+				Assert::AreEqual(Foo(), fooEvent.Message);
 			}
 
 			Event<Foo> fooEvent(Foo(10));
-			Assert::AreEqual(Foo(10), fooEvent.Message());
+			Assert::AreEqual(Foo(10), fooEvent.Message);
 
 			const Event<Foo> constFooEvent = fooEvent;
-			Assert::AreEqual(Foo(10), constFooEvent.Message());
+			Assert::AreEqual(Foo(10), constFooEvent.Message);
 		}
 
 		TEST_METHOD(Publish)
@@ -122,7 +122,7 @@ namespace EventTests
 
 			Assert::AreEqual(0, subscriber.Data());
 			EventQueue::Publish(fooEvent);
-			Assert::AreEqual(fooEvent.Message().Data(), subscriber.Data());
+			Assert::AreEqual(fooEvent.Message.Data(), subscriber.Data());
 		}
 
 		TEST_METHOD(RTTITest)
@@ -131,7 +131,6 @@ namespace EventTests
 			Event<Foo> b;
 
 			Assert::IsTrue(a.Is(EventPublisher::TypeIdClass()));
-			Assert::IsTrue(a.Equals(&b));
 
 			EventPublisher* fooEvent = new Event<Foo>();
 			bool isEvent = fooEvent->Is(Event<Foo>::TypeIdClass());

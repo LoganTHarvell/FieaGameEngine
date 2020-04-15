@@ -14,6 +14,23 @@
 
 namespace Library
 {
+#pragma region Static Members
+	const TypeManager::TypeInfo& ReactionAttributed::TypeInfo()
+	{
+		static const TypeManager::TypeInfo typeInfo
+		{
+			{
+				{ SubtypeKey, Types::String, false, 1, offsetof(ReactionAttributed, mSubtype) },
+			},
+
+			ActionList::TypeIdClass()
+		};
+
+		return typeInfo;
+	}
+#pragma endregion
+
+
 #pragma region Special Members
 	ReactionAttributed::ReactionAttributed(const std::string& name, const Subtype& subtype) : Reaction(TypeIdClass(), name),
 		mSubtype(subtype)
@@ -48,7 +65,7 @@ namespace Library
 	void ReactionAttributed::Notify(EventPublisher& eventPublisher)
 	{
 		assert(eventPublisher.Is(Event<EventMessageAttributed>::TypeIdClass()));
-		auto message = static_cast<Event<EventMessageAttributed>*>(&eventPublisher)->Message();
+		auto message = static_cast<Event<EventMessageAttributed>*>(&eventPublisher)->Message;
 		
 		if (mSubtype == message.GetSubtype() && message.GetWorld())
 		{

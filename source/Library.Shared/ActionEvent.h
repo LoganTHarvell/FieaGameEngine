@@ -18,7 +18,7 @@ namespace Library
 	{
 		RTTI_DECLARATIONS(ActionEvent, Action)
 
-#pragma region Type Definitions, Constants
+#pragma region Static Members
 	public:
 		/// <summary>
 		/// Key for the Subtype Attribute used to set the created EventMessageAttributed Subtype.
@@ -35,7 +35,7 @@ namespace Library
 		/// Getter for the class TypeInfo, used for registration with the TypeManager.
 		/// </summary>
 		static const TypeManager::TypeInfo& TypeInfo();
-#pragma endregion Type Definitions, Constants
+#pragma endregion Static Members
 
 #pragma region Special Members
 	public:

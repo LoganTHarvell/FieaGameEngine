@@ -67,24 +67,10 @@ namespace Library
 #pragma region Special Members
 	template<typename MessageT>
 	inline Event<MessageT>::Event(MessageT message) : EventPublisher(sSubscriberList, sSubscribersPendingAdd),
-		mMessage(message)
+		Message(message)
 	{
 	}
 #pragma endregion Special Members
-
-#pragma region Accessors
-	template<typename MessageT>
-	inline MessageT& Event<MessageT>::Message()
-	{
-		return mMessage;
-	}
-	
-	template<typename MessageT>
-	inline const MessageT& Event<MessageT>::Message() const
-	{
-		return mMessage;
-	}
-#pragma endregion Accessors
 
 #pragma region RTTI Overrides
 	template<typename MessageT>
@@ -93,16 +79,6 @@ namespace Library
 		std::ostringstream oss;
 		oss << "Event";
 		return oss.str();
-	}
-
-	template<typename MessageT>
-	inline bool Event<MessageT>::Equals(const RTTI* rhs) const
-	{
-		if (this == rhs)	return true;
-		if (!rhs)			return false;
-
-		const Event<MessageT>* rhsEvent = rhs->As<const Event<MessageT>>();
-		return rhsEvent && mMessage == rhsEvent->mMessage;
 	}
 #pragma endregion RTTI Overrides
 }
