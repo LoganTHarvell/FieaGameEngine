@@ -317,7 +317,7 @@ namespace Library
 		/// <param name="rhs">A list of int values for intializing mData.</param>
 		/// <exception cref="runtime_error">Mismatched types.</exception>
 		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
-		Datum(const std::initializer_list<int> rhs);
+		Datum(std::initializer_list<int> rhs);
 
 		/// <summary>
 		/// Initializer list constructor overloads for assigning Datum to a list of float values.
@@ -325,7 +325,7 @@ namespace Library
 		/// <param name="rhs">A list of float values for initializing mData.</param>
 		/// <exception cref="runtime_error">Mismatched types.</exception>
 		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
-		Datum(const std::initializer_list<float> rhs);
+		Datum(std::initializer_list<float> rhs);
 
 		/// <summary>
 		/// Initializer list constructor overloads for assigning Datum to a list of glm::vec4 vectors.
@@ -333,7 +333,7 @@ namespace Library
 		/// <param name="rhs">A list of glm::vec4 values for initializing mData.</param>
 		/// <exception cref="runtime_error">Mismatched types.</exception>
 		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
-		Datum(const std::initializer_list<glm::vec4> rhs);
+		Datum(std::initializer_list<glm::vec4> rhs);
 
 		/// <summary>
 		/// Initializer list constructor overloads for assigning Datum to a list of glm::mat4 matrices.
@@ -341,7 +341,7 @@ namespace Library
 		/// <param name="rhs">A list of glm::mat4 values for initializing mData.</param>
 		/// <exception cref="runtime_error">Mismatched types.</exception>
 		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
-		Datum(const std::initializer_list<glm::mat4> rhs);
+		Datum(std::initializer_list<glm::mat4> rhs);
 
 		/// <summary>
 		/// Initializer list constructor overloads for assigning Datum to a list of std::string values.
@@ -349,7 +349,7 @@ namespace Library
 		/// <param name="rhs">A list of std::string values for initializing mData.</param>
 		/// <exception cref="runtime_error">Mismatched types.</exception>
 		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
-		Datum(const std::initializer_list<std::string> rhs);
+		Datum(std::initializer_list<std::string> rhs);
 
 		/// <summary>
 		/// Initializer list constructor overloads for assigning Datum to a list of ScopePointer values.
@@ -357,7 +357,7 @@ namespace Library
 		/// <param name="rhs">A list of ScopePointer values for initializing mData.</param>
 		/// <exception cref="runtime_error">Mismatched types.</exception>
 		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
-		Datum(const std::initializer_list<ScopePointer> rhs);
+		Datum(std::initializer_list<ScopePointer> rhs);
 
 		/// <summary>
 		/// Initializer list constructor overloads for assigning Datum to a list of RTTIPointer values.
@@ -365,7 +365,7 @@ namespace Library
 		/// <param name="rhs">A list of RTTIPointer values for initializing mData.</param>
 		/// <exception cref="runtime_error">Mismatched types.</exception>
 		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
-		Datum(const std::initializer_list<RTTIPointer> rhs);
+		Datum(std::initializer_list<RTTIPointer> rhs);
 
 		/// <summary>
 		/// Initializer list constructor overloads for assigning Datum to a list of DatumPointer values.
@@ -373,7 +373,7 @@ namespace Library
 		/// <param name="rhs">A list of DatumPointer values for initializing mData.</param>
 		/// <exception cref="runtime_error">Mismatched types.</exception>
 		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
-		Datum(const std::initializer_list<DatumPointer> rhs);
+		Datum(std::initializer_list<DatumPointer> rhs);
 #pragma endregion Scalar/List Constructors
 
 #pragma region Scalar/Initializer List Assignment
@@ -448,7 +448,7 @@ namespace Library
 		/// <param name="rhs">A list of int values for assigning to mData.</param>
 		/// <exception cref="runtime_error">Mismatched types.</exception>
 		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
-		Datum& operator=(const std::initializer_list<int> rhs);
+		Datum& operator=(std::initializer_list<int> rhs);
 
 		/// <summary>
 		/// Initializer list assignment overloads for assigning Datum to a list of float values.
@@ -456,7 +456,7 @@ namespace Library
 		/// <param name="rhs">A list of float values for assigning to mData.</param>
 		/// <exception cref="runtime_error">Mismatched types.</exception>
 		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
-		Datum& operator=(const std::initializer_list<float> rhs);
+		Datum& operator=(std::initializer_list<float> rhs);
 
 		/// <summary>
 		/// Initializer list assignment overloads for assigning Datum to a list of glm::vec4 vectors.
@@ -464,7 +464,7 @@ namespace Library
 		/// <param name="rhs">A list of glm::vec4 values for assigning to mData.</param>
 		/// <exception cref="runtime_error">Mismatched types.</exception>
 		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
-		Datum& operator=(const std::initializer_list<glm::vec4> rhs);
+		Datum& operator=(std::initializer_list<glm::vec4> rhs);
 
 		/// <summary>
 		/// Initializer list assignment overloads for assigning Datum to a list of glm::mat4 matrices.
@@ -472,7 +472,7 @@ namespace Library
 		/// <param name="rhs">A list of glm::mat4 values for assigning to mData.</param>
 		/// <exception cref="runtime_error">Mismatched types.</exception>
 		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
-		Datum& operator=(const std::initializer_list<glm::mat4> rhs);
+		Datum& operator=(std::initializer_list<glm::mat4> rhs);
 
 		/// <summary>
 		/// Initializer list assignment overloads for assigning Datum to a list of std::string values.
@@ -480,7 +480,7 @@ namespace Library
 		/// <param name="rhs">A list of std::string values for assigning to mData.</param>
 		/// <exception cref="runtime_error">Mismatched types.</exception>
 		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
-		Datum& operator=(const std::initializer_list<std::string> rhs);
+		Datum& operator=(std::initializer_list<std::string> rhs);
 
 		/// <summary>
 		/// Initializer list assignment overloads for assigning Datum to a list of ScopePointer values.
@@ -488,7 +488,7 @@ namespace Library
 		/// <param name="rhs">A list of ScopePointer values for assigning to mData.</param>
 		/// <exception cref="runtime_error">Mismatched types.</exception>
 		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
-		Datum& operator=(const std::initializer_list<ScopePointer> rhs);
+		Datum& operator=(std::initializer_list<ScopePointer> rhs);
 
 		/// <summary>
 		/// Initializer list assignment overloads for assigning Datum to a list of RTTIPointer values.
@@ -496,7 +496,7 @@ namespace Library
 		/// <param name="rhs">A list of RTTIPointer values for assigning to mData.</param>
 		/// <exception cref="runtime_error">Mismatched types.</exception>
 		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
-		Datum& operator=(const std::initializer_list<RTTIPointer> rhs);
+		Datum& operator=(std::initializer_list<RTTIPointer> rhs);
 
 		/// <summary>
 		/// Initializer list assignment overloads for assigning Datum to a list of DatumPointer values.
@@ -504,7 +504,7 @@ namespace Library
 		/// <param name="rhs">A list of DatumPointer values for assigning to mData.</param>
 		/// <exception cref="runtime_error">Mismatched types.</exception>
 		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
-		Datum& operator=(const std::initializer_list<DatumPointer> rhs);
+		Datum& operator=(std::initializer_list<DatumPointer> rhs);
 #pragma endregion Scalar/Initializer List Assignment
 #pragma endregion Constructors, Destructor, Assignment
 
@@ -934,7 +934,7 @@ namespace Library
 		/// <typeparam name="T">Type of elements to fill the Datum.</typeparam>
 		/// <param name="rhs">List of values to fill the Datum.</param>
 		template<typename T>
-		Datum& ListInitializationHelper(const std::initializer_list<T> rhs);
+		Datum& ListInitializationHelper(std::initializer_list<T> rhs);
 #pragma endregion Helper Methods
 
 #pragma region Data Members

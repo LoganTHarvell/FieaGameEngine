@@ -514,7 +514,7 @@ namespace Library
 		};
 #pragma endregion ConstIterator
 
-#pragma region Constructors, Destructor, Assignment
+#pragma region Special Members
 	public:
 		/// <summary>
 		/// Default constructor.
@@ -522,13 +522,13 @@ namespace Library
 		/// <param name="capacity">Default capacity for the vector.</param>
 		/// <param name="equalityFunctor">Default equality functor.</param>
 		/// <param name="reserveFunctor">Default reserve strategy functor.</param>
-		explicit Vector(const std::size_t capacity=0, const EqualityFunctor equalityFunctor=DefaultEquality<T>(), const ReserveFunctor reserveFunctor=DefaultReserveFunctor());
+		explicit Vector(const std::size_t capacity=0, const EqualityFunctor& equalityFunctor=DefaultEquality<T>(), const ReserveFunctor& reserveFunctor=DefaultReserveFunctor());
 
 		/// <summary>
 		/// Specialized constructor that takes a single equality functor parameter.
 		/// </summary>
 		/// <param name="equalityFunctor">Default equality functor.</param>
-		explicit Vector(const EqualityFunctor equalityFunctor);
+		explicit Vector(const EqualityFunctor& equalityFunctor);
 
 		/// <summary>
 		/// Destructor. 
@@ -573,15 +573,15 @@ namespace Library
 		/// <remarks>May require an EqualityFunctor passed using constructor syntax, if no suitable DefaultEquality exists.</remarks>
 		/// <param name="reserveStrategy">Default reserve strategy functor.</param>
 		/// <param name="equalityFunctor">Default equality functor.</param>
-		Vector(const std::initializer_list<T> rhs, const EqualityFunctor equalityFunctor=DefaultEquality<T>(), const ReserveFunctor reserveFunctor=DefaultReserveFunctor());
+		Vector(std::initializer_list<T> rhs, const EqualityFunctor& equalityFunctor=DefaultEquality<T>(), const ReserveFunctor& reserveFunctor=DefaultReserveFunctor());
 
 		/// <summary>
 		/// Initializer list assignment operator.
 		/// </summary>
 		/// <param name="rhs">Value Vector for initializing a new Vector.</param>
 		/// <remarks>Does not initialize equality functor. Must call SetEqualityFunctor for full functionality.</remarks>
-		Vector& operator=(const std::initializer_list<T> rhs);
-#pragma endregion Constructors, Destructor, Assignment
+		Vector& operator=(std::initializer_list<T> rhs);
+#pragma endregion Special Members
 
 #pragma region Boolean Operators
 	public:
@@ -775,6 +775,7 @@ namespace Library
 		/// Adds an element with the passed in data to the back of the Vector.
 		/// </summary>
 		/// <param name="data">Value to be added to the back of the Vector.</param>
+		/// <exception cref="std::runtime_error">ReserveFunctor null.</exception>
 		void PushBack(const T& data);
 
 		/// <summary>
@@ -850,14 +851,14 @@ namespace Library
 		std::size_t mCapacity{ 0 };
 
 		/// <summary>
-		/// Functor for evaluating the capacity reserve strategy during resize during element insert.
-		/// </summary>
-		ReserveFunctor mReserveFunctor{ DefaultReserveFunctor() };
-
-		/// <summary>
 		/// Functor for evaluating the equality of two values in the Vector.
 		/// </summary>
-		EqualityFunctor mEqualityFunctor{ DefaultEquality<T>() };
+		std::shared_ptr<EqualityFunctor> mEqualityFunctor;
+
+		/// <summary>
+		/// Functor for evaluating the capacity reserve strategy during resize during element insert.
+		/// </summary>
+		std::shared_ptr<ReserveFunctor> mReserveFunctor;
 #pragma endregion Data Members
 	};
 }

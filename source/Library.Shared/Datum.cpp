@@ -322,42 +322,42 @@ namespace Library
 		ScalarInitializationHelper(rhs);
 	}
 
-	Datum::Datum(const std::initializer_list<int> rhs)
+	Datum::Datum(std::initializer_list<int> rhs)
 	{
 		ListInitializationHelper(rhs);
 	}
 
-	Datum::Datum(const std::initializer_list<float> rhs)
+	Datum::Datum(std::initializer_list<float> rhs)
 	{
 		ListInitializationHelper(rhs);
 	}
 
-	Datum::Datum(const std::initializer_list<glm::vec4> rhs)
+	Datum::Datum(std::initializer_list<glm::vec4> rhs)
 	{
 		ListInitializationHelper(rhs);
 	}
 
-	Datum::Datum(const std::initializer_list<glm::mat4> rhs)
+	Datum::Datum(std::initializer_list<glm::mat4> rhs)
 	{
 		ListInitializationHelper(rhs);
 	}
 
-	Datum::Datum(const std::initializer_list<std::string> rhs)
+	Datum::Datum(std::initializer_list<std::string> rhs)
 	{
 		ListInitializationHelper(rhs);
 	}
 
-	Datum::Datum(const std::initializer_list<ScopePointer> rhs)
+	Datum::Datum(std::initializer_list<ScopePointer> rhs)
 	{
 		ListInitializationHelper(rhs);
 	}
 
-	Datum::Datum(const std::initializer_list<RTTIPointer> rhs)
+	Datum::Datum(std::initializer_list<RTTIPointer> rhs)
 	{
 		ListInitializationHelper(rhs);
 	}
 
-	Datum::Datum(const std::initializer_list<DatumPointer> rhs)
+	Datum::Datum(std::initializer_list<DatumPointer> rhs)
 	{
 		ListInitializationHelper(rhs);
 	}
@@ -404,42 +404,42 @@ namespace Library
 		return ScalarInitializationHelper(rhs);
 	}
 
-	Datum& Datum::operator=(const std::initializer_list<int> rhs)
+	Datum& Datum::operator=(std::initializer_list<int> rhs)
 	{
 		return ListInitializationHelper(rhs);
 	}
 
-	Datum& Datum::operator=(const std::initializer_list<float> rhs)
+	Datum& Datum::operator=(std::initializer_list<float> rhs)
 	{
 		return ListInitializationHelper(rhs);
 	}
 
-	Datum& Datum::operator=(const std::initializer_list<glm::vec4> rhs)
+	Datum& Datum::operator=(std::initializer_list<glm::vec4> rhs)
 	{
 		return ListInitializationHelper(rhs);
 	}
 
-	Datum& Datum::operator=(const std::initializer_list<glm::mat4> rhs)
+	Datum& Datum::operator=(std::initializer_list<glm::mat4> rhs)
 	{
 		return ListInitializationHelper(rhs);
 	}
 
-	Datum& Datum::operator=(const std::initializer_list<std::string> rhs)
+	Datum& Datum::operator=(std::initializer_list<std::string> rhs)
 	{
 		return ListInitializationHelper(rhs);
 	}
 
-	Datum& Datum::operator=(const std::initializer_list<ScopePointer> rhs)
+	Datum& Datum::operator=(std::initializer_list<ScopePointer> rhs)
 	{
 		return ListInitializationHelper(rhs);
 	}
 
-	Datum& Datum::operator=(const std::initializer_list<RTTIPointer> rhs)
+	Datum& Datum::operator=(std::initializer_list<RTTIPointer> rhs)
 	{
 		return ListInitializationHelper(rhs);
 	}
 
-	Datum& Datum::operator=(const std::initializer_list<DatumPointer> rhs)
+	Datum& Datum::operator=(std::initializer_list<DatumPointer> rhs)
 	{
 		return ListInitializationHelper(rhs);
 	}
@@ -729,7 +729,7 @@ namespace Library
 	}
 
 	template<typename T>
-	Datum& Datum::ListInitializationHelper(const std::initializer_list<T> rhs)
+	Datum& Datum::ListInitializationHelper(std::initializer_list<T> rhs)
 	{
 		if (mType == Types::Unknown)
 		{

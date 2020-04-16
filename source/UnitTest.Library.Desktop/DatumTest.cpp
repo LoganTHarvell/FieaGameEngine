@@ -16,7 +16,7 @@ using namespace Library;
 namespace UnitTests
 {
 	template<typename T>
-	void TestConstructors(const std::initializer_list<T> data)
+	void TestConstructors(std::initializer_list<T> data)
 	{
 		Datum emptyDatum;
 		Assert::AreEqual(0_z, emptyDatum.Size());
@@ -68,7 +68,7 @@ namespace UnitTests
 	}
 
 	template<typename T>
-	void TestCopy(const std::initializer_list<T> data)
+	void TestCopy(std::initializer_list<T> data)
 	{
 		Datum datum = data;
 		
@@ -80,7 +80,7 @@ namespace UnitTests
 	}
 
 	template<typename T>
-	void TestMove(const std::initializer_list<T> data)
+	void TestMove(std::initializer_list<T> data)
 	{
 		Datum datum = data;
 		Datum copy = datum;
@@ -95,7 +95,7 @@ namespace UnitTests
 	}
 
 	template<typename T>
-	void TestEquality(const std::initializer_list<T> data, const T& differentData)
+	void TestEquality(std::initializer_list<T> data, const T& differentData)
 	{
 		Datum datum1;
 		Datum datum2;
@@ -119,7 +119,7 @@ namespace UnitTests
 	}
 
 	template<typename T>
-	void TestTypeSizeCapacity(const std::initializer_list<T> data)
+	void TestTypeSizeCapacity(std::initializer_list<T> data)
 	{
 		Datum datum;
 		Assert::AreEqual(Datum::Types::Unknown, datum.Type());
@@ -156,7 +156,7 @@ namespace UnitTests
 	}
 
 	template<typename T>
-	void TestResize(const std::initializer_list<T> data)
+	void TestResize(std::initializer_list<T> data)
 	{
 		Datum datum = data;
 
@@ -170,7 +170,7 @@ namespace UnitTests
 	}
 
 	template<typename T>
-	void TestShrinkToFit(const std::initializer_list<T> data)
+	void TestShrinkToFit(std::initializer_list<T> data)
 	{
 		{
 			Datum datum;
@@ -197,7 +197,7 @@ namespace UnitTests
 	}
 
 	template<typename T>
-	void TestElementAccessors(const std::initializer_list<T> data, const T& notFoundData)
+	void TestElementAccessors(std::initializer_list<T> data, const T& notFoundData)
 	{
 		Datum datum;
 		
@@ -259,7 +259,7 @@ namespace UnitTests
 	}
 
 	template<typename T>
-	void TestPushBack(const std::initializer_list<T> data)
+	void TestPushBack(std::initializer_list<T> data)
 	{
 		Datum datum;
 
@@ -294,7 +294,7 @@ namespace UnitTests
 	}
 
 	template<typename T>
-	void TestPopBack(const std::initializer_list<T> data)
+	void TestPopBack(std::initializer_list<T> data)
 	{
 		Datum datum = data;
 
@@ -312,7 +312,7 @@ namespace UnitTests
 	}
 
 	template<typename T>
-	void TestRemove(const std::initializer_list<T> data, const T& notFoundData)
+	void TestRemove(std::initializer_list<T> data, const T& notFoundData)
 	{
 		Datum datum = data;
 
@@ -346,7 +346,7 @@ namespace UnitTests
 	}
 
 	template<typename T>
-	void TestClear(const std::initializer_list<T> data)
+	void TestClear(std::initializer_list<T> data)
 	{
 		Datum datum = data;
 		
@@ -356,7 +356,7 @@ namespace UnitTests
 	}
 
 	template<typename T>
-	void TestStringConversion(const std::initializer_list<T> data)
+	void TestStringConversion(std::initializer_list<T> data)
 	{
 		Datum datum = data;
 

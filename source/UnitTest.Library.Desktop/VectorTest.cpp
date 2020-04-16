@@ -4,6 +4,8 @@
 #include "Foo.h"
 #include "Bar.h"
 #include "Vector.h"
+#include "SList.h"
+#include "Event.h"
 
 
 using namespace std::string_literals;
@@ -45,25 +47,25 @@ namespace ContainerTests
 			Vector<double> doubleVector;
 			Vector<Foo> fooVector;
 
-			Vector<int>::Iterator intIterator1 = Vector<int>::Iterator(intVector.begin());
-			Vector<double>::Iterator doubleIterator1 = Vector<double>::Iterator(doubleVector.begin());
-			Vector<Foo>::Iterator fooIterator1 = Vector<Foo>::Iterator(fooVector.begin());
+			const Vector<int>::Iterator intIterator1 = Vector<int>::Iterator(intVector.begin());
+			const Vector<double>::Iterator doubleIterator1 = Vector<double>::Iterator(doubleVector.begin());
+			const Vector<Foo>::Iterator fooIterator1 = Vector<Foo>::Iterator(fooVector.begin());
 
-			Vector<int>::Iterator intIterator2 = intVector.begin();
-			Vector<double>::Iterator doubleIterator2 = doubleVector.begin();
-			Vector<Foo>::Iterator fooIterator2 = fooVector.begin();
+			const Vector<int>::Iterator intIterator2 = intVector.begin();
+			const Vector<double>::Iterator doubleIterator2 = doubleVector.begin();
+			const Vector<Foo>::Iterator fooIterator2 = fooVector.begin();
 
 			Assert::AreEqual(intIterator1, intIterator2);
 			Assert::AreEqual(doubleIterator1, doubleIterator2);
 			Assert::AreEqual(fooIterator1, fooIterator2);
 
-			Vector<int>::ConstIterator constIntIterator1 = Vector<int>::ConstIterator(intVector.begin());
-			Vector<double>::ConstIterator constDoubleIterator1 = Vector<double>::ConstIterator(doubleVector.begin());
-			Vector<Foo>::ConstIterator constFooIterator1 = Vector<Foo>::ConstIterator(fooVector.begin());
+			const Vector<int>::ConstIterator constIntIterator1 = Vector<int>::ConstIterator(intVector.begin());
+			const Vector<double>::ConstIterator constDoubleIterator1 = Vector<double>::ConstIterator(doubleVector.begin());
+			const Vector<Foo>::ConstIterator constFooIterator1 = Vector<Foo>::ConstIterator(fooVector.begin());
 
-			Vector<int>::ConstIterator constIntIterator2 = intVector.begin();
-			Vector<double>::ConstIterator constDoubleIterator2 = doubleVector.begin();
-			Vector<Foo>::ConstIterator constFooIterator2 = fooVector.begin();
+			const Vector<int>::ConstIterator constIntIterator2 = intVector.begin();
+			const Vector<double>::ConstIterator constDoubleIterator2 = doubleVector.begin();
+			const Vector<Foo>::ConstIterator constFooIterator2 = fooVector.begin();
 
 			Assert::AreEqual(constIntIterator1, constIntIterator2);
 			Assert::AreEqual(constDoubleIterator1, constDoubleIterator2);
@@ -133,13 +135,13 @@ namespace ContainerTests
 			Assert::AreEqual(constDoubleIterator, doubleVector.cbegin());
 			Assert::AreEqual(constFooIterator, fooVector.cbegin());
 
-			Vector<int>::Iterator prevIntIterator = intIterator++;
-			Vector<double>::Iterator prevDoubleIterator = doubleIterator++;
-			Vector<Foo>::Iterator prevFooIterator = fooIterator++;
+			const Vector<int>::Iterator prevIntIterator = intIterator++;
+			const Vector<double>::Iterator prevDoubleIterator = doubleIterator++;
+			const Vector<Foo>::Iterator prevFooIterator = fooIterator++;
 
-			Vector<int>::ConstIterator prevConstIntIterator = constIntIterator++;
-			Vector<double>::ConstIterator prevConstDoubleIterator = constDoubleIterator++;
-			Vector<Foo>::ConstIterator prevConstFooIterator = constFooIterator++;
+			const Vector<int>::ConstIterator prevConstIntIterator = constIntIterator++;
+			const Vector<double>::ConstIterator prevConstDoubleIterator = constDoubleIterator++;
+			const Vector<Foo>::ConstIterator prevConstFooIterator = constFooIterator++;
 
 			Assert::IsTrue(intIterator != prevIntIterator);
 			Assert::IsTrue(doubleIterator != prevDoubleIterator);
@@ -403,57 +405,36 @@ namespace ContainerTests
 
 			/* Integer Data */
 
-			// Validates copies are equal to source
 			Vector<int> intVectorCopy = intVector;
-			intVector = std::move(intVector);
-			Assert::AreEqual(intVectorCopy, intVector);
 
-			// Validates moved element is equal to copy
 			Vector<int> intVectorMoved = std::move(intVector);
 			Assert::AreEqual(intVectorMoved, intVectorCopy);
 
-			intVector.PushBack(10);
-			intVector.PushBack(20);
-
-			intVectorCopy = intVector;
+			intVector = intVectorCopy;
 			intVectorMoved = std::move(intVector);
 			Assert::AreEqual(intVectorMoved, intVectorCopy);
 
 
 			/* Double Data */
 
-			// Validates copies are equal to source
 			Vector<double> doubleVectorCopy = doubleVector;
-			doubleVector = std::move(doubleVector);
-			Assert::AreEqual(doubleVectorCopy, doubleVector);
 
-			// Validates moved element is equal to copy
 			Vector<double> doubleVectorMoved = std::move(doubleVector);
 			Assert::AreEqual(doubleVectorMoved, doubleVectorCopy);
 
-			doubleVector.PushBack(10);
-			doubleVector.PushBack(20);
-
-			doubleVectorCopy = doubleVector;
+			doubleVector = doubleVectorCopy;
 			doubleVectorMoved = std::move(doubleVector);
 			Assert::AreEqual(doubleVectorMoved, doubleVectorCopy);
 
 
 			/* Foo Data */
 
-			// Validates copies are equal to source
 			Vector<Foo> fooVectorCopy = fooVector;
-			fooVector = std::move(fooVector);
-			Assert::AreEqual(fooVectorCopy, fooVector);
 
-			// Validates moved element is equal to copy
 			Vector<Foo> fooVectorMoved = std::move(fooVector);
 			Assert::AreEqual(fooVectorMoved, fooVectorCopy);
 
-			fooVector.PushBack(Foo(10));
-			fooVector.PushBack(Foo(20));
-
-			fooVectorCopy = fooVector;
+			fooVector = fooVectorCopy;
 			fooVectorMoved = std::move(fooVector);
 			Assert::AreEqual(fooVectorMoved, fooVectorCopy);
 		}
@@ -660,9 +641,9 @@ namespace ContainerTests
 			Assert::AreEqual(doubleVector.Size(), 0_z);
 			Assert::AreEqual(doubleVector.Capacity(), 0_z);
 
-			const Vector<double> emptyConstdoubleVector;
-			Assert::AreEqual(emptyConstdoubleVector.Size(), 0_z);
-			Assert::AreEqual(emptyConstdoubleVector.Capacity(), 0_z);
+			const Vector<double> emptyConstDoubleVector;
+			Assert::AreEqual(emptyConstDoubleVector.Size(), 0_z);
+			Assert::AreEqual(emptyConstDoubleVector.Capacity(), 0_z);
 
 			// Capacity and Size increase
 			doubleVector.Reserve(1);
@@ -865,11 +846,11 @@ namespace ContainerTests
 
 			const Vector<int> emptyIntVectorCopy = intVector;
 			const Vector<double> emptyDoubleVectorCopy = doubleVector;
-			const Vector<Foo> emptyfooVectorCopy = fooVector;
+			const Vector<Foo> emptyFooVectorCopy = fooVector;
 
 			Assert::ExpectException<std::out_of_range>([&emptyIntVectorCopy] { *(emptyIntVectorCopy.begin()); });
 			Assert::ExpectException<std::out_of_range>([&emptyDoubleVectorCopy] { *(emptyDoubleVectorCopy.begin()); });
-			Assert::ExpectException<std::out_of_range>([&emptyfooVectorCopy] { *(emptyfooVectorCopy.begin()); });
+			Assert::ExpectException<std::out_of_range>([&emptyFooVectorCopy] { *(emptyFooVectorCopy.begin()); });
 
 			Assert::ExpectException<std::out_of_range>([&intVector] { *(intVector.cbegin()); });
 			Assert::ExpectException<std::out_of_range>([&doubleVector] { *(doubleVector.cbegin()); });
@@ -1114,67 +1095,81 @@ namespace ContainerTests
 			Vector<int> intVector = { 10, 20, 30 };
 			Vector<double> doubleVector = { 10, 20, 30 };
 			Vector<Foo> fooVector = { Foo(10), Foo(20), Foo(30) };
+			Vector<Scope> scopeVector = { {{"10", 10}}, {{"20", 20}}, {{"30", 30}} };
 
 			intVector.PopBack();
 			doubleVector.PopBack();
 			fooVector.PopBack();
+			scopeVector.PopBack();
 
 			// Back is set correctly with more than 2 elements
 			Assert::AreEqual(intVector.Back(), 20);
 			Assert::AreEqual(doubleVector.Back(), 20.0);
 			Assert::AreEqual(fooVector.Back(), Foo(20));
+			Assert::AreEqual(scopeVector.Back(), {{ "20", 20 }});
 
 			// Size is reduced correctly with more than 2 elements
 			Assert::AreEqual(intVector.Size(), 2_z);
 			Assert::AreEqual(doubleVector.Size(), 2_z);
 			Assert::AreEqual(fooVector.Size(), 2_z);
+			Assert::AreEqual(scopeVector.Size(), 2_z);
 
 			intVector.PopBack();
 			doubleVector.PopBack();
 			fooVector.PopBack();
+			scopeVector.PopBack();
 
 			// Back is set correctly with 1 element remaining
 			Assert::AreEqual(intVector.Back(), 10);
 			Assert::AreEqual(doubleVector.Back(), 10.0);
 			Assert::AreEqual(fooVector.Back(), Foo(10));
+			Assert::AreEqual(scopeVector.Back(), {{ "10", 10 }});
 
 			// Size is reduced correctly with 1 element remaining
 			Assert::AreEqual(intVector.Size(), 1_z);
 			Assert::AreEqual(doubleVector.Size(), 1_z);
 			Assert::AreEqual(fooVector.Size(), 1_z);
+			Assert::AreEqual(scopeVector.Size(), 1_z);
 
 			// Back is set correctly with 1 element remaining
 			Assert::AreEqual(intVector.Back(), intVector.Back());
 			Assert::AreEqual(doubleVector.Back(), doubleVector.Back());
 			Assert::AreEqual(fooVector.Back(), fooVector.Front());
+			Assert::AreEqual(scopeVector.Back(), scopeVector.Front());
 
 			intVector.PopBack();
 			doubleVector.PopBack();
 			fooVector.PopBack();
+			scopeVector.PopBack();
 
 			// Size is reduced correctly with no elements remaining
 			Assert::AreEqual(intVector.Size(), 0_z);
 			Assert::AreEqual(doubleVector.Size(), 0_z);
 			Assert::AreEqual(fooVector.Size(), 0_z);
+			Assert::AreEqual(scopeVector.Size(), 0_z);
 
 			// Now empty
 			Assert::IsTrue(intVector.IsEmpty());
 			Assert::IsTrue(doubleVector.IsEmpty());
 			Assert::IsTrue(fooVector.IsEmpty());
+			Assert::IsTrue(scopeVector.IsEmpty());
 
 			intVector.PopBack();
 			doubleVector.PopBack();
 			fooVector.PopBack();
+			scopeVector.PopBack();
 
 			// Size does not change when called on empty list
 			Assert::AreEqual(intVector.Size(), 0_z);
 			Assert::AreEqual(doubleVector.Size(), 0_z);
 			Assert::AreEqual(fooVector.Size(), 0_z);
+			Assert::AreEqual(scopeVector.Size(), 0_z);
 
 			// Emptiness does not change when called on empty list
 			Assert::IsTrue(intVector.IsEmpty());
 			Assert::IsTrue(doubleVector.IsEmpty());
 			Assert::IsTrue(fooVector.IsEmpty());
+			Assert::IsTrue(scopeVector.IsEmpty());
 		}
 
 		TEST_METHOD(Find)

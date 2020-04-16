@@ -306,59 +306,48 @@ namespace ContainerTests
 
 			/* Integer Data */
 
-			// Validates copies are equal to source
 			SList<int> intListCopy = intList;
-			intList = std::move(intList);
-			Assert::AreEqual(intListCopy, intList);
 
 			// Validates moved element is equal to copy
 			SList<int> intListMoved = std::move(intList);
 			Assert::AreEqual(intListMoved, intListCopy);
+			Assert::IsTrue(intList.IsEmpty());
 
-			intList.PushBack(10);
-			intList.PushBack(20);
-
-			intListCopy = intList;
+			intList = intListCopy;
 			intListMoved = std::move(intList);
 			Assert::AreEqual(intListMoved, intListCopy);
-
+			Assert::IsTrue(intList.IsEmpty());
 
 			/* Double Data */
 
-			// Validates copies are equal to source
 			SList<double> doubleListCopy = doubleList;
-			doubleList = std::move(doubleList);
-			Assert::AreEqual(doubleListCopy, doubleList);
 
 			// Validates moved element is equal to copy
 			SList<double> doubleListMoved = std::move(doubleList);
 			Assert::AreEqual(doubleListMoved, doubleListCopy);
+			Assert::IsTrue(doubleList.IsEmpty());
 
 			doubleList.PushBack(10);
 			doubleList.PushBack(20);
 
-			doubleListCopy = doubleList;
+			doubleList = doubleListCopy;
 			doubleListMoved = std::move(doubleList);
 			Assert::AreEqual(doubleListMoved, doubleListCopy);
-
+			Assert::IsTrue(doubleList.IsEmpty());
 
 			/* Foo Data */
 
-			// Validates copies are equal to source
 			SList<Foo> fooListCopy = fooList;
-			fooList = std::move(fooList);
-			Assert::AreEqual(fooListCopy, fooList);
 
 			// Validates moved element is equal to copy
 			SList<Foo> fooListMoved = std::move(fooList);
 			Assert::AreEqual(fooListMoved, fooListCopy);
+			Assert::IsTrue(fooList.IsEmpty());
 
-			fooList.PushBack(Foo(10));
-			fooList.PushBack(Foo(20));
-
-			fooListCopy = fooList;
+			fooList = fooListCopy;
 			fooListMoved = std::move(fooList);
 			Assert::AreEqual(fooListMoved, fooListCopy);
+			Assert::IsTrue(fooList.IsEmpty());
 		}
 
 		TEST_METHOD(EqualityOperators)
@@ -1000,6 +989,12 @@ namespace ContainerTests
 
 		TEST_METHOD(Find)
 		{
+			SList<int> missingEquality = SList(SList<int>::EqualityFunctor());
+			Assert::ExpectException<std::runtime_error>([&missingEquality] { missingEquality.Find(1); });
+			
+			const SList<int> constMissingEquality = SList(SList<int>::EqualityFunctor());
+			Assert::ExpectException<std::runtime_error>([&constMissingEquality] { constMissingEquality.Find(1); });
+			
 			SList<int> intList = { 10, 20, 30 };
 			SList<double> doubleList = { 10, 20, 30 };
 			SList<Foo> fooList = { Foo(10), Foo(20), Foo(30) };

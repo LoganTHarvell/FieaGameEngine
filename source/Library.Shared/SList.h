@@ -286,14 +286,14 @@ namespace Library
 		};
 #pragma endregion ConstIterator
 
-#pragma region Constructors, Destructor, Assignment
-	public:
+#pragma region Special Members
+	public:		
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
 		/// <param name="equalityFunctor">Equality functor for comparing SList elements.</param>
 		/// <remarks>If no EqualityFunctor is passed and no valid DefaultEquality exists, then a compiler error will occur.</remarks>
-		SList(EqualityFunctor equalityFunctor=DefaultEquality<T>());
+		explicit SList(const EqualityFunctor& equalityFunctor=DefaultEquality<T>());
 
 		/// <summary>
 		/// Destructor. 
@@ -330,21 +330,21 @@ namespace Library
 		/// <param name="rhs">SList whose values are copied.</param>
 		/// <returns>Modified SList with copied values.</returns>
 		SList& operator=(SList&& rhs) noexcept;
-
+		
 		/// <summary>
 		/// Initializer SList constructor.
 		/// </summary>
 		/// <param name="rhs">Value SList for initializing a new SList.</param>
 		/// <param name="equalityFunctor">Equality functor for comparing SList elements.</param>
 		/// <remarks>May require an EqualityFunctor passed using constructor syntax, if no suitable DefaultEquality exists.</remarks>
-		SList(const std::initializer_list<T> rhs, EqualityFunctor equalityFunctor=DefaultEquality<T>());
+		SList(std::initializer_list<T> rhs, const EqualityFunctor& equalityFunctor=DefaultEquality<T>());
 
 		/// <summary>
 		/// Initializer SList assignment operator.
 		/// </summary>
 		/// <param name="rhs">Value list for initializing a new SList.</param>
-		SList& operator=(const std::initializer_list<T> rhs);
-#pragma endregion Constructors, Destructor, Assignment
+		SList& operator=(std::initializer_list<T> rhs);
+#pragma endregion Special Members
 
 #pragma region Boolean Operators
 	public:
@@ -423,6 +423,7 @@ namespace Library
 		/// </summary>
 		/// <param name="value">Value to search for in the SList.</param>
 		/// <returns>Iterator referencing the value, if found. Otherwise it returns an empty Iterator.</returns>
+		/// <exception cref="std::runtime_error">EqualityFunctor null.</exception>
 		Iterator Find(const T& value);
 
 		/// <summary>
@@ -430,6 +431,7 @@ namespace Library
 		/// </summary>
 		/// <param name="value">Value to search for in the SList.</param>
 		/// <returns>const value ConstIterator referencing the value, if found. Otherwise it returns an empty ConstIterator.</returns>
+		/// <exception cref="std::runtime_error">EqualityFunctor null.</exception>
 		ConstIterator Find(const T& value) const;
 #pragma endregion Iterator Accessors
 
@@ -502,7 +504,7 @@ namespace Library
 		/// </summary>
 		/// <param name="vale">Value to be searched for in the SList to be removed.</param>
 		/// <returns>True on successful remove, false otherwise.</returns>
-		/// <exception cref="runtime_error">Missing equality functor.</exception>
+		/// <exception cref="runtime_error">EqualityFunctor null.</exception>
 		/// <exception cref="runtime_error">Invalid Iterator.</exception>
 		bool Remove(const T& value);
 
@@ -540,7 +542,7 @@ namespace Library
 		/// <summary>
 		/// Functor for evaluating the equality of two values in the SList.
 		/// </summary>
-		EqualityFunctor mEqualityFunctor{ DefaultEquality<T>() };
+		std::shared_ptr<EqualityFunctor> mEqualityFunctor;
 #pragma endregion Data Members
 	};
 }

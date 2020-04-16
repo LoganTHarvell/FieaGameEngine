@@ -152,13 +152,13 @@ namespace Library
 	}
 #pragma endregion ConstIterator
 
-#pragma region Constructors, Destructor, Assignment
+#pragma region Special Members
 	template<typename T>
-	inline SList<T>::SList(EqualityFunctor equalityFunctor) :
-		mEqualityFunctor(std::move(equalityFunctor))
+	inline SList<T>::SList(const EqualityFunctor& equalityFunctor) :
+		mEqualityFunctor(std::make_shared<EqualityFunctor>(equalityFunctor))
 	{
 	}
-
+	
 	template<typename T>
 	inline SList<T>::~SList()
 	{
@@ -223,8 +223,8 @@ namespace Library
 	}
 
 	template<typename T>
-	inline SList<T>::SList(const std::initializer_list<T> rhs, EqualityFunctor equalityFunctor) :
-		mEqualityFunctor(std::move(equalityFunctor))
+	inline SList<T>::SList(std::initializer_list<T> rhs, const EqualityFunctor& equalityFunctor) :
+		mEqualityFunctor(std::make_shared<EqualityFunctor>(equalityFunctor))
 	{
 		for (const auto& value : rhs)
 		{
@@ -233,7 +233,7 @@ namespace Library
 	}
 
 	template<typename T>
-	inline SList<T>& SList<T>::operator=(const std::initializer_list<T> rhs)
+	inline SList<T>& SList<T>::operator=(std::initializer_list<T> rhs)
 	{
 		Clear();
 
@@ -244,7 +244,7 @@ namespace Library
 
 		return *this;
 	}
-#pragma endregion Constructors, Destructor, Assignment
+#pragma endregion Special Members
 
 #pragma region Boolean Operators
 	template<typename T>
@@ -324,10 +324,12 @@ namespace Library
 	template<typename T>
 	inline typename SList<T>::Iterator SList<T>::Find(const T& value)
 	{
+		if (!*mEqualityFunctor) throw std::runtime_error("EqualityFunctor null.");
+		
 		auto it = begin();
 		for (; it != end(); ++it)
 		{
-			if (mEqualityFunctor(*it, value))
+			if (mEqualityFunctor->operator()(*it, value))
 			{
 				break;
 			}
@@ -339,10 +341,12 @@ namespace Library
 	template<typename T>
 	inline typename SList<T>::ConstIterator SList<T>::Find(const T& value) const
 	{
+		if (!*mEqualityFunctor) throw std::runtime_error("EqualityFunctor null.");
+		
 		auto it = cbegin();
 		for (; it != cend(); ++it)
 		{
-			if (mEqualityFunctor(*it, value))
+			if (mEqualityFunctor->operator()(*it, value))
 			{
 				break;
 			}

@@ -104,7 +104,7 @@ namespace Library
 		/// <param name="capacity">Capacity to initialize for the Scope.</param>
 		/// <exception cref="std::runtime_error">Duplicate names found in the initializer list.</exception>
 		/// <remarks>Data values are copied.</remarks>
-		Scope(const std::initializer_list<Attribute> rhs, const std::size_t capacity=0);
+		Scope(std::initializer_list<Attribute> rhs, const std::size_t capacity=0);
 
 		/// <summary>
 		/// Initializer list assignment operator.
@@ -113,7 +113,7 @@ namespace Library
 		/// <returns>Reference to the modified Scope containing the new pairs.</returns>
 		/// <exception cref="std::runtime_error">Duplicate names found in the initializer list.</exception>
 		/// <remarks>Data values are copied.</remarks>
-		Scope& operator=(const std::initializer_list<Attribute> rhs);
+		Scope& operator=(std::initializer_list<Attribute> rhs);
 
 		/// <summary>
 		/// Creates a heap allocated copy of the current Scope.

@@ -388,8 +388,8 @@ namespace Library
 
 #pragma region Constructors, Destructor, Assignment
 	template <typename T>
-	inline Vector<T>::Vector(const std::size_t capacity, const EqualityFunctor equalityFunctor, const ReserveFunctor reserveFunctor) :
-		mEqualityFunctor(equalityFunctor), mReserveFunctor(reserveFunctor)
+	inline Vector<T>::Vector(const std::size_t capacity, const EqualityFunctor& equalityFunctor, const ReserveFunctor& reserveFunctor) :
+		mEqualityFunctor(std::make_shared<EqualityFunctor>(equalityFunctor)), mReserveFunctor(std::make_shared<ReserveFunctor>(reserveFunctor))
 	{
 		if (capacity > 0)
 		{
@@ -398,7 +398,8 @@ namespace Library
 	}
 
 	template<typename T>
-	inline Vector<T>::Vector(const EqualityFunctor equalityFunctor) : mEqualityFunctor(equalityFunctor)
+	inline Vector<T>::Vector(const EqualityFunctor& equalityFunctor) :
+		mEqualityFunctor(std::make_shared<EqualityFunctor>(equalityFunctor)), mReserveFunctor(std::make_shared<ReserveFunctor>(DefaultReserveFunctor()))
 	{
 	}
 
@@ -484,8 +485,8 @@ namespace Library
 	}
 
 	template<typename T>
-	inline Vector<T>::Vector(const std::initializer_list<T> rhs, const EqualityFunctor equalityFunctor, const ReserveFunctor reserveFunctor) :
-		mEqualityFunctor(equalityFunctor), mReserveFunctor(reserveFunctor)
+	inline Vector<T>::Vector(std::initializer_list<T> rhs, const EqualityFunctor& equalityFunctor, const ReserveFunctor& reserveFunctor) :
+		mEqualityFunctor(std::make_shared<EqualityFunctor>(equalityFunctor)), mReserveFunctor(std::make_shared<ReserveFunctor>(reserveFunctor))
 	{
 		Reserve(rhs.size());
 
@@ -495,7 +496,7 @@ namespace Library
 		}
 	}
 	template<typename T>
-	inline Vector<T>& Vector<T>::operator=(const std::initializer_list<T> rhs)
+	inline Vector<T>& Vector<T>::operator=(std::initializer_list<T> rhs)
 	{
 		Clear();
 		ShrinkToFit();
@@ -672,11 +673,11 @@ namespace Library
 	template<typename T>
 	inline typename Vector<T>::Iterator Vector<T>::Find(const T& value)
 	{
-		if (!mEqualityFunctor) throw std::runtime_error("Missing equality functor.");
-
+		if (!*mEqualityFunctor) throw std::runtime_error("EqualityFunctor null.");
+		
 		for (std::size_t i = 0; i < mSize; ++i)
 		{
-			if (mEqualityFunctor(mData[i], value))
+			if (mEqualityFunctor->operator()(mData[i], value))
 			{
 				return Iterator(*this, i);
 			}
@@ -777,11 +778,11 @@ namespace Library
 	template<typename T>
 	inline void Vector<T>::PushBack(const T& data)
 	{
-		if (!mReserveFunctor) throw std::runtime_error("Missing reserve functor.");
-
+		if (!*mReserveFunctor) throw std::runtime_error("Missing ReserveFunctor.");
+		
 		if (mCapacity <= mSize)
 		{
-			std::size_t newCapacity = mReserveFunctor(mCapacity, mSize);
+			const std::size_t newCapacity = mReserveFunctor->operator()(mCapacity, mSize);
 			Reserve(std::max(newCapacity, mCapacity + 1));
 		}
 
@@ -797,7 +798,7 @@ namespace Library
 		if (first < last)
 		{
 			std::size_t insertCount = last.mIndex - first.mIndex;
-			std::size_t newSize = mSize + insertCount;
+			const std::size_t newSize = mSize + insertCount;
 		
 			Reserve(newSize);
 			std::memmove(&mData[position.mIndex + insertCount], &mData[position.mIndex], sizeof(T) * (mSize - position.mIndex));
@@ -827,11 +828,14 @@ namespace Library
 	template<typename T>
 	inline bool Vector<T>::Remove(const T& value)
 	{
-		if (!mEqualityFunctor) throw std::runtime_error("Missing equality functor.");
-
+		if (!mEqualityFunctor || !*mEqualityFunctor)
+		{
+			throw std::runtime_error("EqualityFunctor null.");
+		}
+		
 		for (std::size_t i = 0; i < mSize; ++i)
 		{
-			if (mEqualityFunctor(mData[i], value))
+			if (mEqualityFunctor->operator()(mData[i], value))
 			{
 				mData[i].~T();
 				std::memmove(&mData[i], &mData[i + 1], sizeof(T) * (mSize - i));

@@ -17,8 +17,8 @@ namespace Library
 	template<typename TKey, typename TData>
 	class HashMap final
 	{
-	public:
 #pragma region Type Definitions and Constants
+	public:
 		/// <summary>
 		/// Pairs of TKey and TData values that make up the elements of the HashMap.
 		/// </summary>
@@ -75,8 +75,8 @@ namespace Library
 		static constexpr std::size_t DefaultBucketCount = 31;
 #pragma endregion Type Definitions and Constants
 
-	public:
 #pragma region Iterator
+	public:
 		/// <summary>
 		/// Class for traversing the HashMap and retrieving values, which can then be manipulated.
 		/// </summary>
@@ -85,8 +85,8 @@ namespace Library
 			friend HashMap;
 			friend class ConstIterator;
 
-		public:
 #pragma region Iterator Traits
+		public:
 			/// <summary>
 			/// Size type for std::iterator_trait.
 			/// </summary>
@@ -202,6 +202,7 @@ namespace Library
 #pragma endregion Iterator
 
 #pragma region ConstIterator
+	public:
 		/// <summary>
 		/// Class for traversing the HashMap and reading values, may not manipulate the HashMap.
 		/// </summary>
@@ -209,8 +210,8 @@ namespace Library
 		{
 			friend HashMap;
 
-		public:
 #pragma region Iterator Traits
+		public:
 			/// <summary>
 			/// Size type for std::iterator_trait.
 			/// </summary>
@@ -331,8 +332,8 @@ namespace Library
 		};
 #pragma endregion ConstIterator
 
+#pragma region Special Members
 	public:
-#pragma region Constructors, Destructor, Assignment
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
@@ -340,7 +341,7 @@ namespace Library
 		/// <param name="keyEqualityFunctor">Equality functor for comparing TKey values.</param>
 		/// <param name="hashFunctor">Hashing functor for creating hash codes from TKey values.</param>
 		/// <remarks cref="bucketCount">Asserts on zero bucketCount.</remarks>
-		explicit HashMap(const std::size_t bucketCount=DefaultBucketCount, const KeyEqualityFunctor keyEqualityFunctor=DefaultEquality<TKey>(), const HashFunctor hashFunctor=DefaultHash<TKey>());
+		explicit HashMap(const std::size_t bucketCount=DefaultBucketCount, const KeyEqualityFunctor& keyEqualityFunctor=DefaultEquality<TKey>(), const HashFunctor& hashFunctor=DefaultHash<TKey>());
 
 		/// <summary>
 		/// Default Destructor. 
@@ -386,17 +387,18 @@ namespace Library
 		/// <param name="keyEqualityFunctor">Equality functor for comparing TKey values.</param>
 		/// <param name="hashFunctor">Hashing functor for creating hash codes from TKey values.</param>
 		/// <remarks cref="bucketCount">Asserts on zero bucketCount.</remarks>
-		HashMap(const std::initializer_list<Pair> rhs, const std::size_t bucketCount = DefaultBucketCount, KeyEqualityFunctor keyEqualityFunctor = DefaultEquality<TKey>(), const HashFunctor hashFunctor = DefaultHash<TKey>());
+		HashMap(std::initializer_list<Pair> rhs, const std::size_t bucketCount=DefaultBucketCount, const KeyEqualityFunctor& keyEqualityFunctor=DefaultEquality<TKey>(), const HashFunctor& hashFunctor=DefaultHash<TKey>());
 
 		/// <summary>
 		/// Initializer list assignment operator.
 		/// </summary>
 		/// <param name="rhs">List of values to be in the HashMap.</param>
 		/// <returns>Reference to the modified HashMap containing the new pairs.</returns>
-		HashMap& operator=(const std::initializer_list<Pair> rhs);
-#pragma endregion Constructors, Destructor, and Assignment
+		HashMap& operator=(std::initializer_list<Pair> rhs);
+#pragma endregion Special Members
 
 #pragma region Size and Capacity
+	public:
 		/// <summary>
 		/// Getter method for the number of Pair values in the HashMap.
 		/// </summary>
@@ -429,6 +431,7 @@ namespace Library
 #pragma endregion Size and Capacity
 
 #pragma region Iterator Accessors
+	public:
 		/// <summary>
 		/// Gets an Iterator pointing to the first element in the HashMap, values are mutable.
 		/// </summary>
@@ -481,6 +484,7 @@ namespace Library
 #pragma endregion Iterator Accessors
 
 #pragma region Element Accessors
+	public:
 		/// <summary>
 		/// Retrieves a value reference for the element with the specified key.
 		/// </summary>
@@ -531,6 +535,7 @@ namespace Library
 #pragma endregion Element Accessors
 
 #pragma region Modifiers
+	public:
 		/// <summary>
 		/// Attempts to insert a Pair
 		/// </summary>
@@ -558,19 +563,21 @@ namespace Library
 		void Clear();
 #pragma endregion Modifiers
 
-	private:
 #pragma region Helper Methods
+	private:
 		/// <summary>
 		/// Searches the HashMap for a given value and returns an Iterator.
 		/// </summary>
 		/// <param name="key">TKey value to search for in the HashMap.</param>
 		/// <param name="indexOut">Reference to be written with the hashed index.</param>
 		/// <returns>Iterator referencing the value, if found. Otherwise it returns an Iterator to the end.</returns>
+		/// <exception cref="std::runtime_error">HashFunctor null.</exception>
+		/// <exception cref="std::runtime_error">KeyEqualityFunctor null.</exception>
 		Iterator Find(const TKey& key, std::size_t& indexOut);
 #pragma endregion Helper Methods
 
-	private:
 #pragma region Data Members
+	private:
 		/// <summary>
 		/// HashMap of chain lists for storing key-value pairs according at a hashed index.
 		/// </summary>
@@ -584,12 +591,12 @@ namespace Library
 		/// <summary>
 		/// Equality functor for comparing two TKey values.
 		/// </summary>
-		KeyEqualityFunctor mKeyEqualityFunctor;
+		std::shared_ptr<KeyEqualityFunctor> mKeyEqualityFunctor;
 
 		/// <summary>
 		/// Hash functor used to compute hash code from a TKey.
 		/// </summary>
-		HashFunctor mHashFunctor;
+		std::shared_ptr<HashFunctor> mHashFunctor;
 #pragma endregion Data Members
 	};
 }

@@ -138,7 +138,7 @@ namespace Library
 		return *this;
 	}
 
-	Scope::Scope(const std::initializer_list<Attribute> rhs, const std::size_t capacity) :
+	Scope::Scope(std::initializer_list<Attribute> rhs, const std::size_t capacity) :
 		mTable(std::max(Table::DefaultBucketCount, Math::FindNextPrime(capacity))), mPairPtrs(capacity)
 	{
 		for (auto& tableEntry : rhs)
@@ -171,7 +171,7 @@ namespace Library
 		}
 	}
 
-	Scope& Scope::operator=(const std::initializer_list<Attribute> rhs)
+	Scope& Scope::operator=(std::initializer_list<Attribute> rhs)
 	{
 		Clear();
 		

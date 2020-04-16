@@ -170,8 +170,8 @@ namespace Library
 
 #pragma region Constructors, Destructor, Assignment
 	template<typename TKey, typename TData>
-	inline HashMap<TKey, TData>::HashMap(const size_t bucketCount, const KeyEqualityFunctor keyEqualityFunctor, const HashFunctor hashFunctor) :
-		mBuckets(0, Bucket::EqualityFunctor()), mKeyEqualityFunctor(keyEqualityFunctor), mHashFunctor(hashFunctor)
+	inline HashMap<TKey, TData>::HashMap(const size_t bucketCount, const KeyEqualityFunctor& keyEqualityFunctor, const HashFunctor& hashFunctor) :
+		mBuckets(0, Bucket::EqualityFunctor()), mKeyEqualityFunctor(std::make_shared<KeyEqualityFunctor>(keyEqualityFunctor)), mHashFunctor(std::make_shared<HashFunctor>(hashFunctor))
 	{		
 		assert(bucketCount > 0);
 
@@ -199,8 +199,8 @@ namespace Library
 	}
 
 	template<typename TKey, typename TData>
-	inline HashMap<TKey, TData>::HashMap(const std::initializer_list<Pair> rhs, const size_t bucketCount, const KeyEqualityFunctor keyEqualityFunctor, const HashFunctor hashFunctor) :
-		mBuckets(0, Bucket::EqualityFunctor()), mKeyEqualityFunctor(keyEqualityFunctor), mHashFunctor(hashFunctor)
+	inline HashMap<TKey, TData>::HashMap(std::initializer_list<Pair> rhs, const size_t bucketCount, const KeyEqualityFunctor& keyEqualityFunctor, const HashFunctor& hashFunctor) :
+		mBuckets(0, Bucket::EqualityFunctor()), mKeyEqualityFunctor(std::make_shared<KeyEqualityFunctor>(keyEqualityFunctor)), mHashFunctor(std::make_shared<HashFunctor>(hashFunctor))
 	{
 		assert(bucketCount > 0);
 
@@ -213,7 +213,7 @@ namespace Library
 	}
 
 	template<typename TKey, typename TData>
-	inline HashMap<TKey, TData>& HashMap<TKey, TData>::operator=(const std::initializer_list<Pair> rhs)
+	inline HashMap<TKey, TData>& HashMap<TKey, TData>::operator=(std::initializer_list<Pair> rhs)
 	{
 		Clear();
 
@@ -256,7 +256,7 @@ namespace Library
 	{
 		if (bucketCount == mBuckets.Size()) return;
 
-		HashMap newHash = HashMap(bucketCount, mKeyEqualityFunctor, mHashFunctor);
+		HashMap newHash = HashMap(bucketCount, *mKeyEqualityFunctor, *mHashFunctor);
 
 		for (auto it = begin(); it != end(); ++it)
 		{
@@ -448,14 +448,17 @@ namespace Library
 	template<typename TKey, typename TData>
 	inline typename HashMap<TKey, TData>::Iterator HashMap<TKey, TData>::Find(const TKey& key, std::size_t& indexOut)
 	{
-		indexOut = mHashFunctor(key) % mBuckets.Capacity();
+		if (!*mHashFunctor)			throw std::runtime_error("HashFunctor null.");
+		if (!*mKeyEqualityFunctor)	throw std::runtime_error("KeyEqualityFunctor null.");
+		
+		indexOut = mHashFunctor->operator()(key) % mBuckets.Capacity();
 
 		Chain& chain = mBuckets[indexOut];
 
 		ChainIterator chainIterator = chain.begin();
 		for (; chainIterator != chain.end(); ++chainIterator)
 		{
-			if (mKeyEqualityFunctor(key, chainIterator->first))
+			if (mKeyEqualityFunctor->operator()(key, chainIterator->first))
 			{
 				break;
 			}
