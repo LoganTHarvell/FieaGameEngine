@@ -16,7 +16,7 @@ namespace Library
 {
 #pragma region Constructors, Destructor, Assignment
 	Scope::Scope(const std::size_t capacity) :
-		mTable(std::max(Table::DefaultBucketCount, Math::FindNextPrime(capacity))), mPairPtrs(capacity)
+		mPairPtrs(capacity), mTable(std::max(Table::DefaultBucketCount, Math::FindNextPrime(capacity)))
 	{
 	}
 
@@ -26,9 +26,9 @@ namespace Library
 	}
 
 	Scope::Scope(const Scope& rhs) :
-		mTable(rhs.mTable.BucketCount()), mPairPtrs(rhs.mPairPtrs.Size())
+		mPairPtrs(rhs.mPairPtrs.Size()), mTable(rhs.mTable.BucketCount())
 	{
-		for (auto& tableEntryPtr : rhs.mPairPtrs)
+		for (const auto& tableEntryPtr : rhs.mPairPtrs)
 		{
 			if (tableEntryPtr->second.Type() == Types::Scope)
 			{
@@ -37,16 +37,16 @@ namespace Library
 				
 				for (std::size_t i = 0; i < tableEntryPtr->second.Size(); ++i)
 				{
-					mChildren.PushBack(tableEntryPtr->second[i].Clone());
+					mChildren.EmplaceBack(tableEntryPtr->second[i].Clone());
 					mChildren.Back()->mParent = this;
-					data.PushBack(mChildren.Back());
+					data.EmplaceBack<Scope*>(mChildren.Back());
 				}
 
-				mPairPtrs.PushBack(&(*mTable.Insert({ tableEntryPtr->first, data }).first));
+				mPairPtrs.EmplaceBack(&(*mTable.TryEmplace(tableEntryPtr->first, data).first));
 			}
 			else
 			{
-				mPairPtrs.PushBack(&(*mTable.Insert(*tableEntryPtr).first));
+				mPairPtrs.EmplaceBack(&(*mTable.Emplace(*tableEntryPtr).first));
 			}
 		}
 	}
@@ -69,16 +69,16 @@ namespace Library
 				
 				for (std::size_t i = 0; i < tableEntryPtr->second.Size(); ++i)
 				{
-					mChildren.PushBack(tableEntryPtr->second[i].Clone());
+					mChildren.EmplaceBack(tableEntryPtr->second[i].Clone());
 					mChildren.Back()->mParent = this;
-					data.PushBack(mChildren.Back());
+					data.EmplaceBack<Scope*>(mChildren.Back());
 				}
 
-				mPairPtrs.PushBack(&(*mTable.Insert({ tableEntryPtr->first, data }).first));
+				mPairPtrs.EmplaceBack(&(*mTable.TryEmplace(tableEntryPtr->first, data).first));
 			}
 			else
 			{
-				mPairPtrs.PushBack(&(*mTable.Insert(*tableEntryPtr).first));
+				mPairPtrs.EmplaceBack(&(*mTable.Emplace(*tableEntryPtr).first));
 			}
 		}
 
@@ -139,11 +139,11 @@ namespace Library
 	}
 
 	Scope::Scope(std::initializer_list<Attribute> rhs, const std::size_t capacity) :
-		mTable(std::max(Table::DefaultBucketCount, Math::FindNextPrime(capacity))), mPairPtrs(capacity)
+		mPairPtrs(capacity), mTable(std::max(Table::DefaultBucketCount, Math::FindNextPrime(capacity)))
 	{
-		for (auto& tableEntry : rhs)
+		for (const auto& tableEntry : rhs)
 		{
-			if (Find(tableEntry.first) != nullptr)
+			if (Scope::Find(tableEntry.first) != nullptr)
 			{
 				throw std::runtime_error("Duplicate names found in the initializer list.");
 			}
@@ -155,18 +155,18 @@ namespace Library
 
 				for (std::size_t i = 0; i < tableEntry.second.Size(); ++i)
 				{
-					mChildren.PushBack(tableEntry.second[i].Clone());
+					mChildren.EmplaceBack(tableEntry.second[i].Clone());
 					mChildren.Back()->mParent = this;
-					data.PushBack(mChildren.Back());
+					data.EmplaceBack<Scope*>(mChildren.Back());
 
-					auto [it, isNew] = mTable.Insert({ tableEntry.first, Data(mChildren.Back()) });
-					if (isNew) mPairPtrs.PushBack(&(*it));
-					else it->second.PushBack(mChildren.Back());
+					auto [it, isNew] = mTable.TryEmplace(tableEntry.first, Data(mChildren.Back()));
+					if (isNew) mPairPtrs.EmplaceBack(&(*it));
+					else it->second.EmplaceBack<Scope*>(mChildren.Back());
 				}
 			}
 			else
 			{
-				mPairPtrs.PushBack(&(*mTable.Insert(tableEntry).first));
+				mPairPtrs.EmplaceBack(&(*mTable.Emplace(tableEntry).first));
 			}
 		}
 	}
@@ -194,18 +194,18 @@ namespace Library
 
 				for (std::size_t i = 0; i < tableEntry.second.Size(); ++i)
 				{
-					mChildren.PushBack(tableEntry.second[i].Clone());
+					mChildren.EmplaceBack(tableEntry.second[i].Clone());
 					mChildren.Back()->mParent = this;
-					data.PushBack(mChildren.Back());
+					data.EmplaceBack<Scope*>(mChildren.Back());
 
-					auto [it, isNew] = mTable.Insert({ tableEntry.first, Data(mChildren.Back()) });
-					if (isNew) mPairPtrs.PushBack(&(*it));
-					else it->second.PushBack(mChildren.Back());
+					auto [it, isNew] = mTable.TryEmplace(tableEntry.first, Data(mChildren.Back()));
+					if (isNew) mPairPtrs.EmplaceBack(&(*it));
+					else it->second.EmplaceBack<Scope*>(mChildren.Back());
 				}
 			}
 			else
 			{
-				mPairPtrs.PushBack(&(*mTable.Insert(tableEntry).first));
+				mPairPtrs.EmplaceBack(&(*mTable.Emplace(tableEntry).first));
 			}
 		}
 
@@ -371,11 +371,11 @@ namespace Library
 
 	const Scope::Data* Scope::SearchChildren(const Key& key, const Scope** scopePtrOut) const
 	{
-		Vector queue = { const_cast<Scope*>(this) };
-		return queue.Front()->SearchChildrenHelper(queue, key, const_cast<Scope**>(scopePtrOut));
+		const Vector queue = { const_cast<Scope*>(this) };
+		return SearchChildrenHelper(queue, key, const_cast<Scope**>(scopePtrOut));
 	}
 
-	void Scope::ForEachAttribute(std::function<void(Attribute&)> functor)
+	void Scope::ForEachAttribute(const std::function<void(Attribute&)>& functor)
 	{
 		for (auto& pair : mPairPtrs)
 		{
@@ -383,7 +383,7 @@ namespace Library
 		}
 	}
 
-	void Scope::ForEachAttribute(std::function<void(const Attribute&)> functor) const
+	void Scope::ForEachAttribute(const std::function<void(const Attribute&)>& functor) const
 	{
 		for (const auto& pair : mPairPtrs)
 		{
@@ -397,8 +397,8 @@ namespace Library
 	{
 		if (key.empty()) throw std::runtime_error("Name cannot be empty.");
 
-		auto [it, isNew] = mTable.Insert({ key, Data() });
-		if (isNew) mPairPtrs.PushBack(&(*it));
+		auto [it, isNew] = mTable.TryEmplace(key, Data());
+		if (isNew) mPairPtrs.EmplaceBack(&(*it));
 
 		return it->second;
 	}
@@ -416,15 +416,15 @@ namespace Library
 
 		Scope* child = new Scope(std::max(Table::DefaultBucketCount, Math::FindNextPrime(capacity)));
 		child->mParent = this;
-		mChildren.PushBack(child);
+		mChildren.EmplaceBack(child);
 
 		if (data)
 		{
-			data->PushBack(child);
+			data->EmplaceBack<Scope*>(child);
 		}
 		else
 		{
-			mPairPtrs.PushBack(&(*mTable.Insert({ key, Data(mChildren.Back()) }).first));
+			mPairPtrs.EmplaceBack(&(*mTable.TryEmplace(key, Data(mChildren.Back())).first));
 		}
 
 		return *child;
@@ -458,15 +458,15 @@ namespace Library
 	
 		Scope* orphan = child.mParent ? child.mParent->Orphan(child) : &child;
 		orphan->mParent = this;
-		mChildren.PushBack(orphan);
+		mChildren.EmplaceBack(orphan);
 
 		if (data)
 		{
-			data->PushBack(orphan);
+			data->EmplaceBack<Scope*>(orphan);
 		}
 		else
 		{
-			mPairPtrs.PushBack(&(*mTable.Insert({ key, Data(mChildren.Back()) }).first));
+			mPairPtrs.EmplaceBack(&(*mTable.TryEmplace(key, Data(mChildren.Back())).first));
 		}
 
 		return *mChildren.Back();
@@ -510,7 +510,7 @@ namespace Library
 
 			for (auto& child : scopePtr->mChildren)
 			{
-				newQueue.PushBack(child);
+				newQueue.EmplaceBack(child);
 			}
 		}
 

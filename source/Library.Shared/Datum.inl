@@ -79,7 +79,7 @@ namespace Library
 		mType = type;
 	}
 
-	inline bool Datum::HasInternalStorage()
+	inline bool Datum::HasInternalStorage() const
 	{
 		return mInternalStorage;
 	}
@@ -146,7 +146,7 @@ namespace Library
 		if (mType != TypeOf<T>())		throw std::runtime_error("Mismatched type.");
 		if (index >= mSize)				throw std::out_of_range("Index out of bounds.");
 
-		return reinterpret_cast<T*>(mData.voidPtr)[index];
+		return reinterpret_cast<T*>(mData.VoidPtr)[index];
 	}
 
 	template<typename T>
@@ -158,7 +158,7 @@ namespace Library
 		if (mType != TypeOf<T>())		throw std::runtime_error("Mismatched type.");
 		if (index >= mSize)				throw std::out_of_range("Index out of bounds.");
 
-		return reinterpret_cast<T*>(mData.voidPtr)[index];
+		return reinterpret_cast<T*>(mData.VoidPtr)[index];
 	}
 
 	template<typename T>
@@ -187,7 +187,7 @@ namespace Library
 		if (mType == Types::Unknown)	throw std::runtime_error("Type not set.");
 		if (mType != TypeOf<T>())		throw std::runtime_error("Mismatched type.");
 
-		T* const data = reinterpret_cast<T*>(mData.voidPtr);
+		T* const data = reinterpret_cast<T*>(mData.VoidPtr);
 		T valueCopy = value;
 
 		std::size_t i = 0;
@@ -223,7 +223,7 @@ namespace Library
 		Clear();
 		ShrinkToFit();
 
-		mData.voidPtr = storage.data();
+		mData.VoidPtr = storage.data();
 		mSize = storage.size();
 		mCapacity = storage.size();
 		mInternalStorage = false;
@@ -238,17 +238,17 @@ namespace Library
 		Clear();
 		ShrinkToFit();
 
-		mData.voidPtr = storage.data();
+		mData.VoidPtr = storage.data();
 		mSize = storage.size();
 		mCapacity = storage.size();
 		mInternalStorage = false;
 	}
 
-	template<typename T>
-	inline void Datum::PushBack(const T& data)
+	template<typename T, typename... Args>
+	inline T& Datum::EmplaceBack(Args&&... args)
 	{
 		static_assert(TypeOf<T>() != Types::Unknown && TypeOf<T>() != Types::End, "Invalid data type.");
-		
+
 		if (!mInternalStorage) throw std::runtime_error("Cannot modify external storage.");
 
 		if (mType == Types::Unknown)
@@ -262,11 +262,23 @@ namespace Library
 
 		if (mCapacity <= mSize)
 		{
-			const std::size_t newCapacity = mReserveFunctor(mCapacity, mSize);
+			const std::size_t newCapacity = mReserveFunctor->operator()(mCapacity, mSize);
 			Reserve(std::max(newCapacity, mCapacity + 1));
 		}
 
-		new(reinterpret_cast<T*>(mData.voidPtr) + mSize++)T(data);
+		return *new(reinterpret_cast<T*>(mData.VoidPtr) + mSize++)T(std::forward<Args>(args)...);
+	}
+
+	template<typename T>
+	inline void Datum::PushBack(const T& data)
+	{
+		EmplaceBack<T>(data);
+	}
+
+	template<typename T>
+	inline typename std::enable_if_t<!std::is_lvalue_reference<T>::value> Datum::PushBack(T&& data)
+	{
+		EmplaceBack<T>(std::move(data));
 	}
 
 	template<typename T>
@@ -276,14 +288,14 @@ namespace Library
 
 		if (!mInternalStorage) throw std::runtime_error("Cannot modify external storage.");
 
-		T* const data = reinterpret_cast<T*>(mData.voidPtr);
+		T* const data = reinterpret_cast<T*>(mData.VoidPtr);
 		const std::size_t index = IndexOf(value);
 		
 		if (index < mSize)
 		{
 			if (mType == Types::String)
 			{
-				mData.stringPtr[index].~basic_string();
+				mData.StringPtr[index].~basic_string();
 			}
 
 			std::memmove(&data[index], &data[index + 1], sizeof(T) * (mSize - index));
@@ -295,9 +307,9 @@ namespace Library
 		return false;
 	}
 
-	inline void Datum::SetReserveStrategy(ReserveFunctor reserveFunctor)
+	inline void Datum::SetReserveStrategy(const ReserveFunctor& reserveFunctor)
 	{
-		mReserveFunctor = reserveFunctor;
+		mReserveFunctor = std::make_shared<ReserveFunctor>(reserveFunctor);
 	}
 #pragma endregion Modifiers
 }

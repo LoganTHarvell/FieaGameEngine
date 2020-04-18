@@ -52,7 +52,7 @@ namespace Library
 					&mAttributeKey
 				};
 
-				worldState.World->PendingChildren().PushBack(childToAdd);
+				worldState.World->PendingChildren().EmplaceBack(std::move(childToAdd));
 			}
 		}
 	}

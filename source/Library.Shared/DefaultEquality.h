@@ -1,8 +1,5 @@
 #pragma once
 
-#include <string>
-#include <functional>
-
 namespace Library::Equality
 {
 	/// <summary>

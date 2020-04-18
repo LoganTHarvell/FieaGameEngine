@@ -163,7 +163,7 @@ namespace Library
 		/// Gets the current load factor of the type registry.
 		/// </summary>
 		/// <returns>Float representing the load factor of the type registry.</returns>
-		float RegistryLoadFactor();
+		float RegistryLoadFactor() const;
 
 		/// <summary>
 		/// Rehashes the type registry with the specified size.

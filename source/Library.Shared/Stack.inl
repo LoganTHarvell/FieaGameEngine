@@ -32,15 +32,22 @@ namespace Library
 
 #pragma region Modifiers
 	template<typename T, typename Container>
+	template<typename... Args>
+	inline T& Stack<T, Container>::Emplace(Args&&... args)
+	{
+		return mContainer.EmplaceBack(std::forward<Args>(args)...);
+	}
+	
+	template<typename T, typename Container>
 	inline void Stack<T, Container>::Push(const T& value)
 	{
-		mContainer.PushBack(value);
+		mContainer.EmplaceBack(value);
 	}
 
 	template<typename T, typename Container>
 	inline void Stack<T, Container>::Push(T&& value)
 	{
-		mContainer.PushBack(std::move(value));
+		mContainer.EmplaceBack(std::move(value));
 	}
 
 	template<typename T, typename Container>

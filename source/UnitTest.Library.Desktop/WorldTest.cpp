@@ -135,12 +135,12 @@ namespace EntitySystemTests
 			Assert::IsTrue(a.Equals(&b));
 
 			Attributed* world = new World();
-			bool isEntity = world->Is(World::TypeIdClass());
+			const bool isEntity = world->Is(World::TypeIdClass());
 
 			Attributed* createdWorld = isEntity ? createdWorld = world->CreateAs<World>() : nullptr;
-			bool wasCreated = createdWorld != nullptr;
+			const bool wasCreated = createdWorld != nullptr;
 
-			bool isFooEntity = wasCreated ? createdWorld->Is(World::TypeIdClass()) : false;
+			const bool isFooEntity = wasCreated ? createdWorld->Is(World::TypeIdClass()) : false;
 			
 			delete world;
 			delete createdWorld;
@@ -180,6 +180,13 @@ namespace EntitySystemTests
 
 			const World copy = world;
 
+			Assert::IsNull(copy.GetWorldState().GameTime);
+			Assert::IsNull(copy.GetWorldState().EventQueue);
+			Assert::AreEqual(&copy, copy.GetWorldState().World);
+			Assert::IsNull(copy.GetWorldState().Sector);
+			Assert::IsNull(copy.GetWorldState().Entity);
+			Assert::IsNull(copy.GetWorldState().Action);
+			
 			Assert::AreEqual(2_z, copy.Sectors().Size());
 			Assert::AreEqual(sector1, *copy.Sectors().Get<Scope*>(0)->As<Sector>());
 			Assert::AreEqual(sector2, *copy.Sectors().Get<Scope*>(1)->As<Sector>());
@@ -211,10 +218,10 @@ namespace EntitySystemTests
 			Scope* sectorClone = sectorBasePtr->Clone();
 			Assert::IsNotNull(sectorClone);
 
-			bool isEntity = sectorClone->Is(World::TypeIdClass());
+			const bool isEntity = sectorClone->Is(World::TypeIdClass());
 
 			World::Data* aux = sectorClone->Find("aux");
-			int copiedAuxValue = aux ? aux->Get<int>() : 0;
+			const int copiedAuxValue = aux ? aux->Get<int>() : 0;
 
 			delete sectorClone;
 

@@ -3,16 +3,10 @@
 #pragma region Includes
 // Standard
 #include <string>
-#include <type_traits>
 
 // Third Party
 #include <gsl/span>
 #include <glm/glm.hpp>
-
-#pragma warning(disable : 4201)
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/gtx/string_cast.hpp>
-#pragma warning(default : 4201)
 
 // First Party
 #include "RTTI.h"
@@ -20,14 +14,16 @@
 
 namespace Library
 {
+	// Forwarded Classes
 	class Scope;
+	class Attributed;
 
 	/// <summary>
 	/// Runtime type polymorphic wrapper for data elements.
 	/// </summary>
 	class Datum final
 	{
-		friend class Attributed;
+		friend Attributed;
 
 #pragma region Type Definitions, Constants
 	public:
@@ -76,18 +72,18 @@ namespace Library
 		/// </summary>
 		union Values
 		{
-			int* intPtr;
-			float* floatPtr;
-			glm::vec4* vectorPtr;
-			glm::mat4* matrixPtr;
-			std::string* stringPtr;
-			ScopePointer* scopePtr;
-			RTTIPointer* rttiPtr;
-			DatumPointer* datumPtr;
+			int* IntPtr;
+			float* FloatPtr;
+			glm::vec4* VectorPtr;
+			glm::mat4* MatrixPtr;
+			std::string* StringPtr;
+			ScopePointer* ScopePtr;
+			RTTIPointer* RttiPtr;
+			DatumPointer* DatumPtr;
 
 			// Convenience Pointers
-			void* voidPtr;
-			std::byte* bytePtr;
+			void* VoidPtr;
+			std::byte* BytePtr;
 		};
 
 		/// <summary>
@@ -207,7 +203,7 @@ namespace Library
 		static constexpr Types TypeOf<DatumPointer>();
 #pragma endregion TypeOf Static Method
 
-#pragma region Constructors, Destructor, Assignment
+#pragma region Special Members
 	public:
 		/// <summary>
 		/// Default constructor.
@@ -250,7 +246,7 @@ namespace Library
 		/// <summary>
 		/// Scalar constructor overloads for assigning Datum to an int value.
 		/// </summary>
-		/// <param name="rhs">An int value for intializing mData.</param>
+		/// <param name="rhs">An int value for initializing mData.</param>
 		/// <exception cref="runtime_error">Mismatched types.</exception>
 		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
 		Datum(const int rhs);
@@ -314,7 +310,7 @@ namespace Library
 		/// <summary>
 		/// Initializer list constructor overloads for assigning Datum to a list of int values.
 		/// </summary>
-		/// <param name="rhs">A list of int values for intializing mData.</param>
+		/// <param name="rhs">A list of int values for initializing mData.</param>
 		/// <exception cref="runtime_error">Mismatched types.</exception>
 		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
 		Datum(std::initializer_list<int> rhs);
@@ -506,7 +502,7 @@ namespace Library
 		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
 		Datum& operator=(std::initializer_list<DatumPointer> rhs);
 #pragma endregion Scalar/Initializer List Assignment
-#pragma endregion Constructors, Destructor, Assignment
+#pragma endregion Special Members
 
 #pragma region Boolean Operators
  	public:
@@ -679,7 +675,7 @@ namespace Library
 		/// Determines if the data is stored internally.
 		/// </summary>
 		/// <returns>True if the data is stored internally. Otherwise, when external, returns false.</returns>
-		bool HasInternalStorage();
+		bool HasInternalStorage() const;
 
 		/// <summary>
 		/// Gets the number of elements.
@@ -835,7 +831,6 @@ namespace Library
 		/// </summary>
 		/// <typeparam name="T">Type of elements in the Datum. A compiler error is thrown on invalid types.</typeparam>
 		/// <param name="storage">External data storage to be wrapped by the Datum.</param>
-		/// <param name="size">Size of the external data. Must be greater than zero.</param>
 		/// <exception cref="runtime_error">External storage size must be greater than zero.</exception>
 		/// <exception cref="runtime_error">Mismatched types.</exception>
 		template<typename T>
@@ -845,21 +840,39 @@ namespace Library
 		/// <summary>
 		/// Sets the storage to the external data at the given address with the given size.
 		/// </summary>
-		/// <param name="storage">External data storage to be wrapped by the Datum, as a byte pointer.</param>
-		/// <param name="size">Size of the external data. Must be greater than zero.</param>
+		/// <param name="type">Type of the external data.</param>
+		/// <param name="storage">
+		/// External data storage to be wrapped by the Datum, as a byte pointer.
+		/// Size must be greater than zero.
+		/// </param>
 		/// <exception cref="runtime_error">Mismatched types.</exception>
 		void SetStorage(const Types type, const gsl::span<std::byte> storage);
 
 	public:
 		/// <summary>
+		/// Constructs and inserts data into the end of the Datum, incrementing capacity if needed.
+		/// </summary>
+		/// <typeparam name="T">Type of elements in the Datum. Invalid types result in compile time errors.</typeparam>
+		/// <typeparam name="Args">Variadic list for constructor arguments.</typeparam>
+		/// <exception cref="runtime_error">Cannot modify external storage.</exception>
+		template<typename T, typename... Args>
+		T& EmplaceBack(Args&&... args);
+		
+		/// <summary>
 		/// Inserts data into the end of the Datum, incrementing capacity if needed.
 		/// </summary>
-		/// <typeparam name="T">Type of elements in the Datum. A compiler error is thrown on invalid types.</typeparam>
-		/// <param name="size">New size for the Datum.</param>
-		/// <param name="mDataPtr">Pointer alias for mData for the DatumTypes value.</param>
+		/// <typeparam name="T">Type of elements in the Datum. Invalid types result in compile time errors.</typeparam>
 		/// <exception cref="runtime_error">Cannot modify external storage.</exception>
 		template<typename T>
 		void PushBack(const T& data);
+		
+		/// <summary>
+		/// Inserts data into the end of the Datum, incrementing capacity if needed.
+		/// </summary>
+		/// <typeparam name="T">Type of elements in the Datum. Invalid types result in compile time errors.</typeparam>
+		/// <exception cref="runtime_error">Cannot modify external storage.</exception>
+		template<typename T>
+		typename std::enable_if_t<!std::is_lvalue_reference<T>::value> PushBack(T&& data);
 
 		/// <summary>
 		/// Removes the last element of the Datum.
@@ -896,7 +909,7 @@ namespace Library
 		/// Sets the reserve strategy for incrementing the capacity during a PushBack call at full capacity.
 		/// </summary>
 		/// <param name="reserveFunctor">New reserve strategy functor.</param>
-		void SetReserveStrategy(ReserveFunctor reserveFunctor);
+		void SetReserveStrategy(const ReserveFunctor& reserveFunctor);
 #pragma endregion Modifiers
 
 #pragma region String Conversion
@@ -967,7 +980,7 @@ namespace Library
 		/// <summary>
 		/// Reserve strategy functor denoting how to increment capacity during insertion.
 		/// </summary>
-		ReserveFunctor mReserveFunctor{ DefaultReserveFunctor() };
+		std::shared_ptr<ReserveFunctor> mReserveFunctor{ std::make_shared<ReserveFunctor>(DefaultReserveFunctor()) };
 #pragma endregion Data Members
 	};
 }

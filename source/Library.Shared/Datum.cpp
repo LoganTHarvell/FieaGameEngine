@@ -159,17 +159,17 @@ namespace Library
 	};
 #pragma endregion Look Up Tables
 
-#pragma region Constructors, Destructor, Assignment
+#pragma region Special Members
 	Datum::~Datum()
 	{
 		Clear();
 	
-		if (mInternalStorage && mData.voidPtr != nullptr)
+		if (mInternalStorage && mData.VoidPtr != nullptr)
 		{
-			free(mData.voidPtr);
+			free(mData.VoidPtr);
 		}
 	
-		mData.voidPtr = nullptr;
+		mData.VoidPtr = nullptr;
 		mCapacity = 0;
 	}
 	
@@ -186,13 +186,13 @@ namespace Library
 				{
 					for (std::size_t i = 0; i < mSize; ++i)
 					{
-						new(mData.stringPtr + i)std::string(rhs.mData.stringPtr[i]);
+						new(mData.StringPtr + i)std::string(rhs.mData.StringPtr[i]);
 					}
 				}
-				else if (mData.voidPtr && rhs.mData.voidPtr)
+				else if (mData.VoidPtr && rhs.mData.VoidPtr)
 				{
-					std::size_t dataSize = TypeSizeLUT[static_cast<std::size_t>(mType)];
-					std::memcpy(mData.voidPtr, rhs.mData.voidPtr, rhs.mSize * dataSize);
+					const std::size_t dataSize = TypeSizeLUT[static_cast<std::size_t>(mType)];
+					std::memcpy(mData.VoidPtr, rhs.mData.VoidPtr, rhs.mSize * dataSize);
 				}
 			}
 			else
@@ -226,13 +226,13 @@ namespace Library
 				{
 					for (std::size_t i = 0; i < mSize; ++i)
 					{
-						new(mData.stringPtr + i)std::string(rhs.mData.stringPtr[i]);
+						new(mData.StringPtr + i)std::string(rhs.mData.StringPtr[i]);
 					}
 				}
 				else
 				{
-					std::size_t dataSize = TypeSizeLUT[static_cast<std::size_t>(mType)];
-					std::memcpy(mData.voidPtr, rhs.mData.voidPtr, rhs.mSize * dataSize);
+					const std::size_t dataSize = TypeSizeLUT[static_cast<std::size_t>(mType)];
+					std::memcpy(mData.VoidPtr, rhs.mData.VoidPtr, rhs.mSize * dataSize);
 				}
 			}
 			else
@@ -249,7 +249,7 @@ namespace Library
 		mData(rhs.mData), mType(rhs.mType), mSize(rhs.mSize), mCapacity(rhs.mCapacity), 
 		mInternalStorage(rhs.mInternalStorage), mReserveFunctor(rhs.mReserveFunctor)
 	{
-		rhs.mData.voidPtr = nullptr;
+		rhs.mData.VoidPtr = nullptr;
 		rhs.mSize = 0;
 		rhs.mCapacity = 0;
 		rhs.mInternalStorage = true;
@@ -262,17 +262,17 @@ namespace Library
 			if (mInternalStorage && mCapacity > 0)
 			{
 				Clear();
-				free(mData.voidPtr);
+				free(mData.VoidPtr);
 			}
 
-			mData.voidPtr = rhs.mData.voidPtr;
+			mData.VoidPtr = rhs.mData.VoidPtr;
 			mType = rhs.mType;
 			mSize = rhs.mSize;
 			mCapacity = rhs.mCapacity;
 			mInternalStorage = rhs.mInternalStorage;
 			mReserveFunctor = rhs.mReserveFunctor;
 
-			rhs.mData.voidPtr = nullptr;
+			rhs.mData.VoidPtr = nullptr;
 			rhs.mSize = 0;
 			rhs.mCapacity = 0;
 			rhs.mInternalStorage = true;
@@ -453,7 +453,7 @@ namespace Library
 		if (mType != rhs.mType || mSize != rhs.mSize)	return false;
 		if (mType == Types::Unknown)					return true;
 		
-		return EqualityLUT[static_cast<std::size_t>(mType)](mData.voidPtr, rhs.mData.voidPtr, mSize);
+		return EqualityLUT[static_cast<std::size_t>(mType)](mData.VoidPtr, rhs.mData.VoidPtr, mSize);
 	}
 
 	bool Datum::operator!=(const Datum& rhs) const noexcept
@@ -464,50 +464,50 @@ namespace Library
 #pragma region Equals Scalar
 	bool Datum::operator==(const int rhs) const noexcept
 	{
-		assert(mData.intPtr != nullptr);
-		return mData.intPtr[0] == rhs;
+		assert(mData.IntPtr != nullptr);
+		return mData.IntPtr[0] == rhs;
 	}
 
 	bool Datum::operator==(const float rhs) const noexcept
 	{
-		assert(mData.floatPtr != nullptr);
-		return mData.floatPtr[0] == rhs;
+		assert(mData.FloatPtr != nullptr);
+		return mData.FloatPtr[0] == rhs;
 	}
 
 	bool Datum::operator==(const glm::vec4& rhs) const noexcept
 	{
-		assert(mData.vectorPtr != nullptr);
-		return mData.vectorPtr[0] == rhs;
+		assert(mData.VectorPtr != nullptr);
+		return mData.VectorPtr[0] == rhs;
 	}
 
 	bool Datum::operator==(const glm::mat4& rhs) const noexcept
 	{
-		assert(mData.matrixPtr != nullptr);
-		return mData.matrixPtr[0] == rhs;
+		assert(mData.MatrixPtr != nullptr);
+		return mData.MatrixPtr[0] == rhs;
 	}
 
 	bool Datum::operator==(const std::string& rhs) const noexcept
 	{
-		assert(mData.stringPtr != nullptr);
-		return mData.stringPtr[0] == rhs;
+		assert(mData.StringPtr != nullptr);
+		return mData.StringPtr[0] == rhs;
 	}
 
 	bool Datum::operator==(const ScopePointer& rhs) const noexcept
 	{
-		assert(mData.scopePtr != nullptr);
-		return ((!mData.scopePtr[0] && !rhs) || (mData.scopePtr[0] && *mData.scopePtr[0] == *rhs));
+		assert(mData.ScopePtr != nullptr);
+		return ((!mData.ScopePtr[0] && !rhs) || (mData.ScopePtr[0] && *mData.ScopePtr[0] == *rhs));
 	}
 
 	bool Datum::operator==(const RTTIPointer& rhs) const noexcept
 	{
-		assert(mData.rttiPtr != nullptr);
-		return ((!mData.rttiPtr[0] && !rhs) || (mData.rttiPtr[0] && mData.rttiPtr[0]->Equals(rhs)));
+		assert(mData.RttiPtr != nullptr);
+		return ((!mData.RttiPtr[0] && !rhs) || (mData.RttiPtr[0] && mData.RttiPtr[0]->Equals(rhs)));
 	}
 
 	bool Datum::operator==(const DatumPointer& rhs) const noexcept
 	{
-		assert(mData.datumPtr != nullptr);
-		return ((!mData.datumPtr[0] && !rhs) || (mData.datumPtr[0] && *mData.datumPtr[0] == *rhs));
+		assert(mData.DatumPtr != nullptr);
+		return ((!mData.DatumPtr[0] && !rhs) || (mData.DatumPtr[0] && *mData.DatumPtr[0] == *rhs));
 	}
 #pragma endregion Equals Scalar
 
@@ -562,11 +562,11 @@ namespace Library
 
 		if (capacity > mCapacity)
 		{
-			void* newMemory = realloc(mData.voidPtr, capacity * TypeSizeLUT[static_cast<std::size_t>(mType)]);
+			void* newMemory = realloc(mData.VoidPtr, capacity * TypeSizeLUT[static_cast<std::size_t>(mType)]);
 
 			assert(newMemory != nullptr);
 
-			mData.voidPtr = newMemory;
+			mData.VoidPtr = newMemory;
 			mCapacity = capacity;
 		}
 	}
@@ -582,14 +582,14 @@ namespace Library
 
 			for (std::size_t i = mSize; i < size; ++i)
 			{
-				CreateDefaultLUT[static_cast<std::size_t>(mType)](mData.voidPtr, i);
+				CreateDefaultLUT[static_cast<std::size_t>(mType)](mData.VoidPtr, i);
 			}
 		}
 		else if (mType == Types::String && size < mSize)
 		{
 			for (std::size_t i = size; i < mSize; ++i)
 			{
-				mData.stringPtr[i].~basic_string();
+				mData.StringPtr[i].~basic_string();
 			}
 		}
 
@@ -603,16 +603,16 @@ namespace Library
 
 		if (mSize == 0)
 		{
-			free(mData.voidPtr);
-			mData.voidPtr = nullptr;
+			free(mData.VoidPtr);
+			mData.VoidPtr = nullptr;
 		}
 		else if (mSize < mCapacity)
 		{
-			void* newMemory = realloc(mData.voidPtr, mSize * TypeSizeLUT[static_cast<std::size_t>(mType)]);
+			void* newMemory = realloc(mData.VoidPtr, mSize * TypeSizeLUT[static_cast<std::size_t>(mType)]);
 
 			assert(newMemory != nullptr);
 
-			mData.voidPtr = newMemory;
+			mData.VoidPtr = newMemory;
 		}
 
 		mCapacity = mSize;
@@ -643,7 +643,7 @@ namespace Library
 		{
 			if (mType == Types::String)
 			{
-				mData.stringPtr[mSize - 1].~basic_string();
+				mData.StringPtr[mSize - 1].~basic_string();
 			}
 
 			--mSize;
@@ -658,11 +658,11 @@ namespace Library
 
 		if (mType == Types::String)
 		{
-			mData.stringPtr[index].~basic_string();
+			mData.StringPtr[index].~basic_string();
 		}
 
 		const std::size_t size = TypeSizeLUT[static_cast<std::size_t>(mType)];
-		std::memmove(&mData.bytePtr[index * size], &mData.bytePtr[(index * size) + size], size * (mSize - index));
+		std::memmove(&mData.BytePtr[index * size], &mData.BytePtr[(index * size) + size], size * (mSize - index));
 
 		--mSize;
 	}
@@ -671,13 +671,13 @@ namespace Library
 	{
 		if (!mInternalStorage)
 		{
-			mData.voidPtr = nullptr;
+			mData.VoidPtr = nullptr;
 		}
 		else if (mType == Types::String)
 		{
 			for (std::size_t i = 0; i < mSize; ++i)
 			{
-				std::destroy_at(mData.stringPtr + i);
+				std::destroy_at(mData.StringPtr + i);
 			}
 		}
 
@@ -692,7 +692,7 @@ namespace Library
 		if (mType == Types::Unknown) throw std::runtime_error("Data type unknown.");
 		if (index >= mSize)			 throw std::out_of_range("Index out of bounds.");
 
-		return ToStringLUT[static_cast<std::size_t>(mType)](mData.voidPtr, index);
+		return ToStringLUT[static_cast<std::size_t>(mType)](mData.VoidPtr, index);
 	}
 
 	void Datum::SetFromString(const std::string& str, const std::size_t index)
@@ -700,7 +700,7 @@ namespace Library
 		if (mType == Types::Unknown) throw std::runtime_error("Data type unknown.");
 		if (index >= mSize)			 throw std::out_of_range("Index out of bounds.");
 
-		FromStringLUT[static_cast<std::size_t>(mType)](str, mData.voidPtr, index);
+		FromStringLUT[static_cast<std::size_t>(mType)](str, mData.VoidPtr, index);
 	}
 #pragma endregion String Conversion
 

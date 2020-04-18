@@ -208,7 +208,7 @@ namespace Library
 
 		for (auto pair : rhs)
 		{
-			Insert(pair);
+			Emplace(pair);
 		}
 	}
 
@@ -219,7 +219,7 @@ namespace Library
 
 		for (auto pair : rhs)
 		{
-			Insert(pair);
+			Emplace(pair);
 		}
 
 		return *this;
@@ -367,7 +367,7 @@ namespace Library
 	template<typename TKey, typename TData>
 	inline TData& HashMap<TKey, TData>::operator[](const TKey& key)
 	{
-		return Insert({ key, TData() }).first->second;
+		return TryEmplace(key, TData()).first->second;
 	}
 
 	template<typename TKey, typename TData>
@@ -399,21 +399,57 @@ namespace Library
 
 #pragma region Modifiers
 	template<typename TKey, typename TData>
-	inline std::pair<typename HashMap<TKey, TData>::Iterator, bool> HashMap<TKey, TData>::Insert(const Pair& entry)
+	template<typename ...Args>
+	inline std::pair<typename HashMap<TKey, TData>::Iterator, bool> HashMap<TKey, TData>::Emplace(Args&& ...args)
 	{
+		auto entry = Pair(std::forward<Args>(args)...);
+		
 		std::size_t index;
 		auto it = Find(entry.first, index);
-		
-		bool alreadyExists = it != end();
-		
+
+		const bool alreadyExists = it != end();
+
 		if (!alreadyExists)
 		{
 			it.mBucketIterator = mBuckets.begin() + index;
-			it.mChainIterator = mBuckets[index].InsertAfter(mBuckets[index].end(), entry);
+			it.mChainIterator = mBuckets[index].EmplaceAfter(mBuckets[index].end(), std::move(entry));
 			++mSize;
 		}
 
 		return { it, !alreadyExists };
+	}
+
+	template<typename TKey, typename TData>
+	template<typename ...Args>
+	inline std::pair<typename HashMap<TKey, TData>::Iterator, bool> HashMap<TKey, TData>::TryEmplace(const TKey& key, Args&&... args)
+	{
+		std::size_t index;
+		auto it = Find(key, index);
+
+		const bool alreadyExists = it != end();
+
+		if (!alreadyExists)
+		{
+			it.mBucketIterator = mBuckets.begin() + index;
+			it.mChainIterator = mBuckets[index].EmplaceAfter(mBuckets[index].end(), Pair(std::piecewise_construct, 
+																						 std::forward_as_tuple(key), 
+																						 std::forward_as_tuple(std::forward<Args>(args)...)));
+			++mSize;
+		}
+
+		return { it, !alreadyExists };
+	}
+	
+	template<typename TKey, typename TData>
+	inline std::pair<typename HashMap<TKey, TData>::Iterator, bool> HashMap<TKey, TData>::Insert(const Pair& entry)
+	{
+		return Emplace(entry);
+	}
+	
+	template<typename TKey, typename TData>
+	inline std::pair<typename HashMap<TKey, TData>::Iterator, bool> HashMap<TKey, TData>::Insert(Pair&& entry)
+	{
+		return Emplace(std::move(entry));
 	}
 
 	template<typename TKey, typename TData>

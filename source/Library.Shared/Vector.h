@@ -3,10 +3,8 @@
 #pragma region Includes
 // Standard
 #include <initializer_list>
-#include <stdexcept>
 #include <cassert>
 #include <functional>
-#include <algorithm>
 
 // First Party
 #include "DefaultEquality.h"
@@ -774,9 +772,25 @@ namespace Library
 		/// <summary>
 		/// Adds an element with the passed in data to the back of the Vector.
 		/// </summary>
+		/// <param name="args">Argument list used to construct the element.</param>
+		/// <exception cref="std::runtime_error">ReserveFunctor null.</exception>
+		/// <typeparam name="Args">Variadic list for constructor arguments.</typeparam>
+		template<typename... Args>
+		T& EmplaceBack(Args&&... args);
+		
+		/// <summary>
+		/// Adds an element with the passed in data to the back of the Vector.
+		/// </summary>
 		/// <param name="data">Value to be added to the back of the Vector.</param>
 		/// <exception cref="std::runtime_error">ReserveFunctor null.</exception>
 		void PushBack(const T& data);
+		
+		/// <summary>
+		/// Adds an element with the passed in data to the back of the Vector.
+		/// </summary>
+		/// <param name="data">Value to be added to the back of the Vector.</param>
+		/// <exception cref="std::runtime_error">ReserveFunctor null.</exception>
+		void PushBack(T&& data);
 
 		/// <summary>
 		/// Inserts elements in the range [first, last) before the given position.

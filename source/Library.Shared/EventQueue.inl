@@ -32,7 +32,7 @@ namespace Library
 		if (!eventPublisher) throw std::runtime_error("Attempted to Enqueue null pointer.");
 
 		EventEntry entry(eventPublisher, expireTime);
-		mUpdating ? mPendingQueue.PushBack(entry) : mQueue.PushBack(entry);
+		mUpdating ? mPendingQueue.EmplaceBack(entry) : mQueue.EmplaceBack(entry);
 	}
 
 	inline void EventQueue::Clear()

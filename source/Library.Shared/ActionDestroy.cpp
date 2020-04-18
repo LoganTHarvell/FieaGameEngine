@@ -59,7 +59,7 @@ namespace Library
 							nullptr
 						};
 
-						worldState.World->PendingChildren().PushBack(childToRemove);
+						worldState.World->PendingChildren().EmplaceBack(std::move(childToRemove));
 					}
 				}
 			}

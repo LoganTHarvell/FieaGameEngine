@@ -26,7 +26,7 @@ namespace Library
 			throw std::runtime_error("Subscriber already added.");
 		}
 
-		sSubscribersPendingAdd.PushBack(entry);
+		sSubscribersPendingAdd.EmplaceBack(entry);
 	}
 
 	template<typename MessageT>

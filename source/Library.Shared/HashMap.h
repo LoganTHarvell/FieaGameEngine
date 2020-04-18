@@ -131,10 +131,10 @@ namespace Library
 			/// <summary>
 			/// Specialized constructor for creating an Iterator for a HashMap.
 			/// </summary>
-			/// <param name="HashMap">Source HashMap for the Iterator's values.</param>
+			/// <param name="hashMap">Source HashMap for the Iterator's values.</param>
 			/// <param name="bucketIterator">BucketIterator pointing to the target Chain value.</param>
 			/// <param name="chainIterator">ChainIterator to the target Pair value.</param>
-			Iterator(HashMap& hashMap, const typename BucketIterator& bucketIterator=BucketIterator(), const typename ChainIterator& chainIterator=ChainIterator());
+			explicit Iterator(HashMap& hashMap, const BucketIterator& bucketIterator=BucketIterator(), const ChainIterator& chainIterator=ChainIterator());
 
 		public:
 			/// <summary>
@@ -164,7 +164,7 @@ namespace Library
 			/// Not equal operator.
 			/// </summary>
 			/// <param name="rhs">Right hand side Iterator to be compared against for equality.</param>
-			/// <returns>True when the rhs owner HashMap and element are inequal to the left, false otherwise.</returns>
+			/// <returns>True when the rhs owner HashMap and element are unequal to the left, false otherwise.</returns>
 			bool operator!=(const Iterator& rhs) const noexcept;
 
 			/// <summary>
@@ -262,10 +262,10 @@ namespace Library
 			/// <summary>
 			/// Specialized constructor for creating an ConstIterator for a HashMap.
 			/// </summary>
-			/// <param name="HashMap">Source HashMap for the ConstIterator's values.</param>
+			/// <param name="hashMap">Source HashMap for the ConstIterator's values.</param>
 			/// <param name="bucketIterator">BucketIterator pointing to the target Chain value.</param>
 			/// <param name="chainIterator">ChainIterator to the target Pair value.</param>
-			ConstIterator(const HashMap& hashMap, const typename BucketConstIterator& bucketIterator=BucketConstIterator(), const typename ChainConstIterator& chainIterator=ChainConstIterator());
+			explicit ConstIterator(const HashMap& hashMap, const BucketConstIterator& bucketIterator=BucketConstIterator(), const ChainConstIterator& chainIterator=ChainConstIterator());
 
 		public:
 			/// <summary>
@@ -295,7 +295,7 @@ namespace Library
 			/// Equal operator.
 			/// </summary>
 			/// <param name="rhs">Right hand side ConstIterator to be compared against for equality.</param>
-			/// <returns>True when the rhs owner HashMap and element are inequal to the left, false otherwise.</returns>
+			/// <returns>True when the rhs owner HashMap and element are unequal to the left, false otherwise.</returns>
 			bool operator!=(const ConstIterator& rhs) const noexcept;
 
 			/// <summary>
@@ -537,11 +537,37 @@ namespace Library
 #pragma region Modifiers
 	public:
 		/// <summary>
-		/// Attempts to insert a Pair
+		/// Attempts to construct and insert a Pair.
+		/// </summary>
+		/// <param name="args">Argument list used to construct the element.</param>
+		/// <returns>As a pair, an Iterator to the entry matching the TKey value and a boolean indicating successful insertion.</returns>
+		/// <typeparam name="Args">Variadic list for constructor arguments.</typeparam>
+		template<typename... Args>
+		std::pair<Iterator, bool> Emplace(Args&&... args);
+		
+		/// <summary>
+		/// Attempts to construct and insert a Pair.
+		/// </summary>
+		/// <param name="key">Key of the Pair attempting to be inserted.</param>
+		/// <param name="args">Argument list used to construct the element.</param>
+		/// <returns>As a pair, an Iterator to the entry matching the TKey value and a boolean indicating successful insertion.</returns>
+		/// <typeparam name="Args">Variadic list for constructor arguments.</typeparam>
+		template<typename... Args>
+		std::pair<Iterator, bool> TryEmplace(const TKey& key, Args&&... args);
+		
+		/// <summary>
+		/// Attempts to insert a Pair.
 		/// </summary>
 		/// <param name="entry">Pair element to be inserted.</param>
 		/// <returns>As a pair, an Iterator to the entry matching the TKey value and a boolean indicating successful insertion.</returns>
 		std::pair<Iterator, bool> Insert(const Pair& entry);
+		
+		/// <summary>
+		/// Attempts to insert a Pair.
+		/// </summary>
+		/// <param name="entry">Pair element to be inserted.</param>
+		/// <returns>As a pair, an Iterator to the entry matching the TKey value and a boolean indicating successful insertion.</returns>
+		std::pair<Iterator, bool> Insert(Pair&& entry);
 
 		/// <summary>
 		/// Removes a single Pair value from the HashMap given the corresponding TKey value.

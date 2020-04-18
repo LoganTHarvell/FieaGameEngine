@@ -104,7 +104,7 @@ namespace Library
 		for (std::size_t i = 0; i < mHelpers.Size(); ++i)
 		{
 			clone->AddHelper(*mHelpers[i]->CreateAs<IJsonParseHelper>());
-			clone->mOwnedHelperIndices.PushBack(i);
+			clone->mOwnedHelperIndices.EmplaceBack(i);
 		}
 
 		return clone;
@@ -124,7 +124,7 @@ namespace Library
 			throw std::runtime_error("Multiple helpers of the same type.");
 		}
 
-		mHelpers.PushBack(&helper);
+		mHelpers.EmplaceBack(&helper);
 	}
 
 	bool JsonParseMaster::RemoveHelper(IJsonParseHelper& helper)

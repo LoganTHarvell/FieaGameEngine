@@ -1401,6 +1401,37 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 
 #pragma region TypeManager
 	template<>
+	inline std::wstring ToString<Signature>(const Signature& t)
+	{
+		RETURN_WIDE_STRING(t.Key.c_str());
+	}
+
+	template<>
+	inline std::wstring ToString<Signature>(const Signature* t)
+	{
+		try
+		{
+			RETURN_WIDE_STRING(t->Key.c_str());
+		}
+		catch (...)
+		{
+			RETURN_WIDE_STRING(t);
+		}
+	}
+
+	template<>
+	inline std::wstring ToString<Signature>(Signature* t)
+	{
+		try
+		{
+			RETURN_WIDE_STRING(t->Key.c_str());
+		}
+		catch (...)
+		{
+			RETURN_WIDE_STRING(t);
+		}
+	}
+	template<>
 	inline std::wstring ToString<SignatureListType>(const SignatureListType& t)
 	{
 		RETURN_WIDE_STRING(t.Size());

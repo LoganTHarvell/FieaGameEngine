@@ -40,6 +40,15 @@ namespace ReflectionSystemTests
 #endif
 		}
 
+		TEST_METHOD(SignatureRelationalOperators)
+		{
+			Signature a { "hello", Datum::Types::Integer, false, 0, 20 };
+			const Signature b { "hello", Datum::Types::Integer, false, 0, 20 };
+			Assert::AreEqual(a, b);
+			a.Offset = 5;
+			Assert::IsTrue(a != b);
+		}
+		
 		TEST_METHOD(InstanceManagement)
 		{
 			Assert::IsNull(TypeManager::Instance());

@@ -305,13 +305,13 @@ namespace Library
 		/// Performs an action iteratively on each Attribute in the Scope.
 		/// </summary>
 		/// <param name="functor">Function object to be called on each Attribute.</param>
-		void ForEachAttribute(std::function<void(Attribute&)> functor);
+		void ForEachAttribute(const std::function<void(Attribute&)>& functor);
 
 		/// <summary>
 		/// Performs an action iteratively on each Attribute in the Scope.
 		/// </summary>
 		/// <param name="functor">Function object to be called on each Attribute.</param>
-		void ForEachAttribute(std::function<void(const Attribute&)> functor) const;
+		void ForEachAttribute(const std::function<void(const Attribute&)>& functor) const;
 #pragma endregion Accessors
 
 #pragma region Modifiers
@@ -364,7 +364,7 @@ namespace Library
 		/// <param name="key">Key value of the Attribute to be found.</param>
 		/// <param name="scopePtrOut">Output parameter that points to the Scope which owns the found Attribute.</param>
 		/// <returns>If found, a pointer to the Data value of the Attribute. Otherwise, nullptr.</returns>
-		Data* SearchChildrenHelper(const Vector<Scope*>& queue, const Key& key, Scope** scopePtrOut=nullptr);
+		static Data* SearchChildrenHelper(const Vector<Scope*>& queue, const Key& key, Scope** scopePtrOut=nullptr);
 #pragma endregion Helper Methods
 
 #pragma region RTTI Overrides

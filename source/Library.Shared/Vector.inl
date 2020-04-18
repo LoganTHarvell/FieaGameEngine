@@ -776,17 +776,30 @@ namespace Library
 
 #pragma region Modifiers
 	template<typename T>
-	inline void Vector<T>::PushBack(const T& data)
+	template<typename ...Args>
+	inline T& Vector<T>::EmplaceBack(Args&& ...args)
 	{
 		if (!*mReserveFunctor) throw std::runtime_error("Missing ReserveFunctor.");
-		
+
 		if (mCapacity <= mSize)
 		{
 			const std::size_t newCapacity = mReserveFunctor->operator()(mCapacity, mSize);
 			Reserve(std::max(newCapacity, mCapacity + 1));
 		}
 
-		new(mData + mSize++)T(data);
+		return *new(mData + mSize++)T(std::forward<Args>(args)...);
+	}
+	
+	template<typename T>
+	inline void Vector<T>::PushBack(const T& data)
+	{
+		EmplaceBack(data);
+	}
+	
+	template<typename T>
+	inline void Vector<T>::PushBack(T&& data)
+	{
+		EmplaceBack(std::move(data));
 	}
 
 	template<typename T>
@@ -875,9 +888,9 @@ namespace Library
 	}
 
 	template<typename T>
-	inline typename Vector<T>::Iterator Vector<T>::Erase(ConstIterator first)
+	inline typename Vector<T>::Iterator Vector<T>::Erase(ConstIterator position)
 	{
-		return Erase(first, cend());
+		return Erase(position, cend());
 	}
 
 	template<typename T>

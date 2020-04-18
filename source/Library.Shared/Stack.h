@@ -48,6 +48,14 @@ namespace Library
 #pragma region Modifiers
 	public:
 		/// <summary>
+		/// Constructs and adds an element to the back of the Stack given an argument list.
+		/// </summary>
+		/// <param name="args">Argument list used to construct the element.</param>
+		/// <typeparam name="Args">Variadic list for constructor arguments.</typeparam>
+		template<typename... Args>
+		T& Emplace(Args&&... args);
+		
+		/// <summary>
 		/// Pushes an element onto the Stack.
 		/// </summary>
 		/// <param name="value">Reference to the element to be pushed onto the Stack.</param>

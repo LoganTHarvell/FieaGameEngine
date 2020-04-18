@@ -112,6 +112,7 @@ namespace Library
 		/// Meant to be called from within the Event subclass constructor.
 		/// </summary>
 		/// <param name="subscribers">Reference to a list of subscribers.</param>
+		/// <param name="subscribersPendingAdd">Reference to a list of Subscribers pending being added.</param>
 		explicit EventPublisher(SubscriberList& subscribers, SubscriberList& subscribersPendingAdd);
 #pragma endregion Special Members
 

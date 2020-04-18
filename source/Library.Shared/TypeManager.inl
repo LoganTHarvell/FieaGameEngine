@@ -14,7 +14,7 @@ namespace Library
 			throw std::runtime_error("Parent type is not registered.");
 		}
 
-		auto [it, isNew] = mRegistry.Insert({ typeId, typeInfo });
+		auto [it, isNew] = mRegistry.TryEmplace(typeId, typeInfo);
 
 		if (!isNew)
 		{
@@ -22,7 +22,7 @@ namespace Library
 		}
 	}
 
-	inline float TypeManager::RegistryLoadFactor()
+	inline float TypeManager::RegistryLoadFactor() const
 	{
 		return mRegistry.LoadFactor();
 	}
