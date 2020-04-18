@@ -2,9 +2,7 @@
 
 #include <memory>
 #include <initializer_list>
-#include <stdexcept>
 #include <functional>
-#include <algorithm>
 
 #include "DefaultEquality.h"
 
@@ -28,21 +26,33 @@ namespace Library
 		/// Equality functor type used to evaluate equality of elements in the SList.
 		/// </summary>
 		using EqualityFunctor = std::function<bool(const T&, const T&)>;
-#pragma endregion Type Definitions
-
-#pragma region Node
+		
 	private:
 		/// <summary>
 		/// Represents an element in a SList.
 		/// </summary>
 		struct Node final
 		{
-			T Data;
+			/// <summary>
+			/// Pointer to the next Node in the list.
+			/// </summary>
 			std::shared_ptr<Node> Next;
-		
-			Node(const T& data, const std::shared_ptr<Node> next=nullptr);
+
+			/// <summary>
+			/// Data stored in the Node.
+			/// </summary>
+			T Data;
+			
+			/// <summary>
+			/// Specialized constructor that constructs the data from an argument list parameter.
+			/// </summary>
+			/// <param name="next">Shared pointer to the next Node in the list.</param>
+			/// <param name="args">Argument list used to construct the stored Data.</param>
+			/// <typeparam name="Args">Variadic argument list for constructing stored Data.</typeparam>
+			template<typename... Args>
+			explicit Node(const std::shared_ptr<Node>& next, Args&&... args);
 		};
-#pragma endregion Node
+#pragma endregion Type Definitions
 
 #pragma region Iterator
 	public:
@@ -99,9 +109,9 @@ namespace Library
 			/// <summary>
 			/// Specialized constructor for creating an Iterator for a SList at a given node.
 			/// </summary>
-			/// <param name="list">Source SList for the Iterator's values.</param>
+			/// <param name="owner">Source SList for the Iterator's values.</param>
 			/// <param name="node">Current element of the SList referenced by the Iterator.</param>
-			Iterator(const SList<T>& owner, const std::shared_ptr<Node> node=nullptr);
+			Iterator(const SList<T>& owner, const std::shared_ptr<Node>& node=nullptr);
 
 		public:
 			/// <summary>
@@ -131,7 +141,7 @@ namespace Library
 			/// Not equal operator.
 			/// </summary>
 			/// <param name="rhs">Right hand side Iterator to be compared against for equality.</param>
-			/// <returns>True when the rhs owner SList and element are inequal to the left, false otherwise.</returns>
+			/// <returns>True when the rhs owner SList and element are unequal to the left, false otherwise.</returns>
 			bool operator!=(const Iterator& rhs) const noexcept;
 
 			/// <summary>
@@ -223,9 +233,9 @@ namespace Library
 			/// <summary>
 			/// Specialized constructor for creating an ConstIterator for a SList at a given node.
 			/// </summary>
-			/// <param name="list">Source SList for the ConstIterator's values.</param>
+			/// <param name="owner">Source SList for the ConstIterator's values.</param>
 			/// <param name="node">Current element of the SList referenced by the ConstIterator, defaulted to a nullptr value.</param>
-			ConstIterator(const SList& owner, const std::shared_ptr<Node> node=nullptr);
+			ConstIterator(const SList& owner, const std::shared_ptr<Node>& node=nullptr);
 
 		public:
 			/// <summary>
@@ -255,7 +265,7 @@ namespace Library
 			/// Equal operator.
 			/// </summary>
 			/// <param name="rhs">Right hand side ConstIterator to be compared against for equality.</param>
-			/// <returns>True when the rhs owner SList and element are inequal to the left, false otherwise.</returns>
+			/// <returns>True when the rhs owner SList and element are unequal to the left, false otherwise.</returns>
 			bool operator!=(const ConstIterator& rhs) const noexcept;
 
 			/// <summary>
@@ -469,25 +479,73 @@ namespace Library
 #pragma region Modifiers
 	public:
 		/// <summary>
+		/// Constructs and adds an element to the back of the SList given an argument list.
+		/// </summary>
+		/// <param name="args">Argument list used to construct the element.</param>
+		/// <typeparam name="Args">Variadic list for constructor arguments.</typeparam>
+		template<typename... Args>
+		T& EmplaceFront(Args&&... args);
+
+		/// <summary>
 		/// Adds an element with the passed in data to the front of the SList.
 		/// </summary>
 		/// <param name="data">Value to be added to the front of the SList.</param>
 		void PushFront(const T& data);
+		
+		/// <summary>
+		/// Adds an element with the passed in data to the front of the SList.
+		/// </summary>
+		/// <param name="data">Value to be added to the front of the SList.</param>
+		void PushFront(T&& data);
 
+		/// <summary>
+		/// Constructs and adds an element to the back of the SList given an argument list.
+		/// </summary>
+		/// <param name="args">Argument list used to construct the element.</param>
+		/// <typeparam name="Args">Variadic list for constructor arguments.</typeparam>
+		template<typename... Args>
+		T& EmplaceBack(Args&&... args);
+		
 		/// <summary>
 		/// Adds an element with the passed in data to the back of the SList.
 		/// </summary>
 		/// <param name="data">Value to be added to the back of the SList.</param>
 		void PushBack(const T& data);
+		
+		/// <summary>
+		/// Adds an element with the passed in data to the back of the SList.
+		/// </summary>
+		/// <param name="data">Value to be added to the back of the SList.</param>
+		void PushBack(T&& data);
 
 		/// <summary>
-		/// Inserts a new element in the SList in between a given Iterator and the following element.
+		/// Constructs a new element and inserts it into the SList after the given Iterator.
 		/// </summary>
-		/// <param name="it">Iterator used to insert a new element in the following position.</param>
+		/// <param name="position">Iterator after which the new element will be inserted.</param>
+		/// <param name="args">Argument list used to construct the element.</param>
+		/// <returns>Iterator referencing the new node.</returns>
+		/// <exception cref="runtime_error">Invalid Iterator.</exception>
+		/// <typeparam name="Args">Variadic list for constructor arguments.</typeparam>
+		template<typename... Args>
+		Iterator EmplaceAfter(const Iterator& position, Args&&... args);
+
+		/// <summary>
+		/// Inserts a new element into the SList after the given Iterator.
+		/// </summary>
+		/// <param name="position">Iterator after which the new element will be inserted.</param>
 		/// <param name="data">Value to be used to create a new node.</param>
 		/// <returns>Iterator referencing the new node.</returns>
 		/// <exception cref="runtime_error">Invalid Iterator.</exception>
-		Iterator InsertAfter(const Iterator& it, const T& data);
+		Iterator InsertAfter(const Iterator& position, const T& data);
+
+		/// <summary>
+		/// Inserts a new element into the SList after the given Iterator.
+		/// </summary>
+		/// <param name="position">Iterator after which the new element will be inserted.</param>
+		/// <param name="data">Value to be used to create a new node.</param>
+		/// <returns>Iterator referencing the new node.</returns>
+		/// <exception cref="runtime_error">Invalid Iterator.</exception>
+		Iterator InsertAfter(const Iterator& position, T&& data);
 
 		/// <summary>
 		/// Removes the first element from the SList.
@@ -502,7 +560,7 @@ namespace Library
 		/// <summary>
 		/// Removes a single element from the SList given the corresponding Iterator.
 		/// </summary>
-		/// <param name="vale">Value to be searched for in the SList to be removed.</param>
+		/// <param name="value">Value to be searched for in the SList to be removed.</param>
 		/// <returns>True on successful remove, false otherwise.</returns>
 		/// <exception cref="runtime_error">EqualityFunctor null.</exception>
 		/// <exception cref="runtime_error">Invalid Iterator.</exception>

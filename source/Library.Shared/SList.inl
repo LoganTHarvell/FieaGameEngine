@@ -4,15 +4,16 @@ namespace Library
 {
 #pragma region Node
 	template<typename T>
-	inline SList<T>::Node::Node(const T& data, const std::shared_ptr<Node> next) :
-		Data(data), Next(next)
+	template<typename... Args>
+	inline Library::SList<T>::Node::Node(const std::shared_ptr<Node>& next, Args&&... args) :
+		Next(next), Data(std::forward<Args>(args)...)
 	{
 	}
 #pragma endregion Node
 
 #pragma region Iterator
 	template<typename T>
-	inline SList<T>::Iterator::Iterator(const SList& owner, const std::shared_ptr<Node> node) :
+	inline SList<T>::Iterator::Iterator(const SList& owner, const std::shared_ptr<Node>& node) :
 		mOwner(&owner), mNode(node)
 	{
 	}
@@ -86,7 +87,7 @@ namespace Library
 	}
 
 	template<typename T>
-	inline SList<T>::ConstIterator::ConstIterator(const SList& owner, const std::shared_ptr<Node> node) :
+	inline SList<T>::ConstIterator::ConstIterator(const SList& owner, const std::shared_ptr<Node>& node) :
 		mOwner(&owner), mNode(node)
 	{
 	}
@@ -404,9 +405,10 @@ namespace Library
 
 #pragma region Modifiers
 	template<typename T>
-	inline void SList<T>::PushFront(const T& data)
+	template<typename ...Args>
+	inline T& SList<T>::EmplaceFront(Args&& ...args)
 	{
-		mFront = std::make_shared<Node>(data, mFront);
+		mFront = std::make_shared<Node>(mFront, std::forward<Args>(args)...);
 
 		if (mSize == 0)
 		{
@@ -414,12 +416,27 @@ namespace Library
 		}
 
 		mSize++;
+
+		return mFront->Data;
 	}
 
 	template<typename T>
-	inline void SList<T>::PushBack(const T& data)
+	inline void SList<T>::PushFront(const T& data)
 	{
-		std::shared_ptr<Node> newNode = std::make_shared<Node>(data);
+		EmplaceFront(data);
+	}
+
+	template<typename T>
+	inline void SList<T>::PushFront(T&& data)
+	{
+		EmplaceFront(std::move(data));
+	}
+
+	template<typename T>
+	template<typename... Args>
+	inline T& SList<T>::EmplaceBack(Args&&... args)
+	{
+		auto newNode = std::make_shared<Node>(nullptr, std::forward<Args>(args)...);
 
 		if (mSize == 0)
 		{
@@ -433,27 +450,54 @@ namespace Library
 		}
 
 		mSize++;
+
+		return newNode->Data;
 	}
 
 	template<typename T>
-	inline typename SList<T>::Iterator SList<T>::InsertAfter(const Iterator& it, const T& data)
+	inline void SList<T>::PushBack(const T& data)
 	{
-		if (this != it.mOwner)
+		EmplaceBack(data);
+	}
+
+	template<typename T>
+	inline void SList<T>::PushBack(T&& data)
+	{
+		EmplaceBack(std::move(data));
+	}
+
+	template<typename T>
+	template<typename ...Args>
+	inline typename SList<T>::Iterator SList<T>::EmplaceAfter(const Iterator& position, Args&&... args)
+	{
+		if (this != position.mOwner)
 		{
 			throw std::runtime_error("Invalid iterator.");
 		}
 
-		if (it == end())
+		if (position == end())
 		{
-			PushBack(data);
+			EmplaceBack(std::forward<Args>(args)...);
 			return Iterator(*this, mBack);
 		}
 
-		std::shared_ptr<Node> newNode = std::make_shared<Node>(data);
-		newNode->Next = it.mNode->Next;
-		it.mNode->Next = newNode;
+		auto newNode = std::make_shared<Node>(nullptr, std::forward<Args>(args)...);
+		newNode->Next = position.mNode->Next;
+		position.mNode->Next = newNode;
 
 		return Iterator(*this, newNode);
+	}
+	
+	template<typename T>
+	inline typename SList<T>::Iterator SList<T>::InsertAfter(const Iterator& position, const T& data)
+	{
+		return EmplaceAfter(position, data);
+	}
+	
+	template<typename T>
+	inline typename SList<T>::Iterator SList<T>::InsertAfter(const Iterator& position, T&& data)
+	{
+		return EmplaceAfter(position, std::move(data));
 	}
 
 	template<typename T>
