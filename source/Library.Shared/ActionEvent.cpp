@@ -7,6 +7,7 @@
 
 // First Party
 #include "World.h"
+#include "EventQueue.h"
 #pragma endregion Includes
 
 namespace Library

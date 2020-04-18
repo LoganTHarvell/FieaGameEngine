@@ -8,7 +8,6 @@
 #include <glm/gtx/string_cast.hpp>
 #pragma warning(default : 4201)
 
-
 #include "Foo.h"
 #include "Bar.h"
 #include "AttributedFoo.h"
@@ -24,8 +23,8 @@
 #include "Sector.h"
 #include "Entity.h"
 #include "Action.h"
-
-
+#include "GameTime.h"
+#include "EventQueue.h"
 
 using namespace UnitTests;
 using namespace Library;

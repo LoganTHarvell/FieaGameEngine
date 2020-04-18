@@ -3,8 +3,8 @@
 #pragma region Includes
 // First Party
 #include "Attributed.h"
+#include "GameClock.h"
 #include "WorldState.h"
-#include "EventQueue.h"
 #pragma endregion Includes
 
 namespace Library
@@ -21,6 +21,12 @@ namespace Library
 
 #pragma region Type Definitions
 	public:
+		/// <summary>
+		/// Type definition for a list of PendingChild data.
+		/// </summary>
+		struct PendingChild;
+		using PendingChildList = Vector<PendingChild>;
+		
 		/// <summary>
 		/// Data structure for performing an action on a given Scope at the end of an Update call.
 		/// </summary>
@@ -47,7 +53,7 @@ namespace Library
 			/// <summary>
 			/// Child pending State delimiting which action is to be performed on the Child.
 			/// </summary>
-			const State ChildState;
+			State ChildState;
 			
 			/// <summary>
 			/// Target Scope of the performed action.
@@ -57,13 +63,8 @@ namespace Library
 			/// <summary>
 			/// Key value of the Target Attribute of the performed action.
 			/// </summary>
-			const Key* const AttributeKey;
+			Key* AttributeKey;
 		};
-
-		/// <summary>
-		/// Type definition for a list of PendingChild data.
-		/// </summary>
-		using PendingChildList = Vector<PendingChild>;
 #pragma endregion Type Definitions
 
 #pragma region Static Members
@@ -98,7 +99,7 @@ namespace Library
 		/// <param name="name">Name of the World.</param>
 		/// <param name="gameTime">GameTime to be used in Update.</param>
 		/// <param name="eventQueue">EventQueue to be used in Update.</param>
-		explicit World(const std::string& name=std::string(), GameTime* gameTime=nullptr, EventQueue* eventQueue=nullptr);
+		explicit World(std::string name=std::string(), GameTime* gameTime=nullptr, EventQueue* eventQueue=nullptr);
 
 		/// <summary>
 		/// Default destructor.
@@ -109,14 +110,14 @@ namespace Library
 		/// Copy constructor.
 		/// </summary>
 		/// <param name="rhs">World to be copied.</param>
-		World(const World& rhs) = default;
+		World(const World& rhs);
 
 		/// <summary>
 		/// Copy assignment operator.
 		/// </summary>
 		/// <param name="rhs">World to be copied.</param>
 		/// <returns>Newly copied into left hand side World.</returns>
-		World& operator=(const World& rhs) = default;
+		World& operator=(const World& rhs);
 
 		/// <summary>
 		/// Move constructor.
@@ -148,12 +149,12 @@ namespace Library
 		/// </summary>
 		/// <returns>Reference to the WorldState associated with the World.</returns>
 		WorldState& GetWorldState();
-
+		
 		/// <summary>
 		/// Gets the WorldState associated with the World.
 		/// </summary>
 		/// <returns>Reference to the WorldState associated with the World.</returns>
-		const WorldState& GetWorldState() const;
+		ConstWorldState GetWorldState() const;
 
 		/// <summary>
 		/// Gets the list of PendingChild data.
@@ -204,7 +205,6 @@ namespace Library
 		/// <summary>
 		/// Virtual update method to be called every frame.
 		/// </summary>
-		/// <param name="worldState">WorldState context for the current processing step.</param>
 		void Update();
 #pragma endregion Game Loop
 
@@ -248,7 +248,7 @@ namespace Library
 		std::string mName;
 
 		/// <summary>
-		/// Collection of World objects within the Sectors prescribed Attribute.
+		/// Collection of Sector instances within the Sectors prescribed Attribute.
 		/// </summary>
 		Data& mSectors;
 #pragma endregion Data Members

@@ -11,6 +11,22 @@
 
 namespace Library
 {
+#pragma region Signature
+	bool Signature::operator==(const Signature& rhs) const noexcept
+	{
+		return Key == rhs.Key
+			&& Type == rhs.Type
+			&& IsInternal == rhs.IsInternal
+			&& Size == rhs.Size
+			&& Offset == rhs.Offset;
+	}
+	
+	bool Signature::operator!=(const Signature& rhs) const noexcept
+	{
+		return !operator==(rhs);
+	}
+#pragma endregion Signature
+	
 #pragma region Instance Management
 	void TypeManager::Create(const std::size_t capacity)
 	{
@@ -20,7 +36,7 @@ namespace Library
 
 	void TypeManager::Destroy()
 	{
-		if (mInstance) delete mInstance;
+		delete mInstance;
 		mInstance = nullptr;
 	}
 
@@ -33,7 +49,7 @@ namespace Library
 #pragma region Registry
 	const TypeManager::TypeInfo* TypeManager::Find(const IdType typeId) const
 	{
-		auto it = mRegistry.Find(typeId);
+		const auto it = mRegistry.Find(typeId);
 		return it != mRegistry.end() ? &it->second : nullptr;
 	}
 

@@ -3,6 +3,8 @@
 #include "ToStringSpecialization.h"
 #include "World.h"
 #include "Sector.h"
+#include "GameTime.h"
+#include "EventQueue.h"
 #include "FooEntity.h"
 
 using namespace std::string_literals;
@@ -56,6 +58,37 @@ namespace EntitySystemTests
 			Assert::AreEqual("World"s, world.Find("Name")->Get<std::string>());
 			Assert::IsNotNull(world.Find("Sectors"));
 			Assert::AreEqual(0_z, world.Find("Sectors")->Size());
+		}
+
+		TEST_METHOD(Copy)
+		{
+			const auto lhs = Signature();
+			const auto rhs = Signature();
+			Assert::IsTrue(lhs == rhs);
+			
+			GameTime gameTime;
+			EventQueue eventQueue;
+			const World world("World", &gameTime, &eventQueue);
+
+			World copyConstructed(world);
+			Assert::AreEqual("World"s, copyConstructed.Name());
+			Assert::IsNotNull(copyConstructed.GetWorldState().World);
+			Assert::AreEqual(&copyConstructed, copyConstructed.GetWorldState().World);
+			Assert::IsNotNull(copyConstructed.GetWorldState().GameTime);
+			Assert::AreEqual(&gameTime, copyConstructed.GetWorldState().GameTime);
+			Assert::IsNotNull(copyConstructed.GetWorldState().EventQueue);
+			Assert::AreEqual(&eventQueue, copyConstructed.GetWorldState().EventQueue);
+
+			World copyAssigned;
+			copyAssigned = copyConstructed;
+
+			Assert::AreEqual("World"s, copyAssigned.Name());
+			Assert::IsNotNull(copyAssigned.GetWorldState().World);
+			Assert::AreEqual(&copyAssigned, copyAssigned.GetWorldState().World);
+			Assert::IsNotNull(copyAssigned.GetWorldState().GameTime);
+			Assert::AreEqual(&gameTime, copyAssigned.GetWorldState().GameTime);
+			Assert::IsNotNull(copyAssigned.GetWorldState().EventQueue);
+			Assert::AreEqual(&eventQueue, copyAssigned.GetWorldState().EventQueue);
 		}
 
 		TEST_METHOD(Move)
@@ -147,7 +180,6 @@ namespace EntitySystemTests
 
 			const World copy = world;
 
-			Assert::AreEqual(&world, copy.GetWorldState().World);
 			Assert::AreEqual(2_z, copy.Sectors().Size());
 			Assert::AreEqual(sector1, *copy.Sectors().Get<Scope*>(0)->As<Sector>());
 			Assert::AreEqual(sector2, *copy.Sectors().Get<Scope*>(1)->As<Sector>());

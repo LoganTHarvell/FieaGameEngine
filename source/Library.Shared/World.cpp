@@ -5,6 +5,8 @@
 // Header
 #include "World.h"
 
+#include <utility>
+
 // First Party
 #include "Sector.h"
 #include "EventQueue.h"
@@ -27,23 +29,44 @@ namespace Library
 		return typeInfo;
 	}
 
-	World::World(const std::string& name, GameTime* gameTime, EventQueue* eventQueue) : Attributed(TypeIdClass()), 
-		mName(name), mSectors(mPairPtrs[SectorsIndex]->second)
+	World::World(std::string name, GameTime* gameTime, EventQueue* eventQueue) : Attributed(TypeIdClass()),
+		mName(std::move(name)), mSectors(mPairPtrs[SectorsIndex]->second)
 	{
 		mWorldState.World = this;
 		mWorldState.GameTime = gameTime;
 		mWorldState.EventQueue = eventQueue;
 	}
 
+	World::World(const World& rhs) : Attributed(rhs),
+		mGameClock(rhs.mGameClock), mPendingChildren(rhs.mPendingChildren), mName(rhs.mName), mSectors(mPairPtrs[SectorsIndex]->second)
+	{
+			mWorldState.World = this;
+			mWorldState.GameTime = rhs.mWorldState.GameTime;
+			mWorldState.EventQueue = rhs.mWorldState.EventQueue;
+	}
+
+	World& World::operator=(const World& rhs)
+	{
+		if (this != &rhs)
+		{
+			Attributed::operator=(rhs);
+
+			mGameClock = rhs.mGameClock;
+			mWorldState.GameTime = rhs.mWorldState.GameTime;
+			mWorldState.EventQueue = rhs.mWorldState.EventQueue;
+			mPendingChildren = rhs.mPendingChildren;
+			mName = rhs.mName;
+		}
+		
+		return *this;
+	}
+	
 	World::World(World&& rhs) noexcept : Attributed(std::move(rhs)),
-		mName(rhs.mName), mSectors(mPairPtrs[SectorsIndex]->second)
+		mName(std::move(rhs.mName)), mSectors(mPairPtrs[SectorsIndex]->second)
 	{
 		mWorldState.World = this;
 		mWorldState.GameTime = rhs.mWorldState.GameTime;
 		mWorldState.EventQueue = rhs.mWorldState.EventQueue;
-
-		mName = std::move(rhs.mName);
-
 		rhs.mWorldState.GameTime = nullptr;
 		rhs.mWorldState.EventQueue = nullptr;
 	}
@@ -73,9 +96,17 @@ namespace Library
 		return mWorldState;
 	}
 
-	const WorldState& World::GetWorldState() const
+	ConstWorldState World::GetWorldState() const
 	{
-		return mWorldState;
+		return
+		{
+			mWorldState.GameTime,
+			mWorldState.EventQueue,
+			mWorldState.World,
+			mWorldState.Sector,
+			mWorldState.Entity,
+			mWorldState.Action
+		};
 	}
 
 	World::PendingChildList& World::PendingChildren()

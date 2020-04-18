@@ -10,7 +10,7 @@
 
 namespace Library
 {
-#pragma region Signature Type
+#pragma region Signature
 	/// <summary>
 	/// Represents signature information for instantiating an Attribute of an Attributed Scope.
 	/// </summary>
@@ -26,22 +26,22 @@ namespace Library
 		/// <summary>
 		/// Type of the Attribute data value.
 		/// </summary>
-		Datum::Types Type;
+		Datum::Types Type{ Datum::Types::Unknown };
 
 		/// <summary>
 		/// Type of storage for the Attribute data.
 		/// </summary>
-		bool IsInternal;
+		bool IsInternal{ false };
 
 		/// <summary>
 		/// Number of elements in the Attribute data.
 		/// </summary>
-		std::size_t Size;
+		std::size_t Size{ 0 };
 
 		/// <summary>
 		/// Offset of a class data member serving as external memory, if storage is external.
 		/// </summary>
-		std::size_t Offset;
+		std::size_t Offset{ 0 };
 #pragma endregion Data Members
 
 #pragma region Relational Operators
@@ -51,14 +51,14 @@ namespace Library
 		/// </summary>
 		/// <param name="rhs">Right hand side Signature to be compared against.</param>
 		/// <returns> True if all Signature members are equivalent.</returns>
-		bool operator==(const Signature& rhs) const noexcept = default;
+		bool operator==(const Signature& rhs) const noexcept;
 
 		/// <summary>
 		/// Not equal operator.
 		/// </summary>
 		/// <param name="rhs">Right hand side Signature to be compared against.</param>
 		/// <returns> True if any Signature members are not equivalent.</returns>
-		bool operator!=(const Signature& rhs) const noexcept = default;
+		bool operator!=(const Signature& rhs) const noexcept;
 #pragma endregion Relational Operators
 	};
 
@@ -66,7 +66,7 @@ namespace Library
 	/// List of signatures for each registered types attributes.
 	/// </summary>
 	using SignatureListType = Vector<Signature>;
-#pragma endregion Signature Type
+#pragma endregion Signature
 
 	/// <summary>
 	/// Manager singleton that maintains a registry for TypeInfo of Attributed subclasses.
