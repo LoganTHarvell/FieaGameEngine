@@ -9,9 +9,6 @@
 
 namespace Library
 {
-	// Forwarded Classes
-	class Sector;
-
 	/// <summary>
 	/// Represents the global scope for a simulation, containing sectors and their entities.
 	/// </summary>
@@ -99,7 +96,7 @@ namespace Library
 		/// <param name="name">Name of the World.</param>
 		/// <param name="gameTime">GameTime to be used in Update.</param>
 		/// <param name="eventQueue">EventQueue to be used in Update.</param>
-		explicit World(std::string name=std::string(), GameTime* gameTime=nullptr, EventQueue* eventQueue=nullptr);
+		explicit World(std::string name=std::string(), GameTime* gameTime=nullptr, class EventQueue* eventQueue=nullptr);
 
 		/// <summary>
 		/// Default destructor.
@@ -197,7 +194,7 @@ namespace Library
 		/// </summary>
 		/// <param name="name">Name of the newly created Sector.</param>
 		/// <returns>Reference to the newly heap allocated Sector.</returns>
-		Sector& CreateSector(const std::string& name);
+		class Sector& CreateSector(const std::string& name);
 #pragma endregion Accessors
 
 #pragma region Game Loop
