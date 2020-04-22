@@ -195,7 +195,10 @@ namespace EntitySystemTests
 
 		TEST_METHOD(Update)
 		{
-			World world;
+			GameTime gameTime;
+			EventQueue queue;
+			
+			World world("World", &gameTime, &queue);
 			Sector& sector1 = world.CreateSector("Sector1");
 			Sector& sector2 = world.CreateSector("Sector2");
 

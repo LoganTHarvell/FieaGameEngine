@@ -49,6 +49,25 @@ namespace UtilityTests
 			Assert::AreEqual(127_z, Math::FindNextPrime(113));
 		}
 
+		TEST_METHOD(Exception)
+		{
+			Exception::AggregateException aggregate("Test.");
+			Assert::AreEqual("Test.", aggregate.what());
+			Assert::AreEqual(0_z, aggregate.Exceptions.Size());
+			
+			Vector exceptions(Vector<Exception::AggregateException::Entry>::EqualityFunctor{});
+			exceptions.Resize(5);
+			
+			aggregate = Exception::AggregateException("Test.", exceptions);
+			Assert::AreEqual("Test.", aggregate.what());
+			Assert::AreEqual(exceptions.Size(), aggregate.Exceptions.Size());
+
+			const auto exceptionsCopy = exceptions;
+			aggregate = Exception::AggregateException("Test.", std::move(exceptions));
+			Assert::AreEqual("Test.", aggregate.what());
+			Assert::AreEqual(exceptionsCopy.Size(), aggregate.Exceptions.Size());
+		}
+		
 	private:
 		static _CrtMemState sStartMemState;
 	};

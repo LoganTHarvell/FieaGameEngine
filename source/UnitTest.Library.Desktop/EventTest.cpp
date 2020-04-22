@@ -20,6 +20,17 @@ namespace EventTests
 		}
 	};
 
+	class TestSubscriberException final : public IEventSubscriber
+	{
+	public:
+		virtual void Notify(EventPublisher&) override
+		{
+			throw std::runtime_error("Test exception.");
+		}
+
+	public:
+		EventQueue* queue{ nullptr };
+	};
 
 	TEST_CLASS(EventTest)
 	{
@@ -119,12 +130,26 @@ namespace EventTests
 		TEST_METHOD(Publish)
 		{
 			Event<Foo> fooEvent(Foo(10));
-			TestEventSubscriber subscriber;
-			Event<Foo>::Subscribe(subscriber);
+			Vector<TestEventSubscriber> subscribers;
+			subscribers.Resize(1000);
 
-			Assert::AreEqual(0, subscriber.Data());
+			for (auto& subscriber : subscribers)
+			{
+				Event<Foo>::Subscribe(subscriber);
+				Assert::AreEqual(0, subscriber.Data());
+			}
+			
 			EventQueue::Publish(fooEvent);
-			Assert::AreEqual(fooEvent.Message.Data(), subscriber.Data());
+
+			for (auto& subscriber : subscribers)
+			{
+				Assert::AreEqual(fooEvent.Message.Data(), subscriber.Data());
+			}
+			
+			TestSubscriberException subscriberWithException;
+			Event<Foo>::Subscribe(subscriberWithException);
+
+			Assert::ExpectException<Exception::AggregateException>([&fooEvent]{ EventQueue::Publish(fooEvent); });
 		}
 
 		TEST_METHOD(RTTITest)

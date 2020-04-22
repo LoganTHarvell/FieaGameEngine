@@ -11,35 +11,7 @@
 #pragma endregion Includes
 
 namespace Library
-{
-	namespace TypeTraits
-	{	
-		template <typename T, typename T1, typename ... R>
-		struct SameOrConvertible
-		{
-			static const bool Value =	std::is_same<T, T1>::value
-									||	std::is_convertible<T, T1>::value
-									||	SameOrConvertible<T, R...>::value;
-		};
-
-		template <typename T, typename T1>
-		struct SameOrConvertible<T, T1>
-		{
-			static const bool Value = std::is_same<T, T1>::value || std::is_convertible<T, T1>::value;
-		};
-
-		template <typename T, typename ... R>
-		struct DisableForward
-		{
-		private:
-			using RemovedRefT = typename std::remove_reference<typename std::remove_cv<T>::type>::type;
-
-		public:
-			static const bool Value = SameOrConvertible<RemovedRefT, R...>::value;
-			using Type = std::enable_if<Value, int>;
-		};
-	}
-	
+{	
 	namespace String
 	{
 		std::string ToLower(const std::string& str)
@@ -88,6 +60,23 @@ namespace Library
 			std::size_t prime = value;
 			while (!IsPrime(++prime));
 			return prime;
+		}
+	}
+
+	namespace Exception
+	{
+		AggregateException::AggregateException(const char* message) : std::exception(message)
+		{
+		}
+		
+		AggregateException::AggregateException(const char* message, const Vector<Entry>& exceptions) : std::exception(message),
+			Exceptions(exceptions)
+		{
+		}
+
+		AggregateException::AggregateException(const char* message, Vector<Entry>&& exceptions) : std::exception(message),
+			Exceptions(std::move(exceptions))
+		{
 		}
 	}
 }
