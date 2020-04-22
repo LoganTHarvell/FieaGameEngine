@@ -60,7 +60,7 @@ namespace Library
 		mPairPtrs.ShrinkToFit();
 		mPairPtrs.Reserve(rhs.mPairPtrs.Size());
 
-		for (auto& tableEntryPtr : rhs.mPairPtrs)
+		for (const auto& tableEntryPtr : rhs.mPairPtrs)
 		{
 			if (tableEntryPtr->second.Type() == Types::Scope)
 			{
@@ -86,7 +86,7 @@ namespace Library
 	}
 
 	Scope::Scope(Scope&& rhs) noexcept :
-		mParent(rhs.mParent), mTable(std::move(rhs.mTable)), mPairPtrs(std::move(rhs.mPairPtrs)), mChildren(std::move(rhs.mChildren))
+		mParent(rhs.mParent), mPairPtrs(std::move(rhs.mPairPtrs)), mTable(std::move(rhs.mTable)), mChildren(std::move(rhs.mChildren))
 	{
 		for (auto& child : mChildren)
 		{
@@ -180,7 +180,7 @@ namespace Library
 		mPairPtrs.ShrinkToFit();
 		mPairPtrs.Reserve(rhs.size());
 
-		for (auto& tableEntry : rhs)
+		for (const auto& tableEntry : rhs)
 		{
 			if (Find(tableEntry.first) != nullptr)
 			{

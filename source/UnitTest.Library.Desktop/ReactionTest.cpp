@@ -342,7 +342,6 @@ namespace EntitySystemTests::ActionTests
 			Assert::AreEqual(2_z, world.GetWorldState().EventQueue->Size());
 			Assert::AreEqual(0, testReaction->As<ActionTestReaction>()->Parameter);
 
-			// TODO: Figure out why parameter stack fails here
 			world.Update();
 			Assert::AreEqual(1_z, world.GetWorldState().EventQueue->Size());
 			Assert::AreEqual(2, testReaction->As<ActionTestReaction>()->Parameter);

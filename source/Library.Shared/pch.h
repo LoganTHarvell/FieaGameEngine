@@ -13,6 +13,8 @@
 #include <istream>
 #include <fstream>
 #include <chrono>
+#include <mutex>
+#include <future>
 
 // GSL Library
 #include <gsl/gsl>

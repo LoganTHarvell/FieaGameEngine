@@ -68,16 +68,23 @@ namespace Library
 		auto message = static_cast<Event<EventMessageAttributed>*>(&eventPublisher)->Message;
 		
 		if (mSubtype == message.GetSubtype() && message.GetWorld())
-		{
-			Scope parameters;
-
-			message.ForEachAuxiliary([&](const Attribute& attribute) 
+		{			
 			{
-				parameters[attribute.first] = attribute.second; 
-			});
+				std::scoped_lock<std::mutex> lock(mMutex);
+			
+				Scope parameters;
 
-			mParameterStack.Push(parameters);
+				message.ForEachAuxiliary([&](const Attribute& attribute) 
+                {
+                    parameters[attribute.first] = attribute.second; 
+                });
+			
+				mParameterStack.Push(parameters);
+			}
+			
 			ActionList::Update(message.GetWorld()->GetWorldState());
+			
+			std::scoped_lock<std::mutex> lock(mMutex);
 			mParameterStack.Pop();
 		}
 	}

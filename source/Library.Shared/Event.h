@@ -66,9 +66,8 @@ namespace Library
 		/// </summary>
 		inline static SubscriberList sSubscriberList;
 
-
 		/// <summary>
-		/// Mutex controlling thread access to the Event.
+		/// Mutex controlling thread access to the Event SubscriberList.
 		/// </summary>
 		inline static std::mutex sMutex;
 #pragma endregion Static Members

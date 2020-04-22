@@ -118,6 +118,11 @@ namespace Library
 		/// String to specify a EventMessageAttributed subtype to which this Reaction should respond.
 		/// </summary>
 		std::string mSubtype;
+
+		/// <summary>
+		/// Mutex controlling thread access to the ReactionAttributed.
+		/// </summary>
+		std::mutex mMutex;
 #pragma endregion Data Members
 	};
 

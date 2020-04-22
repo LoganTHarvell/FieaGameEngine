@@ -23,7 +23,8 @@ namespace Library
 
 		Vector notifyThreads(Vector<std::future<void>>::EqualityFunctor{});
 		Vector exceptionEntries(Vector<Exception::AggregateException::Entry>::EqualityFunctor{});
-
+		std::mutex exceptionEntriesMutex;
+		
 		{
 			std::scoped_lock<std::mutex> lock(*mMutex);
 
@@ -31,7 +32,7 @@ namespace Library
 			{
 				assert(subscriber);
 
-				auto notify = [subscriber, this, &exceptionEntries]
+				auto notify = [subscriber, this, &exceptionEntries, &exceptionEntriesMutex]
 				{
 					try
 					{
@@ -39,7 +40,6 @@ namespace Library
 					}
 					catch (...)
 					{
-
 						Exception::AggregateException::Entry exceptionEntry =
 						{
 							std::current_exception(),
@@ -48,7 +48,8 @@ namespace Library
 							"Notify"s,
 							ToString()
 						};
-						
+
+						std::scoped_lock<std::mutex> exceptionEntriesLock(exceptionEntriesMutex);
 						exceptionEntries.EmplaceBack(std::move(exceptionEntry));
 					}
 				};
