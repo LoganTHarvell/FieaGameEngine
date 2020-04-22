@@ -90,6 +90,7 @@ namespace Library
 		/// Interface method called by an EventPublisher during Publish to receive the Event.
 		/// </summary>
 		/// <param name="eventPublisher">Reference to an Event as an EventPublisher.</param>
+		/// <remarks>Overrides must be thread safe.</remarks>
 		virtual void Notify(EventPublisher& eventPublisher) override;
 #pragma endregion Event Subscriber Overrides
 

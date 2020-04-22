@@ -91,12 +91,11 @@ namespace EntitySystemTests::ActionTests
 
 			ActionList copy;
 			copy = actionList;
-			// TODO: Figure out why the equality is returning false
-			//Assert::IsTrue(actionList.As<Attributed>() == copy.As<Attributed>());
+			Assert::IsTrue(*actionList.As<Action>() == *copy.As<Action>());
 
 			ActionList moved;
 			moved = std::move(copy);
-			//Assert::AreEqual(actionList.As<Action>(), moved.As<Action>());
+			Assert::AreEqual(*actionList.As<Action>(), *moved.As<Action>());
 		}
 
 		TEST_METHOD(Clone)

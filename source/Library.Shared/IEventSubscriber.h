@@ -56,6 +56,7 @@ namespace Library
 		/// Implement to customize the behavior that occurs when the Event is received.
 		/// </summary>
 		/// <param name="eventPublisher">Reference to an Event as an EventPublisher.</param>
+		/// <remarks>Overrides must be thread safe.</remarks>
 		virtual void Notify(EventPublisher& eventPublisher)=0;
 #pragma endregion Event Notification
 	};
