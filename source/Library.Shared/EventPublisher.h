@@ -2,7 +2,7 @@
 
 #pragma region Includes
 // Standard
-#include <memory>
+#include <mutex>
 
 // First Party
 #include "RTTI.h"
@@ -27,51 +27,9 @@ namespace Library
 #pragma region Type Definitions
 	protected:
 		/// <summary>
-		/// Represents data associated with an entry in SubscriberList.
-		/// </summary>
-		struct SubscriberEntry final
-		{
-#pragma region Data Members
-		public:
-			/// <summary>
-			/// Pointer to an IEventSubscriber instance.
-			/// </summary>
-			IEventSubscriber* Subscriber{ nullptr };
-
-			/// <summary>
-			/// Represents if the Subscriber is pending to be removed.
-			/// </summary>
-			bool PendingRemove{ false };
-#pragma endregion Data Members
-
-#pragma region Relational Operators
-		public:
-			/// <summary>
-			/// Equal operator.
-			/// </summary>
-			/// <param name="rhs">Right hand side EventEntry to be compared against.</param>
-			/// <returns>
-			/// True if both EventEntry instance point to the same Event. Otherwise false.
-			/// Always returns false if either EventPublisher pointer is expired.
-			/// </returns>
-			bool operator==(const SubscriberEntry& rhs) const noexcept;
-
-			/// <summary>
-			/// Not equal operator.
-			/// </summary>
-			/// <param name="rhs">Right hand side EventEntry to be compared against.</param>
-			/// <returns>
-			/// True if both EventEntry instance point to the same Event. Otherwise false.
-			/// Always returns false if either EventPublisher pointer is expired.
-			/// </returns>
-			bool operator!=(const SubscriberEntry& rhs) const noexcept;
-#pragma endregion Relational Operators
-		};
-
-		/// <summary>
 		/// List of subscribers to an Event subclass.
 		/// </summary>
-		using SubscriberList = Vector<SubscriberEntry>;
+		using SubscriberList = Vector<IEventSubscriber*>;
 #pragma endregion Type Definitions
 
 #pragma region Special Members
@@ -112,8 +70,8 @@ namespace Library
 		/// Meant to be called from within the Event subclass constructor.
 		/// </summary>
 		/// <param name="subscribers">Reference to a list of subscribers.</param>
-		/// <param name="subscribersPendingAdd">Reference to a list of Subscribers pending being added.</param>
-		explicit EventPublisher(SubscriberList& subscribers, SubscriberList& subscribersPendingAdd);
+		/// <param name="mutex">Reference to the underlying subclass instance mutex member.</param>
+		explicit EventPublisher(SubscriberList& subscribers, std::mutex& mutex);
 #pragma endregion Special Members
 
 #pragma region Event Publishing
@@ -137,15 +95,15 @@ namespace Library
 #pragma region Data Members
 	private:
 		/// <summary>
-		/// A pointer to a static list of IEventSubscriber instances subscribed to the Event type
+		/// Pointer to a static list of IEventSubscriber instances subscribed to the Event type
 		/// of the underlying Event instance for the underlying Event instance.
 		/// </summary>
 		SubscriberList* mSubscriberList;
 
 		/// <summary>
-		/// A pointer to a static list of IEventSubscriber instances pending subscription.
+		/// Pointer to the mutex of the underlying Event instance. 
 		/// </summary>
-		SubscriberList* mSubscribersPendingAdd;
+		std::mutex* mMutex;
 #pragma endregion Data Members
 	};
 }

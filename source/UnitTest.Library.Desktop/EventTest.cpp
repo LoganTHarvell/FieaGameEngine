@@ -55,26 +55,32 @@ namespace EventTests
 			TestEventSubscriber testEventSubscriber3;
 
 			Assert::AreEqual(0_z, Event<Foo>::SubscriberCount());
-			Assert::AreEqual(0_z, Event<Foo>::SubscriberCapacity());
+			
+			auto capacity = Event<Foo>::SubscriberCapacity();
+			Assert::AreEqual(0_z, capacity);
 
 			Event<Foo>::Subscribe(testEventSubscriber1);
 			Assert::AreEqual(1_z, Event<Foo>::SubscriberCount());
-			Assert::AreEqual(0_z, Event<Foo>::SubscriberCapacity());
+
+			Assert::IsTrue(capacity < Event<Foo>::SubscriberCapacity());
+			capacity = Event<Foo>::SubscriberCapacity();
 
 			Assert::ExpectException<std::runtime_error>([&] 
 			{
 				Event<Foo>::Subscribe(testEventSubscriber1); 
 			});
 
+			Assert::AreEqual(capacity, Event<Foo>::SubscriberCapacity());
+			
 			Event<Foo> fooEvent;
 			EventQueue::Publish(fooEvent);
 			
-			Assert::AreNotEqual(0_z, Event<Foo>::SubscriberCapacity());
-
 			Assert::ExpectException<std::runtime_error>([&]
 			{
 				Event<Foo>::Subscribe(testEventSubscriber1);
 			});
+
+			Assert::AreEqual(capacity, Event<Foo>::SubscriberCapacity());
 
 			Event<Foo>::Subscribe(testEventSubscriber2);
 			Assert::AreEqual(2_z, Event<Foo>::SubscriberCount());
@@ -82,13 +88,9 @@ namespace EventTests
 			Assert::AreEqual(3_z, Event<Foo>::SubscriberCount());
 
 			EventQueue::Publish(fooEvent);
-			std::size_t capacity = Event<Foo>::SubscriberCapacity();
+			capacity = Event<Foo>::SubscriberCapacity();
 
 			Event<Foo>::Unsubscribe(testEventSubscriber1);
-			Assert::AreEqual(3_z, Event<Foo>::SubscriberCount());
-			Assert::AreEqual(capacity, Event<Foo>::SubscriberCapacity());
-
-			EventQueue::Publish(fooEvent);
 			Assert::AreEqual(2_z, Event<Foo>::SubscriberCount());
 			Assert::AreEqual(capacity, Event<Foo>::SubscriberCapacity());
 

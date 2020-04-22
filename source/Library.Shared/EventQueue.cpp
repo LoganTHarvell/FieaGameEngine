@@ -7,6 +7,7 @@
 
 // Standard
 #include <algorithm>
+#include <future>
 
 // First Party
 #include "EventPublisher.h"
@@ -21,35 +22,32 @@ namespace Library
 
 	void EventQueue::Update(const GameTime& gameTime)
 	{
-		mUpdating = true;
+		Vector publishThreads(Vector<std::future<void>>::EqualityFunctor{});
 
-		for (EventEntry& entry : mQueue)
 		{
-			if (gameTime.CurrentTime() >= entry.ExpireTime)
+			std::scoped_lock<std::mutex> lock(mMutex);
+			
+			for (EventEntry& entry : mQueue)
 			{
-				assert(entry.Publisher);
-				entry.Publisher->Publish();
+				if (gameTime.CurrentTime() >= entry.ExpireTime)
+				{
+					assert(entry.Publisher);
+					publishThreads.EmplaceBack(std::async(std::launch::async, &EventPublisher::Publish, entry.Publisher));
+					entry.IsExpired = true;
+				}
 			}
 		}
 
-		mUpdating = false;
+		for (const auto& t : publishThreads)
+		{
+			t.wait();
+		}
 
 		auto isExpired = [&gameTime](const EventEntry& eventEntry) 
 		{ 
-			return gameTime.CurrentTime() < eventEntry.ExpireTime; 
+			return !eventEntry.IsExpired; 
 		};
 		
-		if (mPendingClear)
-		{
-			Clear();
-		}
-		else
-		{
-			mQueue.Erase(std::partition(mQueue.begin(), mQueue.end(), isExpired));
-			mQueue.Insert(mQueue.end(), mPendingQueue.begin(), mPendingQueue.end());
-			mPendingQueue.Clear();
-		}
-
-		if (mPendingShrinkToFit) ShrinkToFit();
+		mQueue.Erase(std::partition(mQueue.begin(), mQueue.end(), isExpired));
 	}
 }

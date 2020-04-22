@@ -4,6 +4,7 @@
 // Standard
 #include <chrono>
 #include <memory>
+#include <mutex>
 
 // First Party
 #include "Vector.h"
@@ -44,8 +45,7 @@ namespace Library
 			/// </summary>
 			/// <param name="publisher">Weak pointer to an Event as a EventPublisher.</param>
 			/// <param name="expireTime">TimePoint when the Event should expire.</param>
-			/// <param name="isExpired">Boolean denoting the EventEntry is expired.</param>
-			explicit EventEntry(const std::shared_ptr<EventPublisher> publisher=std::shared_ptr<EventPublisher>(), const TimePoint& expireTime=TimePoint());
+			explicit EventEntry(const std::shared_ptr<EventPublisher>& publisher=std::shared_ptr<EventPublisher>(), const TimePoint& expireTime=TimePoint());
 
 			/// <summary>
 			/// Default destructor.
@@ -90,6 +90,11 @@ namespace Library
 			/// Time point at which the Event should be published.
 			/// </summary>
 			TimePoint ExpireTime;
+
+			/// <summary>
+			/// Represents whether the Event has been published.
+			/// </summary>
+			bool IsExpired{ false };
 #pragma endregion Data Members
 
 		};
@@ -132,15 +137,14 @@ namespace Library
 		/// Adds an EventEntry to the EventQueue.
 		/// </summary>
 		/// <param name="eventPublisher">EventPublisher reference to the Event instance to be queued.</param>
-		/// <param name="gameTime">Reference to a GameTime instance used to calculate the Event expire time.</param>
-		/// <param name="delay">Duration value in milliseconds to delay publishing the Event. Defaults to zero.</param>
+		/// <param name="expireTime">Reference to a GameTime instance used to calculate the Event expire time.</param>
 		/// <exception cref="std::runtime_error">Attempted to Enqueue null pointer.</exception>
 		/// <remarks>EventQueue capacity will not increase until the next call to Update.</remarks>
-		void Enqueue(const std::shared_ptr<EventPublisher> eventPublisher, const TimePoint& expireTime=TimePoint());
+		void Enqueue(const std::shared_ptr<EventPublisher>& eventPublisher, const TimePoint& expireTime=TimePoint());
 
 		/// <summary>
-		/// Publishes all expired events, then dequeues expired EventEntry instances.
-		/// Also dequeues any EventEntry instances with null EventPublisher references.
+		/// Publishes all expired events, then removes expired EventEntry instances.
+		/// Also removes any EventEntry instances with null EventPublisher references.
 		/// </summary>
 		/// <param name="gameTime">Reference to a GameTime instance used when calculating EventEntry expiration.</param>
 		void Update(const GameTime& gameTime);
@@ -164,24 +168,9 @@ namespace Library
 		Vector<EventEntry> mQueue{ Vector(Vector<EventEntry>::EqualityFunctor()) };
 
 		/// <summary>
-		/// Queue of EventEntry data pending to be Enqueued during the next Update call.
+		/// Mutex controlling thread access to the EventQueue instance.
 		/// </summary>
-		Vector<EventEntry> mPendingQueue{ Vector(Vector<EventEntry>::EqualityFunctor()) };
-
-		/// <summary>
-		/// Represents when a call to Update is currently in progress.
-		/// </summary>
-		bool mUpdating{ false };
-
-		/// <summary>
-		/// Represents when a call to Clear needs to be deferred while Update is in progress.
-		/// </summary>
-		bool mPendingClear{ false };
-
-		/// <summary>
-		/// Represents when a call to ShrinkToFit needs to be deferred while Update is in progress.
-		/// </summary>
-		bool mPendingShrinkToFit{ false };
+		mutable std::mutex mMutex;
 #pragma endregion Data Members
 	};
 }

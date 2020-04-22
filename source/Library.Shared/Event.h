@@ -62,14 +62,15 @@ namespace Library
 
 	private:
 		/// <summary>
-		/// Static list of IEventSubsriber instances associated with an Event type.
+		/// Static list of IEventSubscriber instances associated with an Event type.
 		/// </summary>
 		inline static SubscriberList sSubscriberList;
 
+
 		/// <summary>
-		/// Static list of IEventSubsriber instances pending addition to the SubscriberList.
+		/// Mutex controlling thread access to the Event.
 		/// </summary>
-		inline static SubscriberList sSubscribersPendingAdd;
+		inline static std::mutex sMutex;
 #pragma endregion Static Members
 
 #pragma region Special Members
@@ -77,8 +78,7 @@ namespace Library
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
-		/// <param name="message">Data contained by this Event instance.</param>
-		explicit Event(MessageT message=MessageT());
+		Event();
 
 		/// <summary>
 		/// Default destructor.
@@ -96,21 +96,33 @@ namespace Library
 		/// </summary>
 		/// <param name="rhs">Event instance to be copied.</param>
 		/// <returns>Newly copied into Event instance.</returns>
-		Event& operator=(const Event& rhs) = default;
+		Event& operator=(const Event& rhs) = delete;
 
 		/// <summary>
 		/// Move constructor.
 		/// </summary>
 		/// <param name="rhs">Event instance to be moved.</param>
 		/// <returns>Newly moved into Event instance.</returns>
-		Event(Event&& rhs) noexcept= default;
+		Event(Event&& rhs) noexcept = default;
 
 		/// <summary>
 		/// Move assignment operator.
 		/// </summary>
 		/// <param name="rhs">Event instance to be moved.</param>
 		/// <returns>Newly moved into Event instance.</returns>
-		Event& operator=(Event&& rhs) noexcept = default;
+		Event& operator=(Event&& rhs) noexcept = delete;
+
+		/// <summary>
+		/// Specialized constructor for setting the Event message value.
+		/// </summary>
+		/// <param name="message">Data contained by this Event instance.</param>
+		explicit Event(const MessageT& message);
+
+		/// <summary>
+		/// Specialized constructor for setting the Event message value.
+		/// </summary>
+		/// <param name="message">Data contained by this Event instance.</param>
+		explicit Event(MessageT&& message);
 #pragma endregion Special Members
 
 #pragma region RTTI Overrides

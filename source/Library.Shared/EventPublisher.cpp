@@ -5,6 +5,9 @@
 // Header
 #include "EventPublisher.h"
 
+// Standard
+#include <future>
+
 // First Party
 #include "IEventSubscriber.h"
 #pragma endregion Includes
@@ -15,22 +18,21 @@ namespace Library
 	{
 		assert(mSubscriberList);
 
-		auto pendingRemove = [](const SubscriberEntry& entry)
-		{
-			return !entry.PendingRemove;
-		};
-
-		mSubscriberList->Erase(std::partition(mSubscriberList->begin(), mSubscriberList->end(), pendingRemove));
-		mSubscribersPendingAdd->Erase(std::partition(mSubscribersPendingAdd->begin(), mSubscribersPendingAdd->end(), pendingRemove));
+		Vector notifyThreads(Vector<std::future<void>>::EqualityFunctor{});
 		
-		assert(mSubscribersPendingAdd);
-		mSubscriberList->Insert(mSubscriberList->end(), mSubscribersPendingAdd->begin(), mSubscribersPendingAdd->end());
-		mSubscribersPendingAdd->Clear();
-
-		for (auto entry : *mSubscriberList)
 		{
-			assert(entry.Subscriber);
-			entry.Subscriber->Notify(*this);
+			std::scoped_lock<std::mutex> lock(*mMutex);
+
+			for (auto* subscriber : *mSubscriberList)
+			{
+				assert(subscriber);
+				notifyThreads.EmplaceBack(std::async(std::launch::async, [&subscriber, this] { subscriber->Notify(*this); }));
+			}
+		}
+
+		for (const auto& t : notifyThreads)
+		{
+			t.wait();
 		}
 	}
 }

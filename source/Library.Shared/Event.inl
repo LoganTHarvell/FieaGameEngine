@@ -6,67 +6,76 @@ namespace Library
 	template<typename MessageT>
 	inline std::size_t Event<MessageT>::SubscriberCount()
 	{
-		return sSubscriberList.Size() + sSubscribersPendingAdd.Size();
+		std::scoped_lock<std::mutex> lock(sMutex);
+		return sSubscriberList.Size();
 	}
 
 	template<typename MessageT>
 	inline std::size_t Event<MessageT>::SubscriberCapacity()
 	{
+		std::scoped_lock<std::mutex> lock(sMutex);
 		return sSubscriberList.Capacity();
 	}
 
 	template<typename MessageT>
 	inline void Event<MessageT>::Subscribe(IEventSubscriber& eventSubscriber)
 	{
-		SubscriberEntry entry = { &eventSubscriber, false };
+		std::scoped_lock<std::mutex> lock(sMutex);
 
-		if ((sSubscriberList.Find(entry) != sSubscriberList.end() && !sSubscriberList.Find(entry)->PendingRemove) 
-		||	sSubscribersPendingAdd.Find(entry) != sSubscribersPendingAdd.end())
+		IEventSubscriber* subscriber = &eventSubscriber;
+
+		const auto entryIt = sSubscriberList.Find(subscriber);
+		
+		if (entryIt != sSubscriberList.end())
 		{
 			throw std::runtime_error("Subscriber already added.");
 		}
 
-		sSubscribersPendingAdd.EmplaceBack(entry);
+		sSubscriberList.EmplaceBack(subscriber);
 	}
 
 	template<typename MessageT>
 	inline void Event<MessageT>::Unsubscribe(IEventSubscriber& eventSubscriber)
 	{
-		auto entry = sSubscriberList.Find({ &eventSubscriber, false });
+		std::scoped_lock<std::mutex> lock(sMutex);
+
+		const auto subscriber = sSubscriberList.Find(&eventSubscriber);
 	
-		if (entry != sSubscriberList.end())
+		if (subscriber != sSubscriberList.end())
 		{
-			entry->PendingRemove = true;
+			sSubscriberList.Remove(subscriber);
 		}
-		else
-		{
-			entry = sSubscribersPendingAdd.Find({ &eventSubscriber, false });
-			
-			if (entry != sSubscribersPendingAdd.end())
-			{
-				entry->PendingRemove = true;
-			}
-		}		
 	}
 
 	template<typename MessageT>
 	inline void Event<MessageT>::UnsubscribeAll()
 	{
+		std::scoped_lock<std::mutex> lock(sMutex);
 		sSubscriberList.Clear();
-		sSubscribersPendingAdd.Clear();
 	}
 
 	template<typename MessageT>
 	inline void Event<MessageT>::SubscriberShrinkToFit()
 	{
+		std::scoped_lock<std::mutex> lock(sMutex);
 		sSubscriberList.ShrinkToFit();
-		sSubscribersPendingAdd.ShrinkToFit();
 	}
 #pragma endregion Static Members
 
 #pragma region Special Members
 	template<typename MessageT>
-	inline Event<MessageT>::Event(MessageT message) : EventPublisher(sSubscriberList, sSubscribersPendingAdd),
+	inline Event<MessageT>::Event() : EventPublisher(sSubscriberList, sMutex)
+	{
+	}
+
+	template<typename MessageT>
+	inline Event<MessageT>::Event(const MessageT& message) : EventPublisher(sSubscriberList, sMutex),
+		Message(message)
+	{
+	}
+	
+	template<typename MessageT>
+	inline Event<MessageT>::Event(MessageT&& message) : EventPublisher(sSubscriberList, sMutex),
 		Message(message)
 	{
 	}
@@ -76,9 +85,7 @@ namespace Library
 	template<typename MessageT>
 	std::string Event<MessageT>::ToString() const
 	{
-		std::ostringstream oss;
-		oss << "Event";
-		return oss.str();
+		return "Event";
 	}
 #pragma endregion RTTI Overrides
 }

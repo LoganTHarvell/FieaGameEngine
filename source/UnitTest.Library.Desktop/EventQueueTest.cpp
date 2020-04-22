@@ -18,7 +18,7 @@ namespace EventTests
 	public:
 		virtual void Notify(EventPublisher& eventPublisher) override
 		{
-			Data() = int(static_cast<Event<Foo>&>(eventPublisher).Message.Data());
+			Data() = static_cast<Event<Foo>&>(eventPublisher).Message.Data();
 		}
 	};
 
@@ -27,8 +27,8 @@ namespace EventTests
 	public:
 		virtual void Notify(EventPublisher& eventPublisher) override
 		{
-			Data() = int(static_cast<Event<Foo>&>(eventPublisher).Message.Data());
-			queue->Enqueue(std::make_shared<Event<Foo>>());
+			Data() = static_cast<Event<Foo>&>(eventPublisher).Message.Data();
+			queue->Enqueue(std::make_shared<Event<Foo>>(Foo(20)));
 		}
 
 	public:
@@ -40,7 +40,7 @@ namespace EventTests
 	public:
 		virtual void Notify(EventPublisher& eventPublisher) override
 		{
-			Data() = int(static_cast<Event<Foo>&>(eventPublisher).Message.Data());
+			Data() = static_cast<Event<Foo>&>(eventPublisher).Message.Data();
 			queue->Clear();
 		}
 
@@ -53,7 +53,7 @@ namespace EventTests
 	public:
 		virtual void Notify(EventPublisher& eventPublisher) override
 		{
-			Data() = int(static_cast<Event<Foo>&>(eventPublisher).Message.Data());
+			Data() = static_cast<Event<Foo>&>(eventPublisher).Message.Data();
 			queue->Clear();
 			queue->ShrinkToFit();
 		}

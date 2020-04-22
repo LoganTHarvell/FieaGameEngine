@@ -179,11 +179,11 @@ namespace EntitySystemTests::ActionTests
 			Assert::AreEqual(0_z, Event<EventMessageAttributed>::SubscriberCount());
 
 			{
-				ReactionAttributed();
+				const auto reaction = ReactionAttributed();
 				Assert::AreEqual(1_z, Event<EventMessageAttributed>::SubscriberCount());
 			}
 
-			auto event = std::make_shared<Event<EventMessageAttributed>>();
+			const auto event = std::make_shared<Event<EventMessageAttributed>>();
 			EventQueue queue;
 			queue.Enqueue(event);
 			queue.Update(GameTime());
@@ -224,12 +224,12 @@ namespace EntitySystemTests::ActionTests
 			Assert::AreEqual(0_z, Event<EventMessageAttributed>::SubscriberCount());
 
 			{
-				auto reaction = ReactionAttributed();
+				const auto reaction = ReactionAttributed();
 				auto copy = ReactionAttributed(reaction);
 				Assert::AreEqual(2_z, Event<EventMessageAttributed>::SubscriberCount());
 			}
 
-			auto event = std::make_shared<Event<EventMessageAttributed>>();
+			const auto event = std::make_shared<Event<EventMessageAttributed>>();
 			EventQueue queue;
 			queue.Enqueue(event);
 			queue.Update(GameTime());
@@ -312,8 +312,8 @@ namespace EntitySystemTests::ActionTests
 
 		TEST_METHOD(Update)
 		{
-			auto gameTime = std::make_shared<GameTime>();
-			auto eventQueue = std::make_shared<EventQueue>();
+			const auto gameTime = std::make_shared<GameTime>();
+			const auto eventQueue = std::make_shared<EventQueue>();
 
 			World world("World", gameTime.get(), eventQueue.get());
 			Entity* entity = world.CreateSector("Sector").CreateEntity("Entity", "Entity");
