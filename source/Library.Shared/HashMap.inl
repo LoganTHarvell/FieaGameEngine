@@ -439,6 +439,27 @@ namespace Library
 
 		return { it, !alreadyExists };
 	}
+
+	template<typename TKey, typename TData>
+	template<typename Key, typename ...Args>
+	auto HashMap<TKey, TData>::TryEmplace(Key&& key, Args&&... args) -> std::enable_if_t<std::is_same_v<Key, TKey> && !std::is_reference_v<Key>, std::pair<typename HashMap<TKey, TData>::Iterator, bool>>
+	{	
+		std::size_t index;
+		auto it = Find(key, index);
+
+		const bool alreadyExists = it != end();
+
+		if (!alreadyExists)
+		{
+			it.mBucketIterator = mBuckets.begin() + index;
+			it.mChainIterator = mBuckets[index].EmplaceAfter(mBuckets[index].end(), Pair(std::piecewise_construct, 
+																						 std::forward_as_tuple(std::move(key)), 
+																						 std::forward_as_tuple(std::forward<Args>(args)...)));
+			++mSize;
+		}
+
+		return { it, !alreadyExists };
+	}
 	
 	template<typename TKey, typename TData>
 	inline std::pair<typename HashMap<TKey, TData>::Iterator, bool> HashMap<TKey, TData>::Insert(const Pair& entry)

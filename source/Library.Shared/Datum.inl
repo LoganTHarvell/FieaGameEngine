@@ -276,7 +276,7 @@ namespace Library
 	}
 
 	template<typename T>
-	inline typename std::enable_if_t<!std::is_lvalue_reference<T>::value> Datum::PushBack(T&& data)
+	inline std::enable_if_t<!std::is_reference_v<T>> Datum::PushBack(T&& data)
 	{
 		EmplaceBack<T>(std::move(data));
 	}

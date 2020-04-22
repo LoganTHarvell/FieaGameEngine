@@ -17,7 +17,7 @@ namespace Library
 	template<typename TKey, typename TData>
 	class HashMap final
 	{
-#pragma region Type Definitions and Constants
+#pragma region Type Definitions, Constants
 	public:
 		/// <summary>
 		/// Pairs of TKey and TData values that make up the elements of the HashMap.
@@ -73,7 +73,7 @@ namespace Library
 		/// Default number of buckets in the HashMap.
 		/// </summary>
 		static constexpr std::size_t DefaultBucketCount = 31;
-#pragma endregion Type Definitions and Constants
+#pragma endregion Type Definitions, Constants
 
 #pragma region Iterator
 	public:
@@ -554,6 +554,16 @@ namespace Library
 		/// <typeparam name="Args">Variadic list for constructor arguments.</typeparam>
 		template<typename... Args>
 		std::pair<Iterator, bool> TryEmplace(const TKey& key, Args&&... args);
+		
+		/// <summary>
+		/// Attempts to construct and insert a Pair.
+		/// </summary>
+		/// <param name="key">Key of the Pair attempting to be inserted.</param>
+		/// <param name="args">Argument list used to construct the element.</param>
+		/// <returns>As a pair, an Iterator to the entry matching the TKey value and a boolean indicating successful insertion.</returns>
+		/// <typeparam name="Args">Variadic list for constructor arguments.</typeparam>
+		template<typename Key, typename... Args>
+		auto TryEmplace(Key&& key, Args&&... args) -> std::enable_if_t<std::is_same_v<Key, TKey> && !std::is_reference_v<Key>, std::pair<Iterator, bool>>;
 		
 		/// <summary>
 		/// Attempts to insert a Pair.

@@ -872,7 +872,7 @@ namespace Library
 		/// <typeparam name="T">Type of elements in the Datum. Invalid types result in compile time errors.</typeparam>
 		/// <exception cref="runtime_error">Cannot modify external storage.</exception>
 		template<typename T>
-		typename std::enable_if_t<!std::is_lvalue_reference<T>::value> PushBack(T&& data);
+		std::enable_if_t<!std::is_reference_v<T>> PushBack(T&& data);
 
 		/// <summary>
 		/// Removes the last element of the Datum.

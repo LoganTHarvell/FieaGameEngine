@@ -6,7 +6,6 @@ namespace Library
 	template<typename T>
 	inline void TypeManager::Register()
 	{
-		const IdType typeId = T::TypeIdClass();
 		const TypeInfo& typeInfo = T::TypeInfo();
 
 		if (typeInfo.parentTypeId != Attributed::TypeIdClass() && !mRegistry.ContainsKey(typeInfo.parentTypeId))
@@ -14,7 +13,7 @@ namespace Library
 			throw std::runtime_error("Parent type is not registered.");
 		}
 
-		auto [it, isNew] = mRegistry.TryEmplace(typeId, typeInfo);
+		auto [it, isNew] = mRegistry.TryEmplace(T::TypeIdClass(), typeInfo);
 
 		if (!isNew)
 		{
