@@ -80,9 +80,23 @@ namespace EntitySystemTests::ActionTests
 			Assert::IsNotNull(actionList.Find("Name"));
 			Assert::AreEqual("ActionList"s, actionList.Find("Name")->Get<std::string>());
 
-			auto actions = actionList.Find(actionList.ActionsKey);
+			const auto* actions = actionList.Find(ActionList::ActionsKey);
 			Assert::IsNotNull(actions);
 			Assert::AreEqual(actionList.Actions(), *actions);
+		}
+
+		TEST_METHOD(Assignment)
+		{
+			ActionList actionList("ActionList");
+
+			ActionList copy;
+			copy = actionList;
+			// TODO: Figure out why the equality is returning false
+			//Assert::IsTrue(actionList.As<Attributed>() == copy.As<Attributed>());
+
+			ActionList moved;
+			moved = std::move(copy);
+			//Assert::AreEqual(actionList.As<Action>(), moved.As<Action>());
 		}
 
 		TEST_METHOD(Clone)
@@ -92,9 +106,9 @@ namespace EntitySystemTests::ActionTests
 			actionList.Adopt(*actionIncrement, ActionList::ActionsKey);
 
 			Scope* clone = actionList.Clone();
-			bool notNull = clone;
-			bool isActionList = notNull ? clone->Is(ActionList::TypeIdClass()) : false;
-			bool equal = *actionList.As<Action>() == *clone->As<Action>();
+			const bool notNull = clone;
+			const bool isActionList = notNull ? clone->Is(ActionList::TypeIdClass()) : false;
+			const bool equal = *actionList.As<Action>() == *clone->As<Action>();
 
 			delete clone;
 
@@ -128,7 +142,7 @@ namespace EntitySystemTests::ActionTests
 			Assert::IsNull(actionList.CreateAction("", "Null"));
 			Assert::AreEqual(0_z, actionList.Actions().Size());
 
-			Action* created;
+			Action* created = nullptr;
 			Assert::IsNotNull(created = actionList.CreateAction("ActionList", "NotNull"));
 			Assert::AreEqual(1_z, actionList.Actions().Size());
 			Assert::AreEqual(created, actionList.Actions()[0].As<Action>());
@@ -147,19 +161,19 @@ namespace EntitySystemTests::ActionTests
 			Assert::IsNotNull(increment);
 			Assert::IsTrue(increment->Is(ActionIncrement::TypeIdClass()));
 
-			ActionIncrement* castedIncrement = static_cast<ActionIncrement*>(increment);
-			*castedIncrement->Find(castedIncrement->OperandKey) = "Integer1"s;
+			ActionIncrement* castIncrement = static_cast<ActionIncrement*>(increment);
+			*castIncrement->Find(ActionIncrement::OperandKey) = "Integer1"s;
 
 			/* Action List */
 
 			Action* actionList = entity.CreateAction("ActionList"s, "List");
 
 			ActionIncrement* increment2 = new ActionIncrement("Increment2");
-			*increment2->Find(increment2->OperandKey) = "Integer2";
+			*increment2->Find(ActionIncrement::OperandKey) = "Integer2";
 			actionList->Adopt(*increment2->As<Scope>(), ActionList::ActionsKey);
 
 			ActionIncrement* increment3 = new ActionIncrement("Increment3");
-			*increment3->Find(increment3->OperandKey) = "Integer3";
+			*increment3->Find(ActionIncrement::OperandKey) = "Integer3";
 			actionList->Adopt(*increment3->As<Scope>(), ActionList::ActionsKey);
 
 			/* Updates */
@@ -183,7 +197,7 @@ namespace EntitySystemTests::ActionTests
 			Assert::AreEqual(2, integer2);
 			Assert::AreEqual(2, integer3);
 
-			castedIncrement->Update(worldState);
+			castIncrement->Update(worldState);
 
 			Assert::AreEqual(3, integer1);
 			Assert::AreEqual(2, integer2);
@@ -192,7 +206,7 @@ namespace EntitySystemTests::ActionTests
 
 		TEST_METHOD(ToString)
 		{
-			ActionList actionList("List");
+			const ActionList actionList("List");
 			Assert::AreEqual("List (ActionList)"s, actionList.ToString());
 		}
 

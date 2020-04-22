@@ -27,7 +27,7 @@ namespace Library
 		{
 			std::scoped_lock<std::mutex> lock(*mMutex);
 
-			for (auto subscriber : *mSubscriberList)
+			for (auto* subscriber : *mSubscriberList)
 			{
 				assert(subscriber);
 

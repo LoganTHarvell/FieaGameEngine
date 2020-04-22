@@ -27,6 +27,26 @@ namespace Library
 	{
 	}
 
+	ActionList& ActionList::operator=(const ActionList& rhs)
+	{
+		if (this != &rhs)
+		{
+			Action::operator=(rhs);
+		}
+
+		return *this;
+	}
+
+	ActionList& ActionList::operator=(ActionList&& rhs) noexcept
+	{
+		if (this != &rhs)
+		{
+			Action::operator=(std::move(rhs));
+		}
+
+		return *this;
+	}
+
 	ActionList::ActionList(const RTTI::IdType typeId, const std::string& name) : Action(typeId, name),
 		mActions(mPairPtrs[ActionsIndex]->second)
 	{

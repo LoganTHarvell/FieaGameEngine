@@ -58,7 +58,7 @@ namespace Library
 		/// </summary>
 		/// <param name="rhs">ActionList to be copied.</param>
 		/// <returns>Newly copied into left hand side ActionList.</returns>
-		ActionList& operator=(const ActionList& rhs) = default;
+		ActionList& operator=(const ActionList& rhs);
 
 		/// <summary>
 		/// Move constructor.
@@ -71,13 +71,14 @@ namespace Library
 		/// </summary>
 		/// <param name="rhs">ActionList to be moved.</param>
 		/// <returns>Newly moved into left hand side ActionList.</returns>
-		ActionList& operator=(ActionList&& rhs) = default;
+		ActionList& operator=(ActionList&& rhs) noexcept;
 
 	protected:
 		/// <summary>
 		/// Specialized constructor for use by derived classes to ensure correct Attribute population.
 		/// </summary>
 		/// <param name="typeId">Type ID of the derived class.</param>
+		/// <param name="name">Name for the ActionList.</param>
 		explicit ActionList(const RTTI::IdType typeId, const std::string& name=std::string());
 #pragma endregion Special Members
 
@@ -119,7 +120,7 @@ namespace Library
 		/// Virtual update method called by the containing object.
 		/// </summary>
 		/// <param name="worldState">WorldState context for the current processing step.</param>
-		virtual void Update(WorldState & worldState);
+		virtual void Update(WorldState & worldState) override;
 #pragma endregion Game Loop
 
 #pragma region RTTI Overrides

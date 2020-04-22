@@ -1,9 +1,6 @@
 #pragma once
 
 #pragma region Includes
-// Standard
-#include <sstream>
-
 // First Party
 #include "ActionList.h"
 #include "IEventSubscriber.h"
@@ -61,6 +58,7 @@ namespace Library
 		/// Specialized constructor for use by derived classes to ensure correct Attribute population.
 		/// </summary>
 		/// <param name="typeId">Type ID of the derived class.</param>
+		/// <param name="name">Name for the Reaction.</param>
 		explicit Reaction(const RTTI::IdType typeId, const std::string& name=std::string());
 #pragma endregion Special Members
 
@@ -69,7 +67,6 @@ namespace Library
 		/// <summary>
 		/// Update method overridden to have a default behavior of doing nothing.
 		/// </summary>
-		/// <param name="worldState">WorldState context for the current processing step.</param>
 		virtual void Update(WorldState&) override {};
 #pragma endregion Action List Overrides
 

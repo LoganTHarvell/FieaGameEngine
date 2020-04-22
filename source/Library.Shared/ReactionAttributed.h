@@ -40,6 +40,7 @@ namespace Library
 		/// Default constructor.
 		/// </summary>
 		/// <param name="name">Pointer to the World that will process this message.</param>
+		/// <param name="subtype">Tag specifying an EventMessageAttribute subtype to which an instance responds.</param>
 		explicit ReactionAttributed(const std::string& name=std::string(), const Subtype& subtype=Subtype());
 
 		/// <summary>
@@ -89,7 +90,7 @@ namespace Library
 		/// Interface method called by an EventPublisher during Publish to receive the Event.
 		/// </summary>
 		/// <param name="eventPublisher">Reference to an Event as an EventPublisher.</param>
-		virtual void Notify(EventPublisher& eventPublisher);
+		virtual void Notify(EventPublisher& eventPublisher) override;
 #pragma endregion Event Subscriber Overrides
 
 #pragma region Scope Overrides
@@ -100,7 +101,7 @@ namespace Library
 		/// </summary>
 		/// <param name="key">Key value associated with the Data value to be found.</param>
 		/// <returns>If found, a pointer to the Data value. Otherwise, nullptr.</returns>
-		virtual Data* Find(const Key& key);
+		virtual Data* Find(const Key& key) override;
 #pragma endregion Scope Overrides
 
 #pragma region Data Members

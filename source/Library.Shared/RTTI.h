@@ -61,9 +61,8 @@ namespace Library
 		virtual RTTI::IdType TypeIdInstance() const = 0;
 
 		/// <summary>
-		/// Gets the current instance casted as an RTTI pointer.
+		/// Gets the current instance cast as an RTTI pointer.
 		/// </summary>
-		/// <param name="">Type ID of the instance being casted.</param>
 		/// <returns>If the given type ID matches the instance type ID, a pointer to the instance as an RTTI. Otherwise, nullptr.</returns>
 		virtual RTTI* QueryInterface(const IdType)
 		{
@@ -73,7 +72,6 @@ namespace Library
 		/// <summary>
 		/// Validates that an instance is related to the type associate with the given IdType value.
 		/// </summary>
-		/// <param name="">Type ID of the type to validate is related to an instance.</param>
 		/// <returns>True, if the given type ID matches with the type ID of this class or any related base/derived class.</returns>
 		virtual bool Is(IdType) const
 		{
@@ -81,9 +79,9 @@ namespace Library
 		}
 
 		/// <summary>
-		/// Gets the instance casted as a related class type.
+		/// Gets the instance cast as a related class type.
 		/// </summary>
-		/// <typeparam name="T">Type to which this instance is casted.</param>
+		/// <typeparam name="T">Type to which this instance is cast.</param>
 		/// <returns>If the type is related, a pointer to the instance as the given type. Otherwise, nullptr.</returns>
 		template <typename T>
 		T* As()
@@ -92,9 +90,9 @@ namespace Library
 		}
 
 		/// <summary>
-		/// Gets the instance casted as a related class type.
+		/// Gets the instance cast as a related class type.
 		/// </summary>
-		/// <typeparam name="T">Type to which this instance is casted.</param>
+		/// <typeparam name="T">Type to which this instance is cast.</param>
 		/// <returns>If the type is related, a pointer to the instance as the given type. Otherwise, nullptr.</returns>
 		template <typename T>
 		const T* As() const
