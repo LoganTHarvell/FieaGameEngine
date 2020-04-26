@@ -189,12 +189,12 @@ namespace Library
 #pragma region Helper Methods
 	void Attributed::Populate(const TypeManager::TypeInfo* typeInfo)
 	{
-		auto parentTypeInfo = TypeManager::Instance()->Find(typeInfo->parentTypeId);
+		auto parentTypeInfo = TypeManager::Instance()->Find(typeInfo->ParentTypeId);
 		if (parentTypeInfo) Populate(parentTypeInfo);
 
-		mPairPtrs.Reserve(typeInfo->signatures.Size() + mPairPtrs.Size());
+		mPairPtrs.Reserve(typeInfo->Signatures.Size() + mPairPtrs.Size());
 
-		for (const auto& signature : typeInfo->signatures)
+		for (const auto& signature : typeInfo->Signatures)
 		{
 			Data& data = Append(signature.Key);
 
@@ -215,10 +215,10 @@ namespace Library
 	{
 		std::size_t index = 1;
 
-		auto parentTypeInfo = TypeManager::Instance()->Find(typeInfo->parentTypeId);
+		auto parentTypeInfo = TypeManager::Instance()->Find(typeInfo->ParentTypeId);
 		if (parentTypeInfo) index = UpdateExternalStorage(parentTypeInfo);
 
-		for (const auto& signature : typeInfo->signatures)
+		for (const auto& signature : typeInfo->Signatures)
 		{
 			if (!signature.IsInternal)
 			{

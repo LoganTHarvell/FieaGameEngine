@@ -60,7 +60,7 @@ namespace Library
 	}
 
 	JsonParseMaster::JsonParseMaster(JsonParseMaster&& rhs) noexcept : 
-		mSharedData(rhs.mSharedData), mHelpers(std::move(rhs.mHelpers)), mFilename(rhs.mFilename), 
+		mSharedData(rhs.mSharedData), mHelpers(std::move(rhs.mHelpers)), mFilename(std::move(rhs.mFilename)), 
 		mOwnsSharedData(rhs.mOwnsSharedData), mOwnedHelperIndices(std::move(rhs.mOwnedHelperIndices))
 	{
 		mSharedData->SetJsonParseMaster(this);
@@ -138,7 +138,7 @@ namespace Library
 	{
 		mSharedData->Initialize();
 
-		for (auto helper : mHelpers)
+		for (auto* helper : mHelpers)
 		{
 			helper->Initialize();
 		}
@@ -164,7 +164,7 @@ namespace Library
 		std::ifstream filestream;
 		filestream.open(filename);
 
-		if (filestream.good())
+		if (filestream.is_open())
 		{
 			mFilename = std::move(filename);
 			Parse(filestream);

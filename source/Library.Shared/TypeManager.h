@@ -85,8 +85,8 @@ namespace Library
 		/// </summary>
 		struct TypeInfo
 		{
-			SignatureListType signatures;
-			IdType parentTypeId;
+			SignatureListType Signatures;
+			IdType ParentTypeId;
 		};
 
 		/// <summary>

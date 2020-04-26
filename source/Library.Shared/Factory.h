@@ -122,7 +122,7 @@ namespace Library
 		/// <summary>
 		/// Virtual constructor for the type T associated with a Factory derived class.
 		/// </summary>
-		/// <returns>Owning pointer to a newly heap allocated instance of the type T assoicated with the derived Factory instance.</returns>
+		/// <returns>Owning pointer to a newly heap allocated instance of the type T associated with the derived Factory instance.</returns>
 		virtual gsl::owner<T*> Create() const = 0;
 
 		/// <summary>

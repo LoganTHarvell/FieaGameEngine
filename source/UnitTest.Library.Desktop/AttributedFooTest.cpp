@@ -306,7 +306,7 @@ namespace ReflectionSystemTests
 
 			a.ForEachPrescribed(functor);
 
-			Assert::AreEqual(TypeManager::Instance()->Find(a.TypeIdInstance())->signatures.Size()+1, count);
+			Assert::AreEqual(TypeManager::Instance()->Find(a.TypeIdInstance())->Signatures.Size()+1, count);
 			
 			a.AppendAuxiliaryAttribute("auxInteger") = 20;
 			a.AppendAuxiliaryAttribute("auxString") = { "20", "30", "40" };
@@ -329,7 +329,7 @@ namespace ReflectionSystemTests
 
 			constA.ForEachPrescribed(constFunctor);
 
-			Assert::AreEqual(TypeManager::Instance()->Find(constA.TypeIdInstance())->signatures.Size() + 1, count);
+			Assert::AreEqual(TypeManager::Instance()->Find(constA.TypeIdInstance())->Signatures.Size() + 1, count);
 
 			constA.ForEachAuxiliary(constFunctor);
 

@@ -8,7 +8,7 @@ namespace Library
 	{
 		const TypeInfo& typeInfo = T::TypeInfo();
 
-		if (typeInfo.parentTypeId != Attributed::TypeIdClass() && !mRegistry.ContainsKey(typeInfo.parentTypeId))
+		if (typeInfo.ParentTypeId != Attributed::TypeIdClass() && !mRegistry.ContainsKey(typeInfo.ParentTypeId))
 		{
 			throw std::runtime_error("Parent type is not registered.");
 		}
