@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)pch.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Utility.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Datum.cpp">
+      <Filter>Containers\Datum</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)JsonParseMaster.cpp">
+      <Filter>JSON Parser</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)JsonScopeParseHelper.cpp">
+      <Filter>JSON Parser</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Attributed.cpp">
+      <Filter>Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Scope.cpp">
+      <Filter>Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)TypeManager.cpp">
+      <Filter>Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)GameClock.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)GameTime.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Action.cpp">
+      <Filter>Core\Entity System\Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)ActionList.cpp">
+      <Filter>Core\Entity System\Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)ActionIncrement.cpp">
+      <Filter>Core\Entity System\Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)ActionCreate.cpp">
+      <Filter>Core\Entity System\Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)ActionDestroy.cpp">
+      <Filter>Core\Entity System\Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)ActionListWhile.cpp">
+      <Filter>Core\Entity System\Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)ActionExpression.cpp">
+      <Filter>Core\Entity System\Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)EventQueue.cpp">
+      <Filter>Core\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)EventPublisher.cpp">
+      <Filter>Core\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Entity.cpp">
+      <Filter>Core\Entity System</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Sector.cpp">
+      <Filter>Core\Entity System</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)World.cpp">
+      <Filter>Core\Entity System</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)ReactionAttributed.cpp">
+      <Filter>Core\Entity System\Actions\Reaction</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)EventMessageAttributed.cpp">
+      <Filter>Core\Entity System\Actions\Reaction</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)ActionEvent.cpp">
+      <Filter>Core\Entity System\Actions\Reaction</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Utility.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)DefaultHash.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)DefaultEquality.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)RTTI.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Datum.h">
+      <Filter>Containers\Datum</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)HashMap.h">
+      <Filter>Containers\HashMap</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)SList.h">
+      <Filter>Containers\SList</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Vector.h">
+      <Filter>Containers\Vector</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)IJsonParseHelper.h">
+      <Filter>JSON Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)JsonParseMaster.h">
+      <Filter>JSON Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Stack.h">
+      <Filter>Containers\Stack</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)JsonScopeParseHelper.h">
+      <Filter>JSON Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Factory.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Attributed.h">
+      <Filter>Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Scope.h">
+      <Filter>Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)TypeManager.h">
+      <Filter>Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)GameClock.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)GameTime.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)ActionList.h">
+      <Filter>Core\Entity System\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Action.h">
+      <Filter>Core\Entity System\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)ActionIncrement.h">
+      <Filter>Core\Entity System\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)ActionDestroy.h">
+      <Filter>Core\Entity System\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)ActionCreate.h">
+      <Filter>Core\Entity System\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)ActionListWhile.h">
+      <Filter>Core\Entity System\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)ActionExpression.h">
+      <Filter>Core\Entity System\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)EventPublisher.h">
+      <Filter>Core\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Event.h">
+      <Filter>Core\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)EventQueue.h">
+      <Filter>Core\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)WorldState.h">
+      <Filter>Core\Entity System</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Entity.h">
+      <Filter>Core\Entity System</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Sector.h">
+      <Filter>Core\Entity System</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)World.h">
+      <Filter>Core\Entity System</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)IEventSubscriber.h">
+      <Filter>Core\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)EventMessageAttributed.h">
+      <Filter>Core\Entity System\Actions\Reaction</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)ReactionAttributed.h">
+      <Filter>Core\Entity System\Actions\Reaction</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)ActionEvent.h">
+      <Filter>Core\Entity System\Actions\Reaction</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Reaction.h">
+      <Filter>Core\Entity System\Actions\Reaction</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)DefaultHash.inl">
+      <Filter>Utility</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)DefaultEquality.inl">
+      <Filter>Utility</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Datum.inl">
+      <Filter>Containers\Datum</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)HashMap.inl">
+      <Filter>Containers\HashMap</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)SList.inl">
+      <Filter>Containers\SList</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Vector.inl">
+      <Filter>Containers\Vector</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)JsonParseMaster.inl">
+      <Filter>JSON Parser</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Stack.inl">
+      <Filter>Containers\Stack</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Factory.inl">
+      <Filter>Utility</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Scope.inl">
+      <Filter>Reflection</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)TypeManager.inl">
+      <Filter>Reflection</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Event.inl">
+      <Filter>Core\Events</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)EventQueue.inl">
+      <Filter>Core\Events</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)EventPublisher.inl">
+      <Filter>Core\Events</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Reaction.inl">
+      <Filter>Core\Entity System\Actions\Reaction</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)EventMessageAttributed.inl">
+      <Filter>Core\Entity System\Actions\Reaction</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Containers">
+      <UniqueIdentifier>{8316f63d-dcba-44f1-b30b-e78811dbd172}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility">
+      <UniqueIdentifier>{2f6f67e5-19b1-465b-a10a-d413f9a12d48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Containers\Datum">
+      <UniqueIdentifier>{ba00a61c-058c-4031-af9f-5be588c0ae86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Containers\SList">
+      <UniqueIdentifier>{7f894690-b53f-467f-8152-34d593bb2926}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Containers\Vector">
+      <UniqueIdentifier>{65e56c70-4f5f-4e3b-b5fb-fbce7e929e27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Containers\HashMap">
+      <UniqueIdentifier>{87b9de7d-298d-4497-81db-52956c8c344c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="JSON Parser">
+      <UniqueIdentifier>{cb52c9b0-32c6-480a-a0f2-20ac7613b4c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Containers\Stack">
+      <UniqueIdentifier>{b76401fc-c5b1-4d3c-aa7b-afcba3c7a565}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Reflection">
+      <UniqueIdentifier>{239b5842-83b7-4bec-b7c9-2b65e8d64508}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{f8346060-d4cd-4e79-830a-f01c0f376ad2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Events">
+      <UniqueIdentifier>{6f061f23-0bac-472e-bdbb-a48f46a4bf26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Entity System">
+      <UniqueIdentifier>{62a21585-c056-47e6-a328-c0bbcabe4791}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Entity System\Actions">
+      <UniqueIdentifier>{ea3462ea-d32e-475a-9e02-f3f12b5435d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Entity System\Actions\Reaction">
+      <UniqueIdentifier>{268d84ef-a093-4f0b-bb17-f714a1e258eb}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
