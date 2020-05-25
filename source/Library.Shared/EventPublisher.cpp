@@ -20,52 +20,18 @@ namespace Library
 	void EventPublisher::Publish()
 	{
 		assert(mSubscriberList);
-
-		Vector notifyThreads(Vector<std::future<void>>::EqualityFunctor{});
-		Vector exceptionEntries(Vector<Exception::AggregateException::Entry>::EqualityFunctor{});
-		std::mutex exceptionEntriesMutex;
+		if (!mSubscriberList) return;
 		
+		SubscriberList subscribers;
 		{
 			std::scoped_lock<std::mutex> lock(*mMutex);
-
-			for (auto* subscriber : *mSubscriberList)
-			{
-				assert(subscriber);
-
-				auto notify = [subscriber, this, &exceptionEntries, &exceptionEntriesMutex]
-				{
-					try
-					{
-						subscriber->Notify(*this);
-					}
-					catch (...)
-					{
-						Exception::AggregateException::Entry exceptionEntry =
-						{
-							std::current_exception(),
-							(__FILE__),
-							(__LINE__),
-							"Notify"s,
-							ToString()
-						};
-
-						std::scoped_lock<std::mutex> exceptionEntriesLock(exceptionEntriesMutex);
-						exceptionEntries.EmplaceBack(std::move(exceptionEntry));
-					}
-				};
-				
-				notifyThreads.EmplaceBack(std::async(std::launch::async, notify));
-			}
+			subscribers = *mSubscriberList;
 		}
-
-		for (const auto& t : notifyThreads)
+		
+		for (auto* subscriber : subscribers)
 		{
-			t.wait();
-		}
-
-		if (exceptionEntries.Size() > 0)
-		{
-			throw Exception::AggregateException("Publishing exceptions.", exceptionEntries);
+			assert(subscriber);
+			subscriber->Notify(*this);
 		}
 	}
 }

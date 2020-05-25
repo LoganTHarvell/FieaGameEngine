@@ -116,11 +116,11 @@ namespace EventTests
 		TEST_METHOD(Constructor)
 		{
 			{
-				Event<Foo> fooEvent;
+				const Event<Foo> fooEvent;
 				Assert::AreEqual(Foo(), fooEvent.Message);
 			}
 
-			Event<Foo> fooEvent(Foo(10));
+			const Event<Foo> fooEvent(Foo(10));
 			Assert::AreEqual(Foo(10), fooEvent.Message);
 
 			const Event<Foo> constFooEvent = fooEvent;
@@ -149,23 +149,23 @@ namespace EventTests
 			TestSubscriberException subscriberWithException;
 			Event<Foo>::Subscribe(subscriberWithException);
 
-			Assert::ExpectException<Exception::AggregateException>([&fooEvent]{ EventQueue::Publish(fooEvent); });
+			Assert::ExpectException<std::runtime_error>([&fooEvent]{ EventQueue::Publish(fooEvent); });
 		}
 
 		TEST_METHOD(RTTITest)
 		{
-			Event<Foo> a;
+			const Event<Foo> a;
 			Event<Foo> b;
 
 			Assert::IsTrue(a.Is(EventPublisher::TypeIdClass()));
 
 			EventPublisher* fooEvent = new Event<Foo>();
-			bool isEvent = fooEvent->Is(Event<Foo>::TypeIdClass());
+			const bool isEvent = fooEvent->Is(Event<Foo>::TypeIdClass());
 
 			Event<Foo>* createdFooEvent = isEvent ? createdFooEvent = fooEvent->CreateAs<Event<Foo>>() : nullptr;
-			bool wasCreated = createdFooEvent != nullptr;
+			const bool wasCreated = createdFooEvent != nullptr;
 
-			bool isFooEvent = wasCreated ? createdFooEvent->Is(Event<Foo>::TypeIdClass()) : false;
+			const bool isFooEvent = wasCreated ? createdFooEvent->Is(Event<Foo>::TypeIdClass()) : false;
 
 			delete fooEvent;
 			delete createdFooEvent;
@@ -177,7 +177,7 @@ namespace EventTests
 
 		TEST_METHOD(ToString)
 		{
-			Event<Foo> fooEvent;
+			const Event<Foo> fooEvent;
 			Assert::AreEqual("Event"s, fooEvent.ToString());
 			Assert::AreEqual("EventPublisher"s, fooEvent.EventPublisher::ToString());
 		}

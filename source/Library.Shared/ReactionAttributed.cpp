@@ -69,23 +69,16 @@ namespace Library
 		
 		if (mSubtype == message.GetSubtype() && message.GetWorld())
 		{			
-			{
-				std::scoped_lock<std::mutex> lock(mMutex);
-			
-				Scope parameters;
+			Scope parameters;
 
-				message.ForEachAuxiliary([&](const Attribute& attribute) 
-                {
-                    parameters[attribute.first] = attribute.second; 
-                });
-			
-				mParameterStack.Push(parameters);
-			}
-			
+			message.ForEachAuxiliary([&](const Attribute& attribute) 
+            {
+                mParameters[attribute.first] = attribute.second; 
+            });
+					
 			ActionList::Update(message.GetWorld()->GetWorldState());
 			
-			std::scoped_lock<std::mutex> lock(mMutex);
-			mParameterStack.Pop();
+			mParameters.Clear();
 		}
 	}
 #pragma endregion Event Subscriber Overrides
@@ -95,9 +88,9 @@ namespace Library
 	{
 		Data* result = nullptr;
 
-		if (!mParameterStack.IsEmpty())
+		if (!mParameters.IsEmpty())
 		{
-			result = mParameterStack.Top().Find(key);
+			result = mParameters.Find(key);
 		}
 		
 		return result ? result : ActionList::Find(key);

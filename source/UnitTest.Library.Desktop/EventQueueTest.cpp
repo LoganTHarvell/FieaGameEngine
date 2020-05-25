@@ -290,7 +290,7 @@ namespace EventTests
 			subscriber.queue = &queue;
 			Event<Foo>::Subscribe(subscriber);
 
-			Assert::ExpectException<Exception::AggregateException>([this, &gameTime] { queue.Update(gameTime); });
+			Assert::ExpectException<std::runtime_error>([this, &gameTime] { queue.Update(gameTime); });
 		}
 
 	private:

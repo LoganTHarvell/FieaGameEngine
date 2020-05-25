@@ -1,10 +1,13 @@
+#include <utility>
+
+
 #include "EventQueue.h"
 
 namespace Library
 {
 #pragma region Event Entry
-	inline EventQueue::EventEntry::EventEntry(const std::shared_ptr<EventPublisher>& publisher, const TimePoint& expireTime) :
-		Publisher(publisher), ExpireTime(expireTime)
+	inline EventQueue::EventEntry::EventEntry(std::shared_ptr<EventPublisher> publisher, const TimePoint& expireTime) :
+		Publisher(std::move(publisher)), ExpireTime(expireTime)
 	{
 	}
 #pragma endregion Event Entry

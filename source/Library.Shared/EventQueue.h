@@ -45,7 +45,7 @@ namespace Library
 			/// </summary>
 			/// <param name="publisher">Weak pointer to an Event as a EventPublisher.</param>
 			/// <param name="expireTime">TimePoint when the Event should expire.</param>
-			explicit EventEntry(const std::shared_ptr<EventPublisher>& publisher=std::shared_ptr<EventPublisher>(), const TimePoint& expireTime=TimePoint());
+			explicit EventEntry(std::shared_ptr<EventPublisher> publisher=std::shared_ptr<EventPublisher>(), const TimePoint& expireTime=TimePoint());
 
 			/// <summary>
 			/// Default destructor.
@@ -139,7 +139,6 @@ namespace Library
 		/// <param name="eventPublisher">EventPublisher reference to the Event instance to be queued.</param>
 		/// <param name="expireTime">Reference to a GameTime instance used to calculate the Event expire time.</param>
 		/// <exception cref="std::runtime_error">Attempted to Enqueue null pointer.</exception>
-		/// <remarks>EventQueue capacity will not increase until the next call to Update.</remarks>
 		void Enqueue(const std::shared_ptr<EventPublisher>& eventPublisher, const TimePoint& expireTime=TimePoint());
 
 		/// <summary>

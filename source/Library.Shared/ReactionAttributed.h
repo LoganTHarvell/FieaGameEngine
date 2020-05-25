@@ -113,17 +113,12 @@ namespace Library
 		/// These attributes act as a parameter list that is evaluated first during
 		/// any Search call made during the ActionList Update call.
 		/// </summary>
-		Stack<Scope> mParameterStack;
+		Scope mParameters;
 
 		/// <summary>
 		/// String to specify a EventMessageAttributed subtype to which this Reaction should respond.
 		/// </summary>
 		std::string mSubtype;
-
-		/// <summary>
-		/// Mutex controlling thread access to the ReactionAttributed.
-		/// </summary>
-		std::mutex mMutex;
 #pragma endregion Data Members
 	};
 

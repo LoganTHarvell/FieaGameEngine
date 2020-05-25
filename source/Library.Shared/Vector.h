@@ -569,7 +569,7 @@ namespace Library
 		/// </summary>
 		/// <param name="rhs">Value list for intializing a new Vector.</param>
 		/// <remarks>May require an EqualityFunctor passed using constructor syntax, if no suitable DefaultEquality exists.</remarks>
-		/// <param name="reserveStrategy">Default reserve strategy functor.</param>
+		/// <param name="reserveFunctor">Default reserve strategy functor.</param>
 		/// <param name="equalityFunctor">Default equality functor.</param>
 		Vector(std::initializer_list<T> rhs, const EqualityFunctor& equalityFunctor=DefaultEquality<T>(), const ReserveFunctor& reserveFunctor=DefaultReserveFunctor());
 
