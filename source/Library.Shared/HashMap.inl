@@ -4,7 +4,7 @@ namespace Library
 {
 #pragma region Iterator
 	template<typename TKey, typename TData>
-	inline HashMap<TKey, TData>::Iterator::Iterator(HashMap& hashMap, const typename BucketIterator& bucketIterator, const typename ChainIterator& chainIterator) :
+	inline HashMap<TKey, TData>::Iterator::Iterator(HashMap& hashMap, const BucketIterator& bucketIterator, const ChainIterator& chainIterator) :
 		mOwner(&hashMap), mBucketIterator(bucketIterator), mChainIterator(chainIterator)
 	{
 	}
@@ -90,13 +90,13 @@ namespace Library
 	}
 
 	template<typename TKey, typename TData>
-	inline HashMap<TKey, TData>::ConstIterator::ConstIterator(const HashMap& hashMap, const typename BucketConstIterator& bucketIterator, const typename ChainConstIterator& chainIterator) :
+	inline HashMap<TKey, TData>::ConstIterator::ConstIterator(const HashMap& hashMap, const BucketConstIterator& bucketIterator, const ChainConstIterator& chainIterator) :
 		mOwner(&hashMap), mBucketIterator(bucketIterator), mChainIterator(chainIterator)
 	{
 	}
 
 	template<typename TKey, typename TData>
-	inline typename const HashMap<TKey, TData>::Pair& HashMap<TKey, TData>::ConstIterator::operator*() const
+	inline const typename HashMap<TKey, TData>::Pair& HashMap<TKey, TData>::ConstIterator::operator*() const
 	{
 		if (mOwner == nullptr)
 		{
@@ -107,7 +107,7 @@ namespace Library
 	}
 
 	template<typename TKey, typename TData>
-	inline typename const HashMap<TKey, TData>::Pair* HashMap<TKey, TData>::ConstIterator::operator->() const
+	inline const typename HashMap<TKey, TData>::Pair* HashMap<TKey, TData>::ConstIterator::operator->() const
 	{
 		return &(this->operator*());
 	}
@@ -453,7 +453,7 @@ namespace Library
 		{
 			it.mBucketIterator = mBuckets.begin() + index;
 			it.mChainIterator = mBuckets[index].EmplaceAfter(mBuckets[index].end(), Pair(std::piecewise_construct, 
-																						 std::forward_as_tuple(std::move(key)), 
+																						 std::forward_as_tuple(std::forward<Key>(key)), 
 																						 std::forward_as_tuple(std::forward<Args>(args)...)));
 			++mSize;
 		}
@@ -505,8 +505,15 @@ namespace Library
 	template<typename TKey, typename TData>
 	inline typename HashMap<TKey, TData>::Iterator HashMap<TKey, TData>::Find(const TKey& key, std::size_t& indexOut)
 	{
-		if (!*mHashFunctor)			throw std::runtime_error("HashFunctor null.");
-		if (!*mKeyEqualityFunctor)	throw std::runtime_error("KeyEqualityFunctor null.");
+		if (!mHashFunctor || !*mHashFunctor)
+		{
+			throw std::runtime_error("HashFunctor null.");
+		}
+
+		if (!mKeyEqualityFunctor || !*mKeyEqualityFunctor)
+		{
+			throw std::runtime_error("KeyEqualityFunctor null.");
+		}
 		
 		indexOut = mHashFunctor->operator()(key) % mBuckets.Capacity();
 

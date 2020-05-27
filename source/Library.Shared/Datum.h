@@ -100,7 +100,7 @@ namespace Library
 		/// <summary>
 		/// Datum equality function look-up table.
 		/// </summary>
-		using EqualityFunctor = std::function<bool(void*, void*, std::size_t)>;
+		using EqualityFunctor = std::function<bool(void*, void*, const std::size_t)>;
 		static const EqualityFunctor EqualityLUT[static_cast<std::size_t>(Types::End)];
 		
 		/// <summary>
@@ -112,19 +112,19 @@ namespace Library
 		/// <summary>
 		/// Create default value function look-up table.
 		/// </summary>
-		using CreateDefaultFunctor = std::function<void(void*, std::size_t)>;
+		using CreateDefaultFunctor = std::function<void(void*, const std::size_t)>;
 		static const CreateDefaultFunctor CreateDefaultLUT[static_cast<std::size_t>(Types::End)];
 
 		/// <summary>
 		/// ToString function look-up table.
 		/// </summary>
-		using ToStringFunctor = std::function<std::string(void*, std::size_t)>;
+		using ToStringFunctor = std::function<std::string(void*, const std::size_t)>;
 		static const ToStringFunctor ToStringLUT[static_cast<std::size_t>(Types::End)];
 
 		/// <summary>
 		/// FromString function look-up table.
 		/// </summary>
-		using FromStringFunctor = std::function<void(std::string, void*, std::size_t)>;
+		using FromStringFunctor = std::function<void(const std::string&, void*, const std::size_t)>;
 		static const FromStringFunctor FromStringLUT[static_cast<std::size_t>(Types::End)];
 #pragma endregion Type Definitions, Constants
 
@@ -138,14 +138,14 @@ namespace Library
 			/// <summary>
 			/// Function call operator.
 			/// </summary>
-			/// <param name="">Placeholder argument for the Datum size.</param>
+			/// <param name="size">Datum size.</param>
 			/// <param name="capacity">Datum capacity.</param>
 			/// <returns>New capacity.</returns>
-			constexpr std::size_t operator()(const std::size_t, const std::size_t capacity) const;
+			constexpr std::size_t operator()(const std::size_t size, const std::size_t capacity) const;
 		};
 #pragma endregion Default Functors
 	
-#pragma region TypeOf Static Method
+#pragma region TypeOf
 	public:
 		/// <summary>
 		/// Returns the DatumTypes value associated with the template typename T.
@@ -153,55 +153,7 @@ namespace Library
 		/// <typeparam name="T">Type to check for an associated DatumTypes value.</typeparam>
 		template<typename T>
 		static constexpr Types TypeOf();
-
-		/// <summary>
-		/// Returns the DatumTypes value associated with an int type.
-		/// </summary>
-		template<>
-		static constexpr Types TypeOf<int>();
-
-		/// <summary>
-		/// Returns the DatumTypes value associated with a float type.
-		/// </summary>
-		template<>
-		static constexpr Types TypeOf<float>();
-
-		/// <summary>
-		/// Returns the DatumTypes value associated with a glm::vec4 type.
-		/// </summary>
-		template<>
-		static constexpr Types TypeOf<glm::vec4>();
-
-		/// <summary>
-		/// Returns the DatumTypes value associated with a glm::mat4 type.
-		/// </summary>
-		template<>
-		static constexpr Types TypeOf<glm::mat4>();
-
-		/// <summary>
-		/// Returns the DatumTypes value associated with a std::string type.
-		/// </summary>
-		template<>
-		static constexpr Types TypeOf<std::string>();
-
-		/// <summary>
-		/// Returns the DatumTypes value associated with a ScopePointer type.
-		/// </summary>
-		template<>
-		static constexpr Types TypeOf<ScopePointer>();
-
-		/// <summary>
-		/// Returns the DatumTypes value associated with a RTTIPointer type.
-		/// </summary>
-		template<>
-		static constexpr Types TypeOf<RTTIPointer>();
-
-		/// <summary>
-		/// Returns the DatumTypes value associated with a DatumPointer type.
-		/// </summary>
-		template<>
-		static constexpr Types TypeOf<DatumPointer>();
-#pragma endregion TypeOf Static Method
+#pragma endregion TypeOf
 
 #pragma region Special Members
 	public:
@@ -313,7 +265,7 @@ namespace Library
 		/// <param name="rhs">A list of int values for initializing mData.</param>
 		/// <exception cref="runtime_error">Mismatched types.</exception>
 		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
-		Datum(std::initializer_list<int> rhs);
+		Datum(const std::initializer_list<int> rhs);
 
 		/// <summary>
 		/// Initializer list constructor overloads for assigning Datum to a list of float values.
@@ -321,7 +273,7 @@ namespace Library
 		/// <param name="rhs">A list of float values for initializing mData.</param>
 		/// <exception cref="runtime_error">Mismatched types.</exception>
 		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
-		Datum(std::initializer_list<float> rhs);
+		Datum(const std::initializer_list<float> rhs);
 
 		/// <summary>
 		/// Initializer list constructor overloads for assigning Datum to a list of glm::vec4 vectors.
@@ -329,7 +281,7 @@ namespace Library
 		/// <param name="rhs">A list of glm::vec4 values for initializing mData.</param>
 		/// <exception cref="runtime_error">Mismatched types.</exception>
 		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
-		Datum(std::initializer_list<glm::vec4> rhs);
+		Datum(const std::initializer_list<glm::vec4> rhs);
 
 		/// <summary>
 		/// Initializer list constructor overloads for assigning Datum to a list of glm::mat4 matrices.
@@ -337,7 +289,7 @@ namespace Library
 		/// <param name="rhs">A list of glm::mat4 values for initializing mData.</param>
 		/// <exception cref="runtime_error">Mismatched types.</exception>
 		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
-		Datum(std::initializer_list<glm::mat4> rhs);
+		Datum(const std::initializer_list<glm::mat4> rhs);
 
 		/// <summary>
 		/// Initializer list constructor overloads for assigning Datum to a list of std::string values.
@@ -345,7 +297,7 @@ namespace Library
 		/// <param name="rhs">A list of std::string values for initializing mData.</param>
 		/// <exception cref="runtime_error">Mismatched types.</exception>
 		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
-		Datum(std::initializer_list<std::string> rhs);
+		Datum(const std::initializer_list<std::string> rhs);
 
 		/// <summary>
 		/// Initializer list constructor overloads for assigning Datum to a list of ScopePointer values.
@@ -353,7 +305,7 @@ namespace Library
 		/// <param name="rhs">A list of ScopePointer values for initializing mData.</param>
 		/// <exception cref="runtime_error">Mismatched types.</exception>
 		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
-		Datum(std::initializer_list<ScopePointer> rhs);
+		Datum(const std::initializer_list<ScopePointer> rhs);
 
 		/// <summary>
 		/// Initializer list constructor overloads for assigning Datum to a list of RTTIPointer values.
@@ -361,7 +313,7 @@ namespace Library
 		/// <param name="rhs">A list of RTTIPointer values for initializing mData.</param>
 		/// <exception cref="runtime_error">Mismatched types.</exception>
 		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
-		Datum(std::initializer_list<RTTIPointer> rhs);
+		Datum(const std::initializer_list<RTTIPointer> rhs);
 
 		/// <summary>
 		/// Initializer list constructor overloads for assigning Datum to a list of DatumPointer values.
@@ -369,7 +321,7 @@ namespace Library
 		/// <param name="rhs">A list of DatumPointer values for initializing mData.</param>
 		/// <exception cref="runtime_error">Mismatched types.</exception>
 		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
-		Datum(std::initializer_list<DatumPointer> rhs);
+		Datum(const std::initializer_list<DatumPointer> rhs);
 #pragma endregion Scalar/List Constructors
 
 #pragma region Scalar/Initializer List Assignment
@@ -444,7 +396,7 @@ namespace Library
 		/// <param name="rhs">A list of int values for assigning to mData.</param>
 		/// <exception cref="runtime_error">Mismatched types.</exception>
 		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
-		Datum& operator=(std::initializer_list<int> rhs);
+		Datum& operator=(const std::initializer_list<int> rhs);
 
 		/// <summary>
 		/// Initializer list assignment overloads for assigning Datum to a list of float values.
@@ -452,7 +404,7 @@ namespace Library
 		/// <param name="rhs">A list of float values for assigning to mData.</param>
 		/// <exception cref="runtime_error">Mismatched types.</exception>
 		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
-		Datum& operator=(std::initializer_list<float> rhs);
+		Datum& operator=(const std::initializer_list<float> rhs);
 
 		/// <summary>
 		/// Initializer list assignment overloads for assigning Datum to a list of glm::vec4 vectors.
@@ -460,7 +412,7 @@ namespace Library
 		/// <param name="rhs">A list of glm::vec4 values for assigning to mData.</param>
 		/// <exception cref="runtime_error">Mismatched types.</exception>
 		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
-		Datum& operator=(std::initializer_list<glm::vec4> rhs);
+		Datum& operator=(const std::initializer_list<glm::vec4> rhs);
 
 		/// <summary>
 		/// Initializer list assignment overloads for assigning Datum to a list of glm::mat4 matrices.
@@ -468,7 +420,7 @@ namespace Library
 		/// <param name="rhs">A list of glm::mat4 values for assigning to mData.</param>
 		/// <exception cref="runtime_error">Mismatched types.</exception>
 		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
-		Datum& operator=(std::initializer_list<glm::mat4> rhs);
+		Datum& operator=(const std::initializer_list<glm::mat4> rhs);
 
 		/// <summary>
 		/// Initializer list assignment overloads for assigning Datum to a list of std::string values.
@@ -476,7 +428,7 @@ namespace Library
 		/// <param name="rhs">A list of std::string values for assigning to mData.</param>
 		/// <exception cref="runtime_error">Mismatched types.</exception>
 		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
-		Datum& operator=(std::initializer_list<std::string> rhs);
+		Datum& operator=(const std::initializer_list<std::string> rhs);
 
 		/// <summary>
 		/// Initializer list assignment overloads for assigning Datum to a list of ScopePointer values.
@@ -484,7 +436,7 @@ namespace Library
 		/// <param name="rhs">A list of ScopePointer values for assigning to mData.</param>
 		/// <exception cref="runtime_error">Mismatched types.</exception>
 		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
-		Datum& operator=(std::initializer_list<ScopePointer> rhs);
+		Datum& operator=(const std::initializer_list<ScopePointer> rhs);
 
 		/// <summary>
 		/// Initializer list assignment overloads for assigning Datum to a list of RTTIPointer values.
@@ -492,7 +444,7 @@ namespace Library
 		/// <param name="rhs">A list of RTTIPointer values for assigning to mData.</param>
 		/// <exception cref="runtime_error">Mismatched types.</exception>
 		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
-		Datum& operator=(std::initializer_list<RTTIPointer> rhs);
+		Datum& operator=(const std::initializer_list<RTTIPointer> rhs);
 
 		/// <summary>
 		/// Initializer list assignment overloads for assigning Datum to a list of DatumPointer values.
@@ -500,7 +452,7 @@ namespace Library
 		/// <param name="rhs">A list of DatumPointer values for assigning to mData.</param>
 		/// <exception cref="runtime_error">Mismatched types.</exception>
 		/// <exception cref="runtime_error">External storage has insufficient memory.</exception>
-		Datum& operator=(std::initializer_list<DatumPointer> rhs);
+		Datum& operator=(const std::initializer_list<DatumPointer> rhs);
 #pragma endregion Scalar/Initializer List Assignment
 #pragma endregion Special Members
 
@@ -669,7 +621,7 @@ namespace Library
 		/// <param name="type">DatumTypes value to set.</param>
 		/// <exception cref="runtime_error">Type cannot be reassigned.</exception>
 		/// <exception cref="runtime_error">Cannot assign to unknown type.</exception>
-		void SetType(Types type);
+		void SetType(const Types type);
 
 		/// <summary>
 		/// Determines if the data is stored internally.
@@ -701,7 +653,7 @@ namespace Library
 		/// <param name="capacity">Number of elements for for which to allocate memory.</param>
 		/// <exception cref="runtime_error">Data type unknown.</exception>
 		/// <exception cref="runtime_error">Cannot modify external storage.</exception>
-		void Reserve(std::size_t capacity);
+		void Reserve(const std::size_t capacity);
 
 		/// <summary>
 		/// Inserts or destroys elements so the Datum contains only the specified number of elements.
@@ -709,7 +661,7 @@ namespace Library
 		/// <param name="size">New size for the Datum.</param>
 		/// <exception cref="runtime_error">Data type unknown.</exception>
 		/// <exception cref="runtime_error">Cannot modify external storage.</exception>
-		void Resize(std::size_t size);
+		void Resize(const std::size_t size);
 
 		/// <summary>
 		/// Shrinks any excess capacity to match the number of elements the Datum contains.
@@ -760,7 +712,7 @@ namespace Library
 		/// <param name="index">Index of the element to be set with the value.</param>
 		/// <returns>Reference to the set element.</returns>
 		template<typename T>
-		T& Set(const T& value, std::size_t index=0);
+		T& Set(const T& value, const std::size_t index=0);
 
 		/// <summary>
 		/// Gets the element of the Datum at a given index, defaults to the first element.
@@ -769,7 +721,7 @@ namespace Library
 		/// <param name="index">Index of the element.</param>
 		/// <returns>Reference to the element.</returns>
 		template<typename T>
-		T& Get(std::size_t index=0);
+		T& Get(const std::size_t index=0);
 
 		/// <summary>
 		/// Gets the element of the Datum at a given index, defaults to the first element.
@@ -778,7 +730,7 @@ namespace Library
 		/// <param name="index">Index of the element.</param>
 		/// <returns>Constant reference to the element.</returns>
 		template<typename T>
-		const T& Get(std::size_t index=0) const;
+		const T& Get(const std::size_t index=0) const;
 
 		/// <summary>
 		/// Finds an element in the Datum given the corresponding value.
@@ -811,7 +763,7 @@ namespace Library
 		/// Scope subscript dereference operator.
 		/// Gets a reference to the Scope located at the given index.
 		/// </summary>
-		/// <param name="index">Index in the Datum of the ScopePointer to be dereferenced.</param>
+		/// <param name="index">Index in the Datum of the ScopePointer to be de-referenced.</param>
 		/// <returns>Reference to the scope pointed at by a ScopePointer at the given index in the Datum.</returns>
 		Scope& operator[](std::size_t index);
 
@@ -819,7 +771,7 @@ namespace Library
 		/// Scope subscript dereference operator.
 		/// Gets a reference to the Scope located at the given index.
 		/// </summary>
-		/// <param name="index">Index in the Datum of the ScopePointer to be dereferenced.</param>
+		/// <param name="index">Index in the Datum of the ScopePointer to be de-referenced.</param>
 		/// <returns>Reference to the scope pointed at by a ScopePointer at the given index in the Datum.</returns>
 		const Scope& operator[](std::size_t index) const;
 #pragma endregion Element Accessors
@@ -925,6 +877,7 @@ namespace Library
 		/// <summary>
 		/// Sets a value in the Datum from a string representation.
 		/// </summary>
+		/// <param name="str">Serialized data to convert and store in the Datum.</param>
 		/// <param name="index">Index of the value to set. Defaults to the first element.</param>
 		/// <returns>String representation of the Datum value.</returns>
 		/// <exception cref="runtime_error">Data type unknown.</exception>
@@ -947,7 +900,7 @@ namespace Library
 		/// <typeparam name="T">Type of elements to fill the Datum.</typeparam>
 		/// <param name="rhs">List of values to fill the Datum.</param>
 		template<typename T>
-		Datum& ListInitializationHelper(std::initializer_list<T> rhs);
+		Datum& ListInitializationHelper(const std::initializer_list<T> rhs);
 #pragma endregion Helper Methods
 
 #pragma region Data Members

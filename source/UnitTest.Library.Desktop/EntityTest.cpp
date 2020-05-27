@@ -134,8 +134,8 @@ namespace EntitySystemTests
 			const Entity copy = *entity;
 
 			Assert::AreEqual(2_z, copy.Actions().Size());
-			Assert::AreEqual(entity1, copy.Actions().Get<Scope*>(0)->As<Action>());
-			Assert::AreEqual(entity2, copy.Actions().Get<Scope*>(1)->As<Action>());
+			Assert::AreEqual(*entity1, *copy.Actions().Get<Scope*>(0)->As<Action>());
+			Assert::AreEqual(*entity2, *copy.Actions().Get<Scope*>(1)->As<Action>());
 
 			entity->SetSector(nullptr);
 			Assert::IsNull(entity->GetSector());

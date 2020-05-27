@@ -77,6 +77,7 @@ namespace Library
 		/// Specialized constructor for use by derived classes to ensure correct Attribute population.
 		/// </summary>
 		/// <param name="typeId">Type ID of the derived class.</param>
+		/// <param name="name">Action name.</param>
 		explicit Action(const RTTI::IdType typeId, const std::string& name=std::string());
 #pragma endregion Special Members
 
@@ -113,7 +114,6 @@ namespace Library
 		/// Virtual update method called by the containing object.
 		/// </summary>
 		/// <param name="worldState">WorldState context for the current processing step.</param>
-		/// <remarks>
 		virtual void Update(WorldState& worldState)=0;
 #pragma endregion Game Loop
 

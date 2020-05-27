@@ -47,10 +47,10 @@ namespace Library
 			/// <summary>
 			/// Function call operator.
 			/// </summary>
-			/// <param name="">Placeholder argument for the Vector size.</param>
+			/// <param name="size">Vector size.</param>
 			/// <param name="capacity">Vector capacity.</param>
 			/// <returns>New capacity.</returns>
-			constexpr std::size_t operator()(const std::size_t, const std::size_t capacity) const;
+			constexpr std::size_t operator()(const std::size_t size, const std::size_t capacity) const;
 		};
 #pragma endregion Default Functors
 
@@ -110,9 +110,9 @@ namespace Library
 			/// <summary>
 			/// Specialized constructor for creating an Iterator for a Vector at a given index.
 			/// </summary>
-			/// <param name="vector">Source Vector for the Iterator's values.</param>
+			/// <param name="owner">Source Vector for the Iterator's values.</param>
 			/// <param name="index">Current element of the Vector referenced by the Iterator.</param>
-			Iterator(Vector& vector, const std::size_t index=0);
+			Iterator(Vector& owner, const std::size_t index=0);
 
 		public:
 #pragma region Dereference Operators
@@ -159,7 +159,7 @@ namespace Library
 			/// Less than operator.
 			/// </summary>
 			/// <param name="rhs">Right hand side Iterator to be compared against.</param>
-			/// <returns>True if the rhs Iterator points to an element preceeding the lhs, false otherwise.</returns>
+			/// <returns>True if the rhs Iterator points to an element preceding the lhs, false otherwise.</returns>
 			bool operator<(const Iterator& rhs) const noexcept;
 
 			/// <summary>
@@ -173,7 +173,7 @@ namespace Library
 			/// Less than or equal operator.
 			/// </summary>
 			/// <param name="rhs">Right hand side Iterator to be compared against.</param>
-			/// <returns>True if the rhs Iterator points to an element preceeding or the same as the lhs, false otherwise.</returns>
+			/// <returns>True if the rhs Iterator points to an element preceding or the same as the lhs, false otherwise.</returns>
 			bool operator<=(const Iterator& rhs) const noexcept;
 
 			/// <summary>
@@ -341,9 +341,9 @@ namespace Library
 			/// <summary>
 			/// Specialized constructor for creating an ConstIterator for a Vector at a given index.
 			/// </summary>
-			/// <param name="vector">Source Vector for the ConstIterator's values.</param>
-			/// <param name="index">Current element of the Vector referenced by the ConstIterator, defaulted to a nullptr value.</param>
-			ConstIterator(const Vector& vector, const std::size_t index=0);
+			/// <param name="owner">Source Vector for the ConstIterator's values.</param>
+			/// <param name="index">Current element of the Vector referenced by the ConstIterator, defaults to first element.</param>
+			explicit ConstIterator(const Vector& owner, const std::size_t index=0);
 
 		public:
 #pragma region Dereference Operators
@@ -390,7 +390,7 @@ namespace Library
 			/// Less than operator.
 			/// </summary>
 			/// <param name="rhs">Right hand side ConstIterator to be compared against.</param>
-			/// <returns>True if the rhs ConstIterator points to an element preceeding the lhs, false otherwise.</returns>
+			/// <returns>True if the rhs ConstIterator points to an element preceding the lhs, false otherwise.</returns>
 			bool operator<(const ConstIterator& rhs) const noexcept;
 
 			/// <summary>
@@ -404,7 +404,7 @@ namespace Library
 			/// Less than or equal operator.
 			/// </summary>
 			/// <param name="rhs">Right hand side ConstIterator to be compared against.</param>
-			/// <returns>True if the rhs ConstIterator points to an element preceeding or the same as the lhs, false otherwise.</returns>
+			/// <returns>True if the rhs ConstIterator points to an element preceding or the same as the lhs, false otherwise.</returns>
 			bool operator<=(const ConstIterator& rhs) const noexcept;
 
 			/// <summary>
@@ -468,7 +468,7 @@ namespace Library
 			/// <summary>
 			/// Post-decrement operator.
 			/// </summary>
-			/// <returns>Vopy of the ConstIterator before it was decremented.</returns>
+			/// <returns>Copy of the ConstIterator before it was decremented.</returns>
 			/// <exception cref="runtime_error">ConstIterator invalid.</exception>
 			/// <exception cref="out_of_range">ConstIterator out of bounds.</exception>
 			ConstIterator operator--(int);
@@ -567,7 +567,7 @@ namespace Library
 		/// <summary>
 		/// Initializer list constructor.
 		/// </summary>
-		/// <param name="rhs">Value list for intializing a new Vector.</param>
+		/// <param name="rhs">Value list for initializing a new Vector.</param>
 		/// <remarks>May require an EqualityFunctor passed using constructor syntax, if no suitable DefaultEquality exists.</remarks>
 		/// <param name="reserveFunctor">Default reserve strategy functor.</param>
 		/// <param name="equalityFunctor">Default equality functor.</param>
@@ -624,7 +624,7 @@ namespace Library
 		/// Allocates memory for the specified capacity. Preserving any existing elements.
 		/// </summary>
 		/// <param name="capacity">Max number of elements for which to allocate memory.</param>
-		/// <exception cref="runtime_error">Failed memory reallocation."</exception>
+		/// <exception cref="runtime_error">Failed memory reallocation.</exception>
 		void Reserve(const std::size_t capacity);
 
 		/// <summary>
@@ -830,7 +830,7 @@ namespace Library
 		/// <param name="position">ConstIterator to the first element to be removed.</param>
 		/// <returns>Iterator pointing to the Vector end.</returns>
 		/// <exception cref="std::runtime_error">Invalid iterator.</exception>
-		Iterator Erase(ConstIterator position);
+		Iterator Erase(const ConstIterator position);
 
 		/// <summary>
 		/// Removed elements from the Vector in the range [first, last).

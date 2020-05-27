@@ -32,7 +32,35 @@ namespace Library
 	{
 	}
 
-	Entity::Entity(const RTTI::IdType typeId, const std::string& name) : Attributed(typeId), 
+	Entity::Entity(const Entity& rhs) : Attributed(rhs),
+		mName(rhs.mName), mActions(mPairPtrs[ActionsIndex]->second)
+	{
+	}
+
+	Entity& Entity::operator=(const Entity& rhs)
+	{
+		if (this == &rhs) return *this;
+
+		mName = rhs.mName;
+		Attributed::operator=(rhs);
+		return *this;
+	}
+
+	Entity::Entity(Entity&& rhs) noexcept : Attributed(std::move(rhs)),
+		mName(std::move(rhs.mName)), mActions(mPairPtrs[ActionsIndex]->second)
+	{
+	}
+
+	Entity& Entity::operator=(Entity&& rhs) noexcept
+	{
+		if (this == &rhs) return *this;
+
+		mName = std::move(rhs.mName);
+		Attributed::operator=(std::move(rhs));
+		return *this;
+	}
+
+	Entity::Entity(const RTTI::IdType typeId, const std::string& name) : Attributed(typeId),
 		mName(name), mActions(mPairPtrs[ActionsIndex]->second)
 	{
 	}

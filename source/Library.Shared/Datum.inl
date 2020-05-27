@@ -9,7 +9,7 @@ namespace Library
 	}
 #pragma endregion Default Functors
 
-#pragma region TypeOf Static Method
+#pragma region TypeOf
 	template<typename T>
 	inline constexpr Datum::Types Datum::TypeOf()
 	{
@@ -63,7 +63,7 @@ namespace Library
 	{
 		return Types::Reference;
 	}
-#pragma endregion TypeOf Static Method
+#pragma endregion TypeOf
 
 #pragma region Type, Size, Capacity
 	inline Datum::Types Datum::Type() const
@@ -71,7 +71,7 @@ namespace Library
 		return mType;
 	}
 
-	inline void Datum::SetType(Types type)
+	inline void Datum::SetType(const Types type)
 	{
 		if (type == Types::Unknown || type == Types::End)	throw std::runtime_error("Cannot assign to unknown type.");
 		if (mType != Types::Unknown && mType != type)		throw std::runtime_error("Type cannot be reassigned.");
@@ -126,7 +126,7 @@ namespace Library
 	}
 
 	template<typename T>
-	inline T& Datum::Set(const T& value, std::size_t index)
+	inline T& Datum::Set(const T& value, const std::size_t index)
 	{
 		static_assert(TypeOf<T>() != Types::Unknown && TypeOf<T>() != Types::End, "Invalid data type.");
 
@@ -138,7 +138,7 @@ namespace Library
 	}
 
 	template<typename T>
-	inline T& Datum::Get(std::size_t index)
+	inline T& Datum::Get(const std::size_t index)
 	{
 		static_assert(TypeOf<T>() != Types::Unknown && TypeOf<T>() != Types::End, "Invalid data type.");
 
@@ -146,11 +146,11 @@ namespace Library
 		if (mType != TypeOf<T>())		throw std::runtime_error("Mismatched type.");
 		if (index >= mSize)				throw std::out_of_range("Index out of bounds.");
 
-		return reinterpret_cast<T*>(mData.VoidPtr)[index];
+		return static_cast<T*>(mData.VoidPtr)[index];
 	}
 
 	template<typename T>
-	inline const T& Datum::Get(std::size_t index) const
+	inline const T& Datum::Get(const std::size_t index) const
 	{
 		static_assert(TypeOf<T>() != Types::Unknown && TypeOf<T>() != Types::End, "Invalid data type.");
 
@@ -158,7 +158,7 @@ namespace Library
 		if (mType != TypeOf<T>())		throw std::runtime_error("Mismatched type.");
 		if (index >= mSize)				throw std::out_of_range("Index out of bounds.");
 
-		return reinterpret_cast<T*>(mData.VoidPtr)[index];
+		return static_cast<T*>(mData.VoidPtr)[index];
 	}
 
 	template<typename T>
@@ -187,7 +187,7 @@ namespace Library
 		if (mType == Types::Unknown)	throw std::runtime_error("Type not set.");
 		if (mType != TypeOf<T>())		throw std::runtime_error("Mismatched type.");
 
-		T* const data = reinterpret_cast<T*>(mData.VoidPtr);
+		T* const data = static_cast<T*>(mData.VoidPtr);
 		T valueCopy = value;
 
 		std::size_t i = 0;
@@ -231,7 +231,7 @@ namespace Library
 
 	inline void Datum::SetStorage(const Types type, const gsl::span<std::byte> storage)
 	{		
-		assert(storage.size() > 0);
+		assert(!storage.empty());
 
 		mType = type;
 
@@ -266,7 +266,7 @@ namespace Library
 			Reserve(std::max(newCapacity, mCapacity + 1));
 		}
 
-		return *new(reinterpret_cast<T*>(mData.VoidPtr) + mSize++)T(std::forward<Args>(args)...);
+		return *new(static_cast<T*>(mData.VoidPtr) + mSize++)T(std::forward<Args>(args)...);
 	}
 
 	template<typename T>
@@ -278,7 +278,7 @@ namespace Library
 	template<typename T>
 	inline std::enable_if_t<!std::is_reference_v<T>> Datum::PushBack(T&& data)
 	{
-		EmplaceBack<T>(std::move(data));
+		EmplaceBack<T>(std::forward<T>(data));
 	}
 
 	template<typename T>
@@ -288,7 +288,7 @@ namespace Library
 
 		if (!mInternalStorage) throw std::runtime_error("Cannot modify external storage.");
 
-		T* const data = reinterpret_cast<T*>(mData.VoidPtr);
+		T* const data = static_cast<T*>(mData.VoidPtr);
 		const std::size_t index = IndexOf(value);
 		
 		if (index < mSize)

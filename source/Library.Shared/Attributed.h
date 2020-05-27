@@ -124,25 +124,25 @@ namespace Library
 		/// Gets the list of prescribed Attribute values.
 		/// </summary>
 		/// <returns>List of pointers to all prescribed Attribute values.</returns>
-		void ForEachPrescribed(std::function<void(Attribute&)> functor);
+		void ForEachPrescribed(const std::function<void(Attribute&)>& functor);
 
 		/// <summary>
 		/// Gets the list of prescribed Attribute values.
 		/// </summary>
 		/// <returns>List of pointers to all prescribed Attribute values.</returns>
-		void ForEachPrescribed(std::function<void(const Attribute&)> functor) const;
+		void ForEachPrescribed(const std::function<void(const Attribute&)>& functor) const;
 
 		/// <summary>
 		/// Gets the list of auxiliary Attribute values.
 		/// </summary>
 		/// <returns>List of pointers to all auxiliary Attribute values.</returns>
-		void ForEachAuxiliary(std::function<void(Attribute&)> functor);
+		void ForEachAuxiliary(const std::function<void(Attribute&)>& functor);
 
 		/// <summary>
 		/// Gets the list of prescribed Attribute values.
 		/// </summary>
 		/// <returns>List of pointers to all auxiliary Attribute values.</returns>
-		void ForEachAuxiliary(std::function<void(const Attribute&)> functor) const;
+		void ForEachAuxiliary(const std::function<void(const Attribute&)>& functor) const;
 #pragma endregion Accessors
 		
 #pragma region Modifiers
@@ -167,7 +167,7 @@ namespace Library
 		/// </summary>
 		/// <param name="rhs">RTTI derived class instance to be compared against.</param>
 		/// <returns>True if the Attributed instance is equivalent to the given RTTI derived class instance.</returns>
-		bool Equals(const RTTI* rhs) const;
+		virtual bool Equals(const RTTI* rhs) const override;
 #pragma endregion RTTI Overrides
 
 #pragma region Helper Methods

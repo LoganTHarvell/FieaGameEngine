@@ -102,7 +102,7 @@ namespace Library
 	template<typename T>
 	inline typename Vector<T>::Iterator Vector<T>::Iterator::operator++(int)
 	{
-		Iterator it = Iterator(*this);
+		const Iterator it = Iterator(*this);
 		++(*this);
 		return it;
 	}
@@ -158,7 +158,7 @@ namespace Library
 	template<typename T>
 	inline typename Vector<T>::Iterator Vector<T>::Iterator::operator--(int)
 	{
-		Iterator it = Iterator(*this);
+		const Iterator it = Iterator(*this);
 		--(*this);
 		return it;
 	}
@@ -293,7 +293,7 @@ namespace Library
 	template<typename T>
 	inline typename Vector<T>::ConstIterator Vector<T>::ConstIterator::operator++(int)
 	{
-		ConstIterator it = ConstIterator(*this);
+		const ConstIterator it = ConstIterator(*this);
 		++(*this);
 		return it;
 	}
@@ -349,7 +349,7 @@ namespace Library
 	template<typename T>
 	inline typename Vector<T>::ConstIterator Vector<T>::ConstIterator::operator--(int)
 	{
-		ConstIterator it = ConstIterator(*this);
+		const ConstIterator it = ConstIterator(*this);
 		--(*this);
 		return it;
 	}
@@ -560,9 +560,9 @@ namespace Library
 		if (capacity > mCapacity)
 		{
 			void* newMemory = realloc(mData, capacity * sizeof(T));
-
-			assert(newMemory != nullptr);
-			mData = reinterpret_cast<T*>(newMemory);
+			if (!newMemory) throw std::bad_alloc();
+			
+			mData = static_cast<T*>(newMemory);
 			mCapacity = capacity;
 		}
 	}
@@ -624,9 +624,9 @@ namespace Library
 		else if (mSize < mCapacity)
 		{
 			void* newMemory = realloc(mData, mSize * sizeof(T));
+			if (!newMemory) throw std::bad_alloc();
 
-			assert(newMemory != nullptr);
-			mData = reinterpret_cast<T*>(newMemory);
+			mData = static_cast<T*>(newMemory);
 		}
 
 		mCapacity = mSize;
@@ -673,7 +673,10 @@ namespace Library
 	template<typename T>
 	inline typename Vector<T>::Iterator Vector<T>::Find(const T& value)
 	{
-		if (!*mEqualityFunctor) throw std::runtime_error("EqualityFunctor null.");
+		if (!mEqualityFunctor || !*mEqualityFunctor)
+		{
+			throw std::runtime_error("EqualityFunctor null.");
+		}
 		
 		for (std::size_t i = 0; i < mSize; ++i)
 		{
@@ -779,8 +782,10 @@ namespace Library
 	template<typename ...Args>
 	inline T& Vector<T>::EmplaceBack(Args&& ...args)
 	{
-		if (!*mReserveFunctor) throw std::runtime_error("Missing ReserveFunctor.");
-
+		if (!mReserveFunctor || !*mReserveFunctor)
+		{
+			throw std::runtime_error("ReserveFunctor null.");
+		}
 		if (mCapacity <= mSize)
 		{
 			const std::size_t newCapacity = mReserveFunctor->operator()(mCapacity, mSize);
@@ -888,7 +893,7 @@ namespace Library
 	}
 
 	template<typename T>
-	inline typename Vector<T>::Iterator Vector<T>::Erase(ConstIterator position)
+	inline typename Vector<T>::Iterator Vector<T>::Erase(const ConstIterator position)
 	{
 		return Erase(position, cend());
 	}

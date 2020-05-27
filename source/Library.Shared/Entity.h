@@ -61,33 +61,34 @@ namespace Library
 		/// Copy constructor.
 		/// </summary>
 		/// <param name="rhs">Entity to be copied.</param>
-		Entity(const Entity& rhs) = default;
+		Entity(const Entity& rhs);
 
 		/// <summary>
 		/// Copy assignment operator.
 		/// </summary>
 		/// <param name="rhs">Entity to be copied.</param>
 		/// <returns>Newly copied into left hand side Entity.</returns>
-		Entity& operator=(const Entity& rhs) = default;
+		Entity& operator=(const Entity& rhs);
 
 		/// <summary>
 		/// Move constructor.
 		/// </summary>
 		/// <param name="rhs">Entity to be moved.</param>
-		Entity(Entity&& rhs) noexcept = default;
+		Entity(Entity&& rhs) noexcept;
 
 		/// <summary>
 		/// Move assignment operator.
 		/// </summary>
 		/// <param name="rhs">Entity to be moved.</param>
 		/// <returns>Newly moved into left hand side Entity.</returns>
-		Entity& operator=(Entity&& rhs) noexcept = default;
+		Entity& operator=(Entity&& rhs) noexcept;
 
 	protected:
 		/// <summary>
 		/// Specialized constructor for use by derived classes to ensure correct Attribute population.
 		/// </summary>
 		/// <param name="typeId">Type ID of the derived class.</param>
+		/// <param name="name">Entity name.</param>
 		explicit Entity(const RTTI::IdType typeId, const std::string& name=std::string());
 #pragma endregion Special Members
 
