@@ -6,7 +6,6 @@
 #include "ActionCreate.h"
 
 // First Party
-#include "World.h"
 #include "Entity.h"
 #pragma endregion Includes
 
@@ -21,13 +20,13 @@ namespace Library
 				{ NewScopeKey, Types::Scope, true, 1, 0 }
 			},
 
-			Action::TypeIdClass()
+			Entity::TypeIdClass()
 		};
 
 		return typeInfo;
 	}
 
-	ActionCreate::ActionCreate(const std::string& name) : Action(TypeIdClass(), name)
+	ActionCreate::ActionCreate(const std::string& name) : Entity(TypeIdClass(), name)
 	{
 	}
 
@@ -44,15 +43,8 @@ namespace Library
 
 			if (scope && scope->Type() == Types::Scope && scope->Size() > 0)
 			{
-				World::PendingChild childToAdd =
-				{
-					*scope->Get<Scope*>()->Clone(),
-					World::PendingChild::State::ToAdd,
-					*worldState.Entity,
-					&mAttributeKey
-				};
-
-				worldState.World->PendingChildren().EmplaceBack(std::move(childToAdd));
+				assert(scope->Get<Scope*>()->Is(Entity::TypeIdClass()));
+				worldState.Entity->AddChild(static_cast<Entity&>(*scope->Get<Scope*>()->Clone()));
 			}
 		}
 	}

@@ -29,12 +29,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)GameTime.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Action.cpp">
-      <Filter>Core\Entity System\Actions</Filter>
-    </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)ActionList.cpp">
-      <Filter>Core\Entity System\Actions</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)ActionIncrement.cpp">
       <Filter>Core\Entity System\Actions</Filter>
     </ClCompile>
@@ -57,9 +51,6 @@
       <Filter>Core\Events</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Entity.cpp">
-      <Filter>Core\Entity System</Filter>
-    </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Sector.cpp">
       <Filter>Core\Entity System</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)World.cpp">
@@ -131,12 +122,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)GameTime.h">
       <Filter>Utility</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)ActionList.h">
-      <Filter>Core\Entity System\Actions</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Action.h">
-      <Filter>Core\Entity System\Actions</Filter>
-    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)ActionIncrement.h">
       <Filter>Core\Entity System\Actions</Filter>
     </ClInclude>
@@ -165,9 +150,6 @@
       <Filter>Core\Entity System</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Entity.h">
-      <Filter>Core\Entity System</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Sector.h">
       <Filter>Core\Entity System</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)World.h">

@@ -2,7 +2,7 @@
 
 #pragma region Includes
 // First Party
-#include "Action.h"
+#include "Entity.h"
 #include "WorldState.h"
 #include "Factory.h"
 #pragma endregion Includes
@@ -12,9 +12,9 @@ namespace Library
 	/// <summary>
 	/// Represents an Action for incrementing an integer Attribute.
 	/// </summary>
-	class ActionIncrement final : public Action
+	class ActionIncrement final : public Entity
 	{
-		RTTI_DECLARATIONS(ActionIncrement, Action)
+		RTTI_DECLARATIONS(ActionIncrement, Entity)
 
 #pragma region Type Definitions, Constants
 	public:
@@ -89,7 +89,7 @@ namespace Library
 		/// Virtual update method called by the containing object.
 		/// </summary>
 		/// <param name="worldState">WorldState context for the current processing step.</param>
-		virtual void Update(WorldState&);
+		virtual void Update(WorldState& worldState) override;
 #pragma endregion Game Loop
 
 #pragma region RTTI Overrides

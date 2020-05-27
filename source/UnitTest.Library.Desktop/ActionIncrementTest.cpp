@@ -20,10 +20,8 @@ namespace EntitySystemTests::ActionTests
 		{
 			TypeManager::Create();
 			
-			RegisterType<Action>();
-			RegisterType<ActionIncrement>();
-
 			RegisterType<Entity>();
+			RegisterType<ActionIncrement>();
 
 #if defined(DEBUG) || defined(_DEBUG)
 			_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF);
@@ -52,13 +50,13 @@ namespace EntitySystemTests::ActionTests
 			ActionIncrement incrementA;
 			ActionIncrement incrementB;
 
-			Assert::IsTrue(incrementA.Is(Action::TypeIdClass()));
+			Assert::IsTrue(incrementA.Is(Entity::TypeIdClass()));
 			Assert::IsTrue(incrementA.Equals(&incrementB));
 
-			Action* newIncrement = new ActionIncrement();
-			bool isAction = newIncrement->Is(Action::TypeIdClass());
+			Entity* newIncrement = new ActionIncrement();
+			bool isAction = newIncrement->Is(Entity::TypeIdClass());
 
-			Action* createdActionIncrement = isAction ? createdActionIncrement = newIncrement->CreateAs<Action>() : nullptr;
+			Entity* createdActionIncrement = isAction ? createdActionIncrement = newIncrement->CreateAs<Entity>() : nullptr;
 			bool wasCreated = createdActionIncrement != nullptr;
 
 			bool  isActionIncrement = wasCreated ? createdActionIncrement->Is(ActionIncrement::TypeIdClass()) : false;
@@ -94,7 +92,7 @@ namespace EntitySystemTests::ActionTests
 
 			bool notNull = clone;
 			bool isActionIncrement = notNull ? clone->Is(ActionIncrement::TypeIdClass()) : false;
-			bool equal = *actionIncrement.As<Action>() == *clone->As<Action>();
+			bool equal = *actionIncrement.As<Entity>() == *clone->As<Entity>();
 
 			delete clone;
 
@@ -107,19 +105,17 @@ namespace EntitySystemTests::ActionTests
 			int& integer1 = (entity.Append("Integer1") = 0).Get<int>();
 			int& integer2 = (entity.Append("Integer2") = 0).Get<int>();
 
-			Action* increment = entity.CreateAction("ActionIncrement"s, "Increment1"s);
-			Assert::IsNotNull(increment);
-			Assert::IsTrue(increment->Is(ActionIncrement::TypeIdClass()));
+			Entity& increment = entity.CreateChild("ActionIncrement"s, "Increment1"s);
+			Assert::IsTrue(increment.Is(ActionIncrement::TypeIdClass()));
 
-			ActionIncrement* castedIncrement = static_cast<ActionIncrement*>(increment);
-			*castedIncrement->Find(castedIncrement->OperandKey) = "Integer1"s;
+			ActionIncrement& castedIncrement = static_cast<ActionIncrement&>(increment);
+			*castedIncrement.Find(castedIncrement.OperandKey) = "Integer1"s;
 
-			increment = entity.CreateAction("ActionIncrement"s, "Increment2"s);
-			Assert::IsNotNull(increment);
-			Assert::IsTrue(increment->Is(ActionIncrement::TypeIdClass()));
+			increment = entity.CreateChild("ActionIncrement"s, "Increment2"s);
+			Assert::IsTrue(increment.Is(ActionIncrement::TypeIdClass()));
 
-			castedIncrement = static_cast<ActionIncrement*>(increment);
-			*castedIncrement->Find(castedIncrement->OperandKey) = "Integer2"s;
+			castedIncrement = static_cast<ActionIncrement&>(increment);
+			*castedIncrement.Find(castedIncrement.OperandKey) = "Integer2"s;
 
 			WorldState worldState;
 			worldState.Entity = &entity;
@@ -132,13 +128,13 @@ namespace EntitySystemTests::ActionTests
 			Assert::AreEqual(1, integer1);
 			Assert::AreEqual(1, integer2);
 
-			*castedIncrement->Find(castedIncrement->IncrementStepKey) = -1;
+			*castedIncrement.Find(castedIncrement.IncrementStepKey) = -1;
 			entity.Update(worldState);
 
 			Assert::AreEqual(2, integer1);
 			Assert::AreEqual(0, integer2);
 
-			castedIncrement->Update(worldState);
+			castedIncrement.Update(worldState);
 
 			Assert::AreEqual(2, integer1);
 			Assert::AreEqual(-1, integer2);

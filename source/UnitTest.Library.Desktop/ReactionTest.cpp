@@ -17,12 +17,12 @@ using namespace UnitTests;
 
 namespace EntitySystemTests::ActionTests
 {
-	struct ActionTestReaction final : public Action 
+	struct ActionTestReaction final : public Entity 
 	{
-		RTTI_DECLARATIONS(ActionTestReaction, Action)
+		RTTI_DECLARATIONS(ActionTestReaction, Entity)
 
 	public:
-		explicit ActionTestReaction(const std::string& name=std::string()) : Action(TypeIdClass(), name)
+		explicit ActionTestReaction(const std::string& name=std::string()) : Entity(TypeIdClass(), name)
 		{
 		}
 
@@ -53,12 +53,8 @@ namespace EntitySystemTests::ActionTests
 		{
 			TypeManager::Create();
 
-			RegisterType<World>();
-			RegisterType<Sector>();
 			RegisterType<Entity>();
-
-			RegisterType<Action>();
-			RegisterType<ActionList>();
+			RegisterType<World>();
 			RegisterType<ActionIncrement>();
 
 			RegisterType<Reaction>();
@@ -102,13 +98,13 @@ namespace EntitySystemTests::ActionTests
 			ReactionAttributed reactionA;
 			ReactionAttributed reactionB;
 
-			Assert::IsTrue(reactionA.Is(Action::TypeIdClass()));
+			Assert::IsTrue(reactionA.Is(Entity::TypeIdClass()));
 			Assert::IsTrue(reactionA.Equals(&reactionB));
 
-			Action* newAction = new ReactionAttributed();
+			Entity* newAction = new ReactionAttributed();
 			bool isReaction = newAction->Is(Reaction::TypeIdClass());
 
-			Action* createdReactionAttributed = isReaction ? createdReactionAttributed = newAction->CreateAs<Action>() : nullptr;
+			Entity* createdReactionAttributed = isReaction ? createdReactionAttributed = newAction->CreateAs<Entity>() : nullptr;
 			bool wasCreated = createdReactionAttributed != nullptr;
 
 			bool  isReactionAttributed = wasCreated ? createdReactionAttributed->Is(ReactionAttributed::TypeIdClass()) : false;
@@ -123,13 +119,13 @@ namespace EntitySystemTests::ActionTests
 			ActionEvent actionEventA;
 			ActionEvent actionEventB;
 
-			Assert::IsTrue(actionEventA.Is(Action::TypeIdClass()));
+			Assert::IsTrue(actionEventA.Is(Entity::TypeIdClass()));
 			Assert::IsTrue(actionEventA.Equals(&actionEventB));
 
 			newAction = new ActionEvent();
-			bool isAction = newAction->Is(Action::TypeIdClass());
+			bool isAction = newAction->Is(Entity::TypeIdClass());
 
-			Action* createdActionEvent = isAction ? createdActionEvent = newAction->CreateAs<Action>() : nullptr;
+			Entity* createdActionEvent = isAction ? createdActionEvent = newAction->CreateAs<Entity>() : nullptr;
 			wasCreated = createdActionEvent != nullptr;
 
 			bool  isActionEvent = wasCreated ? createdActionEvent->Is(ActionEvent::TypeIdClass()) : false;
@@ -208,7 +204,7 @@ namespace EntitySystemTests::ActionTests
 			*actionEvent.Find(actionEvent.SubtypeKey) = "subtype";
 			*actionEvent.Find(actionEvent.DelayKey) = 10;
 
-			Assert::AreEqual(*actionEvent.As<Action>(), *ActionEvent(actionEvent).As<Action>());
+			Assert::AreEqual(*actionEvent.As<Entity>(), *ActionEvent(actionEvent).As<Entity>());
 		}
 
 		TEST_METHOD(Move)
@@ -233,7 +229,7 @@ namespace EntitySystemTests::ActionTests
 			*actionEvent.Find(actionEvent.DelayKey) = 10;
 
 			auto copy = ActionEvent(actionEvent);
-			Assert::AreEqual(*copy.As<Action>(), *ActionEvent(std::move(actionEvent)).As<Action>());
+			Assert::AreEqual(*copy.As<Entity>(), *ActionEvent(std::move(actionEvent)).As<Entity>());
 		}
 
 		TEST_METHOD(Clone)
@@ -245,7 +241,7 @@ namespace EntitySystemTests::ActionTests
 
 			bool notNull = clone;
 			bool isReactionAttributed = notNull ? clone->Is(ReactionAttributed::TypeIdClass()) : false;
-			bool equal = *reactionAttributed.As<Action>() == *clone->As<Action>();
+			bool equal = *reactionAttributed.As<Entity>() == *clone->As<Entity>();
 
 			delete clone;
 
@@ -258,7 +254,7 @@ namespace EntitySystemTests::ActionTests
 
 			notNull = clone;
 			bool isActionEvent = notNull ? clone->Is(ActionEvent::TypeIdClass()) : false;
-			equal = *actionEvent.As<Action>() == *clone->As<Action>();
+			equal = *actionEvent.As<Entity>() == *clone->As<Entity>();
 
 			delete clone;
 
@@ -284,19 +280,17 @@ namespace EntitySystemTests::ActionTests
 			const auto eventQueue = std::make_shared<EventQueue>();
 
 			World world("World", gameTime.get(), eventQueue.get());
-			Entity* entity = world.CreateSector("Sector").CreateEntity("Entity", "Entity");
+			Entity& entity = world.CreateChild("Entity", "Sector").CreateChild("Entity", "Entity");
 
-			Action* reactionAsAction = entity->CreateAction("ReactionAttributed", "Reaction");
-			Assert::IsNotNull(reactionAsAction);
-			ReactionAttributed& reaction = *reactionAsAction->As<ReactionAttributed>();
+			Entity& reactionAsAction = entity.CreateChild("ReactionAttributed", "Reaction");
+			ReactionAttributed& reaction = *reactionAsAction.As<ReactionAttributed>();
 
-			Action* testReaction = reaction.CreateAction("ActionTestReaction"s, "TestReaction"s);
+			Entity& testReaction = reaction.CreateChild("ActionTestReaction"s, "TestReaction"s);
 
-			Action* create = entity->CreateAction("ActionEvent"s, "CreateEvent"s);
-			Assert::IsNotNull(create);
-			Assert::IsTrue(create->Is(ActionEvent::TypeIdClass()));
+			Entity& create = entity.CreateChild("ActionEvent"s, "CreateEvent"s);
+			Assert::IsTrue(create.Is(ActionEvent::TypeIdClass()));
 
-			ActionEvent* event = create->As<ActionEvent>();
+			ActionEvent* event = create.As<ActionEvent>();
 			auto parameter = event->AppendAuxiliaryAttribute("Parameter") = 1;
 
 			Assert::AreEqual(0_z, world.GetWorldState().EventQueue->Size());
@@ -304,13 +298,13 @@ namespace EntitySystemTests::ActionTests
 			world.Update();
 			Assert::AreEqual(1_z, world.GetWorldState().EventQueue->Size());
 
-			entity->Update(world.GetWorldState());
+			entity.Update(world.GetWorldState());
 			Assert::AreEqual(2_z, world.GetWorldState().EventQueue->Size());
-			Assert::AreEqual(0, testReaction->As<ActionTestReaction>()->Parameter);
+			Assert::AreEqual(0, testReaction.As<ActionTestReaction>()->Parameter);
 
 			world.Update();
 			Assert::AreEqual(1_z, world.GetWorldState().EventQueue->Size());
-			Assert::AreEqual(2, testReaction->As<ActionTestReaction>()->Parameter);
+			Assert::AreEqual(2, testReaction.As<ActionTestReaction>()->Parameter);
 
 			world.GetWorldState().EventQueue->Clear();
 			world.GetWorldState().EventQueue->ShrinkToFit();
@@ -333,7 +327,6 @@ namespace EntitySystemTests::ActionTests
 		ReactionAttributedFactory reactionAttributedFactory;
 		ActionEventFactory actionEventFactory;
 		ActionIncrementFactory actionIncrementFactory;
-		SectorFactory sectorFactory;
 		EntityFactory entityFactory;
 
 		ActionTestReactionFactory actionTestReactionFactory;

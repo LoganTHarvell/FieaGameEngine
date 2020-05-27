@@ -9,37 +9,21 @@
 #include <utility>
 
 // First Party
-#include "Sector.h"
+#include "Entity.h"
 #include "EventQueue.h"
 #pragma endregion Includes
 
 namespace Library
 {
-	const TypeManager::TypeInfo& World::TypeInfo()
-	{
-		static const TypeManager::TypeInfo typeInfo
-		{
-			{
-				{ NameKey, Types::String, false, 1, offsetof(World, mName) },
-				{ SectorsKey, Types::Scope, true, 1, 0 }
-			},
-
-			Attributed::TypeIdClass()
-		};
-
-		return typeInfo;
-	}
-
-	World::World(std::string name, GameTime* gameTime, EventQueue* eventQueue) : Attributed(TypeIdClass()),
-		mName(std::move(name)), mSectors(mPairPtrs[SectorsIndex]->second)
+	World::World(std::string name, GameTime* gameTime, EventQueue* eventQueue) : Entity(TypeIdClass(), std::move(name))
 	{
 		mWorldState.World = this;
 		mWorldState.GameTime = gameTime;
 		mWorldState.EventQueue = eventQueue;
 	}
 
-	World::World(const World& rhs) : Attributed(rhs),
-		mGameClock(rhs.mGameClock), mPendingChildren(rhs.mPendingChildren), mName(rhs.mName), mSectors(mPairPtrs[SectorsIndex]->second)
+	World::World(const World& rhs) : Entity(rhs),
+		mGameClock(rhs.mGameClock)
 	{
 			mWorldState.World = this;
 			mWorldState.GameTime = rhs.mWorldState.GameTime;
@@ -55,15 +39,12 @@ namespace Library
 			mGameClock = rhs.mGameClock;
 			mWorldState.GameTime = rhs.mWorldState.GameTime;
 			mWorldState.EventQueue = rhs.mWorldState.EventQueue;
-			mPendingChildren = rhs.mPendingChildren;
-			mName = rhs.mName;
 		}
 		
 		return *this;
 	}
 	
-	World::World(World&& rhs) noexcept : Attributed(std::move(rhs)),
-		mName(std::move(rhs.mName)), mSectors(mPairPtrs[SectorsIndex]->second)
+	World::World(World&& rhs) noexcept : Entity(std::move(rhs))
 	{
 		mWorldState.World = this;
 		mWorldState.GameTime = rhs.mWorldState.GameTime;
@@ -74,15 +55,13 @@ namespace Library
 
 	World& World::operator=(World&& rhs) noexcept
 	{
-		Attributed::operator=(std::move(rhs));
-		
 		mWorldState.GameTime = rhs.mWorldState.GameTime;
 		mWorldState.EventQueue = rhs.mWorldState.EventQueue;
 
-		mName = std::move(rhs.mName);
-
 		rhs.mWorldState.GameTime = nullptr;
 		rhs.mWorldState.EventQueue = nullptr;
+
+		Entity::operator=(std::move(rhs));
 
 		return *this;
 	}
@@ -105,50 +84,8 @@ namespace Library
 			mWorldState.EventQueue,
 			mWorldState.World,
 			mWorldState.Sector,
-			mWorldState.Entity,
-			mWorldState.Action
+			mWorldState.Entity
 		};
-	}
-
-	World::PendingChildList& World::PendingChildren()
-	{
-		return mPendingChildren;
-	}
-
-	const World::PendingChildList& World::PendingChildren() const
-	{
-		return mPendingChildren;
-	}
-
-	const std::string& World::Name() const
-	{
-		return mName;
-	}
-
-	void World::SetName(const std::string& name)
-	{
-		mName = name;
-	}
-
-	Sector::Data& World::Sectors()
-	{
-		return mSectors;
-	}
-
-	const Sector::Data& World::Sectors() const
-	{
-		return mSectors;
-	}
-
-	Sector& World::CreateSector(const std::string& name)
-	{
-		Sector* newSector = new Sector();
-		assert(newSector);
-
-		newSector->SetName(name);
-
-		Adopt(*newSector, SectorsKey);
-		return *newSector;
 	}
 
 	void World::Update()
@@ -163,11 +100,11 @@ namespace Library
 			}
 		}
 
-		for (std::size_t i = 0; i < mSectors.Size(); ++i)
+		for (std::size_t i = 0; i < Children().Size(); ++i)
 		{
-			assert(mSectors[i].Is(Sector::TypeIdClass()));
+			assert(Children()[i].Is(Entity::TypeIdClass()));
 
-			mWorldState.Sector = static_cast<Sector*>(mSectors.Get<Scope*>(i));
+			mWorldState.Sector = static_cast<Entity*>(Children().Get<Scope*>(i));
 			mWorldState.Sector->Update(mWorldState);
 		}
 
@@ -179,29 +116,7 @@ namespace Library
 	std::string World::ToString() const
 	{
 		std::ostringstream oss;
-		oss << mName << " (World)";
+		oss << Name() << " (World)";
 		return oss.str();
-	}
-
-	void World::UpdatePendingChildren()
-	{
-		for (PendingChild& pendingChild : mPendingChildren)
-		{
-			switch (pendingChild.ChildState)
-			{
-			case PendingChild::State::ToAdd:
-				pendingChild.Target.Adopt(pendingChild.Child, *pendingChild.AttributeKey);
-				break;
-
-			case PendingChild::State::ToRemove:
-				delete pendingChild.Target.Orphan(pendingChild.Child);
-				break;
-
-			default:
-				break;
-			}
-		}
-
-		mPendingChildren.Clear();
 	}
 }

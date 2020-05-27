@@ -20,11 +20,9 @@ namespace EntitySystemTests::ActionTests
 		{
 			TypeManager::Create();
 			
-			RegisterType<World>();
-			RegisterType<Sector>();
 			RegisterType<Entity>();
+			RegisterType<World>();
 
-			RegisterType<Action>();
 			RegisterType<ActionDestroy>();
 
 
@@ -55,13 +53,13 @@ namespace EntitySystemTests::ActionTests
 			ActionDestroy destroyA;
 			ActionDestroy destroyB;
 
-			Assert::IsTrue(destroyA.Is(Action::TypeIdClass()));
+			Assert::IsTrue(destroyA.Is(Entity::TypeIdClass()));
 			Assert::IsTrue(destroyA.Equals(&destroyB));
 
-			Action* newCreate = new ActionDestroy();
-			bool isAction = newCreate->Is(Action::TypeIdClass());
+			Entity* newCreate = new ActionDestroy();
+			bool isAction = newCreate->Is(Entity::TypeIdClass());
 
-			Action* destroyedActionDestroy = isAction ? destroyedActionDestroy = newCreate->CreateAs<Action>() : nullptr;
+			Entity* destroyedActionDestroy = isAction ? destroyedActionDestroy = newCreate->CreateAs<Entity>() : nullptr;
 			bool wasDestroyed = destroyedActionDestroy != nullptr;
 
 			bool  isActionDestroy = wasDestroyed ? destroyedActionDestroy->Is(ActionDestroy::TypeIdClass()) : false;
@@ -92,7 +90,7 @@ namespace EntitySystemTests::ActionTests
 
 			bool notNull = clone;
 			bool isActionDestroy = notNull ? clone->Is(ActionDestroy::TypeIdClass()) : false;
-			bool equal = *actionDestroy.As<Action>() == *clone->As<Action>();
+			bool equal = *actionDestroy.As<Entity>() == *clone->As<Entity>();
 
 			delete clone;
 
@@ -102,32 +100,30 @@ namespace EntitySystemTests::ActionTests
 		TEST_METHOD(Update)
 		{
 			World world;
-			Entity* entity = world.CreateSector("Sector").CreateEntity("Entity", "Entity");
+			Entity& entity = world.CreateChild("Entity", "Sector").CreateChild("Entity", "Entity");
 			
 			Entity* destroyEntity = new Entity("EntityToDestroy");
-			entity->Adopt(*destroyEntity, "EntityList");
+			entity.Adopt(*destroyEntity, "EntityList");
 
-			Action* destroy = entity->CreateAction("ActionDestroy"s, "DestroyEntity"s);
-			Assert::IsNotNull(destroy);
-			Assert::IsTrue(destroy->Is(ActionDestroy::TypeIdClass()));
+			Entity& destroy = entity.CreateChild("ActionDestroy"s, "DestroyEntity"s);
+			Assert::IsTrue(destroy.Is(ActionDestroy::TypeIdClass()));
 
-			*destroy->As<ActionDestroy>()->Find(ActionDestroy::AttributeKey) = "EntityList"s;
-			*destroy->As<ActionDestroy>()->Find(ActionDestroy::TargetKey) = "EntityToDestroy"s;
+			*destroy.As<ActionDestroy>()->Find(ActionDestroy::AttributeKey) = "EntityList"s;
+			*destroy.As<ActionDestroy>()->Find(ActionDestroy::TargetKey) = "EntityToDestroy"s;
 
-			destroy = entity->CreateAction("ActionDestroy"s, "DestroyAction"s);
-			Assert::IsNotNull(destroy);
-			Assert::IsTrue(destroy->Is(ActionDestroy::TypeIdClass()));
+			destroy = entity.CreateChild("ActionDestroy"s, "DestroyAction"s);
+			Assert::IsTrue(destroy.Is(ActionDestroy::TypeIdClass()));
 
-			*destroy->As<ActionDestroy>()->Find(ActionDestroy::AttributeKey) = Entity::ActionsKey;
-			*destroy->As<ActionDestroy>()->Find(ActionDestroy::TargetKey) = "DestroyEntity"s;
+			*destroy.As<ActionDestroy>()->Find(ActionDestroy::AttributeKey) = Entity::ChildrenKey;
+			*destroy.As<ActionDestroy>()->Find(ActionDestroy::TargetKey) = "DestroyEntity"s;
 
-			Assert::AreEqual(2_z, entity->Actions().Size());
-			Assert::AreEqual(1_z, entity->Find("EntityList")->Size());
+			Assert::AreEqual(2_z, entity.Children().Size());
+			Assert::AreEqual(1_z, entity.Find("EntityList")->Size());
 
 			world.Update();
 
-			Assert::AreEqual(1_z, entity->Actions().Size());
-			Assert::AreEqual(0_z, entity->Find("EntityList")->Size());
+			Assert::AreEqual(1_z, entity.Children().Size());
+			Assert::AreEqual(0_z, entity.Find("EntityList")->Size());
 		}
 
 		TEST_METHOD(ToString)
@@ -140,7 +136,6 @@ namespace EntitySystemTests::ActionTests
 		static _CrtMemState sStartMemState;
 
 		ActionDestroyFactory actionDestroyFactory;
-		SectorFactory sectorFactory;
 		EntityFactory entityFactory;
 	};
 

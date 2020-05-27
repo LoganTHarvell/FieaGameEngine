@@ -25,17 +25,12 @@ namespace Library
 		/// <summary>
 		/// Handle to the current Sector. May be null.
 		/// </summary>
-		class Sector* Sector{ nullptr };
+		class Entity* Sector{ nullptr };
 
 		/// <summary>
-		/// Handle to the current Sector. May be null.
+		/// Handle to the current Entity. May be null.
 		/// </summary>
 		class Entity* Entity{ nullptr };
-
-		/// <summary>
-		/// Handle to the current Action. May be null.
-		/// </summary>
-		class Action* Action{ nullptr };
 	};
 	
 	/// <summary>
@@ -61,17 +56,12 @@ namespace Library
 		/// <summary>
 		/// Handle to the current Sector. May be null.
 		/// </summary>
-		const class Sector* Sector{ nullptr };
+		const class Entity* Sector{ nullptr };
 
 		/// <summary>
-		/// Handle to the current Sector. May be null.
+		/// Handle to the current Entity. May be null.
 		/// </summary>
 		const class Entity* Entity{ nullptr };
-
-		/// <summary>
-		/// Handle to the current Action. May be null.
-		/// </summary>
-		const class Action* Action{ nullptr };
 	};
 }
 

@@ -2,7 +2,7 @@
 
 #pragma region Includes
 // First Party
-#include "ActionList.h"
+#include "Entity.h"
 #include "IEventSubscriber.h"
 #pragma endregion Includes
 
@@ -11,9 +11,9 @@ namespace Library
 	/// <summary>
 	/// Abstract base class for an ActionList that supports Event subscription.
 	/// </summary>
-	class Reaction : public ActionList, public IEventSubscriber
+	class Reaction : public Entity, public IEventSubscriber
 	{
-		RTTI_DECLARATIONS_ABSTRACT(Reaction, ActionList)
+		RTTI_DECLARATIONS_ABSTRACT(Reaction, Entity)
 
 #pragma region Special Members
 	public:

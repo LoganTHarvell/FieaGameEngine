@@ -3,7 +3,7 @@
 namespace Library
 {
 #pragma region Special Members
-	inline Reaction::Reaction(const RTTI::IdType typeId, const std::string& name) : ActionList(typeId, name)
+	inline Reaction::Reaction(const RTTI::IdType typeId, const std::string& name) : Entity(typeId, name)
 	{
 	}
 #pragma endregion Special Members

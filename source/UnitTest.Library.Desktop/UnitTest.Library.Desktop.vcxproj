@@ -213,9 +213,7 @@ xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
     <ClCompile Include="ActionCreateTest.cpp" />
     <ClCompile Include="ActionDestroyTest.cpp" />
     <ClCompile Include="ActionIncrementTest.cpp" />
-    <ClCompile Include="ActionListTest.cpp" />
     <ClCompile Include="ActionListWhileTest.cpp" />
-    <ClCompile Include="ActionTest.cpp" />
     <ClCompile Include="AttributedBar.cpp" />
     <ClCompile Include="AttributedBarTest.cpp" />
     <ClCompile Include="AttributedFoo.cpp" />
@@ -248,7 +246,6 @@ xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
     <ClCompile Include="ReactionTest.cpp" />
     <ClCompile Include="RTTITest.cpp" />
     <ClCompile Include="ScopeTest.cpp" />
-    <ClCompile Include="SectorTest.cpp" />
     <ClCompile Include="SListTest.cpp" />
     <ClCompile Include="EntityTest.cpp" />
     <ClCompile Include="StackTest.cpp" />

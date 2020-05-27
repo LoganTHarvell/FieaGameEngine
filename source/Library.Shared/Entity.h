@@ -1,6 +1,9 @@
 #pragma once
 
 #pragma region Includes
+// Standard
+#include <optional>
+
 // First Party
 #include "Attributed.h"
 #include "WorldState.h"
@@ -9,10 +12,6 @@
 
 namespace Library
 {
-	// Forwarded Classes
-	class Sector;
-	class Action;
-
 	/// <summary>
 	/// Represents a base object within the reflection system.
 	/// </summary>
@@ -20,6 +19,39 @@ namespace Library
 	{
 		RTTI_DECLARATIONS(Entity, Attributed)
 
+#pragma region Type Definitions
+	public:
+		/// <summary>
+		/// Type definition for a list of PendingChild data.
+		/// </summary>
+		struct PendingChild;
+		using PendingChildList = Vector<PendingChild>;
+
+		/// <summary>
+		/// Data structure for performing an action on a given Scope at the end of an Update call.
+		/// </summary>
+		struct PendingChild final
+		{
+			/// <summary>
+			/// Child Scope pending an action.
+			/// </summary>
+			Scope& Child;
+
+			/// <summary>
+			/// Defines the state delimiting which action is to be performed on the PendingChild.
+			/// </summary>
+			enum class State
+			{
+				Invalid = -1,
+
+				ToAdd,
+				ToRemove,
+
+				End
+			} ChildState;
+		};
+#pragma endregion Type Definitions
+		
 #pragma region Static Members
 	public:
 		/// <summary>
@@ -28,14 +60,14 @@ namespace Library
 		inline static const Key NameKey = "Name";
 
 		/// <summary>
-		/// Key for the Actions Attribute in the ActionList.
+		/// Key for the Attribute of child Entity instances.
 		/// </summary>
-		inline static const Key ActionsKey = "Actions";
+		inline static const Key ChildrenKey = "Children";
 
 		/// <summary>
-		/// Index of the Actions Attribute in the ActionList.
+		/// Index of the Attribute of child Entity instances.
 		/// </summary>
-		inline static const std::size_t ActionsIndex = 2;
+		inline static const std::size_t ChildrenIndex = 2;
 
 	public:
 		/// <summary>
@@ -50,7 +82,7 @@ namespace Library
 		/// Default constructor.
 		/// </summary>
 		/// <param name="name">Name of the Entity.</param>
-		explicit Entity(const std::string& name=std::string());
+		explicit Entity(std::string name=std::string());
 
 		/// <summary>
 		/// Default destructor.
@@ -89,7 +121,7 @@ namespace Library
 		/// </summary>
 		/// <param name="typeId">Type ID of the derived class.</param>
 		/// <param name="name">Entity name.</param>
-		explicit Entity(const RTTI::IdType typeId, const std::string& name=std::string());
+		explicit Entity(const RTTI::IdType typeId, std::string name=std::string());
 #pragma endregion Special Members
 
 #pragma region Virtual Copy Constructor
@@ -116,36 +148,55 @@ namespace Library
 		void SetName(const std::string& name);
 
 		/// <summary>
-		/// Gets the Sector that owns this Entity.
+		/// Gets the Entity that owns this Entity.
 		/// </summary>
-		/// <returns>Pointer to the Sector that owns this Entity.</returns>
-		Sector* GetSector() const;
+		/// <returns>Pointer to the Entity that owns this Entity.</returns>
+		virtual Entity* GetParent() const override;
 
 		/// <summary>
-		/// Sets the Sector that owns this Entity.
+		/// Sets the Entity that owns this Entity.
 		/// </summary>
-		/// <param name="sector">Sector to adopt this Entity.</param>
-		void SetSector(Sector* sector);
+		/// <param name="entity">Entity to be set as the parent.</param>
+		void SetParent(Entity* entity);
 
 		/// <summary>
-		/// Gets the data handle to the Action objects contained in this Entity.
+		/// Gets the data handle to the Entity objects contained in this Entity.
 		/// </summary>
-		/// <returns>Reference to the Action objects.</returns>
-		Data& Actions();
+		/// <returns>Reference to the Entity objects.</returns>
+		Data& Children();
 
 		/// <summary>
-		/// Gets the data handle to the Action objects contained in this Entity.
+		/// Gets the data handle to the Entity objects contained in this Entity.
 		/// </summary>
-		/// <returns>Reference to the Action objects.</returns>
-		const Data& Actions() const;
+		/// <returns>Reference to the Entity objects.</returns>
+		const Data& Children() const;
 
 		/// <summary>
-		/// Generates an Action class and adopts it into this Sector.
+		/// Adopts a child Entity.
 		/// </summary>
-		/// <param name="className">Class name of an Action or Action subclass to be instantiated.</param>
-		/// <param name="name">Name of the newly created Action.</param>
-		/// <returns>Reference to the newly heap allocated Action.</returns>
-		Action* CreateAction(const std::string& className, const std::string& name);
+		/// <param name="child">Child to be adopted.</param>
+		/// <returns>Reference to the newly heap allocated Entity.</returns>
+		Entity& AddChild(Entity& child);
+		
+		/// <summary>
+		/// Generates an Entity and adopts it.
+		/// </summary>
+		/// <param name="className">Class name of an Entity or Entity subclass to be instantiated.</param>
+		/// <param name="name">Name of the newly created Entity.</param>
+		/// <returns>Reference to the newly heap allocated Entity.</returns>
+		Entity& CreateChild(const std::string& className, const std::string& name);
+
+		/// <summary>
+		/// Orphans a child Entity.
+		/// </summary>
+		/// <param name="child">Child to be removed.</param>
+		void DestroyChild(Entity& child);
+
+		/// <summary>
+		/// Gets the list of PendingChild data.
+		/// </summary>
+		/// <returns>Current PendingChild data.</returns>
+		const PendingChildList& PendingChildren() const;
 #pragma endregion Accessors
 
 #pragma region Game Loop
@@ -166,6 +217,14 @@ namespace Library
 		virtual std::string ToString() const override;
 #pragma endregion RTTI Overrides
 
+#pragma region Helper Methods
+	protected:
+		/// <summary>
+		/// Performs pending actions of the child Scopes.
+		/// </summary>
+		void UpdatePendingChildren();
+#pragma endregion Helper Methods
+		
 #pragma region Data Members
 	private:
 		/// <summary>
@@ -174,9 +233,19 @@ namespace Library
 		std::string mName;
 
 		/// <summary>
-		/// Collection of Action objects within the Actions prescribed Attribute.
+		/// Collection of Entity objects within the Children prescribed Attribute.
 		/// </summary>
-		Data& mActions;
+		Data& mChildren;
+
+		/// <summary>
+		/// Pending children to have an action performed during the end of an Update call.
+		/// </summary>
+		PendingChildList mPendingChildren{ PendingChildList(PendingChildList::EqualityFunctor()) };
+
+		/// <summary>
+		/// Flag representing whether the Entity is currently updating children.
+		/// </summary>
+		bool mUpdatingChildren{ false };
 #pragma endregion Data Members
 	};
 

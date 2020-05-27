@@ -4,10 +4,6 @@
 
 // Header
 #include "Entity.h"
-
-//First Party
-#include "Sector.h"
-#include "Action.h"
 #pragma endregion Includes
 
 namespace Library
@@ -18,7 +14,7 @@ namespace Library
 		{
 			{
 				{ NameKey, Types::String, false, 1, offsetof(Entity, mName) },
-				{ ActionsKey, Types::Scope, true, 1, 0 }
+				{ ChildrenKey, Types::Scope, true, 1, 0 }
 			},
 
 			Attributed::TypeIdClass()
@@ -27,13 +23,13 @@ namespace Library
 		return typeInfo;
 	}
 
-	Entity::Entity(const std::string& name) : Attributed(TypeIdClass()), 
-		mName(name), mActions(mPairPtrs[ActionsIndex]->second)
+	Entity::Entity(std::string name) : Attributed(TypeIdClass()), 
+		mName(std::move(name)), mChildren(mPairPtrs[ChildrenIndex]->second)
 	{
 	}
 
 	Entity::Entity(const Entity& rhs) : Attributed(rhs),
-		mName(rhs.mName), mActions(mPairPtrs[ActionsIndex]->second)
+		mName(rhs.mName), mChildren(mPairPtrs[ChildrenIndex]->second)
 	{
 	}
 
@@ -47,7 +43,7 @@ namespace Library
 	}
 
 	Entity::Entity(Entity&& rhs) noexcept : Attributed(std::move(rhs)),
-		mName(std::move(rhs.mName)), mActions(mPairPtrs[ActionsIndex]->second)
+		mName(std::move(rhs.mName)), mChildren(mPairPtrs[ChildrenIndex]->second)
 	{
 	}
 
@@ -60,8 +56,8 @@ namespace Library
 		return *this;
 	}
 
-	Entity::Entity(const RTTI::IdType typeId, const std::string& name) : Attributed(typeId),
-		mName(name), mActions(mPairPtrs[ActionsIndex]->second)
+	Entity::Entity(const RTTI::IdType typeId, std::string name) : Attributed(typeId),
+		mName(std::move(name)), mChildren(mPairPtrs[ChildrenIndex]->second)
 	{
 	}
 
@@ -80,67 +76,120 @@ namespace Library
 		mName = name;
 	}
 
-	Sector* Entity::GetSector() const
+	Entity* Entity::GetParent() const
 	{
-		Scope* parent = GetParent();
+		Scope* parent = Scope::GetParent();
 		if (!parent) return nullptr;
 
-		assert(parent->Is(Sector::TypeIdClass()));
-		return static_cast<Sector*>(parent);
+		assert(parent->Is(Entity::TypeIdClass()));
+		return static_cast<Entity*>(parent);
 	}
 
-	void Entity::SetSector(Sector* sector)
+	void Entity::SetParent(Entity* entity)
 	{
-		if (sector == nullptr)
+		if (entity == nullptr)
 		{
-			Sector* parent = GetSector();
+			Entity* parent = GetParent();
 			if (parent) parent->Orphan(*this);
 		}
 		else
 		{
-			sector->Adopt(*this, mName);
+			entity->Adopt(*this, mName);
 		}
 	}
 
-	Entity::Data& Entity::Actions()
+	Entity::Data& Entity::Children()
 	{
-		return mActions;
+		return mChildren;
 	}
 
-	const Entity::Data& Entity::Actions() const
+	const Entity::Data& Entity::Children() const
 	{
-		return mActions;
+		return mChildren;
 	}
 
-	Action* Entity::CreateAction(const std::string& className, const std::string& name)
+	Entity& Entity::AddChild(Entity& child)
+	{
+		if (mUpdatingChildren)
+		{
+			PendingChild pendingChild
+			{
+				child,
+				PendingChild::State::ToAdd,
+			};
+
+			mPendingChildren.EmplaceBack(pendingChild);
+		}
+		else
+		{
+			Adopt(child, ChildrenKey);
+		}
+
+		return child;
+	}
+
+	void Entity::DestroyChild(Entity& child)
+	{
+		if (mUpdatingChildren)
+		{
+			PendingChild pendingChild
+			{
+				child,
+				PendingChild::State::ToRemove,
+			};
+
+			mPendingChildren.EmplaceBack(pendingChild);
+		}
+		else
+		{
+			delete Orphan(child);
+		}
+	}
+
+	Entity& Entity::CreateChild(const std::string& className, const std::string& name)
 	{
 		Scope* newScope = Factory<Scope>::Create(className);
+		if (!newScope) throw std::runtime_error("Create failed.");
 
-		if (newScope)
+		assert(newScope->Is(Entity::TypeIdClass()));
+
+		Entity* newEntity = static_cast<Entity*>(newScope);
+		newEntity->SetName(name);
+		
+		if (mUpdatingChildren)
 		{
-			assert(newScope->Is(Action::TypeIdClass()));
+			PendingChild pendingChild
+			{
+				*newEntity,
+				PendingChild::State::ToAdd,
+			};
 
-			Action* newAction = static_cast<Action*>(newScope);
-			newAction->SetName(name);
-
-			Adopt(*newScope, ActionsKey);
-			return newAction;
+			mPendingChildren.EmplaceBack(pendingChild);
+		}
+		else
+		{
+			Adopt(*newScope, ChildrenKey);
 		}
 
-		return nullptr;
+		return *newEntity;
 	}
 
+	const Entity::PendingChildList& Entity::PendingChildren() const
+	{
+		return mPendingChildren;
+	}
+	
 	void Entity::Update(WorldState& worldState)
 	{
-		for (std::size_t i = 0; i < mActions.Size(); ++i)
+		for (std::size_t i = 0; i < mChildren.Size(); ++i)
 		{
-			assert(mActions[i].Is(Action::TypeIdClass()));
+			assert(mChildren[i].Is(Entity::TypeIdClass()));
 
-			worldState.Action = static_cast<Action*>(mActions.Get<Scope*>(i));
-			worldState.Action->Update(worldState);
+			worldState.Entity = static_cast<Entity*>(mChildren.Get<Scope*>(i));
+			worldState.Entity->Update(worldState);
 		}
 
-		worldState.Action = nullptr;
+		worldState.Entity = nullptr;
 	}
 
 	std::string Entity::ToString() const
@@ -148,5 +197,27 @@ namespace Library
 		std::ostringstream oss;
 		oss << mName << " (Entity)";
 		return oss.str();
+	}
+
+	void Entity::UpdatePendingChildren()
+	{
+		for (PendingChild& pendingChild : mPendingChildren)
+		{
+			switch (pendingChild.ChildState)
+			{
+			case PendingChild::State::ToAdd:
+				Adopt(pendingChild.Child, ChildrenKey);
+				break;
+
+			case PendingChild::State::ToRemove:
+				delete Orphan(pendingChild.Child);
+				break;
+
+			default:
+				break;
+			}
+		}
+
+		mPendingChildren.Clear();
 	}
 }

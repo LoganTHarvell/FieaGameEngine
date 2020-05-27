@@ -2,7 +2,6 @@
 
 #include "ToStringSpecialization.h"
 #include "World.h"
-#include "Sector.h"
 #include "GameTime.h"
 #include "EventQueue.h"
 #include "FooEntity.h"
@@ -24,7 +23,6 @@ namespace EntitySystemTests
 			TypeManager::Create();
 			RegisterType<Entity>();
 			RegisterType<FooEntity>();
-			RegisterType<Sector>();
 			RegisterType<World>();
 
 #if defined(DEBUG) || defined(_DEBUG)
@@ -56,8 +54,8 @@ namespace EntitySystemTests
 			Assert::AreEqual("World"s, world.Name());
 			Assert::IsNotNull(world.Find("Name"));
 			Assert::AreEqual("World"s, world.Find("Name")->Get<std::string>());
-			Assert::IsNotNull(world.Find("Sectors"));
-			Assert::AreEqual(0_z, world.Find("Sectors")->Size());
+			Assert::IsNotNull(world.Find(World::ChildrenKey));
+			Assert::AreEqual(0_z, world.Find(World::ChildrenKey)->Size());
 		}
 
 		TEST_METHOD(Copy)
@@ -134,7 +132,7 @@ namespace EntitySystemTests
 			Assert::IsTrue(a.Is(Attributed::TypeIdClass()));
 			Assert::IsTrue(a.Equals(&b));
 
-			Attributed* world = new World();
+			World* world = new World();
 			const bool isEntity = world->Is(World::TypeIdClass());
 
 			Attributed* createdWorld = isEntity ? createdWorld = world->CreateAs<World>() : nullptr;
@@ -161,35 +159,33 @@ namespace EntitySystemTests
 			World world;
 			world.SetName("World");
 			Assert::AreEqual("World"s, world.Name());
-			Assert::AreEqual(0_z, world.PendingChildren().Size());
 			
 			Assert::AreEqual(&world, world.GetWorldState().World);
 
-			Sector& sector1 = world.CreateSector("Sector1");
-			Sector& sector2 = world.CreateSector("Sector2");
+			Entity& sector1 = world.CreateChild("Entity"s, "Sector1"s);
+			Entity& sector2 = world.CreateChild("Entity"s, "Sector2"s);
 
 			Assert::AreEqual("Sector1"s, sector1.Name());
-			Assert::AreEqual(world, *sector1.GetWorld());
+			Assert::AreEqual(world, *sector1.GetParent()->As<World>());
 
 			Assert::AreEqual("Sector2"s, sector2.Name());
-			Assert::AreEqual(world, *sector2.GetWorld());
+			Assert::AreEqual(world, *sector2.GetParent()->As<World>());
 			
-			Assert::AreEqual(2_z, world.Sectors().Size());
-			Assert::AreEqual(sector1, *world.Sectors().Get<Scope*>(0)->As<Sector>());
-			Assert::AreEqual(sector2, *world.Sectors().Get<Scope*>(1)->As<Sector>());
+			Assert::AreEqual(2_z, world.Children().Size());
+			Assert::AreEqual(sector1, *world.Children().Get<Scope*>(0)->As<Entity>());
+			Assert::AreEqual(sector2, *world.Children().Get<Scope*>(1)->As<Entity>());
 
 			const World copy = world;
 
 			Assert::IsNull(copy.GetWorldState().GameTime);
 			Assert::IsNull(copy.GetWorldState().EventQueue);
 			Assert::AreEqual(&copy, copy.GetWorldState().World);
-			Assert::IsNull(copy.GetWorldState().Sector);
 			Assert::IsNull(copy.GetWorldState().Entity);
-			Assert::IsNull(copy.GetWorldState().Action);
+			Assert::IsNull(copy.GetWorldState().Entity);
 			
-			Assert::AreEqual(2_z, copy.Sectors().Size());
-			Assert::AreEqual(sector1, *copy.Sectors().Get<Scope*>(0)->As<Sector>());
-			Assert::AreEqual(sector2, *copy.Sectors().Get<Scope*>(1)->As<Sector>());
+			Assert::AreEqual(2_z, copy.Children().Size());
+			Assert::AreEqual(sector1, *copy.Children().Get<Scope*>(0)->As<Entity>());
+			Assert::AreEqual(sector2, *copy.Children().Get<Scope*>(1)->As<Entity>());
 			Assert::AreEqual(0_z, copy.PendingChildren().Size());
 		}
 
@@ -199,16 +195,16 @@ namespace EntitySystemTests
 			EventQueue queue;
 			
 			World world("World", &gameTime, &queue);
-			Sector& sector1 = world.CreateSector("Sector1");
-			Sector& sector2 = world.CreateSector("Sector2");
+			Entity& sector1 = world.CreateChild("Entity", "Sector1");
+			Entity& sector2 = world.CreateChild("Entity", "Sector2");
 
-			Entity* fooEntity1 = sector1.CreateEntity("FooEntity", "Foo1");
-			Entity* fooEntity2 = sector2.CreateEntity("FooEntity", "Foo2");
+			Entity& fooEntity1 = sector1.CreateChild("FooEntity", "Foo1");
+			Entity& fooEntity2 = sector2.CreateChild("FooEntity", "Foo2");
 
 			world.Update();
 
-			Assert::IsTrue(fooEntity1->As<FooEntity>()->IsUpdated());
-			Assert::IsTrue(fooEntity2->As<FooEntity>()->IsUpdated());
+			Assert::IsTrue(fooEntity1.As<FooEntity>()->IsUpdated());
+			Assert::IsTrue(fooEntity2.As<FooEntity>()->IsUpdated());
 		}
 
 		TEST_METHOD(Clone)
@@ -223,7 +219,7 @@ namespace EntitySystemTests
 
 			const bool isEntity = sectorClone->Is(World::TypeIdClass());
 
-			World::Data* aux = sectorClone->Find("aux");
+			Entity::Data* aux = sectorClone->Find("aux");
 			const int copiedAuxValue = aux ? aux->Get<int>() : 0;
 
 			delete sectorClone;
@@ -238,7 +234,6 @@ namespace EntitySystemTests
 
 		EntityFactory entityFactory;
 		FooEntityFactory fooEntityFactory;
-		SectorFactory sectorFactory;
 	};
 
 	_CrtMemState WorldTest::sStartMemState;

@@ -14,13 +14,11 @@
     <ProjectCapability Include="SourceItemsFromImports" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Action.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)ActionCreate.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)ActionDestroy.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)ActionEvent.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)ActionExpression.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)ActionIncrement.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)ActionList.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)ActionListWhile.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Attributed.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Datum.cpp" />
@@ -33,7 +31,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)JsonParseMaster.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)JsonScopeParseHelper.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)ReactionAttributed.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Sector.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)TypeManager.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Utility.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)pch.cpp">
@@ -50,13 +47,11 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)World.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Action.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ActionCreate.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ActionDestroy.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ActionEvent.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ActionExpression.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ActionIncrement.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)ActionList.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ActionListWhile.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Attributed.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Datum.h" />
@@ -77,7 +72,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)JsonScopeParseHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Reaction.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ReactionAttributed.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Sector.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Stack.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)TypeManager.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Utility.h" />

@@ -80,13 +80,7 @@
     <ClCompile Include="Foo.cpp">
       <Filter>Support Code\Basic</Filter>
     </ClCompile>
-    <ClCompile Include="ActionTest.cpp">
-      <Filter>Core Tests\Entity System Tests\Actions Tests</Filter>
-    </ClCompile>
     <ClCompile Include="ActionIncrementTest.cpp">
-      <Filter>Core Tests\Entity System Tests\Actions Tests</Filter>
-    </ClCompile>
-    <ClCompile Include="ActionListTest.cpp">
       <Filter>Core Tests\Entity System Tests\Actions Tests</Filter>
     </ClCompile>
     <ClCompile Include="ActionCreateTest.cpp">
@@ -102,9 +96,6 @@
       <Filter>Core Tests\Entity System Tests</Filter>
     </ClCompile>
     <ClCompile Include="JsonEntitySystemParseTest.cpp">
-      <Filter>Core Tests\Entity System Tests</Filter>
-    </ClCompile>
-    <ClCompile Include="SectorTest.cpp">
       <Filter>Core Tests\Entity System Tests</Filter>
     </ClCompile>
     <ClCompile Include="EntityTest.cpp">

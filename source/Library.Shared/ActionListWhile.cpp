@@ -19,13 +19,13 @@ namespace Library
 				{ ConditionKey, Types::Integer, false, 1, offsetof(ActionListWhile, mCondition) }
 			},
 
-			ActionList::TypeIdClass()
+			Entity::TypeIdClass()
 		};
 
 		return typeInfo;
 	}
 
-	ActionListWhile::ActionListWhile(const std::string& name) : ActionList(TypeIdClass(), name)
+	ActionListWhile::ActionListWhile(const std::string& name) : Entity(TypeIdClass(), name)
 	{
 	}
 
@@ -38,7 +38,7 @@ namespace Library
 	{
 		while (mCondition)
 		{
-			ActionList::Update(worldState);
+			Entity::Update(worldState);
 		}
 	}
 

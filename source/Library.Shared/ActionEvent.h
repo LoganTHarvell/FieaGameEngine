@@ -2,7 +2,7 @@
 
 #pragma region Includes
 // First Party
-#include "Action.h"
+#include "Entity.h"
 #include "Event.h"
 #include "EventMessageAttributed.h"
 #include "WorldState.h"
@@ -14,9 +14,9 @@ namespace Library
 	/// <summary>
 	/// Represents an Action for creating Scopes.
 	/// </summary>
-	class ActionEvent final : public Action
+	class ActionEvent final : public Entity
 	{
-		RTTI_DECLARATIONS(ActionEvent, Action)
+		RTTI_DECLARATIONS(ActionEvent, Entity)
 
 #pragma region Static Members
 	public:
@@ -91,7 +91,7 @@ namespace Library
 		/// Virtual update method called by the containing object.
 		/// </summary>
 		/// <param name="worldState">WorldState context for the current processing step.</param>
-		virtual void Update(WorldState& worldState);
+		virtual void Update(WorldState& worldState) override;
 #pragma endregion Game Loop
 
 #pragma region RTTI Overrides

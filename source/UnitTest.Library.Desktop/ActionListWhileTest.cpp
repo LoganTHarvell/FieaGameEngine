@@ -19,9 +19,8 @@ namespace EntitySystemTests::ActionTests
 		TEST_METHOD_INITIALIZE(Initialize)
 		{
 			TypeManager::Create();
-			
-			RegisterType<Action>();
-			RegisterType<ActionList>();
+
+			RegisterType<Entity>();
 			RegisterType<ActionListWhile>();
 			RegisterType<ActionIncrement>();
 
@@ -52,13 +51,13 @@ namespace EntitySystemTests::ActionTests
 			ActionListWhile incrementA;
 			ActionListWhile incrementB;
 
-			Assert::IsTrue(incrementA.Is(Action::TypeIdClass()));
+			Assert::IsTrue(incrementA.Is(Entity::TypeIdClass()));
 			Assert::IsTrue(incrementA.Equals(&incrementB));
 
-			Action* newListWhile = new ActionListWhile();
-			bool isAction = newListWhile->Is(Action::TypeIdClass());
+			Entity* newListWhile = new ActionListWhile();
+			bool isAction = newListWhile->Is(Entity::TypeIdClass());
 
-			Action* createdActionListWhile = isAction ? createdActionListWhile = newListWhile->CreateAs<Action>() : nullptr;
+			Entity* createdActionListWhile = isAction ? createdActionListWhile = newListWhile->CreateAs<Entity>() : nullptr;
 			bool wasCreated = createdActionListWhile != nullptr;
 
 			bool  isActionListWhile = wasCreated ? createdActionListWhile->Is(ActionListWhile::TypeIdClass()) : false;
@@ -89,7 +88,7 @@ namespace EntitySystemTests::ActionTests
 
 			bool notNull = clone;
 			bool isActionListWhile = notNull ? clone->Is(ActionListWhile::TypeIdClass()) : false;
-			bool equal = *actionListWhile.As<Action>() == *clone->As<Action>();
+			bool equal = *actionListWhile.As<Entity>() == *clone->As<Entity>();
 
 			delete clone;
 
@@ -106,12 +105,12 @@ namespace EntitySystemTests::ActionTests
 			*decrementCondition->Find(ActionIncrement::OperandKey) = ActionListWhile::ConditionKey;
 			*decrementCondition->Find(ActionIncrement::IncrementStepKey) = -1;
 
-			actionListWhile.Adopt(*decrementCondition, ActionListWhile::ActionsKey);
+			actionListWhile.Adopt(*decrementCondition, ActionListWhile::ChildrenKey);
 
 			ActionIncrement* incrementCounter = new ActionIncrement("IncrementCount");
 			*incrementCounter->Find(ActionIncrement::OperandKey) = "LoopCount"s;
 
-			actionListWhile.Adopt(*incrementCounter, ActionListWhile::ActionsKey);
+			actionListWhile.Adopt(*incrementCounter, ActionListWhile::ChildrenKey);
 
 			WorldState worldState;
 			actionListWhile.Update(worldState);

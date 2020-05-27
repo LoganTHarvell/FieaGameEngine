@@ -2,7 +2,7 @@
 
 #pragma region Includes
 // First Party
-#include "Action.h"
+#include "Entity.h"
 #include "WorldState.h"
 #include "Factory.h"
 #include "Stack.h"
@@ -13,9 +13,9 @@ namespace Library
 	/// <summary>
 	/// Represents an Action that evaluates an algebraic expression.
 	/// </summary>
-	class ActionExpression final : public Action
+	class ActionExpression final : public Entity
 	{
-		RTTI_DECLARATIONS(ActionExpression, Action)
+		RTTI_DECLARATIONS(ActionExpression, Entity)
 
 #pragma region Type Definitions, Constants
 	public:
@@ -90,7 +90,7 @@ namespace Library
 		/// Virtual update method called by the containing object.
 		/// </summary>
 		/// <param name="worldState">WorldState context for the current processing step.</param>
-		virtual void Update(WorldState& worldState);
+		virtual void Update(WorldState& worldState) override;
 #pragma endregion Game Loop
 
 #pragma region RTTI Overrides

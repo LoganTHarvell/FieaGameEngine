@@ -6,7 +6,6 @@
 #include "ActionDestroy.h"
 
 // First Party
-#include "World.h"
 #include "Entity.h"
 #pragma endregion Includes
 
@@ -21,13 +20,13 @@ namespace Library
 				{ TargetKey, Types::String, false, 1, offsetof(ActionDestroy, mTargetName) }
 			},
 
-			Action::TypeIdClass()
+			Entity::TypeIdClass()
 		};
 
 		return typeInfo;
 	}
 
-	ActionDestroy::ActionDestroy(const std::string& name) : Action(TypeIdClass(), name)
+	ActionDestroy::ActionDestroy(const std::string& name) : Entity(TypeIdClass(), name)
 	{
 	}
 
@@ -51,15 +50,8 @@ namespace Library
 
 					if (name && *name == mTargetName)
 					{
-						World::PendingChild childToRemove =
-						{
-							scope,
-							World::PendingChild::State::ToRemove,
-							*worldState.Entity,
-							nullptr
-						};
-
-						worldState.World->PendingChildren().EmplaceBack(std::move(childToRemove));
+						assert(scope.Is(Entity::TypeIdClass()));
+						worldState.Entity->DestroyChild(static_cast<Entity&>(scope));
 					}
 				}
 			}

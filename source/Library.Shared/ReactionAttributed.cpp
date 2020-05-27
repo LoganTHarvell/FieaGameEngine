@@ -5,6 +5,8 @@
 // Header
 #include "ReactionAttributed.h"
 
+#include <utility>
+
 // First Party
 #include "EventMessageAttributed.h"
 #include "EventPublisher.h"
@@ -23,7 +25,7 @@ namespace Library
 				{ SubtypeKey, Types::String, false, 1, offsetof(ReactionAttributed, mSubtype) },
 			},
 
-			ActionList::TypeIdClass()
+			Reaction::TypeIdClass()
 		};
 
 		return typeInfo;
@@ -32,8 +34,8 @@ namespace Library
 
 
 #pragma region Special Members
-	ReactionAttributed::ReactionAttributed(const std::string& name, const Subtype& subtype) : Reaction(TypeIdClass(), name),
-		mSubtype(subtype)
+	ReactionAttributed::ReactionAttributed(const std::string& name, Subtype subtype) : Reaction(TypeIdClass(), name),
+		mSubtype(std::move(subtype))
 	{
 		Event<EventMessageAttributed>::Subscribe(*this);
 	}
@@ -76,7 +78,7 @@ namespace Library
                 mParameters[attribute.first] = attribute.second; 
             });
 					
-			ActionList::Update(message.GetWorld()->GetWorldState());
+			Entity::Update(message.GetWorld()->GetWorldState());
 			
 			mParameters.Clear();
 		}
@@ -93,7 +95,7 @@ namespace Library
 			result = mParameters.Find(key);
 		}
 		
-		return result ? result : ActionList::Find(key);
+		return result ? result : Entity::Find(key);
 	}
 #pragma endregion Scope Overrides
 }

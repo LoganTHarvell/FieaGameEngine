@@ -2,7 +2,7 @@
 
 #pragma region Includes
 // First Party
-#include "ActionList.h"
+#include "Entity.h"
 #include "WorldState.h"
 #include "Factory.h"
 #pragma endregion Includes
@@ -12,9 +12,9 @@ namespace Library
 	/// <summary>
 	/// Represents an Action for looping while a condition is true.
 	/// </summary>
-	class ActionListWhile final : public ActionList
+	class ActionListWhile final : public Entity
 	{
-		RTTI_DECLARATIONS(ActionListWhile, ActionList)
+		RTTI_DECLARATIONS(ActionListWhile, Entity)
 
 #pragma region Type Definitions, Constants
 	public:
@@ -84,7 +84,7 @@ namespace Library
 		/// Virtual update method called by the containing object.
 		/// </summary>
 		/// <param name="worldState">WorldState context for the current processing step.</param>
-		virtual void Update(WorldState& worldState);
+		virtual void Update(WorldState& worldState) override;
 #pragma endregion Game Loop
 
 #pragma region RTTI Overrides

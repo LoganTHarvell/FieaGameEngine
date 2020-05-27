@@ -20,13 +20,13 @@ namespace Library
 				{ IncrementStepKey, Types::Integer, false, 1, offsetof(ActionIncrement, mIncrementStep) }
 			},
 
-			Action::TypeIdClass()
+			Entity::TypeIdClass()
 		};
 
 		return typeInfo;
 	}
 
-	ActionIncrement::ActionIncrement(const std::string& name) : Action(TypeIdClass(), name)
+	ActionIncrement::ActionIncrement(const std::string& name) : Entity(TypeIdClass(), name)
 	{
 	}
 

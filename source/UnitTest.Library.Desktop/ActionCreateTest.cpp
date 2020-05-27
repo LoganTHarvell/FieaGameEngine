@@ -20,11 +20,9 @@ namespace EntitySystemTests::ActionTests
 		{
 			TypeManager::Create();
 			
-			RegisterType<World>();
-			RegisterType<Sector>();
 			RegisterType<Entity>();
+			RegisterType<World>();
 
-			RegisterType<Action>();
 			RegisterType<ActionCreate>();
 
 
@@ -55,13 +53,13 @@ namespace EntitySystemTests::ActionTests
 			ActionCreate createA;
 			ActionCreate createB;
 
-			Assert::IsTrue(createA.Is(Action::TypeIdClass()));
+			Assert::IsTrue(createA.Is(Entity::TypeIdClass()));
 			Assert::IsTrue(createA.Equals(&createB));
 
-			Action* newCreate = new ActionCreate();
-			bool isAction = newCreate->Is(Action::TypeIdClass());
+			Entity* newCreate = new ActionCreate();
+			bool isAction = newCreate->Is(Entity::TypeIdClass());
 
-			Action* createdActionCreate = isAction ? createdActionCreate = newCreate->CreateAs<Action>() : nullptr;
+			Entity* createdActionCreate = isAction ? createdActionCreate = newCreate->CreateAs<Entity>() : nullptr;
 			bool wasCreated = createdActionCreate != nullptr;
 
 			bool  isActionCreate = wasCreated ? createdActionCreate->Is(ActionCreate::TypeIdClass()) : false;
@@ -96,7 +94,7 @@ namespace EntitySystemTests::ActionTests
 
 			bool notNull = clone;
 			bool isActionCreate = notNull ? clone->Is(ActionCreate::TypeIdClass()) : false;
-			bool equal = *actionCreate.As<Action>() == *clone->As<Action>();
+			bool equal = *actionCreate.As<Entity>() == *clone->As<Entity>();
 
 			delete clone;
 
@@ -106,44 +104,41 @@ namespace EntitySystemTests::ActionTests
 		TEST_METHOD(Update)
 		{
 			World world;
-			Entity* entity = world.CreateSector("Sector").CreateEntity("Entity", "Entity");
+			Entity& entity = world.CreateChild("Entity", "Sector").CreateChild("Entity", "Entity");
 			
 			/* Creates Entity */
 
-			Action* create = entity->CreateAction("ActionCreate"s, "CreateEntity"s);
-			Assert::IsNotNull(create);
-			Assert::IsTrue(create->Is(ActionCreate::TypeIdClass()));
+			Entity& create = entity.CreateChild("ActionCreate"s, "CreateEntity"s);
+			Assert::IsTrue(create.Is(ActionCreate::TypeIdClass()));
 
 			Entity addedEntity("Added");
-			*create->As<ActionCreate>()->Find(ActionCreate::AttributeKey) = "NewEntity";
-			*create->As<ActionCreate>()->Find(ActionCreate::NewScopeKey) = addedEntity.As<Scope>();
+			*create.As<ActionCreate>()->Find(ActionCreate::AttributeKey) = "NewEntity";
+			*create.As<ActionCreate>()->Find(ActionCreate::NewScopeKey) = addedEntity.As<Scope>();
 
 			world.Update();
 
-			Assert::IsNotNull(entity->Find("NewEntity"));
-			Assert::AreEqual(1_z, entity->Find("NewEntity")->Size());
-			Assert::IsTrue(entity->Find("NewEntity")->Get<Scope*>()->Is(Entity::TypeIdClass()));
-			Assert::AreEqual(*addedEntity.As<Entity>(), *entity->Find("NewEntity")->Get<Scope*>()->As<Entity>());
+			Assert::AreEqual(1_z, entity.Find("NewEntity")->Size());
+			Assert::IsTrue(entity.Find("NewEntity")->Get<Scope*>()->Is(Entity::TypeIdClass()));
+			Assert::AreEqual(*addedEntity.As<Entity>(), *entity.Find("NewEntity")->Get<Scope*>()->As<Entity>());
 
-			delete entity->Orphan(*create);
+			delete entity.Orphan(create);
 
-			/* Creates Action */
+			/* Creates Entity */
 
-			create = entity->CreateAction("ActionCreate"s, "CreateAction"s);
-			Assert::IsNotNull(create);
-			Assert::IsTrue(create->Is(ActionCreate::TypeIdClass()));
+			create = entity.CreateChild("ActionCreate"s, "CreateAction"s);
+			Assert::IsTrue(create.Is(ActionCreate::TypeIdClass()));
 
 			ActionCreate addedAction("Added");
-			*create->As<ActionCreate>()->Find(ActionCreate::AttributeKey) = Entity::ActionsKey;
-			*create->As<ActionCreate>()->Find(ActionCreate::NewScopeKey) = addedAction.As<Scope>();
+			*create.As<ActionCreate>()->Find(ActionCreate::AttributeKey) = Entity::ChildrenKey;
+			*create.As<ActionCreate>()->Find(ActionCreate::NewScopeKey) = addedAction.As<Scope>();
 
-			Assert::AreEqual(1_z, entity->Actions().Size());
+			Assert::AreEqual(1_z, entity.Children().Size());
 
 			world.Update();
 
-			Assert::AreEqual(2_z, entity->Actions().Size());
-			Assert::IsTrue(entity->Actions()[1].Is(ActionCreate::TypeIdClass()));
-			Assert::AreEqual(*addedAction.As<Action>(), *entity->Actions()[1].As<Action>());
+			Assert::AreEqual(2_z, entity.Children().Size());
+			Assert::IsTrue(entity.Children()[1].Is(ActionCreate::TypeIdClass()));
+			Assert::AreEqual(*addedAction.As<Entity>(), *entity.Children()[1].As<Entity>());
 		}
 
 		TEST_METHOD(ToString)
@@ -156,7 +151,6 @@ namespace EntitySystemTests::ActionTests
 		static _CrtMemState sStartMemState;
 
 		ActionCreateFactory actionCreateFactory;
-		SectorFactory sectorFactory;
 		EntityFactory entityFactory;
 	};
 

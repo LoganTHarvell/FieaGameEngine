@@ -21,13 +21,13 @@ namespace Library
 				{ DelayKey, Types::Integer, false, 1, offsetof(ActionEvent, mDelay) }
 			},
 
-			Action::TypeIdClass()
+			Entity::TypeIdClass()
 		};
 
 		return typeInfo;
 	}
 
-	ActionEvent::ActionEvent(const std::string& name, const std::string& subtype, const int delay) : Action(TypeIdClass(), name),
+	ActionEvent::ActionEvent(const std::string& name, const std::string& subtype, const int delay) : Entity(TypeIdClass(), name),
 		mSubtype(subtype), mDelay(delay)
 	{
 	}
