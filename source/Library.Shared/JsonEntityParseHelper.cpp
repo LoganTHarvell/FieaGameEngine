@@ -124,17 +124,9 @@ namespace Library
 
 		if (helperData->mStack.IsEmpty())
 		{
-			if (!value.isObject()) return false;
-			const StackFrame stackFrame =
-			{
-				key,
-				Entity::Types::Unknown,
-				"Entity"s,
-				nullptr,
-				*helperData->mRootEntity
-			};
+			if (!value.isObject() || !value.isMember("type"s) || !value.isMember("value"s)) return false;
 			
-			helperData->mStack.Push(stackFrame);
+			helperData->mStack.Push({ key, Entity::Types::Unknown, "Entity"s, nullptr, *helperData->mRootEntity });
 			return true;
 		}
 		
@@ -142,7 +134,7 @@ namespace Library
 		StackFrame& stackFrame = helperData->mStack.Top();
 		const std::string formattedKey = String::ToLower(key);
 		
-		if (formattedKey == "type" && value.isString())
+		if (formattedKey == "type"s && value.isString())
 		{
 			const std::string& valueStr = value.asString();
 			const auto it = TypeStringMap.Find(valueStr);
@@ -160,10 +152,10 @@ namespace Library
 			}
 			else
 			{
-				throw std::runtime_error("\"" + valueStr + "\" is not a valid type.");
+				throw std::runtime_error("\""s + valueStr + "\" is not a valid type."s);
 			}
 		}
-		else if (formattedKey == "value")
+		else if (formattedKey == "value"s)
 		{
 			if (value.isString() || value.isObject() || value.isInt() || value.isDouble())
 			{
@@ -173,7 +165,8 @@ namespace Library
 				{
 					Entity* newEntity = Factory<Entity>::Create(stackFrame.ClassName);
 					assert(newEntity != nullptr);
-
+					if (newEntity == nullptr) throw std::bad_alloc();
+					
 					newEntity->SetName(stackFrame.Key);
 					stackFrame.Context.AddChild(*newEntity);
 				}
@@ -186,14 +179,14 @@ namespace Library
 				{
 					if (!v1.isString() && !v1.isObject() && !v1.isInt() && !v1.isDouble())
 					{
-						throw std::runtime_error("Invalid array value type.");
+						throw std::runtime_error("Invalid array value type."s);
 					}
 
 					for (const auto& v2 : value)
 					{
 						if (v1.type() != v2.type())
 						{
-							throw std::runtime_error("Mismatched array value types.");
+							throw std::runtime_error("Mismatched array value types."s);
 						}
 					}
 				}
@@ -203,7 +196,7 @@ namespace Library
 			}
 			else
 			{
-				throw std::runtime_error("Invalid value type.");
+				throw std::runtime_error("Invalid value type."s);
 			}
 		}
 		else if (value.isObject())
@@ -230,7 +223,7 @@ namespace Library
 		assert(!testHelperData->mStack.IsEmpty());
 
 		const std::string formattedKey = String::ToLower(key);
-		if (formattedKey == "type" || formattedKey == "value") return true;
+		if (formattedKey == "type"s || formattedKey == "value"s) return true;
 
 		const StackFrame& stackFrame = testHelperData->mStack.Top();
 		
@@ -268,7 +261,7 @@ namespace Library
 				}
 				else if (scopeData.Size() < stackFrame.Value->size())
 				{
-					throw std::runtime_error("\"" + stackFrame.Key + "\" array has too many elements.");
+					throw std::runtime_error("\""s + stackFrame.Key + "\" array has too many elements."s);
 				}
 				
 				for (Json::Value::ArrayIndex i = 0; i < stackFrame.Value->size(); ++i)

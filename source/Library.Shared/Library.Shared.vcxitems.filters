@@ -62,7 +62,9 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)ActionEvent.cpp">
       <Filter>Core\Entity System\Actions\Reaction</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)JsonEntityParseHelper.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)JsonEntityParseHelper.cpp">
+      <Filter>JSON Parser</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
@@ -165,7 +167,9 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Reaction.h">
       <Filter>Core\Entity System\Actions\Reaction</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)JsonEntityParseHelper.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)JsonEntityParseHelper.h">
+      <Filter>JSON Parser</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)DefaultHash.inl">
