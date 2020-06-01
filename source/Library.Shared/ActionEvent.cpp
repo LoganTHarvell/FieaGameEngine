@@ -5,6 +5,8 @@
 // Header
 #include "ActionEvent.h"
 
+#include <utility>
+
 // First Party
 #include "World.h"
 #include "EventQueue.h"
@@ -27,8 +29,8 @@ namespace Library
 		return typeInfo;
 	}
 
-	ActionEvent::ActionEvent(const std::string& name, const std::string& subtype, const int delay) : Entity(TypeIdClass(), name),
-		mSubtype(subtype), mDelay(delay)
+	ActionEvent::ActionEvent(std::string name, std::string subtype, const int delay) : Entity(TypeIdClass(), std::move(name)),
+		mSubtype(std::move(subtype)), mDelay(delay)
 	{
 	}
 

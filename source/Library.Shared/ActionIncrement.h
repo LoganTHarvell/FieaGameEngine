@@ -40,7 +40,7 @@ namespace Library
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
-		explicit ActionIncrement(const std::string& name=std::string());
+		explicit ActionIncrement(std::string name=std::string());
 
 		/// <summary>
 		/// Default destructor.

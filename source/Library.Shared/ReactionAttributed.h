@@ -40,7 +40,7 @@ namespace Library
 		/// </summary>
 		/// <param name="name">Pointer to the World that will process this message.</param>
 		/// <param name="subtype">Tag specifying an EventMessageAttribute subtype to which an instance responds.</param>
-		explicit ReactionAttributed(const std::string& name=std::string(), Subtype subtype=Subtype());
+		explicit ReactionAttributed(std::string name=std::string(), Subtype subtype=Subtype());
 
 		/// <summary>
 		/// Default destructor.

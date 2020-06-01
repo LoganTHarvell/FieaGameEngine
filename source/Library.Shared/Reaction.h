@@ -59,7 +59,7 @@ namespace Library
 		/// </summary>
 		/// <param name="typeId">Type ID of the derived class.</param>
 		/// <param name="name">Name for the Reaction.</param>
-		explicit Reaction(const RTTI::IdType typeId, const std::string& name=std::string());
+		explicit Reaction(const IdType typeId, std::string name=std::string());
 #pragma endregion Special Members
 
 #pragma region Action List Overrides

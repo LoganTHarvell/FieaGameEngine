@@ -28,8 +28,8 @@ namespace Library
 #pragma endregion Static Members
 
 #pragma region Special Members
-	EventMessageAttributed::EventMessageAttributed(World* world, const Subtype& subtype) : Attributed(TypeIdClass()),
-		mWorld(world), mSubtype(subtype)
+	EventMessageAttributed::EventMessageAttributed(World* world, Subtype subtype) : Attributed(TypeIdClass()),
+		mWorld(world), mSubtype(std::move(subtype))
 	{
 	}
 #pragma endregion Special Members

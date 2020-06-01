@@ -42,7 +42,7 @@ namespace Library
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
-		explicit ActionEvent(const std::string& name=std::string(), const std::string& subtype=std::string(), const int delay=0);
+		explicit ActionEvent(std::string name=std::string(), std::string subtype=std::string(), const int delay=0);
 
 		/// <summary>
 		/// Default destructor.

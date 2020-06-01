@@ -41,8 +41,9 @@ namespace Library
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
-		/// <param name="name">Pointer to the World that will process this message.</param>
-		explicit EventMessageAttributed(World* world=nullptr, const Subtype& subtype=Subtype());
+		/// <param name="world">Pointer to the World that will process this message.</param>
+		/// <param name="subtype">Subtype identifier to further distinguish instances.</param>
+		explicit EventMessageAttributed(World* world=nullptr, Subtype subtype=Subtype());
 
 		/// <summary>
 		/// Default destructor.

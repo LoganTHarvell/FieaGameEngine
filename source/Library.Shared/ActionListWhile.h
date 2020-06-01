@@ -35,7 +35,7 @@ namespace Library
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
-		explicit ActionListWhile(const std::string& name=std::string());
+		explicit ActionListWhile(std::string name=std::string());
 
 		/// <summary>
 		/// Default destructor.

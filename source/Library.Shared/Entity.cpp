@@ -228,11 +228,6 @@ namespace Library
 
 		return *child;
 	}
-
-	const Entity::PendingChildList& Entity::PendingChildren() const
-	{
-		return mPendingChildren;
-	}
 	
 	void Entity::Update(WorldState& worldState)
 	{

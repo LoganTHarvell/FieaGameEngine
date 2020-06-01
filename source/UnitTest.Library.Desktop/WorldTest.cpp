@@ -50,7 +50,6 @@ namespace EntitySystemTests
 		TEST_METHOD(Constructor)
 		{
 			const World world("World");
-			Assert::AreEqual(0_z, world.PendingChildren().Size());
 			Assert::AreEqual("World"s, world.Name());
 		}
 
@@ -182,7 +181,6 @@ namespace EntitySystemTests
 			Assert::AreEqual(2_z, copy.ChildCount());
 			Assert::AreEqual(sector1, *copy.FindChild("Sector1"));
 			Assert::AreEqual(sector2, *copy.FindChild("Sector2"));
-			Assert::AreEqual(0_z, copy.PendingChildren().Size());
 		}
 
 		TEST_METHOD(Update)

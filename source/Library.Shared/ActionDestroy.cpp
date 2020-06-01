@@ -25,7 +25,7 @@ namespace Library
 		return typeInfo;
 	}
 
-	ActionDestroy::ActionDestroy(const std::string& name) : Entity(TypeIdClass(), name)
+	ActionDestroy::ActionDestroy(std::string name) : Entity(TypeIdClass(), std::move(name))
 	{
 	}
 

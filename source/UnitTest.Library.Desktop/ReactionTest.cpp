@@ -26,8 +26,6 @@ namespace EntitySystemTests::ActionTests
 		{
 		}
 
-		ActionTestReaction(const ActionTestReaction& rhs) = default;
-
 		virtual gsl::owner<Library::Scope*> Clone() const override
 		{
 			return new ActionTestReaction(*this);
@@ -35,7 +33,7 @@ namespace EntitySystemTests::ActionTests
 
 		virtual void Update(Library::WorldState&) override
 		{
-			auto parameter = Search("Parameter");
+			auto* parameter = Search("Parameter");
 			if (parameter) Parameter += parameter->Get<int>();
 		}
 
@@ -95,19 +93,19 @@ namespace EntitySystemTests::ActionTests
 		{
 			/* ReactionAttributed */
 
-			ReactionAttributed reactionA;
+			const ReactionAttributed reactionA;
 			ReactionAttributed reactionB;
 
 			Assert::IsTrue(reactionA.Is(Entity::TypeIdClass()));
 			Assert::IsTrue(reactionA.Equals(&reactionB));
 
 			Entity* newAction = new ReactionAttributed();
-			bool isReaction = newAction->Is(Reaction::TypeIdClass());
+			const bool isReaction = newAction->Is(Reaction::TypeIdClass());
 
 			Entity* createdReactionAttributed = isReaction ? createdReactionAttributed = newAction->CreateAs<Entity>() : nullptr;
 			bool wasCreated = createdReactionAttributed != nullptr;
 
-			bool  isReactionAttributed = wasCreated ? createdReactionAttributed->Is(ReactionAttributed::TypeIdClass()) : false;
+			const bool  isReactionAttributed = wasCreated ? createdReactionAttributed->Is(ReactionAttributed::TypeIdClass()) : false;
 
 			delete newAction;
 			delete createdReactionAttributed;
@@ -116,19 +114,19 @@ namespace EntitySystemTests::ActionTests
 
 			/* ActionEvent */
 
-			ActionEvent actionEventA;
+			const ActionEvent actionEventA;
 			ActionEvent actionEventB;
 
 			Assert::IsTrue(actionEventA.Is(Entity::TypeIdClass()));
 			Assert::IsTrue(actionEventA.Equals(&actionEventB));
 
 			newAction = new ActionEvent();
-			bool isAction = newAction->Is(Entity::TypeIdClass());
+			const bool isAction = newAction->Is(Entity::TypeIdClass());
 
 			Entity* createdActionEvent = isAction ? createdActionEvent = newAction->CreateAs<Entity>() : nullptr;
 			wasCreated = createdActionEvent != nullptr;
 
-			bool  isActionEvent = wasCreated ? createdActionEvent->Is(ActionEvent::TypeIdClass()) : false;
+			const bool  isActionEvent = wasCreated ? createdActionEvent->Is(ActionEvent::TypeIdClass()) : false;
 
 			delete newAction;
 			delete createdActionEvent;
@@ -157,7 +155,7 @@ namespace EntitySystemTests::ActionTests
 			ReactionAttributed reactionAttributed("ReactionAttributed");
 			Assert::AreEqual("ReactionAttributed"s, reactionAttributed.Name());
 
-			auto actionSubtypeKey = reactionAttributed.Find(reactionAttributed.SubtypeKey);
+			auto* actionSubtypeKey = reactionAttributed.Find(ReactionAttributed::SubtypeKey);
 			Assert::IsNotNull(actionSubtypeKey);
 			Assert::AreEqual(Scope::Types::String, actionSubtypeKey->Type());
 			Assert::AreEqual(std::string(), actionSubtypeKey->Get<std::string>());			
@@ -167,12 +165,12 @@ namespace EntitySystemTests::ActionTests
 			ActionEvent actionEvent("ActionEvent");
 			Assert::AreEqual("ActionEvent"s, actionEvent.Name());
 
-			actionSubtypeKey = actionEvent.Find(actionEvent.SubtypeKey);
+			actionSubtypeKey = actionEvent.Find(ActionEvent::SubtypeKey);
 			Assert::IsNotNull(actionSubtypeKey);
 			Assert::AreEqual(Scope::Types::String, actionSubtypeKey->Type());
 			Assert::AreEqual(std::string(), actionSubtypeKey->Get<std::string>());
 
-			auto delay = actionEvent.Find(actionEvent.DelayKey);
+			auto* delay = actionEvent.Find(ActionEvent::DelayKey);
 			Assert::IsNotNull(delay);
 			Assert::AreEqual(Scope::Types::Integer, delay->Type());
 			Assert::AreEqual(1_z, delay->Size());
@@ -197,8 +195,8 @@ namespace EntitySystemTests::ActionTests
 			Assert::AreEqual(0_z, Event<EventMessageAttributed>::SubscriberCount());
 
 			ActionEvent actionEvent("ActionEvent");
-			*actionEvent.Find(actionEvent.SubtypeKey) = "subtype";
-			*actionEvent.Find(actionEvent.DelayKey) = 10;
+			*actionEvent.Find(ActionEvent::SubtypeKey) = "subtype";
+			*actionEvent.Find(ActionEvent::DelayKey) = 10;
 
 			Assert::AreEqual(*actionEvent.As<Entity>(), *ActionEvent(actionEvent).As<Entity>());
 		}
@@ -213,7 +211,7 @@ namespace EntitySystemTests::ActionTests
 				Assert::AreEqual(2_z, Event<EventMessageAttributed>::SubscriberCount());
 			}
 
-			auto event = std::make_shared<Event<EventMessageAttributed>>();
+			const auto event = std::make_shared<Event<EventMessageAttributed>>();
 			EventQueue queue;
 			queue.Enqueue(event);
 			queue.Update(GameTime());
@@ -221,8 +219,8 @@ namespace EntitySystemTests::ActionTests
 			Assert::AreEqual(0_z, Event<EventMessageAttributed>::SubscriberCount());
 
 			ActionEvent actionEvent("ActionEvent");
-			*actionEvent.Find(actionEvent.SubtypeKey) = "subtype";
-			*actionEvent.Find(actionEvent.DelayKey) = 10;
+			*actionEvent.Find(ActionEvent::SubtypeKey) = "subtype";
+			*actionEvent.Find(ActionEvent::DelayKey) = 10;
 
 			auto copy = ActionEvent(actionEvent);
 			Assert::AreEqual(*copy.As<Entity>(), *ActionEvent(std::move(actionEvent)).As<Entity>());
@@ -236,7 +234,7 @@ namespace EntitySystemTests::ActionTests
 			Scope* clone = reactionAttributed.Clone();
 
 			bool notNull = clone;
-			bool isReactionAttributed = notNull ? clone->Is(ReactionAttributed::TypeIdClass()) : false;
+			const bool isReactionAttributed = notNull ? clone->Is(ReactionAttributed::TypeIdClass()) : false;
 			bool equal = *reactionAttributed.As<Entity>() == *clone->As<Entity>();
 
 			delete clone;
@@ -249,7 +247,7 @@ namespace EntitySystemTests::ActionTests
 			clone = actionEvent.Clone();
 
 			notNull = clone;
-			bool isActionEvent = notNull ? clone->Is(ActionEvent::TypeIdClass()) : false;
+			const bool isActionEvent = notNull ? clone->Is(ActionEvent::TypeIdClass()) : false;
 			equal = *actionEvent.As<Entity>() == *clone->As<Entity>();
 
 			delete clone;
@@ -262,7 +260,7 @@ namespace EntitySystemTests::ActionTests
 			clone = eventMessageAttributed.Clone();
 
 			notNull = clone;
-			bool isEventMessageAttributed = notNull ? clone->Is(EventMessageAttributed::TypeIdClass()) : false;
+			const bool isEventMessageAttributed = notNull ? clone->Is(EventMessageAttributed::TypeIdClass()) : false;
 			equal = *eventMessageAttributed.As<Attributed>() == *clone->As<Attributed>();
 
 			delete clone;

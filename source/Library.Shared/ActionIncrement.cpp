@@ -26,7 +26,7 @@ namespace Library
 		return typeInfo;
 	}
 
-	ActionIncrement::ActionIncrement(const std::string& name) : Entity(TypeIdClass(), name)
+	ActionIncrement::ActionIncrement(std::string name) : Entity(TypeIdClass(), std::move(name))
 	{
 	}
 

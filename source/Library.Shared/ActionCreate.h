@@ -35,7 +35,7 @@ namespace Library
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
-		explicit ActionCreate(const std::string& name=std::string());
+		explicit ActionCreate(std::string name=std::string());
 
 		/// <summary>
 		/// Default destructor.

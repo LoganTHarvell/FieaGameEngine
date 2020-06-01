@@ -29,7 +29,7 @@ namespace Library
 		return typeInfo;
 	}
 
-	ActionExpression::ActionExpression(const std::string& name) : Entity(TypeIdClass(), name)
+	ActionExpression::ActionExpression(std::string name) : Entity(TypeIdClass(), std::move(name))
 	{
 	}
 

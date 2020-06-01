@@ -41,7 +41,7 @@ namespace Library
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
-		explicit ActionExpression(const std::string& name=std::string());
+		explicit ActionExpression(std::string name=std::string());
 
 		/// <summary>
 		/// Default destructor.

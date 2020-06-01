@@ -164,7 +164,7 @@ namespace Library
 		/// <summary>
 		/// Queue of EventEntry data used to publish Event instances to their EventSubscriber lists.
 		/// </summary>
-		Vector<EventEntry> mQueue{ Vector(Vector<EventEntry>::EqualityFunctor()) };
+		Vector<EventEntry> mQueue{ Vector<EventEntry>::EqualityFunctor() };
 
 		/// <summary>
 		/// Mutex controlling thread access to the EventQueue instance.

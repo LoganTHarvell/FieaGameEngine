@@ -20,12 +20,7 @@ namespace Library
 		RTTI_DECLARATIONS(Entity, Attributed)
 
 #pragma region Type Definitions
-	public:
-		/// <summary>
-		/// Type definition for Children.
-		/// </summary>
-		using Children = Vector<Entity*>;
-		
+	private:
 		/// <summary>
 		/// Data structure for performing an action on a given Scope at the end of an Update call.
 		/// </summary>
@@ -49,8 +44,6 @@ namespace Library
 				End
 			} ChildState;
 		};
-		
-		using PendingChildList = Vector<PendingChild>;
 #pragma endregion Type Definitions
 		
 #pragma region Static Members
@@ -175,12 +168,6 @@ namespace Library
 		/// </summary>
 		/// <param name="functor">Function to be performed on each child Entity.</param>
 		void ForEachChild(const std::function<void(const Entity&)>& functor) const;
-		
-		/// <summary>
-		/// Gets the list of PendingChild data.
-		/// </summary>
-		/// <returns>Current PendingChild data.</returns>
-		const PendingChildList& PendingChildren() const;
 #pragma endregion Accessors
 
 #pragma region Modifiers
@@ -206,7 +193,6 @@ namespace Library
 		/// <param name="child">Child to be removed.</param>
 		void DestroyChild(Entity& child);
 #pragma endregion Modifiers
-
 
 #pragma region Game Loop
 	public:
@@ -256,7 +242,7 @@ namespace Library
 		/// <summary>
 		/// Pending children to have an action performed during the end of an Update call.
 		/// </summary>
-		PendingChildList mPendingChildren{ PendingChildList::EqualityFunctor() };
+		Vector<PendingChild> mPendingChildren{ Vector<PendingChild>::EqualityFunctor() };
 
 		/// <summary>
 		/// Flag representing whether the Entity is currently updating children.

@@ -25,7 +25,7 @@ namespace Library
 		return typeInfo;
 	}
 
-	ActionCreate::ActionCreate(const std::string& name) : Entity(TypeIdClass(), name)
+	ActionCreate::ActionCreate(std::string name) : Entity(TypeIdClass(), std::move(name))
 	{
 	}
 

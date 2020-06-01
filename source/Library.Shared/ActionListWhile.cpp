@@ -25,7 +25,7 @@ namespace Library
 		return typeInfo;
 	}
 
-	ActionListWhile::ActionListWhile(const std::string& name) : Entity(TypeIdClass(), name)
+	ActionListWhile::ActionListWhile(std::string name) : Entity(TypeIdClass(), std::move(name))
 	{
 	}
 

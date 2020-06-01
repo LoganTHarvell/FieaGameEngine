@@ -34,7 +34,7 @@ namespace Library
 
 
 #pragma region Special Members
-	ReactionAttributed::ReactionAttributed(const std::string& name, Subtype subtype) : Reaction(TypeIdClass(), name),
+	ReactionAttributed::ReactionAttributed(std::string name, Subtype subtype) : Reaction(TypeIdClass(), std::move(name)),
 		mSubtype(std::move(subtype))
 	{
 		Event<EventMessageAttributed>::Subscribe(*this);

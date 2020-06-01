@@ -27,7 +27,6 @@ namespace Library
 		{ "vector", Entity::Types::Vector },
 		{ "matrix", Entity::Types::Matrix },
 		{ "string", Entity::Types::String },
-		{ "scope", Entity::Types::Scope },
 	};
 #pragma endregion Constants
 
