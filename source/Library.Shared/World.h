@@ -115,7 +115,7 @@ namespace Library
 		/// <summary>
 		/// Convenience struct for passing the WorldState data in cascaded Update calls.
 		/// </summary>
-		WorldState mWorldState;
+		struct WorldState mWorldState;
 #pragma endregion Data Members
 	};
 }

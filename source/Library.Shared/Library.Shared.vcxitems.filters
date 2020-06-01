@@ -54,16 +54,16 @@
       <Filter>Core\Entity System</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)ReactionAttributed.cpp">
-      <Filter>Core\Entity System\Actions\Reaction</Filter>
+      <Filter>Core\Entity System\Reaction</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)EventMessageAttributed.cpp">
-      <Filter>Core\Entity System\Actions\Reaction</Filter>
-    </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)ActionEvent.cpp">
-      <Filter>Core\Entity System\Actions\Reaction</Filter>
+      <Filter>Core\Entity System\Reaction</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)JsonEntityParseHelper.cpp">
       <Filter>JSON Parser</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)ActionEvent.cpp">
+      <Filter>Core\Entity System\Actions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -156,19 +156,19 @@
       <Filter>Core\Events</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)EventMessageAttributed.h">
-      <Filter>Core\Entity System\Actions\Reaction</Filter>
+      <Filter>Core\Entity System\Reaction</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)ReactionAttributed.h">
-      <Filter>Core\Entity System\Actions\Reaction</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)ActionEvent.h">
-      <Filter>Core\Entity System\Actions\Reaction</Filter>
+      <Filter>Core\Entity System\Reaction</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Reaction.h">
-      <Filter>Core\Entity System\Actions\Reaction</Filter>
+      <Filter>Core\Entity System\Reaction</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)JsonEntityParseHelper.h">
       <Filter>JSON Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)ActionEvent.h">
+      <Filter>Core\Entity System\Actions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -215,10 +215,10 @@
       <Filter>Core\Events</Filter>
     </None>
     <None Include="$(MSBuildThisFileDirectory)Reaction.inl">
-      <Filter>Core\Entity System\Actions\Reaction</Filter>
+      <Filter>Core\Entity System\Reaction</Filter>
     </None>
     <None Include="$(MSBuildThisFileDirectory)EventMessageAttributed.inl">
-      <Filter>Core\Entity System\Actions\Reaction</Filter>
+      <Filter>Core\Entity System\Reaction</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -261,7 +261,7 @@
     <Filter Include="Core\Entity System\Actions">
       <UniqueIdentifier>{ea3462ea-d32e-475a-9e02-f3f12b5435d9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Core\Entity System\Actions\Reaction">
+    <Filter Include="Core\Entity System\Reaction">
       <UniqueIdentifier>{268d84ef-a093-4f0b-bb17-f714a1e258eb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>

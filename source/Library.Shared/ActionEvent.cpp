@@ -9,6 +9,8 @@
 
 // First Party
 #include "World.h"
+#include "EventMessageAttributed.h"
+#include "Event.h"
 #include "EventQueue.h"
 #pragma endregion Includes
 

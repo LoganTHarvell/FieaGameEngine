@@ -4,6 +4,7 @@
 
 // Header
 #include "Entity.h"
+#include "WorldState.h"
 #pragma endregion Includes
 
 namespace Library

@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "FooEntity.h"
+#include "WorldState.h"
 
 namespace UnitTests
 {

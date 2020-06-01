@@ -7,6 +7,7 @@
 #include "ActionIncrement.h"
 #include "Entity.h"
 #include "Event.h"
+#include "EventMessageAttributed.h"
 
 using namespace std::string_literals;
 

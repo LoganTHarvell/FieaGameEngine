@@ -6,7 +6,6 @@
 
 // First Party
 #include "Attributed.h"
-#include "WorldState.h"
 #include "Factory.h"
 #pragma endregion Includes
 
@@ -200,7 +199,7 @@ namespace Library
 		/// Virtual update method to be called every frame.
 		/// </summary>
 		/// <param name="worldState">WorldState context for the current processing step.</param>
-		virtual void Update(WorldState& worldState);
+		virtual void Update(struct WorldState& worldState);
 #pragma endregion Game Loop
 
 #pragma region RTTI Overrides
