@@ -2,7 +2,7 @@
 
 #include "ToStringSpecialization.h"
 #include "JsonParseMaster.h"
-#include "JsonScopeParseHelper.h"
+#include "JsonEntityParseHelper.h"
 #include "Entity.h"
 #include "FooEntity.h"
 #include "World.h"
@@ -52,20 +52,16 @@ namespace EntitySystemTests
 		{
 			Entity entity;
 
-			JsonScopeParseHelper::SharedData sharedData;
-			sharedData.SetScope(entity);
+			JsonEntityParseHelper::SharedData sharedData;
+			sharedData.SetEntity(entity);
 
-			JsonScopeParseHelper helper;
+			JsonEntityParseHelper helper;
 			JsonParseMaster parser;
 
 			parser.AddHelper(helper);
 			parser.SetSharedData(sharedData);
 
 			std::string json = R"({
-				"Name": {
-				  "type": "string",
-				  "value": "Entity"
-				},
 				"AuxiliaryInt": {
 				  "type": "integer",
 				  "value": 10
@@ -74,9 +70,7 @@ namespace EntitySystemTests
 
 			parser.Parse(json);
 
-			Assert::AreEqual(4_z, entity.Size());
-
-			Assert::AreEqual("Entity"s, entity.Name());
+			Assert::AreEqual(2_z, entity.Size());
 
 			Assert::IsNotNull(entity.Find("AuxiliaryInt"));
 			Assert::AreEqual(10, entity.Find(("AuxiliaryInt"))->Get<int>());
@@ -86,64 +80,43 @@ namespace EntitySystemTests
 		{
 			Entity sector;
 
-			JsonScopeParseHelper::SharedData sharedData;
-			sharedData.SetScope(sector);
+			JsonEntityParseHelper::SharedData sharedData;
+			sharedData.SetEntity(sector);
 
-			JsonScopeParseHelper helper;
+			JsonEntityParseHelper helper;
 			JsonParseMaster parser;
 
 			parser.AddHelper(helper);
 			parser.SetSharedData(sharedData);
 
 			std::string json = R"({
-				"Name": {
-				  "type": "string",
-				  "value": "Sector"
-				},
-				"Entities": {
+				"Entity1": {
 				  "type": "Entity",
-				  "value": [
-				    {
-				      "type": "Entity",
-				      "value": {
-				        "Name": {
-				          "type": "string",
-				          "value": "Entity1"
-				        },
-				        "AuxiliaryInt": {
-				          "type": "integer",
-				          "value": 10
-				        }
-				      }
-				    },
-				    {
-				      "type": "Entity",
-				      "value": {
-				        "Name": {
-				          "type": "string",
-				          "value": "Entity2"
-				        },
-				        "AuxiliaryInt": {
-				          "type": "integer",
-				          "value": 20
-				        }
-				      }
+				  "value": {
+				    "AuxiliaryInt": {
+				      "type": "integer",
+				      "value": 10
 				    }
-				  ]
+				  }
+				},
+				"Entity2": {
+				  "type": "Entity",
+				  "value": {
+				    "AuxiliaryInt": {
+				      "type": "integer",
+				      "value": 20
+				    }
+				  }
 				}
 			})"s;
 
 			parser.Parse(json);
 
 			Assert::AreEqual(3_z, sector.Size());
-			Assert::AreEqual("Sector"s, sector.Name());
-			Assert::AreEqual(2_z, sector.Children().Size());
+			Assert::AreEqual(2_z, sector.ChildCount());
 
-			Assert::IsNotNull(sector.Find("Entities"));
-			Assert::AreEqual(sector.Children(), *sector.Find("Entities"));
-
-			Entity* entity1 = sector.Children().Get<Scope*>(0)->As<Entity>();
-			Entity* entity2 = sector.Children().Get<Scope*>(1)->As<Entity>();
+			Entity* entity1 = sector.FindChild("Entity1");
+			Entity* entity2 = sector.FindChild("Entity2");
 
 			Assert::IsNotNull(entity1);
 			Assert::IsNotNull(entity2);
@@ -161,31 +134,28 @@ namespace EntitySystemTests
 		{
 			World world;
 
-			JsonScopeParseHelper::SharedData sharedData;
-			sharedData.SetScope(world);
+			JsonEntityParseHelper::SharedData sharedData;
+			sharedData.SetEntity(world);
 
-			JsonScopeParseHelper helper;
+			JsonEntityParseHelper helper;
 			JsonParseMaster parser;
 
 			parser.AddHelper(helper);
 			parser.SetSharedData(sharedData);
 
 			parser.ParseFromFile("Content/World.json");
-			Assert::AreEqual(2_z, world.Children().Size());
+			Assert::AreEqual(2_z, world.ChildCount());
 
 			/* Sector 1 */
 
-			Entity* sector1 = world.Children().Get<Scope*>(0)->As<Entity>();
+			Entity* sector1 = world.FindChild("Sector1");
 			Assert::IsNotNull(sector1);
 
 			Assert::AreEqual("Sector1"s, sector1->Name());
+			Assert::AreEqual(2_z, sector1->ChildCount());
 
-			Assert::IsNotNull(sector1->Find("Entities"));
-			Assert::AreEqual(sector1->Children(), *sector1->Find("Entities"));
-			Assert::AreEqual(2_z, sector1->Children().Size());
-
-			Entity* entity1 = sector1->Children().Get<Scope*>(0)->As<Entity>();
-			Entity* entity2 = sector1->Children().Get<Scope*>(1)->As<Entity>();
+			Entity* entity1 = sector1->FindChild("Entity1");
+			Entity* entity2 = sector1->FindChild("Entity2");
 			
 			Assert::IsNotNull(entity1);
 			Assert::IsNotNull(entity2);
@@ -200,17 +170,14 @@ namespace EntitySystemTests
 
 			/* Sector 2*/
 
-			Entity* sector2 = world.Children().Get<Scope*>(1)->As<Entity>();
+			Entity* sector2 = world.FindChild("Sector2");
 			Assert::IsNotNull(sector2);
 			
-			Assert::AreEqual("Sector2"s, sector2->Name());
-			
-			Assert::IsNotNull(sector2->Find("Entities"));
-			Assert::AreEqual(sector2->Children(), *sector2->Find("Entities"));
-			Assert::AreEqual(2_z, sector2->Children().Size());
+			Assert::AreEqual("Sector2"s, sector2->Name());			
+			Assert::AreEqual(2_z, sector2->ChildCount());
 
-			entity1 = sector2->Children().Get<Scope*>(0)->As<Entity>();
-			entity2 = sector2->Children().Get<Scope*>(1)->As<Entity>();
+			entity1 = sector2->FindChild("Entity1");
+			entity2 = sector2->FindChild("Entity2");
 
 			Assert::IsNotNull(entity1);
 			Assert::IsNotNull(entity2);

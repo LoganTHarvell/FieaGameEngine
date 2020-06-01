@@ -49,13 +49,9 @@ namespace EntitySystemTests
 
 		TEST_METHOD(Constructor)
 		{
-			World world("World");
+			const World world("World");
 			Assert::AreEqual(0_z, world.PendingChildren().Size());
 			Assert::AreEqual("World"s, world.Name());
-			Assert::IsNotNull(world.Find("Name"));
-			Assert::AreEqual("World"s, world.Find("Name")->Get<std::string>());
-			Assert::IsNotNull(world.Find(World::ChildrenKey));
-			Assert::AreEqual(0_z, world.Find(World::ChildrenKey)->Size());
 		}
 
 		TEST_METHOD(Copy)
@@ -126,7 +122,7 @@ namespace EntitySystemTests
 
 		TEST_METHOD(RTTITest)
 		{
-			World a;
+			const World a;
 			World b;
 
 			Assert::IsTrue(a.Is(Attributed::TypeIdClass()));
@@ -150,7 +146,7 @@ namespace EntitySystemTests
 
 		TEST_METHOD(ToString)
 		{
-			World world("World");
+			const World world("World");
 			Assert::AreEqual("World (World)"s, world.ToString());
 		}
 
@@ -171,9 +167,9 @@ namespace EntitySystemTests
 			Assert::AreEqual("Sector2"s, sector2.Name());
 			Assert::AreEqual(world, *sector2.GetParent()->As<World>());
 			
-			Assert::AreEqual(2_z, world.Children().Size());
-			Assert::AreEqual(sector1, *world.Children().Get<Scope*>(0)->As<Entity>());
-			Assert::AreEqual(sector2, *world.Children().Get<Scope*>(1)->As<Entity>());
+			Assert::AreEqual(2_z, world.ChildCount());
+			Assert::AreEqual(sector1, *world.FindChild("Sector1"));
+			Assert::AreEqual(sector2, *world.FindChild("Sector2"));
 
 			const World copy = world;
 
@@ -183,9 +179,9 @@ namespace EntitySystemTests
 			Assert::IsNull(copy.GetWorldState().Entity);
 			Assert::IsNull(copy.GetWorldState().Entity);
 			
-			Assert::AreEqual(2_z, copy.Children().Size());
-			Assert::AreEqual(sector1, *copy.Children().Get<Scope*>(0)->As<Entity>());
-			Assert::AreEqual(sector2, *copy.Children().Get<Scope*>(1)->As<Entity>());
+			Assert::AreEqual(2_z, copy.ChildCount());
+			Assert::AreEqual(sector1, *copy.FindChild("Sector1"));
+			Assert::AreEqual(sector2, *copy.FindChild("Sector2"));
 			Assert::AreEqual(0_z, copy.PendingChildren().Size());
 		}
 

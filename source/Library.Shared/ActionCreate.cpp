@@ -16,8 +16,7 @@ namespace Library
 		static const TypeManager::TypeInfo typeInfo
 		{
 			{
-				{ AttributeKey, Types::String, false, 1, offsetof(ActionCreate, mAttributeKey) },
-				{ NewScopeKey, Types::Scope, true, 1, 0 }
+				{ EntityPrototypeKey, Types::Scope, true, 1, 0 },
 			},
 
 			Entity::TypeIdClass()
@@ -35,16 +34,17 @@ namespace Library
 		return new ActionCreate(*this);
 	}
 
-	void ActionCreate::Update(WorldState& worldState)
+	void ActionCreate::Update(WorldState&)
 	{
-		if (worldState.World && worldState.Entity)
+		Entity* parent = GetParent();
+		
+		if (parent != nullptr)
 		{
-			Data* scope = Find(NewScopeKey);
+			Entity* child = FindChild(EntityPrototypeKey);
 
-			if (scope && scope->Type() == Types::Scope && scope->Size() > 0)
+			if (child != nullptr)
 			{
-				assert(scope->Get<Scope*>()->Is(Entity::TypeIdClass()));
-				worldState.Entity->AddChild(static_cast<Entity&>(*scope->Get<Scope*>()->Clone()));
+				parent->AddChild(static_cast<Entity&>(*child->Clone()));
 			}
 		}
 	}

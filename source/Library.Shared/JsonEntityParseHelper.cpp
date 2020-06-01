@@ -6,7 +6,7 @@
 #include <string>
 
 // Header
-#include "JsonScopeParseHelper.h"
+#include "JsonEntityParseHelper.h"
 
 // First Party
 #include "Utility.h"
@@ -19,73 +19,68 @@ using namespace std::string_literals;
 
 namespace Library
 {
-#pragma region Scope Factory Declaration and Instantiation
-	ConcreteFactory(Scope, Scope)
-	ScopeFactory scopeFactory;
-#pragma endregion Scope Factory Declaration and Instantiation
-
 #pragma region Constants
-	const HashMap<std::string, Scope::Types> JsonScopeParseHelper::TypeStringMap =
+	const HashMap<std::string, Entity::Types> JsonEntityParseHelper::TypeStringMap =
 	{
-		{ "integer", Scope::Types::Integer },
-		{ "float", Scope::Types::Float },
-		{ "vector", Scope::Types::Vector },
-		{ "matrix", Scope::Types::Matrix },
-		{ "string", Scope::Types::String },
-		{ "scope", Scope::Types::Scope },
+		{ "integer", Entity::Types::Integer },
+		{ "float", Entity::Types::Float },
+		{ "vector", Entity::Types::Vector },
+		{ "matrix", Entity::Types::Matrix },
+		{ "string", Entity::Types::String },
+		{ "scope", Entity::Types::Scope },
 	};
 #pragma endregion Constants
 
 #pragma region Shared Data Special Members
-	JsonScopeParseHelper::SharedData::SharedData(Scope& scope)
+	JsonEntityParseHelper::SharedData::SharedData(Entity& scope)
 	{
-		mRootScope = &scope;
+		mRootEntity = &scope;
 	}
 
-	JsonScopeParseHelper::SharedData::~SharedData()
+	JsonEntityParseHelper::SharedData::~SharedData()
 	{
-		if (mOwnsScope)
+		if (mOwnsEntity)
 		{
-			delete mRootScope;
-			mRootScope = nullptr;
-			mOwnsScope = false;
+			delete mRootEntity;
+			mRootEntity = nullptr;
+			mOwnsEntity = false;
 		}
 
 		mStack.Clear();
 	}
 
-	JsonScopeParseHelper::SharedData::SharedData(SharedData&& rhs) noexcept : 
-		mRootScope(rhs.mRootScope), mOwnsScope(rhs.mOwnsScope), mStack(std::move(rhs.mStack)), JsonParseMaster::SharedData(std::move(rhs))
+	JsonEntityParseHelper::SharedData::SharedData(SharedData&& rhs) noexcept : JsonParseMaster::SharedData(std::move(rhs)),
+		mRootEntity(rhs.mRootEntity), mOwnsEntity(rhs.mOwnsEntity), mStack(std::move(rhs.mStack))
 	{
-		rhs.mRootScope = nullptr;
-		rhs.mOwnsScope = false;
+		rhs.mRootEntity = nullptr;
+		rhs.mOwnsEntity = false;
 	}
 
-	JsonScopeParseHelper::SharedData& JsonScopeParseHelper::SharedData::operator=(SharedData&& rhs) noexcept
+	JsonEntityParseHelper::SharedData& JsonEntityParseHelper::SharedData::operator=(SharedData&& rhs) noexcept
 	{
-		mRootScope = rhs.mRootScope;
-		mOwnsScope = rhs.mOwnsScope;
+		mRootEntity = rhs.mRootEntity;
+		mOwnsEntity = rhs.mOwnsEntity;
 		mStack = std::move(rhs.mStack);
 
 		JsonParseMaster::SharedData::operator=(std::move(rhs));
 
-		rhs.mRootScope = nullptr;
-		rhs.mOwnsScope = false;
+		rhs.mRootEntity = nullptr;
+		rhs.mOwnsEntity = false;
 
 		return *this;
 	}
 #pragma endregion Shared Data Special Members
 
 #pragma region Parser Methods
-	void JsonScopeParseHelper::SharedData::Initialize()
+	void JsonEntityParseHelper::SharedData::PreParse()
 	{
-		JsonParseMaster::SharedData::Initialize();
+		JsonParseMaster::SharedData::PreParse();
 		
-		if (mRootScope == nullptr)
+		if (mRootEntity == nullptr)
 		{
-			mRootScope = new Scope();
-			mOwnsScope = true;
-			assert(mRootScope);
+			mRootEntity = new Entity();
+			mOwnsEntity = true;
+			assert(mRootEntity);
 		}
 
 		mStack.Clear();
@@ -93,64 +88,75 @@ namespace Library
 #pragma endregion Parser Methods
 
 #pragma region Shared Data Accessors
-	const Scope& JsonScopeParseHelper::SharedData::GetScope() const
+	const Entity& JsonEntityParseHelper::SharedData::GetEntity() const
 	{
-		return *mRootScope;
+		return *mRootEntity;
 	}
 
-	void JsonScopeParseHelper::SharedData::SetScope(Scope& scope)
+	void JsonEntityParseHelper::SharedData::SetEntity(Entity& scope)
 	{
-		if (mOwnsScope)
+		if (mOwnsEntity)
 		{
-			delete mRootScope;
-			mOwnsScope = false;
+			delete mRootEntity;
+			mOwnsEntity = false;
 		}
 
-		mRootScope = &scope;
+		mRootEntity = &scope;
 	}
 
-	gsl::owner<Scope*> JsonScopeParseHelper::SharedData::TransferScope()
+	gsl::owner<Entity*> JsonEntityParseHelper::SharedData::TransferEntity()
 	{
-		if (!mOwnsScope) return nullptr;
+		if (!mOwnsEntity) return nullptr;
 		
-		gsl::owner<Scope*> disownedScope = mRootScope;
+		const gsl::owner<Entity*> disownedEntity = mRootEntity;
 		
-		mRootScope = nullptr;
-		mOwnsScope = false;
+		mRootEntity = nullptr;
+		mOwnsEntity = false;
 
-		return disownedScope;
+		return disownedEntity;
 	}
 #pragma endregion Shared Data Accessors
 
 #pragma region Handlers
-	bool JsonScopeParseHelper::StartHandler(JsonParseMaster::SharedData& data, const std::string& key, const Json::Value& value)
+	bool JsonEntityParseHelper::StartHandler(JsonParseMaster::SharedData& data, const std::string& key, const Json::Value& value)
 	{
-		SharedData* testHelperData = data.As<SharedData>();
-		if (testHelperData == nullptr) return false;
+		SharedData* helperData = data.As<SharedData>();
+		if (helperData == nullptr) return false;
 
-		std::string formattedKey = String::ToLower(key);
-
-		StackFrame* stackFrame = nullptr;
-		if (!testHelperData->mStack.IsEmpty()) stackFrame = &testHelperData->mStack.Top();
-
+		if (helperData->mStack.IsEmpty())
+		{
+			if (!value.isObject()) return false;
+			const StackFrame stackFrame =
+			{
+				key,
+				Entity::Types::Unknown,
+				"Entity"s,
+				nullptr,
+				*helperData->mRootEntity
+			};
+			
+			helperData->mStack.Push(stackFrame);
+			return true;
+		}
+		
 		bool handled = false;
-
+		StackFrame& stackFrame = helperData->mStack.Top();
+		const std::string formattedKey = String::ToLower(key);
+		
 		if (formattedKey == "type" && value.isString())
 		{
 			const std::string& valueStr = value.asString();
-			auto it = TypeStringMap.Find(valueStr);
+			const auto it = TypeStringMap.Find(valueStr);
 
 			if (it != TypeStringMap.end())
 			{
-				assert(stackFrame);
-
-				stackFrame->Type = it->second;
+				stackFrame.Type = it->second;
 				handled = true;
 			}
-			else if (Factory<Scope>::IsRegistered(valueStr))
+			else if (Factory<Entity>::IsRegistered(valueStr))
 			{
-				stackFrame->ClassName = valueStr;
-				stackFrame->Type = Scope::Types::Scope;
+				stackFrame.ClassName = valueStr;
+				stackFrame.Type = Entity::Types::Scope;
 				handled = true;
 			}
 			else
@@ -160,18 +166,17 @@ namespace Library
 		}
 		else if (formattedKey == "value")
 		{
-			assert(stackFrame);
-
 			if (value.isString() || value.isObject() || value.isInt() || value.isDouble())
 			{
-				stackFrame->Value = &value;
+				stackFrame.Value = &value;
 
 				if (value.isObject())
 				{
-					Scope* newScope = Factory<Scope>::Create(stackFrame->ClassName);
-					assert(newScope != nullptr);
+					Entity* newEntity = Factory<Entity>::Create(stackFrame.ClassName);
+					assert(newEntity != nullptr);
 
-					stackFrame->Context.Adopt(*newScope, stackFrame->Key);
+					newEntity->SetName(stackFrame.Key);
+					stackFrame.Context.AddChild(*newEntity);
 				}
 
 				handled = true;
@@ -194,7 +199,7 @@ namespace Library
 					}
 				}
 
-				stackFrame->Value = &value;				
+				stackFrame.Value = &value;
 				handled = true;
 			}
 			else
@@ -203,47 +208,42 @@ namespace Library
 			}
 		}
 		else if (value.isObject())
-		{
-			Scope* scope;
+		{			
+			Entity::Data& entityData = *stackFrame.Context.Find(stackFrame.Key);
 
-			if (stackFrame)
-			{
-				Scope::Data& scopeData = *stackFrame->Context.Find(stackFrame->Key);
-				scope = &scopeData[scopeData.Size() - 1];
-			}
-			else
-			{
-				scope = testHelperData->mRootScope;
-			}
-
-			testHelperData->mStack.Push({ key, Scope::Types::Unknown, "Scope"s, nullptr, *scope });
+			assert(entityData.Type() == Entity::Types::Scope);
+			assert(entityData[entityData.Size() - 1].Is(Entity::TypeIdClass()));
+			
+			Entity* entity = static_cast<Entity*>(entityData.Get<Scope*>(entityData.Size() - 1));
+			
+			helperData->mStack.Push({ key, Entity::Types::Unknown, "Entity"s, nullptr, *entity });
 			handled = true;
 		}
 
 		return handled;
 	}
 
-	bool JsonScopeParseHelper::EndHandler(JsonParseMaster::SharedData& data, const std::string& key)
+	bool JsonEntityParseHelper::EndHandler(JsonParseMaster::SharedData& data, const std::string& key)
 	{
 		assert(data.Is(SharedData::TypeIdClass()));
 
 		SharedData* testHelperData = data.As<SharedData>();
 		assert(!testHelperData->mStack.IsEmpty());
 
-		std::string formattedKey = String::ToLower(key);
+		const std::string formattedKey = String::ToLower(key);
 		if (formattedKey == "type" || formattedKey == "value") return true;
 
 		const StackFrame& stackFrame = testHelperData->mStack.Top();
 		
 		bool handled = false;
 
-		if (stackFrame.Type != Scope::Types::Unknown)
+		if (stackFrame.Type != Entity::Types::Unknown)
 		{
 			if (stackFrame.Value == nullptr)
 			{
 				auto& scopeData = stackFrame.Context[stackFrame.Key];
 
-				if (scopeData.Type() == Scope::Types::Unknown)
+				if (scopeData.Type() == Entity::Types::Unknown)
 				{
 					scopeData.SetType(stackFrame.Type);
 				}
@@ -258,7 +258,7 @@ namespace Library
 			{
 				auto& scopeData = stackFrame.Context[stackFrame.Key];
 
-				if (scopeData.Type() == Scope::Types::Unknown)
+				if (scopeData.Type() == Entity::Types::Unknown)
 				{
 					scopeData.SetType(stackFrame.Type);
 				}
@@ -276,11 +276,11 @@ namespace Library
 				{
 					const auto& v = stackFrame.Value->get(i, 0);
 
-					if (stackFrame.Type == Scope::Types::Integer)
+					if (stackFrame.Type == Entity::Types::Integer)
 					{
 						scopeData.Set(v.asInt(), i);
 					}
-					else if (stackFrame.Type == Scope::Types::Float)
+					else if (stackFrame.Type == Entity::Types::Float)
 					{
 						scopeData.Set(static_cast<float>(v.asDouble()), i);
 					}
@@ -297,7 +297,7 @@ namespace Library
 			{
 				auto& scopeData = stackFrame.Context[stackFrame.Key];
 
-				if (scopeData.Type() == Scope::Types::Unknown)
+				if (scopeData.Type() == Entity::Types::Unknown)
 				{
 					scopeData.SetType(stackFrame.Type);
 				}
@@ -307,11 +307,11 @@ namespace Library
 					scopeData.Resize(1);
 				}
 
-				if (stackFrame.Type == Scope::Types::Integer)
+				if (stackFrame.Type == Entity::Types::Integer)
 				{
 					scopeData.Set(stackFrame.Value->asInt(), scopeData.Size() - 1);
 				}
-				else if (stackFrame.Type == Scope::Types::Float)
+				else if (stackFrame.Type == Entity::Types::Float)
 				{
 					scopeData.Set(static_cast<float>(stackFrame.Value->asDouble()), scopeData.Size() - 1);
 				}

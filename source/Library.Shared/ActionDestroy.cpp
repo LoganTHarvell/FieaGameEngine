@@ -16,7 +16,6 @@ namespace Library
 		static const TypeManager::TypeInfo typeInfo
 		{
 			{
-				{ AttributeKey, Types::String, false, 1, offsetof(ActionDestroy, mAttributeKey) },
 				{ TargetKey, Types::String, false, 1, offsetof(ActionDestroy, mTargetName) }
 			},
 
@@ -35,25 +34,17 @@ namespace Library
 		return new ActionDestroy(*this);
 	}
 
-	void ActionDestroy::Update(WorldState& worldState)
+	void ActionDestroy::Update(WorldState&)
 	{
-		if (worldState.Entity)
+		Entity* parent = GetParent();
+		
+		if (parent != nullptr)
 		{
-			Data* attribute = worldState.Entity->Find(mAttributeKey);
+			Entity* child = parent->FindChild(mTargetName);
 
-			if (attribute)
+			if (child != nullptr)
 			{
-				for (std::size_t i = 0; i < attribute->Size(); ++i)
-				{
-					Scope& scope = (*attribute)[i];
-					Data* name = scope.Find("Name");
-
-					if (name && *name == mTargetName)
-					{
-						assert(scope.Is(Entity::TypeIdClass()));
-						worldState.Entity->DestroyChild(static_cast<Entity&>(scope));
-					}
-				}
+				parent->DestroyChild(*child);
 			}
 		}
 	}

@@ -64,7 +64,7 @@ namespace UnitTests
 #pragma endregion Shared Data Special Member Functions
 
 		public:
-			virtual void Initialize() override;
+			virtual void PreParse() override;
 
 			std::size_t GetSize(const std::string& key) const;
 

@@ -109,7 +109,7 @@ namespace Library
 	/// <summary>
 	/// ActionListWhileFactory class declaration.
 	/// </summary>
-	ConcreteFactory(ActionListWhile, Scope)
+	ConcreteFactory(ActionListWhile, Entity)
 #pragma endregion Factory
 }
 

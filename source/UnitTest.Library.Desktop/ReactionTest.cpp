@@ -43,7 +43,7 @@ namespace EntitySystemTests::ActionTests
 		int Parameter{ 0 };
 	};
 
-	ConcreteFactory(ActionTestReaction, Scope)
+	ConcreteFactory(ActionTestReaction, Entity)
 
 
 	TEST_CLASS(ReactionTest)
@@ -156,8 +156,6 @@ namespace EntitySystemTests::ActionTests
 
 			ReactionAttributed reactionAttributed("ReactionAttributed");
 			Assert::AreEqual("ReactionAttributed"s, reactionAttributed.Name());
-			Assert::IsNotNull(reactionAttributed.Find("Name"));
-			Assert::AreEqual("ReactionAttributed"s, reactionAttributed.Find("Name")->Get<std::string>());
 
 			auto actionSubtypeKey = reactionAttributed.Find(reactionAttributed.SubtypeKey);
 			Assert::IsNotNull(actionSubtypeKey);
@@ -168,8 +166,6 @@ namespace EntitySystemTests::ActionTests
 
 			ActionEvent actionEvent("ActionEvent");
 			Assert::AreEqual("ActionEvent"s, actionEvent.Name());
-			Assert::IsNotNull(actionEvent.Find("Name"));
-			Assert::AreEqual("ActionEvent"s, actionEvent.Find("Name")->Get<std::string>());
 
 			actionSubtypeKey = actionEvent.Find(actionEvent.SubtypeKey);
 			Assert::IsNotNull(actionSubtypeKey);

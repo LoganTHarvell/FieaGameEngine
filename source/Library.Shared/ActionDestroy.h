@@ -19,11 +19,6 @@ namespace Library
 #pragma region Type Definitions, Constants
 	public:
 		/// <summary>
-		/// Key for the name of the Attribute to destroy the Target.
-		/// </summary>
-		inline static const std::string AttributeKey = "Attribute";
-
-		/// <summary>
 		/// Key for the name of the Target to destroy.
 		/// </summary>
 		inline static const std::string TargetKey = "Target";
@@ -88,8 +83,7 @@ namespace Library
 		/// <summary>
 		/// Virtual update method called by the containing object.
 		/// </summary>
-		/// <param name="worldState">WorldState context for the current processing step.</param>
-		virtual void Update(WorldState & worldState) override;
+		virtual void Update(WorldState&) override;
 #pragma endregion Game Loop
 
 #pragma region RTTI Overrides
@@ -104,11 +98,6 @@ namespace Library
 #pragma region Data Members
 	private:
 		/// <summary>
-		/// Key value of the Action to be destroyed.
-		/// </summary>
-		Key mAttributeKey;
-
-		/// <summary>
 		/// Name for the Attribute of the Attribute to create.
 		/// </summary>
 		std::string mTargetName;
@@ -119,7 +108,7 @@ namespace Library
 	/// <summary>
 	/// ActionDestroyFactory class declaration.
 	/// </summary>
-	ConcreteFactory(ActionDestroy, Scope)
+	ConcreteFactory(ActionDestroy, Entity)
 #pragma endregion Factory
 }
 

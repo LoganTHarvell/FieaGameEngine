@@ -200,7 +200,7 @@ namespace Library
 #pragma region Helper Methods
 	void Attributed::Populate(const TypeManager::TypeInfo* typeInfo)
 	{
-		const auto parentTypeInfo = TypeManager::Instance()->Find(typeInfo->ParentTypeId);
+		const auto* parentTypeInfo = TypeManager::Instance()->Find(typeInfo->ParentTypeId);
 		if (parentTypeInfo) Populate(parentTypeInfo);
 
 		mPairPtrs.Reserve(typeInfo->Signatures.Size() + mPairPtrs.Size());

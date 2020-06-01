@@ -22,11 +22,10 @@ namespace Library
 #pragma region Type Definitions
 	public:
 		/// <summary>
-		/// Type definition for a list of PendingChild data.
+		/// Type definition for Children.
 		/// </summary>
-		struct PendingChild;
-		using PendingChildList = Vector<PendingChild>;
-
+		using Children = Vector<Entity*>;
+		
 		/// <summary>
 		/// Data structure for performing an action on a given Scope at the end of an Update call.
 		/// </summary>
@@ -35,7 +34,7 @@ namespace Library
 			/// <summary>
 			/// Child Scope pending an action.
 			/// </summary>
-			Scope& Child;
+			Entity& Child;
 
 			/// <summary>
 			/// Defines the state delimiting which action is to be performed on the PendingChild.
@@ -50,25 +49,11 @@ namespace Library
 				End
 			} ChildState;
 		};
+		
+		using PendingChildList = Vector<PendingChild>;
 #pragma endregion Type Definitions
 		
 #pragma region Static Members
-	public:
-		/// <summary>
-		/// Key for the Name Attribute in the Entity.
-		/// </summary>
-		inline static const Key NameKey = "Name";
-
-		/// <summary>
-		/// Key for the Attribute of child Entity instances.
-		/// </summary>
-		inline static const Key ChildrenKey = "Children";
-
-		/// <summary>
-		/// Index of the Attribute of child Entity instances.
-		/// </summary>
-		inline static const std::size_t ChildrenIndex = 2;
-
 	public:
 		/// <summary>
 		/// Getter for the class TypeInfo, used for registration with the TypeManager.
@@ -158,24 +143,53 @@ namespace Library
 		/// </summary>
 		/// <param name="entity">Entity to be set as the parent.</param>
 		void SetParent(Entity* entity);
+		
+		/// <summary>
+		/// Gets the number of child Entity objects.
+		/// </summary>
+		/// <returns>Number of child Entity objects.</returns>
+		std::size_t ChildCount() const;
 
 		/// <summary>
-		/// Gets the data handle to the Entity objects contained in this Entity.
+		/// Gets the child Entity with the given name.
 		/// </summary>
-		/// <returns>Reference to the Entity objects.</returns>
-		Data& Children();
+		/// <param name="name">Name of the child Entity to be found.</param>
+		/// <returns>Reference to the Child entity with the given name.</returns>
+		Entity* FindChild(const std::string& name);
 
 		/// <summary>
-		/// Gets the data handle to the Entity objects contained in this Entity.
+		/// Gets the child Entity with the given name.
 		/// </summary>
-		/// <returns>Reference to the Entity objects.</returns>
-		const Data& Children() const;
+		/// <param name="name">Name of the child Entity to be found.</param>
+		/// <returns>Reference to the Child entity with the given name.</returns>
+		const Entity* FindChild(const std::string& name) const;
 
+		/// <summary>
+		/// Performs the given function on each child Entity.
+		/// </summary>
+		/// <param name="functor">Function to be performed on each child Entity.</param>
+		void ForEachChild(const std::function<void(Entity&)>& functor);
+
+		/// <summary>
+		/// Performs the given function on each child Entity.
+		/// </summary>
+		/// <param name="functor">Function to be performed on each child Entity.</param>
+		void ForEachChild(const std::function<void(const Entity&)>& functor) const;
+		
+		/// <summary>
+		/// Gets the list of PendingChild data.
+		/// </summary>
+		/// <returns>Current PendingChild data.</returns>
+		const PendingChildList& PendingChildren() const;
+#pragma endregion Accessors
+
+#pragma region Modifiers
 		/// <summary>
 		/// Adopts a child Entity.
 		/// </summary>
 		/// <param name="child">Child to be adopted.</param>
 		/// <returns>Reference to the newly heap allocated Entity.</returns>
+		/// <exception cref="std::runtime_error">Child already exists with that name.</exception>
 		Entity& AddChild(Entity& child);
 		
 		/// <summary>
@@ -191,13 +205,8 @@ namespace Library
 		/// </summary>
 		/// <param name="child">Child to be removed.</param>
 		void DestroyChild(Entity& child);
+#pragma endregion Modifiers
 
-		/// <summary>
-		/// Gets the list of PendingChild data.
-		/// </summary>
-		/// <returns>Current PendingChild data.</returns>
-		const PendingChildList& PendingChildren() const;
-#pragma endregion Accessors
 
 #pragma region Game Loop
 	public:
@@ -224,9 +233,15 @@ namespace Library
 		/// </summary>
 		void UpdatePendingChildren();
 #pragma endregion Helper Methods
+
+#pragma region Hidden Inherited Methods
+	private:
+		using Attributed::Adopt;
+		using Attributed::Orphan;
+#pragma endregion Hidden Inherited Methods
 		
 #pragma region Data Members
-	private:
+	protected:
 		/// <summary>
 		/// Name of the Entity, reflected as a prescribed Attribute.
 		/// </summary>
@@ -235,12 +250,13 @@ namespace Library
 		/// <summary>
 		/// Collection of Entity objects within the Children prescribed Attribute.
 		/// </summary>
-		Data& mChildren;
+		Vector<Entity*> mChildren;
 
+	private:
 		/// <summary>
 		/// Pending children to have an action performed during the end of an Update call.
 		/// </summary>
-		PendingChildList mPendingChildren{ PendingChildList(PendingChildList::EqualityFunctor()) };
+		PendingChildList mPendingChildren{ PendingChildList::EqualityFunctor() };
 
 		/// <summary>
 		/// Flag representing whether the Entity is currently updating children.
@@ -253,6 +269,6 @@ namespace Library
 	/// <summary>
 	/// EntityFactory class declaration.
 	/// </summary>
-	ConcreteFactory(Entity, Scope)
+	ConcreteFactory(Entity, Entity)
 #pragma endregion Factory
 }

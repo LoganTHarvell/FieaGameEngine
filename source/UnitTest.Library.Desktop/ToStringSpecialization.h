@@ -23,6 +23,7 @@
 #include "World.h"
 #include "GameTime.h"
 #include "EventQueue.h"
+#include "ActionCreate.h"
 
 using namespace UnitTests;
 using namespace Library;
@@ -1621,4 +1622,38 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 		}
 	}
 #pragma endregion EventQueue
+
+#pragma region Actions
+	template<>
+	inline std::wstring ToString<ActionCreate>(const ActionCreate& t)
+	{
+		RETURN_WIDE_STRING(t.Name().c_str());
+	}
+
+	template<>
+	inline std::wstring ToString<ActionCreate>(const ActionCreate* t)
+	{
+		try
+		{
+			RETURN_WIDE_STRING(t->Name().c_str());
+		}
+		catch (const std::exception&)
+		{
+			RETURN_WIDE_STRING(t);
+		}
+	}
+
+	template<>
+	inline std::wstring ToString<ActionCreate>(ActionCreate* t)
+	{
+		try
+		{
+			RETURN_WIDE_STRING(t->Name().c_str());
+		}
+		catch (const std::exception&)
+		{
+			RETURN_WIDE_STRING(t);
+		}
+	}
+#pragma endregion Actions
 }

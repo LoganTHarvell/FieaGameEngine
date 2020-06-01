@@ -11,9 +11,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)JsonParseMaster.cpp">
       <Filter>JSON Parser</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)JsonScopeParseHelper.cpp">
-      <Filter>JSON Parser</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Attributed.cpp">
       <Filter>Reflection</Filter>
     </ClCompile>
@@ -65,6 +62,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)ActionEvent.cpp">
       <Filter>Core\Entity System\Actions\Reaction</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)JsonEntityParseHelper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
@@ -100,9 +98,6 @@
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Stack.h">
       <Filter>Containers\Stack</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)JsonScopeParseHelper.h">
-      <Filter>JSON Parser</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Factory.h">
       <Filter>Utility</Filter>
@@ -170,6 +165,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Reaction.h">
       <Filter>Core\Entity System\Actions\Reaction</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)JsonEntityParseHelper.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)DefaultHash.inl">

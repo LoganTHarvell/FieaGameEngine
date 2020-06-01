@@ -32,5 +32,5 @@ namespace UnitTests
 		bool mIsUpdated{ false };
 	};
 
-	ConcreteFactory(FooEntity, Library::Scope)
+	ConcreteFactory(FooEntity, Library::Entity)
 }

@@ -88,8 +88,7 @@ namespace Library
 		/// <summary>
 		/// Virtual update method called by the containing object.
 		/// </summary>
-		/// <param name="worldState">WorldState context for the current processing step.</param>
-		virtual void Update(WorldState& worldState) override;
+		virtual void Update(WorldState&) override;
 #pragma endregion Game Loop
 
 #pragma region RTTI Overrides
@@ -119,7 +118,7 @@ namespace Library
 	/// <summary>
 	/// ActionIncrementFactory class declaration.
 	/// </summary>
-	ConcreteFactory(ActionIncrement, Scope)
+	ConcreteFactory(ActionIncrement, Entity)
 #pragma endregion Factory
 }
 

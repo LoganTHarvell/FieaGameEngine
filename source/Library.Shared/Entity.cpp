@@ -12,11 +12,7 @@ namespace Library
 	{
 		static const TypeManager::TypeInfo typeInfo
 		{
-			{
-				{ NameKey, Types::String, false, 1, offsetof(Entity, mName) },
-				{ ChildrenKey, Types::Scope, true, 1, 0 }
-			},
-
+			SignatureListType(),
 			Attributed::TypeIdClass()
 		};
 
@@ -24,13 +20,21 @@ namespace Library
 	}
 
 	Entity::Entity(std::string name) : Attributed(TypeIdClass()), 
-		mName(std::move(name)), mChildren(mPairPtrs[ChildrenIndex]->second)
+		mName(std::move(name))
 	{
 	}
 
 	Entity::Entity(const Entity& rhs) : Attributed(rhs),
-		mName(rhs.mName), mChildren(mPairPtrs[ChildrenIndex]->second)
+		mName(rhs.mName)
 	{
+		rhs.ForEachChild([this](const Entity& rhsChild)
+		{
+			assert(Find(rhsChild.mName) && Find(rhsChild.mName)->Size() > 0 
+				&& Find(rhsChild.mName)->Type() == Types::Scope 
+				&& Find(rhsChild.mName)->Get<Scope*>()->Is(Entity::TypeIdClass()));
+			
+			mChildren.EmplaceBack(Find(rhsChild.Name())->Get<Scope*>()->As<Entity>());
+		});
 	}
 
 	Entity& Entity::operator=(const Entity& rhs)
@@ -39,11 +43,22 @@ namespace Library
 
 		mName = rhs.mName;
 		Attributed::operator=(rhs);
+
+		rhs.ForEachChild([this](const Entity& rhsChild)
+		{
+			assert(Find(rhsChild.mName));
+			assert(Find(rhsChild.mName)->Size() > 0);
+			assert(Find(rhsChild.mName)->Type() == Types::Scope);
+			assert(Find(rhsChild.mName)->Get<Scope*>()->Is(Entity::TypeIdClass()));
+
+			mChildren.EmplaceBack(Find(rhsChild.Name())->Get<Scope*>()->As<Entity>());
+		});
+		
 		return *this;
 	}
 
 	Entity::Entity(Entity&& rhs) noexcept : Attributed(std::move(rhs)),
-		mName(std::move(rhs.mName)), mChildren(mPairPtrs[ChildrenIndex]->second)
+		mName(std::move(rhs.mName)), mChildren(std::move(rhs.mChildren))
 	{
 	}
 
@@ -52,12 +67,15 @@ namespace Library
 		if (this == &rhs) return *this;
 
 		mName = std::move(rhs.mName);
+		mChildren = std::move(rhs.mChildren);
+		
 		Attributed::operator=(std::move(rhs));
+		
 		return *this;
 	}
 
 	Entity::Entity(const RTTI::IdType typeId, std::string name) : Attributed(typeId),
-		mName(std::move(name)), mChildren(mPairPtrs[ChildrenIndex]->second)
+		mName(std::move(name))
 	{
 	}
 
@@ -98,14 +116,47 @@ namespace Library
 		}
 	}
 
-	Entity::Data& Entity::Children()
+	std::size_t Entity::ChildCount() const
 	{
-		return mChildren;
+		return mChildren.Size();
 	}
 
-	const Entity::Data& Entity::Children() const
+	Entity* Entity::FindChild(const std::string& name)
 	{
-		return mChildren;
+		Entity* child = nullptr;
+
+		Data* childData = Find(name);
+
+		if (childData && childData->Size() > 0)
+		{
+			assert(childData->Get<Scope*>()->Is(Entity::TypeIdClass()));
+			child = static_cast<Entity*>(childData->Get<Scope*>());
+		}
+
+		return child;
+	}
+
+	const Entity* Entity::FindChild(const std::string& name) const
+	{
+		return const_cast<Entity*>(this)->FindChild(name);
+	}
+
+	void Entity::ForEachChild(const std::function<void(Entity&)>& functor)
+	{
+		for (auto* child : mChildren)
+		{
+			assert(child != nullptr);
+			functor(*child);
+		};
+	}
+
+	void Entity::ForEachChild(const std::function<void(const Entity&)>& functor) const
+	{
+		for (auto* child : mChildren)
+		{
+			assert(child != nullptr);
+			functor(*child);
+		};
 	}
 
 	Entity& Entity::AddChild(Entity& child)
@@ -122,7 +173,8 @@ namespace Library
 		}
 		else
 		{
-			Adopt(child, ChildrenKey);
+			Adopt(child, child.Name());
+			mChildren.EmplaceBack(&child);
 		}
 
 		return child;
@@ -142,25 +194,27 @@ namespace Library
 		}
 		else
 		{
+			mChildren.Remove(&child);
 			delete Orphan(child);
 		}
 	}
 
 	Entity& Entity::CreateChild(const std::string& className, const std::string& name)
 	{
-		Scope* newScope = Factory<Scope>::Create(className);
-		if (!newScope) throw std::runtime_error("Create failed.");
+		Entity* child = Factory<Entity>::Create(className);
 
-		assert(newScope->Is(Entity::TypeIdClass()));
-
-		Entity* newEntity = static_cast<Entity*>(newScope);
-		newEntity->SetName(name);
+		if (child == nullptr)
+		{
+			throw std::runtime_error("Create failed.");
+		}
+		
+		child->SetName(name);
 		
 		if (mUpdatingChildren)
 		{
 			PendingChild pendingChild
 			{
-				*newEntity,
+				*child,
 				PendingChild::State::ToAdd,
 			};
 
@@ -168,10 +222,11 @@ namespace Library
 		}
 		else
 		{
-			Adopt(*newScope, ChildrenKey);
+			Adopt(*child, name);
+			mChildren.EmplaceBack(child);
 		}
 
-		return *newEntity;
+		return *child;
 	}
 
 	const Entity::PendingChildList& Entity::PendingChildren() const
@@ -181,15 +236,19 @@ namespace Library
 	
 	void Entity::Update(WorldState& worldState)
 	{
-		for (std::size_t i = 0; i < mChildren.Size(); ++i)
+		mUpdatingChildren = true;
+		
+		ForEachChild([&worldState](Entity& entity)
 		{
-			assert(mChildren[i].Is(Entity::TypeIdClass()));
-
-			worldState.Entity = static_cast<Entity*>(mChildren.Get<Scope*>(i));
+			worldState.Entity = &entity;
 			worldState.Entity->Update(worldState);
-		}
-
+		});
+		
 		worldState.Entity = nullptr;
+
+		mUpdatingChildren = false;
+
+		UpdatePendingChildren();
 	}
 
 	std::string Entity::ToString() const
@@ -206,11 +265,11 @@ namespace Library
 			switch (pendingChild.ChildState)
 			{
 			case PendingChild::State::ToAdd:
-				Adopt(pendingChild.Child, ChildrenKey);
+				AddChild(pendingChild.Child);
 				break;
 
 			case PendingChild::State::ToRemove:
-				delete Orphan(pendingChild.Child);
+				DestroyChild(pendingChild.Child);
 				break;
 
 			default:

@@ -135,7 +135,7 @@ namespace Library
 	/// <summary>
 	/// ActionExpressionFactory class declaration.
 	/// </summary>
-	ConcreteFactory(ActionExpression, Scope)
+	ConcreteFactory(ActionExpression, Entity)
 #pragma endregion Factory
 }
 

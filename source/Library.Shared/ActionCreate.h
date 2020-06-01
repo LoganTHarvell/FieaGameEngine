@@ -19,14 +19,9 @@ namespace Library
 #pragma region Type Definitions, Constants
 	public:
 		/// <summary>
-		/// Key for the name of the Attribute to append the created Attribute onto.
-		/// </summary>
-		inline static const std::string AttributeKey = "Attribute";
-
-		/// <summary>
 		/// Key for the created Attribute.
 		/// </summary>
-		inline static const std::string NewScopeKey = "Scope";
+		inline static const std::string EntityPrototypeKey = "Entity";
 
 	public:
 		/// <summary>
@@ -88,8 +83,7 @@ namespace Library
 		/// <summary>
 		/// Virtual update method called by the containing object.
 		/// </summary>
-		/// <param name="worldState">WorldState context for the current processing step.</param>
-		virtual void Update(WorldState & worldState) override;
+		virtual void Update(WorldState&) override;
 #pragma endregion Game Loop
 
 #pragma region RTTI Overrides
@@ -100,21 +94,13 @@ namespace Library
 		/// <returns></returns>
 		virtual std::string ToString() const override;
 #pragma endregion RTTI Overrides
-
-#pragma region Data Members
-	private:
-		/// <summary>
-		/// Key value for the Attribute of the Attribute to create.
-		/// </summary>
-		std::string mAttributeKey;
-#pragma endregion Data Members
 	};
 
 #pragma region Factory
 	/// <summary>
 	/// ActionCreateFactory class declaration.
 	/// </summary>
-	ConcreteFactory(ActionCreate, Scope)
+	ConcreteFactory(ActionCreate, Entity)
 #pragma endregion Factory
 }
 

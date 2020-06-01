@@ -72,10 +72,8 @@ namespace EntitySystemTests::ActionTests
 		{
 			ActionListWhile actionListWhile("ActionListWhile");
 			Assert::AreEqual("ActionListWhile"s, actionListWhile.Name());
-			Assert::IsNotNull(actionListWhile.Find("Name"));
-			Assert::AreEqual("ActionListWhile"s, actionListWhile.Find("Name")->Get<std::string>());
 
-			auto condition = actionListWhile.Find(actionListWhile.ConditionKey);
+			const auto condition = actionListWhile.Find(ActionListWhile::ConditionKey);
 			Assert::IsNotNull(condition);
 			Assert::AreEqual(Scope::Types::Integer, condition->Type());
 			Assert::AreEqual(0, condition->Get<int>());
@@ -86,9 +84,9 @@ namespace EntitySystemTests::ActionTests
 			ActionListWhile actionListWhile;
 			Scope* clone = actionListWhile.Clone();
 
-			bool notNull = clone;
-			bool isActionListWhile = notNull ? clone->Is(ActionListWhile::TypeIdClass()) : false;
-			bool equal = *actionListWhile.As<Entity>() == *clone->As<Entity>();
+			const bool notNull = clone;
+			const bool isActionListWhile = notNull ? clone->Is(ActionListWhile::TypeIdClass()) : false;
+			const bool equal = *actionListWhile.As<Entity>() == *clone->As<Entity>();
 
 			delete clone;
 
@@ -105,12 +103,12 @@ namespace EntitySystemTests::ActionTests
 			*decrementCondition->Find(ActionIncrement::OperandKey) = ActionListWhile::ConditionKey;
 			*decrementCondition->Find(ActionIncrement::IncrementStepKey) = -1;
 
-			actionListWhile.Adopt(*decrementCondition, ActionListWhile::ChildrenKey);
+			actionListWhile.AddChild(*decrementCondition);
 
 			ActionIncrement* incrementCounter = new ActionIncrement("IncrementCount");
 			*incrementCounter->Find(ActionIncrement::OperandKey) = "LoopCount"s;
 
-			actionListWhile.Adopt(*incrementCounter, ActionListWhile::ChildrenKey);
+			actionListWhile.AddChild(*incrementCounter);
 
 			WorldState worldState;
 			actionListWhile.Update(worldState);
@@ -121,7 +119,7 @@ namespace EntitySystemTests::ActionTests
 
 		TEST_METHOD(ToString)
 		{
-			ActionListWhile actionListWhile("ListWhile");
+			const ActionListWhile actionListWhile("ListWhile");
 			Assert::AreEqual("ListWhile (ActionListWhile)"s, actionListWhile.ToString());
 		}
 

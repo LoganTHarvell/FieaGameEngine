@@ -50,9 +50,6 @@
     <ClCompile Include="JsonTestParseHelper.cpp">
       <Filter>JSON Parser Test</Filter>
     </ClCompile>
-    <ClCompile Include="JsonScopeParseTest.cpp">
-      <Filter>JSON Parser Test</Filter>
-    </ClCompile>
     <ClCompile Include="UtilityTest.cpp">
       <Filter>Utility Tests</Filter>
     </ClCompile>
@@ -189,24 +186,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Content\ScopeOfPrimitives.json">
-      <Filter>Content</Filter>
-    </None>
-    <None Include="Content\ScopeOfArrays.json">
-      <Filter>Content</Filter>
-    </None>
-    <None Include="Content\ScopeOfScopes.json">
-      <Filter>Content</Filter>
-    </None>
-    <None Include="Content\ScopeOfScopeArray.json">
-      <Filter>Content</Filter>
-    </None>
-    <None Include="Content\AttributedFoo.json">
-      <Filter>Content</Filter>
-    </None>
-    <None Include="Content\ScopeOfAttributedFoo.json">
-      <Filter>Content</Filter>
-    </None>
     <None Include="Content\World.json">
       <Filter>Content</Filter>
     </None>

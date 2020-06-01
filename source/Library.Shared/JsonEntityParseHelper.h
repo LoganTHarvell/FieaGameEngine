@@ -8,49 +8,49 @@
 #include "IJsonParseHelper.h"
 #include "HashMap.h"
 #include "Stack.h"
-#include "Scope.h"
+#include "Entity.h"
 #pragma endregion Includes
 
 namespace Library
 {
 	/// <summary>
-	/// Helper that handles parsing JSON into a Scope.
+	/// Helper that handles parsing JSON into a Entity.
 	/// </summary>
-	class JsonScopeParseHelper final : public IJsonParseHelper
+	class JsonEntityParseHelper final : public IJsonParseHelper
 	{
-		RTTI_DECLARATIONS(JsonScopeParseHelper, IJsonParseHelper)
+		RTTI_DECLARATIONS(JsonEntityParseHelper, IJsonParseHelper)
 
 #pragma region Type Definitions and Constants
+	public:
+		/// <summary>
+		/// Mapping of string values to Entity data types.
+		/// </summary>
+		static const HashMap<std::string, Entity::Types> TypeStringMap;
+
 	private:
 		/// <summary>
 		/// Represents the context of the parser for a given value.
 		/// </summary>
-		struct StackFrame
+		struct StackFrame final
 		{
 			const std::string& Key;
-			Scope::Types Type;
+			Entity::Types Type;
 			std::string ClassName;
 			const Json::Value* Value;
-			Scope& Context;
+			Entity& Context;
 		};
-
-	public:
-		/// <summary>
-		/// Mapping of string values to Scope data types.
-		/// </summary>
-		static const HashMap<std::string, Scope::Types> TypeStringMap;
 #pragma endregion Type Definitions and Constants
 
 #pragma region Shared Data
 	public:
 		/// <summary>
-		/// Represents the SharedData needed to parse a Scope.
+		/// Represents the SharedData needed to parse a Entity.
 		/// </summary>
 		class SharedData final : public JsonParseMaster::SharedData
 		{
 			RTTI_DECLARATIONS(SharedData, JsonParseMaster::SharedData)
 
-			friend JsonScopeParseHelper;
+			friend JsonEntityParseHelper;
 
 #pragma region Shared Data Special Members
 		public:
@@ -60,10 +60,10 @@ namespace Library
 			SharedData() = default;
 
 			/// <summary>
-			/// Specialized constructor for initializing with an external Scope.
+			/// Specialized constructor for initializing with an external Entity.
 			/// </summary>
-			/// <param name="scope">Scope used to initialize the SharedData.</param>
-			SharedData(Scope& scope);
+			/// <param name="scope">Entity used to initialize the SharedData.</param>
+			SharedData(Entity& scope);
 
 			/// <summary>
 			/// Default destructor.
@@ -99,46 +99,46 @@ namespace Library
 		public:
 			/// <summary>
 			/// Called before every parse to initialize SharedData.
-			/// If there is no Scope associated with the SharedData, a base Scope class instance is heap allocated to use.
+			/// If there is no Entity associated with the SharedData, a base Entity class instance is heap allocated to use.
 			/// </summary>
-			virtual void Initialize() override;
+			virtual void PreParse() override;
 #pragma endregion Parser Methods
 
-#pragma region Scope Accessors
+#pragma region Entity Accessors
 		public:
 			/// <summary>
-			/// Gets the Scope associated with the SharedData.
+			/// Gets the Entity associated with the SharedData.
 			/// </summary>
-			/// <returns>Reference to the SharedData Scope.</returns>
-			const Scope& GetScope() const;
+			/// <returns>Reference to the SharedData Entity.</returns>
+			const Entity& GetEntity() const;
 
 			/// <summary>
-			/// Sets the associated Scope with a given external Scope.
+			/// Sets the associated Entity with a given external Entity.
 			/// </summary>
 			/// <param name="scope">External scope to set into the SharedData.</param>
-			void SetScope(Scope& scope);
+			void SetEntity(Entity& scope);
 
 			/// <summary>
-			/// Removes ownership of an owned Scope, returning a pointer that now owns the Scope.
+			/// Removes ownership of an owned Entity, returning a pointer that now owns the Entity.
 			/// </summary>
 			/// <returns>
-			/// Owner pointer to the Scope previously owned by SharedData. 
-			/// If the SharedData did not own its associated Scope, then it returns nullptr.
+			/// Owner pointer to the Entity previously owned by SharedData. 
+			/// If the SharedData did not own its associated Entity, then it returns nullptr.
 			/// </returns>
-			gsl::owner<Scope*> TransferScope();
-#pragma endregion Scope Accessors
+			gsl::owner<Entity*> TransferEntity();
+#pragma endregion Entity Accessors
 
 #pragma region Shared Data Data Members
 		private:
 			/// <summary>
-			/// Scope associated with the SharedData. Filled during parsing.
+			/// Entity associated with the SharedData. Filled during parsing.
 			/// </summary>
-			Scope* mRootScope{ nullptr };
+			Entity* mRootEntity{ nullptr };
 
 			/// <summary>
-			/// Represents if the SharedData owns the associated Scope.
+			/// Represents if the SharedData owns the associated Entity.
 			/// </summary>
-			bool mOwnsScope{ false };
+			bool mOwnsEntity{ false };
 
 			/// <summary>
 			/// Context stack frame used during parsing.
@@ -155,7 +155,7 @@ namespace Library
 		/// Verifies a value can be handled and then sets the SharedData context for a subsequent EndHandler call.
 		/// </summary>
 		/// <returns>True if handled. Otherwise, false.</returns>
-		/// <exception cref="std::runtime_error">"" is not a valid type.</exception>
+		/// <exception cref="std::runtime_error"><string> is not a valid type.</exception>
 		/// <exception cref="std::runtime_error">Invalid value type.</exception>
 		/// <exception cref="std::runtime_error">Invalid array value type.</exception>
 		/// <exception cref="std::runtime_error">Invalid mismatched array value types.</exception>

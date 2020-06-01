@@ -121,7 +121,7 @@ namespace Library
 	/// <summary>
 	/// ActionEventFactory class declaration.
 	/// </summary>
-	ConcreteFactory(ActionEvent, Scope)
+	ConcreteFactory(ActionEvent, Entity)
 #pragma endregion Factory
 }
 

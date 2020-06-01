@@ -47,19 +47,19 @@ namespace EntitySystemTests::ActionTests
 
 		TEST_METHOD(RTTITest)
 		{
-			ActionIncrement incrementA;
+			const ActionIncrement incrementA;
 			ActionIncrement incrementB;
 
 			Assert::IsTrue(incrementA.Is(Entity::TypeIdClass()));
 			Assert::IsTrue(incrementA.Equals(&incrementB));
 
 			Entity* newIncrement = new ActionIncrement();
-			bool isAction = newIncrement->Is(Entity::TypeIdClass());
+			const bool isAction = newIncrement->Is(Entity::TypeIdClass());
 
 			Entity* createdActionIncrement = isAction ? createdActionIncrement = newIncrement->CreateAs<Entity>() : nullptr;
-			bool wasCreated = createdActionIncrement != nullptr;
+			const bool wasCreated = createdActionIncrement != nullptr;
 
-			bool  isActionIncrement = wasCreated ? createdActionIncrement->Is(ActionIncrement::TypeIdClass()) : false;
+			const bool  isActionIncrement = wasCreated ? createdActionIncrement->Is(ActionIncrement::TypeIdClass()) : false;
 
 			delete newIncrement;
 			delete createdActionIncrement;
@@ -71,15 +71,13 @@ namespace EntitySystemTests::ActionTests
 		{
 			ActionIncrement actionIncrement("ActionIncrement");
 			Assert::AreEqual("ActionIncrement"s, actionIncrement.Name());
-			Assert::IsNotNull(actionIncrement.Find("Name"));
-			Assert::AreEqual("ActionIncrement"s, actionIncrement.Find("Name")->Get<std::string>());
 
-			auto operand = actionIncrement.Find(actionIncrement.OperandKey);
+			const auto operand = actionIncrement.Find(actionIncrement.OperandKey);
 			Assert::IsNotNull(operand);
 			Assert::AreEqual(Scope::Types::String, operand->Type());
 			Assert::AreEqual(std::string(), operand->Get<std::string>());
 
-			auto incrementStep = actionIncrement.Find(actionIncrement.IncrementStepKey);
+			const auto incrementStep = actionIncrement.Find(actionIncrement.IncrementStepKey);
 			Assert::IsNotNull(incrementStep);
 			Assert::AreEqual(Scope::Types::Integer, incrementStep->Type());
 			Assert::AreEqual(1, incrementStep->Get<int>());
@@ -90,9 +88,9 @@ namespace EntitySystemTests::ActionTests
 			ActionIncrement actionIncrement;
 			Scope* clone = actionIncrement.Clone();
 
-			bool notNull = clone;
-			bool isActionIncrement = notNull ? clone->Is(ActionIncrement::TypeIdClass()) : false;
-			bool equal = *actionIncrement.As<Entity>() == *clone->As<Entity>();
+			const bool notNull = clone;
+			const bool isActionIncrement = notNull ? clone->Is(ActionIncrement::TypeIdClass()) : false;
+			const bool equal = *actionIncrement.As<Entity>() == *clone->As<Entity>();
 
 			delete clone;
 
@@ -105,17 +103,17 @@ namespace EntitySystemTests::ActionTests
 			int& integer1 = (entity.Append("Integer1") = 0).Get<int>();
 			int& integer2 = (entity.Append("Integer2") = 0).Get<int>();
 
-			Entity& increment = entity.CreateChild("ActionIncrement"s, "Increment1"s);
-			Assert::IsTrue(increment.Is(ActionIncrement::TypeIdClass()));
+			Entity& increment1 = entity.CreateChild("ActionIncrement"s, "Increment1"s);
+			Assert::IsTrue(increment1.Is(ActionIncrement::TypeIdClass()));
 
-			ActionIncrement& castedIncrement = static_cast<ActionIncrement&>(increment);
-			*castedIncrement.Find(castedIncrement.OperandKey) = "Integer1"s;
+			ActionIncrement& castIncrement1 = static_cast<ActionIncrement&>(increment1);
+			*castIncrement1.Find(ActionIncrement::OperandKey) = "Integer1"s;
 
-			increment = entity.CreateChild("ActionIncrement"s, "Increment2"s);
-			Assert::IsTrue(increment.Is(ActionIncrement::TypeIdClass()));
+			Entity& increment2 = entity.CreateChild("ActionIncrement"s, "Increment2"s);
+			Assert::IsTrue(increment2.Is(ActionIncrement::TypeIdClass()));
 
-			castedIncrement = static_cast<ActionIncrement&>(increment);
-			*castedIncrement.Find(castedIncrement.OperandKey) = "Integer2"s;
+			ActionIncrement& castIncrement2 = static_cast<ActionIncrement&>(increment2);
+			*castIncrement2.Find(ActionIncrement::OperandKey) = "Integer2"s;
 
 			WorldState worldState;
 			worldState.Entity = &entity;
@@ -128,21 +126,21 @@ namespace EntitySystemTests::ActionTests
 			Assert::AreEqual(1, integer1);
 			Assert::AreEqual(1, integer2);
 
-			*castedIncrement.Find(castedIncrement.IncrementStepKey) = -1;
+			*castIncrement1.Find(ActionIncrement::IncrementStepKey) = -1;
 			entity.Update(worldState);
 
-			Assert::AreEqual(2, integer1);
-			Assert::AreEqual(0, integer2);
+			Assert::AreEqual(0, integer1);
+			Assert::AreEqual(2, integer2);
 
-			castedIncrement.Update(worldState);
+			castIncrement2.Update(worldState);
 
-			Assert::AreEqual(2, integer1);
-			Assert::AreEqual(-1, integer2);
+			Assert::AreEqual(0, integer1);
+			Assert::AreEqual(3, integer2);
 		}
 
 		TEST_METHOD(ToString)
 		{
-			ActionIncrement actionIncrement("Increment");
+			const ActionIncrement actionIncrement("Increment");
 			Assert::AreEqual("Increment (ActionIncrement)"s, actionIncrement.ToString());
 		}
 

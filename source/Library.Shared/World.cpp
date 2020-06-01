@@ -34,7 +34,7 @@ namespace Library
 	{
 		if (this != &rhs)
 		{
-			Attributed::operator=(rhs);
+			Entity::operator=(rhs);
 
 			mGameClock = rhs.mGameClock;
 			mWorldState.GameTime = rhs.mWorldState.GameTime;
@@ -100,13 +100,11 @@ namespace Library
 			}
 		}
 
-		for (std::size_t i = 0; i < Children().Size(); ++i)
+		ForEachChild([this](Entity& sector)
 		{
-			assert(Children()[i].Is(Entity::TypeIdClass()));
-
-			mWorldState.Sector = static_cast<Entity*>(Children().Get<Scope*>(i));
+			mWorldState.Sector = &sector;
 			mWorldState.Sector->Update(mWorldState);
-		}
+		});
 
 		mWorldState.Sector = nullptr;
 

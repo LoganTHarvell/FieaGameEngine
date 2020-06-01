@@ -74,17 +74,10 @@ namespace EntitySystemTests::ActionTests
 		{
 			ActionCreate actionCreate("ActionCreate");
 			Assert::AreEqual("ActionCreate"s, actionCreate.Name());
-			Assert::IsNotNull(actionCreate.Find("Name"));
-			Assert::AreEqual("ActionCreate"s, actionCreate.Find("Name")->Get<std::string>());
-
-			auto actionAttributeName = actionCreate.Find(actionCreate.AttributeKey);
-			Assert::IsNotNull(actionAttributeName);
-			Assert::AreEqual(Scope::Types::String, actionAttributeName->Type());
-			Assert::AreEqual(std::string(), actionAttributeName->Get<std::string>());
-
-			auto action = actionCreate.Find(actionCreate.NewScopeKey);
-			Assert::IsNotNull(action);
-			Assert::AreEqual(Scope::Types::Scope, action->Type());
+			
+			const auto* prototype = actionCreate.Find(ActionCreate::EntityPrototypeKey);
+			Assert::IsNotNull(prototype);
+			Assert::AreEqual(Scope::Types::Scope, prototype->Type());
 		}
 
 		TEST_METHOD(Clone)
@@ -92,9 +85,9 @@ namespace EntitySystemTests::ActionTests
 			ActionCreate actionCreate;
 			Scope* clone = actionCreate.Clone();
 
-			bool notNull = clone;
-			bool isActionCreate = notNull ? clone->Is(ActionCreate::TypeIdClass()) : false;
-			bool equal = *actionCreate.As<Entity>() == *clone->As<Entity>();
+			const bool notNull = clone;
+			const bool isActionCreate = notNull ? clone->Is(ActionCreate::TypeIdClass()) : false;
+			const bool equal = *actionCreate.As<Entity>() == *clone->As<Entity>();
 
 			delete clone;
 
@@ -104,46 +97,44 @@ namespace EntitySystemTests::ActionTests
 		TEST_METHOD(Update)
 		{
 			World world;
-			Entity& entity = world.CreateChild("Entity", "Sector").CreateChild("Entity", "Entity");
+			Entity& entity = world.CreateChild("Entity", "Root");
 			
 			/* Creates Entity */
 
-			Entity& create = entity.CreateChild("ActionCreate"s, "CreateEntity"s);
-			Assert::IsTrue(create.Is(ActionCreate::TypeIdClass()));
+			Entity* create = &entity.CreateChild("ActionCreate"s, "CreateEntity"s);
+			Assert::IsTrue(create->Is(ActionCreate::TypeIdClass()));
 
 			Entity addedEntity("Added");
-			*create.As<ActionCreate>()->Find(ActionCreate::AttributeKey) = "NewEntity";
-			*create.As<ActionCreate>()->Find(ActionCreate::NewScopeKey) = addedEntity.As<Scope>();
+			*create->As<ActionCreate>()->Find(ActionCreate::EntityPrototypeKey) = addedEntity.As<Scope>();
 
 			world.Update();
 
-			Assert::AreEqual(1_z, entity.Find("NewEntity")->Size());
-			Assert::IsTrue(entity.Find("NewEntity")->Get<Scope*>()->Is(Entity::TypeIdClass()));
-			Assert::AreEqual(*addedEntity.As<Entity>(), *entity.Find("NewEntity")->Get<Scope*>()->As<Entity>());
+			Assert::AreEqual(1_z, entity.FindChild("Added")->Size());
+			Assert::AreEqual(addedEntity, *entity.FindChild("Added"));
 
-			delete entity.Orphan(create);
+			entity.DestroyChild(*create);
+			entity.DestroyChild(*entity.FindChild("Added"));
 
-			/* Creates Entity */
+			/* Creates Action */
 
-			create = entity.CreateChild("ActionCreate"s, "CreateAction"s);
-			Assert::IsTrue(create.Is(ActionCreate::TypeIdClass()));
+			create = &entity.CreateChild("ActionCreate"s, "CreateAction"s);
+			Assert::IsTrue(create->Is(ActionCreate::TypeIdClass()));
 
 			ActionCreate addedAction("Added");
-			*create.As<ActionCreate>()->Find(ActionCreate::AttributeKey) = Entity::ChildrenKey;
-			*create.As<ActionCreate>()->Find(ActionCreate::NewScopeKey) = addedAction.As<Scope>();
+			*create->As<ActionCreate>()->Find(ActionCreate::EntityPrototypeKey) = addedAction.As<Scope>();
 
-			Assert::AreEqual(1_z, entity.Children().Size());
+			Assert::AreEqual(1_z, entity.ChildCount());
 
 			world.Update();
 
-			Assert::AreEqual(2_z, entity.Children().Size());
-			Assert::IsTrue(entity.Children()[1].Is(ActionCreate::TypeIdClass()));
-			Assert::AreEqual(*addedAction.As<Entity>(), *entity.Children()[1].As<Entity>());
+			Assert::AreEqual(2_z, entity.ChildCount());
+			Assert::IsTrue(entity.FindChild("Added")->Is(ActionCreate::TypeIdClass()));
+			Assert::AreEqual(addedAction, *entity.FindChild("Added")->As<ActionCreate>());
 		}
 
 		TEST_METHOD(ToString)
 		{
-			ActionCreate actionCreate("Create");
+			const ActionCreate actionCreate("Create");
 			Assert::AreEqual("Create (ActionCreate)"s, actionCreate.ToString());
 		}
 

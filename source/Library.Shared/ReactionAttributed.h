@@ -125,6 +125,6 @@ namespace Library
 	/// <summary>
 	/// ReactionAttributedFactory class declaration.
 	/// </summary>
-	ConcreteFactory(ReactionAttributed, Scope)
+	ConcreteFactory(ReactionAttributed, Entity)
 #pragma endregion Factory
 }

@@ -48,40 +48,36 @@ namespace EntitySystemTests
 
 		TEST_METHOD(Constructor)
 		{
-			Entity entity("Entity");
+			const Entity entity("Entity");
 			Assert::AreEqual("Entity"s, entity.Name());
-			Assert::IsNotNull(entity.Find("Name"));
-			Assert::AreEqual("Entity"s, entity.Find("Name")->Get<std::string>());
 
 			FooEntity fooEntity("FooEntity");
 			Assert::AreEqual("FooEntity"s, fooEntity.Name());
-			Assert::IsNotNull(fooEntity.Find("Name"));
-			Assert::AreEqual("FooEntity"s, fooEntity.Find("Name")->Get<std::string>());
 			Assert::IsNotNull(fooEntity.Find("Data"));
 			Assert::AreEqual(0, fooEntity.Find("Data")->Get<int>());
 		}
 
 		TEST_METHOD(RTTITest)
 		{
-			Entity a;
+			const Entity a;
 			Entity b;
 
 			Assert::IsTrue(a.Is(Attributed::TypeIdClass()));
 			Assert::IsTrue(a.Equals(&b));
 
-			FooEntity aFoo;
+			const FooEntity aFoo;
 			FooEntity bFoo;
 
 			Assert::IsTrue(aFoo.Is(Entity::TypeIdClass()));
 			Assert::IsTrue(aFoo.Equals(&bFoo));
 
 			Entity* fooEntity = new FooEntity();
-			bool isEntity = fooEntity->Is(Entity::TypeIdClass());
+			const bool isEntity = fooEntity->Is(Entity::TypeIdClass());
 
 			Entity* createdFooEntity = isEntity ? createdFooEntity = fooEntity->CreateAs<Entity>() : nullptr;
-			bool wasCreated = createdFooEntity != nullptr;
+			const bool wasCreated = createdFooEntity != nullptr;
 
-			bool isFooEntity = wasCreated ? createdFooEntity->Is(FooEntity::TypeIdClass()) : false;
+			const bool isFooEntity = wasCreated ? createdFooEntity->Is(FooEntity::TypeIdClass()) : false;
 			
 			delete fooEntity;
 			delete createdFooEntity;
@@ -93,10 +89,10 @@ namespace EntitySystemTests
 
 		TEST_METHOD(ToString)
 		{
-			Entity entity("BaseEntity");
+			const Entity entity("BaseEntity");
 			Assert::AreEqual("BaseEntity (Entity)"s, entity.ToString());
 
-			FooEntity fooEntity("Foo");
+			const FooEntity fooEntity("Foo");
 			Assert::AreEqual("Foo (FooEntity)"s, fooEntity.ToString());
 		}
 
@@ -123,15 +119,15 @@ namespace EntitySystemTests
 			Entity& entity1 = entity.CreateChild("ActionIncrement", "ActionIncrement1");
 			Entity& entity2 = entity.CreateChild("ActionIncrement", "ActionIncrement2");
 
-			Assert::AreEqual(2_z, entity.Children().Size());
-			Assert::AreEqual(&entity1, entity.Children().Get<Scope*>(0)->As<Entity>());
-			Assert::AreEqual(&entity2, entity.Children().Get<Scope*>(1)->As<Entity>());
+			Assert::AreEqual(2_z, entity.ChildCount());
+			Assert::AreEqual(&entity1, entity.FindChild("ActionIncrement1"));
+			Assert::AreEqual(&entity2, entity.FindChild("ActionIncrement2"));
 
 			const Entity copy = entity;
 
-			Assert::AreEqual(2_z, copy.Children().Size());
-			Assert::AreEqual(entity1, *copy.Children().Get<Scope*>(0)->As<Entity>());
-			Assert::AreEqual(entity2, *copy.Children().Get<Scope*>(1)->As<Entity>());
+			Assert::AreEqual(2_z, copy.ChildCount());
+			Assert::AreEqual(entity1, *copy.FindChild("ActionIncrement1"));
+			Assert::AreEqual(entity2, *copy.FindChild("ActionIncrement2"));
 
 			entity.SetParent(nullptr);
 			Assert::IsNull(entity.GetParent());
@@ -160,7 +156,7 @@ namespace EntitySystemTests
 			Scope* entityClone = entityBasePtr->Clone();
 			Assert::IsNotNull(entityClone);
 
-			bool isEntity = entityClone->Is(Entity::TypeIdClass());
+			const bool isEntity = entityClone->Is(Entity::TypeIdClass());
 
 			Entity::Data* aux = entityClone->Find("aux");
 			int copiedAuxValue = aux ? aux->Get<int>() : 0;
@@ -178,7 +174,7 @@ namespace EntitySystemTests
 			Scope* fooEntityClone = fooEntityBasePtr->Clone();
 			Assert::IsNotNull(fooEntityClone);
 
-			bool isFooEntity = fooEntityClone->Is(FooEntity::TypeIdClass());
+			const bool isFooEntity = fooEntityClone->Is(FooEntity::TypeIdClass());
 
 			aux = fooEntityClone->Find("aux");
 			copiedAuxValue = aux ? aux->Get<int>() : 0;

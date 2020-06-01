@@ -29,7 +29,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)GameClock.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)GameTime.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)JsonParseMaster.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)JsonScopeParseHelper.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)JsonEntityParseHelper.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)ReactionAttributed.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)TypeManager.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Utility.cpp" />
@@ -69,7 +69,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)HashMap.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)IJsonParseHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)JsonParseMaster.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)JsonScopeParseHelper.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)JsonEntityParseHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Reaction.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ReactionAttributed.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Stack.h" />
