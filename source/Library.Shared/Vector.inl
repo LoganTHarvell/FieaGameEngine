@@ -1,3 +1,4 @@
+// Header
 #include "Vector.h"	
 
 namespace Library
@@ -525,7 +526,14 @@ namespace Library
 			return false;
 		}
 
-		return std::equal(begin(), end(), rhs.begin());
+		try
+		{
+			return std::equal(begin(), end(), rhs.begin());
+		}
+		catch (...)
+		{
+			return false;
+		}
 	}
 
 	template<typename T>

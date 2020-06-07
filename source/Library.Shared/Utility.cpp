@@ -35,34 +35,6 @@ namespace Library
 		}
 	}
 
-	namespace Math
-	{
-		bool IsPrime(std::size_t value)
-		{
-			if (value <= 1)							return false;
-			if (value <= 3)							return true;
-			if (value % 2 == 0 || value % 3 == 0)	return false;
-	
-			std::size_t divisor = 6;
-			while ((divisor * divisor) - (2 * divisor) + std::size_t(1) <= value)
-			{
-				if (value % (divisor - std::size_t(1)) == 0) return false;
-				if (value % (divisor + std::size_t(1)) == 0) return false;
-	
-				divisor += 6;
-			}
-	
-			return true;
-		}
-	
-		std::size_t FindNextPrime(const std::size_t value)
-		{
-			std::size_t prime = value;
-			while (!IsPrime(++prime));
-			return prime;
-		}
-	}
-
 	namespace Exception
 	{
 		AggregateException::AggregateException(const char* message) : std::exception(message)

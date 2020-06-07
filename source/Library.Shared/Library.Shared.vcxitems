@@ -20,7 +20,11 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)ActionExpression.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)ActionIncrement.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)ActionListWhile.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)AnimationClip.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)AnimatorComponent.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Attributed.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Bone.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)BoneAnimation.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Datum.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Entity.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)EventMessageAttributed.cpp" />
@@ -30,7 +34,16 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)GameTime.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)JsonParseMaster.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)JsonEntityParseHelper.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Keyframe.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)MathUtility.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Mesh.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Model.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ModelImporter.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ModelMaterial.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)ReactionAttributed.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)SceneNode.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Transform.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)StreamHelper.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)TypeManager.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Utility.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)pch.cpp">
@@ -53,7 +66,11 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)ActionExpression.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ActionIncrement.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ActionListWhile.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)AnimationClip.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)AnimatorComponent.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Attributed.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Bone.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)BoneAnimation.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Datum.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)DefaultEquality.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)DefaultHash.h" />
@@ -70,9 +87,18 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)IJsonParseHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)JsonParseMaster.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)JsonEntityParseHelper.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Keyframe.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)MathUtility.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Mesh.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Model.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ModelImporter.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ModelMaterial.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Reaction.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ReactionAttributed.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)SceneNode.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Stack.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)StreamHelper.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Transform.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)TypeManager.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Utility.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)pch.h">
@@ -103,6 +129,7 @@
     <None Include="$(MSBuildThisFileDirectory)Scope.inl" />
     <None Include="$(MSBuildThisFileDirectory)SList.inl" />
     <None Include="$(MSBuildThisFileDirectory)Stack.inl" />
+    <None Include="$(MSBuildThisFileDirectory)Transform.inl" />
     <None Include="$(MSBuildThisFileDirectory)TypeManager.inl" />
     <None Include="$(MSBuildThisFileDirectory)Vector.inl" />
   </ItemGroup>
