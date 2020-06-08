@@ -31,14 +31,6 @@ namespace Library
 		boneAnimationData.BoneIndex = 0U;
 	}
 
-	Bone& BoneAnimation::GetBone()
-	{
-		const auto& bone = mBone.lock();
-		assert(bone != nullptr);
-		
-		return *bone;
-	}
-
 	const Bone& BoneAnimation::GetBone() const
 	{
 		const auto& bone = mBone.lock();
@@ -47,7 +39,7 @@ namespace Library
 		return *bone;
 	}
 	
-	Vector<std::shared_ptr<Keyframe>>& BoneAnimation::Keyframes()
+	const Vector<std::shared_ptr<const Keyframe>>& BoneAnimation::Keyframes() const
 	{
 		return mKeyframes;
 	}
@@ -55,7 +47,7 @@ namespace Library
 	uint32_t BoneAnimation::GetTransform(const float time, Transform& transform) const
 	{
 		const std::uint32_t keyframeIndex = FindKeyframeIndex(time);
-		const std::shared_ptr<Keyframe>& keyframe = mKeyframes[keyframeIndex];
+		const std::shared_ptr<const Keyframe>& keyframe = mKeyframes[keyframeIndex];
 		transform = keyframe->TransformationMatrix();
 
 		return keyframeIndex;
@@ -69,14 +61,14 @@ namespace Library
 			keyframeIndex = gsl::narrow_cast<std::uint32_t>(mKeyframes.Size() - 1);
 		}
 		
-		const std::shared_ptr<Keyframe>& keyframe = mKeyframes[keyframeIndex];
+		const std::shared_ptr<const Keyframe>& keyframe = mKeyframes[keyframeIndex];
 		transform = keyframe->TransformationMatrix();
 	}
 
 	void BoneAnimation::GetInterpolatedTransform(const float time, Transform& transform) const
 	{
-		const std::shared_ptr<Keyframe>& firstKeyframe = mKeyframes.Front();
-		const std::shared_ptr<Keyframe>& lastKeyframe = mKeyframes.Back();
+		const std::shared_ptr<const Keyframe>& firstKeyframe = mKeyframes.Front();
+		const std::shared_ptr<const Keyframe>& lastKeyframe = mKeyframes.Back();
 
 		if (time <= firstKeyframe->Time())
 		{
@@ -92,8 +84,8 @@ namespace Library
 		{
 			// Interpolate the transform between keyframes
 			const uint32_t keyframeIndex = FindKeyframeIndex(time);
-			const std::shared_ptr<Keyframe>& keyframeOne = mKeyframes[keyframeIndex];
-			const std::shared_ptr<Keyframe>& keyframeTwo = mKeyframes[keyframeIndex + 1];
+			const std::shared_ptr<const Keyframe>& keyframeOne = mKeyframes[keyframeIndex];
+			const std::shared_ptr<const Keyframe>& keyframeTwo = mKeyframes[static_cast<std::size_t>(keyframeIndex) + 1];
 
 			const glm::vec3 translationOne = keyframeOne->TranslationVector();
 			const glm::quat rotationQuaternionOne = keyframeOne->RotationQuaternionVector();
@@ -144,13 +136,13 @@ namespace Library
 
 	uint32_t BoneAnimation::FindKeyframeIndex(const float time) const
 	{
-		const std::shared_ptr<Keyframe>& firstKeyframe = mKeyframes.Front();
+		const std::shared_ptr<const Keyframe>& firstKeyframe = mKeyframes.Front();
 		if (time <= firstKeyframe->Time())
 		{
 			return 0;
 		}
 
-		const std::shared_ptr<Keyframe>& lastKeyframe = mKeyframes.Back();
+		const std::shared_ptr<const Keyframe>& lastKeyframe = mKeyframes.Back();
 		if (time >= lastKeyframe->Time())
 		{
 			return gsl::narrow_cast<uint32_t>(mKeyframes.Size() - 1);

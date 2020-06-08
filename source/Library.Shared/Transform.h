@@ -34,6 +34,7 @@ namespace Library
 		Transform(const glm::vec3& translation, const glm::quat& quaternion, const glm::vec3& scaling);
 		
 		explicit Transform(const glm::mat4x4& matrix);
+		explicit Transform(const float* data);
 #pragma endregion Special Members
 
 #pragma region Boolean Operators
@@ -79,21 +80,23 @@ namespace Library
 		const glm::vec4& operator[](const int i) const;
 
 		float Determinant() const;
-		Transform Inverse() const;
 #pragma endregion Accessors
 
 #pragma region Transformations
 	public:
-		Transform& Translate(const glm::vec3& translation);
+		Transform Inverse() const;
+		Transform Transpose() const;
+
+		Transform Translate(const glm::vec3& translation) const;
 		static Transform Translate(const Transform& transform, const glm::vec3& translation);
 		
-		Transform& Rotate(const float angle, const glm::vec3& axis);
+		Transform Rotate(const float angle, const glm::vec3& axis) const;
 		static Transform Rotate(const Transform& transform, const float angle, const glm::vec3& axis);
 
-		Transform& Scale(const glm::vec3& scaling);
+		Transform Scale(const glm::vec3& scaling) const;
 		static Transform Scale(const Transform& transform, const glm::vec3& scaling);
 
-		Transform& Transformation(const glm::vec3& translation, const glm::quat& quaternion, const glm::vec3& scaling);
+		Transform Transformation(const glm::vec3& translation, const glm::quat& quaternion, const glm::vec3& scaling) const;
 		static Transform Transformation(const Transform& transform, const glm::vec3& translation, const glm::quat& quaternion, const glm::vec3& scaling);
 #pragma endregion Transformations
 

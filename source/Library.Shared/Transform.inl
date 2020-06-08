@@ -30,6 +30,10 @@ namespace Library
 	inline Transform::Transform(const glm::mat4x4& matrix) : mMatrix(matrix)
 	{
 	}
+
+	inline Transform::Transform(const float* data) : mMatrix(glm::make_mat4x4(data))
+	{
+	}
 #pragma endregion Special Members
 
 #pragma region Boolean Operators
@@ -184,12 +188,17 @@ namespace Library
 	{
 		return Transform(glm::inverse(mMatrix));
 	}
+
+	inline Transform Transform::Transpose() const
+	{
+		return Transform(glm::transpose(mMatrix));
+	}
 #pragma endregion Accessors
 
 #pragma region Transformations
-	inline Transform& Transform::Translate(const glm::vec3& translation)
+	inline Transform Transform::Translate(const glm::vec3& translation) const
 	{
-		return *this = Transform(glm::translate(mMatrix, translation));
+		return Transform(glm::translate(mMatrix, translation));
 	}
 
 	inline Transform Transform::Translate(const Transform& transform, const glm::vec3& translation)
@@ -197,9 +206,9 @@ namespace Library
 		return Transform(glm::translate(transform.mMatrix, translation));
 	}
 
-	inline Transform& Transform::Rotate(const float angle, const glm::vec3& axis)
+	inline Transform Transform::Rotate(const float angle, const glm::vec3& axis) const
 	{
-		return *this = Transform(glm::rotate(mMatrix, angle, axis));
+		return Transform(glm::rotate(mMatrix, angle, axis));
 	}
 
 	inline Transform Transform::Rotate(const Transform& transform, const float angle, const glm::vec3& axis)
@@ -207,9 +216,9 @@ namespace Library
 		return Transform(glm::rotate(transform.mMatrix, angle, axis));
 	}
 
-	inline Transform& Transform::Scale(const glm::vec3& scaling)
+	inline Transform Transform::Scale(const glm::vec3& scaling) const
 	{
-		return *this = Transform(glm::scale(mMatrix, scaling));
+		return Transform(glm::scale(mMatrix, scaling));
 	}
 
 	inline Transform Transform::Scale(const Transform& transform, const glm::vec3& scaling)
@@ -217,10 +226,9 @@ namespace Library
 		return Transform(glm::scale(transform.mMatrix, scaling));
 	}
 
-	inline Transform& Transform::Transformation(const glm::vec3& translation, const glm::quat& quaternion, const glm::vec3& scaling)
+	inline Transform Transform::Transformation(const glm::vec3& translation, const glm::quat& quaternion, const glm::vec3& scaling) const
 	{
-		mMatrix *= glm::translate(translation) * glm::mat4_cast(quaternion) * glm::scale(scaling);
-		return *this;
+		return Transform(mMatrix * glm::translate(translation) * glm::mat4_cast(quaternion) * glm::scale(scaling));
 	}
 
 	inline Transform Transform::Transformation(const Transform& transform, const glm::vec3& translation, const glm::quat& quaternion, const glm::vec3& scaling)

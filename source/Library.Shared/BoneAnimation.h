@@ -18,7 +18,7 @@ namespace Library
 	struct BoneAnimationData final
 	{
 		std::uint32_t BoneIndex{ 0 };
-		Vector<std::shared_ptr<Keyframe>> Keyframes;
+		Vector<std::shared_ptr<const Keyframe>> Keyframes;
 	};
 
     class BoneAnimation final
@@ -33,9 +33,8 @@ namespace Library
 		BoneAnimation& operator=(BoneAnimation&& rhs) = default;
 		~BoneAnimation() = default;
 
-		Bone& GetBone();
-		const Bone& GetBone() const;
-		Vector<std::shared_ptr<Keyframe>>& Keyframes();
+		const Bone& GetBone() const;    	
+		const Vector<std::shared_ptr<const Keyframe>>& Keyframes() const;
 
 		std::uint32_t GetTransform(const float time, Transform& transform) const;
 		void GetTransformAtKeyframe(std::uint32_t keyframeIndex, Transform& transform) const;
@@ -49,6 +48,6 @@ namespace Library
 
 		Model* mModel;
 		std::weak_ptr<Bone> mBone;
-		Vector<std::shared_ptr<Keyframe>> mKeyframes;
+		Vector<std::shared_ptr<const Keyframe>> mKeyframes;
     };
 }

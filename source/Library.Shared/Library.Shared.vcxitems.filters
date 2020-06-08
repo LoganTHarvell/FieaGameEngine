@@ -59,9 +59,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)ActionEvent.cpp">
       <Filter>Engine\Actions</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)ModelImporter.cpp">
-      <Filter>Assimp</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)JsonEntityParseHelper.cpp">
       <Filter>Support\Serialization\Json</Filter>
     </ClCompile>
@@ -104,6 +101,19 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)ReactionAttributed.cpp">
       <Filter>Core\Reaction</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)MeshImporter.cpp">
+      <Filter>AssetImporter</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)ModelMaterialImporter.cpp">
+      <Filter>AssetImporter</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)AnimationClipImporter.cpp">
+      <Filter>AssetImporter</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)BoneAnimationImporter.cpp">
+      <Filter>AssetImporter</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)AssetImporter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
@@ -203,9 +213,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)ActionEvent.h">
       <Filter>Engine\Actions</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)ModelImporter.h">
-      <Filter>Assimp</Filter>
-    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)JsonEntityParseHelper.h">
       <Filter>Support\Serialization\Json</Filter>
     </ClInclude>
@@ -248,6 +255,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)ReactionAttributed.h">
       <Filter>Core\Reaction</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)AssetImporter.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)DefaultHash.inl">
@@ -321,9 +329,6 @@
     <Filter Include="Core\Math">
       <UniqueIdentifier>{0d407872-4c83-4417-b686-9ef5845bc368}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Assimp">
-      <UniqueIdentifier>{4b323967-9e51-47ef-9b8f-77f6aaafb2d3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Core\Model">
       <UniqueIdentifier>{f2fa0368-37b1-48e4-bfab-4c1a36e4a17a}</UniqueIdentifier>
     </Filter>
@@ -368,6 +373,9 @@
     </Filter>
     <Filter Include="Core\Containers\Stack">
       <UniqueIdentifier>{b76401fc-c5b1-4d3c-aa7b-afcba3c7a565}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AssetImporter">
+      <UniqueIdentifier>{4b323967-9e51-47ef-9b8f-77f6aaafb2d3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

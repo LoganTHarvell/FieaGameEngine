@@ -21,10 +21,12 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)ActionIncrement.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)ActionListWhile.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)AnimationClip.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)AnimationClipImporter.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)AnimatorComponent.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Attributed.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Bone.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)BoneAnimation.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)BoneAnimationImporter.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Datum.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Entity.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)EventMessageAttributed.cpp" />
@@ -37,9 +39,11 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Keyframe.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)MathUtility.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Mesh.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)MeshImporter.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Model.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)ModelImporter.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)AssetImporter.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)ModelMaterial.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ModelMaterialImporter.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)ReactionAttributed.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)SceneNode.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Transform.cpp" />
@@ -91,7 +95,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)MathUtility.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Mesh.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Model.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)ModelImporter.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)AssetImporter.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ModelMaterial.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Reaction.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ReactionAttributed.h" />

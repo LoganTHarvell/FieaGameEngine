@@ -17,7 +17,7 @@ namespace Library
 		Keyframe& operator=(Keyframe&&) = default;
 
     	explicit Keyframe(InputStreamHelper& streamHelper);
-		Keyframe(float time, const glm::vec3& translation, const glm::quat& rotationQuaternion, const glm::vec3& scale);
+		Keyframe(const float time, const glm::vec3& translation, const glm::quat& rotationQuaternion, const glm::vec3& scale);
 
 		float Time() const;
 		const glm::vec3& Translation() const;
