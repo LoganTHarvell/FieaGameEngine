@@ -61,10 +61,10 @@ namespace Library
 		mOwnsEntity = rhs.mOwnsEntity;
 		mStack = std::move(rhs.mStack);
 
-		JsonParseMaster::SharedData::operator=(std::move(rhs));
-
 		rhs.mRootEntity = nullptr;
 		rhs.mOwnsEntity = false;
+
+		JsonParseMaster::SharedData::operator=(std::move(rhs));
 
 		return *this;
 	}
@@ -173,7 +173,7 @@ namespace Library
 
 				handled = true;
 			}
-			else if (value.isArray() && value.size() > 0)
+			else if (value.isArray() && !value.empty())
 			{
 				for (const auto& v1 : value)
 				{

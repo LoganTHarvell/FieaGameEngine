@@ -5,7 +5,8 @@
 // Header
 #include "ReactionAttributed.h"
 
-#include <utility>
+// Standard
+#include <iostream>
 
 // First Party
 #include "EventMessageAttributed.h"
@@ -13,6 +14,8 @@
 #include "Event.h"
 #include "World.h"
 #pragma endregion Includes
+
+using namespace std::string_literals;
 
 namespace Library
 {
@@ -42,7 +45,15 @@ namespace Library
 
 	ReactionAttributed::~ReactionAttributed()
 	{
-		Event<EventMessageAttributed>::Unsubscribe(*this);
+		try
+		{
+			Event<EventMessageAttributed>::Unsubscribe(*this);
+		}
+		catch (...)
+		{
+			std::cerr	<< "ReactionAttributed instance unsubscribe from Event<EventMessageAttributed> on destruction."s
+						<< "It could not be found in the Event's subscriber list."s << std::endl;
+		}
 	}
 
 	ReactionAttributed::ReactionAttributed(const ReactionAttributed& rhs) : Reaction(rhs)
@@ -50,9 +61,17 @@ namespace Library
 		Event<EventMessageAttributed>::Subscribe(*this);
 	}
 
-	ReactionAttributed::ReactionAttributed(ReactionAttributed&& rhs) noexcept : Reaction(rhs)
+	ReactionAttributed::ReactionAttributed(ReactionAttributed&& rhs) noexcept : Reaction(std::move(rhs))
 	{
-		Event<EventMessageAttributed>::Subscribe(*this);
+		try
+		{
+			Event<EventMessageAttributed>::Subscribe(*this);
+		}
+		catch (...)
+		{
+			std::cerr	<< "ReactionAttributed instance subscription to Event<EventMessageAttributed> failed."s
+						<< "It is already found on the Event's subscriber list. (Impossible)"s << std::endl;
+		}
 	}
 #pragma endregion Special Members
 

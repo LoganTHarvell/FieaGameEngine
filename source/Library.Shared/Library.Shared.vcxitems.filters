@@ -3,28 +3,28 @@
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)pch.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Utility.cpp">
-      <Filter>Core\Utility</Filter>
+      <Filter>Support\Utility</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Datum.cpp">
       <Filter>Core\Containers\Datum</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)JsonParseMaster.cpp">
-      <Filter>Core\Serialization\Json</Filter>
+      <Filter>Support\Serialization\Json</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Attributed.cpp">
-      <Filter>Core\Reflection</Filter>
+      <Filter>Support\Reflection</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Scope.cpp">
-      <Filter>Core\Reflection</Filter>
+      <Filter>Support\Reflection</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)TypeManager.cpp">
-      <Filter>Core\Reflection</Filter>
+      <Filter>Support\Reflection</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)GameClock.cpp">
-      <Filter>Core\Utility</Filter>
+      <Filter>Support\Utility</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)GameTime.cpp">
-      <Filter>Core\Utility</Filter>
+      <Filter>Support\Utility</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)ActionIncrement.cpp">
       <Filter>Engine\Actions</Filter>
@@ -53,9 +53,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)World.cpp">
       <Filter>Core\Entity</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)ReactionAttributed.cpp">
-      <Filter>Core\Reaction</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)EventMessageAttributed.cpp">
       <Filter>Core\Reaction</Filter>
     </ClCompile>
@@ -66,10 +63,10 @@
       <Filter>Assimp</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)JsonEntityParseHelper.cpp">
-      <Filter>Core\Serialization\Json</Filter>
+      <Filter>Support\Serialization\Json</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)StreamHelper.cpp">
-      <Filter>Core\Serialization</Filter>
+      <Filter>Support\Serialization</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)SceneNode.cpp">
       <Filter>Core\Model</Filter>
@@ -95,27 +92,32 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)MathUtility.cpp">
       <Filter>Core\Math</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Transform.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Model.cpp">
       <Filter>Engine\Components</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Dev\Students\CH16\Logan.Harvell\Prog2\fieagameengine\source\Library.Shared\AnimatorComponent.cpp">
+    <ClCompile Include="$(MSBuildThisFileDirectory)Transform.cpp">
+      <Filter>Core\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)AnimatorComponent.cpp">
       <Filter>Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)ReactionAttributed.cpp">
+      <Filter>Core\Reaction</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Utility.h">
-      <Filter>Core\Utility</Filter>
+      <Filter>Support\Utility</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)DefaultHash.h">
-      <Filter>Core\Utility</Filter>
+      <Filter>Support\Utility</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)DefaultEquality.h">
-      <Filter>Core\Utility</Filter>
+      <Filter>Support\Utility</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)RTTI.h">
-      <Filter>Core\Utility</Filter>
+      <Filter>Support\Utility</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Datum.h">
       <Filter>Core\Containers\Datum</Filter>
@@ -130,31 +132,31 @@
       <Filter>Core\Containers\Vector</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)IJsonParseHelper.h">
-      <Filter>Core\Serialization\Json</Filter>
+      <Filter>Support\Serialization\Json</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)JsonParseMaster.h">
-      <Filter>Core\Serialization\Json</Filter>
+      <Filter>Support\Serialization\Json</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Stack.h">
       <Filter>Core\Containers\Stack</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Factory.h">
-      <Filter>Core\Utility</Filter>
+      <Filter>Support\Utility</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Attributed.h">
-      <Filter>Core\Reflection</Filter>
+      <Filter>Support\Reflection</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Scope.h">
-      <Filter>Core\Reflection</Filter>
+      <Filter>Support\Reflection</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)TypeManager.h">
-      <Filter>Core\Reflection</Filter>
+      <Filter>Support\Reflection</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)GameClock.h">
-      <Filter>Core\Utility</Filter>
+      <Filter>Support\Utility</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)GameTime.h">
-      <Filter>Core\Utility</Filter>
+      <Filter>Support\Utility</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)ActionIncrement.h">
       <Filter>Engine\Actions</Filter>
@@ -195,9 +197,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)EventMessageAttributed.h">
       <Filter>Core\Reaction</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)ReactionAttributed.h">
-      <Filter>Core\Reaction</Filter>
-    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Reaction.h">
       <Filter>Core\Reaction</Filter>
     </ClInclude>
@@ -208,10 +207,10 @@
       <Filter>Assimp</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)JsonEntityParseHelper.h">
-      <Filter>Core\Serialization\Json</Filter>
+      <Filter>Support\Serialization\Json</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)StreamHelper.h">
-      <Filter>Core\Serialization</Filter>
+      <Filter>Support\Serialization</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)SceneNode.h">
       <Filter>Core\Model</Filter>
@@ -243,16 +242,19 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Model.h">
       <Filter>Engine\Components</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Dev\Students\CH16\Logan.Harvell\Prog2\fieagameengine\source\Library.Shared\AnimatorComponent.h">
+    <ClInclude Include="$(MSBuildThisFileDirectory)AnimatorComponent.h">
       <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)ReactionAttributed.h">
+      <Filter>Core\Reaction</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)DefaultHash.inl">
-      <Filter>Core\Utility</Filter>
+      <Filter>Support\Utility</Filter>
     </None>
     <None Include="$(MSBuildThisFileDirectory)DefaultEquality.inl">
-      <Filter>Core\Utility</Filter>
+      <Filter>Support\Utility</Filter>
     </None>
     <None Include="$(MSBuildThisFileDirectory)Datum.inl">
       <Filter>Core\Containers\Datum</Filter>
@@ -267,19 +269,19 @@
       <Filter>Core\Containers\Vector</Filter>
     </None>
     <None Include="$(MSBuildThisFileDirectory)JsonParseMaster.inl">
-      <Filter>Core\Serialization\Json</Filter>
+      <Filter>Support\Serialization\Json</Filter>
     </None>
     <None Include="$(MSBuildThisFileDirectory)Stack.inl">
       <Filter>Core\Containers\Stack</Filter>
     </None>
     <None Include="$(MSBuildThisFileDirectory)Factory.inl">
-      <Filter>Core\Utility</Filter>
+      <Filter>Support\Utility</Filter>
     </None>
     <None Include="$(MSBuildThisFileDirectory)Scope.inl">
-      <Filter>Core\Reflection</Filter>
+      <Filter>Support\Reflection</Filter>
     </None>
     <None Include="$(MSBuildThisFileDirectory)TypeManager.inl">
-      <Filter>Core\Reflection</Filter>
+      <Filter>Support\Reflection</Filter>
     </None>
     <None Include="$(MSBuildThisFileDirectory)Event.inl">
       <Filter>Core\Events</Filter>
@@ -313,7 +315,40 @@
     <Filter Include="Engine">
       <UniqueIdentifier>{dc70e2e4-9824-4073-beb1-c37f0bb1c5d9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Core\Reflection">
+    <Filter Include="Core\Reaction">
+      <UniqueIdentifier>{268d84ef-a093-4f0b-bb17-f714a1e258eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Math">
+      <UniqueIdentifier>{0d407872-4c83-4417-b686-9ef5845bc368}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assimp">
+      <UniqueIdentifier>{4b323967-9e51-47ef-9b8f-77f6aaafb2d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Model">
+      <UniqueIdentifier>{f2fa0368-37b1-48e4-bfab-4c1a36e4a17a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Texture">
+      <UniqueIdentifier>{f2c6e780-ddc4-4016-8311-d53689dd7aeb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Components">
+      <UniqueIdentifier>{132d3b44-9e36-449b-b915-00d8c688d930}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Actions">
+      <UniqueIdentifier>{ea3462ea-d32e-475a-9e02-f3f12b5435d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Support">
+      <UniqueIdentifier>{8c3d3926-1362-4226-8f3f-71d77c87cda9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Support\Serialization">
+      <UniqueIdentifier>{f6870558-fb10-4312-850c-199c9cd70d25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Support\Serialization\Json">
+      <UniqueIdentifier>{cb52c9b0-32c6-480a-a0f2-20ac7613b4c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Support\Utility">
+      <UniqueIdentifier>{2f6f67e5-19b1-465b-a10a-d413f9a12d48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Support\Reflection">
       <UniqueIdentifier>{239b5842-83b7-4bec-b7c9-2b65e8d64508}</UniqueIdentifier>
     </Filter>
     <Filter Include="Core\Containers">
@@ -333,36 +368,6 @@
     </Filter>
     <Filter Include="Core\Containers\Stack">
       <UniqueIdentifier>{b76401fc-c5b1-4d3c-aa7b-afcba3c7a565}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Core\Reaction">
-      <UniqueIdentifier>{268d84ef-a093-4f0b-bb17-f714a1e258eb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Core\Math">
-      <UniqueIdentifier>{0d407872-4c83-4417-b686-9ef5845bc368}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Core\Serialization">
-      <UniqueIdentifier>{f6870558-fb10-4312-850c-199c9cd70d25}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Core\Serialization\Json">
-      <UniqueIdentifier>{cb52c9b0-32c6-480a-a0f2-20ac7613b4c0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Core\Utility">
-      <UniqueIdentifier>{2f6f67e5-19b1-465b-a10a-d413f9a12d48}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Assimp">
-      <UniqueIdentifier>{4b323967-9e51-47ef-9b8f-77f6aaafb2d3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Core\Model">
-      <UniqueIdentifier>{f2fa0368-37b1-48e4-bfab-4c1a36e4a17a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Core\Texture">
-      <UniqueIdentifier>{f2c6e780-ddc4-4016-8311-d53689dd7aeb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Components">
-      <UniqueIdentifier>{132d3b44-9e36-449b-b915-00d8c688d930}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Actions">
-      <UniqueIdentifier>{ea3462ea-d32e-475a-9e02-f3f12b5435d9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
