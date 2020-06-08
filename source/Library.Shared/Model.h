@@ -7,7 +7,7 @@
 
 namespace Library
 {
-	// Forwarded Classes
+	// Forward Declarations
 	class Mesh;
 	class ModelMaterial;
 	class SceneNode;

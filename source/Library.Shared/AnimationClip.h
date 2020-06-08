@@ -8,7 +8,7 @@
 
 namespace Library
 {
-	// Forwarded Classes
+	// Forward Declarations
 	class Transform;
 	class Model;
 	class Bone;

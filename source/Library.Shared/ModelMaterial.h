@@ -8,7 +8,7 @@
 
 namespace Library
 {
-	// Forwarded Classes
+	// Forward Declarations
 	class Model;
 	class OutputStreamHelper;
 	class InputStreamHelper;

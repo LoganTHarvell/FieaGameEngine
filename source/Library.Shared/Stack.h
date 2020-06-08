@@ -2,9 +2,7 @@
 
 namespace Library
 {
-	/// <summary>
-	/// Forward declaration for Vector class used as the default Container type.
-	/// </summary>
+	// Forward Declarations
 	template<typename T> class Vector;
 
 	/// <summary>

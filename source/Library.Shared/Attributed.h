@@ -2,7 +2,6 @@
 
 #pragma region Includes
 // First Party
-#include "RTTI.h"
 #include "TypeManager.h"
 #include "Scope.h"
 #pragma endregion Includes

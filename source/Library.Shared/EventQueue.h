@@ -13,7 +13,7 @@
 
 namespace Library
 {
-	// Forwarded Classes
+	// Forward Declarations
 	class EventPublisher;
 
 	/// <summary>

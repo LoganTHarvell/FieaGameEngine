@@ -11,7 +11,7 @@
 
 namespace Library
 {
-	// Forwarded Classes
+	// Forward Declarations
 	class IEventSubscriber;
 
 	/// <summary>

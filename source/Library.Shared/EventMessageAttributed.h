@@ -7,7 +7,7 @@
 
 namespace Library
 {
-	// Forwarded Classes
+	// Forward Declarations
 	class World;
 
 	class EventMessageAttributed final : public Attributed

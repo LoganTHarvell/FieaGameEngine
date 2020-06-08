@@ -7,14 +7,12 @@
 // Third Party
 #include <gsl/span>
 #include <glm/glm.hpp>
-
-// First Party
-#include "RTTI.h"
 #pragma endregion Includes
 
 namespace Library
 {
-	// Forwarded Classes
+	// Forward Declarations
+	class RTTI;
 	class Scope;
 	class Attributed;
 
