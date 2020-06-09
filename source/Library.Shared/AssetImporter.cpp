@@ -6,18 +6,22 @@
 #include "AssetImporter.h"
 
 // Third Party
+#pragma warning(disable : 26812)
 #pragma warning(disable : 26451)
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #pragma warning(default : 26451)
+#pragma warning(default : 26812)
 
 // First Party
 #include "Model.h"
-#include "SceneNode.h"
+#include "Bone.h"
 #include "AnimationClip.h"
 #include "Transform.h"
 #pragma endregion Includes
+
+using namespace std::string_literals;
 
 namespace Library
 {
@@ -62,7 +66,8 @@ namespace Library
 
 		if (scene->HasAnimations())
 		{
-			assert(scene->mRootNode != nullptr);
+			if (scene->mRootNode == nullptr) throw std::runtime_error("Attempted to load animations, mesh root node is null."s);
+
 			modelData.RootNode = BuildSkeleton(modelData, *scene->mRootNode, nullptr);
 
 			modelData.Animations.Reserve(scene->mNumAnimations);
