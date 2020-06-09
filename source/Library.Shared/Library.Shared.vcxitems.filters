@@ -113,7 +113,9 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)BoneAnimationImporter.cpp">
       <Filter>AssetImporter</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)AssetImporter.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)AssetImporter.cpp">
+      <Filter>AssetImporter</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
@@ -255,7 +257,9 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)ReactionAttributed.h">
       <Filter>Core\Reaction</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)AssetImporter.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)AssetImporter.h">
+      <Filter>AssetImporter</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)DefaultHash.inl">

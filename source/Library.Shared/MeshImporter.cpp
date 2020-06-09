@@ -6,7 +6,9 @@
 #include "AssetImporter.h"
 
 // Third Party
+#pragma warning(disable : 26451)
 #include <assimp/mesh.h>
+#pragma warning(default : 26451)
 
 // First Party
 #include "Model.h"

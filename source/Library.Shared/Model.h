@@ -66,16 +66,17 @@ namespace Library
 		std::shared_ptr<const SceneNode> RootNode() const;
 
 		ModelData& Data();
+		const ModelData& Data() const;
 #pragma endregion Acessors
 
 #pragma region Asset Management
 	public:
 		void Save(const std::string& filename) const;
-		void Save(std::ofstream & file) const;
+		void Save(std::ofstream& file) const;
 
 	private:
-		void Load(const std::string & filename);
-		void Load(std::ifstream & file);
+		void Load(const std::string& filename);
+		void Load(std::ifstream& file);
 
 		void SaveSkeleton(OutputStreamHelper & streamHelper, const std::shared_ptr<const SceneNode> & sceneNode) const;
 		std::shared_ptr<SceneNode> LoadSkeleton(InputStreamHelper & streamHelper, std::shared_ptr<SceneNode> parentSceneNode);

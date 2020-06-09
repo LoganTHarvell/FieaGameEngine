@@ -42,21 +42,21 @@ namespace Library
 			throw std::runtime_error(importer.GetErrorString());
 		}
 
-		if (scene->HasMeshes())
-		{
-			for (unsigned int i = 0; i < scene->mNumMeshes; i++)
-			{
-				std::shared_ptr<Mesh> mesh = LoadMesh(model, *(scene->mMeshes[i]));
-				modelData.Meshes.EmplaceBack(mesh);
-			}
-		}
-
 		if (scene->HasMaterials())
 		{
 			for (unsigned int i = 0; i < scene->mNumMaterials; i++)
 			{
 				std::shared_ptr<ModelMaterial> modelMaterial = LoadModelMaterial(model, *(scene->mMaterials[i]));
 				modelData.Materials.EmplaceBack(modelMaterial);
+			}
+		}
+
+		if (scene->HasMeshes())
+		{
+			for (unsigned int i = 0; i < scene->mNumMeshes; i++)
+			{
+				std::shared_ptr<Mesh> mesh = LoadMesh(model, *(scene->mMeshes[i]));
+				modelData.Meshes.EmplaceBack(mesh);
 			}
 		}
 

@@ -89,6 +89,11 @@ namespace Library
 		return mData;
 	}
 
+	const ModelData& Model::Data() const
+	{
+		return mData;
+	}
+
 	void Model::Save(const std::string& filename) const
 	{
 		std::ofstream file(filename.c_str(), std::ios::binary);
