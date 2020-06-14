@@ -71,6 +71,19 @@ namespace Library
 		return *this;
 	}
 
+	OutputStreamHelper& OutputStreamHelper::operator<<(const glm::mat4x4& value)
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				*this << value[i][j];
+			}
+		}
+
+		return *this;
+	}
+
 	OutputStreamHelper& OutputStreamHelper::operator<<(const Transform& value)
 	{
 		for (int i = 0; i < 4; i++)
@@ -163,7 +176,7 @@ namespace Library
 		return *this;
 	}
 
-	InputStreamHelper& InputStreamHelper::operator>>(Transform& value)
+	InputStreamHelper& InputStreamHelper::operator>>(glm::mat4x4& value)
 	{
 		for (int i = 0; i < 4; i++)
 		{

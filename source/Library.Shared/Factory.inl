@@ -1,4 +1,6 @@
-// Header File
+#pragma once
+
+// Header
 #include "Factory.h"
 
 namespace Library

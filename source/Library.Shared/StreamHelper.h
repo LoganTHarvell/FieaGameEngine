@@ -7,7 +7,7 @@ namespace Library
 	class OutputStreamHelper final
 	{
 	public:
-		OutputStreamHelper(std::ostream& stream);
+		explicit OutputStreamHelper(std::ostream& stream);
 		~OutputStreamHelper() = default;
 		OutputStreamHelper(const OutputStreamHelper&) = delete;
 		OutputStreamHelper& operator=(const OutputStreamHelper&) = delete;
@@ -23,6 +23,7 @@ namespace Library
 		OutputStreamHelper& operator<<(const std::uint64_t value);
 		OutputStreamHelper& operator<<(const float value);
 		OutputStreamHelper& operator<<(const std::string& value);
+		OutputStreamHelper& operator<<(const glm::mat4x4& value);
 		OutputStreamHelper& operator<<(const Transform& value);
 		OutputStreamHelper& operator<<(const bool value);
 		
@@ -36,7 +37,7 @@ namespace Library
 	class InputStreamHelper final
 	{
 	public:
-		InputStreamHelper(std::istream& stream);
+		explicit InputStreamHelper(std::istream& stream);
 		~InputStreamHelper() = default;
 		InputStreamHelper(const InputStreamHelper&) = delete;
 		InputStreamHelper& operator=(const InputStreamHelper&) = delete;
@@ -52,7 +53,7 @@ namespace Library
 		InputStreamHelper& operator>>(std::uint64_t& value);
 		InputStreamHelper& operator>>(float& value);
 		InputStreamHelper& operator>>(std::string& value);
-		InputStreamHelper& operator>>(Transform& value);
+		InputStreamHelper& operator>>(glm::mat4x4& value);
 		InputStreamHelper& operator>>(bool& value);
 		
 	private:

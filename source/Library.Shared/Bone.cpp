@@ -29,7 +29,7 @@ namespace Library
 		Load(streamHelper);
 	}
 
-	Bone::Bone(const std::string& name, const uint32_t index, const Transform& offsetTransform) :
+	Bone::Bone(const std::string& name, const uint32_t index, const glm::mat4x4& offsetTransform) :
 		SceneNode(name), mIndex(index), mOffsetTransform(offsetTransform)
     {
     }
@@ -44,7 +44,7 @@ namespace Library
 		mIndex = index;
 	}
 
-	const Transform& Bone::OffsetTransform() const
+	const glm::mat4x4& Bone::OffsetTransform() const
 	{
 		return mOffsetTransform;
 	}

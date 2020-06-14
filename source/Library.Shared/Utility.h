@@ -64,6 +64,14 @@ namespace Library
 		/// <param name="str">String to be converted to uppercase.</param>
 		/// <returns>Uppercase copy of the given string.</returns>
 		std::string ToUpper(const std::string& str);
+
+		void ToWideString(const std::string& source, std::wstring& dest);
+		std::wstring ToWideString(const std::string& source);
+		void ToString(const std::wstring& source, std::string& dest);
+		std::string ToString(const std::wstring& source);
+
+		bool EndsWith(const std::string& value, const std::string& ending);
+		bool EndsWith(const std::wstring& value, const std::wstring& ending);
 	}
 
 	namespace Exception
@@ -169,5 +177,36 @@ namespace Library
 			explicit AggregateException(const char* message, Vector<Entry>&& exceptions);
 #pragma endregion Special Members			
 		};
+	}
+
+	namespace File
+	{	
+		void GetName(const std::string& inputPath, std::string& filename);
+		void GetDirectory(const std::string& inputPath, std::string& directory);
+		std::tuple<std::string, std::string> GetNameAndDirectory(const std::string& inputPath);
+		void LoadBinary(const std::string& filename, Vector<char>& data);
+	}
+
+	template <typename T>
+	void UpdateValue(const std::function<bool()>& increasePredicate, const std::function<bool()>& decreasePredicate, T& value, const T& delta, std::function<void(const T&)> updateFunc = nullptr, const T& minValue = std::numeric_limits<T>::min(), const T& maxValue = std::numeric_limits<T>::max())
+	{
+		bool update = false;
+		if (increasePredicate() && value < maxValue)
+		{
+			value += delta;
+			value = std::min(value, maxValue);
+			update = true;
+		}
+		else if (decreasePredicate() && value > minValue)
+		{
+			value -= delta;
+			value = std::max(value, minValue);
+			update = true;
+		}
+
+		if (update && updateFunc != nullptr)
+		{
+			updateFunc(value);
+		}
 	}
 }

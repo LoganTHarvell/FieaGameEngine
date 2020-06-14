@@ -65,18 +65,22 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\build\Shared.props" />
+    <Import Project="..\..\build\CustomBuildStep.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\build\Shared.props" />
+    <Import Project="..\..\build\CustomBuildStep.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\build\Shared.props" />
+    <Import Project="..\..\build\CustomBuildStep.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\build\Shared.props" />
+    <Import Project="..\..\build\CustomBuildStep.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -111,14 +115,8 @@
       <Command>
       </Command>
     </PreBuildEvent>
-    <CustomBuildStep>
-      <Command>mkdir "$(OutDir)Content"
-xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
-    </CustomBuildStep>
-    <CustomBuildStep>
-      <Message>Copy Content Directory</Message>
-      <Outputs>$(OutDir)Content</Outputs>
-    </CustomBuildStep>
+    <CustomBuildStep />
+    <CustomBuildStep />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -140,14 +138,8 @@ xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
       <Command>
       </Command>
     </PreBuildEvent>
-    <CustomBuildStep>
-      <Command>mkdir "$(OutDir)Content"
-xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
-    </CustomBuildStep>
-    <CustomBuildStep>
-      <Message>Copy Content Directory</Message>
-      <Outputs>$(OutDir)Content</Outputs>
-    </CustomBuildStep>
+    <CustomBuildStep />
+    <CustomBuildStep />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -170,14 +162,8 @@ xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
       <Command>
       </Command>
     </PreBuildEvent>
-    <CustomBuildStep>
-      <Command>mkdir "$(OutDir)Content"
-xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
-    </CustomBuildStep>
-    <CustomBuildStep>
-      <Message>Copy Content Directory</Message>
-      <Outputs>$(OutDir)Content</Outputs>
-    </CustomBuildStep>
+    <CustomBuildStep />
+    <CustomBuildStep />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -200,14 +186,8 @@ xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
       <Command>
       </Command>
     </PreBuildEvent>
-    <CustomBuildStep>
-      <Command>mkdir "$(OutDir)Content"
-xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
-    </CustomBuildStep>
-    <CustomBuildStep>
-      <Message>Copy Content Directory</Message>
-      <Outputs>$(OutDir)Content</Outputs>
-    </CustomBuildStep>
+    <CustomBuildStep />
+    <CustomBuildStep />
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ActionCreateTest.cpp" />

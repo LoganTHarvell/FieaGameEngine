@@ -1,3 +1,6 @@
+#pragma once
+
+// Header
 #include "JsonParseMaster.h"
 
 namespace Library

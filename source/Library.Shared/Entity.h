@@ -11,6 +11,9 @@
 
 namespace Library
 {
+	// Forward Declarations
+	struct WorldState;
+
 	/// <summary>
 	/// Represents a base object within the reflection system.
 	/// </summary>
@@ -18,6 +21,12 @@ namespace Library
 	{
 		RTTI_DECLARATIONS(Entity, Attributed)
 
+#pragma region Hidden Inheritance
+	private:
+		using Attributed::Adopt;
+		using Attributed::Orphan;
+#pragma endregion Hidden Inheritance
+		
 #pragma region Type Definitions
 	private:
 		/// <summary>
@@ -98,7 +107,7 @@ namespace Library
 		/// </summary>
 		/// <param name="typeId">Type ID of the derived class.</param>
 		/// <param name="name">Entity name.</param>
-		explicit Entity(const RTTI::IdType typeId, std::string name=std::string());
+		explicit Entity(const IdType typeId, std::string name=std::string());
 #pragma endregion Special Members
 
 #pragma region Virtual Copy Constructor
@@ -135,6 +144,18 @@ namespace Library
 		/// </summary>
 		/// <param name="entity">Entity to be set as the parent.</param>
 		void SetParent(Entity* entity);
+
+		/// <summary>
+		/// Gets whether the Entity is enabled or disabled.
+		/// </summary>
+		/// <returns>True when enabled. Otherwise, false.</returns>
+		bool Enabled() const;
+
+		/// <summary>
+		/// Enables or disables the Entity, determining whether Update is called.
+		/// </summary>
+		/// <param name="enabled">Boolean determining whether to enable or disable the Entity.</param>
+		void SetEnabled(const bool enabled);
 		
 		/// <summary>
 		/// Gets the number of child Entity objects.
@@ -146,16 +167,34 @@ namespace Library
 		/// Gets the child Entity with the given name.
 		/// </summary>
 		/// <param name="name">Name of the child Entity to be found.</param>
-		/// <returns>Reference to the Child entity with the given name.</returns>
-		Entity* FindChild(const std::string& name);
+		/// <returns>Reference to the child Entity with the given name.</returns>
+		template<typename T=Entity>
+		T* FindChild(const std::string& name);
 
 		/// <summary>
 		/// Gets the child Entity with the given name.
 		/// </summary>
 		/// <param name="name">Name of the child Entity to be found.</param>
-		/// <returns>Reference to the Child entity with the given name.</returns>
-		const Entity* FindChild(const std::string& name) const;
+		/// <returns>Reference to the child Entity with the given name.</returns>
+		template<typename T=Entity>
+		const T* FindChild(const std::string& name) const;
 
+		/// <summary>
+		/// Gets the child Entity array with the given name.
+		/// </summary>
+		/// <param name="name">Name of the child Entity array to be found.</param>
+		/// <returns>Span of the child Entity array with the given name.</returns>
+		template<typename T=Entity>
+		gsl::span<T*> FindChildArray(const std::string& name);
+
+		/// <summary>
+		/// Gets the child Entity array associated with the given name.
+		/// </summary>
+		/// <param name="name">Name of the child Entity array to be found.</param>
+		/// <returns>Span of the child Entity array with the given name.</returns>
+		template<typename T=Entity>
+		gsl::span<const T* const> FindChildArray(const std::string& name) const;
+		
 		/// <summary>
 		/// Performs the given function on each child Entity.
 		/// </summary>
@@ -196,10 +235,20 @@ namespace Library
 #pragma region Game Loop
 	public:
 		/// <summary>
+		/// Virtual initialization method meant for use by derived classes.
+		/// </summary>
+		virtual void Initialize(WorldState& worldState);
+		
+		/// <summary>
 		/// Virtual update method to be called every frame.
 		/// </summary>
 		/// <param name="worldState">WorldState context for the current processing step.</param>
-		virtual void Update(struct WorldState& worldState);
+		virtual void Update(WorldState& worldState);
+
+		/// <summary>
+		/// Virtual shutdown method meant for use by derived classes.
+		/// </summary>
+		virtual void Shutdown(WorldState& worldState);
 #pragma endregion Game Loop
 
 #pragma region RTTI Overrides
@@ -218,12 +267,6 @@ namespace Library
 		/// </summary>
 		void UpdatePendingChildren();
 #pragma endregion Helper Methods
-
-#pragma region Hidden Inherited Methods
-	private:
-		using Attributed::Adopt;
-		using Attributed::Orphan;
-#pragma endregion Hidden Inherited Methods
 		
 #pragma region Data Members
 	protected:
@@ -232,6 +275,11 @@ namespace Library
 		/// </summary>
 		std::string mName;
 
+		/// <summary>
+		/// Represents whether the Entity should be updated.
+		/// </summary>
+		bool mEnabled{ true };
+		
 		/// <summary>
 		/// Collection of Entity objects within the Children prescribed Attribute.
 		/// </summary>
@@ -257,3 +305,6 @@ namespace Library
 	ConcreteFactory(Entity, Entity)
 #pragma endregion Factory
 }
+
+// Inline File
+#include "Entity.inl"

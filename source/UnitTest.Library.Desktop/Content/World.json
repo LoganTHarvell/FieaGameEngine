@@ -36,12 +36,26 @@
       },
       "Entity2": {
         "type": "Entity",
-        "value": {
-          "AuxiliaryInt": {
-            "type": "integer",
-            "value": 20
+        "value": [
+          {
+            "type": "Entity",
+            "value": {
+              "AuxiliaryInt": {
+                "type": "integer",
+                "value": 20
+              }
+            }
+          },
+          {
+            "type": "Entity",
+            "value": {
+              "AuxiliaryInt": {
+                "type": "integer",
+                "value": 30
+              }
+            }
           }
-        }
+        ]
       }
     }
   }

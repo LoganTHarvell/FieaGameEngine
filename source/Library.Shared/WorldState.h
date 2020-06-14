@@ -8,6 +8,16 @@ namespace Library
 	struct WorldState final
 	{	
 		/// <summary>
+		/// Handle for the current ContentManager. May be null;
+		/// </summary>
+		class ContentManager* ContentManager{ nullptr };
+
+		/// <summary>
+		/// Handle for the current RenderingManager. May be null;
+		/// </summary>
+		class RenderingManager* RenderingManager{ nullptr };
+
+		/// <summary>
 		/// Handle to the current GameTime. May be null.
 		/// </summary>
 		class GameTime* GameTime{ nullptr };
@@ -16,7 +26,7 @@ namespace Library
 		/// Handle to the current EventQueue. May be null.
 		/// </summary>
 		class EventQueue* EventQueue{ nullptr };
-
+		
 		/// <summary>
 		/// Handle to the current World. May be null.
 		/// </summary>
@@ -37,7 +47,17 @@ namespace Library
 	/// Handle for data that makes up the current state of a World during processing.
 	/// </summary>
 	struct ConstWorldState final
-	{	
+	{
+		/// <summary>
+		/// Handle for the current ContentManager. May be null;
+		/// </summary>
+		class ContentManager* ContentManager{ nullptr };
+
+		/// <summary>
+		/// Handle for the current RenderingManager. May be null;
+		/// </summary>
+		class RenderingManager* RenderingManager{ nullptr };
+		
 		/// <summary>
 		/// Handle to the current GameTime. May be null.
 		/// </summary>
@@ -47,7 +67,7 @@ namespace Library
 		/// Handle to the current EventQueue. May be null.
 		/// </summary>
 		const class EventQueue* EventQueue{ nullptr };
-
+		
 		/// <summary>
 		/// Handle to the current World. May be null.
 		/// </summary>

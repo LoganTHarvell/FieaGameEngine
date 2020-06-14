@@ -85,15 +85,45 @@ namespace Library
 #pragma region Game Loop
 	public:
 		/// <summary>
-		/// Virtual update method to be called every frame.
+		/// Runs the game loop of the World until Stop is called.
+		/// </summary>
+		void Run();
+
+		/// <summary>
+		/// Stops the game loop.
+		/// </summary>
+		void Stop();
+	
+		/// <summary>
+		/// World initialize method to be called before running, hides inherited Entity Initialize.
+		/// </summary>
+		void Initialize();
+	
+		/// <summary>
+		/// World update method to be called every frame, hides inherited Entity Update.
 		/// </summary>
 		void Update();
+	
+		/// <summary>
+		/// World shutdown method to be called after running, hides inherited Entity Shutdown.
+		/// </summary>
+		void Shutdown();
 
 	private:
 		/// <summary>
 		/// Hides unused Entity Update method.
 		/// </summary>
+		using Entity::Initialize;
+		
+		/// <summary>
+		/// Hides unused Entity Update method.
+		/// </summary>
 		using Entity::Update;
+
+		/// <summary>
+		/// Hides unused Entity Update method.
+		/// </summary>
+		using Entity::Shutdown;
 #pragma endregion Game Loop
 
 #pragma region RTTI Overrides
@@ -116,6 +146,11 @@ namespace Library
 		/// Convenience struct for passing the WorldState data in cascaded Update calls.
 		/// </summary>
 		struct WorldState mWorldState;
+
+		/// <summary>
+		/// Represents whether the game loop is running.
+		/// </summary>
+		bool IsRunning{ false };
 #pragma endregion Data Members
 	};
 }

@@ -1,37 +1,18 @@
+#pragma once
+
 // Header
 #include "Transform.h"
 
 namespace Library
 {
 #pragma region Special Members
-	inline Transform::Transform(const float value) :
-		mMatrix(value)
-	{
-	}
-
-	inline Transform::Transform(float const& x0, float const& y0, float const& z0, float const& w0,
-	                            float const& x1, float const& y1, float const& z1, float const& w1,
-	                            float const& x2, float const& y2, float const& z2, float const& w2,
-	                            float const& x3, float const& y3, float const& z3, float const& w3) :
-		mMatrix(x0, y0, z0, w0, x1, y1, z1, w1, x2, y2, z2, w2, x3, y3, z3, w3)
-	{
-	}
-
-	inline Transform::Transform(const glm::vec4& v1, const glm::vec4& v2, const glm::vec4& v3, const glm::vec4& v4) :
-		mMatrix(v1, v2, v3, v4)
-	{
-	}
-
 	inline Transform::Transform(const glm::vec3& translation, const glm::quat& quaternion, const glm::vec3& scaling) :
-		mMatrix(glm::translate(translation) * glm::mat4_cast(quaternion) * glm::scale(scaling))
+		mTranslation(translation), mRotation(glm::eulerAngles(quaternion)), mScale(scaling)
 	{
 	}
 
-	inline Transform::Transform(const glm::mat4x4& matrix) : mMatrix(matrix)
-	{
-	}
-
-	inline Transform::Transform(const float* data) : mMatrix(glm::make_mat4x4(data))
+	inline Transform::Transform(const glm::vec3& translation, const glm::vec3& rotation, const glm::vec3& scaling) :
+		mTranslation(translation), mRotation(rotation), mScale(scaling)
 	{
 	}
 #pragma endregion Special Members
@@ -39,7 +20,7 @@ namespace Library
 #pragma region Boolean Operators
 	inline bool Transform::operator==(const Transform& rhs) const noexcept
 	{
-		return mMatrix == rhs.mMatrix;
+		return Matrix() == rhs.Matrix();
 	}
 
 	inline bool Transform::operator!=(const Transform& rhs) const noexcept
@@ -51,189 +32,217 @@ namespace Library
 #pragma region Arithmetic Operators
 	inline Transform Transform::operator+(const Transform& rhs) const
 	{
-		return Transform(mMatrix + rhs.mMatrix);
-	}
-
-	inline Transform Transform::operator+(const float rhs) const
-	{
-		return Transform(mMatrix + rhs);
-	}
-
-	inline Transform operator+(const float lhs, const Transform& rhs)
-	{
-		return Transform(lhs + rhs.mMatrix);
+		return Transform(mTranslation + rhs.mTranslation, mRotation + rhs.mRotation, mScale + rhs.mScale);
 	}
 
 	inline Transform& Transform::operator+=(const Transform& rhs)
 	{
-		this->mMatrix += rhs.mMatrix;
-		return *this;
-	}
-
-	inline Transform& Transform::operator+=(const float rhs)
-	{
-		this->mMatrix += rhs;
-		return *this;
+		mUpdateMatrix = true;
+		return *this = Transform(*this) + rhs;
 	}
 	
 	inline Transform Transform::operator-(const Transform& rhs) const
 	{
-		return Transform(mMatrix - rhs.mMatrix);
-	}
-
-	inline Transform Transform::operator-(const float rhs) const
-	{
-		return Transform(mMatrix - rhs);
-	}
-
-	inline Transform operator-(const float lhs, const Transform& rhs)
-	{
-		return Transform(lhs - rhs.mMatrix);
+		return Transform(mTranslation - rhs.mTranslation, mRotation - rhs.mRotation, mScale - rhs.mScale);
 	}
 
 	inline Transform& Transform::operator-=(const Transform& rhs)
 	{
-		this->mMatrix -= rhs.mMatrix;
-		return *this;
-	}
-
-	inline Transform& Transform::operator-=(const float rhs)
-	{
-		this->mMatrix -= rhs;
-		return *this;
+		mUpdateMatrix = true;
+		return *this = Transform(*this) + rhs;
 	}
 	
 	inline Transform Transform::operator*(const Transform& rhs) const
 	{
-		return Transform(mMatrix * rhs.mMatrix);
-	}
+		// RotationResult rhs.Rotation * lhs.Rotation
+		const glm::quat rotation = mRotation * rhs.mRotation;
 
-	inline Transform Transform::operator*(const float rhs) const
-	{
-		return Transform(mMatrix * rhs);
-	}
+		// TranslateResult = rhs.Rotate(rhs.Scale * lhs.Translation) + rhs.Translate
+		const glm::vec4 scaledTranslation = { mTranslation * rhs.mScale, 0 };
+		const glm::vec4 rotatedTranslate = glm::rotate(rhs.mRotation, scaledTranslation);
+		const glm::vec3 translation = glm::vec3(rotatedTranslate) + rhs.mTranslation;
 
-	inline glm::vec4 Transform::operator*(const glm::vec4& rhs) const
-	{
-		return mMatrix * rhs;
-	}
-
-	inline glm::vec4 operator*(const glm::vec4& lhs, const Transform& rhs)
-	{
-		return lhs * rhs.mMatrix;
+		// ScaleResult = rhs.Scale * lhs.Scale
+		const glm::vec3 scale = mScale * rhs.mScale;
+		
+		return Transform(translation, rotation, scale);
 	}
 
 	inline Transform& Transform::operator*=(const Transform& rhs)
 	{
-		this->mMatrix *= rhs.mMatrix;
-		return *this;
+		mUpdateMatrix = true;
+		return *this = Transform(*this) * rhs;
+	}
+
+	inline Transform Transform::operator*(const float rhs) const
+	{
+		return Transform(mTranslation * rhs, mRotation * rhs, mScale * rhs);
 	}
 
 	inline Transform& Transform::operator*=(const float rhs)
 	{
-		this->mMatrix *= rhs;
-		return *this;
+		mUpdateMatrix = true;
+		return *this = Transform(*this) * rhs;
 	}
-	
-	inline Transform Transform::operator/(const Transform& rhs) const
+
+	inline glm::vec4 Transform::operator*(const glm::vec4& rhs) const
 	{
-		return Transform(mMatrix / rhs.mMatrix);
+		return Matrix() * rhs;
+	}
+
+	inline glm::vec4 operator*(const glm::vec4& lhs, const Transform& rhs)
+	{
+		return lhs * rhs.Matrix();
 	}
 
 	inline Transform Transform::operator/(const float rhs) const
 	{
-		return Transform(mMatrix / rhs);
-	}
-
-	inline glm::vec4 Transform::operator/(const glm::vec4& rhs) const
-	{
-		return mMatrix / rhs;
-	}
-
-	inline glm::vec4 operator/(const glm::vec4& lhs, const Transform& rhs)
-	{
-		return lhs / rhs.mMatrix;
-	}
-
-	inline Transform& Transform::operator/=(const Transform& rhs)
-	{
-		this->mMatrix /= rhs.mMatrix;
-		return *this;
+		return Transform(mTranslation / rhs, mRotation / rhs, mScale / rhs);
 	}
 
 	inline Transform& Transform::operator/=(const float rhs)
 	{
-		this->mMatrix /= rhs;
-		return *this;
+		mUpdateMatrix = true;
+		return *this = Transform(*this) / rhs;
+	}
+
+	inline glm::vec4 Transform::operator/(const glm::vec4& rhs) const
+	{
+		return Matrix() / rhs;
+	}
+
+	inline glm::vec4 operator/(const glm::vec4& lhs, const Transform& rhs)
+	{
+		return lhs / rhs.Matrix();
 	}
 #pragma endregion Arithmetic Operators
 
 #pragma region Accessors
-	inline glm::vec4& Transform::operator[](const int i)
-	{
-		return mMatrix[i];
-	}
-	
 	inline const glm::vec4& Transform::operator[](const int i) const
 	{
-		return mMatrix[i];
+		return Matrix()[i];
 	}
 
 	inline float Transform::Determinant() const
 	{
-		return glm::determinant(mMatrix);
+		return glm::determinant(Matrix());
 	}
 
-	inline Transform Transform::Inverse() const
+	inline glm::vec3& Transform::Translation()
 	{
-		return Transform(glm::inverse(mMatrix));
+		return mTranslation;
 	}
 
-	inline Transform Transform::Transpose() const
+	inline const glm::vec3& Transform::Translation() const
 	{
-		return Transform(glm::transpose(mMatrix));
+		return mTranslation;
+	}
+
+	inline glm::quat& Transform::Rotation()
+	{
+		return mRotation;
+	}
+
+	inline const glm::quat& Transform::Rotation() const
+	{
+		return mRotation;
+	}
+
+	inline glm::vec3 Transform::EulerRotation() const
+	{
+		return glm::eulerAngles(mRotation);
+	}
+
+	inline glm::vec3& Transform::Scale()
+	{
+		return mScale;
+	}
+
+	inline const glm::vec3& Transform::Scale() const
+	{
+		return mScale;
+	}
+
+	inline const glm::mat4x4& Transform::Matrix() const
+	{
+		if (mUpdateMatrix)
+		{
+			mMatrix = glm::mat4x4(glm::translate(mTranslation) * glm::mat4_cast(mRotation) * glm::scale(mScale));
+			mUpdateMatrix = false;
+		}
+
+		return mMatrix;
 	}
 #pragma endregion Accessors
 
 #pragma region Transformations
-	inline Transform Transform::Translate(const glm::vec3& translation) const
+	inline glm::mat4x4 Transform::Inverse() const
 	{
-		return Transform(glm::translate(mMatrix, translation));
+		return glm::inverse(Matrix());
 	}
 
-	inline Transform Transform::Translate(const Transform& transform, const glm::vec3& translation)
+	inline glm::mat4x4 Transform::Transpose() const
 	{
-		return Transform(glm::translate(transform.mMatrix, translation));
+		return glm::transpose(Matrix());
 	}
 
-	inline Transform Transform::Rotate(const float angle, const glm::vec3& axis) const
+	inline Transform& Transform::Translate(const glm::vec3& translation)
 	{
-		return Transform(glm::rotate(mMatrix, angle, axis));
+		mTranslation += translation;
+		mUpdateMatrix = true;
+		return *this;
 	}
 
-	inline Transform Transform::Rotate(const Transform& transform, const float angle, const glm::vec3& axis)
+	inline Transform Transform::Translate(Transform transform, const glm::vec3& translation)
 	{
-		return Transform(glm::rotate(transform.mMatrix, angle, axis));
+		return transform.Translate(translation);
 	}
 
-	inline Transform Transform::Scale(const glm::vec3& scaling) const
+	inline Transform& Transform::Rotate(const float angle, const glm::vec3& axis)
 	{
-		return Transform(glm::scale(mMatrix, scaling));
+		mRotation = mRotation * glm::angleAxis(angle, axis);
+		mUpdateMatrix = true;
+		return *this;
 	}
 
-	inline Transform Transform::Scale(const Transform& transform, const glm::vec3& scaling)
+	inline Transform Transform::Rotate(Transform transform, const float angle, const glm::vec3& axis)
 	{
-		return Transform(glm::scale(transform.mMatrix, scaling));
+		return transform.Rotate(angle, axis);
 	}
 
-	inline Transform Transform::Transformation(const glm::vec3& translation, const glm::quat& quaternion, const glm::vec3& scaling) const
+	inline Transform& Transform::Rotate(const glm::quat& quaternion)
 	{
-		return Transform(mMatrix * glm::translate(translation) * glm::mat4_cast(quaternion) * glm::scale(scaling));
+		mRotation = mRotation * quaternion;
+		mUpdateMatrix = true;
+		return *this;
 	}
 
-	inline Transform Transform::Transformation(const Transform& transform, const glm::vec3& translation, const glm::quat& quaternion, const glm::vec3& scaling)
+	inline Transform Transform::Rotate(Transform transform, const glm::quat& quaternion)
 	{
-		return Transform(transform.mMatrix * glm::translate(translation) * glm::mat4_cast(quaternion) * glm::scale(scaling));
+		return transform.Rotate(quaternion);
+	}
+	
+	inline Transform& Transform::Scale(const glm::vec3& scaling)
+	{
+		mScale += scaling;
+		mUpdateMatrix = true;
+		return *this;
+	}
+
+	inline Transform Transform::Scale(Transform transform, const glm::vec3& scaling)
+	{
+		return transform.Scale(scaling);
+	}
+
+	inline Transform& Transform::Transformation(const glm::vec3& translation, const glm::quat& quaternion, const glm::vec3& scaling)
+	{
+		mUpdateMatrix = true;
+		return *this *= Transform(translation, quaternion, scaling);
+	}
+
+	inline Transform Transform::Transformation(Transform transform, const glm::vec3& translation, const glm::quat& quaternion, const glm::vec3& scaling)
+	{
+		return transform.Transformation(translation, quaternion, scaling);
 	}
 #pragma endregion Transformations
 }

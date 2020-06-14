@@ -12,11 +12,11 @@
 namespace Library
 {
 	SceneNode::SceneNode(std::string name) :
-		SceneNode(std::move(name), Transform::Identity)
+		SceneNode(std::move(name), glm::identity<glm::mat4x4>())
 	{
 	}
 
-	SceneNode::SceneNode(std::string name, const Transform& transform) :
+	SceneNode::SceneNode(std::string name, const glm::mat4x4& transform) :
 		mName(std::move(name)), mTransform(transform)
     {
     }
@@ -41,7 +41,7 @@ namespace Library
 		return mChildren;
 	}
 
-	const Transform& SceneNode::GetTransform() const
+	const glm::mat4x4& SceneNode::GetTransform() const
 	{
 		return mTransform;
 	}
@@ -51,7 +51,7 @@ namespace Library
 		mParent = std::move(parent);
 	}
 
-	void SceneNode::SetTransform(const Transform& transform)
+	void SceneNode::SetTransform(const glm::mat4x4& transform)
 	{
 		mTransform = transform;
 	}

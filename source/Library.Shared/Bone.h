@@ -56,7 +56,7 @@ namespace Library
 
     public:
 		explicit Bone(InputStreamHelper& streamHelper);
-		Bone(const std::string& name, const std::uint32_t index, const Transform& offsetTransform);
+		Bone(const std::string& name, const std::uint32_t index, const glm::mat4x4& offsetTransform);
 		Bone(const Bone&) = default;
 		Bone(Bone&&) = default;
 		Bone& operator=(const Bone&) = default;
@@ -66,14 +66,14 @@ namespace Library
 		std::uint32_t Index() const;
 		void SetIndex(const std::uint32_t index);
 
-		const Transform& OffsetTransform() const;
+		const glm::mat4x4& OffsetTransform() const;
 
 		virtual void Save(OutputStreamHelper& streamHelper) override;
 
     private:
 		virtual void Load(InputStreamHelper& streamHelper) override;
 
-		std::uint32_t mIndex{ 0 };							// Index into the model's bone container
-		Transform mOffsetTransform{ Transform::Identity };	// Transforms from mesh space to bone space
+		std::uint32_t mIndex{ 0 };		// Index into the model's bone container
+		glm::mat4x4 mOffsetTransform;	// Transforms from mesh space to bone space
     };
 }

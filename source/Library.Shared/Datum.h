@@ -731,6 +731,22 @@ namespace Library
 		const T& Get(const std::size_t index=0) const;
 
 		/// <summary>
+		/// Gets the data pointer for the given type.
+		/// </summary>
+		/// <typeparam name="T">Type of elements in the Datum. A compiler error is thrown on invalid types.</typeparam>
+		/// <returns>Data pointer.</returns>
+		template<typename T>
+		T* Data();
+
+		/// <summary>
+		/// Gets the data pointer for the given type.
+		/// </summary>
+		/// <typeparam name="T">Type of elements in the Datum. A compiler error is thrown on invalid types.</typeparam>
+		/// <returns>Data pointer.</returns>
+		template<typename T>
+		const T* Data() const;
+
+		/// <summary>
 		/// Finds an element in the Datum given the corresponding value.
 		/// </summary>
 		/// <typeparam name="T">Type of elements in the Datum. A compiler error is thrown on invalid types.</typeparam>
@@ -936,4 +952,5 @@ namespace Library
 	};
 }
 
+// Inline File
 #include "Datum.inl"

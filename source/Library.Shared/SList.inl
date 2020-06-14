@@ -1,3 +1,6 @@
+#pragma once
+
+// Header
 #include "SList.h"
 
 namespace Library

@@ -1,3 +1,6 @@
+#pragma once
+
+// Header
 #include "EventPublisher.h"
 
 namespace Library

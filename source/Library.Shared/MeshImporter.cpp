@@ -126,7 +126,7 @@ namespace Library
 				else
 				{
 					boneIndex = gsl::narrow_cast<uint32_t>(model.Bones().Size());
-					Transform offset = Transform(reinterpret_cast<const float*>(meshBone->mOffsetMatrix[0]));
+					glm::mat4x4 offset = glm::make_mat4x4(&meshBone->mOffsetMatrix.a1);
 
 					model.Data().Bones.EmplaceBack(std::make_shared<Bone>(boneName, boneIndex, offset));
 					model.Data().BoneIndexMapping[boneName] = boneIndex;

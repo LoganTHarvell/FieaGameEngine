@@ -133,4 +133,5 @@ namespace Library
 	};
 }
 
+// Inline File
 #include "EventMessageAttributed.inl"

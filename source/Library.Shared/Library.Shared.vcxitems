@@ -20,6 +20,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)ActionExpression.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)ActionIncrement.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)ActionListWhile.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Actor.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)AnimationClip.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)AnimationClipImporter.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)AnimatorComponent.cpp" />
@@ -45,6 +46,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)ModelMaterial.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)ModelMaterialImporter.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)ReactionAttributed.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)RenderingAPI_DirectX11.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)SceneNode.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Transform.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)StreamHelper.cpp" />
@@ -70,6 +72,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)ActionExpression.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ActionIncrement.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ActionListWhile.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Actor.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)AnimationClip.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)AnimatorComponent.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Attributed.h" />
@@ -89,6 +92,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)GameTime.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)HashMap.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)IJsonParseHelper.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)RenderingManager.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)JsonParseMaster.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)JsonEntityParseHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Keyframe.h" />
@@ -99,6 +103,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)ModelMaterial.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Reaction.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ReactionAttributed.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)RenderingAPI_DirectX11.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)SceneNode.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Stack.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)StreamHelper.h" />
@@ -122,6 +127,7 @@
     <None Include="$(MSBuildThisFileDirectory)Datum.inl" />
     <None Include="$(MSBuildThisFileDirectory)DefaultEquality.inl" />
     <None Include="$(MSBuildThisFileDirectory)DefaultHash.inl" />
+    <None Include="$(MSBuildThisFileDirectory)Entity.inl" />
     <None Include="$(MSBuildThisFileDirectory)Event.inl" />
     <None Include="$(MSBuildThisFileDirectory)EventMessageAttributed.inl" />
     <None Include="$(MSBuildThisFileDirectory)EventPublisher.inl" />
@@ -130,6 +136,7 @@
     <None Include="$(MSBuildThisFileDirectory)HashMap.inl" />
     <None Include="$(MSBuildThisFileDirectory)JsonParseMaster.inl" />
     <None Include="$(MSBuildThisFileDirectory)Reaction.inl" />
+    <None Include="$(MSBuildThisFileDirectory)RenderingManager.inl" />
     <None Include="$(MSBuildThisFileDirectory)Scope.inl" />
     <None Include="$(MSBuildThisFileDirectory)SList.inl" />
     <None Include="$(MSBuildThisFileDirectory)Stack.inl" />

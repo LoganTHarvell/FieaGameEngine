@@ -1,3 +1,6 @@
+#pragma once
+
+// Header
 #include "Event.h"
 
 namespace Library

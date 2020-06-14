@@ -27,7 +27,7 @@ namespace Library
 		/// Populates the scope with attributes associated with the passed RTTI::IdType.
 		/// </summary>
 		/// <param name="typeId">RTTI::IdType to use during Populate.</param>
-		explicit Attributed(const RTTI::IdType typeId);
+		explicit Attributed(const IdType typeId);
 		
 		/// <summary>
 		/// Default constructor.

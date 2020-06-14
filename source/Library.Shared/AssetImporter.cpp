@@ -18,7 +18,6 @@
 #include "Model.h"
 #include "Bone.h"
 #include "AnimationClip.h"
-#include "Transform.h"
 #pragma endregion Includes
 
 using namespace std::string_literals;
@@ -97,7 +96,7 @@ namespace Library
 			sceneNode = modelData.Bones[boneMapping->second];
 		}
 
-		const Transform transform(reinterpret_cast<const float*>(node.mTransformation[0]));
+		const glm::mat4x4 transform = glm::make_mat4x4(&node.mTransformation.a1);
 		sceneNode->SetTransform(transform);
 		sceneNode->SetParent(parentSceneNode);
 

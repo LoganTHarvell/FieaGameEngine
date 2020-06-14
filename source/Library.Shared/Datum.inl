@@ -1,3 +1,6 @@
+#pragma once
+
+// Header
 #include "Datum.h"
 
 namespace Library
@@ -159,6 +162,28 @@ namespace Library
 		if (index >= mSize)				throw std::out_of_range("Index out of bounds.");
 
 		return static_cast<T*>(mData.VoidPtr)[index];
+	}
+
+	template <typename T>
+	T* Datum::Data()
+	{
+		static_assert(TypeOf<T>() != Types::Unknown && TypeOf<T>() != Types::End, "Invalid data type.");
+
+		if (mType == Types::Unknown)	throw std::runtime_error("Type not set.");
+		if (mType != TypeOf<T>())		throw std::runtime_error("Mismatched type.");
+
+		return static_cast<T*>(mData.VoidPtr);
+	}
+
+	template <typename T>
+	const T* Datum::Data() const
+	{
+		static_assert(TypeOf<T>() != Types::Unknown && TypeOf<T>() != Types::End, "Invalid data type.");
+
+		if (mType == Types::Unknown)	throw std::runtime_error("Type not set.");
+		if (mType != TypeOf<T>())		throw std::runtime_error("Mismatched type.");
+
+		return static_cast<T*>(mData.VoidPtr);
 	}
 
 	template<typename T>

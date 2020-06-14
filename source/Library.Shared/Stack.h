@@ -86,5 +86,6 @@ namespace Library
 	};
 }
 
+// Inline File
 #include "Stack.inl"
 

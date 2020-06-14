@@ -637,4 +637,5 @@ namespace Library
 	};
 }
 
+// Inline File
 #include "HashMap.inl"

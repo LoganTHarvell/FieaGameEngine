@@ -410,4 +410,5 @@ namespace Library
 	};
 }
 
+// Inline File
 #include "Scope.inl"

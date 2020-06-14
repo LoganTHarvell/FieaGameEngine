@@ -97,7 +97,7 @@ namespace Library
 	void Model::Save(const std::string& filename) const
 	{
 		std::ofstream file(filename.c_str(), std::ios::binary);
-		if (!file.good())
+		if (!file.is_open())
 		{
 			throw std::runtime_error("Could not open file.");
 		}
@@ -149,7 +149,7 @@ namespace Library
 	void Model::Load(const std::string& filename)
 	{
 		std::ifstream file(filename.c_str(), std::ios::binary);
-		if (!file.good())
+		if (!file.is_open())
 		{
 			throw std::runtime_error("Could not open file.");
 		}
@@ -244,7 +244,7 @@ namespace Library
 		}
 		else
 		{
-			Transform transform;
+			glm::mat4x4 transform;
 			streamHelper >> transform;
 			sceneNode = std::make_shared<SceneNode>(name, transform);
 		}

@@ -283,4 +283,5 @@ namespace Library
 	};
 }
 
+// Inline File
 #include "JsonParseMaster.inl"

@@ -20,12 +20,12 @@ namespace UnitTests
 	void TestIteratorInitialization(typename HashMap<TKey, TData>::KeyEqualityFunctor keyEqualityFunctor = DefaultEquality<TKey>())
 	{
 		HashMap hashMap = HashMap<TKey, TData>(20, keyEqualityFunctor);
-		HashMap<TKey, TData>::Iterator it1(hashMap.begin());
-		HashMap<TKey, TData>::Iterator it2 = hashMap.begin();
+		typename HashMap<TKey, TData>::Iterator it1(hashMap.begin());
+		typename HashMap<TKey, TData>::Iterator it2 = hashMap.begin();
 		Assert::AreEqual(it1, it2);
 
-		HashMap<TKey, TData>::ConstIterator itConst1 = HashMap<TKey, TData>::ConstIterator(hashMap.begin());
-		HashMap<TKey, TData>::ConstIterator itConst2 = hashMap.cbegin();
+		typename HashMap<TKey, TData>::ConstIterator itConst1 = HashMap<TKey, TData>::ConstIterator(hashMap.begin());
+		typename HashMap<TKey, TData>::ConstIterator itConst2 = hashMap.cbegin();
 		Assert::AreEqual(itConst1, itConst2);
 	}
 
@@ -36,8 +36,8 @@ namespace UnitTests
 		Assert::ExpectException<std::runtime_error>([] { *HashMap<TKey, TData>::ConstIterator(); });
 
 		HashMap hashMap = HashMap<TKey, TData>(20, keyEqualityFunctor);
-		HashMap<TKey, TData>::Iterator it = hashMap.begin();
-		HashMap<TKey, TData>::ConstIterator itConst = hashMap.cbegin();
+		typename HashMap<TKey, TData>::Iterator it = hashMap.begin();
+		typename HashMap<TKey, TData>::ConstIterator itConst = hashMap.cbegin();
 
 		Assert::ExpectException<std::out_of_range>([&it] { *it; });
 		Assert::ExpectException<std::out_of_range>([&itConst] { *itConst; });
@@ -56,14 +56,14 @@ namespace UnitTests
 		auto insert1 = hashMap.Insert({ TKey(10), TData(10) });
 		auto insert2 = hashMap.Insert({ TKey(20), TData(10) });
 
-		HashMap<TKey, TData>::Iterator it(hashMap.begin());
-		HashMap<TKey, TData>::ConstIterator itConstEmpty(hashMap.cbegin());
+		typename HashMap<TKey, TData>::Iterator it(hashMap.begin());
+		typename HashMap<TKey, TData>::ConstIterator itConstEmpty(hashMap.cbegin());
 
 		Assert::AreEqual(it, hashMap.begin());
 		Assert::AreEqual(itConstEmpty, hashMap.cbegin());
 
-		HashMap<TKey, TData>::ConstIterator itConst1 = insert1.first;
-		HashMap<TKey, TData>::ConstIterator itConst2 = insert2.first;
+		typename HashMap<TKey, TData>::ConstIterator itConst1 = insert1.first;
+		typename HashMap<TKey, TData>::ConstIterator itConst2 = insert2.first;
 
 		Assert::IsTrue(insert1.first != insert2.first);
 		Assert::IsTrue(itConst1 != itConst2);
@@ -72,8 +72,8 @@ namespace UnitTests
 	template<typename TKey, typename TData>
 	void TestIteratorArithmetic(typename HashMap<TKey, TData>::KeyEqualityFunctor keyEqualityFunctor = DefaultEquality<TKey>())
 	{
-		HashMap<TKey, TData>::Iterator it;
-		HashMap<TKey, TData>::ConstIterator itConst;
+		typename HashMap<TKey, TData>::Iterator it;
+		typename HashMap<TKey, TData>::ConstIterator itConst;
 
 		Assert::ExpectException<std::runtime_error>([&it] { auto tmp = it++; });
 		Assert::ExpectException<std::runtime_error>([&itConst] { auto tmp = itConst++; });
@@ -222,8 +222,8 @@ namespace UnitTests
 		HashMap hashMap = HashMap<TKey, TData>(20, keyEqualityFunctor);
 		auto tmp = hashMap.Insert({ TKey(10), TData(10) }).first;
 
-		HashMap<TKey, TData>::Iterator it = hashMap.begin();
-		HashMap<TKey, TData>::ConstIterator itConst = hashMap.cbegin();
+		typename HashMap<TKey, TData>::Iterator it = hashMap.begin();
+		typename HashMap<TKey, TData>::ConstIterator itConst = hashMap.cbegin();
 
 		Assert::AreEqual(it->first, TKey(10));
 		Assert::AreEqual(it->second, TData(10));
@@ -241,8 +241,8 @@ namespace UnitTests
 		HashMap hashMap = HashMap<TKey, TData>(20, keyEqualityFunctor);
 		auto tmp = hashMap.Insert({ TKey(10), TData(10) }).first;
 
-		HashMap<TKey, TData>::Iterator it = hashMap.begin();
-		HashMap<TKey, TData>::ConstIterator itConst = hashMap.cbegin();
+		typename HashMap<TKey, TData>::Iterator it = hashMap.begin();
+		typename HashMap<TKey, TData>::ConstIterator itConst = hashMap.cbegin();
 
 		Assert::IsTrue(it++ != hashMap.end());
 		Assert::AreEqual(it, hashMap.end());
@@ -260,7 +260,7 @@ namespace UnitTests
 		HashMap hashMap = HashMap<TKey, TData>(20, keyEqualityFunctor);
 		auto tmp = hashMap.Insert({ TKey(10), TData(10) }).first;
 
-		HashMap<TKey, TData>::Iterator it = hashMap.Find(TKey(10));
+		typename HashMap<TKey, TData>::Iterator it = hashMap.Find(TKey(10));
 		Assert::AreEqual(it->first, TKey(10));
 		Assert::AreEqual(it->second, TData(10));
 		
@@ -268,7 +268,7 @@ namespace UnitTests
 		Assert::AreEqual(it, hashMap.end());
 
 		const HashMap constHashMap = hashMap;
-		HashMap<TKey, TData>::ConstIterator itConst = constHashMap.Find(TKey(10));
+		typename HashMap<TKey, TData>::ConstIterator itConst = constHashMap.Find(TKey(10));
 		Assert::AreEqual(itConst->first, TKey(10));
 		Assert::AreEqual(itConst->second, TData(10));
 
@@ -320,8 +320,8 @@ namespace UnitTests
 		tmp = hashMap.Insert({ TKey(10), TData(10) });
 		Assert::IsFalse(tmp.second);
 
-		HashMap<TKey, TData>::Iterator it = hashMap.begin();
-		HashMap<TKey, TData>::ConstIterator itConst = hashMap.cbegin();
+		typename HashMap<TKey, TData>::Iterator it = hashMap.begin();
+		typename HashMap<TKey, TData>::ConstIterator itConst = hashMap.cbegin();
 
 		Assert::AreEqual(it->first, TKey(10));
 		Assert::AreEqual(it->second, TData(10));

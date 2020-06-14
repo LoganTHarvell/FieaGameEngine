@@ -146,8 +146,8 @@ namespace UtilityTests
 			{
 				DefaultHash<char *> hash;
 	
-				char* a = "Hello";
-				char* b = "Goodbye";
+				char* a = const_cast<char*>("Hello");
+				char* b = const_cast<char*>("Goodbye");
 
 				char c[6];
 
@@ -183,8 +183,8 @@ namespace UtilityTests
 			{
 				DefaultHash<char * const> hash;
 	
-				char* const a = "Hello";
-				char* const b = "Goodbye";
+				char* const a = const_cast<char* const>("Hello");
+				char* const b = const_cast<char* const>("Goodbye");
 
 				char c[6];
 

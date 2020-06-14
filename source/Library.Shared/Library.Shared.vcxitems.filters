@@ -116,6 +116,12 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)AssetImporter.cpp">
       <Filter>AssetImporter</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Actor.cpp">
+      <Filter>Engine\Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)RenderingAPI_DirectX11.cpp">
+      <Filter>Core\Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
@@ -260,6 +266,13 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)AssetImporter.h">
       <Filter>AssetImporter</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Actor.h">
+      <Filter>Engine\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)RenderingAPI_DirectX11.h">
+      <Filter>Core\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)RenderingManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)DefaultHash.inl">
@@ -312,6 +325,12 @@
     </None>
     <None Include="$(MSBuildThisFileDirectory)Transform.inl">
       <Filter>Core\Math</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Entity.inl">
+      <Filter>Core\Entity</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)RenderingManager.inl">
+      <Filter>Core\Rendering</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -380,6 +399,12 @@
     </Filter>
     <Filter Include="AssetImporter">
       <UniqueIdentifier>{4b323967-9e51-47ef-9b8f-77f6aaafb2d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Actors">
+      <UniqueIdentifier>{d7f66df4-5e39-4ead-88b9-19d68793440f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Rendering">
+      <UniqueIdentifier>{fafcebbb-f62b-4890-91b9-65c63fe162e0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

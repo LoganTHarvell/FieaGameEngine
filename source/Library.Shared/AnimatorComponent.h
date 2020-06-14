@@ -3,7 +3,6 @@
 #pragma region Includes
 // First Party
 #include "Entity.h"
-#include "Transform.h"
 #pragma endregion Includes
 
 namespace Library
@@ -34,7 +33,7 @@ namespace Library
 		const std::shared_ptr<AnimationClip>& CurrentClip() const;
 		float CurrentTime() const;
 		std::uint32_t CurrentKeyframe() const;
-		const Vector<Transform>& BoneTransforms() const;
+		const Vector<glm::mat4x4>& BoneTransforms() const;
 		
 		bool InterpolationEnabled() const;
 		void SetInterpolationEnabled(const bool enabled);
@@ -62,9 +61,9 @@ namespace Library
 		std::shared_ptr<AnimationClip> mCurrentClip;
 		float mCurrentTime{ 0.0f };
 		std::uint32_t mCurrentKeyframe{ 0 };
-		HashMap<const SceneNode*, Transform> mToRootTransforms;
-		Vector<Transform> mFinalTransforms;
-		Transform mInverseRootTransform{ Transform::Identity };
+		HashMap<const SceneNode*, glm::mat4x4> mToRootTransforms;
+		Vector<glm::mat4x4> mFinalTransforms;
+		glm::mat4x4 mInverseRootTransform{ glm::identity<glm::mat4x4>() };
 		bool mInterpolationEnabled;
 		bool mIsPlayingClip{ false };
 		bool mIsClipLooped{ true };

@@ -1,3 +1,6 @@
+#pragma once
+
+// Header
 #include "Scope.h"
 
 namespace Library

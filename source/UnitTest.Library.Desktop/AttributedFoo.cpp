@@ -3,7 +3,7 @@
 
 namespace UnitTests
 {
-	AttributedFoo::AttributedFoo(int data) : Attributed(TypeIdClass()),
+	AttributedFoo::AttributedFoo(const int data) : Attributed(TypeIdClass()),
 		mInt(data), mFloat(static_cast<float>(data)), 
 		mVector(static_cast<float>(data)), mMatrix(static_cast<float>(data)), 
 		mString(std::to_string(data)), foo(data), mIntArray{ data, data },
@@ -169,7 +169,7 @@ namespace UnitTests
 		return typeInfo;
 	}
 
-	AttributedFoo::AttributedFoo(const RTTI::IdType typeId, int data) : Attributed(typeId),
+	AttributedFoo::AttributedFoo(const IdType typeId, const int data) : Attributed(typeId),
 		mInt(data), mFloat(static_cast<float>(data)),
 		mVector(static_cast<float>(data)), mMatrix(static_cast<float>(data)),
 		mString(std::to_string(data)), foo(data), mIntArray{ data, data },

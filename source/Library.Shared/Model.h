@@ -46,9 +46,9 @@ namespace Library
 		Model(Model&& rhs) = default;
 		Model& operator=(Model&& rhs) = default;
 
-		Model(const std::string& filename, std::string name=std::string());
-		Model(std::ifstream& file, std::string name=std::string());
-		Model(ModelData&& modelData, std::string name=std::string());
+		Model(const std::string& filename, std::string name);
+		explicit Model(std::ifstream& file, std::string name=std::string());
+		explicit Model(ModelData&& modelData, std::string name=std::string());
 #pragma endregion Special Members
 
 #pragma region Acessors

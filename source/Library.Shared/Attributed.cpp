@@ -16,7 +16,7 @@
 namespace Library
 {
 #pragma region Constructors, Destructor, Assignment
-	Attributed::Attributed(const RTTI::IdType typeId)
+	Attributed::Attributed(const IdType typeId)
 	{	
 		(*this)["this"] = static_cast<RTTI*>(this);
 		Populate(TypeManager::Instance()->Find(typeId));

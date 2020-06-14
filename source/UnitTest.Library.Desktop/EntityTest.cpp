@@ -54,7 +54,7 @@ namespace EntitySystemTests
 			FooEntity fooEntity("FooEntity");
 			Assert::AreEqual("FooEntity"s, fooEntity.Name());
 			Assert::IsNotNull(fooEntity.Find("Data"));
-			Assert::AreEqual(0, fooEntity.Find("Data")->Get<int>());
+			Assert::AreEqual(0.0f, fooEntity.Find("Data")->Get<float>());
 		}
 
 		TEST_METHOD(RTTITest)
@@ -122,12 +122,14 @@ namespace EntitySystemTests
 			Assert::AreEqual(2_z, entity.ChildCount());
 			Assert::AreEqual(&entity1, entity.FindChild("ActionIncrement1"));
 			Assert::AreEqual(&entity2, entity.FindChild("ActionIncrement2"));
+			Assert::AreEqual(&entity2, entity.FindChildArray("ActionIncrement2")[0]);
 
 			const Entity copy = entity;
 
 			Assert::AreEqual(2_z, copy.ChildCount());
 			Assert::AreEqual(entity1, *copy.FindChild("ActionIncrement1"));
 			Assert::AreEqual(entity2, *copy.FindChild("ActionIncrement2"));
+			Assert::AreEqual(entity2, *copy.FindChildArray("ActionIncrement2")[0]);
 
 			entity.SetParent(nullptr);
 			Assert::IsNull(entity.GetParent());

@@ -1,5 +1,11 @@
 #pragma once
 
+// Third Party
+#pragma warning(disable : 4201)
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
+#pragma warning(default : 4201)
+
 namespace Library
 {
 	/// <summary>
@@ -22,22 +28,12 @@ namespace Library
 		Transform(Transform&& rhs) = default;
 		Transform& operator=(Transform&& rhs) = default;
 		
-		explicit Transform(const float value);
-		
-		Transform(	const float& x0, const float& y0, const float& z0, const float& w0,
-		            const float& x1, const float& y1, const float& z1, const float& w1,
-		            const float& x2, const float& y2, const float& z2, const float& w2,
-		            const float& x3, const float& y3, const float& z3, const float& w3	);
-
-		Transform(const glm::vec4& v1, const glm::vec4& v2, const glm::vec4& v3, const glm::vec4& v4);
-		
 		Transform(const glm::vec3& translation, const glm::quat& quaternion, const glm::vec3& scaling);
-		
-		explicit Transform(const glm::mat4x4& matrix);
-		explicit Transform(const float* data);
+		Transform(const glm::vec3& translation, const glm::vec3& rotation, const glm::vec3& scaling);
 #pragma endregion Special Members
 
 #pragma region Boolean Operators
+	public:
 		bool operator==(const Transform& rhs) const noexcept;
 		bool operator!=(const Transform& rhs) const noexcept;
 #pragma endregion Boolean Operators
@@ -45,64 +41,73 @@ namespace Library
 #pragma region Arithmetic Operators
 	public:
 		Transform operator+(const Transform& rhs) const;
-		Transform operator+(const float rhs) const;
-		friend Transform operator+(const float lhs, const Transform& rhs);
-
 		Transform& operator+=(const Transform& rhs);
-		Transform& operator+=(const float rhs);
 
 		Transform operator-(const Transform& rhs) const;
-		Transform operator-(const float rhs) const;
-		friend Transform operator-(const float lhs, const Transform& rhs);
-
 		Transform& operator-=(const Transform& rhs);
-		Transform& operator-=(const float rhs);
 
 		Transform operator*(const Transform& rhs) const;
-		Transform operator*(const float rhs) const;
-		glm::vec4 operator*(const glm::vec4& rhs) const;
-		friend glm::vec4 operator*(const glm::vec4& lhs, const Transform& rhs);
-
 		Transform& operator*=(const Transform& rhs);
+		glm::vec4 operator*(const glm::vec4& rhs) const;
+		Transform operator*(const float rhs) const;
+		friend glm::vec4 operator*(const glm::vec4& lhs, const Transform& rhs);
 		Transform& operator*=(const float rhs);
 
-		Transform operator/(const Transform& rhs) const;
 		Transform operator/(const float rhs) const;
+		Transform& operator/=(const float rhs);
 		glm::vec4 operator/(const glm::vec4& rhs) const;
 		friend glm::vec4 operator/(const glm::vec4& lhs, const Transform& rhs);
-
-		Transform& operator/=(const Transform& rhs);
-		Transform& operator/=(const float rhs);
 #pragma endregion Arithmetic Operators
 
 #pragma region Accessors
-		glm::vec4& operator[](const int i);
+	public:
 		const glm::vec4& operator[](const int i) const;
 
 		float Determinant() const;
+
+		glm::vec3& Translation();
+		const glm::vec3& Translation() const;
+
+		glm::quat& Rotation();
+		const glm::quat& Rotation() const;
+		glm::vec3 EulerRotation() const;
+
+		glm::vec3& Scale();
+		const glm::vec3& Scale() const;
+
+		const glm::mat4x4& Matrix() const;
 #pragma endregion Accessors
 
 #pragma region Transformations
 	public:
-		Transform Inverse() const;
-		Transform Transpose() const;
+		glm::mat4x4 Inverse() const;
+		glm::mat4x4 Transpose() const;
 
-		Transform Translate(const glm::vec3& translation) const;
-		static Transform Translate(const Transform& transform, const glm::vec3& translation);
+		Transform& Translate(const glm::vec3& translation);
+		static Transform Translate(Transform transform, const glm::vec3& translation);
 		
-		Transform Rotate(const float angle, const glm::vec3& axis) const;
-		static Transform Rotate(const Transform& transform, const float angle, const glm::vec3& axis);
+		Transform& Rotate(const float angle, const glm::vec3& axis);
+		static Transform Rotate(Transform transform, const float angle, const glm::vec3& axis);
+		
+		Transform& Rotate(const glm::quat& quaternion);
+		static Transform Rotate(Transform transform, const glm::quat& quaternion);
 
-		Transform Scale(const glm::vec3& scaling) const;
-		static Transform Scale(const Transform& transform, const glm::vec3& scaling);
+		Transform& Scale(const glm::vec3& scaling);
+		static Transform Scale(Transform transform, const glm::vec3& scaling);
 
-		Transform Transformation(const glm::vec3& translation, const glm::quat& quaternion, const glm::vec3& scaling) const;
-		static Transform Transformation(const Transform& transform, const glm::vec3& translation, const glm::quat& quaternion, const glm::vec3& scaling);
+		Transform& Transformation(const glm::vec3& translation, const glm::quat& quaternion, const glm::vec3& scaling);
+		static Transform Transformation(Transform transform, const glm::vec3& translation, const glm::quat& quaternion, const glm::vec3& scaling);
 #pragma endregion Transformations
 
 	private:
-		glm::mat4x4 mMatrix{ 0 };
+		glm::vec3 mTranslation{ 0 };
+		glm::quat mRotation{ 0, 0, 0, 1 };
+		glm::vec3 mScale{ 1 };
+		
+		mutable glm::mat4x4 mMatrix{ 0 };
+		mutable bool mUpdateMatrix{ true };
 	};
 }
 
+// Inline File
 #include "Transform.inl"

@@ -1,10 +1,14 @@
 #pragma once
 
 #pragma region Includes
+// Third Party
+#pragma warning(disable : 26812)
+#include <glm/glm.hpp>
+#pragma warning(default : 26812)
+
 // First Party
 #include "RTTI.h"
 #include "Vector.h"
-#include "Transform.h"
 #pragma endregion Includes
 
 namespace Library
@@ -19,7 +23,7 @@ namespace Library
 
 	public:
 		explicit SceneNode(std::string name = std::string());
-		SceneNode(std::string name, const Transform& transform);
+		SceneNode(std::string name, const glm::mat4x4& transform);
 		SceneNode(const SceneNode&) = default;
 		SceneNode(SceneNode&&) = default;
 		SceneNode& operator=(const SceneNode&) = default;
@@ -30,11 +34,11 @@ namespace Library
 		std::weak_ptr<SceneNode> GetParent() const;
 		Vector<std::shared_ptr<const SceneNode>>& Children();
 		const Vector<std::shared_ptr<const SceneNode>>& Children() const;
-		const Transform& GetTransform() const;
+		const glm::mat4x4& GetTransform() const;
 
 		void SetParent(std::shared_ptr<SceneNode> parent);
 
-		void SetTransform(const Transform& transform);
+		void SetTransform(const glm::mat4x4& transform);
 
 		virtual void Save(OutputStreamHelper& streamHelper);
 
@@ -44,6 +48,6 @@ namespace Library
 		std::string mName;
 		std::weak_ptr<SceneNode> mParent;
 		Vector<std::shared_ptr<const SceneNode>> mChildren;
-		Transform mTransform;
+		glm::mat4x4 mTransform;
 	};
 }

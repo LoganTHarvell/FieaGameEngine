@@ -108,4 +108,5 @@ namespace Library
 	};
 }
 
+// Inline File
 #include "EventPublisher.inl"

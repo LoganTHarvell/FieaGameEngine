@@ -1,3 +1,5 @@
+#pragma once
+
 // Header
 #include "Vector.h"	
 

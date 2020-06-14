@@ -10,6 +10,7 @@
 #include "Bone.h"
 #include "Keyframe.h"
 #include "StreamHelper.h"
+#include "Transform.h"
 #pragma endregion Includes
 
 namespace Library

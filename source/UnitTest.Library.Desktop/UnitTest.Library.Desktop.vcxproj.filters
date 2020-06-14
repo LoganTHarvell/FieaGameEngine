@@ -92,9 +92,6 @@
     <ClCompile Include="WorldTest.cpp">
       <Filter>Core Tests\Entity System Tests</Filter>
     </ClCompile>
-    <ClCompile Include="JsonEntitySystemParseTest.cpp">
-      <Filter>Core Tests\Entity System Tests</Filter>
-    </ClCompile>
     <ClCompile Include="EntityTest.cpp">
       <Filter>Core Tests\Entity System Tests</Filter>
     </ClCompile>
@@ -109,6 +106,9 @@
     </ClCompile>
     <ClCompile Include="ReactionTest.cpp">
       <Filter>Core Tests\Entity System Tests\Actions Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="JsonEntitySystemParseTest.cpp">
+      <Filter>JSON Parser Test</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

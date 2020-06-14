@@ -15,7 +15,7 @@ using namespace UnitTests;
 using namespace Library;
 
 namespace EntitySystemTests
-{
+{	
 	TEST_CLASS(JsonEntitySystemParseTest)
 	{
 	public:
@@ -60,8 +60,12 @@ namespace EntitySystemTests
 
 			parser.AddHelper(helper);
 			parser.SetSharedData(sharedData);
-
-			std::string json = R"({
+			
+			const std::string json = R"({
+				"Integer": {
+				  "type": "integer",
+				  "value": 10
+				},
 				"AuxiliaryInt": {
 				  "type": "integer",
 				  "value": 10
@@ -70,8 +74,10 @@ namespace EntitySystemTests
 
 			parser.Parse(json);
 
-			Assert::AreEqual(2_z, entity.Size());
+			Assert::AreEqual(3_z, entity.Size());
 
+			Assert::IsNotNull(entity.Find("Integer"));
+			Assert::AreEqual(10, entity.Find(("Integer"))->Get<int>());
 			Assert::IsNotNull(entity.Find("AuxiliaryInt"));
 			Assert::AreEqual(10, entity.Find(("AuxiliaryInt"))->Get<int>());
 		}
@@ -89,7 +95,7 @@ namespace EntitySystemTests
 			parser.AddHelper(helper);
 			parser.SetSharedData(sharedData);
 
-			std::string json = R"({
+			const std::string json = R"({
 				"Entity1": {
 				  "type": "Entity",
 				  "value": {
@@ -174,7 +180,7 @@ namespace EntitySystemTests
 			Assert::IsNotNull(sector2);
 			
 			Assert::AreEqual("Sector2"s, sector2->Name());			
-			Assert::AreEqual(2_z, sector2->ChildCount());
+			Assert::AreEqual(3_z, sector2->ChildCount());
 
 			entity1 = sector2->FindChild("Entity1");
 			entity2 = sector2->FindChild("Entity2");
@@ -189,6 +195,35 @@ namespace EntitySystemTests
 			Assert::AreEqual("Entity2"s, entity2->Name());
 			Assert::IsNotNull(entity2->Find("AuxiliaryInt"));
 			Assert::AreEqual(20, entity2->Find(("AuxiliaryInt"))->Get<int>());
+			Assert::AreEqual(30, sector2->Find("Entity2")->Get<Scope*>(1)->Find("AuxiliaryInt")->Get<int>());
+		}
+
+		TEST_METHOD(Prescribed)
+		{
+			FooEntity entity(10);
+
+			JsonEntityParseHelper::SharedData sharedData;
+			sharedData.SetEntity(entity);
+
+			JsonEntityParseHelper helper;
+			JsonParseMaster parser;
+
+			parser.AddHelper(helper);
+			parser.SetSharedData(sharedData);
+
+			const std::string json = R"({
+				"Data": {
+				  "type": "float",
+				  "value": 20.0
+				}
+			})"s;
+
+			parser.Parse(json);
+
+			Assert::AreEqual(2_z, entity.Size());
+
+			Assert::IsNotNull(entity.Find("Data"));
+			Assert::AreEqual(20.0f, entity.Find(("Data"))->Get<float>());
 		}
 
 	private:

@@ -80,12 +80,44 @@ namespace Library
 	{
 		return
 		{
+			mWorldState.ContentManager,
+			mWorldState.RenderingManager,
 			mWorldState.GameTime,
 			mWorldState.EventQueue,
 			mWorldState.World,
 			mWorldState.Sector,
 			mWorldState.Entity
 		};
+	}
+
+	void World::Run()
+	{
+		IsRunning = true;
+		
+		while (IsRunning)
+		{
+			Update();
+		}
+	}
+
+	void World::Stop()
+	{
+		IsRunning = false;
+	}
+
+	void World::Initialize()
+	{
+		mGameClock.Reset();
+		
+		ForEachChild([this](Entity& sector)
+		{
+			mWorldState.Sector = &sector;
+			mWorldState.Sector->Initialize(mWorldState);
+		});
+
+		mWorldState.Sector = nullptr;
+
+		UpdatePendingChildren();
 	}
 
 	void World::Update()
@@ -104,6 +136,24 @@ namespace Library
 		{
 			mWorldState.Sector = &sector;
 			mWorldState.Sector->Update(mWorldState);
+		});
+
+		mWorldState.Sector = nullptr;
+
+		UpdatePendingChildren();
+	}
+
+	void World::Shutdown()
+	{		
+		if (mWorldState.EventQueue)
+		{
+			mWorldState.EventQueue->Clear();
+		}
+		
+		ForEachChild([this](Entity& sector)
+		{
+			mWorldState.Sector = &sector;
+			mWorldState.Sector->Shutdown(mWorldState);
 		});
 
 		mWorldState.Sector = nullptr;

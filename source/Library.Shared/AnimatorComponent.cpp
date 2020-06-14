@@ -11,6 +11,7 @@
 #include "AnimationClip.h"
 #include "WorldState.h"
 #include "GameTime.h"
+#include "Transform.h"
 #pragma endregion Includes
 
 namespace Library
@@ -41,7 +42,7 @@ namespace Library
 		return mCurrentKeyframe;
 	}
 	
-	const Vector<Transform>& AnimatorComponent::BoneTransforms() const
+	const Vector<glm::mat4x4>& AnimatorComponent::BoneTransforms() const
 	{
 		return mFinalTransforms;
 	}
@@ -73,7 +74,7 @@ namespace Library
 		mCurrentKeyframe = 0;
 		mIsPlayingClip = true;
 
-		mInverseRootTransform = mModel->RootNode()->GetTransform().Inverse();
+		mInverseRootTransform = glm::inverse(mModel->RootNode()->GetTransform());
 		GetPose(mCurrentTime, *(mModel->RootNode()));
 	}
 
@@ -139,7 +140,7 @@ namespace Library
 
 	void AnimatorComponent::GetBindPoseBottomUp(const SceneNode& sceneNode)
 	{
-		Transform toRootTransform = sceneNode.GetTransform();
+		glm::mat4x4 toRootTransform = sceneNode.GetTransform();
 
 		auto parentNode = sceneNode.GetParent().lock();
 		while (parentNode != nullptr)
@@ -168,9 +169,9 @@ namespace Library
 
 	void AnimatorComponent::GetBindPose(const SceneNode& sceneNode)
 	{
-		const Transform toParentTransform = sceneNode.GetTransform();
+		const glm::mat4x4 toParentTransform = sceneNode.GetTransform();
 		const auto parentNode = sceneNode.GetParent().lock();
-		const Transform toRootTransform = (parentNode != nullptr ? toParentTransform * mToRootTransforms.At(parentNode.get()) : toParentTransform);
+		const glm::mat4x4 toRootTransform = (parentNode != nullptr ? toParentTransform * mToRootTransforms.At(parentNode.get()) : toParentTransform);
 		mToRootTransforms[&sceneNode] = toRootTransform;		
 
 		const Bone* bone = sceneNode.As<Bone>();
@@ -189,23 +190,27 @@ namespace Library
 	void AnimatorComponent::GetPose(const float time, const SceneNode& sceneNode)
 	{
 		Transform toParentTransform;
+		glm::mat4x4 toParentTransformMatrix;
 		const Bone* bone = sceneNode.As<Bone>();
 
 		if (bone != nullptr)
 		{
 			const auto keyframe = mCurrentClip->GetTransform(time, *bone, toParentTransform);
+			
 			if (keyframe != std::numeric_limits<std::uint32_t>::max())
 			{
 				mCurrentKeyframe = keyframe;
 			}
+
+			toParentTransformMatrix = toParentTransform.Matrix();
 		}
 		else
 		{
-			toParentTransform = sceneNode.GetTransform();
+			toParentTransformMatrix = sceneNode.GetTransform();
 		}
 
 		const auto parentNode = sceneNode.GetParent().lock();
-		const Transform toRootTransform = (parentNode != nullptr ? toParentTransform * mToRootTransforms.At(parentNode.get()) : toParentTransform);
+		const glm::mat4x4 toRootTransform = (parentNode != nullptr ? toParentTransformMatrix * mToRootTransforms.At(parentNode.get()) : toParentTransformMatrix);
 		mToRootTransforms[&sceneNode] = toRootTransform;
 
 		if (bone != nullptr)
@@ -222,19 +227,21 @@ namespace Library
 	void AnimatorComponent::GetPoseAtKeyframe(const std::uint32_t keyframe, const SceneNode& sceneNode)
 	{
 		Transform toParentTransform;
+		glm::mat4x4 toParentTransformMatrix;
 		const Bone* bone = sceneNode.As<Bone>();
 
 		if (bone != nullptr)
 		{
 			mCurrentClip->GetTransformAtKeyframe(keyframe, *bone, toParentTransform);
+			toParentTransformMatrix = toParentTransform.Matrix();
 		}
 		else
 		{
-			toParentTransform = sceneNode.GetTransform();
+			toParentTransformMatrix = sceneNode.GetTransform();
 		}
 
 		const auto& parentNode = sceneNode.GetParent().lock();
-		const Transform toRootTransform = (parentNode != nullptr ? toParentTransform * mToRootTransforms.At(parentNode.get()) : toParentTransform);
+		const glm::mat4x4 toRootTransform = (parentNode != nullptr ? toParentTransformMatrix * mToRootTransforms.At(parentNode.get()) : toParentTransformMatrix);
 		mToRootTransforms[&sceneNode] = toRootTransform;
 
 		if (bone != nullptr)
@@ -251,19 +258,21 @@ namespace Library
 	void AnimatorComponent::GetInterpolatedPose(const float time, const SceneNode& sceneNode)
 	{
 		Transform toParentTransform;
+		glm::mat4x4 toParentTransformMatrix;
 		const Bone* bone = sceneNode.As<Bone>();
 
 		if (bone != nullptr)
 		{
 			mCurrentClip->GetInterpolatedTransform(time, *bone, toParentTransform);
+			toParentTransformMatrix = toParentTransform.Matrix();
 		}
 		else
 		{
-			toParentTransform = sceneNode.GetTransform();
+			toParentTransformMatrix = sceneNode.GetTransform();
 		}
 
 		const auto& parentNode = sceneNode.GetParent().lock();
-		const Transform toRootTransform = (parentNode != nullptr ? toParentTransform * mToRootTransforms.At(parentNode.get()) : toParentTransform);
+		const glm::mat4x4 toRootTransform = (parentNode != nullptr ? toParentTransformMatrix * mToRootTransforms.At(parentNode.get()) : toParentTransformMatrix);
 		mToRootTransforms[&sceneNode] = toRootTransform;
 
 		if (bone != nullptr)

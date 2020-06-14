@@ -1,6 +1,6 @@
-#include <utility>
+#pragma once
 
-
+// Header
 #include "EventQueue.h"
 
 namespace Library

@@ -75,7 +75,7 @@ namespace Library
 		return *this;
 	}
 
-	Entity::Entity(const RTTI::IdType typeId, std::string name) : Attributed(typeId),
+	Entity::Entity(const IdType typeId, std::string name) : Attributed(typeId),
 		mName(std::move(name))
 	{
 	}
@@ -83,16 +83,6 @@ namespace Library
 	gsl::owner<Scope*> Entity::Clone() const
 	{
 		return new Entity(*this);
-	}
-
-	const std::string& Entity::Name() const
-	{
-		return mName;
-	}
-
-	void Entity::SetName(const std::string& name)
-	{
-		mName = name;
 	}
 
 	Entity* Entity::GetParent() const
@@ -117,42 +107,21 @@ namespace Library
 		}
 	}
 
-	std::size_t Entity::ChildCount() const
-	{
-		return mChildren.Size();
-	}
-
-	Entity* Entity::FindChild(const std::string& name)
-	{
-		Entity* child = nullptr;
-
-		Data* childData = Find(name);
-
-		if (childData && childData->Size() > 0)
-		{
-			assert(childData->Get<Scope*>()->Is(Entity::TypeIdClass()));
-			child = static_cast<Entity*>(childData->Get<Scope*>());
-		}
-
-		return child;
-	}
-
-	const Entity* Entity::FindChild(const std::string& name) const
-	{
-		return const_cast<Entity*>(this)->FindChild(name);
-	}
-
 	void Entity::ForEachChild(const std::function<void(Entity&)>& functor)
 	{
+		mUpdatingChildren = true;
+		
 		for (auto* child : mChildren)
 		{
 			assert(child != nullptr);
 			functor(*child);
 		};
+
+		mUpdatingChildren = false;
 	}
 
 	void Entity::ForEachChild(const std::function<void(const Entity&)>& functor) const
-	{
+	{		
 		for (auto* child : mChildren)
 		{
 			assert(child != nullptr);
@@ -229,11 +198,26 @@ namespace Library
 
 		return *child;
 	}
+
+	void Entity::Initialize(WorldState& worldState)
+	{
+		if (!mEnabled) return;
+
+		ForEachChild([&worldState](Entity& entity)
+		{
+			worldState.Entity = &entity;
+			worldState.Entity->Initialize(worldState);
+		});
+
+		worldState.Entity = nullptr;
+
+		UpdatePendingChildren();
+	}
 	
 	void Entity::Update(WorldState& worldState)
 	{
-		mUpdatingChildren = true;
-		
+		if (!mEnabled) return;
+				
 		ForEachChild([&worldState](Entity& entity)
 		{
 			worldState.Entity = &entity;
@@ -242,7 +226,20 @@ namespace Library
 		
 		worldState.Entity = nullptr;
 
-		mUpdatingChildren = false;
+		UpdatePendingChildren();
+	}
+
+	void Entity::Shutdown(WorldState& worldState)
+	{
+		if (!mEnabled) return;
+				
+		ForEachChild([&worldState](Entity& entity)
+		{
+			worldState.Entity = &entity;
+			worldState.Entity->Shutdown(worldState);
+		});
+		
+		worldState.Entity = nullptr;
 
 		UpdatePendingChildren();
 	}
@@ -272,7 +269,7 @@ namespace Library
 				break;
 			}
 		}
-
+		
 		mPendingChildren.Clear();
 	}
 }

@@ -81,4 +81,5 @@ namespace Library
 	};
 }
 
+// Inline File
 #include "Reaction.inl"

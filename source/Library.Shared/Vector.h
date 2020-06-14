@@ -877,4 +877,5 @@ namespace Library
 	};
 }
 
+// Inline File
 #include "Vector.inl"

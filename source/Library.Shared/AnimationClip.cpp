@@ -9,6 +9,7 @@
 #include "BoneAnimation.h"
 #include "Bone.h"
 #include "StreamHelper.h"
+#include "Transform.h"
 #pragma endregion Includes
 
 namespace Library
