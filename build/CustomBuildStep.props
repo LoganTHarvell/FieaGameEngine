@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <CustomBuildBeforeTargets>ClCompile</CustomBuildBeforeTargets>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <CustomBuildStep>
+      <Command>IF EXIST "$(SharedPdb)" xcopy /Y /F "$(SharedPdb)" "$(IntDir)"
+
+IF EXIST "$(SharedIdb)" xcopy /Y /F "$(SharedIdb)" "$(IntDir)"
+
+ 
+mkdir "$(OutDir)Content"
+
+
+IF EXIST "$(SolutionDir)..\content" xcopy /E /Y "$(SolutionDir)..\content" "$(OutDir)Content\"
+IF EXIST "$(ProjectDir)Content" xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content\"</Command>
+      <Outputs>$(IntDir)vc$(PlatformToolsetVersion).pdb;$(SolutionDir)..\content;$(ProjectDir)Content</Outputs>
+      <Inputs>$(SharedPdb)</Inputs>
+    </CustomBuildStep>
+  </ItemDefinitionGroup>
+  <ItemGroup />
+</Project>
