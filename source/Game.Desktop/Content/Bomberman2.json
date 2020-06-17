@@ -1,0 +1,667 @@
+{
+  "Name": {
+    "type": "string",
+    "value": "Level1"
+  },
+  "Entities": {
+    "type": "Entity",
+    "value": [
+      // Character 1
+      {
+        "type": "Character",
+        "value": {
+          "Reaction": {
+            "type": "Player1InputReaction",
+            "value": {
+              "MovementActions": {
+                "type": "ActionList",
+                "value": [
+                  {
+                    "type": "ActionCharacterMovementInput",
+                    "value": {
+                      "Name": {
+                        "type": "string",
+                        "value": "Character1"
+                      }
+                    }
+                  },
+                  {
+                    "type": "ActionUpdateAnimationState",
+                    "value": {
+                      "Name": {
+                        "type": "string",
+                        "value": "UpdateAnimationState"
+                      }
+                    }
+                  },
+                  {
+                    "type": "ActionPlaySound",
+                    "value": {
+                      "Name": {
+                        "type": "string",
+                        "value": "PlaySound"
+                      },
+                      "Delay": {
+                        "type": "integer",
+                        "value": 400
+                      },
+                      "Sound": {
+                        "type": "string",
+                        "value": "Walking"
+                      }
+                    }
+                  }
+                ]
+              },
+              "StopKickActions": {
+                "type": "ActionList",
+                "value": [
+                  {
+                    "type": "ActionStopKick",
+                    "value": {
+                      "Name": {
+                        "type": "string",
+                        "value": "Character1"
+                      }
+                    }
+                  }
+                ]
+              },
+              "PowerUpReaction": {
+                "type": "ReactionAttributed",
+                "value": {
+                  "Actions": {
+                    "type": "ActionList",
+                    "value": [
+                      {
+                        "type": "ActionPickupPowerUp",
+                        "value": {
+                          "Name": {
+                            "type": "string",
+                            "value": "pickuppower"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              "SpawnBombActions": {
+                "type": "ActionList",
+                "value": [
+                  {
+                    "type": "ActionSpawnBomb",
+                    "value": {
+                      "Name": {
+                        "type": "string",
+                        "value": "Character1SpawnBomb"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "Name": {
+            "type": "string",
+            "value": "Character1"
+          },
+          "Transform": {
+            "type": "Transform",
+            "value": {
+              "Rotation": {
+                "type": "float",
+                "value": 0
+              },
+              "Scale": {
+                "type": "vector",
+                "value": "vec4(16.0, 24.0, 1.0, 0.0)"
+              }
+            }
+          },
+          "SpawnTile": {
+            "type": "vector",
+            "value": "vec4(1, 1, 0, 0)"
+          },
+          "RenderComponent": {
+            "type": "RenderComponent",
+            "value": {
+              "CurrentSprite": {
+                "type": "string",
+                "value": "WhiteBomberman"
+              },
+              "ColumnCount": {
+                "type": "integer",
+                "value": 4
+              },
+              "RowCount": {
+                "type": "integer",
+                "value": 8
+              },
+              "RowIndex": {
+                "type": "integer",
+                "value": 6
+              },
+              "ColumnIndex": {
+                "type": "integer",
+                "value": 0
+              }
+            }
+          },
+          "Actions": {
+            "type": "ActionList",
+            "value": [
+              {
+                "type": "ActionRender",
+                "value": {
+                  "Name": {
+                    "type": "string",
+                    "value": "Render"
+                  },
+                  "IsEnabled": {
+                    "type": "integer",
+                    "value": 1
+                  }
+                }
+              },
+              {
+                "type": "ActionAnimate",
+                "value": {
+                  "Name": {
+                    "type": "string",
+                    "value": "Animate"
+                  },
+                  "Delay": {
+                    "type": "integer",
+                    "value": 200
+                  }
+                }
+              }
+            ]
+          },
+          "DeathSprite": {
+            "type": "string",
+            "value": "WhiteBombermanDeath"
+          }
+        }
+      },
+      // Character 2
+      {
+        "type": "Character",
+        "value": {
+          "Reaction": {
+            "type": "Player2InputReaction",
+            "value": {
+              "MovementActions": {
+                "type": "ActionList",
+                "value": [
+                  {
+                    "type": "ActionCharacterMovementInput",
+                    "value": {
+                      "Name": {
+                        "type": "string",
+                        "value": "Character2"
+                      }
+                    }
+                  },
+                  {
+                    "type": "ActionUpdateAnimationState",
+                    "value": {
+                      "Name": {
+                        "type": "string",
+                        "value": "UpdateAnimationState"
+                      }
+                    }
+                  },
+                  {
+                    "type": "ActionPlaySound",
+                    "value": {
+                      "Name": {
+                        "type": "string",
+                        "value": "PlaySound"
+                      },
+                      "Delay": {
+                        "type": "integer",
+                        "value": 400
+                      },
+                      "Sound": {
+                        "type": "string",
+                        "value": "Walking"
+                      }
+                    }
+                  }
+                ]
+              },
+              "StopKickActions": {
+                "type": "ActionList",
+                "value": [
+                  {
+                    "type": "ActionStopKick",
+                    "value": {
+                      "Name": {
+                        "type": "string",
+                        "value": "Character1"
+                      }
+                    }
+                  }
+                ]
+              },
+              "SpawnBombActions": {
+                "type": "ActionList",
+                "value": [
+                  {
+                    "type": "ActionSpawnBomb",
+                    "value": {
+                      "Name": {
+                        "type": "string",
+                        "value": "Character1SpawnBomb"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "PowerUpReaction": {
+            "type": "ReactionAttributed",
+            "value": {
+              "Actions": {
+                "type": "ActionList",
+                "value": [
+                  {
+                    "type": "ActionPickupPowerUp",
+                    "value": {
+                      "Name": {
+                        "type": "string",
+                        "value": "pickuppower"
+                      },
+                      "PowerUp": {
+                        "type": "string",
+                        "value": "ExtraBomb"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "Name": {
+            "type": "string",
+            "value": "Character2"
+          },
+          "Transform": {
+            "type": "Transform",
+            "value": {
+              "Rotation": {
+                "type": "float",
+                "value": 0
+              },
+              "Scale": {
+                "type": "vector",
+                "value": "vec4(16.0, 24.0, 1.0, 0.0)"
+              }
+            }
+          },
+          "SpawnTile": {
+            "type": "vector",
+            "value": "vec4(13, 11, 0, 0)"
+          },
+          "RenderComponent": {
+            "type": "RenderComponent",
+            "value": {
+              "CurrentSprite": {
+                "type": "string",
+                "value": "BlackBomberman"
+              },
+              "ColumnCount": {
+                "type": "integer",
+                "value": 4
+              },
+              "RowCount": {
+                "type": "integer",
+                "value": 8
+              },
+              "RowIndex": {
+                "type": "integer",
+                "value": 6
+              },
+              "ColumnIndex": {
+                "type": "integer",
+                "value": 0
+              }
+            }
+          },
+          "Actions": {
+            "type": "ActionList",
+            "value": [
+              {
+                "type": "ActionRender",
+                "value": {
+                  "Name": {
+                    "type": "string",
+                    "value": "Render"
+                  },
+                  "IsEnabled": {
+                    "type": "integer",
+                    "value": 1
+                  }
+                }
+              },
+              {
+                "type": "ActionAnimate",
+                "value": {
+                  "Name": {
+                    "type": "string",
+                    "value": "Animate"
+                  },
+                  "Delay": {
+                    "type": "integer",
+                    "value": 200
+                  }
+                }
+              }
+            ]
+          },
+          "DeathSprite": {
+            "type": "string",
+            "value": "BlackBombermanDeath"
+          }
+        }
+      },
+      // HUD
+      {
+        "type": "HUD",
+        "value": {
+          "Name": {
+            "type": "string",
+            "value": "HUD"
+          },
+          "Transform": {
+            "type": "Transform",
+            "value": {
+              "Location": {
+                "type": "vector",
+                "value": "vec4(780.0, 390.0, 0.0, 0.0)"
+              },
+              "Rotation": {
+                "type": "float",
+                "value": 0.0
+              },
+              "Scale": {
+                "type": "vector",
+                "value": "vec4(512.0, 390.0, 0.0, 0.0)"
+              }
+            }
+          },
+          "RenderComponent": {
+            "type": "RenderComponent",
+            "value": {
+              "CurrentSprite": {
+                "type": "string",
+                "value": "HUD"
+              },
+              "ColumnCount": {
+                "type": "integer",
+                "value": 1
+              },
+              "RowCount": {
+                "type": "integer",
+                "value": 1
+              },
+              "RowIndex": {
+                "type": "integer",
+                "value": 0
+              },
+              "ColumnIndex": {
+                "type": "integer",
+                "value": 0
+              }
+            }
+          },
+          "Actions": {
+            "type": "ActionList",
+            "value": [
+              {
+                "type": "ActionRender",
+                "value": {
+                  "IsEnabled": {
+                    "type": "integer",
+                    "value": 1
+                  },
+                  "Priority": {
+                    "type": "integer",
+                    "value": 1
+                  }
+                }
+              }
+            ]
+          },
+          "HUDNumbers": {
+            "type": "HUDNumber",
+            "value": [
+              {
+                "type": "HUDNumber",
+                "value": {
+                  "Name": {
+                    "type": "string",
+                    "value": "HUDNumber 1"
+                  },
+                  "Transform": {
+                    "type": "Transform",
+                    "value": {
+                      "Location": {
+                        "type": "vector",
+                        "value": "vec4(512.0, 550.0, 0.0, 0.0)"
+                      },
+                      "Rotation": {
+                        "type": "float",
+                        "value": 0.0
+                      },
+                      "Scale": {
+                        "type": "vector",
+                        "value": "vec4(90.0, 15.0, 0.0, 0.0)"
+                      }
+                    }
+                  },
+                  "RenderComponent": {
+                    "type": "RenderComponent",
+                    "value": {
+                      "CurrentSprite": {
+                        "type": "string",
+                        "value": "HUDNumber"
+                      },
+                      "ColumnCount": {
+                        "type": "integer",
+                        "value": 10
+                      },
+                      "RowCount": {
+                        "type": "integer",
+                        "value": 1
+                      },
+                      "RowIndex": {
+                        "type": "integer",
+                        "value": 0
+                      },
+                      "ColumnIndex": {
+                        "type": "integer",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "Actions": {
+                    "type": "ActionList",
+                    "value": [
+                      {
+                        "type": "ActionRender",
+                        "value": {
+                          "Name": {
+                            "type": "string",
+                            "value": "Render"
+                          },
+                          "IsEnabled": {
+                            "type": "integer",
+                            "value": 1
+                          },
+                          "Priority": {
+                            "type": "integer",
+                            "value": 3
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "HUDNumber",
+                "value": {
+                  "Name": {
+                    "type": "string",
+                    "value": "HUDNumber 2"
+                  },
+                  "Transform": {
+                    "type": "Transform",
+                    "value": {
+                      "Location": {
+                        "type": "vector",
+                        "value": "vec4(512.0, 550.0, 0.0, 0.0)"
+                      },
+                      "Rotation": {
+                        "type": "float",
+                        "value": 0.0
+                      },
+                      "Scale": {
+                        "type": "vector",
+                        "value": "vec4(90.0, 15.0, 0.0, 0.0)"
+                      }
+                    }
+                  },
+                  "RenderComponent": {
+                    "type": "RenderComponent",
+                    "value": {
+                      "CurrentSprite": {
+                        "type": "string",
+                        "value": "HUDNumber"
+                      },
+                      "ColumnCount": {
+                        "type": "integer",
+                        "value": 10
+                      },
+                      "RowCount": {
+                        "type": "integer",
+                        "value": 1
+                      },
+                      "RowIndex": {
+                        "type": "integer",
+                        "value": 0
+                      },
+                      "ColumnIndex": {
+                        "type": "integer",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "Actions": {
+                    "type": "ActionList",
+                    "value": [
+                      {
+                        "type": "ActionRender",
+                        "value": {
+                          "Name": {
+                            "type": "string",
+                            "value": "Render"
+                          },
+                          "IsEnabled": {
+                            "type": "integer",
+                            "value": 1
+                          },
+                          "Priority": {
+                            "type": "integer",
+                            "value": 3
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "HUDNumber",
+                "value": {
+                  "Name": {
+                    "type": "string",
+                    "value": "HUDNumber 3"
+                  },
+                  "Transform": {
+                    "type": "Transform",
+                    "value": {
+                      "Location": {
+                        "type": "vector",
+                        "value": "vec4(512.0, 550.0, 0.0, 0.0)"
+                      },
+                      "Rotation": {
+                        "type": "float",
+                        "value": 0.0
+                      },
+                      "Scale": {
+                        "type": "vector",
+                        "value": "vec4(90.0, 15.0, 0.0, 0.0)"
+                      }
+                    }
+                  },
+                  "RenderComponent": {
+                    "type": "RenderComponent",
+                    "value": {
+                      "CurrentSprite": {
+                        "type": "string",
+                        "value": "HUDNumber"
+                      },
+                      "ColumnCount": {
+                        "type": "integer",
+                        "value": 10
+                      },
+                      "RowCount": {
+                        "type": "integer",
+                        "value": 1
+                      },
+                      "RowIndex": {
+                        "type": "integer",
+                        "value": 0
+                      },
+                      "ColumnIndex": {
+                        "type": "integer",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "Actions": {
+                    "type": "ActionList",
+                    "value": [
+                      {
+                        "type": "ActionRender",
+                        "value": {
+                          "Name": {
+                            "type": "string",
+                            "value": "Render"
+                          },
+                          "IsEnabled": {
+                            "type": "integer",
+                            "value": 1
+                          },
+                          "Priority": {
+                            "type": "integer",
+                            "value": 3
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

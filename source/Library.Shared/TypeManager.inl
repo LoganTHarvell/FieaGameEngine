@@ -1,6 +1,3 @@
-#pragma once
-
-// Header
 #include "TypeManager.h"
 
 namespace Library

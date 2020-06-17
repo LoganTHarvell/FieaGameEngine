@@ -5,6 +5,9 @@
 // Header File
 #include "Datum.h"
 
+// Standard
+#include <cassert>
+
 // First Party
 #include "Scope.h"
 #pragma endregion Includes
@@ -14,15 +17,15 @@ namespace Library
 #pragma region Look Up Tables
 	const Datum::EqualityFunctor Datum::EqualityLUT[static_cast<std::size_t>(Types::End)] =
 	{
-		[](void* lhs, void* rhs, const std::size_t size) { return memcmp(lhs, rhs, size * TypeSizeLUT[static_cast<std::size_t>(Types::Integer)]) == 0; },
-		[](void* lhs, void* rhs, const std::size_t size) { return memcmp(lhs, rhs, size * TypeSizeLUT[static_cast<std::size_t>(Types::Float)]) == 0; },
-		[](void* lhs, void* rhs, const std::size_t size) { return memcmp(lhs, rhs, size * TypeSizeLUT[static_cast<std::size_t>(Types::Vector)]) == 0; },
-		[](void* lhs, void* rhs, const std::size_t size) { return memcmp(lhs, rhs, size * TypeSizeLUT[static_cast<std::size_t>(Types::Matrix)]) == 0; },
-		[](void* lhs, void* rhs, const std::size_t size) 
+		[](void* lhs, void* rhs, std::size_t size) { return memcmp(lhs, rhs, size * TypeSizeLUT[static_cast<std::size_t>(Types::Integer)]) == 0; },
+		[](void* lhs, void* rhs, std::size_t size) { return memcmp(lhs, rhs, size * TypeSizeLUT[static_cast<std::size_t>(Types::Float)]) == 0; },
+		[](void* lhs, void* rhs, std::size_t size) { return memcmp(lhs, rhs, size * TypeSizeLUT[static_cast<std::size_t>(Types::Vector)]) == 0; },
+		[](void* lhs, void* rhs, std::size_t size) { return memcmp(lhs, rhs, size * TypeSizeLUT[static_cast<std::size_t>(Types::Matrix)]) == 0; },
+		[](void* lhs, void* rhs, std::size_t size) 
 		{ 
 			for (std::size_t i = 0; i < size; ++i)
 			{
-				if (static_cast<std::string*>(lhs)[i] != static_cast<std::string*>(rhs)[i])
+				if (reinterpret_cast<std::string*>(lhs)[i] != reinterpret_cast<std::string*>(rhs)[i])
 				{
 					return false;
 				}
@@ -30,10 +33,10 @@ namespace Library
 
 			return true;
 		},
-		[](void* lhs, void* rhs, const std::size_t size)
+		[](void* lhs, void* rhs, std::size_t size)
 		{
-			ScopePointer* lhsScope = static_cast<ScopePointer*>(lhs);
-			ScopePointer* rhsScope = static_cast<ScopePointer*>(rhs);
+			ScopePointer* lhsScope = reinterpret_cast<ScopePointer*>(lhs);
+			ScopePointer* rhsScope = reinterpret_cast<ScopePointer*>(rhs);
 
 			for (std::size_t i = 0; i < size; ++i)
 			{
@@ -46,10 +49,10 @@ namespace Library
 
 			return true;
 		},
-		[](void* lhs, void* rhs, const std::size_t size) 
+		[](void* lhs, void* rhs, std::size_t size) 
 		{
-			RTTIPointer* lhsRTTI = static_cast<RTTIPointer*>(lhs);
-			RTTIPointer* rhsRTTI = static_cast<RTTIPointer*>(rhs);
+			RTTIPointer* lhsRTTI = reinterpret_cast<RTTIPointer*>(lhs);
+			RTTIPointer* rhsRTTI = reinterpret_cast<RTTIPointer*>(rhs);
 
 			for (std::size_t i = 0; i < size; ++i)
 			{
@@ -62,10 +65,10 @@ namespace Library
 			
 			return true;
 		},
-		[](void* lhs, void* rhs, const std::size_t size) 
+		[](void* lhs, void* rhs, std::size_t size) 
 		{
-			DatumPointer* lhsDatum = static_cast<DatumPointer*>(lhs);
-			DatumPointer* rhsDatum = static_cast<DatumPointer*>(rhs);
+			DatumPointer* lhsDatum = reinterpret_cast<DatumPointer*>(lhs);
+			DatumPointer* rhsDatum = reinterpret_cast<DatumPointer*>(rhs);
 
 			for (std::size_t i = 0; i < size; ++i)
 			{
@@ -82,77 +85,77 @@ namespace Library
 
 	const Datum::ElementEqualityFunctor Datum::ElementEqualityLUT[static_cast<std::size_t>(Types::End)] =
 	{
-		[](void* lhs, void* rhs) { return *static_cast<int*>(lhs) == *static_cast<int*>(rhs); },
-		[](void* lhs, void* rhs) { return *static_cast<float*>(lhs) == *static_cast<float*>(rhs); },
-		[](void* lhs, void* rhs) { return *static_cast<glm::vec4*>(lhs) == *static_cast<glm::vec4*>(rhs); },
-		[](void* lhs, void* rhs) { return *static_cast<glm::mat4*>(lhs) == *static_cast<glm::mat4*>(rhs); },
-		[](void* lhs, void* rhs) { return *static_cast<std::string*>(lhs) == *static_cast<std::string*>(rhs); },
+		[](void* lhs, void* rhs) { return *reinterpret_cast<int*>(lhs) == *reinterpret_cast<int*>(rhs); },
+		[](void* lhs, void* rhs) { return *reinterpret_cast<float*>(lhs) == *reinterpret_cast<float*>(rhs); },
+		[](void* lhs, void* rhs) { return *reinterpret_cast<glm::vec4*>(lhs) == *reinterpret_cast<glm::vec4*>(rhs); },
+		[](void* lhs, void* rhs) { return *reinterpret_cast<glm::mat4*>(lhs) == *reinterpret_cast<glm::mat4*>(rhs); },
+		[](void* lhs, void* rhs) { return *reinterpret_cast<std::string*>(lhs) == *reinterpret_cast<std::string*>(rhs); },
 		[](void* lhs, void* rhs)
 		{
-			ScopePointer* lhsScope = static_cast<ScopePointer*>(lhs);
-			ScopePointer* rhsScope = static_cast<ScopePointer*>(rhs);
+			ScopePointer* lhsScope = reinterpret_cast<ScopePointer*>(lhs);
+			ScopePointer* rhsScope = reinterpret_cast<ScopePointer*>(rhs);
 			return ((!*lhsScope && !*rhsScope) || (*lhsScope && (*lhsScope)->Equals(*rhsScope)));
 		},
 		[](void* lhs, void* rhs) 
 		{
-			RTTIPointer* lhsRTTI = static_cast<RTTIPointer*>(lhs);
-			RTTIPointer* rhsRTTI = static_cast<RTTIPointer*>(rhs);
+			RTTIPointer* lhsRTTI = reinterpret_cast<RTTIPointer*>(lhs);
+			RTTIPointer* rhsRTTI = reinterpret_cast<RTTIPointer*>(rhs);
 			return ((!*lhsRTTI && !*rhsRTTI) || (*lhsRTTI && (*lhsRTTI)->Equals(*rhsRTTI)));
 		},
 		[](void* lhs, void* rhs) 
 		{
-			DatumPointer* lhsDatum = static_cast<DatumPointer*>(lhs);
-			DatumPointer* rhsDatum = static_cast<DatumPointer*>(rhs);
+			DatumPointer* lhsDatum = reinterpret_cast<DatumPointer*>(lhs);
+			DatumPointer* rhsDatum = reinterpret_cast<DatumPointer*>(rhs);
 			return ((!*lhsDatum && !*rhsDatum) || (*lhsDatum && *rhsDatum && **lhsDatum == **rhsDatum));
 		}
 	};
 
 	const Datum::CreateDefaultFunctor Datum::CreateDefaultLUT[static_cast<std::size_t>(Types::End)] =
 	{
-		[](void* data, const std::size_t index) { new(static_cast<int*>(data) + index)int(0); },
-		[](void* data, const std::size_t index) { new(static_cast<float*>(data) + index)float(0.0f); },
-		[](void* data, const std::size_t index) { new(static_cast<glm::vec4*>(data) + index)glm::vec4(0.0f); },
-		[](void* data, const std::size_t index) { new(static_cast<glm::mat4*>(data) + index)glm::mat4(0.0f); },
-		[](void* data, const std::size_t index) { new(static_cast<std::string*>(data) + index)std::string(); },
-		[](void* data, const std::size_t index) { new(static_cast<ScopePointer*>(data) + index)ScopePointer(nullptr); },
-		[](void* data, const std::size_t index) { new(static_cast<RTTIPointer*>(data) + index)RTTIPointer(nullptr); },
-		[](void* data, const std::size_t index) { new(static_cast<DatumPointer*>(data) + index)DatumPointer(nullptr); }
+		[](void* data, std::size_t index) { new(reinterpret_cast<int*>(data) + index)int(0); },
+		[](void* data, std::size_t index) { new(reinterpret_cast<float*>(data) + index)float(0.0f); },
+		[](void* data, std::size_t index) { new(reinterpret_cast<glm::vec4*>(data) + index)glm::vec4(0.0f); },
+		[](void* data, std::size_t index) { new(reinterpret_cast<glm::mat4*>(data) + index)glm::mat4(0.0f); },
+		[](void* data, std::size_t index) { new(reinterpret_cast<std::string*>(data) + index)std::string(); },
+		[](void* data, std::size_t index) { new(reinterpret_cast<ScopePointer*>(data) + index)ScopePointer(nullptr); },
+		[](void* data, std::size_t index) { new(reinterpret_cast<RTTIPointer*>(data) + index)RTTIPointer(nullptr); },
+		[](void* data, std::size_t index) { new(reinterpret_cast<DatumPointer*>(data) + index)DatumPointer(nullptr); }
 	};
 
 	const Datum::ToStringFunctor Datum::ToStringLUT[static_cast<std::size_t>(Types::End)] =
 	{
-		[](void* data, const std::size_t index) { return std::to_string(static_cast<int*>(data)[index]); },
-		[](void* data, const std::size_t index) { return std::to_string(static_cast<float*>(data)[index]); },
-		[](void* data, const std::size_t index) { return glm::to_string(static_cast<glm::vec4*>(data)[index]); },
-		[](void* data, const std::size_t index) { return glm::to_string(static_cast<glm::mat4*>(data)[index]); },
-		[](void* data, const std::size_t index) { return static_cast<std::string*>(data)[index]; },
-		[](void* data, const std::size_t index) { const ScopePointer ptr = static_cast<ScopePointer*>(data)[index]; return ptr ? ptr->ToString() : "nullptr";  },
-		[](void* data, const std::size_t index) { const RTTIPointer ptr = static_cast<RTTIPointer*>(data)[index]; return ptr ? ptr->ToString() : "nullptr";  },
-		[](void* data, const std::size_t index) { const DatumPointer ptr = static_cast<DatumPointer*>(data)[index]; return ptr ? ptr->ToString() : "nullptr";  }
+		[](void* data, std::size_t index) { return std::to_string(reinterpret_cast<int*>(data)[index]); },
+		[](void* data, std::size_t index) { return std::to_string(reinterpret_cast<float*>(data)[index]); },
+		[](void* data, std::size_t index) { return glm::to_string(reinterpret_cast<glm::vec4*>(data)[index]); },
+		[](void* data, std::size_t index) { return glm::to_string(reinterpret_cast<glm::mat4*>(data)[index]); },
+		[](void* data, std::size_t index) { return reinterpret_cast<std::string*>(data)[index]; },
+		[](void* data, std::size_t index) { ScopePointer ptr = reinterpret_cast<ScopePointer*>(data)[index]; return ptr ? ptr->ToString() : "nullptr";  },
+		[](void* data, std::size_t index) { RTTIPointer ptr = reinterpret_cast<RTTIPointer*>(data)[index]; return ptr ? ptr->ToString() : "nullptr";  },
+		[](void* data, std::size_t index) { DatumPointer ptr = reinterpret_cast<DatumPointer*>(data)[index]; return ptr ? ptr->ToString() : "nullptr";  }
 	};
 
 	const Datum::FromStringFunctor Datum::FromStringLUT[static_cast<std::size_t>(Types::End)] =
 	{
-		[](const std::string& str, void* data, const std::size_t index) { static_cast<int*>(data)[index] = std::stoi(str); },
-		[](const std::string& str, void* data, const std::size_t index) { static_cast<float*>(data)[index] = std::stof(str); },
-		[](const std::string& str, void* data, const std::size_t index)
+		[](std::string str, void* data, std::size_t index) { reinterpret_cast<int*>(data)[index] = std::stoi(str); },
+		[](std::string str, void* data, std::size_t index) { reinterpret_cast<float*>(data)[index] = std::stof(str); },
+		[](std::string str, void* data, std::size_t index)
 		{
-			float* vector = glm::value_ptr(static_cast<glm::vec4*>(data)[index]);
+			float* vector = glm::value_ptr(reinterpret_cast<glm::vec4*>(data)[index]);
 			sscanf_s(str.c_str(), "vec4(%f,%f,%f,%f)", &vector[0], &vector[1], &vector[2], &vector[3]);
 		},
-		[](const std::string& str, void* data, std::size_t index)
+		[](std::string str, void* data, std::size_t index)
 		{
-			float* matrix = glm::value_ptr(static_cast<glm::mat4*>(data)[index]);
+			float* matrix = glm::value_ptr(reinterpret_cast<glm::mat4*>(data)[index]);
 			sscanf_s(str.c_str(), "mat4x4((%f,%f,%f,%f), (%f,%f,%f,%f), (%f,%f,%f,%f), (%f,%f,%f,%f))",
 						&matrix[0], &matrix[1], &matrix[2], &matrix[3],
 						&matrix[4], &matrix[5], &matrix[6], &matrix[7],
 						&matrix[8], &matrix[9], &matrix[10], &matrix[11],
 						&matrix[12], &matrix[13], &matrix[14], &matrix[15]);
 		},
-		[](const std::string& str, void* data, const std::size_t index) { static_cast<std::string*>(data)[index] = str; },
-		[](const std::string&, void*, const std::size_t) {},
-		[](const std::string&, void*, const std::size_t) {},
-		[](const std::string&, void*, const std::size_t) {}
+		[](std::string str, void* data, std::size_t index) { reinterpret_cast<std::string*>(data)[index] = str; },
+		[](std::string, void*, std::size_t) {},
+		[](std::string, void*, std::size_t) {},
+		[](std::string, void*, std::size_t) {}
 	};
 #pragma endregion Look Up Tables
 
@@ -319,42 +322,42 @@ namespace Library
 		ScalarInitializationHelper(rhs);
 	}
 
-	Datum::Datum(const std::initializer_list<int> rhs)
+	Datum::Datum(std::initializer_list<int> rhs)
 	{
 		ListInitializationHelper(rhs);
 	}
 
-	Datum::Datum(const std::initializer_list<float> rhs)
+	Datum::Datum(std::initializer_list<float> rhs)
 	{
 		ListInitializationHelper(rhs);
 	}
 
-	Datum::Datum(const std::initializer_list<glm::vec4> rhs)
+	Datum::Datum(std::initializer_list<glm::vec4> rhs)
 	{
 		ListInitializationHelper(rhs);
 	}
 
-	Datum::Datum(const std::initializer_list<glm::mat4> rhs)
+	Datum::Datum(std::initializer_list<glm::mat4> rhs)
 	{
 		ListInitializationHelper(rhs);
 	}
 
-	Datum::Datum(const std::initializer_list<std::string> rhs)
+	Datum::Datum(std::initializer_list<std::string> rhs)
 	{
 		ListInitializationHelper(rhs);
 	}
 
-	Datum::Datum(const std::initializer_list<ScopePointer> rhs)
+	Datum::Datum(std::initializer_list<ScopePointer> rhs)
 	{
 		ListInitializationHelper(rhs);
 	}
 
-	Datum::Datum(const std::initializer_list<RTTIPointer> rhs)
+	Datum::Datum(std::initializer_list<RTTIPointer> rhs)
 	{
 		ListInitializationHelper(rhs);
 	}
 
-	Datum::Datum(const std::initializer_list<DatumPointer> rhs)
+	Datum::Datum(std::initializer_list<DatumPointer> rhs)
 	{
 		ListInitializationHelper(rhs);
 	}
@@ -401,42 +404,42 @@ namespace Library
 		return ScalarInitializationHelper(rhs);
 	}
 
-	Datum& Datum::operator=(const std::initializer_list<int> rhs)
+	Datum& Datum::operator=(std::initializer_list<int> rhs)
 	{
 		return ListInitializationHelper(rhs);
 	}
 
-	Datum& Datum::operator=(const std::initializer_list<float> rhs)
+	Datum& Datum::operator=(std::initializer_list<float> rhs)
 	{
 		return ListInitializationHelper(rhs);
 	}
 
-	Datum& Datum::operator=(const std::initializer_list<glm::vec4> rhs)
+	Datum& Datum::operator=(std::initializer_list<glm::vec4> rhs)
 	{
 		return ListInitializationHelper(rhs);
 	}
 
-	Datum& Datum::operator=(const std::initializer_list<glm::mat4> rhs)
+	Datum& Datum::operator=(std::initializer_list<glm::mat4> rhs)
 	{
 		return ListInitializationHelper(rhs);
 	}
 
-	Datum& Datum::operator=(const std::initializer_list<std::string> rhs)
+	Datum& Datum::operator=(std::initializer_list<std::string> rhs)
 	{
 		return ListInitializationHelper(rhs);
 	}
 
-	Datum& Datum::operator=(const std::initializer_list<ScopePointer> rhs)
+	Datum& Datum::operator=(std::initializer_list<ScopePointer> rhs)
 	{
 		return ListInitializationHelper(rhs);
 	}
 
-	Datum& Datum::operator=(const std::initializer_list<RTTIPointer> rhs)
+	Datum& Datum::operator=(std::initializer_list<RTTIPointer> rhs)
 	{
 		return ListInitializationHelper(rhs);
 	}
 
-	Datum& Datum::operator=(const std::initializer_list<DatumPointer> rhs)
+	Datum& Datum::operator=(std::initializer_list<DatumPointer> rhs)
 	{
 		return ListInitializationHelper(rhs);
 	}
@@ -552,7 +555,7 @@ namespace Library
 #pragma endregion Boolean Operators
 
 #pragma region Size and Capacity
-	void Datum::Reserve(const std::size_t capacity)
+	void Datum::Reserve(std::size_t capacity)
 	{
 		if (mType == Types::Unknown)	throw std::runtime_error("Data type unknown.");
 		if (!mInternalStorage)			throw std::runtime_error("Cannot modify external storage.");
@@ -560,14 +563,15 @@ namespace Library
 		if (capacity > mCapacity)
 		{
 			void* newMemory = realloc(mData.VoidPtr, capacity * TypeSizeLUT[static_cast<std::size_t>(mType)]);
-			if (!newMemory) throw std::bad_alloc();
+
+			assert(newMemory != nullptr);
 
 			mData.VoidPtr = newMemory;
 			mCapacity = capacity;
 		}
 	}
 
-	void Datum::Resize(const std::size_t size)
+	void Datum::Resize(std::size_t size)
 	{
 		if (mType == Types::Unknown)	throw std::runtime_error("Data type unknown.");
 		if (!mInternalStorage)			throw std::runtime_error("Cannot modify external storage.");
@@ -605,7 +609,8 @@ namespace Library
 		else if (mSize < mCapacity)
 		{
 			void* newMemory = realloc(mData.VoidPtr, mSize * TypeSizeLUT[static_cast<std::size_t>(mType)]);
-			if (!newMemory) throw std::bad_alloc();
+
+			assert(newMemory != nullptr);
 
 			mData.VoidPtr = newMemory;
 		}
@@ -724,7 +729,7 @@ namespace Library
 	}
 
 	template<typename T>
-	Datum& Datum::ListInitializationHelper(const std::initializer_list<T> rhs)
+	Datum& Datum::ListInitializationHelper(std::initializer_list<T> rhs)
 	{
 		if (mType == Types::Unknown)
 		{

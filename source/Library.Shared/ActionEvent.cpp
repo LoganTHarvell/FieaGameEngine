@@ -5,12 +5,8 @@
 // Header
 #include "ActionEvent.h"
 
-#include <utility>
-
 // First Party
 #include "World.h"
-#include "EventMessageAttributed.h"
-#include "Event.h"
 #include "EventQueue.h"
 #pragma endregion Includes
 
@@ -25,14 +21,14 @@ namespace Library
 				{ DelayKey, Types::Integer, false, 1, offsetof(ActionEvent, mDelay) }
 			},
 
-			Entity::TypeIdClass()
+			Action::TypeIdClass()
 		};
 
 		return typeInfo;
 	}
 
-	ActionEvent::ActionEvent(std::string name, std::string subtype, const int delay) : Entity(TypeIdClass(), std::move(name)),
-		mSubtype(std::move(subtype)), mDelay(delay)
+	ActionEvent::ActionEvent(const std::string& name, const std::string& subtype, const int delay) : Action(TypeIdClass(), name),
+		mSubtype(subtype), mDelay(delay)
 	{
 	}
 

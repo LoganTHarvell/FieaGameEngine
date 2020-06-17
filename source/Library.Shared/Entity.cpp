@@ -4,7 +4,10 @@
 
 // Header
 #include "Entity.h"
-#include "WorldState.h"
+
+//First Party
+#include "Sector.h"
+#include "Action.h"
 #pragma endregion Includes
 
 namespace Library
@@ -13,70 +16,24 @@ namespace Library
 	{
 		static const TypeManager::TypeInfo typeInfo
 		{
-			SignatureListType(),
+			{
+				{ NameKey, Types::String, false, 1, offsetof(Entity, mName) },
+				{ ActionsKey, Types::Scope, true, 1, 0 }
+			},
+
 			Attributed::TypeIdClass()
 		};
 
 		return typeInfo;
 	}
 
-	Entity::Entity(std::string name) : Attributed(TypeIdClass()), 
-		mName(std::move(name))
+	Entity::Entity(const std::string& name) : Attributed(TypeIdClass()), 
+		mName(name), mActions(mPairPtrs[ActionsIndex]->second)
 	{
 	}
 
-	Entity::Entity(const Entity& rhs) : Attributed(rhs),
-		mName(rhs.mName)
-	{
-		rhs.ForEachChild([this](const Entity& rhsChild)
-		{
-			assert(Find(rhsChild.mName) && Find(rhsChild.mName)->Size() > 0 
-				&& Find(rhsChild.mName)->Type() == Types::Scope 
-				&& Find(rhsChild.mName)->Get<Scope*>()->Is(Entity::TypeIdClass()));
-			
-			mChildren.EmplaceBack(Find(rhsChild.Name())->Get<Scope*>()->As<Entity>());
-		});
-	}
-
-	Entity& Entity::operator=(const Entity& rhs)
-	{
-		if (this == &rhs) return *this;
-
-		mName = rhs.mName;
-		Attributed::operator=(rhs);
-
-		rhs.ForEachChild([this](const Entity& rhsChild)
-		{
-			assert(Find(rhsChild.mName));
-			assert(Find(rhsChild.mName)->Size() > 0);
-			assert(Find(rhsChild.mName)->Type() == Types::Scope);
-			assert(Find(rhsChild.mName)->Get<Scope*>()->Is(Entity::TypeIdClass()));
-
-			mChildren.EmplaceBack(Find(rhsChild.Name())->Get<Scope*>()->As<Entity>());
-		});
-		
-		return *this;
-	}
-
-	Entity::Entity(Entity&& rhs) noexcept : Attributed(std::move(rhs)),
-		mName(std::move(rhs.mName)), mChildren(std::move(rhs.mChildren))
-	{
-	}
-
-	Entity& Entity::operator=(Entity&& rhs) noexcept
-	{
-		if (this == &rhs) return *this;
-
-		mName = std::move(rhs.mName);
-		mChildren = std::move(rhs.mChildren);
-		
-		Attributed::operator=(std::move(rhs));
-		
-		return *this;
-	}
-
-	Entity::Entity(const IdType typeId, std::string name) : Attributed(typeId),
-		mName(std::move(name))
+	Entity::Entity(const RTTI::IdType typeId, const std::string& name) : Attributed(typeId), 
+		mName(name), mActions(mPairPtrs[ActionsIndex]->second)
 	{
 	}
 
@@ -85,163 +42,77 @@ namespace Library
 		return new Entity(*this);
 	}
 
-	Entity* Entity::GetParent() const
+	const std::string& Entity::Name() const
 	{
-		Scope* parent = Scope::GetParent();
-		if (!parent) return nullptr;
-
-		assert(parent->Is(Entity::TypeIdClass()));
-		return static_cast<Entity*>(parent);
+		return mName;
 	}
 
-	void Entity::SetParent(Entity* entity)
+	void Entity::SetName(const std::string& name)
 	{
-		if (entity == nullptr)
+		mName = name;
+	}
+
+	Sector* Entity::GetSector() const
+	{
+		Scope* parent = GetParent();
+		if (!parent) return nullptr;
+
+		assert(parent->Is(Sector::TypeIdClass()));
+		return static_cast<Sector*>(parent);
+	}
+
+	void Entity::SetSector(Sector* sector)
+	{
+		if (sector == nullptr)
 		{
-			Entity* parent = GetParent();
+			Sector* parent = GetSector();
 			if (parent) parent->Orphan(*this);
 		}
 		else
 		{
-			entity->Adopt(*this, mName);
+			sector->Adopt(*this, mName);
 		}
 	}
 
-	void Entity::ForEachChild(const std::function<void(Entity&)>& functor)
+	Entity::Data& Entity::Actions()
 	{
-		mUpdatingChildren = true;
-		
-		for (auto* child : mChildren)
-		{
-			assert(child != nullptr);
-			functor(*child);
-		};
-
-		mUpdatingChildren = false;
+		return mActions;
 	}
 
-	void Entity::ForEachChild(const std::function<void(const Entity&)>& functor) const
-	{		
-		for (auto* child : mChildren)
-		{
-			assert(child != nullptr);
-			functor(*child);
-		};
-	}
-
-	Entity& Entity::AddChild(Entity& child)
+	const Entity::Data& Entity::Actions() const
 	{
-		if (mUpdatingChildren)
-		{
-			PendingChild pendingChild
-			{
-				child,
-				PendingChild::State::ToAdd,
-			};
-
-			mPendingChildren.EmplaceBack(pendingChild);
-		}
-		else
-		{
-			Adopt(child, child.Name());
-			mChildren.EmplaceBack(&child);
-		}
-
-		return child;
+		return mActions;
 	}
 
-	void Entity::DestroyChild(Entity& child)
+	Action* Entity::CreateAction(const std::string& className, const std::string& name)
 	{
-		if (mUpdatingChildren)
-		{
-			PendingChild pendingChild
-			{
-				child,
-				PendingChild::State::ToRemove,
-			};
+		Scope* newScope = Factory<Scope>::Create(className);
 
-			mPendingChildren.EmplaceBack(pendingChild);
-		}
-		else
+		if (newScope)
 		{
-			mChildren.Remove(&child);
-			delete Orphan(child);
+			assert(newScope->Is(Action::TypeIdClass()));
+
+			Action* newAction = static_cast<Action*>(newScope);
+			newAction->SetName(name);
+
+			Adopt(*newScope, ActionsKey);
+			return newAction;
 		}
+
+		return nullptr;
 	}
 
-	Entity& Entity::CreateChild(const std::string& className, const std::string& name)
-	{
-		Entity* child = Factory<Entity>::Create(className);
-
-		if (child == nullptr)
-		{
-			throw std::runtime_error("Create failed.");
-		}
-		
-		child->SetName(name);
-		
-		if (mUpdatingChildren)
-		{
-			PendingChild pendingChild
-			{
-				*child,
-				PendingChild::State::ToAdd,
-			};
-
-			mPendingChildren.EmplaceBack(pendingChild);
-		}
-		else
-		{
-			Adopt(*child, name);
-			mChildren.EmplaceBack(child);
-		}
-
-		return *child;
-	}
-
-	void Entity::Initialize(WorldState& worldState)
-	{
-		if (!mEnabled) return;
-
-		ForEachChild([&worldState](Entity& entity)
-		{
-			worldState.Entity = &entity;
-			worldState.Entity->Initialize(worldState);
-		});
-
-		worldState.Entity = nullptr;
-
-		UpdatePendingChildren();
-	}
-	
 	void Entity::Update(WorldState& worldState)
 	{
-		if (!mEnabled) return;
-				
-		ForEachChild([&worldState](Entity& entity)
+		for (std::size_t i = 0; i < mActions.Size(); ++i)
 		{
-			worldState.Entity = &entity;
-			worldState.Entity->Update(worldState);
-		});
-		
-		worldState.Entity = nullptr;
+			assert(mActions[i].Is(Action::TypeIdClass()));
 
-		UpdatePendingChildren();
-	}
+			worldState.Action = static_cast<Action*>(mActions.Get<Scope*>(i));
+			worldState.Action->Update(worldState);
+		}
 
-	void Entity::Shutdown(WorldState& worldState)
-	{
-		if (!mEnabled) return;
-				
-		ForEachChild([&worldState](Entity& entity)
-		{
-			worldState.Entity = &entity;
-			worldState.Entity->Shutdown(worldState);
-		});
-		
-		worldState.Entity = nullptr;
-
-		UpdatePendingChildren();
+		worldState.Action = nullptr;
 	}
 
 	std::string Entity::ToString() const
@@ -249,27 +120,5 @@ namespace Library
 		std::ostringstream oss;
 		oss << mName << " (Entity)";
 		return oss.str();
-	}
-
-	void Entity::UpdatePendingChildren()
-	{
-		for (PendingChild& pendingChild : mPendingChildren)
-		{
-			switch (pendingChild.ChildState)
-			{
-			case PendingChild::State::ToAdd:
-				AddChild(pendingChild.Child);
-				break;
-
-			case PendingChild::State::ToRemove:
-				DestroyChild(pendingChild.Child);
-				break;
-
-			default:
-				break;
-			}
-		}
-		
-		mPendingChildren.Clear();
 	}
 }

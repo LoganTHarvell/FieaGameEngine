@@ -1,12 +1,9 @@
-#pragma once
-
-// Header
 #include "Reaction.h"
 
 namespace Library
 {
 #pragma region Special Members
-	inline Reaction::Reaction(const IdType typeId, std::string name) : Entity(typeId, std::move(name))
+	inline Reaction::Reaction(const RTTI::IdType typeId, const std::string& name) : ActionList(typeId, name)
 	{
 	}
 #pragma endregion Special Members

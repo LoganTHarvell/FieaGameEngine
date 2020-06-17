@@ -1,6 +1,3 @@
-#pragma once
-
-// Header
 #include "Stack.h"
 
 namespace Library

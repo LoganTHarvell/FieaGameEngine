@@ -1,0 +1,30 @@
+{
+  "DestructibleWalls": {
+    "type": "integer",
+    "value": 80
+  },
+  "ExtraBombs": {
+    "type": "integer",
+    "value": 4
+  },
+  "ExplosionExpanders": {
+    "type": "integer",
+    "value": 4
+  },
+  "Accelerators": {
+    "type": "integer",
+    "value": 4
+  },
+  "MaximumExplosions": {
+    "type": "integer",
+    "value": 4
+  },
+  "Kicks": {
+    "type": "integer",
+    "value": 4
+  },
+  "BoxingGloves": {
+    "type": "integer",
+    "value": 0
+  }
+}

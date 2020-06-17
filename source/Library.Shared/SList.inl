@@ -1,6 +1,3 @@
-#pragma once
-
-// Header
 #include "SList.h"
 
 namespace Library
@@ -328,10 +325,8 @@ namespace Library
 	template<typename T>
 	inline typename SList<T>::Iterator SList<T>::Find(const T& value)
 	{
-		if (!mEqualityFunctor || !*mEqualityFunctor)
-		{
-			throw std::runtime_error("EqualityFunctor null.");
-		}
+		if (!*mEqualityFunctor) throw std::runtime_error("EqualityFunctor null.");
+		
 		auto it = begin();
 		for (; it != end(); ++it)
 		{
@@ -347,10 +342,7 @@ namespace Library
 	template<typename T>
 	inline typename SList<T>::ConstIterator SList<T>::Find(const T& value) const
 	{
-		if (!mEqualityFunctor || !*mEqualityFunctor)
-		{
-			throw std::runtime_error("EqualityFunctor null.");
-		}
+		if (!*mEqualityFunctor) throw std::runtime_error("EqualityFunctor null.");
 		
 		auto it = cbegin();
 		for (; it != cend(); ++it)

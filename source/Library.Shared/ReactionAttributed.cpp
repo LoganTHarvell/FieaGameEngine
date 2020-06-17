@@ -5,17 +5,12 @@
 // Header
 #include "ReactionAttributed.h"
 
-// Standard
-#include <iostream>
-
 // First Party
 #include "EventMessageAttributed.h"
 #include "EventPublisher.h"
 #include "Event.h"
 #include "World.h"
 #pragma endregion Includes
-
-using namespace std::string_literals;
 
 namespace Library
 {
@@ -28,7 +23,7 @@ namespace Library
 				{ SubtypeKey, Types::String, false, 1, offsetof(ReactionAttributed, mSubtype) },
 			},
 
-			Reaction::TypeIdClass()
+			ActionList::TypeIdClass()
 		};
 
 		return typeInfo;
@@ -37,23 +32,15 @@ namespace Library
 
 
 #pragma region Special Members
-	ReactionAttributed::ReactionAttributed(std::string name, Subtype subtype) : Reaction(TypeIdClass(), std::move(name)),
-		mSubtype(std::move(subtype))
+	ReactionAttributed::ReactionAttributed(const std::string& name, const Subtype& subtype) : Reaction(TypeIdClass(), name),
+		mSubtype(subtype)
 	{
 		Event<EventMessageAttributed>::Subscribe(*this);
 	}
 
 	ReactionAttributed::~ReactionAttributed()
 	{
-		try
-		{
-			Event<EventMessageAttributed>::Unsubscribe(*this);
-		}
-		catch (...)
-		{
-			std::cerr	<< "ReactionAttributed instance unsubscribe from Event<EventMessageAttributed> on destruction."s
-						<< "It could not be found in the Event's subscriber list."s << std::endl;
-		}
+		Event<EventMessageAttributed>::Unsubscribe(*this);
 	}
 
 	ReactionAttributed::ReactionAttributed(const ReactionAttributed& rhs) : Reaction(rhs)
@@ -61,17 +48,9 @@ namespace Library
 		Event<EventMessageAttributed>::Subscribe(*this);
 	}
 
-	ReactionAttributed::ReactionAttributed(ReactionAttributed&& rhs) noexcept : Reaction(std::move(rhs))
+	ReactionAttributed::ReactionAttributed(ReactionAttributed&& rhs) noexcept : Reaction(rhs)
 	{
-		try
-		{
-			Event<EventMessageAttributed>::Subscribe(*this);
-		}
-		catch (...)
-		{
-			std::cerr	<< "ReactionAttributed instance subscription to Event<EventMessageAttributed> failed."s
-						<< "It is already found on the Event's subscriber list. (Impossible)"s << std::endl;
-		}
+		Event<EventMessageAttributed>::Subscribe(*this);
 	}
 #pragma endregion Special Members
 
@@ -89,17 +68,17 @@ namespace Library
 		auto message = static_cast<Event<EventMessageAttributed>*>(&eventPublisher)->Message;
 		
 		if (mSubtype == message.GetSubtype() && message.GetWorld())
-		{			
+		{
 			Scope parameters;
 
 			message.ForEachAuxiliary([&](const Attribute& attribute) 
-            {
-                mParameters[attribute.first] = attribute.second; 
-            });
-					
-			Entity::Update(message.GetWorld()->GetWorldState());
-			
-			mParameters.Clear();
+			{
+				parameters[attribute.first] = attribute.second; 
+			});
+
+			mParameterStack.Push(parameters);
+			ActionList::Update(message.GetWorld()->GetWorldState());
+			mParameterStack.Pop();
 		}
 	}
 #pragma endregion Event Subscriber Overrides
@@ -109,12 +88,12 @@ namespace Library
 	{
 		Data* result = nullptr;
 
-		if (!mParameters.IsEmpty())
+		if (!mParameterStack.IsEmpty())
 		{
-			result = mParameters.Find(key);
+			result = mParameterStack.Top().Find(key);
 		}
 		
-		return result ? result : Entity::Find(key);
+		return result ? result : ActionList::Find(key);
 	}
 #pragma endregion Scope Overrides
 }

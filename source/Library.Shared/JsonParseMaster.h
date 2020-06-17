@@ -93,12 +93,7 @@ namespace Library
 			/// <summary>
 			/// Virtual initializer method called before parsing to perform any needed steps.
 			/// </summary>
-			virtual void PreParse() {};
-			
-			/// <summary>
-			/// Virtual initializer method called after parsing to perform any needed steps.
-			/// </summary>
-			virtual void PostParse() {};
+			virtual void Initialize() {};
 
 			/// <summary>
 			/// Sets the JsonParseMaster associated with this SharedData.
@@ -283,5 +278,4 @@ namespace Library
 	};
 }
 
-// Inline File
 #include "JsonParseMaster.inl"

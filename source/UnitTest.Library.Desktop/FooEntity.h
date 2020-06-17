@@ -12,14 +12,13 @@ namespace UnitTests
 		static const Library::TypeManager::TypeInfo& TypeInfo();
 
 		explicit FooEntity(const std::string& name=std::string());
-		explicit FooEntity(float data, const std::string& name=std::string());
 		virtual ~FooEntity() = default;
 		FooEntity(const FooEntity & rhs) = default;
 		FooEntity& operator=(const FooEntity & rhs) = default;
 		FooEntity(FooEntity && rhs) noexcept = default;
 		FooEntity& operator=(FooEntity && rhs) noexcept = default;
 
-		virtual gsl::owner<Library::Scope*> Clone() const override;
+		virtual gsl::owner<Library::Scope*> FooEntity::Clone() const override;
 
 		virtual void Update(Library::WorldState& worldState) override;
 
@@ -27,14 +26,11 @@ namespace UnitTests
 
 		bool IsUpdated();
 
-		float& Data();
-		float Data() const;
-
 	private:
-		float mData{ 0 };
+		int mData{ 0 };
 
 		bool mIsUpdated{ false };
 	};
 
-	ConcreteFactory(FooEntity, Library::Entity)
+	ConcreteFactory(FooEntity, Library::Scope)
 }

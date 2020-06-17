@@ -2,7 +2,9 @@
 
 namespace Library
 {
-	// Forward Declarations
+	/// <summary>
+	/// Forward declaration for Vector class used as the default Container type.
+	/// </summary>
 	template<typename T> class Vector;
 
 	/// <summary>
@@ -86,6 +88,5 @@ namespace Library
 	};
 }
 
-// Inline File
 #include "Stack.inl"
 

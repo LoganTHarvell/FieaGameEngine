@@ -2,6 +2,7 @@
 
 #pragma region Includes
 // First Party
+#include "RTTI.h"
 #include "TypeManager.h"
 #include "Scope.h"
 #pragma endregion Includes
@@ -27,7 +28,7 @@ namespace Library
 		/// Populates the scope with attributes associated with the passed RTTI::IdType.
 		/// </summary>
 		/// <param name="typeId">RTTI::IdType to use during Populate.</param>
-		explicit Attributed(const IdType typeId);
+		explicit Attributed(const RTTI::IdType typeId);
 		
 		/// <summary>
 		/// Default constructor.
@@ -123,25 +124,25 @@ namespace Library
 		/// Gets the list of prescribed Attribute values.
 		/// </summary>
 		/// <returns>List of pointers to all prescribed Attribute values.</returns>
-		void ForEachPrescribed(const std::function<void(Attribute&)>& functor);
+		void ForEachPrescribed(std::function<void(Attribute&)> functor);
 
 		/// <summary>
 		/// Gets the list of prescribed Attribute values.
 		/// </summary>
 		/// <returns>List of pointers to all prescribed Attribute values.</returns>
-		void ForEachPrescribed(const std::function<void(const Attribute&)>& functor) const;
+		void ForEachPrescribed(std::function<void(const Attribute&)> functor) const;
 
 		/// <summary>
 		/// Gets the list of auxiliary Attribute values.
 		/// </summary>
 		/// <returns>List of pointers to all auxiliary Attribute values.</returns>
-		void ForEachAuxiliary(const std::function<void(Attribute&)>& functor);
+		void ForEachAuxiliary(std::function<void(Attribute&)> functor);
 
 		/// <summary>
 		/// Gets the list of prescribed Attribute values.
 		/// </summary>
 		/// <returns>List of pointers to all auxiliary Attribute values.</returns>
-		void ForEachAuxiliary(const std::function<void(const Attribute&)>& functor) const;
+		void ForEachAuxiliary(std::function<void(const Attribute&)> functor) const;
 #pragma endregion Accessors
 		
 #pragma region Modifiers
@@ -166,7 +167,7 @@ namespace Library
 		/// </summary>
 		/// <param name="rhs">RTTI derived class instance to be compared against.</param>
 		/// <returns>True if the Attributed instance is equivalent to the given RTTI derived class instance.</returns>
-		virtual bool Equals(const RTTI* rhs) const override;
+		bool Equals(const RTTI* rhs) const;
 #pragma endregion RTTI Overrides
 
 #pragma region Helper Methods

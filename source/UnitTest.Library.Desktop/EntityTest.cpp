@@ -3,6 +3,7 @@
 #include "ToStringSpecialization.h"
 #include "Entity.h"
 #include "FooEntity.h"
+#include "Sector.h"
 #include "ActionIncrement.h"
 
 using namespace std::string_literals;
@@ -20,8 +21,10 @@ namespace EntitySystemTests
 		TEST_METHOD_INITIALIZE(Initialize)
 		{
 			TypeManager::Create();
+			RegisterType<Sector>();
 			RegisterType<Entity>();
 			RegisterType<FooEntity>();
+			RegisterType<Action>();
 			RegisterType<ActionIncrement>();
 
 #if defined(DEBUG) || defined(_DEBUG)
@@ -48,36 +51,40 @@ namespace EntitySystemTests
 
 		TEST_METHOD(Constructor)
 		{
-			const Entity entity("Entity");
+			Entity entity("Entity");
 			Assert::AreEqual("Entity"s, entity.Name());
+			Assert::IsNotNull(entity.Find("Name"));
+			Assert::AreEqual("Entity"s, entity.Find("Name")->Get<std::string>());
 
 			FooEntity fooEntity("FooEntity");
 			Assert::AreEqual("FooEntity"s, fooEntity.Name());
+			Assert::IsNotNull(fooEntity.Find("Name"));
+			Assert::AreEqual("FooEntity"s, fooEntity.Find("Name")->Get<std::string>());
 			Assert::IsNotNull(fooEntity.Find("Data"));
-			Assert::AreEqual(0.0f, fooEntity.Find("Data")->Get<float>());
+			Assert::AreEqual(0, fooEntity.Find("Data")->Get<int>());
 		}
 
 		TEST_METHOD(RTTITest)
 		{
-			const Entity a;
+			Entity a;
 			Entity b;
 
 			Assert::IsTrue(a.Is(Attributed::TypeIdClass()));
 			Assert::IsTrue(a.Equals(&b));
 
-			const FooEntity aFoo;
+			FooEntity aFoo;
 			FooEntity bFoo;
 
 			Assert::IsTrue(aFoo.Is(Entity::TypeIdClass()));
 			Assert::IsTrue(aFoo.Equals(&bFoo));
 
 			Entity* fooEntity = new FooEntity();
-			const bool isEntity = fooEntity->Is(Entity::TypeIdClass());
+			bool isEntity = fooEntity->Is(Entity::TypeIdClass());
 
 			Entity* createdFooEntity = isEntity ? createdFooEntity = fooEntity->CreateAs<Entity>() : nullptr;
-			const bool wasCreated = createdFooEntity != nullptr;
+			bool wasCreated = createdFooEntity != nullptr;
 
-			const bool isFooEntity = wasCreated ? createdFooEntity->Is(FooEntity::TypeIdClass()) : false;
+			bool isFooEntity = wasCreated ? createdFooEntity->Is(FooEntity::TypeIdClass()) : false;
 			
 			delete fooEntity;
 			delete createdFooEntity;
@@ -89,10 +96,10 @@ namespace EntitySystemTests
 
 		TEST_METHOD(ToString)
 		{
-			const Entity entity("BaseEntity");
+			Entity entity("BaseEntity");
 			Assert::AreEqual("BaseEntity (Entity)"s, entity.ToString());
 
-			const FooEntity fooEntity("Foo");
+			FooEntity fooEntity("Foo");
 			Assert::AreEqual("Foo (FooEntity)"s, fooEntity.ToString());
 		}
 
@@ -101,39 +108,38 @@ namespace EntitySystemTests
 			Entity emptyEntity;
 			emptyEntity.SetName("EmptyEntity");
 			Assert::AreEqual("EmptyEntity"s, emptyEntity.Name());
-			Assert::IsNull(emptyEntity.GetParent());
+			Assert::IsNull(emptyEntity.GetSector());
 
-			Entity sectorRoot;
-			Entity& entity = sectorRoot.CreateChild("Entity", "BaseEntity");
-			Assert::AreEqual("BaseEntity"s, entity.Name());
-			Assert::AreEqual(sectorRoot, *entity.GetParent());
+			Sector sector;
+			Entity* entity = sector.CreateEntity("Entity", "BaseEntity");
+			Assert::IsNotNull(entity);
+			Assert::AreEqual("BaseEntity"s, entity->Name());
+			Assert::AreEqual(sector, *entity->GetSector());
 
-			Entity adopter;
-			entity.SetParent(&adopter);
-			Assert::IsNotNull(entity.GetParent());
-			Assert::AreEqual(adopter, *entity.GetParent());
-			Assert::IsNull(sectorRoot.FindScope(entity).first);
+			Sector adopter;
+			entity->SetSector(&adopter);
+			Assert::IsNotNull(entity->GetSector());
+			Assert::AreEqual(adopter, *entity->GetSector());
+			Assert::IsNull(sector.FindScope(*entity).first);
 
-			Assert::ExpectException<std::runtime_error>([&entity] { entity.CreateChild("Invalid", "Name"); });
+			Assert::IsNull(entity->CreateAction("Invalid", "Name"));
 
-			Entity& entity1 = entity.CreateChild("ActionIncrement", "ActionIncrement1");
-			Entity& entity2 = entity.CreateChild("ActionIncrement", "ActionIncrement2");
+			Action* entity1 = entity->CreateAction("ActionIncrement", "ActionIncrement1");
+			Action* entity2 = entity->CreateAction("ActionIncrement", "ActionIncrement2");
 
-			Assert::AreEqual(2_z, entity.ChildCount());
-			Assert::AreEqual(&entity1, entity.FindChild("ActionIncrement1"));
-			Assert::AreEqual(&entity2, entity.FindChild("ActionIncrement2"));
-			Assert::AreEqual(&entity2, entity.FindChildArray("ActionIncrement2")[0]);
+			Assert::AreEqual(2_z, entity->Actions().Size());
+			Assert::AreEqual(entity1, entity->Actions().Get<Scope*>(0)->As<Action>());
+			Assert::AreEqual(entity2, entity->Actions().Get<Scope*>(1)->As<Action>());
 
-			const Entity copy = entity;
+			const Entity copy = *entity;
 
-			Assert::AreEqual(2_z, copy.ChildCount());
-			Assert::AreEqual(entity1, *copy.FindChild("ActionIncrement1"));
-			Assert::AreEqual(entity2, *copy.FindChild("ActionIncrement2"));
-			Assert::AreEqual(entity2, *copy.FindChildArray("ActionIncrement2")[0]);
+			Assert::AreEqual(2_z, copy.Actions().Size());
+			Assert::AreEqual(entity1, copy.Actions().Get<Scope*>(0)->As<Action>());
+			Assert::AreEqual(entity2, copy.Actions().Get<Scope*>(1)->As<Action>());
 
-			entity.SetParent(nullptr);
-			Assert::IsNull(entity.GetParent());
-			delete &entity;
+			entity->SetSector(nullptr);
+			Assert::IsNull(entity->GetSector());
+			delete entity;
 		}
 
 		TEST_METHOD(Update)
@@ -158,7 +164,7 @@ namespace EntitySystemTests
 			Scope* entityClone = entityBasePtr->Clone();
 			Assert::IsNotNull(entityClone);
 
-			const bool isEntity = entityClone->Is(Entity::TypeIdClass());
+			bool isEntity = entityClone->Is(Entity::TypeIdClass());
 
 			Entity::Data* aux = entityClone->Find("aux");
 			int copiedAuxValue = aux ? aux->Get<int>() : 0;
@@ -176,7 +182,7 @@ namespace EntitySystemTests
 			Scope* fooEntityClone = fooEntityBasePtr->Clone();
 			Assert::IsNotNull(fooEntityClone);
 
-			const bool isFooEntity = fooEntityClone->Is(FooEntity::TypeIdClass());
+			bool isFooEntity = fooEntityClone->Is(FooEntity::TypeIdClass());
 
 			aux = fooEntityClone->Find("aux");
 			copiedAuxValue = aux ? aux->Get<int>() : 0;
@@ -193,6 +199,7 @@ namespace EntitySystemTests
 
 		EntityFactory entityFactory;
 		FooEntityFactory fooEntityFactory;
+		SectorFactory sectorFactory;
 		ActionIncrementFactory actionIncrementFactory;
 	};
 

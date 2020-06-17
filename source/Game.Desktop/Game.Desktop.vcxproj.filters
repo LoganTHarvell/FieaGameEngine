@@ -7,4 +7,75 @@
   <ItemGroup>
     <ClInclude Include="pch.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Content">
+      <UniqueIdentifier>{f600c8bb-fcad-447b-bc03-db3001095a3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Content\Image">
+      <UniqueIdentifier>{949b5426-aa77-44ef-8e1e-53349222d51c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Content\World.json">
+      <Filter>Content</Filter>
+    </None>
+    <None Include="Content\ChaohaoTest.json">
+      <Filter>Content</Filter>
+    </None>
+    <None Include="Content\Shader.frag">
+      <Filter>Content</Filter>
+    </None>
+    <None Include="Content\Shader.vert">
+      <Filter>Content</Filter>
+    </None>
+    <None Include="Content\NateTestWorld.json">
+      <Filter>Content</Filter>
+    </None>
+    <None Include="Content\TestMap.json">
+      <Filter>Content</Filter>
+    </None>
+    <None Include="Content\MenuTest.json">
+      <Filter>Content</Filter>
+    </None>
+    <None Include="Content\Bomberman2.json">
+      <Filter>Content</Filter>
+    </None>
+    <None Include="Content\MainMenu.json">
+      <Filter>Content</Filter>
+    </None>
+    <None Include="Content\Bomberman3.json">
+      <Filter>Content</Filter>
+    </None>
+    <None Include="Content\Bomberman4.json">
+      <Filter>Content</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Content\Image\testBrick.png">
+      <Filter>Content\Image</Filter>
+    </Image>
+    <Image Include="Content\Image\testDirt.png">
+      <Filter>Content\Image</Filter>
+    </Image>
+    <Image Include="Content\Image\BombermanWhite.png">
+      <Filter>Content\Image</Filter>
+    </Image>
+    <Image Include="Content\Image\PowerUps2x.png">
+      <Filter>Content\Image</Filter>
+    </Image>
+    <Image Include="Content\Image\PowerUps4x.png">
+      <Filter>Content\Image</Filter>
+    </Image>
+    <Image Include="Content\Image\PowerUps4x2.png">
+      <Filter>Content\Image</Filter>
+    </Image>
+    <Image Include="Content\Image\powerups.png">
+      <Filter>Content\Image</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Content\level.txt">
+      <Filter>Content</Filter>
+    </Text>
+  </ItemGroup>
 </Project>

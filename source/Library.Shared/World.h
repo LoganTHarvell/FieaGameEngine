@@ -2,7 +2,7 @@
 
 #pragma region Includes
 // First Party
-#include "Entity.h"
+#include "Attributed.h"
 #include "GameClock.h"
 #include "WorldState.h"
 #pragma endregion Includes
@@ -12,9 +12,81 @@ namespace Library
 	/// <summary>
 	/// Represents the global scope for a simulation, containing sectors and their entities.
 	/// </summary>
-	class World final : public Entity
+	class World final : public Attributed
 	{
-		RTTI_DECLARATIONS(World, Entity)
+		RTTI_DECLARATIONS(World, Attributed)
+
+#pragma region Type Definitions
+	public:
+		/// <summary>
+		/// Type definition for a list of PendingChild data.
+		/// </summary>
+		struct PendingChild;
+		using PendingChildList = Vector<PendingChild>;
+		
+		/// <summary>
+		/// Data structure for performing an action on a given Scope at the end of an Update call.
+		/// </summary>
+		struct PendingChild final
+		{
+			/// <summary>
+			/// Defines the state delimiting which action is to be performed on the PendingChild.
+			/// </summary>
+			enum class State
+			{
+				Invalid = -1,
+
+				ToAdd,
+				ToRemove,
+
+				End
+			};
+
+			/// <summary>
+			/// Child Scope pending an action.
+			/// </summary>
+			Scope& Child;
+			
+			/// <summary>
+			/// Child pending State delimiting which action is to be performed on the Child.
+			/// </summary>
+			State ChildState;
+			
+			/// <summary>
+			/// Target Scope of the performed action.
+			/// </summary>
+			Scope& Target;
+
+			/// <summary>
+			/// Key value of the Target Attribute of the performed action.
+			/// </summary>
+			Key AttributeKey;
+		};
+#pragma endregion Type Definitions
+
+#pragma region Static Members
+	public:
+		/// <summary>
+		/// Key for the Name Attribute in the World.
+		/// </summary>
+		inline static const Key NameKey = "Name";
+
+		/// <summary>
+		/// Key for the Sectors Attribute in the World.
+		/// </summary>
+		inline static const Key SectorsKey = "Sectors";
+
+		/// <summary>
+		/// Index of the Sectors Attribute in the World.
+		/// </summary>
+		inline static const std::size_t SectorsIndex = 2;
+
+	public:
+		/// <summary>
+		/// Getter for the class TypeInfo, used for registration with the TypeManager.
+		/// </summary>
+		static const TypeManager::TypeInfo& TypeInfo();
+#pragma endregion Static Members
 
 #pragma region Special Members
 	public:
@@ -80,50 +152,57 @@ namespace Library
 		/// </summary>
 		/// <returns>Reference to the WorldState associated with the World.</returns>
 		ConstWorldState GetWorldState() const;
+
+		/// <summary>
+		/// Gets the list of PendingChild data.
+		/// </summary>
+		/// <returns>Current PendingChild data.</returns>
+		PendingChildList& PendingChildren();
+
+		/// <summary>
+		/// Gets the list of PendingChild data.
+		/// </summary>
+		/// <returns>Current PendingChild data.</returns>
+		const PendingChildList& PendingChildren() const;
+
+		/// <summary>
+		/// Name of the World.
+		/// </summary>
+		/// <returns>Name of the World as a std::string.</returns>
+		const std::string& Name() const;
+
+		/// <summary>
+		/// Sets the name of the World.
+		/// </summary>
+		/// <param name="name">String to use as the name of the World.</param>
+		void SetName(const std::string & name);
+
+		/// <summary>
+		/// Gets the data handle to the Sector objects contained in this World.
+		/// </summary>
+		/// <returns>Reference to the Sector objects.</returns>
+		Data& Sectors();
+
+		/// <summary>
+		/// Gets the data handle to the Sector objects contained in this World.
+		/// </summary>
+		/// <returns>Reference to the Sector objects.</returns>
+		const Data& Sectors() const;
+
+		/// <summary>
+		/// Generates an Sector class and adopts it into this World.
+		/// </summary>
+		/// <param name="name">Name of the newly created Sector.</param>
+		/// <returns>Reference to the newly heap allocated Sector.</returns>
+		class Sector& CreateSector(const std::string& name);
 #pragma endregion Accessors
 
 #pragma region Game Loop
 	public:
 		/// <summary>
-		/// Runs the game loop of the World until Stop is called.
-		/// </summary>
-		void Run();
-
-		/// <summary>
-		/// Stops the game loop.
-		/// </summary>
-		void Stop();
-	
-		/// <summary>
-		/// World initialize method to be called before running, hides inherited Entity Initialize.
-		/// </summary>
-		void Initialize();
-	
-		/// <summary>
-		/// World update method to be called every frame, hides inherited Entity Update.
+		/// Virtual update method to be called every frame.
 		/// </summary>
 		void Update();
-	
-		/// <summary>
-		/// World shutdown method to be called after running, hides inherited Entity Shutdown.
-		/// </summary>
-		void Shutdown();
-
-	private:
-		/// <summary>
-		/// Hides unused Entity Update method.
-		/// </summary>
-		using Entity::Initialize;
-		
-		/// <summary>
-		/// Hides unused Entity Update method.
-		/// </summary>
-		using Entity::Update;
-
-		/// <summary>
-		/// Hides unused Entity Update method.
-		/// </summary>
-		using Entity::Shutdown;
 #pragma endregion Game Loop
 
 #pragma region RTTI Overrides
@@ -135,6 +214,14 @@ namespace Library
 		virtual std::string ToString() const override;
 #pragma endregion RTTI Overrides
 
+#pragma region Helper Methods
+	private:
+		/// <summary>
+		/// Performs pending actions of the child Scopes.
+		/// </summary>
+		void UpdatePendingChildren();
+#pragma endregion Helper Methods
+
 #pragma region Data Members
 	private:
 		/// <summary>
@@ -145,12 +232,22 @@ namespace Library
 		/// <summary>
 		/// Convenience struct for passing the WorldState data in cascaded Update calls.
 		/// </summary>
-		struct WorldState mWorldState;
+		WorldState mWorldState;
+
+ 		/// <summary>
+ 		/// Pending children to have an action performed during the end of an Update call.
+ 		/// </summary>
+ 		PendingChildList mPendingChildren{ PendingChildList(PendingChildList::EqualityFunctor()) };
 
 		/// <summary>
-		/// Represents whether the game loop is running.
+		/// Name of the World, reflected as a prescribed Attribute.
 		/// </summary>
-		bool IsRunning{ false };
+		std::string mName;
+
+		/// <summary>
+		/// Collection of Sector instances within the Sectors prescribed Attribute.
+		/// </summary>
+		Data& mSectors;
 #pragma endregion Data Members
 	};
 }

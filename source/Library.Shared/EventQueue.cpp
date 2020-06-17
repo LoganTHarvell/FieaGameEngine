@@ -7,13 +7,10 @@
 
 // Standard
 #include <algorithm>
-#include <future>
 
 // First Party
 #include "EventPublisher.h"
 #pragma endregion Includes
-
-using namespace std::string_literals;
 
 namespace Library
 {
@@ -24,30 +21,35 @@ namespace Library
 
 	void EventQueue::Update(const GameTime& gameTime)
 	{
+		mUpdating = true;
+
 		for (EventEntry& entry : mQueue)
 		{
 			if (gameTime.CurrentTime() >= entry.ExpireTime)
 			{
 				assert(entry.Publisher);
-				entry.IsExpired = true;
+				entry.Publisher->Publish();
 			}
 		}
 
+		mUpdating = false;
+
 		auto isExpired = [&gameTime](const EventEntry& eventEntry) 
 		{ 
-			return !eventEntry.IsExpired; 
+			return gameTime.CurrentTime() < eventEntry.ExpireTime; 
 		};
-
-		const auto eventPartition = std::partition(mQueue.begin(), mQueue.end(), isExpired);
-
-		Vector expiredEvents(Vector<EventEntry>::EqualityFunctor{});
-		expiredEvents.Insert(expiredEvents.begin(), eventPartition, mQueue.cend());
-
-		mQueue.Erase(eventPartition);
 		
-		for (const auto& event : expiredEvents)
+		if (mPendingClear)
 		{
-			event.Publisher->Publish();
+			Clear();
 		}
+		else
+		{
+			mQueue.Erase(std::partition(mQueue.begin(), mQueue.end(), isExpired));
+			mQueue.Insert(mQueue.end(), mPendingQueue.begin(), mPendingQueue.end());
+			mPendingQueue.Clear();
+		}
+
+		if (mPendingShrinkToFit) ShrinkToFit();
 	}
 }

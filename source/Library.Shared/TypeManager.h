@@ -206,5 +206,4 @@ namespace Library
 #pragma endregion Global Registry Function
 }
 
-// Inline File
 #include "TypeManager.inl"

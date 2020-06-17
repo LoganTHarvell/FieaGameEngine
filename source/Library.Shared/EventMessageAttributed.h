@@ -7,7 +7,7 @@
 
 namespace Library
 {
-	// Forward Declarations
+	// Forwarded Classes
 	class World;
 
 	class EventMessageAttributed final : public Attributed
@@ -41,9 +41,8 @@ namespace Library
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
-		/// <param name="world">Pointer to the World that will process this message.</param>
-		/// <param name="subtype">Subtype identifier to further distinguish instances.</param>
-		explicit EventMessageAttributed(World* world=nullptr, Subtype subtype=Subtype());
+		/// <param name="name">Pointer to the World that will process this message.</param>
+		explicit EventMessageAttributed(World* world=nullptr, const Subtype& subtype=Subtype());
 
 		/// <summary>
 		/// Default destructor.
@@ -133,5 +132,4 @@ namespace Library
 	};
 }
 
-// Inline File
 #include "EventMessageAttributed.inl"

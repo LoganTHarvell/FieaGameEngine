@@ -15,9 +15,9 @@ namespace UnitTests
 		return *this;
 	}
 
-	void JsonTestParseHelper::SharedData::PreParse()
+	void JsonTestParseHelper::SharedData::Initialize()
 	{
-		JsonParseMaster::SharedData::PreParse();
+		JsonParseMaster::SharedData::Initialize();
 
 		mDataSizes.Clear();
 	}

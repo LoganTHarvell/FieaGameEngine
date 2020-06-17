@@ -57,5 +57,4 @@ namespace Library::Equality
 
 using namespace Library::Equality;
 
-// Inline File
 #include "DefaultEquality.inl"

@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "FooEntity.h"
-#include "WorldState.h"
 
 namespace UnitTests
 {
@@ -9,7 +8,7 @@ namespace UnitTests
 		static const Library::TypeManager::TypeInfo typeInfo
 		{
 			{
-				{ "Data", Types::Float, false, 1, offsetof(FooEntity, mData) }
+				{ "Data", Types::Integer, false, 1, offsetof(FooEntity, mData) }
 			},
 
 			Entity::TypeIdClass()
@@ -19,11 +18,6 @@ namespace UnitTests
 	}
 
 	FooEntity::FooEntity(const std::string& name) : Entity(TypeIdClass(), name)
-	{
-	}
-
-	FooEntity::FooEntity(float data, const std::string& name) : Entity(TypeIdClass(), name),
-		mData(data)
 	{
 	}
 
@@ -51,15 +45,5 @@ namespace UnitTests
 	bool FooEntity::IsUpdated()
 	{
 		return mIsUpdated;
-	}
-
-	float& FooEntity::Data()
-	{
-		return mData;
-	}
-
-	float FooEntity::Data() const
-	{
-		return mData;
 	}
 }

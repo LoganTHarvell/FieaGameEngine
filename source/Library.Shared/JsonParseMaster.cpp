@@ -136,7 +136,7 @@ namespace Library
 #pragma region Parse Methods
 	void JsonParseMaster::Parse(std::istream& inputStream)
 	{
-		mSharedData->PreParse();
+		mSharedData->Initialize();
 
 		for (auto* helper : mHelpers)
 		{
@@ -151,8 +151,6 @@ namespace Library
 		mSharedData->IncrementDepth();
 		ParseMembers(root);
 		mSharedData->DecrementDepth();
-
-		mSharedData->PostParse();
 	}
 
 	void JsonParseMaster::Parse(const std::string& string)

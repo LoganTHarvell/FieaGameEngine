@@ -1,6 +1,3 @@
-#pragma once
-
-// Header
 #include "EventMessageAttributed.h"
 
 namespace Library

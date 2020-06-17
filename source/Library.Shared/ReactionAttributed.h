@@ -3,6 +3,7 @@
 #pragma region Includes
 // First Party
 #include "Reaction.h"
+#include "Stack.h"
 #pragma endregion Includes
 
 namespace Library
@@ -39,8 +40,7 @@ namespace Library
 		/// Default constructor.
 		/// </summary>
 		/// <param name="name">Pointer to the World that will process this message.</param>
-		/// <param name="subtype">Tag specifying an EventMessageAttribute subtype to which an instance responds.</param>
-		explicit ReactionAttributed(std::string name=std::string(), Subtype subtype=Subtype());
+		explicit ReactionAttributed(const std::string& name=std::string(), const Subtype& subtype=Subtype());
 
 		/// <summary>
 		/// Default destructor.
@@ -89,8 +89,7 @@ namespace Library
 		/// Interface method called by an EventPublisher during Publish to receive the Event.
 		/// </summary>
 		/// <param name="eventPublisher">Reference to an Event as an EventPublisher.</param>
-		/// <remarks>Overrides must be thread safe.</remarks>
-		virtual void Notify(EventPublisher& eventPublisher) override;
+		virtual void Notify(EventPublisher& eventPublisher);
 #pragma endregion Event Subscriber Overrides
 
 #pragma region Scope Overrides
@@ -101,7 +100,7 @@ namespace Library
 		/// </summary>
 		/// <param name="key">Key value associated with the Data value to be found.</param>
 		/// <returns>If found, a pointer to the Data value. Otherwise, nullptr.</returns>
-		virtual Data* Find(const Key& key) override;
+		virtual Data* Find(const Key& key);
 #pragma endregion Scope Overrides
 
 #pragma region Data Members
@@ -112,7 +111,7 @@ namespace Library
 		/// These attributes act as a parameter list that is evaluated first during
 		/// any Search call made during the ActionList Update call.
 		/// </summary>
-		Scope mParameters;
+		Stack<Scope> mParameterStack;
 
 		/// <summary>
 		/// String to specify a EventMessageAttributed subtype to which this Reaction should respond.
@@ -125,6 +124,6 @@ namespace Library
 	/// <summary>
 	/// ReactionAttributedFactory class declaration.
 	/// </summary>
-	ConcreteFactory(ReactionAttributed, Entity)
+	ConcreteFactory(ReactionAttributed, Scope)
 #pragma endregion Factory
 }

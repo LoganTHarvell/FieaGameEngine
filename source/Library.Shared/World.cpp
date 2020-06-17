@@ -5,25 +5,40 @@
 // Header
 #include "World.h"
 
-// Standard
 #include <utility>
 
 // First Party
-#include "Entity.h"
+#include "Sector.h"
 #include "EventQueue.h"
 #pragma endregion Includes
 
 namespace Library
 {
-	World::World(std::string name, GameTime* gameTime, EventQueue* eventQueue) : Entity(TypeIdClass(), std::move(name))
+	const TypeManager::TypeInfo& World::TypeInfo()
+	{
+		static const TypeManager::TypeInfo typeInfo
+		{
+			{
+				{ NameKey, Types::String, false, 1, offsetof(World, mName) },
+				{ SectorsKey, Types::Scope, true, 1, 0 }
+			},
+
+			Attributed::TypeIdClass()
+		};
+
+		return typeInfo;
+	}
+
+	World::World(std::string name, GameTime* gameTime, EventQueue* eventQueue) : Attributed(TypeIdClass()),
+		mName(std::move(name)), mSectors(mPairPtrs[SectorsIndex]->second)
 	{
 		mWorldState.World = this;
 		mWorldState.GameTime = gameTime;
 		mWorldState.EventQueue = eventQueue;
 	}
 
-	World::World(const World& rhs) : Entity(rhs),
-		mGameClock(rhs.mGameClock)
+	World::World(const World& rhs) : Attributed(rhs),
+		mGameClock(rhs.mGameClock), mPendingChildren(rhs.mPendingChildren), mName(rhs.mName), mSectors(mPairPtrs[SectorsIndex]->second)
 	{
 			mWorldState.World = this;
 			mWorldState.GameTime = rhs.mWorldState.GameTime;
@@ -34,17 +49,20 @@ namespace Library
 	{
 		if (this != &rhs)
 		{
-			Entity::operator=(rhs);
+			Attributed::operator=(rhs);
 
 			mGameClock = rhs.mGameClock;
 			mWorldState.GameTime = rhs.mWorldState.GameTime;
 			mWorldState.EventQueue = rhs.mWorldState.EventQueue;
+			mPendingChildren = rhs.mPendingChildren;
+			mName = rhs.mName;
 		}
 		
 		return *this;
 	}
 	
-	World::World(World&& rhs) noexcept : Entity(std::move(rhs))
+	World::World(World&& rhs) noexcept : Attributed(std::move(rhs)),
+		mName(std::move(rhs.mName)), mSectors(mPairPtrs[SectorsIndex]->second)
 	{
 		mWorldState.World = this;
 		mWorldState.GameTime = rhs.mWorldState.GameTime;
@@ -55,13 +73,15 @@ namespace Library
 
 	World& World::operator=(World&& rhs) noexcept
 	{
+		Attributed::operator=(std::move(rhs));
+		
 		mWorldState.GameTime = rhs.mWorldState.GameTime;
 		mWorldState.EventQueue = rhs.mWorldState.EventQueue;
 
+		mName = std::move(rhs.mName);
+
 		rhs.mWorldState.GameTime = nullptr;
 		rhs.mWorldState.EventQueue = nullptr;
-
-		Entity::operator=(std::move(rhs));
 
 		return *this;
 	}
@@ -80,48 +100,60 @@ namespace Library
 	{
 		return
 		{
-			mWorldState.ContentManager,
-			mWorldState.RenderingManager,
 			mWorldState.GameTime,
 			mWorldState.EventQueue,
 			mWorldState.World,
 			mWorldState.Sector,
-			mWorldState.Entity
+			mWorldState.Entity,
+			mWorldState.Action
 		};
 	}
 
-	void World::Run()
+	World::PendingChildList& World::PendingChildren()
 	{
-		IsRunning = true;
-		
-		while (IsRunning)
-		{
-			Update();
-		}
+		return mPendingChildren;
 	}
 
-	void World::Stop()
+	const World::PendingChildList& World::PendingChildren() const
 	{
-		IsRunning = false;
+		return mPendingChildren;
 	}
 
-	void World::Initialize()
+	const std::string& World::Name() const
 	{
-		mGameClock.Reset();
-		
-		ForEachChild([this](Entity& sector)
-		{
-			mWorldState.Sector = &sector;
-			mWorldState.Sector->Initialize(mWorldState);
-		});
+		return mName;
+	}
 
-		mWorldState.Sector = nullptr;
+	void World::SetName(const std::string& name)
+	{
+		mName = name;
+	}
 
-		UpdatePendingChildren();
+	Sector::Data& World::Sectors()
+	{
+		return mSectors;
+	}
+
+	const Sector::Data& World::Sectors() const
+	{
+		return mSectors;
+	}
+
+	Sector& World::CreateSector(const std::string& name)
+	{
+		Sector* newSector = new Sector();
+		assert(newSector);
+
+		newSector->SetName(name);
+
+		Adopt(*newSector, SectorsKey);
+		return *newSector;
 	}
 
 	void World::Update()
 	{
+		UpdatePendingChildren();
+
 		if (mWorldState.GameTime)
 		{
 			mGameClock.UpdateGameTime(*mWorldState.GameTime);
@@ -132,39 +164,43 @@ namespace Library
 			}
 		}
 
-		ForEachChild([this](Entity& sector)
+		for (std::size_t i = 0; i < mSectors.Size(); ++i)
 		{
-			mWorldState.Sector = &sector;
+			assert(mSectors[i].Is(Sector::TypeIdClass()));
+
+			mWorldState.Sector = static_cast<Sector*>(mSectors.Get<Scope*>(i));
 			mWorldState.Sector->Update(mWorldState);
-		});
-
-		mWorldState.Sector = nullptr;
-
-		UpdatePendingChildren();
-	}
-
-	void World::Shutdown()
-	{		
-		if (mWorldState.EventQueue)
-		{
-			mWorldState.EventQueue->Clear();
 		}
-		
-		ForEachChild([this](Entity& sector)
-		{
-			mWorldState.Sector = &sector;
-			mWorldState.Sector->Shutdown(mWorldState);
-		});
 
 		mWorldState.Sector = nullptr;
-
-		UpdatePendingChildren();
 	}
 
 	std::string World::ToString() const
 	{
 		std::ostringstream oss;
-		oss << Name() << " (World)";
+		oss << mName << " (World)";
 		return oss.str();
+	}
+
+	void World::UpdatePendingChildren()
+	{
+		for (PendingChild& pendingChild : mPendingChildren)
+		{
+			switch (pendingChild.ChildState)
+			{
+			case PendingChild::State::ToAdd:
+				pendingChild.Target.Adopt(pendingChild.Child, pendingChild.AttributeKey);
+				break;
+
+			case PendingChild::State::ToRemove:
+				delete pendingChild.Target.Orphan(pendingChild.Child);
+				break;
+
+			default:
+				break;
+			}
+		}
+
+		mPendingChildren.Clear();
 	}
 }

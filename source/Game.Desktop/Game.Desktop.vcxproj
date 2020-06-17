@@ -55,6 +55,7 @@
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
   <ImportGroup Label="Shared">
+    <Import Project="..\Game.Shared\Game.Shared.vcxitems" Label="Shared" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -84,15 +85,24 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>$(SolutionDir)Sounds;$(SolutionDir)External Libraries\irrKlang\x64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <OptimizeReferences>false</OptimizeReferences>
+      <AdditionalDependencies>$(SolutionDir)External Libraries\irrklang\x64\lib\irrKlang.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <CustomBuildStep>
-      <Command>
-      </Command>
+      <Command>mkdir "$(OutDir)Content"
+xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
+      <Message>Copy Content Directory</Message>
+      <Outputs>$(OutDir)Content</Outputs>
     </CustomBuildStep>
+    <PostBuildEvent>
+      <Command>xcopy /E/Y "$(SolutionDir)External Libraries\irrKlang\x64\lib\irrKlang.dll" "$(OutDir)"
+mkdir "$(OutDir)Sounds"
+xcopy /E/Y "$(SolutionDir)Sounds" "$(OutDir)Sounds"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -101,15 +111,24 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>$(SolutionDir)Sounds;$(SolutionDir)External Libraries\irrKlang\x86\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <OptimizeReferences>false</OptimizeReferences>
+      <AdditionalDependencies>$(SolutionDir)External Libraries\irrklang\x86\lib\irrKlang.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <CustomBuildStep>
-      <Command>
-      </Command>
+      <Command>mkdir "$(OutDir)Content"
+xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
+      <Message>Copy Content Directory</Message>
+      <Outputs>$(OutDir)Content</Outputs>
     </CustomBuildStep>
+    <PostBuildEvent>
+      <Command>xcopy /E/Y "$(SolutionDir)External Libraries\irrKlang\x86\lib\irrKlang.dll" "$(OutDir)"
+mkdir "$(OutDir)Sounds"
+xcopy /E/Y "$(SolutionDir)Sounds" "$(OutDir)Sounds"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -119,16 +138,25 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir)Sounds;$(SolutionDir)External Libraries\irrKlang\x86\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>$(SolutionDir)External Libraries\irrklang\x86\lib\irrKlang.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <CustomBuildStep>
-      <Command>
-      </Command>
+      <Command>mkdir "$(OutDir)Content"
+xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
+      <Message>Copy Content Directory</Message>
+      <Outputs>$(OutDir)Content</Outputs>
     </CustomBuildStep>
+    <PostBuildEvent>
+      <Command>xcopy /E/Y "$(SolutionDir)External Libraries\irrKlang\x64\lib\irrKlang.dll" "$(OutDir)"
+mkdir "$(OutDir)Sounds"
+xcopy /E/Y "$(SolutionDir)Sounds" "$(OutDir)Sounds"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -138,16 +166,25 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir)Sounds;$(SolutionDir)External Libraries\irrKlang\x64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>$(SolutionDir)External Libraries\irrklang\x64\lib\irrKlang.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <CustomBuildStep>
-      <Command>
-      </Command>
+      <Command>mkdir "$(OutDir)Content"
+xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
+      <Message>Copy Content Directory</Message>
+      <Outputs>$(OutDir)Content</Outputs>
     </CustomBuildStep>
+    <PostBuildEvent>
+      <Command>xcopy /E/Y "$(SolutionDir)External Libraries\irrKlang\x64\lib\irrKlang.dll" "$(OutDir)"
+mkdir "$(OutDir)Sounds"
+xcopy /E/Y "$(SolutionDir)Sounds" "$(OutDir)Sounds"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ProjectReference Include="..\Library.Desktop\Library.Desktop.vcxproj">
@@ -165,6 +202,31 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Content\Bomberman2.json" />
+    <None Include="Content\Bomberman3.json" />
+    <None Include="Content\Bomberman4.json" />
+    <None Include="Content\ChaohaoTest.json" />
+    <None Include="Content\MainMenu.json" />
+    <None Include="Content\NateTestWorld.json" />
+    <None Include="Content\Shader.frag" />
+    <None Include="Content\Shader.vert" />
+    <None Include="Content\TestMap.json" />
+    <None Include="Content\World.json" />
+    <None Include="Content\MenuTest.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Content\Image\powerups.png" />
+    <Image Include="Content\Image\PowerUps2x.png" />
+    <Image Include="Content\Image\PowerUps4x.png" />
+    <Image Include="Content\Image\PowerUps4x2.png" />
+    <Image Include="Content\Image\testBrick.png" />
+    <Image Include="Content\Image\testDirt.png" />
+    <Image Include="Content\Image\BombermanWhite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Content\level.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

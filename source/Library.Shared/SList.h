@@ -605,5 +605,4 @@ namespace Library
 	};
 }
 
-// Inline File
 #include "SList.inl"

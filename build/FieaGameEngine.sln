@@ -11,54 +11,42 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Game.Desktop", "..\source\G
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnitTest.Library.Desktop", "..\source\UnitTest.Library.Desktop\UnitTest.Library.Desktop.vcxproj", "{559E27FC-4A51-43A1-8F69-3248413B4F42}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Game.Shared", "..\source\Game.Shared\Game.Shared.vcxitems", "{0892DA0D-77F6-4D67-9B31-227CA3A13BCE}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		..\source\Game.Shared\Game.Shared.vcxitems*{0892da0d-77f6-4d67-9b31-227ca3a13bce}*SharedItemsImports = 9
 		..\source\Library.Shared\Library.Shared.vcxitems*{181f0862-06ef-4a98-acdb-044af1ba6626}*SharedItemsImports = 4
 		..\source\Library.Shared\Library.Shared.vcxitems*{2d1ffe99-1e60-48be-bbe3-07903ed72466}*SharedItemsImports = 9
+		..\source\Game.Shared\Game.Shared.vcxitems*{e7f2aa68-4cc2-4df9-a24b-59cc196c768f}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|ARM = Debug|ARM
-		Debug|ARM64 = Debug|ARM64
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
-		Release|ARM = Release|ARM
-		Release|ARM64 = Release|ARM64
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{181F0862-06EF-4A98-ACDB-044AF1BA6626}.Debug|ARM.ActiveCfg = Debug|Win32
-		{181F0862-06EF-4A98-ACDB-044AF1BA6626}.Debug|ARM64.ActiveCfg = Debug|Win32
 		{181F0862-06EF-4A98-ACDB-044AF1BA6626}.Debug|x64.ActiveCfg = Debug|x64
 		{181F0862-06EF-4A98-ACDB-044AF1BA6626}.Debug|x64.Build.0 = Debug|x64
 		{181F0862-06EF-4A98-ACDB-044AF1BA6626}.Debug|x86.ActiveCfg = Debug|Win32
 		{181F0862-06EF-4A98-ACDB-044AF1BA6626}.Debug|x86.Build.0 = Debug|Win32
-		{181F0862-06EF-4A98-ACDB-044AF1BA6626}.Release|ARM.ActiveCfg = Release|Win32
-		{181F0862-06EF-4A98-ACDB-044AF1BA6626}.Release|ARM64.ActiveCfg = Release|Win32
 		{181F0862-06EF-4A98-ACDB-044AF1BA6626}.Release|x64.ActiveCfg = Release|x64
 		{181F0862-06EF-4A98-ACDB-044AF1BA6626}.Release|x64.Build.0 = Release|x64
 		{181F0862-06EF-4A98-ACDB-044AF1BA6626}.Release|x86.ActiveCfg = Release|Win32
 		{181F0862-06EF-4A98-ACDB-044AF1BA6626}.Release|x86.Build.0 = Release|Win32
-		{E7F2AA68-4CC2-4DF9-A24B-59CC196C768F}.Debug|ARM.ActiveCfg = Debug|Win32
-		{E7F2AA68-4CC2-4DF9-A24B-59CC196C768F}.Debug|ARM64.ActiveCfg = Debug|Win32
 		{E7F2AA68-4CC2-4DF9-A24B-59CC196C768F}.Debug|x64.ActiveCfg = Debug|x64
 		{E7F2AA68-4CC2-4DF9-A24B-59CC196C768F}.Debug|x64.Build.0 = Debug|x64
 		{E7F2AA68-4CC2-4DF9-A24B-59CC196C768F}.Debug|x86.ActiveCfg = Debug|Win32
 		{E7F2AA68-4CC2-4DF9-A24B-59CC196C768F}.Debug|x86.Build.0 = Debug|Win32
-		{E7F2AA68-4CC2-4DF9-A24B-59CC196C768F}.Release|ARM.ActiveCfg = Release|Win32
-		{E7F2AA68-4CC2-4DF9-A24B-59CC196C768F}.Release|ARM64.ActiveCfg = Release|Win32
 		{E7F2AA68-4CC2-4DF9-A24B-59CC196C768F}.Release|x64.ActiveCfg = Release|x64
 		{E7F2AA68-4CC2-4DF9-A24B-59CC196C768F}.Release|x64.Build.0 = Release|x64
 		{E7F2AA68-4CC2-4DF9-A24B-59CC196C768F}.Release|x86.ActiveCfg = Release|Win32
 		{E7F2AA68-4CC2-4DF9-A24B-59CC196C768F}.Release|x86.Build.0 = Release|Win32
-		{559E27FC-4A51-43A1-8F69-3248413B4F42}.Debug|ARM.ActiveCfg = Debug|Win32
-		{559E27FC-4A51-43A1-8F69-3248413B4F42}.Debug|ARM64.ActiveCfg = Debug|Win32
 		{559E27FC-4A51-43A1-8F69-3248413B4F42}.Debug|x64.ActiveCfg = Debug|x64
 		{559E27FC-4A51-43A1-8F69-3248413B4F42}.Debug|x64.Build.0 = Debug|x64
 		{559E27FC-4A51-43A1-8F69-3248413B4F42}.Debug|x86.ActiveCfg = Debug|Win32
 		{559E27FC-4A51-43A1-8F69-3248413B4F42}.Debug|x86.Build.0 = Debug|Win32
-		{559E27FC-4A51-43A1-8F69-3248413B4F42}.Release|ARM.ActiveCfg = Release|Win32
-		{559E27FC-4A51-43A1-8F69-3248413B4F42}.Release|ARM64.ActiveCfg = Release|Win32
 		{559E27FC-4A51-43A1-8F69-3248413B4F42}.Release|x64.ActiveCfg = Release|x64
 		{559E27FC-4A51-43A1-8F69-3248413B4F42}.Release|x64.Build.0 = Release|x64
 		{559E27FC-4A51-43A1-8F69-3248413B4F42}.Release|x86.ActiveCfg = Release|Win32

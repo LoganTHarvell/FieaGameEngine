@@ -50,6 +50,9 @@
     <ClCompile Include="JsonTestParseHelper.cpp">
       <Filter>JSON Parser Test</Filter>
     </ClCompile>
+    <ClCompile Include="JsonScopeParseTest.cpp">
+      <Filter>JSON Parser Test</Filter>
+    </ClCompile>
     <ClCompile Include="UtilityTest.cpp">
       <Filter>Utility Tests</Filter>
     </ClCompile>
@@ -77,7 +80,13 @@
     <ClCompile Include="Foo.cpp">
       <Filter>Support Code\Basic</Filter>
     </ClCompile>
+    <ClCompile Include="ActionTest.cpp">
+      <Filter>Core Tests\Entity System Tests\Actions Tests</Filter>
+    </ClCompile>
     <ClCompile Include="ActionIncrementTest.cpp">
+      <Filter>Core Tests\Entity System Tests\Actions Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="ActionListTest.cpp">
       <Filter>Core Tests\Entity System Tests\Actions Tests</Filter>
     </ClCompile>
     <ClCompile Include="ActionCreateTest.cpp">
@@ -90,6 +99,12 @@
       <Filter>Core Tests\Entity System Tests\Actions Tests</Filter>
     </ClCompile>
     <ClCompile Include="WorldTest.cpp">
+      <Filter>Core Tests\Entity System Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="JsonEntitySystemParseTest.cpp">
+      <Filter>Core Tests\Entity System Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="SectorTest.cpp">
       <Filter>Core Tests\Entity System Tests</Filter>
     </ClCompile>
     <ClCompile Include="EntityTest.cpp">
@@ -107,8 +122,8 @@
     <ClCompile Include="ReactionTest.cpp">
       <Filter>Core Tests\Entity System Tests\Actions Tests</Filter>
     </ClCompile>
-    <ClCompile Include="JsonEntitySystemParseTest.cpp">
-      <Filter>JSON Parser Test</Filter>
+    <ClCompile Include="ActionListForEachTest.cpp">
+      <Filter>Core Tests\Entity System Tests\Actions Tests</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -186,7 +201,28 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Content\ScopeOfPrimitives.json">
+      <Filter>Content</Filter>
+    </None>
+    <None Include="Content\ScopeOfArrays.json">
+      <Filter>Content</Filter>
+    </None>
+    <None Include="Content\ScopeOfScopes.json">
+      <Filter>Content</Filter>
+    </None>
+    <None Include="Content\ScopeOfScopeArray.json">
+      <Filter>Content</Filter>
+    </None>
+    <None Include="Content\AttributedFoo.json">
+      <Filter>Content</Filter>
+    </None>
+    <None Include="Content\ScopeOfAttributedFoo.json">
+      <Filter>Content</Filter>
+    </None>
     <None Include="Content\World.json">
+      <Filter>Content</Filter>
+    </None>
+    <None Include="Content\ActionListForEach.json">
       <Filter>Content</Filter>
     </None>
   </ItemGroup>

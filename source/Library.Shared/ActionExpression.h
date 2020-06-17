@@ -2,7 +2,8 @@
 
 #pragma region Includes
 // First Party
-#include "Entity.h"
+#include "Action.h"
+#include "WorldState.h"
 #include "Factory.h"
 #include "Stack.h"
 #pragma endregion Includes
@@ -12,9 +13,9 @@ namespace Library
 	/// <summary>
 	/// Represents an Action that evaluates an algebraic expression.
 	/// </summary>
-	class ActionExpression final : public Entity
+	class ActionExpression final : public Action
 	{
-		RTTI_DECLARATIONS(ActionExpression, Entity)
+		RTTI_DECLARATIONS(ActionExpression, Action)
 
 #pragma region Type Definitions, Constants
 	public:
@@ -40,7 +41,7 @@ namespace Library
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
-		explicit ActionExpression(std::string name=std::string());
+		explicit ActionExpression(const std::string& name=std::string());
 
 		/// <summary>
 		/// Default destructor.
@@ -89,7 +90,7 @@ namespace Library
 		/// Virtual update method called by the containing object.
 		/// </summary>
 		/// <param name="worldState">WorldState context for the current processing step.</param>
-		virtual void Update(WorldState& worldState) override;
+		virtual void Update(WorldState& worldState);
 #pragma endregion Game Loop
 
 #pragma region RTTI Overrides
@@ -134,7 +135,7 @@ namespace Library
 	/// <summary>
 	/// ActionExpressionFactory class declaration.
 	/// </summary>
-	ConcreteFactory(ActionExpression, Entity)
+	ConcreteFactory(ActionExpression, Scope)
 #pragma endregion Factory
 }
 

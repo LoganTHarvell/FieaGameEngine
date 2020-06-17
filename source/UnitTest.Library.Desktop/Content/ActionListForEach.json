@@ -1,0 +1,90 @@
+{
+  "Name": {
+    "type": "string",
+    "value": "World"
+  },
+  "Sectors": {
+    "type": "Sector",
+    "value": [
+      {
+        "type": "Sector",
+        "value": {
+          "Name": {
+            "type": "string",
+            "value": "Sector"
+          },
+          "Entities": {
+            "type": "Entity",
+            "value": [
+              {
+                "type": "Entity",
+                "value": {
+                  "Name": {
+                    "type": "string",
+                    "value": "Entity"
+                  },
+                  "AuxIndex": {
+                    "type": "integer",
+                    "value": 0
+                  },
+                  "AuxOperand": {
+                    "type": "integer",
+                    "value": [ 1, 2, 3, 4, 5 ]
+                  },
+                  "Actions": {
+                    "type": "ActionList",
+                    "value": [
+                      {
+                        "type": "ActionListForEach",
+                        "value": {
+                          "Name": {
+                            "type": "string",
+                            "value": "Action List For Each"
+                          },
+                          "Operand": {
+                            "type": "string",
+                            "value": "AuxOperand"
+                          },
+                          "Index": {
+                            "type": "string",
+                            "value": "AuxIndex"
+                          },
+                          "Actions": {
+                            "type": "ActionList",
+                            "value": [
+                              {
+                                "type": "ActionIncrement",
+                                "value": {
+                                  "Name": {
+                                    "type": "string",
+                                    "value": "Action Increment"
+                                  },
+                                  "Operand": {
+                                    "type": "string",
+                                    "value": "AuxOperand"
+                                  },
+                                  "IncrementStep": {
+                                    "type": "integer",
+                                    "value": -1
+                                  },
+                                  "Index": {
+                                    "type": "string",
+                                    "value": "AuxIndex"
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

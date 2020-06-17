@@ -23,24 +23,24 @@ namespace Library
 				{ ResultKey, Types::Reference, false, 1, offsetof(ActionExpression, mResultPtr) }
 			},
 
-			Entity::TypeIdClass()
+			Action::TypeIdClass()
 		};
 
 		return typeInfo;
 	}
 
-	ActionExpression::ActionExpression(std::string name) : Entity(TypeIdClass(), std::move(name))
+	ActionExpression::ActionExpression(const std::string& name) : Action(TypeIdClass(), name)
 	{
 	}
 
-	ActionExpression::ActionExpression(ActionExpression&& rhs) noexcept : Entity(std::move(rhs)), 
+	ActionExpression::ActionExpression(ActionExpression&& rhs) noexcept : Action(std::move(rhs)), 
 		mResult(std::move(rhs.mResult))
 	{
 	}
 
 	ActionExpression& ActionExpression::operator=(ActionExpression&& rhs) noexcept
 	{
-		Entity::operator=(std::move(rhs));
+		Action::operator=(std::move(rhs));
 		mResult = std::move(rhs.mResult);
 
 		return *this;

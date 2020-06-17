@@ -184,7 +184,7 @@ namespace Library
 		/// Gets a pointer to the parent Scope, if it exists.
 		/// </summary>
 		/// <returns>If a child, the pointer to the parent Scope. Otherwise, nullptr.</returns>
-		virtual Scope* GetParent() const;
+		Scope* GetParent() const;
 
 		/// <summary>
 		/// Checks if the Scope instance is a parent of the given Scope or any of its parents.
@@ -328,7 +328,6 @@ namespace Library
 		/// Appends a Attribute to the Scope with the given key and a default Scope value, as a child.
 		/// </summary>
 		/// <param name="key">Key value for the Attribute to be accessed or appended with a child Scope.</param>
-		/// <param name="capacity">New Scope capacity.</param>
 		/// <returns>Reference to the Data value of the appended Attribute.</returns>
 		/// <exception cref="std::runtime_error">Name cannot be empty.</exception>
 		/// <exception cref="std::runtime_error">Table entry already exists with a non-Scope type.</exception>
@@ -410,5 +409,4 @@ namespace Library
 	};
 }
 
-// Inline File
 #include "Scope.inl"

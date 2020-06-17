@@ -1,0 +1,212 @@
+// World
+{
+  // Window Options - Auxiliary
+  "WindowOptions": {
+    "type": "scope",
+    "value": {
+      "Title": {
+        "type": "string",
+        "value": "Super Bomberman"
+      },
+      "Position": {
+        "type": "integer",
+        "value": [ 1024, 780 ]
+      },
+      "Size": {
+        "type": "integer",
+        "value": [ 1024, 780 ]
+      },
+      "SetFullscreen": {
+        "type": "integer",
+        "value": 0
+      },
+      "SetCentered": {
+        "type": "integer",
+        "value": 1
+      }
+    }
+  },
+
+  // Name - Prescribed
+  "Name": {
+    "type": "string",
+    "value": "World"
+  },
+
+  // Levels - Prescribed
+  "Sectors": {
+    "type": "Sector",
+    "value": [
+      // Initial Level
+      {
+        "type": "Sector",
+        "value": {
+          "Name": {
+            "type": "string",
+            "value": "TitleScreen"
+          },
+          "Entities": {
+            "type": "Entity",
+            "value": [
+              {
+                "type": "Character",
+                "value": {
+                  "Name": {
+                    "type": "string",
+                    "value": "Test object"
+                  },
+                  "Transform": {
+                    "type": "Transform",
+                    "value": {
+                      "Location": {
+                        "type": "vector",
+                        "value": "vec4(500.0, 390.0, 0.0, 0.0)"
+                      },
+                      "Rotation": {
+                        "type": "float",
+                        "value": 0.0
+                      },
+                      "Scale": {
+                        "type": "vector",
+                        "value": "vec4(512.0, 390.0, 0.0, 0.0)"
+                      }
+                    }
+                  },
+                  "RenderComponent": {
+                    "type": "RenderComponent",
+                    "value": {
+                      "CurrentSprite": {
+                        "type": "string",
+                        "value": "TestBrick"
+                      },
+                      "ColumnCount": {
+                        "type": "integer",
+                        "value": 1
+                      },
+                      "RowCount": {
+                        "type": "integer",
+                        "value": 1
+                      },
+                      "RowIndex": {
+                        "type": "integer",
+                        "value": 0
+                      },
+                      "ColumnIndex": {
+                        "type": "integer",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "Actions": {
+                    "type": "ActionList",
+                    "value": [
+                      {
+                        "type": "ActionRender",
+                        "value": {
+                          "Name": {
+                            "type": "string",
+                            "value": "Render"
+                          },
+                          "IsEnabled": {
+                            "type": "integer",
+                            "value": 1
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "GameObject",
+                "value": {
+                  "Name": {
+                    "type": "string",
+                    "value": "Test Bomberman"
+                  },
+                  "Transform": {
+                    "type": "Transform",
+                    "value": {
+                      "Location": {
+                        "type": "vector",
+                        "value": "vec4(300.0, 390.0, 0.0, 0.0)"
+                      },
+                      "Rotation": {
+                        "type": "float",
+                        "value": 0.0
+                      },
+                      "Scale": {
+                        "type": "vector",
+                        "value": "vec4(48.0, 64.0, 1.0, 0.0)"
+                      }
+                    }
+                  },
+                  "RenderComponent": {
+                    "type": "RenderComponent",
+                    "value": {
+                      "CurrentSprite": {
+                        "type": "string",
+                        "value": "WhiteBomberman"
+                      },
+                      "ColumnCount": {
+                        "type": "integer",
+                        "value": 6
+                      },
+                      "RowCount": {
+                        "type": "integer",
+                        "value": 4
+                      },
+                      "RowIndex": {
+                        "type": "integer",
+                        "value": 2
+                      },
+                      "ColumnIndex": {
+                        "type": "integer",
+                        "value": 1
+                      }
+                    }
+                  },
+                  "Actions": {
+                    "type": "ActionList",
+                    "value": [
+                      {
+                        "type": "ActionRender",
+                        "value": {
+                          "Name": {
+                            "type": "string",
+                            "value": "Render"
+                          },
+                          "IsEnabled": {
+                            "type": "integer",
+                            "value": 1
+                          }
+                        }
+                      },
+                      {
+                        "type": "ActionAnimate",
+                        "value": {
+                          "Name": {
+                            "type": "string",
+                            "value": "Animate"
+                          },
+                          "IsEnabled": {
+                            "type": "integer",
+                            "value": 1
+                          },
+                          "Delay": {
+                            "type": "integer",
+                            "value": 500
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

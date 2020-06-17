@@ -108,8 +108,8 @@ namespace UtilityTests
 			{
 				DefaultEquality<char *> equality;
 	
-				char* a = const_cast<char*>("Hello");
-				char* b = const_cast<char*>("Goodbye");
+				char* a = "Hello";
+				char* b = "Goodbye";
 				
 				char c[6];
 	
@@ -144,10 +144,10 @@ namespace UtilityTests
 			}
 
 			{
-				DefaultEquality<char * const> equality;
+				DefaultEquality<char * const > equality;
 	
-				char* const a = const_cast<char* const>("Hello");
-				char* const b = const_cast<char* const>("Goodbye");
+				char* const a = "Hello";
+				char* const b = "Goodbye";
 				
 				char c[6];
 	

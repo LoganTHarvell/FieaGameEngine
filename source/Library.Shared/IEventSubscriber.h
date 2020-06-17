@@ -5,7 +5,7 @@
 
 namespace Library
 {
-	// Forward Declarations
+	// Forwarded Classes
 	class EventPublisher;
 
 	/// <summary>

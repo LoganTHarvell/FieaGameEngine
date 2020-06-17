@@ -9,6 +9,7 @@
 
 // First Party
 #include "HashMap.h"
+#include "Utility.h"
 #pragma endregion Includes
 
 namespace Library
@@ -160,5 +161,4 @@ namespace Library
 #pragma endregion Concrete Factory Convenience Macro											
 }
 
-// Inline File
 #include "Factory.inl"

@@ -1,0 +1,22 @@
+{
+  "Integer": {
+    "type": "integer",
+    "value": 10
+  },
+  "Float": {
+    "type": "float",
+    "value": 10.0
+  },
+  "Vector": {
+    "type": "vector",
+    "value": "vec4(10.0,10.0,10.0,10.0)"
+  },
+  "Matrix": {
+    "type": "matrix",
+    "value": "mat4x4((10.0,0.0,0.0,0.0), (0.0,10.0,0.0,0.0), (0.0,0.0,10.0,0.0), (0.0,0.0,0.0,10.0))"
+  },
+  "String": {
+    "type": "string",
+    "value": "10"
+  }
+}

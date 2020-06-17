@@ -5,33 +5,32 @@
 // Header
 #include "EventPublisher.h"
 
-// Standard
-#include <future>
-
 // First Party
 #include "IEventSubscriber.h"
-#include "Utility.h"
 #pragma endregion Includes
-
-using namespace std::string_literals;
 
 namespace Library
 {
 	void EventPublisher::Publish()
 	{
 		assert(mSubscriberList);
-		if (!mSubscriberList) return;
-		
-		SubscriberList subscribers;
+
+		auto pendingRemove = [](const SubscriberEntry& entry)
 		{
-			std::scoped_lock<std::mutex> lock(*mMutex);
-			subscribers = *mSubscriberList;
-		}
+			return !entry.PendingRemove;
+		};
+
+		mSubscriberList->Erase(std::partition(mSubscriberList->begin(), mSubscriberList->end(), pendingRemove));
+		mSubscribersPendingAdd->Erase(std::partition(mSubscribersPendingAdd->begin(), mSubscribersPendingAdd->end(), pendingRemove));
 		
-		for (auto* subscriber : subscribers)
+		assert(mSubscribersPendingAdd);
+		mSubscriberList->Insert(mSubscriberList->end(), mSubscribersPendingAdd->begin(), mSubscribersPendingAdd->end());
+		mSubscribersPendingAdd->Clear();
+
+		for (auto entry : *mSubscriberList)
 		{
-			assert(subscriber);
-			subscriber->Notify(*this);
+			assert(entry.Subscriber);
+			entry.Subscriber->Notify(*this);
 		}
 	}
 }

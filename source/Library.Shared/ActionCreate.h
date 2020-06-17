@@ -2,7 +2,8 @@
 
 #pragma region Includes
 // First Party
-#include "Entity.h"
+#include "Action.h"
+#include "WorldState.h"
 #include "Factory.h"
 #pragma endregion Includes
 
@@ -11,16 +12,21 @@ namespace Library
 	/// <summary>
 	/// Represents an Action for creating Scopes.
 	/// </summary>
-	class ActionCreate final : public Entity
+	class ActionCreate final : public Action
 	{
-		RTTI_DECLARATIONS(ActionCreate, Entity)
+		RTTI_DECLARATIONS(ActionCreate, Action)
 
 #pragma region Type Definitions, Constants
 	public:
 		/// <summary>
+		/// Key for the name of the Attribute to append the created Attribute onto.
+		/// </summary>
+		inline static const std::string AttributeKey = "Attribute";
+
+		/// <summary>
 		/// Key for the created Attribute.
 		/// </summary>
-		inline static const std::string EntityPrototypeKey = "Entity";
+		inline static const std::string NewScopeKey = "Scope";
 
 	public:
 		/// <summary>
@@ -34,7 +40,7 @@ namespace Library
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
-		explicit ActionCreate(std::string name=std::string());
+		explicit ActionCreate(const std::string& name=std::string());
 
 		/// <summary>
 		/// Default destructor.
@@ -82,7 +88,8 @@ namespace Library
 		/// <summary>
 		/// Virtual update method called by the containing object.
 		/// </summary>
-		virtual void Update(WorldState&) override;
+		/// <param name="worldState">WorldState context for the current processing step.</param>
+		virtual void Update(WorldState & worldState);
 #pragma endregion Game Loop
 
 #pragma region RTTI Overrides
@@ -93,13 +100,21 @@ namespace Library
 		/// <returns></returns>
 		virtual std::string ToString() const override;
 #pragma endregion RTTI Overrides
+
+#pragma region Data Members
+	private:
+		/// <summary>
+		/// Key value for the Attribute of the Attribute to create.
+		/// </summary>
+		std::string mAttributeKey;
+#pragma endregion Data Members
 	};
 
 #pragma region Factory
 	/// <summary>
 	/// ActionCreateFactory class declaration.
 	/// </summary>
-	ConcreteFactory(ActionCreate, Entity)
+	ConcreteFactory(ActionCreate, Scope)
 #pragma endregion Factory
 }
 

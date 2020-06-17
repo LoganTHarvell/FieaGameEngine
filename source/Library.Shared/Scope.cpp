@@ -9,7 +9,7 @@
 #include "Scope.h"
 
 // First Party
-#include "MathUtility.h"
+#include "Utility.h"
 #pragma endregion Includes
 
 namespace Library

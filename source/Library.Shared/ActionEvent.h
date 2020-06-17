@@ -2,7 +2,10 @@
 
 #pragma region Includes
 // First Party
-#include "Entity.h"
+#include "Action.h"
+#include "Event.h"
+#include "EventMessageAttributed.h"
+#include "WorldState.h"
 #include "Factory.h"
 #pragma endregion Includes
 
@@ -11,9 +14,9 @@ namespace Library
 	/// <summary>
 	/// Represents an Action for creating Scopes.
 	/// </summary>
-	class ActionEvent final : public Entity
+	class ActionEvent final : public Action
 	{
-		RTTI_DECLARATIONS(ActionEvent, Entity)
+		RTTI_DECLARATIONS(ActionEvent, Action)
 
 #pragma region Static Members
 	public:
@@ -39,7 +42,7 @@ namespace Library
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
-		explicit ActionEvent(std::string name=std::string(), std::string subtype=std::string(), const int delay=0);
+		explicit ActionEvent(const std::string& name=std::string(), const std::string& subtype=std::string(), const int delay=0);
 
 		/// <summary>
 		/// Default destructor.
@@ -88,7 +91,7 @@ namespace Library
 		/// Virtual update method called by the containing object.
 		/// </summary>
 		/// <param name="worldState">WorldState context for the current processing step.</param>
-		virtual void Update(WorldState& worldState) override;
+		virtual void Update(WorldState& worldState);
 #pragma endregion Game Loop
 
 #pragma region RTTI Overrides
@@ -118,7 +121,7 @@ namespace Library
 	/// <summary>
 	/// ActionEventFactory class declaration.
 	/// </summary>
-	ConcreteFactory(ActionEvent, Entity)
+	ConcreteFactory(ActionEvent, Scope)
 #pragma endregion Factory
 }
 

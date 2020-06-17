@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "Attributed.h"
 #include "Foo.h"
 
@@ -10,7 +12,7 @@ namespace UnitTests
 		RTTI_DECLARATIONS(AttributedFoo, Library::Attributed)
 
 	public:
-		explicit AttributedFoo(const int data = 0);
+		explicit AttributedFoo(int data = 0);
 		AttributedFoo(const AttributedFoo& rhs);
 		AttributedFoo(AttributedFoo&& rhs) noexcept;
 		AttributedFoo& operator=(const AttributedFoo& rhs);
@@ -23,7 +25,7 @@ namespace UnitTests
 		static const Library::TypeManager::TypeInfo& TypeInfo();
 
 	protected:
-		explicit AttributedFoo(const IdType typeId, const int data = 0);
+		explicit AttributedFoo(const RTTI::IdType typeId, int data = 0);
 
 	private:
 		int mInt;

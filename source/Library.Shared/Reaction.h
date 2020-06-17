@@ -2,7 +2,7 @@
 
 #pragma region Includes
 // First Party
-#include "Entity.h"
+#include "ActionList.h"
 #include "IEventSubscriber.h"
 #pragma endregion Includes
 
@@ -11,9 +11,9 @@ namespace Library
 	/// <summary>
 	/// Abstract base class for an ActionList that supports Event subscription.
 	/// </summary>
-	class Reaction : public Entity, public IEventSubscriber
+	class Reaction : public ActionList, public IEventSubscriber
 	{
-		RTTI_DECLARATIONS_ABSTRACT(Reaction, Entity)
+		RTTI_DECLARATIONS_ABSTRACT(Reaction, ActionList)
 
 #pragma region Special Members
 	public:
@@ -59,7 +59,7 @@ namespace Library
 		/// </summary>
 		/// <param name="typeId">Type ID of the derived class.</param>
 		/// <param name="name">Name for the Reaction.</param>
-		explicit Reaction(const IdType typeId, std::string name=std::string());
+		explicit Reaction(const RTTI::IdType typeId, const std::string& name=std::string());
 #pragma endregion Special Members
 
 #pragma region Action List Overrides
@@ -81,5 +81,4 @@ namespace Library
 	};
 }
 
-// Inline File
 #include "Reaction.inl"

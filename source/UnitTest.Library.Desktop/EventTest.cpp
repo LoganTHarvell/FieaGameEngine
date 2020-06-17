@@ -20,17 +20,6 @@ namespace EventTests
 		}
 	};
 
-	class TestSubscriberException final : public IEventSubscriber
-	{
-	public:
-		virtual void Notify(EventPublisher&) override
-		{
-			throw std::runtime_error("Test exception.");
-		}
-
-	public:
-		EventQueue* queue{ nullptr };
-	};
 
 	TEST_CLASS(EventTest)
 	{
@@ -66,32 +55,26 @@ namespace EventTests
 			TestEventSubscriber testEventSubscriber3;
 
 			Assert::AreEqual(0_z, Event<Foo>::SubscriberCount());
-			
-			auto capacity = Event<Foo>::SubscriberCapacity();
-			Assert::AreEqual(0_z, capacity);
+			Assert::AreEqual(0_z, Event<Foo>::SubscriberCapacity());
 
 			Event<Foo>::Subscribe(testEventSubscriber1);
 			Assert::AreEqual(1_z, Event<Foo>::SubscriberCount());
-
-			Assert::IsTrue(capacity < Event<Foo>::SubscriberCapacity());
-			capacity = Event<Foo>::SubscriberCapacity();
+			Assert::AreEqual(0_z, Event<Foo>::SubscriberCapacity());
 
 			Assert::ExpectException<std::runtime_error>([&] 
 			{
 				Event<Foo>::Subscribe(testEventSubscriber1); 
 			});
 
-			Assert::AreEqual(capacity, Event<Foo>::SubscriberCapacity());
-			
 			Event<Foo> fooEvent;
 			EventQueue::Publish(fooEvent);
 			
+			Assert::AreNotEqual(0_z, Event<Foo>::SubscriberCapacity());
+
 			Assert::ExpectException<std::runtime_error>([&]
 			{
 				Event<Foo>::Subscribe(testEventSubscriber1);
 			});
-
-			Assert::AreEqual(capacity, Event<Foo>::SubscriberCapacity());
 
 			Event<Foo>::Subscribe(testEventSubscriber2);
 			Assert::AreEqual(2_z, Event<Foo>::SubscriberCount());
@@ -99,9 +82,13 @@ namespace EventTests
 			Assert::AreEqual(3_z, Event<Foo>::SubscriberCount());
 
 			EventQueue::Publish(fooEvent);
-			capacity = Event<Foo>::SubscriberCapacity();
+			std::size_t capacity = Event<Foo>::SubscriberCapacity();
 
 			Event<Foo>::Unsubscribe(testEventSubscriber1);
+			Assert::AreEqual(3_z, Event<Foo>::SubscriberCount());
+			Assert::AreEqual(capacity, Event<Foo>::SubscriberCapacity());
+
+			EventQueue::Publish(fooEvent);
 			Assert::AreEqual(2_z, Event<Foo>::SubscriberCount());
 			Assert::AreEqual(capacity, Event<Foo>::SubscriberCapacity());
 
@@ -116,11 +103,11 @@ namespace EventTests
 		TEST_METHOD(Constructor)
 		{
 			{
-				const Event<Foo> fooEvent;
+				Event<Foo> fooEvent;
 				Assert::AreEqual(Foo(), fooEvent.Message);
 			}
 
-			const Event<Foo> fooEvent(Foo(10));
+			Event<Foo> fooEvent(Foo(10));
 			Assert::AreEqual(Foo(10), fooEvent.Message);
 
 			const Event<Foo> constFooEvent = fooEvent;
@@ -130,42 +117,28 @@ namespace EventTests
 		TEST_METHOD(Publish)
 		{
 			Event<Foo> fooEvent(Foo(10));
-			Vector<TestEventSubscriber> subscribers;
-			subscribers.Resize(1000);
+			TestEventSubscriber subscriber;
+			Event<Foo>::Subscribe(subscriber);
 
-			for (auto& subscriber : subscribers)
-			{
-				Event<Foo>::Subscribe(subscriber);
-				Assert::AreEqual(0, subscriber.Data());
-			}
-			
+			Assert::AreEqual(0, subscriber.Data());
 			EventQueue::Publish(fooEvent);
-
-			for (auto& subscriber : subscribers)
-			{
-				Assert::AreEqual(fooEvent.Message.Data(), subscriber.Data());
-			}
-			
-			TestSubscriberException subscriberWithException;
-			Event<Foo>::Subscribe(subscriberWithException);
-
-			Assert::ExpectException<std::runtime_error>([&fooEvent]{ EventQueue::Publish(fooEvent); });
+			Assert::AreEqual(fooEvent.Message.Data(), subscriber.Data());
 		}
 
 		TEST_METHOD(RTTITest)
 		{
-			const Event<Foo> a;
+			Event<Foo> a;
 			Event<Foo> b;
 
 			Assert::IsTrue(a.Is(EventPublisher::TypeIdClass()));
 
 			EventPublisher* fooEvent = new Event<Foo>();
-			const bool isEvent = fooEvent->Is(Event<Foo>::TypeIdClass());
+			bool isEvent = fooEvent->Is(Event<Foo>::TypeIdClass());
 
 			Event<Foo>* createdFooEvent = isEvent ? createdFooEvent = fooEvent->CreateAs<Event<Foo>>() : nullptr;
-			const bool wasCreated = createdFooEvent != nullptr;
+			bool wasCreated = createdFooEvent != nullptr;
 
-			const bool isFooEvent = wasCreated ? createdFooEvent->Is(Event<Foo>::TypeIdClass()) : false;
+			bool isFooEvent = wasCreated ? createdFooEvent->Is(Event<Foo>::TypeIdClass()) : false;
 
 			delete fooEvent;
 			delete createdFooEvent;
@@ -177,7 +150,7 @@ namespace EventTests
 
 		TEST_METHOD(ToString)
 		{
-			const Event<Foo> fooEvent;
+			Event<Foo> fooEvent;
 			Assert::AreEqual("Event"s, fooEvent.ToString());
 			Assert::AreEqual("EventPublisher"s, fooEvent.EventPublisher::ToString());
 		}

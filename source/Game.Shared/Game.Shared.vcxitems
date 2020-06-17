@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{0892da0d-77f6-4d67-9b31-227ca3a13bce}</ItemsProjectGuid>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)ActionAnimate.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ActionCharacterMovementInput.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ActionExpireEntity.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ActionPlaySound.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ActionStopKick.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ActionPickupPowerUp.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ActionRender.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ActionSpawnBomb.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ActionUpdateAnimationState.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)AIManager.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)AudioManager.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Bomb.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Character.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)DestructibleWall.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Explosion.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Game.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)GameMessage.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)GameObject.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)HUD.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)HUDNumber.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Map.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)MapTiles.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)MenuDisplay.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)MenuInputHandler.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)MenuInputMessage.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)PowerUp.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Menu.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Quad.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)RenderComponent.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)RenderQueue.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Shader.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)RenderManager.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Texture.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)InputManager.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)PlayerInputReaction.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Player1InputMessage.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Player1InputReaction.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Player2InputMessage.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Player2InputReaction.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Player3InputMessage.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Player3InputReaction.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Player4InputMessage.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Player4InputReaction.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)PlayerInputHandlers.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)PlayerInputMessage.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)StateManager.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Transform.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)WindowManager.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)WorldHelpers.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)ActionAnimate.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ActionCharacterMovementInput.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ActionExpireEntity.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ActionPlaySound.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ActionStopKick.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ActionPickupPowerUp.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ActionRender.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ActionSpawnBomb.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ActionUpdateAnimationState.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)AIManager.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)AudioManager.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Bomb.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Character.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)DestructibleWall.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Explosion.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Game.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)GameMessage.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)GameObject.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)GameTypes.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)HUD.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)HUDNumber.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Map.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)MenuDisplay.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)MenuInputHandler.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)MenuInputMessage.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)PowerUp.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Menu.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Quad.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)RenderComponent.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)RenderQueue.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Shader.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)RenderManager.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Texture.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)InputManager.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)PlayerInputReaction.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Player1InputMessage.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Player1InputReaction.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Player2InputMessage.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Player2InputReaction.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Player3InputMessage.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Player3InputReaction.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Player4InputMessage.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Player4InputReaction.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)PlayerInputHandlers.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)PlayerInputMessage.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)StateManager.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)MapTiles.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Transform.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)WindowManager.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)WorldHelpers.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)PlayerInputHandler.inl" />
+    <None Include="$(MSBuildThisFileDirectory)WindowManager.inl" />
+    <None Include="$(MSBuildThisFileDirectory)PlayerInputMessage.inl" />
+  </ItemGroup>
+</Project>

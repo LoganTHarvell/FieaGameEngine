@@ -140,5 +140,4 @@ namespace Library::Hash
 
 using namespace Library::Hash;
 
-// Inline File
 #include "DefaultHash.inl"

@@ -1,0 +1,149 @@
+{
+  "Name": {
+    "type": "string",
+    "value": "TitleScreen"
+  },
+  "Entities": {
+    "type": "Entity",
+    "value": [
+      {
+        "type": "Menu",
+        "value": {
+          "Name": {
+            "type": "string",
+            "value": "Main menu"
+          },
+          "Transform": {
+            "type": "Transform",
+            "value": {
+              "Location": {
+                "type": "vector",
+                "value": "vec4(780.0, 390.0, 0.0, 0.0)"
+              },
+              "Rotation": {
+                "type": "float",
+                "value": 0.0
+              },
+              "Scale": {
+                "type": "vector",
+                "value": "vec4(512.0, 390.0, 0.0, 0.0)"
+              }
+            }
+          },
+          "RenderComponent": {
+            "type": "RenderComponent",
+            "value": {
+              "CurrentSprite": {
+                "type": "string",
+                "value": "MainMenu"
+              },
+              "ColumnCount": {
+                "type": "integer",
+                "value": 1
+              },
+              "RowCount": {
+                "type": "integer",
+                "value": 1
+              },
+              "RowIndex": {
+                "type": "integer",
+                "value": 0
+              },
+              "ColumnIndex": {
+                "type": "integer",
+                "value": 0
+              }
+            }
+          },
+          "Actions": {
+            "type": "ActionList",
+            "value": [
+              {
+                "type": "ActionRender",
+                "value": {
+                  "IsEnabled": {
+                    "type": "integer",
+                    "value": 1
+                  }
+                }
+              }
+            ]
+          },
+          "MenuDisplay": {
+            "type": "MenuDisplay",
+            "value": {
+              "Name": {
+                "type": "string",
+                "value": "Menu Display"
+              },
+              "Transform": {
+                "type": "Transform",
+                "value": {
+                  "Location": {
+                    "type": "vector",
+                    "value": "vec4(512.0, 550.0, 0.0, 0.0)"
+                  },
+                  "Rotation": {
+                    "type": "float",
+                    "value": 0.0
+                  },
+                  "Scale": {
+                    "type": "vector",
+                    "value": "vec4(90.0, 15.0, 0.0, 0.0)"
+                  }
+                }
+              },
+              "RenderComponent": {
+                "type": "RenderComponent",
+                "value": {
+                  "CurrentSprite": {
+                    "type": "string",
+                    "value": "MenuDisplay"
+                  },
+                  "ColumnCount": {
+                    "type": "integer",
+                    "value": 1
+                  },
+                  "RowCount": {
+                    "type": "integer",
+                    "value": 4
+                  },
+                  "RowIndex": {
+                    "type": "integer",
+                    "value": 0
+                  },
+                  "ColumnIndex": {
+                    "type": "integer",
+                    "value": 0
+                  }
+                }
+              },
+              "Actions": {
+                "type": "ActionList",
+                "value": [
+                  {
+                    "type": "ActionRender",
+                    "value": {
+                      "Name": {
+                        "type": "string",
+                        "value": "Render"
+                      },
+                      "IsEnabled": {
+                        "type": "integer",
+                        "value": 1
+                      },
+                      "Priority": {
+                        "type": "integer",
+                        "value": 1
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}

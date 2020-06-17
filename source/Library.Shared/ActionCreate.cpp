@@ -6,6 +6,7 @@
 #include "ActionCreate.h"
 
 // First Party
+#include "World.h"
 #include "Entity.h"
 #pragma endregion Includes
 
@@ -16,16 +17,17 @@ namespace Library
 		static const TypeManager::TypeInfo typeInfo
 		{
 			{
-				{ EntityPrototypeKey, Types::Scope, true, 1, 0 },
+				{ AttributeKey, Types::String, false, 1, offsetof(ActionCreate, mAttributeKey) },
+				{ NewScopeKey, Types::Scope, true, 1, 0 }
 			},
 
-			Entity::TypeIdClass()
+			Action::TypeIdClass()
 		};
 
 		return typeInfo;
 	}
 
-	ActionCreate::ActionCreate(std::string name) : Entity(TypeIdClass(), std::move(name))
+	ActionCreate::ActionCreate(const std::string& name) : Action(TypeIdClass(), name)
 	{
 	}
 
@@ -34,17 +36,23 @@ namespace Library
 		return new ActionCreate(*this);
 	}
 
-	void ActionCreate::Update(WorldState&)
+	void ActionCreate::Update(WorldState& worldState)
 	{
-		Entity* parent = GetParent();
-		
-		if (parent != nullptr)
+		if (worldState.World && worldState.Entity)
 		{
-			Entity* child = FindChild(EntityPrototypeKey);
+			Data* scope = Find(NewScopeKey);
 
-			if (child != nullptr)
+			if (scope && scope->Type() == Types::Scope && scope->Size() > 0)
 			{
-				parent->AddChild(static_cast<Entity&>(*child->Clone()));
+				World::PendingChild childToAdd =
+				{
+					*scope->Get<Scope*>()->Clone(),
+					World::PendingChild::State::ToAdd,
+					*worldState.Entity,
+					mAttributeKey
+				};
+
+				worldState.World->PendingChildren().EmplaceBack(std::move(childToAdd));
 			}
 		}
 	}

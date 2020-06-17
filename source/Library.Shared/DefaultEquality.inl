@@ -1,6 +1,3 @@
-#pragma once
-
-// Header
 #include "DefaultEquality.h"
 
 namespace Library::Equality

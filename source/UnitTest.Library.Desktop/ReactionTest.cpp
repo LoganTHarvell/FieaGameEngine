@@ -7,7 +7,6 @@
 #include "ActionIncrement.h"
 #include "Entity.h"
 #include "Event.h"
-#include "EventMessageAttributed.h"
 
 using namespace std::string_literals;
 
@@ -18,14 +17,16 @@ using namespace UnitTests;
 
 namespace EntitySystemTests::ActionTests
 {
-	struct ActionTestReaction final : public Entity 
+	struct ActionTestReaction final : public Action 
 	{
-		RTTI_DECLARATIONS(ActionTestReaction, Entity)
+		RTTI_DECLARATIONS(ActionTestReaction, Action)
 
 	public:
-		explicit ActionTestReaction(const std::string& name=std::string()) : Entity(TypeIdClass(), name)
+		explicit ActionTestReaction(const std::string& name=std::string()) : Action(TypeIdClass(), name)
 		{
 		}
+
+		ActionTestReaction(const ActionTestReaction& rhs) = default;
 
 		virtual gsl::owner<Library::Scope*> Clone() const override
 		{
@@ -34,7 +35,7 @@ namespace EntitySystemTests::ActionTests
 
 		virtual void Update(Library::WorldState&) override
 		{
-			auto* parameter = Search("Parameter");
+			auto parameter = Search("Parameter");
 			if (parameter) Parameter += parameter->Get<int>();
 		}
 
@@ -42,7 +43,40 @@ namespace EntitySystemTests::ActionTests
 		int Parameter{ 0 };
 	};
 
-	ConcreteFactory(ActionTestReaction, Entity)
+	struct ActionTestParameterStack final : public Action 
+	{
+		RTTI_DECLARATIONS(ActionTestParameterStack, Action)
+
+	public:
+		explicit ActionTestParameterStack(const std::string& name=std::string()) : Action(TypeIdClass(), name)
+		{
+		}
+
+		ActionTestParameterStack(const ActionTestParameterStack& rhs) = default;
+
+		virtual gsl::owner<Library::Scope*> Clone() const override
+		{
+			return new ActionTestParameterStack(*this);
+		}
+
+		virtual void Update(Library::WorldState& worldState) override
+		{
+			if (StackLevel++ < 1)
+			{
+				EventMessageAttributed message;
+				message.SetWorld(worldState.World);
+				message.AppendAuxiliaryAttribute("Parameter") = 1;
+				Event<EventMessageAttributed> event(message);
+				worldState.EventQueue->Publish(event);
+			}
+		}
+
+	public:
+		int StackLevel{ 0 };
+	};
+
+	ConcreteFactory(ActionTestReaction, Scope)
+	ConcreteFactory(ActionTestParameterStack, Scope)
 
 
 	TEST_CLASS(ReactionTest)
@@ -52,8 +86,12 @@ namespace EntitySystemTests::ActionTests
 		{
 			TypeManager::Create();
 
-			RegisterType<Entity>();
 			RegisterType<World>();
+			RegisterType<Sector>();
+			RegisterType<Entity>();
+
+			RegisterType<Action>();
+			RegisterType<ActionList>();
 			RegisterType<ActionIncrement>();
 
 			RegisterType<Reaction>();
@@ -62,6 +100,7 @@ namespace EntitySystemTests::ActionTests
 			RegisterType<ActionEvent>();
 
 			RegisterType<ActionTestReaction>();
+			RegisterType<ActionTestParameterStack>();
 
 
 #if defined(DEBUG) || defined(_DEBUG)
@@ -94,19 +133,19 @@ namespace EntitySystemTests::ActionTests
 		{
 			/* ReactionAttributed */
 
-			const ReactionAttributed reactionA;
+			ReactionAttributed reactionA;
 			ReactionAttributed reactionB;
 
-			Assert::IsTrue(reactionA.Is(Entity::TypeIdClass()));
+			Assert::IsTrue(reactionA.Is(Action::TypeIdClass()));
 			Assert::IsTrue(reactionA.Equals(&reactionB));
 
-			Entity* newAction = new ReactionAttributed();
-			const bool isReaction = newAction->Is(Reaction::TypeIdClass());
+			Action* newAction = new ReactionAttributed();
+			bool isReaction = newAction->Is(Reaction::TypeIdClass());
 
-			Entity* createdReactionAttributed = isReaction ? createdReactionAttributed = newAction->CreateAs<Entity>() : nullptr;
+			Action* createdReactionAttributed = isReaction ? createdReactionAttributed = newAction->CreateAs<Action>() : nullptr;
 			bool wasCreated = createdReactionAttributed != nullptr;
 
-			const bool  isReactionAttributed = wasCreated ? createdReactionAttributed->Is(ReactionAttributed::TypeIdClass()) : false;
+			bool  isReactionAttributed = wasCreated ? createdReactionAttributed->Is(ReactionAttributed::TypeIdClass()) : false;
 
 			delete newAction;
 			delete createdReactionAttributed;
@@ -115,19 +154,19 @@ namespace EntitySystemTests::ActionTests
 
 			/* ActionEvent */
 
-			const ActionEvent actionEventA;
+			ActionEvent actionEventA;
 			ActionEvent actionEventB;
 
-			Assert::IsTrue(actionEventA.Is(Entity::TypeIdClass()));
+			Assert::IsTrue(actionEventA.Is(Action::TypeIdClass()));
 			Assert::IsTrue(actionEventA.Equals(&actionEventB));
 
 			newAction = new ActionEvent();
-			const bool isAction = newAction->Is(Entity::TypeIdClass());
+			bool isAction = newAction->Is(Action::TypeIdClass());
 
-			Entity* createdActionEvent = isAction ? createdActionEvent = newAction->CreateAs<Entity>() : nullptr;
+			Action* createdActionEvent = isAction ? createdActionEvent = newAction->CreateAs<Action>() : nullptr;
 			wasCreated = createdActionEvent != nullptr;
 
-			const bool  isActionEvent = wasCreated ? createdActionEvent->Is(ActionEvent::TypeIdClass()) : false;
+			bool  isActionEvent = wasCreated ? createdActionEvent->Is(ActionEvent::TypeIdClass()) : false;
 
 			delete newAction;
 			delete createdActionEvent;
@@ -155,8 +194,10 @@ namespace EntitySystemTests::ActionTests
 
 			ReactionAttributed reactionAttributed("ReactionAttributed");
 			Assert::AreEqual("ReactionAttributed"s, reactionAttributed.Name());
+			Assert::IsNotNull(reactionAttributed.Find("Name"));
+			Assert::AreEqual("ReactionAttributed"s, reactionAttributed.Find("Name")->Get<std::string>());
 
-			auto* actionSubtypeKey = reactionAttributed.Find(ReactionAttributed::SubtypeKey);
+			auto actionSubtypeKey = reactionAttributed.Find(reactionAttributed.SubtypeKey);
 			Assert::IsNotNull(actionSubtypeKey);
 			Assert::AreEqual(Scope::Types::String, actionSubtypeKey->Type());
 			Assert::AreEqual(std::string(), actionSubtypeKey->Get<std::string>());			
@@ -165,13 +206,15 @@ namespace EntitySystemTests::ActionTests
 
 			ActionEvent actionEvent("ActionEvent");
 			Assert::AreEqual("ActionEvent"s, actionEvent.Name());
+			Assert::IsNotNull(actionEvent.Find("Name"));
+			Assert::AreEqual("ActionEvent"s, actionEvent.Find("Name")->Get<std::string>());
 
-			actionSubtypeKey = actionEvent.Find(ActionEvent::SubtypeKey);
+			actionSubtypeKey = actionEvent.Find(actionEvent.SubtypeKey);
 			Assert::IsNotNull(actionSubtypeKey);
 			Assert::AreEqual(Scope::Types::String, actionSubtypeKey->Type());
 			Assert::AreEqual(std::string(), actionSubtypeKey->Get<std::string>());
 
-			auto* delay = actionEvent.Find(ActionEvent::DelayKey);
+			auto delay = actionEvent.Find(actionEvent.DelayKey);
 			Assert::IsNotNull(delay);
 			Assert::AreEqual(Scope::Types::Integer, delay->Type());
 			Assert::AreEqual(1_z, delay->Size());
@@ -196,10 +239,10 @@ namespace EntitySystemTests::ActionTests
 			Assert::AreEqual(0_z, Event<EventMessageAttributed>::SubscriberCount());
 
 			ActionEvent actionEvent("ActionEvent");
-			*actionEvent.Find(ActionEvent::SubtypeKey) = "subtype";
-			*actionEvent.Find(ActionEvent::DelayKey) = 10;
+			*actionEvent.Find(actionEvent.SubtypeKey) = "subtype";
+			*actionEvent.Find(actionEvent.DelayKey) = 10;
 
-			Assert::AreEqual(*actionEvent.As<Entity>(), *ActionEvent(actionEvent).As<Entity>());
+			Assert::AreEqual(*actionEvent.As<Action>(), *ActionEvent(actionEvent).As<Action>());
 		}
 
 		TEST_METHOD(Move)
@@ -212,7 +255,7 @@ namespace EntitySystemTests::ActionTests
 				Assert::AreEqual(2_z, Event<EventMessageAttributed>::SubscriberCount());
 			}
 
-			const auto event = std::make_shared<Event<EventMessageAttributed>>();
+			auto event = std::make_shared<Event<EventMessageAttributed>>();
 			EventQueue queue;
 			queue.Enqueue(event);
 			queue.Update(GameTime());
@@ -220,11 +263,11 @@ namespace EntitySystemTests::ActionTests
 			Assert::AreEqual(0_z, Event<EventMessageAttributed>::SubscriberCount());
 
 			ActionEvent actionEvent("ActionEvent");
-			*actionEvent.Find(ActionEvent::SubtypeKey) = "subtype";
-			*actionEvent.Find(ActionEvent::DelayKey) = 10;
+			*actionEvent.Find(actionEvent.SubtypeKey) = "subtype";
+			*actionEvent.Find(actionEvent.DelayKey) = 10;
 
 			auto copy = ActionEvent(actionEvent);
-			Assert::AreEqual(*copy.As<Entity>(), *ActionEvent(std::move(actionEvent)).As<Entity>());
+			Assert::AreEqual(*copy.As<Action>(), *ActionEvent(std::move(actionEvent)).As<Action>());
 		}
 
 		TEST_METHOD(Clone)
@@ -235,8 +278,8 @@ namespace EntitySystemTests::ActionTests
 			Scope* clone = reactionAttributed.Clone();
 
 			bool notNull = clone;
-			const bool isReactionAttributed = notNull ? clone->Is(ReactionAttributed::TypeIdClass()) : false;
-			bool equal = *reactionAttributed.As<Entity>() == *clone->As<Entity>();
+			bool isReactionAttributed = notNull ? clone->Is(ReactionAttributed::TypeIdClass()) : false;
+			bool equal = *reactionAttributed.As<Action>() == *clone->As<Action>();
 
 			delete clone;
 
@@ -248,8 +291,8 @@ namespace EntitySystemTests::ActionTests
 			clone = actionEvent.Clone();
 
 			notNull = clone;
-			const bool isActionEvent = notNull ? clone->Is(ActionEvent::TypeIdClass()) : false;
-			equal = *actionEvent.As<Entity>() == *clone->As<Entity>();
+			bool isActionEvent = notNull ? clone->Is(ActionEvent::TypeIdClass()) : false;
+			equal = *actionEvent.As<Action>() == *clone->As<Action>();
 
 			delete clone;
 
@@ -261,7 +304,7 @@ namespace EntitySystemTests::ActionTests
 			clone = eventMessageAttributed.Clone();
 
 			notNull = clone;
-			const bool isEventMessageAttributed = notNull ? clone->Is(EventMessageAttributed::TypeIdClass()) : false;
+			bool isEventMessageAttributed = notNull ? clone->Is(EventMessageAttributed::TypeIdClass()) : false;
 			equal = *eventMessageAttributed.As<Attributed>() == *clone->As<Attributed>();
 
 			delete clone;
@@ -275,17 +318,19 @@ namespace EntitySystemTests::ActionTests
 			const auto eventQueue = std::make_shared<EventQueue>();
 
 			World world("World", gameTime.get(), eventQueue.get());
-			Entity& entity = world.CreateChild("Entity", "Sector").CreateChild("Entity", "Entity");
+			Entity* entity = world.CreateSector("Sector").CreateEntity("Entity", "Entity");
 
-			Entity& reactionAsAction = entity.CreateChild("ReactionAttributed", "Reaction");
-			ReactionAttributed& reaction = *reactionAsAction.As<ReactionAttributed>();
+			Action* reactionAsAction = entity->CreateAction("ReactionAttributed", "Reaction");
+			Assert::IsNotNull(reactionAsAction);
+			ReactionAttributed& reaction = *reactionAsAction->As<ReactionAttributed>();
 
-			Entity& testReaction = reaction.CreateChild("ActionTestReaction"s, "TestReaction"s);
+			Action* testReaction = reaction.CreateAction("ActionTestReaction"s, "TestReaction"s);
 
-			Entity& create = entity.CreateChild("ActionEvent"s, "CreateEvent"s);
-			Assert::IsTrue(create.Is(ActionEvent::TypeIdClass()));
+			Action* create = entity->CreateAction("ActionEvent"s, "CreateEvent"s);
+			Assert::IsNotNull(create);
+			Assert::IsTrue(create->Is(ActionEvent::TypeIdClass()));
 
-			ActionEvent* event = create.As<ActionEvent>();
+			ActionEvent* event = create->As<ActionEvent>();
 			auto parameter = event->AppendAuxiliaryAttribute("Parameter") = 1;
 
 			Assert::AreEqual(0_z, world.GetWorldState().EventQueue->Size());
@@ -293,13 +338,47 @@ namespace EntitySystemTests::ActionTests
 			world.Update();
 			Assert::AreEqual(1_z, world.GetWorldState().EventQueue->Size());
 
-			entity.Update(world.GetWorldState());
+			entity->Update(world.GetWorldState());
 			Assert::AreEqual(2_z, world.GetWorldState().EventQueue->Size());
-			Assert::AreEqual(0, testReaction.As<ActionTestReaction>()->Parameter);
+			Assert::AreEqual(0, testReaction->As<ActionTestReaction>()->Parameter);
 
 			world.Update();
 			Assert::AreEqual(1_z, world.GetWorldState().EventQueue->Size());
-			Assert::AreEqual(2, testReaction.As<ActionTestReaction>()->Parameter);
+			Assert::AreEqual(2, testReaction->As<ActionTestReaction>()->Parameter);
+
+			world.GetWorldState().EventQueue->Clear();
+			world.GetWorldState().EventQueue->ShrinkToFit();
+		}
+
+		TEST_METHOD(ParameterStack)
+		{
+			const auto gameTime = std::make_shared<GameTime>();
+			const auto eventQueue = std::make_shared<EventQueue>();
+
+			World world("World", gameTime.get(), eventQueue.get());
+			Entity* entity = world.CreateSector("Sector").CreateEntity("Entity", "Entity");
+
+			ReactionAttributed& testReaction = *entity->CreateAction("ReactionAttributed", "TestReaction")->As<ReactionAttributed>();
+			ActionTestParameterStack& testParameterStack = *testReaction.CreateAction("ActionTestParameterStack"s, "TestParameterStack"s)->As<ActionTestParameterStack>();
+			Action* testAction = testReaction.CreateAction("ActionTestReaction"s, "TestReaction"s);
+			
+			Action* create = entity->CreateAction("ActionEvent"s, "CreateEvent"s);
+			Assert::IsNotNull(create);
+			Assert::IsTrue(create->Is(ActionEvent::TypeIdClass()));
+
+			ActionEvent* event = create->As<ActionEvent>();
+			auto parameter = event->AppendAuxiliaryAttribute("Parameter") = 1;
+
+			Assert::AreEqual(0_z, world.GetWorldState().EventQueue->Size());
+
+			world.Update();
+			Assert::AreEqual(1_z, world.GetWorldState().EventQueue->Size());
+			Assert::AreEqual(0, testParameterStack.StackLevel);
+			Assert::AreEqual(0, testAction->As<ActionTestReaction>()->Parameter);
+			
+			world.Update();
+			Assert::AreEqual(1_z, world.GetWorldState().EventQueue->Size());
+			Assert::AreEqual(2, testAction->As<ActionTestReaction>()->Parameter);
 
 			world.GetWorldState().EventQueue->Clear();
 			world.GetWorldState().EventQueue->ShrinkToFit();
@@ -322,9 +401,11 @@ namespace EntitySystemTests::ActionTests
 		ReactionAttributedFactory reactionAttributedFactory;
 		ActionEventFactory actionEventFactory;
 		ActionIncrementFactory actionIncrementFactory;
+		SectorFactory sectorFactory;
 		EntityFactory entityFactory;
 
 		ActionTestReactionFactory actionTestReactionFactory;
+		ActionTestParameterStackFactory actionTestParameterFactory;
 	};
 
 	_CrtMemState ReactionTest::sStartMemState;

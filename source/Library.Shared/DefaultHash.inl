@@ -1,6 +1,3 @@
-#pragma once
-
-// Header
 #include "DefaultHash.h"
 
 namespace Library::Hash

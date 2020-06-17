@@ -6,6 +6,7 @@
 #include "ActionDestroy.h"
 
 // First Party
+#include "World.h"
 #include "Entity.h"
 #pragma endregion Includes
 
@@ -16,16 +17,17 @@ namespace Library
 		static const TypeManager::TypeInfo typeInfo
 		{
 			{
+				{ AttributeKey, Types::String, false, 1, offsetof(ActionDestroy, mAttributeKey) },
 				{ TargetKey, Types::String, false, 1, offsetof(ActionDestroy, mTargetName) }
 			},
 
-			Entity::TypeIdClass()
+			Action::TypeIdClass()
 		};
 
 		return typeInfo;
 	}
 
-	ActionDestroy::ActionDestroy(std::string name) : Entity(TypeIdClass(), std::move(name))
+	ActionDestroy::ActionDestroy(const std::string& name) : Action(TypeIdClass(), name)
 	{
 	}
 
@@ -34,17 +36,32 @@ namespace Library
 		return new ActionDestroy(*this);
 	}
 
-	void ActionDestroy::Update(WorldState&)
+	void ActionDestroy::Update(WorldState& worldState)
 	{
-		Entity* parent = GetParent();
-		
-		if (parent != nullptr)
+		if (worldState.Entity)
 		{
-			Entity* child = parent->FindChild(mTargetName);
+			Data* attribute = worldState.Entity->Find(mAttributeKey);
 
-			if (child != nullptr)
+			if (attribute)
 			{
-				parent->DestroyChild(*child);
+				for (std::size_t i = 0; i < attribute->Size(); ++i)
+				{
+					Scope& scope = (*attribute)[i];
+					Data* name = scope.Find("Name");
+
+					if (name && *name == mTargetName)
+					{
+						World::PendingChild childToRemove =
+						{
+							scope,
+							World::PendingChild::State::ToRemove,
+							*worldState.Entity,
+							std::string()
+						};
+
+						worldState.World->PendingChildren().EmplaceBack(std::move(childToRemove));
+					}
+				}
 			}
 		}
 	}

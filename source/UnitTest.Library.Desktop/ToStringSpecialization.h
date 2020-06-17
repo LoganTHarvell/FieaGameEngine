@@ -19,11 +19,12 @@
 #include "Scope.h"
 #include "TypeManager.h"
 #include "JsonParseMaster.h"
-#include "Entity.h"
 #include "World.h"
+#include "Sector.h"
+#include "Entity.h"
+#include "Action.h"
 #include "GameTime.h"
 #include "EventQueue.h"
-#include "ActionCreate.h"
 
 using namespace UnitTests;
 using namespace Library;
@@ -1487,6 +1488,40 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 	}
 #pragma endregion JSON Parser
 
+#pragma region Action
+	template<>
+	inline std::wstring ToString<Action>(const Action& t)
+	{
+		RETURN_WIDE_STRING(t.Name().c_str());
+	}
+
+	template<>
+	inline std::wstring ToString<Action>(const Action* t)
+	{
+		try 
+		{
+			RETURN_WIDE_STRING(t->Name().c_str());
+		}
+		catch (const std::exception&)
+		{
+			RETURN_WIDE_STRING(t);
+		}
+	}
+
+	template<>
+	inline std::wstring ToString<Action>(Action* t)
+	{
+		try
+		{
+			RETURN_WIDE_STRING(t->Name().c_str());
+		}
+		catch (const std::exception&)
+		{
+			RETURN_WIDE_STRING(t);
+		}
+	}
+#pragma endregion Action
+
 #pragma region Entity
 	template<>
 	inline std::wstring ToString<Entity>(const Entity& t)
@@ -1520,6 +1555,40 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 		}
 	}
 #pragma endregion Entity
+
+#pragma region Sector
+	template<>
+	inline std::wstring ToString<Sector>(const Sector& t)
+	{
+		RETURN_WIDE_STRING(t.Name().c_str());
+	}
+
+	template<>
+	inline std::wstring ToString<Sector>(const Sector* t)
+	{
+		try 
+		{
+			RETURN_WIDE_STRING(t->Name().c_str());
+		}
+		catch (const std::exception&)
+		{
+			RETURN_WIDE_STRING(t);
+		}
+	}
+
+	template<>
+	inline std::wstring ToString<Sector>(Sector* t)
+	{
+		try
+		{
+			RETURN_WIDE_STRING(t->Name().c_str());
+		}
+		catch (const std::exception&)
+		{
+			RETURN_WIDE_STRING(t);
+		}
+	}
+#pragma endregion Sector
 
 #pragma region World
 	template<>
@@ -1622,38 +1691,4 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 		}
 	}
 #pragma endregion EventQueue
-
-#pragma region Actions
-	template<>
-	inline std::wstring ToString<ActionCreate>(const ActionCreate& t)
-	{
-		RETURN_WIDE_STRING(t.Name().c_str());
-	}
-
-	template<>
-	inline std::wstring ToString<ActionCreate>(const ActionCreate* t)
-	{
-		try
-		{
-			RETURN_WIDE_STRING(t->Name().c_str());
-		}
-		catch (const std::exception&)
-		{
-			RETURN_WIDE_STRING(t);
-		}
-	}
-
-	template<>
-	inline std::wstring ToString<ActionCreate>(ActionCreate* t)
-	{
-		try
-		{
-			RETURN_WIDE_STRING(t->Name().c_str());
-		}
-		catch (const std::exception&)
-		{
-			RETURN_WIDE_STRING(t);
-		}
-	}
-#pragma endregion Actions
 }

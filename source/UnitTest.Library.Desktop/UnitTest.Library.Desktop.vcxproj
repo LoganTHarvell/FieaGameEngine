@@ -65,22 +65,18 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\build\Shared.props" />
-    <Import Project="..\..\build\CustomBuildStep.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\build\Shared.props" />
-    <Import Project="..\..\build\CustomBuildStep.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\build\Shared.props" />
-    <Import Project="..\..\build\CustomBuildStep.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\build\Shared.props" />
-    <Import Project="..\..\build\CustomBuildStep.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -115,8 +111,14 @@
       <Command>
       </Command>
     </PreBuildEvent>
-    <CustomBuildStep />
-    <CustomBuildStep />
+    <CustomBuildStep>
+      <Command>mkdir "$(OutDir)Content"
+xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Message>Copy Content Directory</Message>
+      <Outputs>$(OutDir)Content</Outputs>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -138,8 +140,14 @@
       <Command>
       </Command>
     </PreBuildEvent>
-    <CustomBuildStep />
-    <CustomBuildStep />
+    <CustomBuildStep>
+      <Command>mkdir "$(OutDir)Content"
+xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Message>Copy Content Directory</Message>
+      <Outputs>$(OutDir)Content</Outputs>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -162,8 +170,14 @@
       <Command>
       </Command>
     </PreBuildEvent>
-    <CustomBuildStep />
-    <CustomBuildStep />
+    <CustomBuildStep>
+      <Command>mkdir "$(OutDir)Content"
+xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Message>Copy Content Directory</Message>
+      <Outputs>$(OutDir)Content</Outputs>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -186,20 +200,29 @@
       <Command>
       </Command>
     </PreBuildEvent>
-    <CustomBuildStep />
-    <CustomBuildStep />
+    <CustomBuildStep>
+      <Command>mkdir "$(OutDir)Content"
+xcopy /E /Y "$(ProjectDir)Content" "$(OutDir)Content"</Command>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Message>Copy Content Directory</Message>
+      <Outputs>$(OutDir)Content</Outputs>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ActionCreateTest.cpp" />
     <ClCompile Include="ActionDestroyTest.cpp" />
     <ClCompile Include="ActionIncrementTest.cpp" />
+    <ClCompile Include="ActionListTest.cpp" />
     <ClCompile Include="ActionListWhileTest.cpp" />
+    <ClCompile Include="ActionTest.cpp" />
     <ClCompile Include="AttributedBar.cpp" />
     <ClCompile Include="AttributedBarTest.cpp" />
     <ClCompile Include="AttributedFoo.cpp" />
     <ClCompile Include="AttributedFooTest.cpp" />
     <ClCompile Include="Bar.cpp" />
     <ClCompile Include="BarTest.cpp" />
+    <ClCompile Include="ActionListForEachTest.cpp" />
     <ClCompile Include="DatumTest.cpp" />
     <ClCompile Include="DefaultEqualityTest.cpp" />
     <ClCompile Include="DefaultHashTest.cpp" />
@@ -214,6 +237,7 @@
     <ClCompile Include="GameClockTimeTest.cpp" />
     <ClCompile Include="HashMapTest.cpp" />
     <ClCompile Include="JsonEntitySystemParseTest.cpp" />
+    <ClCompile Include="JsonScopeParseTest.cpp" />
     <ClCompile Include="JsonTestParseHelper.cpp" />
     <ClCompile Include="JsonParseTest.cpp" />
     <ClCompile Include="pch.cpp">
@@ -225,6 +249,7 @@
     <ClCompile Include="ReactionTest.cpp" />
     <ClCompile Include="RTTITest.cpp" />
     <ClCompile Include="ScopeTest.cpp" />
+    <ClCompile Include="SectorTest.cpp" />
     <ClCompile Include="SListTest.cpp" />
     <ClCompile Include="EntityTest.cpp" />
     <ClCompile Include="StackTest.cpp" />
@@ -251,6 +276,13 @@
     <ClInclude Include="ToStringSpecialization.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Content\ActionListForEach.json" />
+    <None Include="Content\AttributedFoo.json" />
+    <None Include="Content\ScopeOfArrays.json" />
+    <None Include="Content\ScopeOfAttributedFoo.json" />
+    <None Include="Content\ScopeOfPrimitives.json" />
+    <None Include="Content\ScopeOfScopeArray.json" />
+    <None Include="Content\ScopeOfScopes.json" />
     <None Include="Content\World.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

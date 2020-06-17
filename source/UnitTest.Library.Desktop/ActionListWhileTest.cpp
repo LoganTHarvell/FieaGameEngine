@@ -19,8 +19,9 @@ namespace EntitySystemTests::ActionTests
 		TEST_METHOD_INITIALIZE(Initialize)
 		{
 			TypeManager::Create();
-
-			RegisterType<Entity>();
+			
+			RegisterType<Action>();
+			RegisterType<ActionList>();
 			RegisterType<ActionListWhile>();
 			RegisterType<ActionIncrement>();
 
@@ -51,13 +52,13 @@ namespace EntitySystemTests::ActionTests
 			ActionListWhile incrementA;
 			ActionListWhile incrementB;
 
-			Assert::IsTrue(incrementA.Is(Entity::TypeIdClass()));
+			Assert::IsTrue(incrementA.Is(Action::TypeIdClass()));
 			Assert::IsTrue(incrementA.Equals(&incrementB));
 
-			Entity* newListWhile = new ActionListWhile();
-			bool isAction = newListWhile->Is(Entity::TypeIdClass());
+			Action* newListWhile = new ActionListWhile();
+			bool isAction = newListWhile->Is(Action::TypeIdClass());
 
-			Entity* createdActionListWhile = isAction ? createdActionListWhile = newListWhile->CreateAs<Entity>() : nullptr;
+			Action* createdActionListWhile = isAction ? createdActionListWhile = newListWhile->CreateAs<Action>() : nullptr;
 			bool wasCreated = createdActionListWhile != nullptr;
 
 			bool  isActionListWhile = wasCreated ? createdActionListWhile->Is(ActionListWhile::TypeIdClass()) : false;
@@ -72,8 +73,10 @@ namespace EntitySystemTests::ActionTests
 		{
 			ActionListWhile actionListWhile("ActionListWhile");
 			Assert::AreEqual("ActionListWhile"s, actionListWhile.Name());
+			Assert::IsNotNull(actionListWhile.Find("Name"));
+			Assert::AreEqual("ActionListWhile"s, actionListWhile.Find("Name")->Get<std::string>());
 
-			const auto condition = actionListWhile.Find(ActionListWhile::ConditionKey);
+			auto condition = actionListWhile.Find(actionListWhile.ConditionKey);
 			Assert::IsNotNull(condition);
 			Assert::AreEqual(Scope::Types::Integer, condition->Type());
 			Assert::AreEqual(0, condition->Get<int>());
@@ -84,9 +87,9 @@ namespace EntitySystemTests::ActionTests
 			ActionListWhile actionListWhile;
 			Scope* clone = actionListWhile.Clone();
 
-			const bool notNull = clone;
-			const bool isActionListWhile = notNull ? clone->Is(ActionListWhile::TypeIdClass()) : false;
-			const bool equal = *actionListWhile.As<Entity>() == *clone->As<Entity>();
+			bool notNull = clone;
+			bool isActionListWhile = notNull ? clone->Is(ActionListWhile::TypeIdClass()) : false;
+			bool equal = *actionListWhile.As<Action>() == *clone->As<Action>();
 
 			delete clone;
 
@@ -103,12 +106,12 @@ namespace EntitySystemTests::ActionTests
 			*decrementCondition->Find(ActionIncrement::OperandKey) = ActionListWhile::ConditionKey;
 			*decrementCondition->Find(ActionIncrement::IncrementStepKey) = -1;
 
-			actionListWhile.AddChild(*decrementCondition);
+			actionListWhile.Adopt(*decrementCondition, ActionListWhile::ActionsKey);
 
 			ActionIncrement* incrementCounter = new ActionIncrement("IncrementCount");
 			*incrementCounter->Find(ActionIncrement::OperandKey) = "LoopCount"s;
 
-			actionListWhile.AddChild(*incrementCounter);
+			actionListWhile.Adopt(*incrementCounter, ActionListWhile::ActionsKey);
 
 			WorldState worldState;
 			actionListWhile.Update(worldState);
@@ -119,7 +122,7 @@ namespace EntitySystemTests::ActionTests
 
 		TEST_METHOD(ToString)
 		{
-			const ActionListWhile actionListWhile("ListWhile");
+			ActionListWhile actionListWhile("ListWhile");
 			Assert::AreEqual("ListWhile (ActionListWhile)"s, actionListWhile.ToString());
 		}
 

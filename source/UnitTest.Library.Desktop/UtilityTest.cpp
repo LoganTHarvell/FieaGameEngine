@@ -2,7 +2,6 @@
 
 #include "ToStringSpecialization.h"
 #include "Utility.h"
-#include "MathUtility.h"
 
 
 using namespace std::string_literals;

@@ -1,62 +1,91 @@
 {
-  "Sector1": {
-    "type": "Entity",
-    "value": {
-      "Entity1": {
-        "type": "Entity",
-        "value": {
-          "AuxiliaryInt": {
-            "type": "integer",
-            "value": 10
-          }
-        }
-      },
-      "Entity2": {
-        "type": "Entity",
-        "value": {
-          "AuxiliaryInt": {
-            "type": "integer",
-            "value": 20
-          }
-        }
-      }
-    }
+  "Name": {
+    "type": "string",
+    "value": "World"
   },
-  "Sector2": {
-    "type": "Entity",
-    "value": {
-      "Entity1": {
-        "type": "Entity",
+  "Sectors": {
+    "type": "Sector",
+    "value": [
+      {
+        "type": "Sector",
         "value": {
-          "AuxiliaryInt": {
-            "type": "integer",
-            "value": 10
+          "Name": {
+            "type": "string",
+            "value": "Sector1"
+          },
+          "Entities": {
+            "type": "Entity",
+            "value": [
+              {
+                "type": "Entity",
+                "value": {
+                  "Name": {
+                    "type": "string",
+                    "value": "Entity1"
+                  },
+                  "AuxiliaryInt": {
+                    "type": "integer",
+                    "value": 10
+                  }
+                }
+              },
+              {
+                "type": "Entity",
+                "value": {
+                  "Name": {
+                    "type": "string",
+                    "value": "Entity2"
+                  },
+                  "AuxiliaryInt": {
+                    "type": "integer",
+                    "value": 20
+                  }
+                }
+              }
+            ]
           }
         }
       },
-      "Entity2": {
-        "type": "Entity",
-        "value": [
-          {
-            "type": "Entity",
-            "value": {
-              "AuxiliaryInt": {
-                "type": "integer",
-                "value": 20
-              }
-            }
+      {
+        "type": "Sector",
+        "value": {
+          "Name": {
+            "type": "string",
+            "value": "Sector2"
           },
-          {
+          "Entities": {
             "type": "Entity",
-            "value": {
-              "AuxiliaryInt": {
-                "type": "integer",
-                "value": 30
+            "value": [
+              {
+                "type": "Entity",
+                "value": {
+                  "Name": {
+                    "type": "string",
+                    "value": "Entity1"
+                  },
+                  "AuxiliaryInt": {
+                    "type": "integer",
+                    "value": 10
+                  }
+                }
+              },
+              {
+                "type": "Entity",
+                "value": {
+                  "Name": {
+                    "type": "string",
+                    "value": "Entity2"
+                  },
+                  "AuxiliaryInt": {
+                    "type": "integer",
+                    "value": 20
+                  }
+                }
               }
-            }
+            ]
           }
-        ]
+        }
       }
-    }
+    ]
   }
 }

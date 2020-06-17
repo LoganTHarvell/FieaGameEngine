@@ -16,7 +16,7 @@
 namespace Library
 {
 #pragma region Constructors, Destructor, Assignment
-	Attributed::Attributed(const IdType typeId)
+	Attributed::Attributed(const RTTI::IdType typeId)
 	{	
 		(*this)["this"] = static_cast<RTTI*>(this);
 		Populate(TypeManager::Instance()->Find(typeId));
@@ -32,8 +32,6 @@ namespace Library
 
 	Attributed& Attributed::operator=(const Attributed& rhs)
 	{
-		if (this == &rhs) return *this;
-		
 		Scope::operator=(rhs);
 		mNumPrescribed = rhs.mNumPrescribed;
 
@@ -52,8 +50,6 @@ namespace Library
 
 	Attributed& Attributed::operator=(Attributed&& rhs) noexcept
 	{
-		if (this == &rhs) return *this;
-
 		Scope::operator=(std::move(rhs));
 		mNumPrescribed = rhs.mNumPrescribed;
 
@@ -72,17 +68,10 @@ namespace Library
 
 		for (std::size_t i = 1; i < mPairPtrs.Size(); ++i)
 		{
-			try
-			{
-				const auto& pairPtr = mPairPtrs[i];
+			const auto& pairPtr = mPairPtrs[i];
 
-				const Data* rhsData = rhs.Find(pairPtr->first);
-				if (!rhsData || pairPtr->second != *rhsData) return false;
-			}
-			catch (...)
-			{
-				return false;
-			}
+			const Data* rhsData = rhs.Find(pairPtr->first);
+			if (!rhsData || pairPtr->second != *rhsData) return false;
 		}
 
 		return true;
@@ -115,7 +104,7 @@ namespace Library
 		return !IsPrescribedAttribute(key);
 	}
 
-	void Attributed::ForEachPrescribed(const std::function<void(Attribute&)>& functor)
+	void Attributed::ForEachPrescribed(std::function<void(Attribute&)> functor)
 	{
 		for (std::size_t i = 0; i < mNumPrescribed; ++i)
 		{
@@ -123,7 +112,7 @@ namespace Library
 		}
 	}
 
-	void Attributed::ForEachPrescribed(const std::function<void(const Attribute&)>& functor) const
+	void Attributed::ForEachPrescribed(std::function<void(const Attribute&)> functor) const
 	{
 		for (std::size_t i = 0; i < mNumPrescribed; ++i)
 		{
@@ -131,7 +120,7 @@ namespace Library
 		}
 	}
 
-	void Attributed::ForEachAuxiliary(const std::function<void(Attribute&)>& functor)
+	void Attributed::ForEachAuxiliary(std::function<void(Attribute&)> functor)
 	{
 		for (std::size_t i = mNumPrescribed; i < mPairPtrs.Size(); ++i)
 		{
@@ -139,7 +128,7 @@ namespace Library
 		}
 	}
 
-	void Attributed::ForEachAuxiliary(const std::function<void(const Attribute&)>& functor) const
+	void Attributed::ForEachAuxiliary(std::function<void(const Attribute&)> functor) const
 	{
 		for (std::size_t i = mNumPrescribed; i < mPairPtrs.Size(); ++i)
 		{
@@ -200,7 +189,7 @@ namespace Library
 #pragma region Helper Methods
 	void Attributed::Populate(const TypeManager::TypeInfo* typeInfo)
 	{
-		const auto* parentTypeInfo = TypeManager::Instance()->Find(typeInfo->ParentTypeId);
+		auto parentTypeInfo = TypeManager::Instance()->Find(typeInfo->ParentTypeId);
 		if (parentTypeInfo) Populate(parentTypeInfo);
 
 		mPairPtrs.Reserve(typeInfo->Signatures.Size() + mPairPtrs.Size());
@@ -226,7 +215,7 @@ namespace Library
 	{
 		std::size_t index = 1;
 
-		const auto parentTypeInfo = TypeManager::Instance()->Find(typeInfo->ParentTypeId);
+		auto parentTypeInfo = TypeManager::Instance()->Find(typeInfo->ParentTypeId);
 		if (parentTypeInfo) index = UpdateExternalStorage(parentTypeInfo);
 
 		for (const auto& signature : typeInfo->Signatures)

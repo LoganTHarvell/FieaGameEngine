@@ -1,0 +1,700 @@
+{
+  "WindowOptions": {
+    "type": "scope",
+    "value": {
+      "Title": {
+        "type": "string",
+        "value": "Super Bomberman"
+      },
+      "Position": {
+        "type": "integer",
+        "value": [
+          1024,
+          1024
+        ]
+      },
+      "Size": {
+        "type": "integer",
+        "value": [
+          1024,
+          1024
+        ]
+      },
+      "SetFullscreen": {
+        "type": "integer",
+        "value": 0
+      },
+      "SetCentered": {
+        "type": "integer",
+        "value": 1
+      }
+    }
+  },
+  "Name": {
+    "type": "string",
+    "value": "World"
+  },
+  "Sectors": {
+    "type": "Sector",
+    "value": [
+      {
+        "type": "Sector",
+        "value": {
+          "Name": {
+            "type": "string",
+            "value": "Level1"
+          },
+          "Entities": {
+            "type": "Entity",
+            "value": [
+              // Character 1
+              {
+                "type": "Character",
+                "value": {
+                  "Reaction": {
+                    "type": "Player1InputReaction",
+                    "value": {
+                      "MovementActions": {
+                        "type": "ActionList",
+                        "value": [
+                          {
+                            "type": "ActionCharacterMovementInput",
+                            "value": {
+                              "Name": {
+                                "type": "string",
+                                "value": "Character1"
+                              }
+                            }
+                          },
+                          {
+                            "type": "ActionUpdateAnimationState",
+                            "value": {
+                              "Name": {
+                                "type": "string",
+                                "value": "UpdateAnimationState"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "StopKickActions": {
+                        "type": "ActionList",
+                        "value": [
+                          {
+                            "type": "ActionStopKick",
+                            "value": {
+                              "Name": {
+                                "type": "string",
+                                "value": "Character1"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "PowerUpReaction": {
+                        "type": "ReactionAttributed",
+                        "value": {
+                          "Actions": {
+                            "type": "ActionList",
+                            "value": [
+                              {
+                                "type": "ActionPickupPowerUp",
+                                "value": {
+                                  "Name": {
+                                    "type": "string",
+                                    "value": "pickuppower"
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      "SpawnBombActions": {
+                        "type": "ActionList",
+                        "value": [
+                          {
+                            "type": "ActionSpawnBomb",
+                            "value": {
+                              "Name": {
+                                "type": "string",
+                                "value": "Character1SpawnBomb"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "Name": {
+                    "type": "string",
+                    "value": "Character1"
+                  },
+                  "Transform": {
+                    "type": "Transform",
+                    "value": {
+                      "Rotation": {
+                        "type": "float",
+                        "value": 0
+                      },
+                      "Scale": {
+                        "type": "vector",
+                        "value": "vec4(16.0, 24.0, 1.0, 0.0)"
+                      }
+                    }
+                  },
+                  "SpawnTile": {
+                    "type": "vector",
+                    "value": "vec4(1, 1, 0, 0)"
+                  },
+                  "RenderComponent": {
+                    "type": "RenderComponent",
+                    "value": {
+                      "CurrentSprite": {
+                        "type": "string",
+                        "value": "WhiteBomberman"
+                      },
+                      "ColumnCount": {
+                        "type": "integer",
+                        "value": 4
+                      },
+                      "RowCount": {
+                        "type": "integer",
+                        "value": 8
+                      },
+                      "RowIndex": {
+                        "type": "integer",
+                        "value": 6
+                      },
+                      "ColumnIndex": {
+                        "type": "integer",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "Actions": {
+                    "type": "ActionList",
+                    "value": [
+                      {
+                        "type": "ActionRender",
+                        "value": {
+                          "Name": {
+                            "type": "string",
+                            "value": "Render"
+                          },
+                          "IsEnabled": {
+                            "type": "integer",
+                            "value": 1
+                          }
+                        }
+                      },
+                      {
+                        "type": "ActionAnimate",
+                        "value": {
+                          "Name": {
+                            "type": "string",
+                            "value": "Animate"
+                          },
+                          "Delay": {
+                            "type": "integer",
+                            "value": 200
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              // Character 2
+              {
+                "type": "Character",
+                "value": {
+                  "Reaction": {
+                    "type": "Player2InputReaction",
+                    "value": {
+                      "MovementActions": {
+                        "type": "ActionList",
+                        "value": [
+                          {
+                            "type": "ActionCharacterMovementInput",
+                            "value": {
+                              "Name": {
+                                "type": "string",
+                                "value": "Character2"
+                              }
+                            }
+                          },
+                          {
+                            "type": "ActionUpdateAnimationState",
+                            "value": {
+                              "Name": {
+                                "type": "string",
+                                "value": "UpdateAnimationState"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "StopKickActions": {
+                        "type": "ActionList",
+                        "value": [
+                          {
+                            "type": "ActionStopKick",
+                            "value": {
+                              "Name": {
+                                "type": "string",
+                                "value": "Character1"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "SpawnBombActions": {
+                        "type": "ActionList",
+                        "value": [
+                          {
+                            "type": "ActionSpawnBomb",
+                            "value": {
+                              "Name": {
+                                "type": "string",
+                                "value": "Character1SpawnBomb"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "PowerUpReaction": {
+                    "type": "ReactionAttributed",
+                    "value": {
+                      "Actions": {
+                        "type": "ActionList",
+                        "value": [
+                          {
+                            "type": "ActionPickupPowerUp",
+                            "value": {
+                              "Name": {
+                                "type": "string",
+                                "value": "pickuppower"
+                              },
+                              "PowerUp": {
+                                "type": "string",
+                                "value": "ExtraBomb"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "Name": {
+                    "type": "string",
+                    "value": "Character2"
+                  },
+                  "Transform": {
+                    "type": "Transform",
+                    "value": {
+                      "Rotation": {
+                        "type": "float",
+                        "value": 0
+                      },
+                      "Scale": {
+                        "type": "vector",
+                        "value": "vec4(16.0, 24.0, 1.0, 0.0)"
+                      }
+                    }
+                  },
+                  "SpawnTile": {
+                    "type": "vector",
+                    "value": "vec4(13, 11, 0, 0)"
+                  },
+                  "RenderComponent": {
+                    "type": "RenderComponent",
+                    "value": {
+                      "CurrentSprite": {
+                        "type": "string",
+                        "value": "BlackBomberman"
+                      },
+                      "ColumnCount": {
+                        "type": "integer",
+                        "value": 4
+                      },
+                      "RowCount": {
+                        "type": "integer",
+                        "value": 8
+                      },
+                      "RowIndex": {
+                        "type": "integer",
+                        "value": 6
+                      },
+                      "ColumnIndex": {
+                        "type": "integer",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "Actions": {
+                    "type": "ActionList",
+                    "value": [
+                      {
+                        "type": "ActionRender",
+                        "value": {
+                          "Name": {
+                            "type": "string",
+                            "value": "Render"
+                          },
+                          "IsEnabled": {
+                            "type": "integer",
+                            "value": 1
+                          }
+                        }
+                      },
+                      {
+                        "type": "ActionAnimate",
+                        "value": {
+                          "Name": {
+                            "type": "string",
+                            "value": "Animate"
+                          },
+                          "Delay": {
+                            "type": "integer",
+                            "value": 200
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }//,
+              // Character 3
+              //{
+              //  "type": "Character",
+              //  "value": {
+              //    "Reaction": {
+              //      "type": "Player3InputReaction",
+              //      "value": {
+              //        "MovementActions": {
+              //          "type": "ActionList",
+              //          "value": [
+              //            {
+              //              "type": "ActionCharacterMovementInput",
+              //              "value": {
+              //                "Name": {
+              //                  "type": "string",
+              //                  "value": "Character3"
+              //                }
+              //              }
+              //            },
+              //            {
+              //              "type": "ActionUpdateAnimationState",
+              //              "value": {
+              //                "Name": {
+              //                  "type": "string",
+              //                  "value": "UpdateAnimationState"
+              //                }
+              //              }
+              //            }
+              //          ]
+              //        },
+              //        "StopKickActions": {
+              //          "type": "ActionList",
+              //          "value": [
+              //            {
+              //              "type": "ActionStopKick",
+              //              "value": {
+              //                "Name": {
+              //                  "type": "string",
+              //                  "value": "Character1"
+              //                }
+              //              }
+              //            }
+              //          ]
+              //        },
+              //        "SpawnBombActions": {
+              //          "type": "ActionList",
+              //          "value": [
+              //            {
+              //              "type": "ActionSpawnBomb",
+              //              "value": {
+              //                "Name": {
+              //                  "type": "string",
+              //                  "value": "Character3SpawnBomb"
+              //                }
+              //              }
+              //            }
+              //          ]
+              //        }
+              //      }
+              //    },
+              //    "PowerUpReaction": {
+              //      "type": "ReactionAttributed",
+              //      "value": {
+              //        "Actions": {
+              //          "type": "ActionList",
+              //          "value": [
+              //            {
+              //              "type": "ActionPickupPowerUp",
+              //              "value": {
+              //                "Name": {
+              //                  "type": "string",
+              //                  "value": "pickuppower"
+              //                },
+              //                "PowerUp": {
+              //                  "type": "string",
+              //                  "value": "ExtraBomb"
+              //                }
+              //              }
+              //            }
+              //          ]
+              //        }
+              //      }
+              //    },
+              //    "Name": {
+              //      "type": "string",
+              //      "value": "Character3"
+              //    },
+              //    "Transform": {
+              //      "type": "Transform",
+              //      "value": {
+              //        "Rotation": {
+              //          "type": "float",
+              //          "value": 0
+              //        },
+              //        "Scale": {
+              //          "type": "vector",
+              //          "value": "vec4(16.0, 24.0, 1.0, 0.0)"
+              //        }
+              //      }
+              //    },
+              //    "SpawnTile": {
+              //      "type": "vector",
+              //      "value": "vec4(13, 1, 0, 0)"
+              //    },
+              //    "RenderComponent": {
+              //      "type": "RenderComponent",
+              //      "value": {
+              //        "CurrentSprite": {
+              //          "type": "string",
+              //          "value": "BlueBomberman"
+              //        },
+              //        "ColumnCount": {
+              //          "type": "integer",
+              //          "value": 4
+              //        },
+              //        "RowCount": {
+              //          "type": "integer",
+              //          "value": 8
+              //        },
+              //        "RowIndex": {
+              //          "type": "integer",
+              //          "value": 6
+              //        },
+              //        "ColumnIndex": {
+              //          "type": "integer",
+              //          "value": 0
+              //        }
+              //      }
+              //    },
+              //    "Actions": {
+              //      "type": "ActionList",
+              //      "value": [
+              //        {
+              //          "type": "ActionRender",
+              //          "value": {
+              //            "Name": {
+              //              "type": "string",
+              //              "value": "Render"
+              //            },
+              //            "IsEnabled": {
+              //              "type": "integer",
+              //              "value": 1
+              //            }
+              //          }
+              //        },
+              //        {
+              //          "type": "ActionAnimate",
+              //          "value": {
+              //            "Name": {
+              //              "type": "string",
+              //              "value": "Animate"
+              //            },
+              //            "Delay": {
+              //              "type": "integer",
+              //              "value": 200
+              //            }
+              //          }
+              //        }
+              //      ]
+              //    }
+              //  }
+              //},
+              // Character 4
+              //{
+              //  "type": "Character",
+              //  "value": {
+              //    "Reaction": {
+              //      "type": "Player4InputReaction",
+              //      "value": {
+              //        "MovementActions": {
+              //          "type": "ActionList",
+              //          "value": [
+              //            {
+              //              "type": "ActionCharacterMovementInput",
+              //              "value": {
+              //                "Name": {
+              //                  "type": "string",
+              //                  "value": "Character4"
+              //                }
+              //              }
+              //            },
+              //            {
+              //              "type": "ActionUpdateAnimationState",
+              //              "value": {
+              //                "Name": {
+              //                  "type": "string",
+              //                  "value": "UpdateAnimationState"
+              //                }
+              //              }
+              //            }
+              //          ]
+              //        },
+              //        "StopKickActions": {
+              //          "type": "ActionList",
+              //          "value": [
+              //            {
+              //              "type": "ActionStopKick",
+              //              "value": {
+              //                "Name": {
+              //                  "type": "string",
+              //                  "value": "Character1"
+              //                }
+              //              }
+              //            }
+              //          ]
+              //        },
+              //        "SpawnBombActions": {
+              //          "type": "ActionList",
+              //          "value": [
+              //            {
+              //              "type": "ActionSpawnBomb",
+              //              "value": {
+              //                "Name": {
+              //                  "type": "string",
+              //                  "value": "Character4SpawnBomb"
+              //                }
+              //              }
+              //            }
+              //          ]
+              //        }
+              //      }
+              //    },
+              //    "PowerUpReaction": {
+              //      "type": "ReactionAttributed",
+              //      "value": {
+              //        "Actions": {
+              //          "type": "ActionList",
+              //          "value": [
+              //            {
+              //              "type": "ActionPickupPowerUp",
+              //              "value": {
+              //                "Name": {
+              //                  "type": "string",
+              //                  "value": "pickuppower"
+              //                },
+              //                "PowerUp": {
+              //                  "type": "string",
+              //                  "value": "ExtraBomb"
+              //                }
+              //              }
+              //            }
+              //          ]
+              //        }
+              //      }
+              //    },
+              //    "Name": {
+              //      "type": "string",
+              //      "value": "Character4"
+              //    },
+              //    "Transform": {
+              //      "type": "Transform",
+              //      "value": {
+              //        "Rotation": {
+              //          "type": "float",
+              //          "value": 0
+              //        },
+              //        "Scale": {
+              //          "type": "vector",
+              //          "value": "vec4(16.0, 24.0, 1.0, 0.0)"
+              //        }
+              //      }
+              //    },
+              //    "SpawnTile": {
+              //      "type": "vector",
+              //      "value": "vec4(1, 11, 0, 0)"
+              //    },
+              //    "RenderComponent": {
+              //      "type": "RenderComponent",
+              //      "value": {
+              //        "CurrentSprite": {
+              //          "type": "string",
+              //          "value": "RedBomberman"
+              //        },
+              //        "ColumnCount": {
+              //          "type": "integer",
+              //          "value": 4
+              //        },
+              //        "RowCount": {
+              //          "type": "integer",
+              //          "value": 8
+              //        },
+              //        "RowIndex": {
+              //          "type": "integer",
+              //          "value": 6
+              //        },
+              //        "ColumnIndex": {
+              //          "type": "integer",
+              //          "value": 0
+              //        }
+              //      }
+              //    },
+              //    "Actions": {
+              //      "type": "ActionList",
+              //      "value": [
+              //        {
+              //          "type": "ActionRender",
+              //          "value": {
+              //            "Name": {
+              //              "type": "string",
+              //              "value": "Render"
+              //            },
+              //            "IsEnabled": {
+              //              "type": "integer",
+              //              "value": 1
+              //            }
+              //          }
+              //        },
+              //        {
+              //          "type": "ActionAnimate",
+              //          "value": {
+              //            "Name": {
+              //              "type": "string",
+              //              "value": "Animate"
+              //            },
+              //            "Delay": {
+              //              "type": "integer",
+              //              "value": 200
+              //            }
+              //          }
+              //        }
+              //      ]
+              //    }
+              //  }
+              //}
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

@@ -2,7 +2,8 @@
 
 #pragma region Includes
 // First Party
-#include "Entity.h"
+#include "Action.h"
+#include "WorldState.h"
 #include "Factory.h"
 #pragma endregion Includes
 
@@ -11,9 +12,9 @@ namespace Library
 	/// <summary>
 	/// Represents an Action for incrementing an integer Attribute.
 	/// </summary>
-	class ActionIncrement final : public Entity
+	class ActionIncrement final : public Action
 	{
-		RTTI_DECLARATIONS(ActionIncrement, Entity)
+		RTTI_DECLARATIONS(ActionIncrement, Action)
 
 #pragma region Type Definitions, Constants
 	public:
@@ -26,7 +27,7 @@ namespace Library
 		/// Key for the increment step amount.
 		/// </summary>
 		inline static const std::string IncrementStepKey = "IncrementStep";
-
+		inline static const std::string IndexKey = "Index";
 	public:
 		/// <summary>
 		/// Getter for the class TypeInfo, used for registration with the TypeManager.
@@ -39,7 +40,7 @@ namespace Library
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
-		explicit ActionIncrement(std::string name=std::string());
+		explicit ActionIncrement(const std::string& name=std::string());
 
 		/// <summary>
 		/// Default destructor.
@@ -87,7 +88,8 @@ namespace Library
 		/// <summary>
 		/// Virtual update method called by the containing object.
 		/// </summary>
-		virtual void Update(WorldState&) override;
+		/// <param name="worldState">WorldState context for the current processing step.</param>
+		virtual void Update(WorldState&);
 #pragma endregion Game Loop
 
 #pragma region RTTI Overrides
@@ -110,6 +112,8 @@ namespace Library
 		/// Amount to increment the integer Attribute.
 		/// </summary>
 		int mIncrementStep{ 1 };
+
+		std::string mIndex;
 #pragma endregion Data Members
 	};
 
@@ -117,7 +121,7 @@ namespace Library
 	/// <summary>
 	/// ActionIncrementFactory class declaration.
 	/// </summary>
-	ConcreteFactory(ActionIncrement, Entity)
+	ConcreteFactory(ActionIncrement, Scope)
 #pragma endregion Factory
 }
 
