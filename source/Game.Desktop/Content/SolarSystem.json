@@ -1,0 +1,326 @@
+{
+  // Solar System Properties
+  "DistanceScale": {
+    "type": "float",
+    "value": 80.0
+  },
+  "TimeScale": {
+    "type": "float",
+    "value": 0.3
+  },
+
+  // Sun
+  "Sun": {
+    "type": "SolarBody",
+    "value": {
+      "ColorMap": {
+        "type": "string",
+        "value": "Textures/sun.jpg"
+      },
+      "Diameter": {
+        "type": "float",
+        "value": 3.0
+      },
+      "OrbitalDistance": {
+        "type": "float",
+        "value": 0.0
+      },
+
+      // Planets
+      "Mercury": {
+        "type": "SolarBody",
+        "value": {
+          "ColorMap": {
+            "type": "string",
+            "value": "Textures/mercury2.jpg"
+          },
+          "Diameter": {
+            "type": "float",
+            "value": 0.382
+          },
+          "OrbitalDistance": {
+            "type": "float",
+            "value": 0.387
+          },
+          "OrbitalPeriod": {
+            "type": "float",
+            "value": 0.24
+          },
+          "RotationPeriod": {
+            "type": "float",
+            "value": 2.44
+          },
+          "Tilt": {
+            "type": "float",
+            "value": 0.122173
+          } 
+        }
+      },
+      "Venus": {
+        "type": "SolarBody",
+        "value": {
+          "ColorMap": {
+            "type": "string",
+            "value": "Textures/venus.jpg"
+          },
+          "Diameter": {
+            "type": "float",
+            "value": 0.949
+          },
+          "OrbitalDistance": {
+            "type": "float",
+            "value": 0.723
+          },
+          "OrbitalPeriod": {
+            "type": "float",
+            "value": 0.615
+          },
+          "RotationPeriod": {
+            "type": "float",
+            "value": 10.15
+          },
+          "Tilt": {
+            "type": "float",
+            "value": 0.056374
+          } 
+        }
+      },
+      "Earth": {
+        "type": "SolarBody",
+        "value": {
+          "ColorMap": {
+            "type": "string",
+            "value": "Textures/EarthComposite.dds"
+          },
+          "SpecularMap": {
+            "type": "string",
+            "value": "Textures/EarthSpecularMap.png"
+          },
+          "Diameter": {
+            "type": "float",
+            "value": 1.0
+          },
+          "OrbitalDistance": {
+            "type": "float",
+            "value": 1.0
+          },
+          "OrbitalPeriod": {
+            "type": "float",
+            "value": 1.0
+          },
+          "RotationPeriod": {
+            "type": "float",
+            "value": 1.0
+          },
+          "Tilt": {
+            "type": "float",
+            "value": 0.41
+          },
+          "Moon": {
+            "type": "SolarBody",
+            "value": {
+              "ColorMap": {
+                "type": "string",
+                "value": "Textures/moon.dds"
+              },
+              "Diameter": {
+                "type": "float",
+                "value": 0.27
+              },
+              "OrbitalDistance": {
+                "type": "float",
+                "value": 0.1
+              },
+              "OrbitalPeriod": {
+                "type": "float",
+                "value": 0.0747945
+              },
+              "RotationPeriod": {
+                "type": "float",
+                "value": 0
+              },
+              "Tilt": {
+                "type": "float",
+                "value": 0.026598
+              }
+            }
+          }
+        }
+      },
+      "Mars": {
+        "type": "SolarBody",
+        "value": {
+          "ColorMap": {
+            "type": "string",
+            "value": "Textures/mars.dds"
+          },
+          "Diameter": {
+            "type": "float",
+            "value": 0.532
+          },
+          "OrbitalDistance": {
+            "type": "float",
+            "value": 1.524
+          },
+          "OrbitalPeriod": {
+            "type": "float",
+            "value": 0.5319
+          },
+          "RotationPeriod": {
+            "type": "float",
+            "value": 1.017
+          },
+          "Tilt": {
+            "type": "float",
+            "value": 0.436332
+          } 
+        }
+      },
+      "Jupiter": {
+        "type": "SolarBody",
+        "value": {
+          "ColorMap": {
+            "type": "string",
+            "value": "Textures/jupiter.jpg"
+          },
+          "Diameter": {
+            "type": "float",
+            "value": 11.19
+          },
+          "OrbitalDistance": {
+            "type": "float",
+            "value": 5.203
+          },
+          "OrbitalPeriod": {
+            "type": "float",
+            "value": 0.0843
+          },
+          "RotationPeriod": {
+            "type": "float",
+            "value": 0.416
+          },
+          "Tilt": {
+            "type": "float",
+            "value": 0.0523599
+          } 
+        }
+      },
+      "Saturn": {
+        "type": "SolarBody",
+        "value": {
+          "ColorMap": {
+            "type": "string",
+            "value": "Textures/saturn.png"
+          },
+          "Diameter": {
+            "type": "float",
+            "value": 9.26
+          },
+          "OrbitalDistance": {
+            "type": "float",
+            "value": 9.582
+          },
+          "OrbitalPeriod": {
+            "type": "float",
+            "value": 0.34
+          },
+          "RotationPeriod": {
+            "type": "float",
+            "value": 0.421667
+          },
+          "Tilt": {
+            "type": "float",
+            "value": 0.471239
+          } 
+        }
+      },
+      "Uranus": {
+        "type": "SolarBody",
+        "value": {
+          "ColorMap": {
+            "type": "string",
+            "value": "Textures/uranus.jpg"
+          },
+          "Diameter": {
+            "type": "float",
+            "value": 4.01
+          },
+          "OrbitalDistance": {
+            "type": "float",
+            "value": 19.2
+          },
+          "OrbitalPeriod": {
+            "type": "float",
+            "value": 0.011899
+          },
+          "RotationPeriod": {
+            "type": "float",
+            "value": 0.718162
+          },
+          "Tilt": {
+            "type": "float",
+            "value": 1.708677
+          } 
+        }
+      },
+      "Neptune": {
+        "type": "SolarBody",
+        "value": {
+          "ColorMap": {
+            "type": "string",
+            "value": "Textures/neptune.jpg"
+          },
+          "Diameter": {
+            "type": "float",
+            "value": 3.88
+          },
+          "OrbitalDistance": {
+            "type": "float",
+            "value": 30.05
+          },
+          "OrbitalPeriod": {
+            "type": "float",
+            "value": 0.006108
+          },
+          "RotationPeriod": {
+            "type": "float",
+            "value": 0.672
+          },
+          "Tilt": {
+            "type": "float",
+            "value": 0.5166175
+          } 
+        }
+      },
+      "Pluto": {
+        "type": "SolarBody",
+        "value": {
+          "ColorMap": {
+            "type": "string",
+            "value": "Textures/pluto.jpg"
+          },
+          "Diameter": {
+            "type": "float",
+            "value": 0.18
+          },
+          "OrbitalDistance": {
+            "type": "float",
+            "value": 39.48
+          },
+          "OrbitalPeriod": {
+            "type": "float",
+            "value": 0.004033
+          },
+          "RotationPeriod": {
+            "type": "float",
+            "value": 6.3874
+          },
+          "Tilt": {
+            "type": "float",
+            "value": 2.1293
+          } 
+        }
+      }
+    }
+  }
+}

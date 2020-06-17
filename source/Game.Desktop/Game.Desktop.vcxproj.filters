@@ -1,0 +1,648 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Program.cpp" />
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="GamePadComponent.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyboardComponent.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="MouseComponent.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicMaterial.cpp">
+      <Filter>Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="FirstPersonCamera.cpp">
+      <Filter>Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="OrthographicCamera.cpp">
+      <Filter>Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="GameComponent.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="GameException.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawableGameComponent.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_impl_dx11.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGuiComponent.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ColorHelper.cpp">
+      <Filter>Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectXHelper.cpp">
+      <Filter>Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="MatrixHelper.cpp">
+      <Filter>Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderStateHelper.cpp">
+      <Filter>Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="StringHelper.cpp">
+      <Filter>Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="VectorHelper.cpp">
+      <Filter>Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureHelper.cpp">
+      <Filter>Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectionalLight.cpp">
+      <Filter>Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="PointLight.cpp">
+      <Filter>Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="SpotLight.cpp">
+      <Filter>Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="DepthMapMaterial.cpp">
+      <Filter>Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="FullScreenQuadMaterial.cpp">
+      <Filter>Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="SkyboxMaterial.cpp">
+      <Filter>Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="TexturedModelMaterial.cpp">
+      <Filter>Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="FpsComponent.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="ServiceContainer.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="ProxyModel.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Grid.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Frustum.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Ray.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Rectangle.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="BlendStates.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Bloom.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="ComputeShader.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="DepthMap.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="DepthStencilStates.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="DomainShader.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="FullScreenQuad.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="FullScreenRenderTarget.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="GaussianBlur.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="GeometryShader.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="HullShader.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="PerspectiveCamera.cpp">
+      <Filter>Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="PixelShader.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Point.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="RasterizerStates.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderableFrustum.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderTarget.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="SamplerStates.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Skybox.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture2D.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureCube.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexDeclarations.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexShader.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="SolarBody.cpp">
+      <Filter>SolarSystemDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="SolarSystem.cpp">
+      <Filter>SolarSystemDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="UtilityWin32.cpp" />
+    <ClCompile Include="SolarSystemDemo.cpp">
+      <Filter>SolarSystemDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderingGame.cpp">
+      <Filter>SolarSystemDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="SolarBodyMaterial.cpp">
+      <Filter>SolarSystemDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="ComputeShaderReader.cpp">
+      <Filter>ContentManager\Readers</Filter>
+    </ClCompile>
+    <ClCompile Include="DomainShaderReader.cpp">
+      <Filter>ContentManager\Readers</Filter>
+    </ClCompile>
+    <ClCompile Include="GeometryShaderReader.cpp">
+      <Filter>ContentManager\Readers</Filter>
+    </ClCompile>
+    <ClCompile Include="HullShaderReader.cpp">
+      <Filter>ContentManager\Readers</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelReader.cpp">
+      <Filter>ContentManager\Readers</Filter>
+    </ClCompile>
+    <ClCompile Include="PixelShaderReader.cpp">
+      <Filter>ContentManager\Readers</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture2DReader.cpp">
+      <Filter>ContentManager\Readers</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureCubeReader.cpp">
+      <Filter>ContentManager\Readers</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexShaderReader.cpp">
+      <Filter>ContentManager\Readers</Filter>
+    </ClCompile>
+    <ClCompile Include="ContentManager.cpp">
+      <Filter>ContentManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ContentTypeReader.cpp">
+      <Filter>ContentManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ContentTypeReaderManager.cpp">
+      <Filter>ContentManager</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="GamePadComponent.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyboardComponent.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="MouseComponent.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicMaterial.h">
+      <Filter>Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="FirstPersonCamera.h">
+      <Filter>Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="OrthographicCamera.h">
+      <Filter>Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="GameComponent.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="GameException.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawableGameComponent.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_impl_dx11.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuiComponent.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorHelper.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectXHelper.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="MatrixHelper.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderStateHelper.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="StringHelper.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="VectorHelper.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureHelper.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectionalLight.h">
+      <Filter>Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="PointLight.h">
+      <Filter>Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="SpotLight.h">
+      <Filter>Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="DepthMapMaterial.h">
+      <Filter>Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="FullScreenQuadMaterial.h">
+      <Filter>Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyboxMaterial.h">
+      <Filter>Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="TexturedModelMaterial.h">
+      <Filter>Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="FpsComponent.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="ServiceContainer.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="ProxyModel.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Grid.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Frustum.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Point.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Ray.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Rectangle.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="BlendStates.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Bloom.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="ComputeShader.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="DepthMap.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="DepthStencilStates.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="DomainShader.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="FullScreenQuad.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="FullScreenRenderTarget.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="GaussianBlur.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="GeometryShader.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="HullShader.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="PerspectiveCamera.h">
+      <Filter>Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="PixelShader.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="RasterizerStates.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderableFrustum.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderTarget.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="SamplerStates.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Skybox.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture2D.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureCube.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexDeclarations.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexShader.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="SolarBody.h">
+      <Filter>SolarSystemDemo</Filter>
+    </ClInclude>
+    <ClInclude Include="SolarSystem.h">
+      <Filter>SolarSystemDemo</Filter>
+    </ClInclude>
+    <ClInclude Include="UtilityWin32.h" />
+    <ClInclude Include="SolarSystemDemo.h">
+      <Filter>SolarSystemDemo</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderingGame.h">
+      <Filter>SolarSystemDemo</Filter>
+    </ClInclude>
+    <ClInclude Include="SolarBodyMaterial.h">
+      <Filter>SolarSystemDemo</Filter>
+    </ClInclude>
+    <ClInclude Include="ComputeShaderReader.h">
+      <Filter>ContentManager\Readers</Filter>
+    </ClInclude>
+    <ClInclude Include="DomainShaderReader.h">
+      <Filter>ContentManager\Readers</Filter>
+    </ClInclude>
+    <ClInclude Include="GeometryShaderReader.h">
+      <Filter>ContentManager\Readers</Filter>
+    </ClInclude>
+    <ClInclude Include="HullShaderReader.h">
+      <Filter>ContentManager\Readers</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelReader.h">
+      <Filter>ContentManager\Readers</Filter>
+    </ClInclude>
+    <ClInclude Include="PixelShaderReader.h">
+      <Filter>ContentManager\Readers</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture2DReader.h">
+      <Filter>ContentManager\Readers</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureCubeReader.h">
+      <Filter>ContentManager\Readers</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexShaderReader.h">
+      <Filter>ContentManager\Readers</Filter>
+    </ClInclude>
+    <ClInclude Include="ContentManager.h">
+      <Filter>ContentManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ContentTypeReader.h">
+      <Filter>ContentManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ContentTypeReaderManager.h">
+      <Filter>ContentManager</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Content">
+      <UniqueIdentifier>{ead7a7f2-2bba-4e06-9c6c-2b7e0f3460c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{70cca9f2-1897-473e-88e4-bcd48810a4be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImGui">
+      <UniqueIdentifier>{cf8fdc84-3629-4d5b-8485-f4974a58c769}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lights">
+      <UniqueIdentifier>{358c2ec1-9fd7-49ce-9cd1-4b7e9c6be907}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Helpers">
+      <UniqueIdentifier>{ef420b38-1d7a-4e97-a97d-8407426e3ae2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Cameras">
+      <UniqueIdentifier>{754b3603-578c-4eb0-bbac-2d99fdcd4aeb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{fdcdebb6-c132-4d58-8746-4e0c44b964e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Materials">
+      <UniqueIdentifier>{fc8c84ec-428d-4a42-a2fe-272d5719ef15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{4d0f56f7-947e-448d-bcbd-381cdd19439b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Misc">
+      <UniqueIdentifier>{d881d2c2-ef67-4a3e-a53c-75e0f5060be2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{80edd7a3-f908-476c-95b8-df59130a45ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SolarSystemDemo">
+      <UniqueIdentifier>{b18ea84d-68d1-4a9f-80ae-27aa501f9191}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Content\Models">
+      <UniqueIdentifier>{5c88c009-8dd7-446e-8761-101a61f549e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Content\Shaders">
+      <UniqueIdentifier>{44f9d19e-f06f-4904-970c-5161c9c12006}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Content\Textures">
+      <UniqueIdentifier>{5d717506-12bd-492b-8e74-48e05115df00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ContentManager">
+      <UniqueIdentifier>{ddc58dfd-e80a-4a1f-839d-4d319163a029}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ContentManager\Readers">
+      <UniqueIdentifier>{79c22010-9012-4305-9fdc-4004d0f39444}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Game.inl">
+      <Filter>Game</Filter>
+    </None>
+    <None Include="Light.inl">
+      <Filter>Lights</Filter>
+    </None>
+    <None Include="Material.inl">
+      <Filter>Materials</Filter>
+    </None>
+    <None Include="Point.inl">
+      <Filter>Math</Filter>
+    </None>
+    <None Include="Rectangle.inl">
+      <Filter>Math</Filter>
+    </None>
+    <None Include="Texture.inl">
+      <Filter>Graphics</Filter>
+    </None>
+    <None Include="VertexDeclarations.inl">
+      <Filter>Graphics</Filter>
+    </None>
+    <None Include="VectorHelper.inl">
+      <Filter>Helpers</Filter>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Content\Models\PointLightProxy.obj.bin">
+      <Filter>Content\Models</Filter>
+    </None>
+    <None Include="ContentManager.inl">
+      <Filter>ContentManager</Filter>
+    </None>
+    <None Include="ContentTypeReader.inl">
+      <Filter>ContentManager</Filter>
+    </None>
+    <None Include="Content\SolarSystem.json">
+      <Filter>Content</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Content\Shaders\PointLightDemoPS.hlsl">
+      <Filter>Content\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Content\Shaders\PointLightDemoVS.hlsl">
+      <Filter>Content\Shaders</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Content\Textures\EarthComposite.dds">
+      <Filter>Content\Textures</Filter>
+    </Image>
+    <Image Include="Content\Textures\EarthSpecularMap.png">
+      <Filter>Content\Textures</Filter>
+    </Image>
+    <Image Include="Content\Textures\jupiter.jpg">
+      <Filter>Content\Textures</Filter>
+    </Image>
+    <Image Include="Content\Textures\mars.dds">
+      <Filter>Content\Textures</Filter>
+    </Image>
+    <Image Include="Content\Textures\mercury2.jpg">
+      <Filter>Content\Textures</Filter>
+    </Image>
+    <Image Include="Content\Textures\moon.dds">
+      <Filter>Content\Textures</Filter>
+    </Image>
+    <Image Include="Content\Textures\neptune.jpg">
+      <Filter>Content\Textures</Filter>
+    </Image>
+    <Image Include="Content\Textures\NoSpecular.png">
+      <Filter>Content\Textures</Filter>
+    </Image>
+    <Image Include="Content\Textures\pluto.jpg">
+      <Filter>Content\Textures</Filter>
+    </Image>
+    <Image Include="Content\Textures\saturn.png">
+      <Filter>Content\Textures</Filter>
+    </Image>
+    <Image Include="Content\Textures\Skybox.dds">
+      <Filter>Content\Textures</Filter>
+    </Image>
+    <Image Include="Content\Textures\sun.jpg">
+      <Filter>Content\Textures</Filter>
+    </Image>
+    <Image Include="Content\Textures\uranus.jpg">
+      <Filter>Content\Textures</Filter>
+    </Image>
+    <Image Include="Content\Textures\venus.jpg">
+      <Filter>Content\Textures</Filter>
+    </Image>
+    <Image Include="Content\Textures\callisto.jpg">
+      <Filter>Content\Textures</Filter>
+    </Image>
+    <Image Include="Content\Textures\Europa.png">
+      <Filter>Content\Textures</Filter>
+    </Image>
+    <Image Include="Content\Textures\ganymede.jpg">
+      <Filter>Content\Textures</Filter>
+    </Image>
+    <Image Include="Content\Textures\Io.png">
+      <Filter>Content\Textures</Filter>
+    </Image>
+    <Image Include="Content\Textures\JupiterNormalized2k.dds">
+      <Filter>Content\Textures</Filter>
+    </Image>
+    <Image Include="Content\Textures\mars.jpg">
+      <Filter>Content\Textures</Filter>
+    </Image>
+    <Image Include="Content\Textures\mercury.jpg">
+      <Filter>Content\Textures</Filter>
+    </Image>
+    <Image Include="Content\Textures\moon.jpg">
+      <Filter>Content\Textures</Filter>
+    </Image>
+    <Image Include="Content\Textures\neptune_current.dds">
+      <Filter>Content\Textures</Filter>
+    </Image>
+  </ItemGroup>
+</Project>

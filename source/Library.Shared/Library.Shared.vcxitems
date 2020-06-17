@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{2d1ffe99-1e60-48be-bbe3-07903ed72466}</ItemsProjectGuid>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)ActionCreate.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ActionDestroy.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ActionEvent.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ActionExpression.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ActionIncrement.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ActionListWhile.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Actor.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)AnimationClip.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)AnimationClipImporter.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)AnimatorComponent.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Attributed.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Bone.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)BoneAnimation.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)BoneAnimationImporter.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Datum.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Entity.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)EventMessageAttributed.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)EventPublisher.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)EventQueue.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)GameClock.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)GameTime.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)JsonParseMaster.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)JsonEntityParseHelper.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Keyframe.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)MathUtility.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Mesh.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)MeshImporter.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Model.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)AssetImporter.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ModelMaterial.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ModelMaterialImporter.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ReactionAttributed.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)RenderingAPI_DirectX11.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)SceneNode.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Transform.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)StreamHelper.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)TypeManager.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Utility.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)pch.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Scope.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)World.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)ActionCreate.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ActionDestroy.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ActionEvent.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ActionExpression.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ActionIncrement.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ActionListWhile.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Actor.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)AnimationClip.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)AnimatorComponent.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Attributed.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Bone.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)BoneAnimation.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Datum.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)DefaultEquality.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)DefaultHash.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Entity.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Event.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)EventMessageAttributed.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)EventPublisher.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)EventQueue.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)IEventSubscriber.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Factory.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)GameClock.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)GameTime.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)HashMap.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)IJsonParseHelper.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)RenderingManager.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)JsonParseMaster.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)JsonEntityParseHelper.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Keyframe.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)MathUtility.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Mesh.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Model.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)AssetImporter.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ModelMaterial.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Reaction.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ReactionAttributed.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)RenderingAPI_DirectX11.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)SceneNode.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Stack.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)StreamHelper.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Transform.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)TypeManager.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Utility.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)pch.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)RTTI.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Scope.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)SList.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Vector.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)World.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)WorldState.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Datum.inl" />
+    <None Include="$(MSBuildThisFileDirectory)DefaultEquality.inl" />
+    <None Include="$(MSBuildThisFileDirectory)DefaultHash.inl" />
+    <None Include="$(MSBuildThisFileDirectory)Entity.inl" />
+    <None Include="$(MSBuildThisFileDirectory)Event.inl" />
+    <None Include="$(MSBuildThisFileDirectory)EventMessageAttributed.inl" />
+    <None Include="$(MSBuildThisFileDirectory)EventPublisher.inl" />
+    <None Include="$(MSBuildThisFileDirectory)EventQueue.inl" />
+    <None Include="$(MSBuildThisFileDirectory)Factory.inl" />
+    <None Include="$(MSBuildThisFileDirectory)HashMap.inl" />
+    <None Include="$(MSBuildThisFileDirectory)JsonParseMaster.inl" />
+    <None Include="$(MSBuildThisFileDirectory)Reaction.inl" />
+    <None Include="$(MSBuildThisFileDirectory)RenderingManager.inl" />
+    <None Include="$(MSBuildThisFileDirectory)Scope.inl" />
+    <None Include="$(MSBuildThisFileDirectory)SList.inl" />
+    <None Include="$(MSBuildThisFileDirectory)Stack.inl" />
+    <None Include="$(MSBuildThisFileDirectory)Transform.inl" />
+    <None Include="$(MSBuildThisFileDirectory)TypeManager.inl" />
+    <None Include="$(MSBuildThisFileDirectory)Vector.inl" />
+  </ItemGroup>
+</Project>

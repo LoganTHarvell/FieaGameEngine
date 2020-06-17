@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="HashMapTest.cpp">
+      <Filter>Container Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="VectorTest.cpp">
+      <Filter>Container Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="SListTest.cpp">
+      <Filter>Container Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="DatumTest.cpp">
+      <Filter>Container Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="BarTest.cpp">
+      <Filter>Support Code Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="FooTest.cpp">
+      <Filter>Support Code Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="DefaultEqualityTest.cpp">
+      <Filter>Utility Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="DefaultHashTest.cpp">
+      <Filter>Utility Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="RTTITest.cpp">
+      <Filter>Utility Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="AttributedFooTest.cpp">
+      <Filter>Reflection System Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="TypeManagerTest.cpp">
+      <Filter>Reflection System Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="ScopeTest.cpp">
+      <Filter>Reflection System Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="StackTest.cpp">
+      <Filter>Container Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="JsonParseTest.cpp">
+      <Filter>JSON Parser Test</Filter>
+    </ClCompile>
+    <ClCompile Include="AttributedBarTest.cpp">
+      <Filter>Reflection System Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="JsonTestParseHelper.cpp">
+      <Filter>JSON Parser Test</Filter>
+    </ClCompile>
+    <ClCompile Include="UtilityTest.cpp">
+      <Filter>Utility Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="FactoryTest.cpp">
+      <Filter>Utility Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="AttributedBar.cpp">
+      <Filter>Support Code\Attributed</Filter>
+    </ClCompile>
+    <ClCompile Include="AttributedFoo.cpp">
+      <Filter>Support Code\Attributed</Filter>
+    </ClCompile>
+    <ClCompile Include="DerivedAttributedFoo.cpp">
+      <Filter>Support Code\Attributed</Filter>
+    </ClCompile>
+    <ClCompile Include="FooEntity.cpp">
+      <Filter>Support Code\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Bar.cpp">
+      <Filter>Support Code\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="DerivedFoo.cpp">
+      <Filter>Support Code\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="Foo.cpp">
+      <Filter>Support Code\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="ActionIncrementTest.cpp">
+      <Filter>Core Tests\Entity System Tests\Actions Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="ActionCreateTest.cpp">
+      <Filter>Core Tests\Entity System Tests\Actions Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="ActionDestroyTest.cpp">
+      <Filter>Core Tests\Entity System Tests\Actions Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="ActionListWhileTest.cpp">
+      <Filter>Core Tests\Entity System Tests\Actions Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldTest.cpp">
+      <Filter>Core Tests\Entity System Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityTest.cpp">
+      <Filter>Core Tests\Entity System Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="EventTest.cpp">
+      <Filter>Core Tests\Event Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="EventQueueTest.cpp">
+      <Filter>Core Tests\Event Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="GameClockTimeTest.cpp">
+      <Filter>Utility Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="ReactionTest.cpp">
+      <Filter>Core Tests\Entity System Tests\Actions Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="JsonEntitySystemParseTest.cpp">
+      <Filter>JSON Parser Test</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="ToStringSpecialization.h">
+      <Filter>Support Code</Filter>
+    </ClInclude>
+    <ClInclude Include="JsonTestParseHelper.h">
+      <Filter>JSON Parser Test</Filter>
+    </ClInclude>
+    <ClInclude Include="AttributedBar.h">
+      <Filter>Support Code\Attributed</Filter>
+    </ClInclude>
+    <ClInclude Include="AttributedFoo.h">
+      <Filter>Support Code\Attributed</Filter>
+    </ClInclude>
+    <ClInclude Include="DerivedAttributedFoo.h">
+      <Filter>Support Code\Attributed</Filter>
+    </ClInclude>
+    <ClInclude Include="FooEntity.h">
+      <Filter>Support Code\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Bar.h">
+      <Filter>Support Code\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="DerivedFoo.h">
+      <Filter>Support Code\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="Foo.h">
+      <Filter>Support Code\Basic</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Support Code">
+      <UniqueIdentifier>{cb92ebec-90e8-4542-8efe-4690f20fc191}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Container Tests">
+      <UniqueIdentifier>{baf04301-e9bb-4af7-9984-1eaafbf44244}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Support Code Tests">
+      <UniqueIdentifier>{03f82542-212a-4fae-8644-5b1c0589d18f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility Tests">
+      <UniqueIdentifier>{18e39828-51fc-423c-8aeb-ddceb560a31b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="JSON Parser Test">
+      <UniqueIdentifier>{e8149a2f-8b57-469f-b5fb-5e87426c5d65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Content">
+      <UniqueIdentifier>{7c84e84d-c64a-45c5-9935-43b0c86deccd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Support Code\Attributed">
+      <UniqueIdentifier>{ad1ac5c6-b7b7-49d2-8bb9-2b78a080db17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Support Code\Basic">
+      <UniqueIdentifier>{4d5447e3-1e4e-4ef9-b62e-6cfb0c47b6ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Support Code\Core">
+      <UniqueIdentifier>{767465cd-7442-452c-8903-60620b40d12a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Reflection System Tests">
+      <UniqueIdentifier>{89ca14ab-61f6-4885-a5ad-66ab9007c3f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core Tests">
+      <UniqueIdentifier>{bd2439d4-7db9-4537-9865-77b749a06bf6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core Tests\Entity System Tests">
+      <UniqueIdentifier>{da1b1a78-6d9f-4487-a994-028fa0387e33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core Tests\Entity System Tests\Actions Tests">
+      <UniqueIdentifier>{830b286f-9457-4087-9008-28c1783b99a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core Tests\Event Tests">
+      <UniqueIdentifier>{50c15955-0fa3-494f-8c45-4f0a6d7a9bbf}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Content\World.json">
+      <Filter>Content</Filter>
+    </None>
+  </ItemGroup>
+</Project>
