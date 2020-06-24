@@ -57,9 +57,9 @@ namespace Library
 #pragma region Static Members
 	public:
 		/// <summary>
-		/// Getter for the class TypeInfo, used for registration with the TypeManager.
+		/// Getter for the class SignatureList, used for registration with the TypeManager.
 		/// </summary>
-		static const TypeManager::TypeInfo& TypeInfo();
+		static const SignatureList& Signatures();
 #pragma endregion Static Members
 
 #pragma region Special Members

@@ -275,6 +275,9 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)RenderingManager.h">
       <Filter>Core\Rendering</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)StopWatch.h">
+      <Filter>Support\Utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)DefaultHash.inl">
@@ -333,6 +336,9 @@
     </None>
     <None Include="$(MSBuildThisFileDirectory)RenderingManager.inl">
       <Filter>Core\Rendering</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)StopWatch.inl">
+      <Filter>Support\Utility</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

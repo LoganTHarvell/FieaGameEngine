@@ -1431,19 +1431,19 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 		}
 	}
 	template<>
-	inline std::wstring ToString<SignatureListType>(const SignatureListType& t)
+	inline std::wstring ToString<SignatureList>(const SignatureList& t)
 	{
 		RETURN_WIDE_STRING(t.Size());
 	}
 
 	template<>
-	inline std::wstring ToString<SignatureListType>(const SignatureListType* t)
+	inline std::wstring ToString<SignatureList>(const SignatureList* t)
 	{
 		RETURN_WIDE_STRING(t);
 	}
 
 	template<>
-	inline std::wstring ToString<SignatureListType>(SignatureListType* t)
+	inline std::wstring ToString<SignatureList>(SignatureList* t)
 	{
 		RETURN_WIDE_STRING(t);
 	}

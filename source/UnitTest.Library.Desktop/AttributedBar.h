@@ -26,7 +26,7 @@ namespace UnitTests
 		virtual std::string ToString() const override;
 
 		virtual gsl::owner<Library::Scope*> Clone() const override;
-		static const Library::TypeManager::TypeInfo& TypeInfo();
+		static const Library::SignatureList& Signatures();
 
 	private:
 		int mIntData;

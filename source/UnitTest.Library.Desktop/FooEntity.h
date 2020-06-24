@@ -9,7 +9,7 @@ namespace UnitTests
 		RTTI_DECLARATIONS(FooEntity, Library::Entity)
 
 	public:
-		static const Library::TypeManager::TypeInfo& TypeInfo();
+		static const Library::SignatureList& Signatures();
 
 		explicit FooEntity(const std::string& name=std::string());
 		explicit FooEntity(float data, const std::string& name=std::string());

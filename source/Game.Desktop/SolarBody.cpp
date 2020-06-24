@@ -17,27 +17,23 @@ using namespace Library;
 
 namespace Demo
 {
-	const TypeManager::TypeInfo& SolarBody::TypeInfo()
+	const SignatureList& SolarBody::Signatures()
 	{
-		static const TypeManager::TypeInfo typeInfo
+		static const SignatureList signatures =
 		{
-			{
-				{ ColorMapKey, Types::String, false, 1, offsetof(SolarBody, mDescription.ColorMap) },
-				{ SpecularMapKey, Types::String, false, 1, offsetof(SolarBody, mDescription.SpecularMap) },
-				{ DiameterKey, Types::Float, false, 1, offsetof(SolarBody, mDescription.Diameter) },
-				{ OrbitalDistanceKey, Types::Float, false, 1, offsetof(SolarBody, mDescription.OrbitalDistance) },
-				{ OrbitalPeriodKey, Types::Float, false, 1, offsetof(SolarBody, mDescription.OrbitalPeriod) },
-				{ RotationPeriodKey, Types::Float, false, 1, offsetof(SolarBody, mDescription.RotationPeriod) },
-				{ TiltKey, Types::Float, false, 1, offsetof(SolarBody, mDescription.Tilt) },
-				{ AmbientColorKey, Types::Vector, false, 1, offsetof(SolarBody, mDescription.AmbientColor) },
-				{ SpecularColorKey, Types::Vector, false, 1, offsetof(SolarBody, mDescription.SpecularColor) },
-				{ SpecularPowerKey, Types::Float, false, 1, offsetof(SolarBody, mDescription.SpecularPower) }		
-			},
-			
-			Actor::TypeIdClass()
+			{ ColorMapKey, Types::String, false, 1, offsetof(SolarBody, mDescription.ColorMap) },
+			{ SpecularMapKey, Types::String, false, 1, offsetof(SolarBody, mDescription.SpecularMap) },
+			{ DiameterKey, Types::Float, false, 1, offsetof(SolarBody, mDescription.Diameter) },
+			{ OrbitalDistanceKey, Types::Float, false, 1, offsetof(SolarBody, mDescription.OrbitalDistance) },
+			{ OrbitalPeriodKey, Types::Float, false, 1, offsetof(SolarBody, mDescription.OrbitalPeriod) },
+			{ RotationPeriodKey, Types::Float, false, 1, offsetof(SolarBody, mDescription.RotationPeriod) },
+			{ TiltKey, Types::Float, false, 1, offsetof(SolarBody, mDescription.Tilt) },
+			{ AmbientColorKey, Types::Vector, false, 1, offsetof(SolarBody, mDescription.AmbientColor) },
+			{ SpecularColorKey, Types::Vector, false, 1, offsetof(SolarBody, mDescription.SpecularColor) },
+			{ SpecularPowerKey, Types::Float, false, 1, offsetof(SolarBody, mDescription.SpecularPower) }
 		};
 
-		return typeInfo;
+		return signatures;
 	}
 	
 	SolarBody::SolarBody(std::string name, Description description) : Actor(TypeIdClass(), std::move(name)),

@@ -10,19 +10,15 @@ using namespace Library;
 
 namespace Demo
 {
-	const TypeManager::TypeInfo& SolarSystem::TypeInfo()
+	const SignatureList& SolarSystem::Signatures()
 	{
-		static const TypeManager::TypeInfo typeInfo
+		static const SignatureList signatures =
 		{
-			{
-				{ DistanceScaleKey, Types::Float, false, 1,  offsetof(SolarSystem, mDistanceScale) },
-				{ TimeScaleKey, Types::Float, false, 1,  offsetof(SolarSystem, mTimeScale) }
-			},
-
-			Entity::TypeIdClass()
+			{ DistanceScaleKey, Types::Float, false, 1,  offsetof(SolarSystem, mDistanceScale) },
+			{ TimeScaleKey, Types::Float, false, 1,  offsetof(SolarSystem, mTimeScale) }
 		};
 
-		return typeInfo;
+		return signatures;
 	}
 
 	SolarSystem::SolarSystem(std::string name) : Entity(TypeIdClass(), std::move(name))

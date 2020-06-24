@@ -11,19 +11,15 @@
 
 namespace Library
 {
-	const TypeManager::TypeInfo& ActionIncrement::TypeInfo()
+	const SignatureList& ActionIncrement::Signatures()
 	{
-		static const TypeManager::TypeInfo typeInfo
+		static const SignatureList signatures =
 		{
-			{
-				{ OperandKey, Types::String, false, 1, offsetof(ActionIncrement, mOperand) },
-				{ IncrementStepKey, Types::Integer, false, 1, offsetof(ActionIncrement, mIncrementStep) }
-			},
-
-			Entity::TypeIdClass()
+			{ OperandKey, Types::String, false, 1, offsetof(ActionIncrement, mOperand) },
+			{ IncrementStepKey, Types::Integer, false, 1, offsetof(ActionIncrement, mIncrementStep) }
 		};
 
-		return typeInfo;
+		return signatures;
 	}
 
 	ActionIncrement::ActionIncrement(std::string name) : Entity(TypeIdClass(), std::move(name))

@@ -65,7 +65,7 @@ namespace Library
 	/// <summary>
 	/// List of signatures for each registered types attributes.
 	/// </summary>
-	using SignatureListType = Vector<Signature>;
+	using SignatureList = Vector<Signature>;
 #pragma endregion Signature
 
 	/// <summary>
@@ -85,14 +85,14 @@ namespace Library
 		/// </summary>
 		struct TypeInfo
 		{
-			SignatureListType Signatures;
+			const SignatureList& Signatures;
 			IdType ParentTypeId;
 		};
 
 		/// <summary>
 		/// Registry type for containing TypeInfo.
 		/// </summary>
-		using Registry = HashMap<IdType, const TypeInfo&>;
+		using Registry = HashMap<IdType, const TypeInfo>;
 #pragma endregion Type Definitions
 
 #pragma region Special Members

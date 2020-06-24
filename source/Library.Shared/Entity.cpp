@@ -9,15 +9,14 @@
 
 namespace Library
 {
-	const TypeManager::TypeInfo& Entity::TypeInfo()
+	const SignatureList& Entity::Signatures()
 	{
-		static const TypeManager::TypeInfo typeInfo
+		static const SignatureList signatures
 		{
-			SignatureListType(),
-			Attributed::TypeIdClass()
+			SignatureList(),
 		};
 
-		return typeInfo;
+		return signatures;
 	}
 
 	Entity::Entity(std::string name) : Attributed(TypeIdClass()), 

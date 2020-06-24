@@ -13,8 +13,7 @@ namespace Library
 	/// </summary>
 	/// <remarks>
 	/// In order to populate, any derived class must be registered with a TypeManager. To do so, each derived 
-	/// class must implement a TypeInfo method that returns a const TypeInfo reference to data that will not
-	/// change after registration.
+	/// class must implement a Signatures method that returns a reference to a const SignatureList for the class prescribed Attributes.
 	/// </remarks>
 	class Attributed : public Scope
 	{

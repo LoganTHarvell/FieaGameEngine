@@ -11,18 +11,14 @@
 
 namespace Library
 {
-	const TypeManager::TypeInfo& ActionDestroy::TypeInfo()
+	const SignatureList& ActionDestroy::Signatures()
 	{
-		static const TypeManager::TypeInfo typeInfo
+		static const SignatureList signatures =
 		{
-			{
-				{ TargetKey, Types::String, false, 1, offsetof(ActionDestroy, mTargetName) }
-			},
-
-			Entity::TypeIdClass()
+			{ TargetKey, Types::String, false, 1, offsetof(ActionDestroy, mTargetName) }
 		};
 
-		return typeInfo;
+		return signatures;
 	}
 
 	ActionDestroy::ActionDestroy(std::string name) : Entity(TypeIdClass(), std::move(name))

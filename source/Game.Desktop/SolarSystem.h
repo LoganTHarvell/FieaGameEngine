@@ -5,6 +5,9 @@
 
 namespace Demo
 {
+	/// <summary>
+	/// Represents a solar system, managing the update of any SolarBody children.
+	/// </summary>
 	class SolarSystem final : public Library::Entity
 	{
 		RTTI_DECLARATIONS(SolarSystem, Library::Entity)
@@ -19,15 +22,22 @@ namespace Demo
 #pragma region Static Members
 	public:
 		/// <summary>
-		/// Getter for the class TypeInfo, used for registration with the TypeManager.
+		/// Getter for the class SignatureList, used for registration with the TypeManager.
 		/// </summary>
-		static const Library::TypeManager::TypeInfo& TypeInfo();
+		static const Library::SignatureList& Signatures();
 #pragma endregion Static Members
 
+#pragma region Special Members
 	public:
+		/// <summary>
+		/// Default constructor.
+		/// </summary>
+		/// <param name="name">Name of the SolarSystem Entity.</param>
 		explicit SolarSystem(std::string name=std::string());
+#pragma endregion Special Members
 
-		public:
+#pragma region Accessors
+	public:
 		float& DistanceScale();
 		float DistanceScale() const;
 		float& TimeScale();
@@ -50,7 +60,9 @@ namespace Demo
 
 		glm::vec3 SunPosition() const;
 		void SetSunPosition(glm::vec3 position);
-		
+#pragma endregion Accessors
+
+#pragma region Data Members
 	private:		
 		float mDistanceScale{ 150 };
 		float mTimeScale{ 1 };
@@ -61,6 +73,7 @@ namespace Demo
 		float mLightRadius{ 100 };
 		float mSpecularIntensity{ 0.5 };
 		float mSpecularPower{ 0.5 };
+#pragma endregion Data Members
 	};
 
 #pragma region Factory

@@ -11,18 +11,14 @@
 
 namespace Library
 {
-	const TypeManager::TypeInfo& ActionListWhile::TypeInfo()
+	const SignatureList& ActionListWhile::Signatures()
 	{
-		static const TypeManager::TypeInfo typeInfo
+		static const SignatureList signatures =
 		{
-			{
-				{ ConditionKey, Types::Integer, false, 1, offsetof(ActionListWhile, mCondition) }
-			},
-
-			Entity::TypeIdClass()
+			{ ConditionKey, Types::Integer, false, 1, offsetof(ActionListWhile, mCondition) }
 		};
 
-		return typeInfo;
+		return signatures;
 	}
 
 	ActionListWhile::ActionListWhile(std::string name) : Entity(TypeIdClass(), std::move(name))

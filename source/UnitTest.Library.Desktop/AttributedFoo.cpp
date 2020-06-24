@@ -142,31 +142,27 @@ namespace UnitTests
 		return new AttributedFoo(*this);
 	}
 
-	const Library::TypeManager::TypeInfo& AttributedFoo::TypeInfo()
+	const Library::SignatureList& AttributedFoo::Signatures()
 	{
-		static const Library::TypeManager::TypeInfo typeInfo
+		static const Library::SignatureList signatures =
 		{
-			{
-				{ "Integer", Types::Integer, false, 1, offsetof(AttributedFoo, mInt) },
-				{ "Float", Types::Float, false, 1, offsetof(AttributedFoo, mFloat) },
-				{ "Vector", Types::Vector, false, 1, offsetof(AttributedFoo, mVector) },
-				{ "Matrix", Types::Matrix, false, 1, offsetof(AttributedFoo, mMatrix) },
-				{ "String", Types::String, false, 1, offsetof(AttributedFoo, mString) },
-				{ "Scope", Types::Scope, true, 1 , 0},
-				{ "Rtti", Types::Pointer, false, 1, offsetof(AttributedFoo, mRtti) },
-				{ "IntegerArray", Types::Integer, false, 2, offsetof(AttributedFoo, mIntArray) },
-				{ "FloatArray", Types::Float, false, 2, offsetof(AttributedFoo, mFloatArray) },
-				{ "VectorArray", Types::Vector, false, 2, offsetof(AttributedFoo, mVectorArray) },
-				{ "MatrixArray", Types::Matrix, false, 2, offsetof(AttributedFoo, mMatrixArray) },
-				{ "StringArray", Types::String, false, 2, offsetof(AttributedFoo, mStringArray) },
-				{ "ScopeArray", Types::Scope, true, 2 , 0},
-				{ "RttiArray", Types::Pointer, false, 2, offsetof(AttributedFoo, mRttiArray) }
-			},
-
-			Attributed::TypeIdClass()
+			{ "Integer", Types::Integer, false, 1, offsetof(AttributedFoo, mInt) },
+			{ "Float", Types::Float, false, 1, offsetof(AttributedFoo, mFloat) },
+			{ "Vector", Types::Vector, false, 1, offsetof(AttributedFoo, mVector) },
+			{ "Matrix", Types::Matrix, false, 1, offsetof(AttributedFoo, mMatrix) },
+			{ "String", Types::String, false, 1, offsetof(AttributedFoo, mString) },
+			{ "Scope", Types::Scope, true, 1 , 0},
+			{ "Rtti", Types::Pointer, false, 1, offsetof(AttributedFoo, mRtti) },
+			{ "IntegerArray", Types::Integer, false, 2, offsetof(AttributedFoo, mIntArray) },
+			{ "FloatArray", Types::Float, false, 2, offsetof(AttributedFoo, mFloatArray) },
+			{ "VectorArray", Types::Vector, false, 2, offsetof(AttributedFoo, mVectorArray) },
+			{ "MatrixArray", Types::Matrix, false, 2, offsetof(AttributedFoo, mMatrixArray) },
+			{ "StringArray", Types::String, false, 2, offsetof(AttributedFoo, mStringArray) },
+			{ "ScopeArray", Types::Scope, true, 2 , 0},
+			{ "RttiArray", Types::Pointer, false, 2, offsetof(AttributedFoo, mRttiArray) }
 		};
 
-		return typeInfo;
+		return signatures;
 	}
 
 	AttributedFoo::AttributedFoo(const IdType typeId, const int data) : Attributed(typeId),
