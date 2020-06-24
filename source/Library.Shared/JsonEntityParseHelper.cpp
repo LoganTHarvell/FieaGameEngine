@@ -163,12 +163,14 @@ namespace Library
 
 				if (value.isObject())
 				{
-					Entity* newEntity = Factory<Entity>::Create(stackFrame.ClassName);
-					assert(newEntity != nullptr);
-					if (newEntity == nullptr) throw std::bad_alloc();
+					const Scope::Data* scopeData = stackFrame.Context.Find(stackFrame.Key);
 					
-					newEntity->SetName(stackFrame.Key);
-					stackFrame.Context.AddChild(*newEntity);
+					if (!scopeData || stackFrame.ArrayIndex >= scopeData->Size())
+					{
+						stackFrame.Context.CreateChild(stackFrame.ClassName, stackFrame.Key);
+					}
+
+					++stackFrame.ArrayIndex;
 				}
 
 				handled = true;
@@ -204,7 +206,7 @@ namespace Library
 			Entity::Data& entityData = *stackFrame.Context.Find(stackFrame.Key);
 
 			assert(entityData.Type() == Entity::Types::Scope);
-			assert(entityData[entityData.Size() - 1].Is(Entity::TypeIdClass()));
+			assert(entityData[stackFrame.ArrayIndex-1].Is(Entity::TypeIdClass()));
 			
 			Entity* entity = static_cast<Entity*>(entityData.Get<Scope*>(entityData.Size() - 1));
 			

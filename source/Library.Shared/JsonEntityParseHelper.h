@@ -38,6 +38,7 @@ namespace Library
 			std::string ClassName;
 			const Json::Value* Value;
 			Entity& Context;
+			std::size_t ArrayIndex{ 0 };
 		};
 #pragma endregion Type Definitions and Constants
 
@@ -63,7 +64,7 @@ namespace Library
 			/// Specialized constructor for initializing with an external Entity.
 			/// </summary>
 			/// <param name="scope">Entity used to initialize the SharedData.</param>
-			SharedData(Entity& scope);
+			explicit SharedData(Entity& scope);
 
 			/// <summary>
 			/// Default destructor.
