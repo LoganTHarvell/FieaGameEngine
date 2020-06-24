@@ -340,6 +340,9 @@
     <None Include="$(MSBuildThisFileDirectory)StopWatch.inl">
       <Filter>Support\Utility</Filter>
     </None>
+    <None Include="$(MSBuildThisFileDirectory)Actor.inl">
+      <Filter>Engine\Actors</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Core">

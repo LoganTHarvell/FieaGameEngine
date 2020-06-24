@@ -125,6 +125,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)WorldState.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Actor.inl" />
     <None Include="$(MSBuildThisFileDirectory)Datum.inl" />
     <None Include="$(MSBuildThisFileDirectory)DefaultEquality.inl" />
     <None Include="$(MSBuildThisFileDirectory)DefaultHash.inl" />

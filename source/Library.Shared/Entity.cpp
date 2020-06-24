@@ -84,15 +84,6 @@ namespace Library
 		return new Entity(*this);
 	}
 
-	Entity* Entity::GetParent() const
-	{
-		Scope* parent = Scope::GetParent();
-		if (!parent) return nullptr;
-
-		assert(parent->Is(Entity::TypeIdClass()));
-		return static_cast<Entity*>(parent);
-	}
-
 	void Entity::SetParent(Entity* entity)
 	{
 		if (entity == nullptr)

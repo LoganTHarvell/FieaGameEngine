@@ -16,6 +16,15 @@ namespace Library
 		mName = name;
 	}
 
+	inline Entity* Entity::GetParent() const
+	{
+		Scope* parent = Scope::GetParent();
+		if (!parent) return nullptr;
+
+		assert(parent->Is(Entity::TypeIdClass()));
+		return static_cast<Entity*>(parent);
+	}
+
 	inline bool Entity::Enabled() const
 	{
 		return mEnabled;

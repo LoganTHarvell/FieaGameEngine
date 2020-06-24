@@ -53,6 +53,8 @@ namespace Demo
 		explicit SolarBody(std::string name=std::string(), Description description=Description());
 		explicit SolarBody(Description description);
 
+		virtual void SetParent(Entity* entity) override;
+		
 		Description& GetDescription();
 		const Description& GetDescription() const;
 

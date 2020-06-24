@@ -143,7 +143,7 @@ namespace Library
 		/// Sets the Entity that owns this Entity.
 		/// </summary>
 		/// <param name="entity">Entity to be set as the parent.</param>
-		void SetParent(Entity* entity);
+		virtual void SetParent(Entity* entity);
 
 		/// <summary>
 		/// Gets whether the Entity is enabled or disabled.

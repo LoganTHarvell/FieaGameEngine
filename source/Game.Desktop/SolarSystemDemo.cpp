@@ -210,7 +210,7 @@ namespace Demo
 
 				if (mUpdateMaterial)
 				{
-					auto mat4x4 = XMFLOAT4X4(&solarBody->GetTransform()[0][0]);
+					auto mat4x4 = XMFLOAT4X4(&solarBody->WorldTransform()[0][0]);
 					const XMMATRIX worldMatrix = XMLoadFloat4x4(&mat4x4);
 					const XMMATRIX wvp = XMMatrixTranspose(worldMatrix * mCamera->ViewProjectionMatrix());
 					material.UpdateTransforms(wvp, XMMatrixTranspose(worldMatrix));

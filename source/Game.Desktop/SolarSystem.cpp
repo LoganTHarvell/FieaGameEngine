@@ -186,6 +186,6 @@ namespace Demo
 		mSunPosition = { position, 1 };
 		
 		SolarBody* sun = FindChild<SolarBody>(SunKey);
-		if (sun) sun->GetTransform().Translation() = position;
+		if (sun) sun->SetWorldTranslation(position);
 	}
 }

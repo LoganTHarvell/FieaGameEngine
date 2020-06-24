@@ -46,6 +46,12 @@ namespace Demo
 	{
 	}
 
+	void SolarBody::SetParent(Entity* entity)
+	{
+		Base::SetParent(entity);
+		SetRootActor(entity->As<SolarBody>());
+	}
+
 	SolarBody::Description& SolarBody::GetDescription()
 	{
 		return mDescription;
@@ -92,15 +98,14 @@ namespace Demo
 		mAxialRotation += worldState.GameTime->ElapsedGameTimeSeconds().count() * mDescription.RotationPeriod * solarSystem->TimeScale();
 		mOrbitRotation += worldState.GameTime->ElapsedGameTimeSeconds().count() * mDescription.OrbitalPeriod * solarSystem->TimeScale();
 		
-		Transform& transform = GetTransform();
-		transform.Scale() = glm::vec3(mDescription.Diameter);
-		transform.Rotation() = glm::angleAxis(mAxialRotation, glm::vec3( 0, 1, 0 ));
-		transform.Rotate(mDescription.Tilt, glm::vec3(1, 0, 0));
-		transform.Translation() = glm::vec3(1.0f * mDescription.OrbitalDistance * solarSystem->DistanceScale(), 0.0f, 0.0f);
-		transform *= Transform(glm::vec3(0), glm::angleAxis(mOrbitRotation, glm::vec3(0, 1, 0)), glm::vec3(1));
+		SetLocalScale(glm::vec3(mDescription.Diameter));
+		SetLocalRotation(mAxialRotation, glm::vec3( 0, 1, 0 ));
+		AddLocalRotation(mDescription.Tilt, glm::vec3(1, 0, 0));
+		SetLocalTranslation(glm::vec3(1.0f * mDescription.OrbitalDistance * solarSystem->DistanceScale(), 0.0f, 0.0f));
+		LocalTransformation({ glm::vec3(0), glm::angleAxis(mOrbitRotation, glm::vec3(0, 1, 0)), glm::vec3(1) });
 		
 		SolarBody* parent = GetParent()->As<SolarBody>();
-		if (parent) transform.Translate(parent->GetTransform().Translation());
+		if (parent) AddLocalTranslation(parent->WorldTransform().Translation());
 
 		Actor::Update(worldState);
 	}
