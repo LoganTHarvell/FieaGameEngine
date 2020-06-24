@@ -157,6 +157,11 @@ namespace Demo
 		{
 			Exit();
 		}
+		
+		if (mKeyboard->WasKeyPressedThisFrame(Keys::R))
+		{
+			mSolarSystemDemo->HotReload();
+		}
 
 		if (mMouse->WasButtonPressedThisFrame(MouseButtons::Left))
 		{

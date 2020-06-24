@@ -43,7 +43,7 @@ namespace Demo
 		void SetPointLightIntensity(float intensity);
 
 		const DirectX::XMFLOAT3& LightPosition() const;
-		const DirectX::XMVECTOR LightPositionVector() const;
+		DirectX::XMVECTOR LightPositionVector() const;
 		void SetLightPosition(const DirectX::XMFLOAT3& position);
 		void SetLightPosition(DirectX::FXMVECTOR position);
 
@@ -60,6 +60,8 @@ namespace Demo
 		virtual void Update(const Library::GameTime& gameTime) override;
 		virtual void Draw(const Library::GameTime& gameTime) override;
 		void DrawChildren(Library::Entity& parent);
+
+		void HotReload();
 
 	private:
 		SolarSystem mSolarSystem{ "SolarSystem" };

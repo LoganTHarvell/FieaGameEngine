@@ -78,7 +78,7 @@ namespace Demo
 		return mPointLight.Position();
 	}
 
-	const XMVECTOR SolarSystemDemo::LightPositionVector() const
+	XMVECTOR SolarSystemDemo::LightPositionVector() const
 	{
 		return mPointLight.PositionVector();
 	}
@@ -221,5 +221,16 @@ namespace Demo
 
 			DrawChildren(entity);
 		});
+	}
+
+	void SolarSystemDemo::HotReload()
+	{
+		JsonEntityParseHelper::SharedData data(mSolarSystem);
+		JsonParseMaster parser(&data);
+		JsonEntityParseHelper entityParseHelper;
+		parser.AddHelper(entityParseHelper);
+		parser.ParseFromFile("Content/SolarSystem.json"s);
+
+		mSolarSystem.Initialize(mGame->GetWorldState());
 	}
 }

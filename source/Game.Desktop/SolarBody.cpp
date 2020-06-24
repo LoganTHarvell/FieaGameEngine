@@ -87,7 +87,7 @@ namespace Demo
 			mMaterial->SetAmbientColor(DirectX::XMFLOAT4(&mDescription.AmbientColor[0]));
 		}
 
-		Actor::Initialize(worldState);
+		Base::Initialize(worldState);
 	}
 
 	void SolarBody::Update(Library::WorldState& worldState)
@@ -107,6 +107,6 @@ namespace Demo
 		SolarBody* parent = GetParent()->As<SolarBody>();
 		if (parent) AddLocalTranslation(parent->WorldTransform().Translation());
 
-		Actor::Update(worldState);
+		Base::Update(worldState);
 	}
 }
