@@ -138,16 +138,29 @@ namespace Library
 		[](const std::string& str, void* data, const std::size_t index)
 		{
 			float* vector = glm::value_ptr(static_cast<glm::vec4*>(data)[index]);
+#if defined (_WIN32)
 			sscanf_s(str.c_str(), "vec4(%f,%f,%f,%f)", &vector[0], &vector[1], &vector[2], &vector[3]);
+#else
+			sscanf(str.c_str(), "vec4(%f,%f,%f,%f)", &vector[0], &vector[1], &vector[2], &vector[3]);
+#endif
+
 		},
 		[](const std::string& str, void* data, std::size_t index)
 		{
 			float* matrix = glm::value_ptr(static_cast<glm::mat4*>(data)[index]);
+#if defined (_WIN32)
 			sscanf_s(str.c_str(), "mat4x4((%f,%f,%f,%f), (%f,%f,%f,%f), (%f,%f,%f,%f), (%f,%f,%f,%f))",
 						&matrix[0], &matrix[1], &matrix[2], &matrix[3],
 						&matrix[4], &matrix[5], &matrix[6], &matrix[7],
 						&matrix[8], &matrix[9], &matrix[10], &matrix[11],
 						&matrix[12], &matrix[13], &matrix[14], &matrix[15]);
+#else
+			sscanf(str.c_str(), "mat4x4((%f,%f,%f,%f), (%f,%f,%f,%f), (%f,%f,%f,%f), (%f,%f,%f,%f))",
+					&matrix[0], &matrix[1], &matrix[2], &matrix[3],
+					&matrix[4], &matrix[5], &matrix[6], &matrix[7],
+					&matrix[8], &matrix[9], &matrix[10], &matrix[11],
+					&matrix[12], &matrix[13], &matrix[14], &matrix[15]);
+#endif
 		},
 		[](const std::string& str, void* data, const std::size_t index) { static_cast<std::string*>(data)[index] = str; },
 		[](const std::string&, void*, const std::size_t) {},

@@ -115,21 +115,12 @@ namespace Library
 			};
 #pragma endregion Exception Entry
 
-#pragma region Data Members
-		public:
-			/// <summary>
-			/// List of exception Entry values.
-			/// </summary>
-			Vector<Entry> Exceptions{ Vector<Entry>::EqualityFunctor() };
-#pragma endregion Data Members
-
 #pragma region Special Members
 		public:
 			/// <summary>
 			/// Default constructor.
 			/// </summary>
-			/// <param name="message">String passed to std::exception base constructor.</param>
-			explicit AggregateException(const char* message=nullptr);
+			explicit AggregateException() = default;
 
 			/// <summary>
 			/// Default destructor.
@@ -165,17 +156,23 @@ namespace Library
 			/// <summary>
 			/// Specialized constructor that initialized the list of exceptions.
 			/// </summary>
-			/// <param name="message">String passed to std::exception base constructor.</param>
 			/// <param name="exceptions">List of exception Entry values to initialize with.</param>
-			explicit AggregateException(const char* message, const Vector<Entry>& exceptions);
+			explicit AggregateException(const Vector<Entry>& exceptions);
 
 			/// <summary>
 			/// Specialized constructor that initialized the list of exceptions.
 			/// </summary>
-			/// <param name="message">String passed to std::exception base constructor.</param>
 			/// <param name="exceptions">List of exception Entry values to initialize with.</param>
-			explicit AggregateException(const char* message, Vector<Entry>&& exceptions);
-#pragma endregion Special Members			
+			explicit AggregateException(Vector<Entry>&& exceptions);
+#pragma endregion Special Members		
+
+#pragma region Data Members
+		public:
+			/// <summary>
+			/// List of exception Entry values.
+			/// </summary>
+			Vector<Entry> Exceptions{ Vector<Entry>::EqualityFunctor() };
+#pragma endregion Data Members	
 		};
 	}
 

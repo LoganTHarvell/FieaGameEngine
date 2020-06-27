@@ -16,7 +16,7 @@ namespace Library
 
 		const TypeInfo typeInfo = { T::Signatures(), T::Base::TypeIdClass() };
 		
-		auto [it, isNew] = mRegistry.TryEmplace(T::TypeIdClass(), typeInfo);
+		const bool isNew = mRegistry.TryEmplace(T::TypeIdClass(), typeInfo).second;
 
 		if (!isNew)
 		{

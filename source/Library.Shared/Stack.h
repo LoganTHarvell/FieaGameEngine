@@ -81,7 +81,7 @@ namespace Library
 		/// <summary>
 		/// Instance of the container used to store elements on the Stack.
 		/// </summary>
-		Container mContainer{ Container(Container::EqualityFunctor()) };
+		Container mContainer{ Container(typename Container::EqualityFunctor()) };
 #pragma endregion Data Members
 	};
 }

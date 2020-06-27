@@ -30,7 +30,7 @@
 #endif
 
 // Guidelines Support Library
-#include <gsl\gsl>
+#include <gsl/gsl>
 
 // Windows
 #include <windows.h>
@@ -42,13 +42,13 @@
 #include <DirectXMath.h>
 #include <DirectXPackedVector.h>
 #include <DirectXColors.h>
-#include <DirectXTK\DDSTextureLoader.h>
-#include <DirectXTK\WICTextureLoader.h>
-#include <DirectXTK\SpriteBatch.h>
-#include <DirectXTK\SpriteFont.h>
-#include <DirectXTK\GamePad.h>
-#include <DirectXTK\Keyboard.h>
-#include <DirectXTK\Mouse.h>
+#include <DirectXTK/DDSTextureLoader.h>
+#include <DirectXTK/WICTextureLoader.h>
+#include <DirectXTK/SpriteBatch.h>
+#include <DirectXTK/SpriteFont.h>
+#include <DirectXTK/GamePad.h>
+#include <DirectXTK/Keyboard.h>
+#include <DirectXTK/Mouse.h>
 
 // OpenGL Mathematics
 #pragma warning(disable : 26812)
