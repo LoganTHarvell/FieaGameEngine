@@ -18,6 +18,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Library.Linux.Remote", "..\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Game.Linux.Remote", "..\source\Game.Linux.Remote\Game.Linux.Remote.vcxproj", "{E0C141CC-AA7D-42CD-8C09-584F30C6075A}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnitTest.Library.Linux", "..\source\UnitTest.Library.Linux\UnitTest.Library.Linux.vcxproj", "{1DC00B7F-F821-4F41-968D-F00E12FD2C9B}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\source\Library.Shared\Library.Shared.vcxitems*{181f0862-06ef-4a98-acdb-044af1ba6626}*SharedItemsImports = 4
@@ -105,6 +107,18 @@ Global
 		{E0C141CC-AA7D-42CD-8C09-584F30C6075A}.Release|x86.ActiveCfg = Release|x86
 		{E0C141CC-AA7D-42CD-8C09-584F30C6075A}.Release|x86.Build.0 = Release|x86
 		{E0C141CC-AA7D-42CD-8C09-584F30C6075A}.Release|x86.Deploy.0 = Release|x86
+		{1DC00B7F-F821-4F41-968D-F00E12FD2C9B}.Debug|x64.ActiveCfg = Debug|x64
+		{1DC00B7F-F821-4F41-968D-F00E12FD2C9B}.Debug|x64.Build.0 = Debug|x64
+		{1DC00B7F-F821-4F41-968D-F00E12FD2C9B}.Debug|x64.Deploy.0 = Debug|x64
+		{1DC00B7F-F821-4F41-968D-F00E12FD2C9B}.Debug|x86.ActiveCfg = Debug|x86
+		{1DC00B7F-F821-4F41-968D-F00E12FD2C9B}.Debug|x86.Build.0 = Debug|x86
+		{1DC00B7F-F821-4F41-968D-F00E12FD2C9B}.Debug|x86.Deploy.0 = Debug|x86
+		{1DC00B7F-F821-4F41-968D-F00E12FD2C9B}.Release|x64.ActiveCfg = Release|x64
+		{1DC00B7F-F821-4F41-968D-F00E12FD2C9B}.Release|x64.Build.0 = Release|x64
+		{1DC00B7F-F821-4F41-968D-F00E12FD2C9B}.Release|x64.Deploy.0 = Release|x64
+		{1DC00B7F-F821-4F41-968D-F00E12FD2C9B}.Release|x86.ActiveCfg = Release|x86
+		{1DC00B7F-F821-4F41-968D-F00E12FD2C9B}.Release|x86.Build.0 = Release|x86
+		{1DC00B7F-F821-4F41-968D-F00E12FD2C9B}.Release|x86.Deploy.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
