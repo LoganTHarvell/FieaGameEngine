@@ -46,7 +46,9 @@ As of May 2020, I have begun work on a rendering abstraction layer for the engin
     * Uses the above classes to manage the game loop
     * Root `Entity` objects can be added/removed, analagous to loading/unloding a level
   * `Reaction`, a generic implementation of `IEventSubscriber` integrated into the reflection system
-
+* **Math**
+  * `Transform`, represents position and orientation transformations of an object in 3D space
+ 
 ### Engine
 
 * **Entities**
