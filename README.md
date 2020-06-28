@@ -59,15 +59,13 @@ As of May 2020, I have begun work on a rendering abstraction layer for the engin
   * Can be used for any behavior inluding data manipulation and control flow
   * Used with the parser and reflection system to define behavior within JSON
 
-<div class="breaker"></div>
+### Engine Core Inheritance Hierarchy
 
 ![New Inheritance Hierarchy](https://logantharvell.github.io/assets/images/NewEngineInheritanceHierarchy.png)
-<figcaption class="caption">Engine core inheritance hierarchy.</figcaption>
 
-<div class="breaker"></div>
+### Engine Core Ownership Hierarchy
 
 ![New Ownership Hierarchy](https://logantharvell.github.io/assets/images/NewEngineOwnershipHierarchy.png)
-<figcaption class="caption">Engine core ownership hierarchy.</figcaption>
 
 ## Goals
 
