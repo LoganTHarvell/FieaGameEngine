@@ -63,11 +63,11 @@ As of May 2020, I have begun work on a rendering abstraction layer for the engin
 
 ## Engine Core Inheritance Hierarchy
 
-![New Inheritance Hierarchy](https://logantharvell.github.io/assets/images/NewEngineInheritanceHierarchy.png)
+![New Inheritance Hierarchy](https://logantharvell.github.io/assets/images/FieaGameEngine/NewEngineInheritanceHierarchy.png)
 
 ## Engine Core Ownership Hierarchy
 
-![New Ownership Hierarchy](https://logantharvell.github.io/assets/images/NewEngineOwnershipHierarchy.png)
+![New Ownership Hierarchy](https://logantharvell.github.io/assets/images/FieaGameEngine/NewEngineOwnershipHierarchy.png)
 
 ## Goals
 
