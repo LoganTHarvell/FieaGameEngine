@@ -1,5 +1,4 @@
 #include <catch.hpp>
-
 #include "SList.h"
 
 using namespace Library;

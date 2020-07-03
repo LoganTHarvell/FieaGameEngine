@@ -5,22 +5,22 @@
   <PropertyGroup>
     <OutDir>$(SolutionDir)bin\$(ProjectName)\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)obj\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+    <ProjectPublicIncludePath>
+    </ProjectPublicIncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>/mnt/c/Dev/Personal/FieaGameEngine/source/Library.Shared;/home/lharvell/dev/vcpkg/installed/x64-linux/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/home/lharvell/dev/vcpkg/installed/x64-linux/include;/mnt/c/Dev/Personal/FieaGameEngine/source/Library.Shared</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup>
     <ClCompile>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <LanguageStandard>stdcpp17</LanguageStandard>
       <PreprocessorDefinitions>RENDERINGAPI_OPENGL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <Verbose>true</Verbose>
-      <CppLanguageStandard>c++17</CppLanguageStandard>
       <AdditionalOptions>-Wno-unknown-pragmas -Wno-conversion -Wno-float-conversion -Wno-invalid-offsetof</AdditionalOptions>
+      <CppLanguageStandard>c++17</CppLanguageStandard>
     </ClCompile>
     <FxCompile>
       <ShaderModel>5.0</ShaderModel>
