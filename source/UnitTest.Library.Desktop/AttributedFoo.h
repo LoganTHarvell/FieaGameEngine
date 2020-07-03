@@ -2,6 +2,7 @@
 
 #include "Attributed.h"
 #include "Foo.h"
+#include "TypeManager.h"
 
 namespace UnitTests
 {
@@ -20,7 +21,7 @@ namespace UnitTests
 		virtual std::string ToString() const override;
 
 		virtual gsl::owner<Library::Scope*> Clone() const override;
-		static const Library::TypeManager::TypeInfo& TypeInfo();
+		static const Library::SignatureList& Signatures();
 
 	protected:
 		explicit AttributedFoo(const IdType typeId, const int data = 0);

@@ -20,14 +20,4 @@ namespace Library
 	{
 		return new Actor(*this);
 	}
-
-	Transform& Actor::GetTransform()
-	{
-		return mTransform;
-	}
-
-	const Transform& Actor::GetTransform() const
-	{
-		return mTransform;
-	}
 }

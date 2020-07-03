@@ -9,14 +9,14 @@ namespace Library
 	template<typename T>
 	inline void TypeManager::Register()
 	{
-		const TypeInfo& typeInfo = T::TypeInfo();
-
-		if (typeInfo.ParentTypeId != Attributed::TypeIdClass() && !mRegistry.ContainsKey(typeInfo.ParentTypeId))
+		if (T::Base::TypeIdClass() != Attributed::TypeIdClass() && !mRegistry.ContainsKey(T::Base::TypeIdClass()))
 		{
 			throw std::runtime_error("Parent type is not registered.");
 		}
 
-		auto [it, isNew] = mRegistry.TryEmplace(T::TypeIdClass(), typeInfo);
+		const TypeInfo typeInfo = { T::Signatures(), T::Base::TypeIdClass() };
+		
+		const bool isNew = mRegistry.TryEmplace(T::TypeIdClass(), typeInfo).second;
 
 		if (!isNew)
 		{

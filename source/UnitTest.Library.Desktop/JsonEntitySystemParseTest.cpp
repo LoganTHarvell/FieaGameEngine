@@ -85,6 +85,7 @@ namespace EntitySystemTests
 		TEST_METHOD(ParseSector)
 		{
 			Entity sector;
+			sector.CreateChild("Entity"s, "Entity1").Append("AuxiliaryInt") = 10;
 
 			JsonEntityParseHelper::SharedData sharedData;
 			sharedData.SetEntity(sector);
@@ -101,7 +102,7 @@ namespace EntitySystemTests
 				  "value": {
 				    "AuxiliaryInt": {
 				      "type": "integer",
-				      "value": 10
+				      "value": 20
 				    }
 				  }
 				},
@@ -110,7 +111,7 @@ namespace EntitySystemTests
 				  "value": {
 				    "AuxiliaryInt": {
 				      "type": "integer",
-				      "value": 20
+				      "value": 30
 				    }
 				  }
 				}
@@ -129,11 +130,11 @@ namespace EntitySystemTests
 
 			Assert::AreEqual("Entity1"s, entity1->Name());
 			Assert::IsNotNull(entity1->Find("AuxiliaryInt"));
-			Assert::AreEqual(10, entity1->Find(("AuxiliaryInt"))->Get<int>());
+			Assert::AreEqual(20, entity1->Find(("AuxiliaryInt"))->Get<int>());
 
 			Assert::AreEqual("Entity2"s, entity2->Name());
 			Assert::IsNotNull(entity2->Find("AuxiliaryInt"));
-			Assert::AreEqual(20, entity2->Find(("AuxiliaryInt"))->Get<int>());
+			Assert::AreEqual(30, entity2->Find(("AuxiliaryInt"))->Get<int>());
 		}
 
 		TEST_METHOD(ParseWorld)

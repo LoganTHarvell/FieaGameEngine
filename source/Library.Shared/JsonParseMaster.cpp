@@ -186,7 +186,7 @@ namespace Library
 
 	void JsonParseMaster::Parse(const std::string& key, const Json::Value& value)
 	{		
-		for (auto helper : mHelpers)
+		for (auto* helper : mHelpers)
 		{
 			if (value.isObject())
 			{

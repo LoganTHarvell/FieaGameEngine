@@ -12,18 +12,14 @@
 namespace Library
 {
 #pragma region Static Members
-	const TypeManager::TypeInfo& EventMessageAttributed::TypeInfo()
+	const SignatureList& EventMessageAttributed::Signatures()
 	{
-		static const TypeManager::TypeInfo typeInfo
+		static const SignatureList signatures =
 		{
-			{
-				{ SubtypeKey, Types::String, false, 1, offsetof(EventMessageAttributed, mSubtype) }
-			},
-
-			Attributed::TypeIdClass()
+			{ SubtypeKey, Types::String, false, 1, offsetof(EventMessageAttributed, mSubtype) }
 		};
 
-		return typeInfo;
+		return signatures;
 	}
 #pragma endregion Static Members
 

@@ -6,6 +6,7 @@
 #include "HashMap.h"
 #include "Vector.h"
 #include "Datum.h"
+#include "Attributed.h"
 #pragma endregion Includes
 
 namespace Library
@@ -65,7 +66,16 @@ namespace Library
 	/// <summary>
 	/// List of signatures for each registered types attributes.
 	/// </summary>
-	using SignatureListType = Vector<Signature>;
+	using SignatureList = Vector<Signature>;
+
+	/// <summary>
+	/// Data registered for each type.
+	/// </summary>
+	struct TypeInfo
+	{
+		const SignatureList& Signatures;
+		RTTI::IdType ParentTypeId;
+	};
 #pragma endregion Signature
 
 	/// <summary>
@@ -81,18 +91,9 @@ namespace Library
 		using IdType = RTTI::IdType;
 
 		/// <summary>
-		/// Data registered for each type.
-		/// </summary>
-		struct TypeInfo
-		{
-			SignatureListType Signatures;
-			IdType ParentTypeId;
-		};
-
-		/// <summary>
 		/// Registry type for containing TypeInfo.
 		/// </summary>
-		using Registry = HashMap<IdType, const TypeInfo&>;
+		using Registry = HashMap<IdType, const TypeInfo>;
 #pragma endregion Type Definitions
 
 #pragma region Special Members

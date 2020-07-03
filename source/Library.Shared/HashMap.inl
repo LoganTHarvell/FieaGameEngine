@@ -174,11 +174,11 @@ namespace Library
 #pragma region Constructors, Destructor, Assignment
 	template<typename TKey, typename TData>
 	inline HashMap<TKey, TData>::HashMap(const size_t bucketCount, const KeyEqualityFunctor& keyEqualityFunctor, const HashFunctor& hashFunctor) :
-		mBuckets(0, Bucket::EqualityFunctor()), mKeyEqualityFunctor(std::make_shared<KeyEqualityFunctor>(keyEqualityFunctor)), mHashFunctor(std::make_shared<HashFunctor>(hashFunctor))
+		mBuckets(0, typename Bucket::EqualityFunctor()), mKeyEqualityFunctor(std::make_shared<KeyEqualityFunctor>(keyEqualityFunctor)), mHashFunctor(std::make_shared<HashFunctor>(hashFunctor))
 	{		
 		assert(bucketCount > 0);
 
-		mBuckets.Resize(bucketCount, Chain(Chain::EqualityFunctor()));
+		mBuckets.Resize(bucketCount, Chain(typename Chain::EqualityFunctor()));
 	}
 
 	template<typename TKey, typename TData>
@@ -203,11 +203,11 @@ namespace Library
 
 	template<typename TKey, typename TData>
 	inline HashMap<TKey, TData>::HashMap(std::initializer_list<Pair> rhs, const size_t bucketCount, const KeyEqualityFunctor& keyEqualityFunctor, const HashFunctor& hashFunctor) :
-		mBuckets(0, Bucket::EqualityFunctor()), mKeyEqualityFunctor(std::make_shared<KeyEqualityFunctor>(keyEqualityFunctor)), mHashFunctor(std::make_shared<HashFunctor>(hashFunctor))
+		mBuckets(0, typename Bucket::EqualityFunctor()), mKeyEqualityFunctor(std::make_shared<KeyEqualityFunctor>(keyEqualityFunctor)), mHashFunctor(std::make_shared<HashFunctor>(hashFunctor))
 	{
 		assert(bucketCount > 0);
 
-		mBuckets.Resize(bucketCount, Chain(Chain::EqualityFunctor()));
+		mBuckets.Resize(bucketCount, Chain(typename Chain::EqualityFunctor()));
 
 		for (auto pair : rhs)
 		{

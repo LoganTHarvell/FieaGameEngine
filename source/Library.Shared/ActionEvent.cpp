@@ -16,19 +16,15 @@
 
 namespace Library
 {
-	const TypeManager::TypeInfo& ActionEvent::TypeInfo()
+	const SignatureList& ActionEvent::Signatures()
 	{
-		static const TypeManager::TypeInfo typeInfo
+		static const SignatureList signatures =
 		{
-			{
 				{ SubtypeKey, Types::String, false, 1, offsetof(ActionEvent, mSubtype) },
 				{ DelayKey, Types::Integer, false, 1, offsetof(ActionEvent, mDelay) }
-			},
-
-			Entity::TypeIdClass()
 		};
 
-		return typeInfo;
+		return signatures;
 	}
 
 	ActionEvent::ActionEvent(std::string name, std::string subtype, const int delay) : Entity(TypeIdClass(), std::move(name)),

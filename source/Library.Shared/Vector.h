@@ -5,6 +5,8 @@
 #include <initializer_list>
 #include <cassert>
 #include <functional>
+#include <memory>
+#include <cstring>
 
 // First Party
 #include "DefaultEquality.h"

@@ -84,17 +84,13 @@ namespace Library
 	}
 
 	namespace Exception
-	{
-		AggregateException::AggregateException(const char* message) : std::exception(message)
-		{
-		}
-		
-		AggregateException::AggregateException(const char* message, const Vector<Entry>& exceptions) : std::exception(message),
+	{	
+		AggregateException::AggregateException(const Vector<Entry>& exceptions) :
 			Exceptions(exceptions)
 		{
 		}
 		
-		AggregateException::AggregateException(const char* message, Vector<Entry>&& exceptions) : std::exception(message),
+		AggregateException::AggregateException(Vector<Entry>&& exceptions) :
 			Exceptions(std::move(exceptions))
 		{
 		}

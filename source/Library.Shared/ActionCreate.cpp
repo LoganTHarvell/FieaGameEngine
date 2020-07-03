@@ -11,18 +11,14 @@
 
 namespace Library
 {
-	const TypeManager::TypeInfo& ActionCreate::TypeInfo()
+	const SignatureList& ActionCreate::Signatures()
 	{
-		static const TypeManager::TypeInfo typeInfo
+		static const SignatureList signatures =
 		{
-			{
-				{ EntityPrototypeKey, Types::Scope, true, 1, 0 },
-			},
-
-			Entity::TypeIdClass()
+			{ EntityPrototypeKey, Types::Scope, true, 1, 0 }
 		};
 
-		return typeInfo;
+		return signatures;
 	}
 
 	ActionCreate::ActionCreate(std::string name) : Entity(TypeIdClass(), std::move(name))

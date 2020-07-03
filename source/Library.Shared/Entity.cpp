@@ -9,15 +9,14 @@
 
 namespace Library
 {
-	const TypeManager::TypeInfo& Entity::TypeInfo()
+	const SignatureList& Entity::Signatures()
 	{
-		static const TypeManager::TypeInfo typeInfo
+		static const SignatureList signatures
 		{
-			SignatureListType(),
-			Attributed::TypeIdClass()
+			SignatureList(),
 		};
 
-		return typeInfo;
+		return signatures;
 	}
 
 	Entity::Entity(std::string name) : Attributed(TypeIdClass()), 
@@ -83,15 +82,6 @@ namespace Library
 	gsl::owner<Scope*> Entity::Clone() const
 	{
 		return new Entity(*this);
-	}
-
-	Entity* Entity::GetParent() const
-	{
-		Scope* parent = Scope::GetParent();
-		if (!parent) return nullptr;
-
-		assert(parent->Is(Entity::TypeIdClass()));
-		return static_cast<Entity*>(parent);
 	}
 
 	void Entity::SetParent(Entity* entity)

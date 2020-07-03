@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="$(MSBuildThisFileDirectory)pch.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Utility.cpp">
       <Filter>Support\Utility</Filter>
     </ClCompile>
@@ -122,9 +121,9 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)RenderingAPI_DirectX11.cpp">
       <Filter>Core\Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)pch.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Utility.h">
       <Filter>Support\Utility</Filter>
     </ClInclude>
@@ -272,7 +271,13 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)RenderingAPI_DirectX11.h">
       <Filter>Core\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)RenderingManager.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)RenderingManager.h">
+      <Filter>Core\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)StopWatch.h">
+      <Filter>Support\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)DefaultHash.inl">
@@ -331,6 +336,12 @@
     </None>
     <None Include="$(MSBuildThisFileDirectory)RenderingManager.inl">
       <Filter>Core\Rendering</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)StopWatch.inl">
+      <Filter>Support\Utility</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Actor.inl">
+      <Filter>Engine\Actors</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

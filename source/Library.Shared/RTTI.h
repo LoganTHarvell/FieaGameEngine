@@ -4,7 +4,6 @@
 // Standard
 #include <string>
 #include <cstddef>
-#include <type_traits>
 
 // Third Party
 #include <gsl/gsl>
@@ -138,6 +137,8 @@ namespace Library
 /// <param name="ParentType">Type of the direct parent class from which the given Type is derived.</param>
 #define RTTI_DECLARATIONS_ABSTRACT(Type, ParentType)																					\
 	public:																																\
+		using Base = ParentType;																										\
+																																		\
 		static Library::RTTI::IdType TypeIdClass() { return sRunTimeTypeId; }															\
 																																		\
 		virtual Library::RTTI::IdType TypeIdInstance() const override { return TypeIdClass(); }											\

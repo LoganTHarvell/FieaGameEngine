@@ -14,19 +14,15 @@
 
 namespace Library
 {
-	const TypeManager::TypeInfo& ActionExpression::TypeInfo()
+	const SignatureList& ActionExpression::Signatures()
 	{
-		static const TypeManager::TypeInfo typeInfo
+		static const SignatureList signatures =
 		{
-			{
-				{ ExpressionKey, Types::String, false, 1, offsetof(ActionExpression, mExpression) },
-				{ ResultKey, Types::Reference, false, 1, offsetof(ActionExpression, mResultPtr) }
-			},
-
-			Entity::TypeIdClass()
+			{ ExpressionKey, Types::String, false, 1, offsetof(ActionExpression, mExpression) },
+			{ ResultKey, Types::Reference, false, 1, offsetof(ActionExpression, mResultPtr) }
 		};
 
-		return typeInfo;
+		return signatures;
 	}
 
 	ActionExpression::ActionExpression(std::string name) : Entity(TypeIdClass(), std::move(name))

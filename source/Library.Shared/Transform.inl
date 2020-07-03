@@ -37,7 +37,7 @@ namespace Library
 
 	inline Transform& Transform::operator+=(const Transform& rhs)
 	{
-		mUpdateMatrix = true;
+		mDirtyMatrix = true;
 		return *this = Transform(*this) + rhs;
 	}
 	
@@ -48,7 +48,7 @@ namespace Library
 
 	inline Transform& Transform::operator-=(const Transform& rhs)
 	{
-		mUpdateMatrix = true;
+		mDirtyMatrix = true;
 		return *this = Transform(*this) + rhs;
 	}
 	
@@ -70,7 +70,7 @@ namespace Library
 
 	inline Transform& Transform::operator*=(const Transform& rhs)
 	{
-		mUpdateMatrix = true;
+		mDirtyMatrix = true;
 		return *this = Transform(*this) * rhs;
 	}
 
@@ -81,7 +81,7 @@ namespace Library
 
 	inline Transform& Transform::operator*=(const float rhs)
 	{
-		mUpdateMatrix = true;
+		mDirtyMatrix = true;
 		return *this = Transform(*this) * rhs;
 	}
 
@@ -102,7 +102,7 @@ namespace Library
 
 	inline Transform& Transform::operator/=(const float rhs)
 	{
-		mUpdateMatrix = true;
+		mDirtyMatrix = true;
 		return *this = Transform(*this) / rhs;
 	}
 
@@ -118,16 +118,6 @@ namespace Library
 #pragma endregion Arithmetic Operators
 
 #pragma region Accessors
-	inline const glm::vec4& Transform::operator[](const int i) const
-	{
-		return Matrix()[i];
-	}
-
-	inline float Transform::Determinant() const
-	{
-		return glm::determinant(Matrix());
-	}
-
 	inline glm::vec3& Transform::Translation()
 	{
 		return mTranslation;
@@ -163,20 +153,48 @@ namespace Library
 		return mScale;
 	}
 
+	inline Transform Transform::Inverse() const
+	{
+		Transform inverse;
+
+		inverse.mScale = glm::vec3(1) / mScale;
+		inverse.mRotation = glm::inverse(mRotation);
+		inverse.mTranslation = inverse.mRotation * (inverse.mScale * -mTranslation);
+
+		return inverse;
+	}
+
+	inline Transform Transform::Inverse(Transform transform)
+	{
+		transform.mScale = glm::vec3(1) / transform.mScale;
+		transform.mRotation = glm::inverse(transform.mRotation);
+		transform.mTranslation = transform.mRotation * (transform.mScale * -transform.mTranslation);
+
+		return transform;
+	}
+
 	inline const glm::mat4x4& Transform::Matrix() const
 	{
-		if (mUpdateMatrix)
+		if (mDirtyMatrix)
 		{
 			mMatrix = glm::mat4x4(glm::translate(mTranslation) * glm::mat4_cast(mRotation) * glm::scale(mScale));
-			mUpdateMatrix = false;
+			mDirtyMatrix = false;
 		}
 
 		return mMatrix;
 	}
-#pragma endregion Accessors
 
-#pragma region Transformations
-	inline glm::mat4x4 Transform::Inverse() const
+	inline const glm::vec4& Transform::operator[](const int i) const
+	{
+		return Matrix()[i];
+	}
+
+	inline float Transform::Determinant() const
+	{
+		return glm::determinant(Matrix());
+	}
+
+	inline glm::mat4x4 Transform::InverseMatrix() const
 	{
 		return glm::inverse(Matrix());
 	}
@@ -185,11 +203,13 @@ namespace Library
 	{
 		return glm::transpose(Matrix());
 	}
+#pragma endregion Accessors
 
+#pragma region Transformations
 	inline Transform& Transform::Translate(const glm::vec3& translation)
 	{
 		mTranslation += translation;
-		mUpdateMatrix = true;
+		mDirtyMatrix = true;
 		return *this;
 	}
 
@@ -201,7 +221,7 @@ namespace Library
 	inline Transform& Transform::Rotate(const float angle, const glm::vec3& axis)
 	{
 		mRotation = mRotation * glm::angleAxis(angle, axis);
-		mUpdateMatrix = true;
+		mDirtyMatrix = true;
 		return *this;
 	}
 
@@ -213,7 +233,7 @@ namespace Library
 	inline Transform& Transform::Rotate(const glm::quat& quaternion)
 	{
 		mRotation = mRotation * quaternion;
-		mUpdateMatrix = true;
+		mDirtyMatrix = true;
 		return *this;
 	}
 
@@ -224,8 +244,8 @@ namespace Library
 	
 	inline Transform& Transform::Scale(const glm::vec3& scaling)
 	{
-		mScale += scaling;
-		mUpdateMatrix = true;
+		mScale *= scaling;
+		mDirtyMatrix = true;
 		return *this;
 	}
 
@@ -234,15 +254,15 @@ namespace Library
 		return transform.Scale(scaling);
 	}
 
-	inline Transform& Transform::Transformation(const glm::vec3& translation, const glm::quat& quaternion, const glm::vec3& scaling)
+	inline Transform& Transform::Transformation(const Transform& transformation)
 	{
-		mUpdateMatrix = true;
-		return *this *= Transform(translation, quaternion, scaling);
+		mDirtyMatrix = true;
+		return *this *= transformation;
 	}
 
-	inline Transform Transform::Transformation(Transform transform, const glm::vec3& translation, const glm::quat& quaternion, const glm::vec3& scaling)
+	inline Transform Transform::Transformation(Transform transform, const Transform& transformation)
 	{
-		return transform.Transformation(translation, quaternion, scaling);
+		return transform.Transformation(transformation);
 	}
 #pragma endregion Transformations
 }

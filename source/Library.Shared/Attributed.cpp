@@ -10,6 +10,9 @@
 
 // Third Party
 #include <gsl/span>
+
+// First Party
+#include "TypeManager.h"
 #pragma endregion Includes
 
 
@@ -198,7 +201,7 @@ namespace Library
 #pragma endregion RTTI Overrides
 
 #pragma region Helper Methods
-	void Attributed::Populate(const TypeManager::TypeInfo* typeInfo)
+	void Attributed::Populate(const TypeInfo* typeInfo)
 	{
 		const auto* parentTypeInfo = TypeManager::Instance()->Find(typeInfo->ParentTypeId);
 		if (parentTypeInfo) Populate(parentTypeInfo);
@@ -222,7 +225,7 @@ namespace Library
 		}
 	}
 
-	std::size_t Attributed::UpdateExternalStorage(const TypeManager::TypeInfo* typeInfo)
+	std::size_t Attributed::UpdateExternalStorage(const TypeInfo* typeInfo)
 	{
 		std::size_t index = 1;
 

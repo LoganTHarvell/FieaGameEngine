@@ -8,6 +8,7 @@
 // Third Party
 #pragma warning(disable : 26812)
 #pragma warning(disable : 26451)
+#include <assimp/Importer.hpp>
 #include <assimp/material.h>
 #pragma warning(default : 26451)
 #pragma warning(default : 26812)

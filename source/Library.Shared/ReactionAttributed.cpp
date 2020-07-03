@@ -20,18 +20,14 @@ using namespace std::string_literals;
 namespace Library
 {
 #pragma region Static Members
-	const TypeManager::TypeInfo& ReactionAttributed::TypeInfo()
+	const SignatureList& ReactionAttributed::Signatures()
 	{
-		static const TypeManager::TypeInfo typeInfo
+		static const SignatureList signatures
 		{
-			{
-				{ SubtypeKey, Types::String, false, 1, offsetof(ReactionAttributed, mSubtype) },
-			},
-
-			Reaction::TypeIdClass()
+			{ SubtypeKey, Types::String, false, 1, offsetof(ReactionAttributed, mSubtype) },
 		};
 
-		return typeInfo;
+		return signatures;
 	}
 #pragma endregion
 

@@ -5,6 +5,7 @@
 #include <optional>
 
 // First Party
+#include "TypeManager.h"
 #include "Attributed.h"
 #include "Factory.h"
 #pragma endregion Includes
@@ -57,9 +58,9 @@ namespace Library
 #pragma region Static Members
 	public:
 		/// <summary>
-		/// Getter for the class TypeInfo, used for registration with the TypeManager.
+		/// Getter for the class SignatureList, used for registration with the TypeManager.
 		/// </summary>
-		static const TypeManager::TypeInfo& TypeInfo();
+		static const SignatureList& Signatures();
 #pragma endregion Static Members
 
 #pragma region Special Members
@@ -143,7 +144,7 @@ namespace Library
 		/// Sets the Entity that owns this Entity.
 		/// </summary>
 		/// <param name="entity">Entity to be set as the parent.</param>
-		void SetParent(Entity* entity);
+		virtual void SetParent(Entity* entity);
 
 		/// <summary>
 		/// Gets whether the Entity is enabled or disabled.

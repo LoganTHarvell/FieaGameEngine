@@ -4,18 +4,14 @@
 
 namespace UnitTests
 {
-	const Library::TypeManager::TypeInfo& FooEntity::TypeInfo()
+	const Library::SignatureList& FooEntity::Signatures()
 	{
-		static const Library::TypeManager::TypeInfo typeInfo
+		static const Library::SignatureList signatures =
 		{
-			{
-				{ "Data", Types::Float, false, 1, offsetof(FooEntity, mData) }
-			},
-
-			Entity::TypeIdClass()
+			{ "Data", Types::Float, false, 1, offsetof(FooEntity, mData) }
 		};
 
-		return typeInfo;
+		return signatures;
 	}
 
 	FooEntity::FooEntity(const std::string& name) : Entity(TypeIdClass(), name)

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Label="Globals">
     <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
@@ -45,6 +45,10 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)AssetImporter.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)ModelMaterial.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)ModelMaterialImporter.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)pch.cpp">
+      <ExcludedFromBuild>false</ExcludedFromBuild>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)ReactionAttributed.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)RenderingAPI_DirectX11.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)SceneNode.cpp" />
@@ -52,16 +56,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)StreamHelper.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)TypeManager.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Utility.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)pch.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Scope.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)World.cpp" />
   </ItemGroup>
@@ -92,6 +86,9 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)GameTime.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)HashMap.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)IJsonParseHelper.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)pch.h">
+      <ExcludedFromBuild>false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)RenderingManager.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)JsonParseMaster.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)JsonEntityParseHelper.h" />
@@ -106,16 +103,11 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)RenderingAPI_DirectX11.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)SceneNode.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Stack.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)StopWatch.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)StreamHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Transform.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)TypeManager.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Utility.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)pch.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)RTTI.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Scope.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)SList.h" />
@@ -124,6 +116,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)WorldState.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Actor.inl" />
     <None Include="$(MSBuildThisFileDirectory)Datum.inl" />
     <None Include="$(MSBuildThisFileDirectory)DefaultEquality.inl" />
     <None Include="$(MSBuildThisFileDirectory)DefaultHash.inl" />
@@ -140,6 +133,7 @@
     <None Include="$(MSBuildThisFileDirectory)Scope.inl" />
     <None Include="$(MSBuildThisFileDirectory)SList.inl" />
     <None Include="$(MSBuildThisFileDirectory)Stack.inl" />
+    <None Include="$(MSBuildThisFileDirectory)StopWatch.inl" />
     <None Include="$(MSBuildThisFileDirectory)Transform.inl" />
     <None Include="$(MSBuildThisFileDirectory)TypeManager.inl" />
     <None Include="$(MSBuildThisFileDirectory)Vector.inl" />

@@ -2,7 +2,6 @@
 
 #pragma region Includes
 // First Party
-#include "TypeManager.h"
 #include "Scope.h"
 #pragma endregion Includes
 
@@ -13,8 +12,7 @@ namespace Library
 	/// </summary>
 	/// <remarks>
 	/// In order to populate, any derived class must be registered with a TypeManager. To do so, each derived 
-	/// class must implement a TypeInfo method that returns a const TypeInfo reference to data that will not
-	/// change after registration.
+	/// class must implement a Signatures method that returns a reference to a const SignatureList for the class prescribed Attributes.
 	/// </remarks>
 	class Attributed : public Scope
 	{
@@ -176,7 +174,7 @@ namespace Library
 		/// Recursively called to append any parent attributes registered.
 		/// </summary>
 		/// <param name="typeInfo">TypeInfo associated with the Attributed class.</param>
-		void Populate(const TypeManager::TypeInfo* typeInfo);
+		void Populate(const struct TypeInfo* typeInfo);
 
 		/// <summary>
 		/// Updates storage for all Data values in the Scope with external storage.
@@ -184,7 +182,7 @@ namespace Library
 		/// </summary>
 		/// <param name="typeInfo">TypeInfo associated with the Attributed class.</param>
 		/// <returns>Next prescribed Attribute index to be updated, used by recursive calls.</returns>
-		std::size_t UpdateExternalStorage(const TypeManager::TypeInfo* typeInfo);
+		std::size_t UpdateExternalStorage(const struct TypeInfo* typeInfo);
 #pragma endregion Helper Methods
 
 #pragma region Data Members

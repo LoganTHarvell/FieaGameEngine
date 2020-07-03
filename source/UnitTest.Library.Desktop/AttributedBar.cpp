@@ -4,7 +4,7 @@
 namespace UnitTests
 {
 
-	AttributedBar::AttributedBar(int data) :
+	AttributedBar::AttributedBar(const int data) :
 		Attributed(AttributedBar::TypeIdClass()), mIntData(data)
 	{
 	}
@@ -78,17 +78,13 @@ namespace UnitTests
 		return new AttributedBar(*this);
 	}
 
-	const Library::TypeManager::TypeInfo& AttributedBar::TypeInfo()
+	const Library::SignatureList& AttributedBar::Signatures()
 	{
-		static Library::TypeManager::TypeInfo typeInfo
+		static Library::SignatureList signatures =
 		{
-			{
-				{ "integer", Types::Integer, false, 1, offsetof(AttributedBar, mIntData) }
-			},
-		
-			Attributed::TypeIdClass()
+			{ "integer", Types::Integer, false, 1, offsetof(AttributedBar, mIntData) }
 		};
 
-		return typeInfo;
+		return signatures;
 	}
 }

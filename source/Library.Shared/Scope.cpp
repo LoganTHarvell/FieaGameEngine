@@ -86,7 +86,7 @@ namespace Library
 	}
 
 	Scope::Scope(Scope&& rhs) noexcept :
-		mParent(rhs.mParent), mPairPtrs(std::move(rhs.mPairPtrs)), mTable(std::move(rhs.mTable)), mChildren(std::move(rhs.mChildren))
+		mPairPtrs(std::move(rhs.mPairPtrs)), mParent(rhs.mParent), mTable(std::move(rhs.mTable)), mChildren(std::move(rhs.mChildren))
 	{
 		for (auto& child : mChildren)
 		{
