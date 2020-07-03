@@ -5,6 +5,7 @@
 #include <optional>
 
 // First Party
+#include "TypeManager.h"
 #include "Attributed.h"
 #include "Factory.h"
 #pragma endregion Includes

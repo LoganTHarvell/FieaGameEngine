@@ -8,6 +8,11 @@
 // Header
 #include "JsonEntityParseHelper.h"
 
+// Third Party
+#pragma warning(disable : 26812)
+#include <json/json.h>
+#pragma warning(default : 26812)
+
 // First Party
 #include "Utility.h"
 #include "Factory.h"
@@ -319,7 +324,7 @@ namespace Library
 			}
 		}
 
- 		testHelperData->mStack.Pop();
+		testHelperData->mStack.Pop();
 		return handled;
 	}
 #pragma endregion Handlers

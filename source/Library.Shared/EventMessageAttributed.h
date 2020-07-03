@@ -2,6 +2,7 @@
 
 #pragma region Includes
 // First Party
+#include "TypeManager.h"
 #include "Attributed.h"
 #pragma endregion Includes
 

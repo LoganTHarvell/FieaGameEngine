@@ -2,7 +2,7 @@
 
 #pragma region Includes
 // Standard
-#include <stdint.h>
+#include <cstdint>
 
 // Third Party
 #pragma warning(disable : 26812)

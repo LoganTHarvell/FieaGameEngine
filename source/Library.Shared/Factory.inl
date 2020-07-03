@@ -34,7 +34,7 @@ namespace Library
 	template<typename T>
 	inline void Factory<T>::Register(const Factory& factory)
 	{
-		auto [it, isNew] = sRegistry.Insert({ factory.ClassName(), factory });
+		const bool isNew = sRegistry.Insert({ factory.ClassName(), factory }).second;
 		if (!isNew) throw std::runtime_error("Factory registered more than once.");
 	}
 

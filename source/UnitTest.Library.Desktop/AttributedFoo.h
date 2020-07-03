@@ -2,6 +2,7 @@
 
 #include "Attributed.h"
 #include "Foo.h"
+#include "TypeManager.h"
 
 namespace UnitTests
 {

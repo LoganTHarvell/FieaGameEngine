@@ -47,7 +47,7 @@ namespace Library
 #pragma endregion Instance Management
 
 #pragma region Registry
-	const TypeManager::TypeInfo* TypeManager::Find(const IdType typeId) const
+	const TypeInfo* TypeManager::Find(const IdType typeId) const
 	{
 		const auto it = mRegistry.Find(typeId);
 		return it != mRegistry.end() ? &it->second : nullptr;

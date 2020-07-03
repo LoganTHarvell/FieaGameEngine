@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "Attributed.h"
+#include "TypeManager.h"
 
 namespace UnitTests
 {

@@ -1,5 +1,8 @@
 #pragma once
 
+// Standard
+#include <cstring>
+
 namespace Library::Equality
 {
 	/// <summary>
