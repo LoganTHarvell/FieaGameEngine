@@ -35,6 +35,7 @@
 // Windows
 #include <windows.h>
 #include <winrt/Windows.Foundation.h>
+#include <winrt/base.h>
 
 // DirectX
 #include <d3d11_3.h>

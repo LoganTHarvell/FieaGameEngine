@@ -47,8 +47,9 @@ namespace Demo
 		mServices.AddService(GamePadComponent::TypeIdClass(), mGamePad.get());
 
 		mCamera = make_shared<FirstPersonCamera>(*this);
+		mCamera->SetAspectRatio(AspectRatio());
 		mCamera->SetFarPlaneDistance(20000);
-		mCamera->MovementRate() = 100;
+		mCamera->MovementRate() = 400;
 		mComponents.push_back(mCamera);
 		mServices.AddService(Camera::TypeIdClass(), mCamera.get());
 
@@ -143,7 +144,10 @@ namespace Demo
 
 		Game::Initialize();
 
-		mCamera->SetPosition(0, 50, 300);
+		mCamera->SetPosition(-500, 100, 200);
+		const glm::quat quaternion = glm::angleAxis(-1.2f, glm::vec3(0, 1, 0));
+		const XMFLOAT4X4 rotationMatrix(&glm::toMat4(quaternion)[0][0]);
+		mCamera->ApplyRotation(rotationMatrix);
 
 		mAmbientLightIntensity = mSolarSystemDemo->AmbientLightIntensity();
 		mPointLightIntensity = mSolarSystemDemo->PointLightIntensity();
@@ -211,13 +215,13 @@ namespace Demo
 		{
 			mCamera->MovementRate() = 10;
 		}
-		else if (mCamera->MovementRate() > 500)
+		else if (mCamera->MovementRate() > 800)
 		{
-			mCamera->MovementRate() = 500;
+			mCamera->MovementRate() = 800;
 		}
 		else
 		{
-			mCamera->MovementRate() += clamp(mMouse->Wheel() / 100.0f, -0.75f, 0.75f);
+			mCamera->MovementRate() += clamp(static_cast<float>(mMouse->Wheel()), -1.0f, 1.0f);
 		}
 		
 		UpdateAmbientLightIntensity(gameTime);

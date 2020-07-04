@@ -2,11 +2,11 @@
   // Solar System Properties
   "DistanceScale": {
     "type": "float",
-    "value": 80.0
+    "value": 130.0
   },
   "TimeScale": {
     "type": "float",
-    "value": 0.3
+    "value": 1
   },
 
   // Sun
@@ -19,7 +19,7 @@
       },
       "Diameter": {
         "type": "float",
-        "value": 3.0
+        "value": 8.0
       },
       "OrbitalDistance": {
         "type": "float",

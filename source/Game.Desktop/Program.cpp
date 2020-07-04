@@ -45,7 +45,7 @@ int WINAPI WinMain(HINSTANCE instance, HINSTANCE, LPSTR, int showCommand)
 	const std::wstring windowClassName = L"RenderingClass";
 	const std::wstring windowTitle = L"Solar System Demo";
 
-	const SIZE RenderTargetSize = { 1024, 768 };
+	const SIZE RenderTargetSize = { 1920, 1080 };
 	HWND windowHandle;
 	WNDCLASSEX window;
 

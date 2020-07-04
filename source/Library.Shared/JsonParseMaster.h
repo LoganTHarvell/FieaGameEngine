@@ -249,7 +249,6 @@ namespace Library
 		/// </summary>
 		/// <param name="key">Key associated with the JSON value.</param>
 		/// <param name="value">Reference to the JSON value.</param>
-		/// <param name="isArray">Boolean representing if the JSON value is an array.</param>
 		void Parse(const std::string& key, const Json::Value& value);
 #pragma endregion Parse Helper Methods
 

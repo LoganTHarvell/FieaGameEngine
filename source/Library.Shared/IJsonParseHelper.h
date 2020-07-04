@@ -60,7 +60,7 @@ namespace Library
 		/// Virtual handler method for determining how the helper will respond to a given JSON::Value.
 		/// </summary>
 		/// <param name="data">Reference to the SharedData instance to be filled with parsed data.</param>
-		/// <param name="key">A const reference to the key string associated witht the JSON::Value.</param>
+		/// <param name="key">A const reference to the key string associated with the JSON::Value.</param>
 		/// <param name="value">The JSON::Value to be parsed.</param>
 		/// <returns>True if the value is handled by the helper. Otherwise, false.</returns>
 		virtual bool StartHandler(JsonParseMaster::SharedData& data, const std::string& key, const Json::Value& value) = 0;
@@ -69,7 +69,7 @@ namespace Library
 		/// Virtual handler method for determining how the helper will react to a handled JSON::Value.
 		/// </summary>
 		/// <param name="data">Reference to the SharedData instance to be filled with parsed data.</param>
-		/// <param name="key">A const reference to the key string associated witht the JSON::Value.</param>
+		/// <param name="key">A const reference to the key string associated with the JSON::Value.</param>
 		/// <returns>True if the value is handled by the helper. Otherwise, false.</returns>
 		virtual bool EndHandler(JsonParseMaster::SharedData& data, const std::string& key) = 0;
 

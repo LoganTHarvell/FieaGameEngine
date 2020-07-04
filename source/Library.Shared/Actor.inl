@@ -5,6 +5,7 @@
 
 namespace Library
 {
+#pragma region Accessors
 	inline const Actor* Actor::RootActor() const
 	{
 		return mRootActor;
@@ -124,7 +125,9 @@ namespace Library
 		mLocalTransform = newTransform;
 		mDirtyWorldTransform = true;
 	}
+#pragma endregion Accessors
 
+#pragma region Modifiers
 	inline void Actor::AddLocalTranslation(const glm::vec3& translation)
 	{
 		mLocalTransform.Translate(translation);
@@ -172,6 +175,7 @@ namespace Library
 		UpdateWorldTransform();
 		SetWorldTransform(mWorldTransform * transformation);
 	}
+#pragma endregion Modifiers
 
 	inline void Actor::UpdateWorldTransform() const
 	{
