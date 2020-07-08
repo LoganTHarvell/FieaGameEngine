@@ -12,6 +12,6 @@ namespace Library
 
 		D3D11_SUBRESOURCE_DATA vertexSubResourceData{ 0 };
 		vertexSubResourceData.pSysMem = &vertices[0];
-		ThrowIfFailed(device->CreateBuffer(&vertexBufferDesc, &vertexSubResourceData, vertexBuffer), "ID3D11Device::CreateBuffer() failed.");
+		ThrowIfFailed(device->CreateBuffer(&vertexBufferDesc, &vertexSubResourceData, vertexBuffer), "ID3D11Device::CreateMeshIndexBuffer() failed.");
 	}
 }

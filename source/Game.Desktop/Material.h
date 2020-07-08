@@ -4,7 +4,8 @@
 #include <vector>
 #include <functional>
 
-#include "DirectXHelper.h"
+#include "CoreDirectX.h"
+
 #include "Shader.h"
 #include "Game.h"
 
@@ -24,10 +25,10 @@ namespace Library
 			std::vector<ID3D11SamplerState*> SamplerStates;
 		};
 
-		explicit Material(ContentManager& contentManager, RenderingManager& renderingManager, D3D_PRIMITIVE_TOPOLOGY topology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		explicit Material(ContentManager& contentManager, RenderingManager& renderingManager, PrimitiveTopology topology = PrimitiveTopology::TriangleList);
 
-		D3D_PRIMITIVE_TOPOLOGY Topology() const;
-		void SetTopology(D3D_PRIMITIVE_TOPOLOGY topology);
+		PrimitiveTopology Topology() const;
+		void SetTopology(PrimitiveTopology topology);
 
 		winrt::com_ptr<ID3D11InputLayout> InputLayout() const;
 		void SetInputLayout(winrt::com_ptr<ID3D11InputLayout> inputLayout);
@@ -111,7 +112,7 @@ namespace Library
 
 		ContentManager& mContentManager;
 		RenderingManager& mRenderingManager;
-		D3D_PRIMITIVE_TOPOLOGY mTopology;
+		PrimitiveTopology mTopology;
 		winrt::com_ptr<ID3D11InputLayout> mInputLayout;
 		std::map<ShaderStages, ShaderStageData> mShaderStageData;
 		std::function<void()> mDrawCallback;

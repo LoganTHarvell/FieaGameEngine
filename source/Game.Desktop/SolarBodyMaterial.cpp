@@ -142,29 +142,29 @@ namespace Demo
 		auto pixelShader = mContentManager.Load<PixelShader>(L"Shaders\\PointLightDemoPS.cso");
 		SetShader(pixelShader);
 
-		auto direct3DDevice = mRenderingManager.GetDevice().DevicePtr;
+		auto* direct3DDevice = static_cast<RenderingManagerD3D11&>(mRenderingManager).Device();
 		vertexShader->CreateInputLayout<VertexPositionTextureNormal>(direct3DDevice);
 		SetInputLayout(vertexShader->InputLayout());
 
 		D3D11_BUFFER_DESC constantBufferDesc{ 0 };
 		constantBufferDesc.ByteWidth = sizeof(VertexCBufferPerFrame);
 		constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		ThrowIfFailed(direct3DDevice->CreateBuffer(&constantBufferDesc, nullptr, mVertexCBufferPerFrame.put()), "ID3D11Device::CreateBuffer() failed.");
+		ThrowIfFailed(direct3DDevice->CreateBuffer(&constantBufferDesc, nullptr, mVertexCBufferPerFrame.put()), "ID3D11Device::CreateMeshIndexBuffer() failed.");
 		AddConstantBuffer(ShaderStages::VS, mVertexCBufferPerFrame.get());
 
 		constantBufferDesc.ByteWidth = sizeof(VertexCBufferPerObject);
-		ThrowIfFailed(direct3DDevice->CreateBuffer(&constantBufferDesc, nullptr, mVertexCBufferPerObject.put()), "ID3D11Device::CreateBuffer() failed.");
+		ThrowIfFailed(direct3DDevice->CreateBuffer(&constantBufferDesc, nullptr, mVertexCBufferPerObject.put()), "ID3D11Device::CreateMeshIndexBuffer() failed.");
 		AddConstantBuffer(ShaderStages::VS, mVertexCBufferPerObject.get());
 
 		constantBufferDesc.ByteWidth = sizeof(PixelCBufferPerFrame);
-		ThrowIfFailed(direct3DDevice->CreateBuffer(&constantBufferDesc, nullptr, mPixelCBufferPerFrame.put()), "ID3D11Device::CreateBuffer() failed.");
+		ThrowIfFailed(direct3DDevice->CreateBuffer(&constantBufferDesc, nullptr, mPixelCBufferPerFrame.put()), "ID3D11Device::CreateMeshIndexBuffer() failed.");
 		AddConstantBuffer(ShaderStages::PS, mPixelCBufferPerFrame.get());
 
 		constantBufferDesc.ByteWidth = sizeof(PixelCBufferPerObject);
-		ThrowIfFailed(direct3DDevice->CreateBuffer(&constantBufferDesc, nullptr, mPixelCBufferPerObject.put()), "ID3D11Device::CreateBuffer() failed.");
+		ThrowIfFailed(direct3DDevice->CreateBuffer(&constantBufferDesc, nullptr, mPixelCBufferPerObject.put()), "ID3D11Device::CreateMeshIndexBuffer() failed.");
 		AddConstantBuffer(ShaderStages::PS, mPixelCBufferPerObject.get());
 
-		auto* direct3DDeviceContext = mRenderingManager.GetDevice().ContextPtr;
+		auto direct3DDeviceContext = static_cast<RenderingManagerD3D11&>(mRenderingManager).Context();
 		direct3DDeviceContext->UpdateSubresource(mVertexCBufferPerFrame.get(), 0, nullptr, &mVertexCBufferPerFrameData, 0, 0);
 		direct3DDeviceContext->UpdateSubresource(mVertexCBufferPerObject.get(), 0, nullptr, &mVertexCBufferPerObjectData, 0, 0);
 		direct3DDeviceContext->UpdateSubresource(mPixelCBufferPerFrame.get(), 0, nullptr, &mPixelCBufferPerFrameData, 0, 0);
@@ -184,14 +184,14 @@ namespace Demo
 	{
 		XMStoreFloat4x4(&mVertexCBufferPerObjectData.WorldViewProjection, worldViewProjectionMatrix);
 		XMStoreFloat4x4(&mVertexCBufferPerObjectData.World, worldMatrix);
-		mRenderingManager.GetDevice().ContextPtr->UpdateSubresource(mVertexCBufferPerObject.get(), 0, nullptr, &mVertexCBufferPerObjectData, 0, 0);
+		static_cast<RenderingManagerD3D11&>(mRenderingManager).Context()->UpdateSubresource(mVertexCBufferPerObject.get(), 0, nullptr, &mVertexCBufferPerObjectData, 0, 0);
 	}
 
 	void SolarBodyMaterial::BeginDraw()
 	{
 		Material::BeginDraw();
 
-		auto* direct3DDeviceContext = mRenderingManager.GetDevice().ContextPtr;
+		auto direct3DDeviceContext = static_cast<RenderingManagerD3D11&>(mRenderingManager).Context();
 
 		if (mVertexCBufferPerFrameDataDirty)
 		{

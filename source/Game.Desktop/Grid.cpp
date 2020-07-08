@@ -69,7 +69,7 @@ namespace Library
 
 	void Grid::Initialize()
 	{
-		mMaterial.SetTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+		mMaterial.SetTopology(PrimitiveTopology::LineList);
 		mMaterial.Initialize();
 		SetColor(mColor);
 
@@ -125,6 +125,6 @@ namespace Library
 		D3D11_SUBRESOURCE_DATA vertexSubResourceData{ 0 };
 		vertexSubResourceData.pSysMem = vertices;		
 		
-		ThrowIfFailed(direct3DDevice->CreateBuffer(&vertexBufferDesc, &vertexSubResourceData, mVertexBuffer.put()), "ID3D11Device::CreateBuffer() failed");
+		ThrowIfFailed(direct3DDevice->CreateBuffer(&vertexBufferDesc, &vertexSubResourceData, mVertexBuffer.put()), "ID3D11Device::CreateMeshIndexBuffer() failed");
 	}
 }

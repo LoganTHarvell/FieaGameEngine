@@ -2,7 +2,9 @@
 
 #include "ProxyModel.h"
 
-#include "RenderingAPI_DirectX11.h"
+
+#include "BufferD3D11.h"
+#include "RenderingManagerD3D11.h"
 #include "Game.h"
 #include "GameException.h"
 #include "Utility.h"
@@ -126,7 +128,7 @@ namespace Library
 		Mesh* mesh = model->Meshes().At(0).get();
 		VertexPosition::CreateVertexBuffer(mGame->Direct3DDevice(), *mesh, not_null<ID3D11Buffer**>(mVertexBuffer.put()));
 
-		*mIndexBuffer.put() = mGame->GetWorldState().RenderingManager->CreateMeshIndexBuffer(*mesh).BufferPtr;
+		mIndexBuffer = mGame->GetWorldState().RenderingManager->CreateMeshIndexBuffer(*mesh);
 		mIndexCount = narrow<uint32_t>(mesh->Indices().Size());
 
 		mMaterial.Initialize();
@@ -165,12 +167,12 @@ namespace Library
 		if (mDisplayWireframe)
 		{
 			mGame->Direct3DDeviceContext()->RSSetState(RasterizerStates::Wireframe.get());
-			mMaterial.DrawIndexed(not_null<ID3D11Buffer*>(mVertexBuffer.get()), not_null<ID3D11Buffer*>(mIndexBuffer.get()), mIndexCount);
+			mMaterial.DrawIndexed(not_null<ID3D11Buffer*>(mVertexBuffer.get()), static_cast<BufferD3D11*>(mIndexBuffer)->Native(), mIndexCount);
 			mGame->Direct3DDeviceContext()->RSSetState(nullptr);
 		}
 		else
 		{
-			mMaterial.DrawIndexed(not_null<ID3D11Buffer*>(mVertexBuffer.get()), not_null<ID3D11Buffer*>(mIndexBuffer.get()), mIndexCount);
+			mMaterial.DrawIndexed(not_null<ID3D11Buffer*>(mVertexBuffer.get()), static_cast<BufferD3D11*>(mIndexBuffer)->Native(), mIndexCount);
 		}
 	}
 }

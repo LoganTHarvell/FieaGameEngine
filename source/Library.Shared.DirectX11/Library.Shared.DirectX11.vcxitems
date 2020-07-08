@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{fe746cfd-404a-4329-9b85-f1b9fc9597d4}</ItemsProjectGuid>
+    <ItemsProjectName>Library.Shared.DirectX11</ItemsProjectName>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)BufferD3D11.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)GameException.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)RenderContextD3D11.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)RenderingManagerD3D11.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)CoreDirectX.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ResourceD3D11.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)BufferD3D11.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)GameException.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)RenderContextD3D11.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)RenderingManagerD3D11.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)CoreDirectX.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ResourceD3D11.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)BufferD3D11.inl" />
+  </ItemGroup>
+</Project>

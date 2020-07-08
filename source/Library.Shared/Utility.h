@@ -5,6 +5,16 @@
 
 namespace Library
 {
+	/**
+	 * @brief Calculates the adjusted size of the given data to properly align with the given alignment.
+	 * @tparam T Size data type.
+	 * @param size Given size to be adjusted for proper alignment.
+	 * @param alignment Given alignment for calculating the new size.
+	 * @return Adjusted size required to properly align with the given alignment.
+	*/
+	template <typename T>
+	T AlignedSize(T size, T alignment);
+	
 	namespace TypeTraits
 	{
 		/// <summary>
@@ -207,3 +217,6 @@ namespace Library
 		}
 	}
 }
+
+// Inline File
+#include "Utility.inl"

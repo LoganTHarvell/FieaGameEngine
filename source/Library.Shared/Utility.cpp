@@ -83,19 +83,6 @@ namespace Library
 		}
 	}
 
-	namespace Exception
-	{	
-		AggregateException::AggregateException(const Vector<Entry>& exceptions) :
-			Exceptions(exceptions)
-		{
-		}
-		
-		AggregateException::AggregateException(Vector<Entry>&& exceptions) :
-			Exceptions(std::move(exceptions))
-		{
-		}
-	}
-
 	namespace File
 	{
 		void GetName(const std::string& inputPath, std::string& filename)

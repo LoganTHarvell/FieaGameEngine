@@ -1,8 +1,10 @@
 #include "pch.h"
 
-#include "RenderingAPI_DirectX11.h"
+#include "RenderingManagerD3D11.h"
 
 #include "Skybox.h"
+
+#include "BufferD3D11.h"
 #include "Game.h"
 #include "GameException.h"
 #include "FirstPersonCamera.h"
@@ -34,7 +36,7 @@ namespace Library
 		WorldState& worldState = mGame->GetWorldState();
 		assert(worldState.ContentManager && worldState.RenderingManager);
 		
-		*mIndexBuffer.put() = worldState.RenderingManager->CreateMeshIndexBuffer(*mesh).BufferPtr;
+		mIndexBuffer = worldState.RenderingManager->CreateMeshIndexBuffer(*mesh);
 		
 		mIndexCount = narrow<uint32_t>(mesh->Indices().Size());
 
@@ -66,6 +68,6 @@ namespace Library
 			mUpdateMaterial = false;
 		}
 
-		mMaterial->DrawIndexed(not_null<ID3D11Buffer*>(mVertexBuffer.get()), not_null<ID3D11Buffer*>(mIndexBuffer.get()), mIndexCount);
+		mMaterial->DrawIndexed(not_null<ID3D11Buffer*>(mVertexBuffer.get()), static_cast<BufferD3D11*>(mIndexBuffer)->Native(), mIndexCount);
 	}
 }

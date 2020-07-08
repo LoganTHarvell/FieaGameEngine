@@ -785,6 +785,18 @@ namespace Library
 	{
 		return At(index);
 	}
+
+	template <typename T>
+	inline constexpr T* Vector<T>::Data()
+	{
+		return mData;
+	}
+
+	template <typename T>
+	inline constexpr const T* Vector<T>::Data() const
+	{
+		return mData;
+	}
 #pragma endregion Element Accessors
 
 #pragma region Modifiers

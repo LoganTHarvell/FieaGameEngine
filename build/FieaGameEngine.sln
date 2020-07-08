@@ -20,13 +20,23 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Game.Linux.Remote", "..\sou
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnitTest.Library.Linux", "..\source\UnitTest.Library.Linux\UnitTest.Library.Linux.vcxproj", "{1DC00B7F-F821-4F41-968D-F00E12FD2C9B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Game", "Game", "{9F94860E-A4DB-42CA-A3FD-1B6ECD4AF1D7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Library", "Library", "{9030F5DD-B777-42E4-B6CF-4F0D877477CB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Unit Tests", "Unit Tests", "{51985CE2-7F14-4067-9980-9B7DF21D7EF2}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Library.Shared.DirectX11", "..\source\Library.Shared.DirectX11\Library.Shared.DirectX11.vcxitems", "{FE746CFD-404A-4329-9B85-F1B9FC9597D4}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		..\source\Library.Shared.DirectX11\Library.Shared.DirectX11.vcxitems*{181f0862-06ef-4a98-acdb-044af1ba6626}*SharedItemsImports = 4
 		..\source\Library.Shared\Library.Shared.vcxitems*{181f0862-06ef-4a98-acdb-044af1ba6626}*SharedItemsImports = 4
 		..\source\Library.Shared\Library.Shared.vcxitems*{2d1ffe99-1e60-48be-bbe3-07903ed72466}*SharedItemsImports = 9
 		..\source\Library.Shared\Library.Shared.vcxitems*{7fd4a967-0705-4cd8-b5c7-6a8ce99c5e7b}*SharedItemsImports = 4
 		..\source\Library.Shared\Library.Shared.vcxitems*{94238f2c-78ac-4d64-97ca-835984a22d02}*SharedItemsImports = 4
 		..\source\Library.Shared\Library.Shared.vcxitems*{c1914ac0-b13c-4e3a-8baf-faee16b1f16d}*SharedItemsImports = 4
+		..\source\Library.Shared.DirectX11\Library.Shared.DirectX11.vcxitems*{fe746cfd-404a-4329-9b85-f1b9fc9597d4}*SharedItemsImports = 9
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -122,6 +132,18 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{181F0862-06EF-4A98-ACDB-044AF1BA6626} = {9030F5DD-B777-42E4-B6CF-4F0D877477CB}
+		{2D1FFE99-1E60-48BE-BBE3-07903ED72466} = {9030F5DD-B777-42E4-B6CF-4F0D877477CB}
+		{E7F2AA68-4CC2-4DF9-A24B-59CC196C768F} = {9F94860E-A4DB-42CA-A3FD-1B6ECD4AF1D7}
+		{559E27FC-4A51-43A1-8F69-3248413B4F42} = {51985CE2-7F14-4067-9980-9B7DF21D7EF2}
+		{94238F2C-78AC-4D64-97CA-835984A22D02} = {9F94860E-A4DB-42CA-A3FD-1B6ECD4AF1D7}
+		{7FD4A967-0705-4CD8-B5C7-6A8CE99C5E7B} = {9030F5DD-B777-42E4-B6CF-4F0D877477CB}
+		{C1914AC0-B13C-4E3A-8BAF-FAEE16B1F16D} = {9030F5DD-B777-42E4-B6CF-4F0D877477CB}
+		{E0C141CC-AA7D-42CD-8C09-584F30C6075A} = {9F94860E-A4DB-42CA-A3FD-1B6ECD4AF1D7}
+		{1DC00B7F-F821-4F41-968D-F00E12FD2C9B} = {51985CE2-7F14-4067-9980-9B7DF21D7EF2}
+		{FE746CFD-404A-4329-9B85-F1B9FC9597D4} = {9030F5DD-B777-42E4-B6CF-4F0D877477CB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AA844CF5-2FBA-4A68-B473-822390BD327F}

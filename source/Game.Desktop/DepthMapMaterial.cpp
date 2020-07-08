@@ -30,19 +30,19 @@ namespace Library
 		SetShader(vertexShader);
 		SetShader<PixelShader>(nullptr);
 		
-		auto direct3DDevice = mRenderingManager.GetDevice().DevicePtr;
+		auto* direct3DDevice = static_cast<RenderingManagerD3D11&>(mRenderingManager).Device();
 		vertexShader->CreateInputLayout<VertexPosition>(direct3DDevice);
 		SetInputLayout(vertexShader->InputLayout());
 
 		D3D11_BUFFER_DESC constantBufferDesc{ 0 };
 		constantBufferDesc.ByteWidth = sizeof(XMFLOAT4X4);
 		constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		ThrowIfFailed(direct3DDevice->CreateBuffer(&constantBufferDesc, nullptr, mVSConstantBuffer.put()), "ID3D11Device::CreateBuffer() failed.");
+		ThrowIfFailed(direct3DDevice->CreateBuffer(&constantBufferDesc, nullptr, mVSConstantBuffer.put()), "ID3D11Device::CreateMeshIndexBuffer() failed.");
 		AddConstantBuffer(ShaderStages::VS, mVSConstantBuffer.get());
 	}
 
 	void DepthMapMaterial::UpdateTransform(CXMMATRIX worldLightViewProjectionMatrix)
 	{
-		mRenderingManager.GetDevice().ContextPtr->UpdateSubresource(mVSConstantBuffer.get(), 0, nullptr, worldLightViewProjectionMatrix.r, 0, 0);
+		static_cast<RenderingManagerD3D11&>(mRenderingManager).Context()->UpdateSubresource(mVSConstantBuffer.get(), 0, nullptr, worldLightViewProjectionMatrix.r, 0, 0);
 	}
 }

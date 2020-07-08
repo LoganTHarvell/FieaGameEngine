@@ -767,6 +767,18 @@ namespace Library
 		/// <returns>Const value reference to the value of the element at the given index.</returns>
 		/// <exception cref="out_of_range">Index is out of bounds.</exception>
 		const T& operator[](const std::size_t index) const;
+
+		/// <summary>
+		/// Gets the underlying data pointer.
+		/// </summary>
+		/// <returns>Pointer to the underlying data.</returns>
+		constexpr T* Data();
+
+		/// <summary>
+		/// Gets the underlying data pointer.
+		/// </summary>
+		/// <returns>Pointer to the underlying data.</returns>
+		constexpr const T* Data() const;
 #pragma endregion Element Accessors
 
 #pragma region Modifiers

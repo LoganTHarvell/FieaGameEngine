@@ -118,9 +118,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Actor.cpp">
       <Filter>Engine\Actors</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)RenderingAPI_DirectX11.cpp">
-      <Filter>Core\Rendering</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)pch.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -268,9 +265,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Actor.h">
       <Filter>Engine\Actors</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)RenderingAPI_DirectX11.h">
-      <Filter>Core\Rendering</Filter>
-    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)RenderingManager.h">
       <Filter>Core\Rendering</Filter>
     </ClInclude>
@@ -278,6 +272,24 @@
       <Filter>Support\Utility</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Buffer.h">
+      <Filter>Core\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Dev\Personal\FieaGameEngine\source\Library.Shared\PImplHeader.h">
+      <Filter>Support\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Dev\Personal\FieaGameEngine\source\Library.Shared\PImplImplementation.h">
+      <Filter>Support\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)RenderingTypes.h">
+      <Filter>Core\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Dev\Personal\FieaGameEngine\source\Library.Shared\RenderContext.h">
+      <Filter>Core\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Resource.h">
+      <Filter>Core\Rendering</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)DefaultHash.inl">
@@ -334,14 +346,20 @@
     <None Include="$(MSBuildThisFileDirectory)Entity.inl">
       <Filter>Core\Entity</Filter>
     </None>
-    <None Include="$(MSBuildThisFileDirectory)RenderingManager.inl">
-      <Filter>Core\Rendering</Filter>
-    </None>
     <None Include="$(MSBuildThisFileDirectory)StopWatch.inl">
       <Filter>Support\Utility</Filter>
     </None>
     <None Include="$(MSBuildThisFileDirectory)Actor.inl">
       <Filter>Engine\Actors</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Buffer.inl">
+      <Filter>Core\Rendering</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)RenderingManager.inl">
+      <Filter>Core\Rendering</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Utility.inl">
+      <Filter>Support\Utility</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -365,9 +383,6 @@
     </Filter>
     <Filter Include="Core\Model">
       <UniqueIdentifier>{f2fa0368-37b1-48e4-bfab-4c1a36e4a17a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Core\Texture">
-      <UniqueIdentifier>{f2c6e780-ddc4-4016-8311-d53689dd7aeb}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Components">
       <UniqueIdentifier>{132d3b44-9e36-449b-b915-00d8c688d930}</UniqueIdentifier>

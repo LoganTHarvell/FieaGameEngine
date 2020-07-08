@@ -3,7 +3,6 @@
 #include "FullScreenQuadMaterial.h"
 #include "Game.h"
 #include "VertexDeclarations.h"
-#include "DirectXHelper.h"
 
 using namespace std;
 using namespace gsl;

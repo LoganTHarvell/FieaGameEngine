@@ -1,6 +1,8 @@
 #include "pch.h"
 
 #include "SolarSystemDemo.h"
+
+#include "BufferD3D11.h"
 #include "FirstPersonCamera.h"
 #include "VertexDeclarations.h"
 #include "Game.h"
@@ -9,7 +11,7 @@
 #include "Mesh.h"
 #include "ProxyModel.h"
 #include "SolarBodyMaterial.h"
-#include "RenderingAPI_DirectX11.h"
+#include "RenderingManagerD3D11.h"
 
 using namespace std;
 using namespace std::string_literals;
@@ -146,7 +148,7 @@ namespace Demo
 		assert(mGame->GetWorldState().RenderingManager);
 		
 		RenderingManager& renderingManager = *mGame->GetWorldState().RenderingManager;
-		*mIndexBuffer.put() = renderingManager.CreateMeshIndexBuffer(*mesh).BufferPtr;
+		mIndexBuffer = renderingManager.CreateMeshIndexBuffer(*mesh);
 		mIndexCount = narrow<uint32_t>(mesh->Indices().Size());
 
 		mSolarSystem.Initialize(mGame->GetWorldState());
@@ -216,7 +218,7 @@ namespace Demo
 					material.UpdateTransforms(wvp, XMMatrixTranspose(worldMatrix));
 				}
 
-				material.DrawIndexed(not_null<ID3D11Buffer*>(mVertexBuffer.get()), not_null<ID3D11Buffer*>(mIndexBuffer.get()), mIndexCount);
+				material.DrawIndexed(not_null<ID3D11Buffer*>(mVertexBuffer.get()), static_cast<BufferD3D11*>(mIndexBuffer)->Native(), mIndexCount);
 			}
 
 			DrawChildren(entity);

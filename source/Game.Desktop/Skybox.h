@@ -32,7 +32,7 @@ namespace Library
 		float mScale;
 		std::shared_ptr<SkyboxMaterial> mMaterial;
 		winrt::com_ptr<ID3D11Buffer> mVertexBuffer;
-		winrt::com_ptr<ID3D11Buffer> mIndexBuffer;
+		Buffer* mIndexBuffer;
 		std::uint32_t mIndexCount{ 0 };
 		bool mUpdateMaterial{ true };
 	};

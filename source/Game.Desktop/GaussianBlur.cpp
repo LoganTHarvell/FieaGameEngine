@@ -67,8 +67,8 @@ namespace Library
 		D3D11_BUFFER_DESC constantBufferDesc{ 0 };
 		constantBufferDesc.ByteWidth = sizeof(PixelCBufferPerFrame);
 		constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		ThrowIfFailed(mGame->Direct3DDevice()->CreateBuffer(&constantBufferDesc, nullptr, mHorizontalCBufferPerFrame.put()), "ID3D11Device::CreateBuffer() failed.");
-		ThrowIfFailed(mGame->Direct3DDevice()->CreateBuffer(&constantBufferDesc, nullptr, mVerticalCBufferPerFrame.put()), "ID3D11Device::CreateBuffer() failed.");
+		ThrowIfFailed(mGame->Direct3DDevice()->CreateBuffer(&constantBufferDesc, nullptr, mHorizontalCBufferPerFrame.put()), "ID3D11Device::CreateMeshIndexBuffer() failed.");
+		ThrowIfFailed(mGame->Direct3DDevice()->CreateBuffer(&constantBufferDesc, nullptr, mVerticalCBufferPerFrame.put()), "ID3D11Device::CreateMeshIndexBuffer() failed.");
 
 		InitializeSampleWeights();
 		InitializeSampleOffsets();

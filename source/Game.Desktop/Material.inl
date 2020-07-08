@@ -2,12 +2,12 @@
 
 namespace Library
 {
-	inline D3D_PRIMITIVE_TOPOLOGY Material::Topology() const
+	inline PrimitiveTopology Material::Topology() const
 	{
 		return mTopology;
 	}
 
-	inline void Material::SetTopology(D3D_PRIMITIVE_TOPOLOGY topology)
+	inline void Material::SetTopology(PrimitiveTopology topology)
 	{
 		mTopology = topology;
 	}
@@ -144,7 +144,7 @@ namespace Library
 	template <size_t _Count>
 	void Material::UnbindShaderResources(ShaderStages shaderStage, std::uint32_t startSlot)
 	{
-		Material::UnbindShaderResources<_Count>(mRenderingManager.GetDevice().ContextPtr, shaderStage, startSlot);
+		Material::UnbindShaderResources<_Count>(static_cast<RenderingManagerD3D11&>(mRenderingManager).Context(), shaderStage, startSlot);
 	}
 
 	inline bool Material::AutoUnbindShaderResourcesEnabled() const

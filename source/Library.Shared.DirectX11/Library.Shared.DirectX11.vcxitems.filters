@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)RenderingManagerD3D11.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)BufferD3D11.cpp">
+      <Filter>Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)ResourceD3D11.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)RenderingManagerD3D11.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)BufferD3D11.h">
+      <Filter>Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)ResourceD3D11.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Buffer">
+      <UniqueIdentifier>{bbf330a7-d426-46c5-8e49-adb3f82e2295}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)BufferD3D11.inl">
+      <Filter>Buffer</Filter>
+    </None>
+  </ItemGroup>
+</Project>

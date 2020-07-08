@@ -1,28 +1,20 @@
 #pragma once
 
 #include <windows.h>
-#include <winrt/Windows.Foundation.h>
 #include <cstdint>
 #include <string>
-#include <sstream>
 #include <memory>
 #include <functional>
-#include <array>
 
 #include <d3d11_4.h>
 #include <dxgi1_6.h>
-#include <d2d1_3.h>
-#include <dwrite_3.h>
-#include <wincodec.h>
-#include <DirectXMath.h>
-#include <DirectXColors.h>
 
 #include "GameClock.h"
 #include "GameTime.h"
 #include "ServiceContainer.h"
 #include "RenderTarget.h"
 #include "ContentManager.h"
-#include "RenderingAPI_DirectX11.h"
+#include "RenderingManagerD3D11.h"
 #include "WorldState.h"
 
 namespace Library
@@ -122,17 +114,15 @@ namespace Library
 		SIZE mRenderTargetSize;
 		IDeviceNotify* mDeviceNotify;
 
+		RenderingManagerD3D11 mRenderingManager;
+		ContentManager mContentManager;
+    	
         GameClock mGameClock;
         GameTime mGameTime;
 		WorldState mWorldState;
     	
-#ifdef RENDERINGAPI_DIRECTX11
-		RenderingAPI_DirectX11 mRenderingManager;
-#endif
-    	
 		std::vector<std::shared_ptr<GameComponent>> mComponents;
 		ServiceContainer mServices;
-		ContentManager mContentManager;
 
 		bool mReadersInitialized{ false };
     };

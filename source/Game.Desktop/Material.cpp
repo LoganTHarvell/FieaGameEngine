@@ -97,7 +97,7 @@ namespace Library
 
 	std::vector<ID3D11ShaderResourceView*> Material::EmptySRVs;
 
-	Material::Material(ContentManager& contentManager, RenderingManager& renderingManager, D3D_PRIMITIVE_TOPOLOGY topology) :
+	Material::Material(ContentManager& contentManager, RenderingManager& renderingManager, const PrimitiveTopology topology) :
 		mContentManager(contentManager), mRenderingManager(renderingManager), mTopology(topology)
 	{
 	}
@@ -193,7 +193,8 @@ namespace Library
 
 	void Material::Draw(not_null<ID3D11Buffer*> vertexBuffer, uint32_t vertexCount, uint32_t startVertexLocation, uint32_t offset)
 	{
-		auto direct3DDeviceContext = mRenderingManager.GetDevice().ContextPtr;
+		// TODO: Abstract SetVertexBuffer and Draw
+		auto* direct3DDeviceContext = static_cast<RenderingManagerD3D11&>(mRenderingManager).Context();
 
 		BeginDraw();
 
@@ -208,7 +209,8 @@ namespace Library
 
 	void Material::DrawIndexed(not_null<ID3D11Buffer*> vertexBuffer, not_null<ID3D11Buffer*> indexBuffer, uint32_t indexCount, DXGI_FORMAT format, uint32_t startIndexLocation, uint32_t baseVertexLocation, uint32_t vertexOffset, uint32_t indexOffset)
 	{
-		auto direct3DDeviceContext = mRenderingManager.GetDevice().ContextPtr;
+		// TODO: Abstract SetVertexBuffer, SetIndexBuffer, and DrawIndexed
+		auto* direct3DDeviceContext = static_cast<RenderingManagerD3D11&>(mRenderingManager).Context();
 
 		BeginDraw();
 
@@ -230,8 +232,10 @@ namespace Library
 
 	void Material::BeginDraw()
 	{
-		auto direct3DDeviceContext = mRenderingManager.GetDevice().ContextPtr;
-		direct3DDeviceContext->IASetPrimitiveTopology(mTopology);
+		// TODO: Abstract SetVertexBuffer, SetIndexBuffer, and DrawIndexed
+		auto* direct3DDeviceContext = static_cast<RenderingManagerD3D11&>(mRenderingManager).Context();
+
+		mRenderingManager.SetPrimitiveTopology(mTopology);
 
 		assert(mInputLayout != nullptr);
 		direct3DDeviceContext->IASetInputLayout(mInputLayout.get());
@@ -277,7 +281,7 @@ namespace Library
 				if (shaderStageData.ShaderResources.size() > 0)
 				{
 					assert(EmptySRVs.size() >= shaderStageData.ShaderResources.size());
-					shaderStageCallInfo.SetShaderResources(mRenderingManager.GetDevice().ContextPtr, 0, narrow_cast<uint32_t>(shaderStageData.ShaderResources.size()), EmptySRVs.data());
+					shaderStageCallInfo.SetShaderResources(static_cast<RenderingManagerD3D11&>(mRenderingManager).Context(), 0, narrow_cast<uint32_t>(shaderStageData.ShaderResources.size()), EmptySRVs.data());
 				}
 			}
 		}

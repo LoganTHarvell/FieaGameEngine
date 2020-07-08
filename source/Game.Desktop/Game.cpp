@@ -2,7 +2,6 @@
 #include "Game.h"
 #include "GameException.h"
 #include "DrawableGameComponent.h"
-#include "DirectXHelper.h"
 #include "ContentTypeReaderManager.h"
 #include "ComputeShaderReader.h"
 #include "DomainShaderReader.h"
@@ -13,6 +12,8 @@
 #include "Texture2DReader.h"
 #include "TextureCubeReader.h"
 #include "VertexShaderReader.h"
+
+#include "CoreDirectX.h"
 
 using namespace std;
 using namespace gsl;
@@ -32,7 +33,6 @@ namespace Library
 		CreateDeviceIndependentResources();
 		CreateDeviceResources();
 
-		mRenderingManager.SetDevice({ Direct3DDevice(), Direct3DDeviceContext() });
 		mWorldState.ContentManager = &mContentManager;
 		mWorldState.RenderingManager = &mRenderingManager;
 		mWorldState.GameTime = &mGameTime;
@@ -130,34 +130,11 @@ namespace Library
 
 	void Game::CreateDeviceResources()
 	{
-		// This flag adds support for surfaces with a different color channel ordering
-		// than the API default. It is required for compatibility with Direct2D.
-		uint32_t createDeviceFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
+		assert(mRenderingManager.DeviceComPtr().as<ID3D11Device3>());
+		mDirect3DDevice = mRenderingManager.DeviceComPtr().as<ID3D11Device3>();
 
-#if defined(_DEBUG)
-		if (SdkLayersAvailable())
-		{
-			// If the project is in a debug build, enable debugging via SDK Layers with this flag.
-			createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
-		}
-#endif
-
-		D3D_FEATURE_LEVEL featureLevels[] = {
-			D3D_FEATURE_LEVEL_11_1,
-			D3D_FEATURE_LEVEL_11_0,
-			D3D_FEATURE_LEVEL_10_1,
-			D3D_FEATURE_LEVEL_10_0
-		};
-
-		// Create the Direct3D device object and a corresponding context.
-		com_ptr<ID3D11Device> direct3DDevice;
-		com_ptr<ID3D11DeviceContext> direct3DDeviceContext;
-		ThrowIfFailed(D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, NULL, createDeviceFlags, featureLevels, narrow_cast<uint32_t>(size(featureLevels)), D3D11_SDK_VERSION, direct3DDevice.put(), &mFeatureLevel, direct3DDeviceContext.put()), "D3D11CreateDevice() failed");
-		mDirect3DDevice = direct3DDevice.as<ID3D11Device3>();
-		assert(mDirect3DDevice != nullptr);
-
-		mDirect3DDeviceContext = direct3DDeviceContext.as<ID3D11DeviceContext3>();
-		assert(mDirect3DDeviceContext != nullptr);
+		assert(mRenderingManager.ContextComPtr().as<ID3D11DeviceContext3>());
+		mDirect3DDeviceContext = mRenderingManager.ContextComPtr().as<ID3D11DeviceContext3>();
 
 		ThrowIfFailed(mDirect3DDevice->CheckMultisampleQualityLevels(DXGI_FORMAT_R8G8B8A8_UNORM, mMultiSamplingCount, &mMultiSamplingQualityLevels), "CheckMultisampleQualityLevels() failed.");
 		if (mMultiSamplingQualityLevels == 0)
@@ -166,7 +143,7 @@ namespace Library
 		}
 
 #ifndef NDEBUG
-		com_ptr<ID3D11Debug> d3dDebug = mDirect3DDevice.as<ID3D11Debug>();
+		const com_ptr<ID3D11Debug> d3dDebug = mDirect3DDevice.as<ID3D11Debug>();
 		if (d3dDebug)
 		{
 			com_ptr<ID3D11InfoQueue> d3dInfoQueue = d3dDebug.as<ID3D11InfoQueue>();

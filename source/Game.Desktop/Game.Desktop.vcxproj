@@ -90,6 +90,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\source\Library.Shared.DirectX11;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -106,6 +107,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\source\Library.Shared.DirectX11;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -170,7 +172,6 @@
     <ClCompile Include="DepthMapMaterial.cpp" />
     <ClCompile Include="DepthStencilStates.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
-    <ClCompile Include="DirectXHelper.cpp" />
     <ClCompile Include="DomainShader.cpp" />
     <ClCompile Include="DomainShaderReader.cpp" />
     <ClCompile Include="DrawableGameComponent.cpp" />
@@ -182,7 +183,6 @@
     <ClCompile Include="FullScreenRenderTarget.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameComponent.cpp" />
-    <ClCompile Include="GameException.cpp" />
     <ClCompile Include="GamePadComponent.cpp" />
     <ClCompile Include="GaussianBlur.cpp" />
     <ClCompile Include="GeometryShader.cpp" />
@@ -262,7 +262,6 @@
     <ClInclude Include="DepthMapMaterial.h" />
     <ClInclude Include="DepthStencilStates.h" />
     <ClInclude Include="DirectionalLight.h" />
-    <ClInclude Include="DirectXHelper.h" />
     <ClInclude Include="DomainShader.h" />
     <ClInclude Include="DomainShaderReader.h" />
     <ClInclude Include="DrawableGameComponent.h" />
@@ -274,7 +273,6 @@
     <ClInclude Include="FullScreenRenderTarget.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameComponent.h" />
-    <ClInclude Include="GameException.h" />
     <ClInclude Include="GamePadComponent.h" />
     <ClInclude Include="GaussianBlur.h" />
     <ClInclude Include="GeometryShader.h" />

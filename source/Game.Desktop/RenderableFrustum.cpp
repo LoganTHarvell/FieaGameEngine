@@ -5,7 +5,6 @@
 #include "Frustum.h"
 #include "Camera.h"
 #include "VertexDeclarations.h"
-#include "DirectXHelper.h"
 
 using namespace std;
 using namespace gsl;
@@ -126,7 +125,7 @@ namespace Library
 
     void RenderableFrustum::Initialize()
 	{		
-		mMaterial.SetTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+		mMaterial.SetTopology(PrimitiveTopology::LineList);
 		mMaterial.Initialize();
 		SetColor(mColor);
 

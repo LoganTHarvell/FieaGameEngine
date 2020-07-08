@@ -60,7 +60,7 @@ namespace Library
 		std::string mModelFileName;
 		float mScale;
 		winrt::com_ptr<ID3D11Buffer> mVertexBuffer;
-		winrt::com_ptr<ID3D11Buffer> mIndexBuffer;		
+		Buffer* mIndexBuffer;		
 		std::uint32_t mIndexCount{ 0 };
 		bool mDisplayWireframe{ true };
 		bool mUpdateWorldMatrix{ true };

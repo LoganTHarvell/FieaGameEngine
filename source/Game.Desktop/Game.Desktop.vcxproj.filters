@@ -30,9 +30,6 @@
     <ClCompile Include="GameComponent.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="GameException.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
     <ClCompile Include="DrawableGameComponent.cpp">
       <Filter>Game</Filter>
     </ClCompile>
@@ -43,9 +40,6 @@
       <Filter>ImGui</Filter>
     </ClCompile>
     <ClCompile Include="ColorHelper.cpp">
-      <Filter>Helpers</Filter>
-    </ClCompile>
-    <ClCompile Include="DirectXHelper.cpp">
       <Filter>Helpers</Filter>
     </ClCompile>
     <ClCompile Include="MatrixHelper.cpp">
@@ -265,9 +259,6 @@
     <ClInclude Include="GameComponent.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="GameException.h">
-      <Filter>Game</Filter>
-    </ClInclude>
     <ClInclude Include="DrawableGameComponent.h">
       <Filter>Game</Filter>
     </ClInclude>
@@ -278,9 +269,6 @@
       <Filter>ImGui</Filter>
     </ClInclude>
     <ClInclude Include="ColorHelper.h">
-      <Filter>Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectXHelper.h">
       <Filter>Helpers</Filter>
     </ClInclude>
     <ClInclude Include="MatrixHelper.h">

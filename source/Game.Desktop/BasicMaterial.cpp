@@ -37,18 +37,18 @@ namespace Library
 		auto pixelShader = mContentManager.Load<PixelShader>(L"Shaders\\BasicPS.cso");
 		SetShader(pixelShader);
 
-		auto direct3DDevice = mRenderingManager.GetDevice().DevicePtr;
+		auto* direct3DDevice = static_cast<RenderingManagerD3D11&>(mRenderingManager).Device();
 		vertexShader->CreateInputLayout<VertexPosition>(direct3DDevice);
 		SetInputLayout(vertexShader->InputLayout());
 
 		D3D11_BUFFER_DESC constantBufferDesc{ 0 };
 		constantBufferDesc.ByteWidth = sizeof(XMFLOAT4X4);
 		constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		ThrowIfFailed(direct3DDevice->CreateBuffer(&constantBufferDesc, nullptr, mVSConstantBuffer.put()), "ID3D11Device::CreateBuffer() failed.");
+		ThrowIfFailed(direct3DDevice->CreateBuffer(&constantBufferDesc, nullptr, mVSConstantBuffer.put()), "ID3D11Device::CreateMeshIndexBuffer() failed.");
 		AddConstantBuffer(ShaderStages::VS, mVSConstantBuffer.get());
 
 		constantBufferDesc.ByteWidth = sizeof(XMFLOAT4);		
-		ThrowIfFailed(direct3DDevice->CreateBuffer(&constantBufferDesc, nullptr, mPSConstantBuffer.put()), "ID3D11Device::CreateBuffer() failed.");
+		ThrowIfFailed(direct3DDevice->CreateBuffer(&constantBufferDesc, nullptr, mPSConstantBuffer.put()), "ID3D11Device::CreateMeshIndexBuffer() failed.");
 		AddConstantBuffer(ShaderStages::PS, mPSConstantBuffer.get());
 
 		SetSurfaceColor(Colors::White.f);
@@ -56,11 +56,11 @@ namespace Library
 
 	void BasicMaterial::UpdateTransform(CXMMATRIX worldViewProjectionMatrix)
 	{
-		mRenderingManager.GetDevice().ContextPtr->UpdateSubresource(mVSConstantBuffer.get(), 0, nullptr, worldViewProjectionMatrix.r, 0, 0);
+		static_cast<RenderingManagerD3D11&>(mRenderingManager).Context()->UpdateSubresource(mVSConstantBuffer.get(), 0, nullptr, worldViewProjectionMatrix.r, 0, 0);
 	}
 
 	void BasicMaterial::SetSurfaceColor(const float* color)
 	{
-		mRenderingManager.GetDevice().ContextPtr->UpdateSubresource(mPSConstantBuffer.get(), 0, nullptr, color, 0, 0);
+		static_cast<RenderingManagerD3D11&>(mRenderingManager).Context()->UpdateSubresource(mPSConstantBuffer.get(), 0, nullptr, color, 0, 0);
 	}
 }

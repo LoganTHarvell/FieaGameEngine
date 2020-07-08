@@ -1,14 +1,13 @@
 #pragma once
 
-#include <gsl/gsl>
-#include <winrt/Windows.Foundation.h>
 #include <d3d11.h>
+
 #include "DrawableGameComponent.h"
 #include "MatrixHelper.h"
 #include "PointLight.h"
 #include "SolarSystem.h"
 #include "Vector.h"
-#include "WorldState.h"
+#include "Buffer.h"
 
 namespace Library
 {
@@ -67,7 +66,7 @@ namespace Demo
 		SolarSystem mSolarSystem{ "SolarSystem" };
 		
 		winrt::com_ptr<ID3D11Buffer> mVertexBuffer;
-		winrt::com_ptr<ID3D11Buffer> mIndexBuffer;
+		Library::Buffer* mIndexBuffer;
 		std::uint32_t mIndexCount{ 0 };
 		Library::PointLight mPointLight;
 		

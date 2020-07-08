@@ -63,7 +63,7 @@ namespace Library
 		auto vertexShader = mContentManager.Load<VertexShader>(L"Shaders\\TexturedQuadPassThroughVS.cso");
 		SetShader(vertexShader);
 
-		auto direct3DDevice = mRenderingManager.GetDevice().DevicePtr;
+		auto* direct3DDevice = static_cast<RenderingManagerD3D11&>(mRenderingManager).Device();
 		vertexShader->CreateInputLayout<VertexPositionTexture>(direct3DDevice);
 		SetInputLayout(vertexShader->InputLayout());
 

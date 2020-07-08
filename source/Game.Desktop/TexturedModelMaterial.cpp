@@ -65,14 +65,14 @@ namespace Library
 		auto pixelShader = mContentManager.Load<PixelShader>(L"Shaders\\TexturedModelPS.cso");
 		SetShader(pixelShader);
 
-		auto direct3DDevice = mRenderingManager.GetDevice().DevicePtr;
+		auto* direct3DDevice = static_cast<RenderingManagerD3D11&>(mRenderingManager).Device();
 		vertexShader->CreateInputLayout<VertexPositionTexture>(direct3DDevice);
 		SetInputLayout(vertexShader->InputLayout());
 
 		D3D11_BUFFER_DESC constantBufferDesc{ 0 };
 		constantBufferDesc.ByteWidth = sizeof(XMFLOAT4X4);
 		constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		ThrowIfFailed(direct3DDevice->CreateBuffer(&constantBufferDesc, nullptr, mVertexCBufferPerObject.put()), "ID3D11Device::CreateBuffer() failed.");
+		ThrowIfFailed(direct3DDevice->CreateBuffer(&constantBufferDesc, nullptr, mVertexCBufferPerObject.put()), "ID3D11Device::CreateMeshIndexBuffer() failed.");
 		AddConstantBuffer(ShaderStages::VS, mVertexCBufferPerObject.get());
 
 		AddSamplerState(ShaderStages::PS, mSamplerState.get());
@@ -80,6 +80,6 @@ namespace Library
 
 	void TexturedModelMaterial::UpdateTransform(CXMMATRIX worldViewProjectionMatrix)
 	{
-		mRenderingManager.GetDevice().ContextPtr->UpdateSubresource(mVertexCBufferPerObject.get(), 0, nullptr, worldViewProjectionMatrix.r, 0, 0);
+		static_cast<RenderingManagerD3D11&>(mRenderingManager).Context()->UpdateSubresource(mVertexCBufferPerObject.get(), 0, nullptr, worldViewProjectionMatrix.r, 0, 0);
 	}
 }

@@ -60,14 +60,14 @@ namespace Library
 		auto pixelShader = mContentManager.Load<PixelShader>(L"Shaders\\SkyboxPS.cso");
 		SetShader(pixelShader);
 
-		auto direct3DDevice = mRenderingManager.GetDevice().DevicePtr;
+		auto* direct3DDevice = static_cast<RenderingManagerD3D11&>(mRenderingManager).Device();
 		vertexShader->CreateInputLayout<VertexPosition>(direct3DDevice);
 		SetInputLayout(vertexShader->InputLayout());
 
 		D3D11_BUFFER_DESC constantBufferDesc{ 0 };
 		constantBufferDesc.ByteWidth = sizeof(XMFLOAT4X4);
 		constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		ThrowIfFailed(mRenderingManager.GetDevice().DevicePtr->CreateBuffer(&constantBufferDesc, nullptr, mConstantBuffer.put()), "ID3D11Device::CreateBuffer() failed.");
+		ThrowIfFailed(static_cast<RenderingManagerD3D11&>(mRenderingManager).Device()->CreateBuffer(&constantBufferDesc, nullptr, mConstantBuffer.put()), "ID3D11Device::CreateMeshIndexBuffer() failed.");
 		AddConstantBuffer(ShaderStages::VS, mConstantBuffer.get());
 
 		AddShaderResource(ShaderStages::PS, mTexture->ShaderResourceView().get());
@@ -78,18 +78,18 @@ namespace Library
 	{
 		Material::BeginDraw();
 
-		mRenderingManager.GetDevice().ContextPtr->RSSetState(RasterizerStates::DisabledCulling.get());
+		static_cast<RenderingManagerD3D11&>(mRenderingManager).Context()->RSSetState(RasterizerStates::DisabledCulling.get());
 	}
 
 	void SkyboxMaterial::EndDraw()
 	{
 		Material::EndDraw();
 
-		mRenderingManager.GetDevice().ContextPtr->RSSetState(nullptr);
+		static_cast<RenderingManagerD3D11&>(mRenderingManager).Context()->RSSetState(nullptr);
 	}
 
 	void SkyboxMaterial::UpdateTransforms(CXMMATRIX worldViewProjectionMatrix)
 	{
-		mRenderingManager.GetDevice().ContextPtr->UpdateSubresource(mConstantBuffer.get(), 0, nullptr, worldViewProjectionMatrix.r, 0, 0);
+		static_cast<RenderingManagerD3D11&>(mRenderingManager).Context()->UpdateSubresource(mConstantBuffer.get(), 0, nullptr, worldViewProjectionMatrix.r, 0, 0);
 	}
 }
