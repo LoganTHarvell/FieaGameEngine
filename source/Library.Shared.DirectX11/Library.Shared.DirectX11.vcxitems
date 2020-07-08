@@ -19,7 +19,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)GameException.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)RenderContextD3D11.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)RenderingManagerD3D11.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)CoreDirectX.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)CoreD3D.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)ResourceD3D11.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -27,7 +27,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)GameException.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)RenderContextD3D11.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)RenderingManagerD3D11.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)CoreDirectX.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)CoreD3D.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ResourceD3D11.h" />
   </ItemGroup>
   <ItemGroup>

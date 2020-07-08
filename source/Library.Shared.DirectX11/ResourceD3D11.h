@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CoreDirectX.h"
+#include "CoreD3D.h"
 
 namespace Library
 {

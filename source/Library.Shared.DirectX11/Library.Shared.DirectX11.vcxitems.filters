@@ -6,6 +6,9 @@
       <Filter>Buffer</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)ResourceD3D11.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)GameException.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)RenderContextD3D11.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)CoreD3D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)RenderingManagerD3D11.h" />
@@ -13,6 +16,9 @@
       <Filter>Buffer</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)ResourceD3D11.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)GameException.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)RenderContextD3D11.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)CoreD3D.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Buffer">

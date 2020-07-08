@@ -13,7 +13,7 @@
 #include "TextureCubeReader.h"
 #include "VertexShaderReader.h"
 
-#include "CoreDirectX.h"
+#include "CoreD3D.h"
 
 using namespace std;
 using namespace gsl;

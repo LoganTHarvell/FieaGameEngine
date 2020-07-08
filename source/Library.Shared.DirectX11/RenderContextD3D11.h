@@ -2,7 +2,7 @@
 
 #include <winrt/base.h>
 
-#include "CoreDirectX.h"
+#include "CoreD3D.h"
 #include "RenderContext.h"
 #include "Factory.h"
 

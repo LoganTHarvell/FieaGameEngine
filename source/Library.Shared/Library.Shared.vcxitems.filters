@@ -275,20 +275,18 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Buffer.h">
       <Filter>Core\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Dev\Personal\FieaGameEngine\source\Library.Shared\PImplHeader.h">
-      <Filter>Support\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\Dev\Personal\FieaGameEngine\source\Library.Shared\PImplImplementation.h">
-      <Filter>Support\Utility</Filter>
-    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)RenderingTypes.h">
-      <Filter>Core\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\Dev\Personal\FieaGameEngine\source\Library.Shared\RenderContext.h">
       <Filter>Core\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Resource.h">
       <Filter>Core\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)RenderContext.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)PImplHeader.h">
+      <Filter>Support\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)PImplImplementation.h">
+      <Filter>Support\Utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

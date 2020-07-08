@@ -3,7 +3,7 @@
 #include "pch.h"
 
 // Header
-#include "CoreDirectX.h"
+#include "CoreD3D.h"
 #pragma endregion Includes
 
 namespace Library

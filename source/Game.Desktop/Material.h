@@ -4,7 +4,7 @@
 #include <vector>
 #include <functional>
 
-#include "CoreDirectX.h"
+#include "CoreD3D.h"
 
 #include "Shader.h"
 #include "Game.h"

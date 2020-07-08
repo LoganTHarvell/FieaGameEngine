@@ -6,7 +6,7 @@
 #include "RenderingManagerD3D11.h"
 
 // First Party
-#include "CoreDirectX.h"
+#include "CoreD3D.h"
 #include "BufferD3D11.h"
 #include "Mesh.h"
 #pragma endregion Includes
