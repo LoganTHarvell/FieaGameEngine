@@ -6,13 +6,11 @@
 
 #include "BufferD3D11.h"
 #include "Game.h"
-#include "GameException.h"
 #include "FirstPersonCamera.h"
 #include "Model.h"
 #include "Mesh.h"
 #include "SkyboxMaterial.h"
 #include "VertexDeclarations.h"
-#include "VectorHelper.h"
 #include "TextureCube.h"
 
 using namespace std;
@@ -31,7 +29,7 @@ namespace Library
 	{
 		const auto model = mGame->Content().Load<Model>(L"Models\\Sphere.obj.bin");
 		Mesh* mesh = model->Meshes().At(0).get();
-		VertexPosition::CreateVertexBuffer(mGame->Direct3DDevice(), *mesh, not_null<ID3D11Buffer**>(mVertexBuffer.put()));
+		mVertexBuffer = VertexPosition::CreateVertexBuffer(mGame->GetWorldState().RenderingManager, *mesh);
 
 		WorldState& worldState = mGame->GetWorldState();
 		assert(worldState.ContentManager && worldState.RenderingManager);
@@ -68,6 +66,6 @@ namespace Library
 			mUpdateMaterial = false;
 		}
 
-		mMaterial->DrawIndexed(not_null<ID3D11Buffer*>(mVertexBuffer.get()), static_cast<BufferD3D11*>(mIndexBuffer)->Native(), mIndexCount);
+		mMaterial->DrawIndexed(not_null<ID3D11Buffer*>(static_cast<BufferD3D11*>(mVertexBuffer)->Native()), static_cast<BufferD3D11*>(mIndexBuffer)->Native(), mIndexCount);
 	}
 }

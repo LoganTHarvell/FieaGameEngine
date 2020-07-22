@@ -119,6 +119,18 @@
       <Filter>Engine\Actors</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)pch.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Resource.cpp">
+      <Filter>Core\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)RenderingManager.cpp">
+      <Filter>Core\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)VertexAttribute.cpp">
+      <Filter>Core\Rendering\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)VertexDeclarations.cpp">
+      <Filter>Core\Rendering\Buffer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Utility.h">
@@ -272,21 +284,29 @@
       <Filter>Support\Utility</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Buffer.h">
-      <Filter>Core\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)RenderingTypes.h">
-      <Filter>Core\Rendering</Filter>
-    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Resource.h">
       <Filter>Core\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)RenderContext.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)PImplHeader.h">
       <Filter>Support\Utility</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)PImplImplementation.h">
       <Filter>Support\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)RenderContext.h">
+      <Filter>Core\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Buffer.h">
+      <Filter>Core\Rendering\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)VertexAttribute.h">
+      <Filter>Core\Rendering\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)VertexDeclarations.h">
+      <Filter>Core\Rendering\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)ShaderSystemValue.h">
+      <Filter>Core\Rendering\Buffer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -350,14 +370,17 @@
     <None Include="$(MSBuildThisFileDirectory)Actor.inl">
       <Filter>Engine\Actors</Filter>
     </None>
-    <None Include="$(MSBuildThisFileDirectory)Buffer.inl">
-      <Filter>Core\Rendering</Filter>
-    </None>
     <None Include="$(MSBuildThisFileDirectory)RenderingManager.inl">
       <Filter>Core\Rendering</Filter>
     </None>
     <None Include="$(MSBuildThisFileDirectory)Utility.inl">
       <Filter>Support\Utility</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Buffer.inl">
+      <Filter>Core\Rendering\Buffer</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)VertexDeclarations.inl">
+      <Filter>Core\Rendering\Buffer</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -429,6 +452,9 @@
     </Filter>
     <Filter Include="Core\Rendering">
       <UniqueIdentifier>{fafcebbb-f62b-4890-91b9-65c63fe162e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Rendering\Buffer">
+      <UniqueIdentifier>{0aa1f109-e7bd-4e23-9045-2e61bf15bfd6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

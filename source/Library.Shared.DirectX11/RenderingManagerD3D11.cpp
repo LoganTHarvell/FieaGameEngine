@@ -8,7 +8,9 @@
 // First Party
 #include "CoreD3D.h"
 #include "BufferD3D11.h"
+#include "BufferWithResourceViewD3D11.h"
 #include "Mesh.h"
+#include "ResourceD3D11.h"
 #pragma endregion Includes
 
 namespace Library
@@ -30,13 +32,19 @@ namespace Library
 		return mRenderContexts.emplace(std::forward<std::unique_ptr<RenderContextD3D11>>(std::move(newRenderContext))).first->get();
 	}
 
-	Buffer* RenderingManagerD3D11::CreateMeshIndexBuffer(const Mesh& mesh)
+	Buffer* RenderingManagerD3D11::CreateBuffer(const BufferDesc& desc, const void* initialData)
 	{
-		BufferDesc desc;
-		desc.Size = gsl::narrow_cast<uint32_t>(sizeof(uint32_t) * mesh.Indices().Size());
-		desc.BindFlags.BufferType = BufferType::Index;
-
-		auto newBuffer = std::make_unique<BufferD3D11>(mDevice.get(), desc, &mesh.Indices()[0]);		
+		std::unique_ptr<BufferD3D11> newBuffer;
+		
+		if (D3D11::RequiresBufferWithRV(desc.BindFlags))
+		{
+			newBuffer = std::make_unique<Direct3D11::BufferWithResourceViewD3D11>(mDevice.get(), desc, initialData);
+		}
+		else
+		{
+			newBuffer = std::make_unique<BufferD3D11>(mDevice.get(), desc, initialData);
+		}
+		
 		return mBuffers.emplace(std::forward<std::unique_ptr<BufferD3D11>>(std::move(newBuffer))).first->get();
 	}
 

@@ -243,7 +243,6 @@
     <ClCompile Include="TextureHelper.cpp" />
     <ClCompile Include="UtilityWin32.cpp" />
     <ClCompile Include="VectorHelper.cpp" />
-    <ClCompile Include="VertexDeclarations.cpp" />
     <ClCompile Include="VertexShader.cpp" />
     <ClCompile Include="VertexShaderReader.cpp" />
   </ItemGroup>
@@ -323,7 +322,6 @@
     <ClInclude Include="TextureHelper.h" />
     <ClInclude Include="UtilityWin32.h" />
     <ClInclude Include="VectorHelper.h" />
-    <ClInclude Include="VertexDeclarations.h" />
     <ClInclude Include="VertexShader.h" />
     <ClInclude Include="VertexShaderReader.h" />
   </ItemGroup>
@@ -340,7 +338,6 @@
     <None Include="Rectangle.inl" />
     <None Include="Texture.inl" />
     <None Include="VectorHelper.inl" />
-    <None Include="VertexDeclarations.inl" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Content\Shaders\PointLightDemoPS.hlsl">

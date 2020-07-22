@@ -143,7 +143,7 @@ namespace Demo
 		auto direct3DDevice = mGame->Direct3DDevice();
 		const auto model = mGame->Content().Load<Model>(L"Models\\Sphere.obj.bin"s);
 		Mesh* mesh = model->Meshes().At(0).get();
-		VertexPositionTextureNormal::CreateVertexBuffer(direct3DDevice, *mesh, not_null<ID3D11Buffer**>(mVertexBuffer.put()));
+		mVertexBuffer = VertexPositionTextureNormal::CreateVertexBuffer(mGame->GetWorldState().RenderingManager, *mesh);
 
 		assert(mGame->GetWorldState().RenderingManager);
 		
@@ -218,7 +218,7 @@ namespace Demo
 					material.UpdateTransforms(wvp, XMMatrixTranspose(worldMatrix));
 				}
 
-				material.DrawIndexed(not_null<ID3D11Buffer*>(mVertexBuffer.get()), static_cast<BufferD3D11*>(mIndexBuffer)->Native(), mIndexCount);
+				material.DrawIndexed(not_null<ID3D11Buffer*>(static_cast<BufferD3D11*>(mVertexBuffer)->Native()), static_cast<BufferD3D11*>(mIndexBuffer)->Native(), mIndexCount);
 			}
 
 			DrawChildren(entity);

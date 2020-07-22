@@ -1,36 +1,36 @@
+#pragma region Includes
+// Pre-compiled Header
 #include "pch.h"
-#include "VertexDeclarations.h"
-#include "GameException.h"
-#include "Mesh.h"
 
-using namespace std;
-using namespace gsl;
-using namespace DirectX;
+// Header
+#include "VertexDeclarations.h"
+
+// First Party
+#include "Mesh.h"
+#pragma endregion Includes
 
 namespace Library
 {
-	void VertexPosition::CreateVertexBuffer(not_null<ID3D11Device*> device, const Mesh& mesh, not_null<ID3D11Buffer**> vertexBuffer)
-	{
+	Buffer* VertexPosition::CreateVertexBuffer(RenderingManager* renderingManager, const Mesh& mesh)
+	{		
 		const Vector<glm::vec3>& sourceVertices = mesh.Vertices();
 
-		vector<VertexPosition> vertices;
-		vertices.reserve(sourceVertices.Size());
+		Vector vertices(sourceVertices.Size(), Vector<VertexPosition>::EqualityFunctor());
 
 		for (size_t i = 0; i < sourceVertices.Size(); i++)
 		{
 			const glm::vec3& position = sourceVertices.At(i);
-			vertices.emplace_back(XMFLOAT4(position.x, position.y, position.z, 1.0f));
+			vertices.EmplaceBack(glm::vec4(position.x, position.y, position.z, 1.0f));
 		}
 
-		VertexDeclaration::CreateVertexBuffer(device, vertices, vertexBuffer);
+		return VertexDeclaration::CreateVertexBuffer(renderingManager, gsl::make_span(vertices.Data(), vertices.Size()));
 	}
 
-	void VertexPositionColor::CreateVertexBuffer(not_null<ID3D11Device*> device, const Mesh& mesh, not_null<ID3D11Buffer**> vertexBuffer)
+	Buffer* VertexPositionColor::CreateVertexBuffer(RenderingManager* renderingManager, const Mesh& mesh)
 	{
 		const Vector<glm::vec3>& sourceVertices = mesh.Vertices();
 
-		vector<VertexPositionColor> vertices;
-		vertices.reserve(sourceVertices.Size());
+		Vector vertices(sourceVertices.Size(), Vector<VertexPositionColor>::EqualityFunctor());
 
 		assert(mesh.VertexColors().Size() > 0);
 		const Vector<glm::vec4>& vertexColors = mesh.VertexColors().At(0);
@@ -40,49 +40,49 @@ namespace Library
 		{
 			const glm::vec3& position = sourceVertices.At(i);
 			const glm::vec4& color = vertexColors.At(i);
-			vertices.emplace_back(XMFLOAT4(position.x, position.y, position.z, 1.0f), XMFLOAT4(&color[0]));
+			vertices.EmplaceBack(glm::vec4(position.x, position.y, position.z, 1.0f), color);
 		}
 
-		VertexDeclaration::CreateVertexBuffer(device, vertices, vertexBuffer);
+		return VertexDeclaration::CreateVertexBuffer(renderingManager, gsl::make_span(vertices.Data(), vertices.Size()));
 	}
 
-	void VertexPositionTexture::CreateVertexBuffer(not_null<ID3D11Device*> device, const Mesh& mesh, not_null<ID3D11Buffer**> vertexBuffer)
+	Buffer* VertexPositionTexture::CreateVertexBuffer(RenderingManager* renderingManager, const Mesh& mesh)
 	{
 		const Vector<glm::vec3>& sourceVertices = mesh.Vertices();
 		const Vector<glm::vec3>& textureCoordinates = mesh.TextureCoordinates().At(0);
 		assert(textureCoordinates.Size() == sourceVertices.Size());
 
-		vector<VertexPositionTexture> vertices;
-		vertices.reserve(sourceVertices.Size());
+		Vector vertices(sourceVertices.Size(), Vector<VertexPositionTexture>::EqualityFunctor());
+
 		for (size_t i = 0; i < sourceVertices.Size(); i++)
 		{
 			const glm::vec3& position = sourceVertices.At(i);
 			const glm::vec3 &uv = textureCoordinates.At(i);
-			vertices.emplace_back(XMFLOAT4(position.x, position.y, position.z, 1.0f), XMFLOAT2(uv.x, uv.y));
+			vertices.EmplaceBack(glm::vec4(position.x, position.y, position.z, 1.0f), glm::vec2(uv.x, uv.y));
 		}
 
-		VertexDeclaration::CreateVertexBuffer(device, vertices, vertexBuffer);
+		return VertexDeclaration::CreateVertexBuffer(renderingManager, gsl::make_span(vertices.Data(), vertices.Size()));
 	}
 
-	void VertexPositionNormal::CreateVertexBuffer(not_null<ID3D11Device*> device, const Mesh& mesh, not_null<ID3D11Buffer**> vertexBuffer)
+	Buffer* VertexPositionNormal::CreateVertexBuffer(RenderingManager* renderingManager, const Mesh& mesh)
 	{
 		const Vector<glm::vec3>& sourceVertices = mesh.Vertices();
 		const Vector<glm::vec3>& sourceNormals = mesh.Normals();
 		assert(sourceNormals.Size() == sourceVertices.Size());
 
-		vector<VertexPositionNormal> vertices;
-		vertices.reserve(sourceVertices.Size());
+		Vector vertices(sourceVertices.Size(), Vector<VertexPositionNormal>::EqualityFunctor());
+
 		for (size_t i = 0; i < sourceVertices.Size(); i++)
 		{
 			const glm::vec3& position = sourceVertices.At(i);
 			const glm::vec3& normal = sourceNormals.At(i);
-			vertices.emplace_back(XMFLOAT4(position.x, position.y, position.z, 1.0f), XMFLOAT3(&normal[0]));
+			vertices.EmplaceBack(glm::vec4(position.x, position.y, position.z, 1.0f), normal);
 		}
 
-		VertexDeclaration::CreateVertexBuffer(device, vertices, vertexBuffer);
+		return VertexDeclaration::CreateVertexBuffer(renderingManager, gsl::make_span(vertices.Data(), vertices.Size()));
 	}
 
-	void VertexPositionTextureNormal::CreateVertexBuffer(not_null<ID3D11Device*> device, const Mesh& mesh, not_null<ID3D11Buffer**> vertexBuffer)
+	Buffer* VertexPositionTextureNormal::CreateVertexBuffer(RenderingManager* renderingManager, const Mesh& mesh)
 	{
 		const Vector<glm::vec3>& sourceVertices = mesh.Vertices();
 		const auto& sourceUVs = mesh.TextureCoordinates().At(0);
@@ -90,20 +90,20 @@ namespace Library
 		const auto& sourceNormals = mesh.Normals();
 		assert(sourceNormals.Size() == sourceVertices.Size());
 
-		vector<VertexPositionTextureNormal> vertices;
-		vertices.reserve(sourceVertices.Size());
+		Vector vertices(sourceVertices.Size(), Vector<VertexPositionTextureNormal>::EqualityFunctor());
+
 		for (size_t i = 0; i < sourceVertices.Size(); i++)
 		{
 			const glm::vec3& position = sourceVertices.At(i);
 			const glm::vec3& uv = sourceUVs.At(i);
 			const glm::vec3& normal = sourceNormals.At(i);
-			vertices.emplace_back(XMFLOAT4(position.x, position.y, position.z, 1.0f), XMFLOAT2(uv.x, uv.y), XMFLOAT3(&normal[0]));
+			vertices.EmplaceBack(glm::vec4(position.x, position.y, position.z, 1.0f), glm::vec2(uv.x, uv.y), normal);
 		}
 
-		VertexDeclaration::CreateVertexBuffer(device, vertices, vertexBuffer);
+		return VertexDeclaration::CreateVertexBuffer(renderingManager, gsl::make_span(vertices.Data(), vertices.Size()));
 	}
 
-	void VertexPositionTextureNormalTangent::CreateVertexBuffer(not_null<ID3D11Device*> device, const Mesh& mesh, not_null<ID3D11Buffer**> vertexBuffer)
+	Buffer* VertexPositionTextureNormalTangent::CreateVertexBuffer(RenderingManager* renderingManager, const Mesh& mesh)
 	{
 		const Vector<glm::vec3>& sourceVertices = mesh.Vertices();
 		const auto& sourceUVs = mesh.TextureCoordinates().At(0);
@@ -113,21 +113,21 @@ namespace Library
 		const auto& sourceTangents = mesh.Tangents();
 		assert(sourceTangents.Size() == sourceVertices.Size());
 
-		vector<VertexPositionTextureNormalTangent> vertices;
-		vertices.reserve(sourceVertices.Size());
+		Vector vertices(sourceVertices.Size(), Vector<VertexPositionTextureNormalTangent>::EqualityFunctor());
+		
 		for (size_t i = 0; i < sourceVertices.Size(); i++)
 		{
 			const glm::vec3& position = sourceVertices.At(i);
 			const glm::vec3& uv = sourceUVs.At(i);
 			const glm::vec3& normal = sourceNormals.At(i);
 			const glm::vec3& tangent = sourceTangents.At(i);
-			vertices.emplace_back(XMFLOAT4(position.x, position.y, position.z, 1.0f), XMFLOAT2(uv.x, uv.y), XMFLOAT3(&normal[0]), XMFLOAT3(&tangent[0]));
+			vertices.EmplaceBack(glm::vec4(position.x, position.y, position.z, 1.0f), glm::vec2(uv.x, uv.y), normal, tangent);
 		}
 
-		VertexDeclaration::CreateVertexBuffer(device, vertices, vertexBuffer);
+		return VertexDeclaration::CreateVertexBuffer(renderingManager, gsl::make_span(vertices.Data(), vertices.Size()));
 	}
 
-	void VertexSkinnedPositionTextureNormal::CreateVertexBuffer(not_null<ID3D11Device*> device, const Mesh& mesh, not_null<ID3D11Buffer**> vertexBuffer)
+	Buffer* VertexSkinnedPositionTextureNormal::CreateVertexBuffer(RenderingManager* renderingManager, const Mesh& mesh)
 	{
 		const Vector<glm::vec3>& sourceVertices = mesh.Vertices();
 		const auto& sourceUVs = mesh.TextureCoordinates().At(0);
@@ -137,8 +137,8 @@ namespace Library
 		const auto& boneWeights = mesh.BoneWeights();
 		assert(boneWeights.Size() == sourceVertices.Size());
 
-		vector<VertexSkinnedPositionTextureNormal> vertices;
-		vertices.reserve(sourceVertices.Size());
+		Vector vertices(sourceVertices.Size(), Vector<VertexSkinnedPositionTextureNormal>::EqualityFunctor());
+
 		for (size_t i = 0; i < sourceVertices.Size(); i++)
 		{
 			const glm::vec3& position = sourceVertices.At(i);
@@ -146,10 +146,9 @@ namespace Library
 			const glm::vec3& normal = sourceNormals.At(i);
 			const BoneVertexWeights& vertexWeights = boneWeights.At(i);
 
-			float weights[BoneVertexWeights::MaxBoneWeightsPerVertex];
-			uint32_t indices[BoneVertexWeights::MaxBoneWeightsPerVertex];
-			ZeroMemory(weights, sizeof(float) * size(weights));
-			ZeroMemory(indices, sizeof(uint32_t) * size(indices));
+			float weights[BoneVertexWeights::MaxBoneWeightsPerVertex] = { 0 };
+			uint32_t indices[BoneVertexWeights::MaxBoneWeightsPerVertex] = { 0 };
+			
 			for (size_t j = 0; j < vertexWeights.Weights().Size(); j++)
 			{
 				const BoneVertexWeights::VertexWeight& vertexWeight = vertexWeights.Weights().At(j);
@@ -157,9 +156,9 @@ namespace Library
 				indices[j] = vertexWeight.BoneIndex;
 			}
 
-			vertices.emplace_back(XMFLOAT4(position.x, position.y, position.z, 1.0f), XMFLOAT2(uv.x, uv.y), XMFLOAT3(&normal[0]), XMUINT4(indices), XMFLOAT4(weights));
+			vertices.EmplaceBack(glm::vec4(position.x, position.y, position.z, 1.0f), glm::vec2(uv.x, uv.y), normal, glm::make_vec4(indices), glm::make_vec4(weights));
 		}
 
-		VertexDeclaration::CreateVertexBuffer(device, vertices, vertexBuffer);
+		return VertexDeclaration::CreateVertexBuffer(renderingManager, gsl::make_span(vertices.Data(), vertices.Size()));
 	}
 }

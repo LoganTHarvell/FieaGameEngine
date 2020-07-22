@@ -16,14 +16,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)BufferD3D11.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)BufferWithResourceViewD3D11.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)GameException.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)RenderContextD3D11.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)RenderingManagerD3D11.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)CoreD3D.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)ResourceD3D11.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)BufferD3D11.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)BufferWithResourceViewD3D11.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)GameException.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)RenderContextD3D11.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)RenderingManagerD3D11.h" />
@@ -32,5 +33,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)BufferD3D11.inl" />
+    <None Include="$(MSBuildThisFileDirectory)BufferWithResourceViewD3D11.inl" />
   </ItemGroup>
 </Project>

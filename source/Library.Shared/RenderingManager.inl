@@ -3,7 +3,7 @@
 #include "RenderingManager.h"
 
 namespace Library
-{
+{	
 	inline RenderingManager::API RenderingManager::GetAPI() const
 	{
 		return mAPI;

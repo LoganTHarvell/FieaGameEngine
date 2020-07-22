@@ -5,6 +5,9 @@
 
 namespace Library
 {
+	// Forward Declarations
+	struct VertexAttribute;
+	
 	class VertexShader final : public Shader
 	{
 		RTTI_DECLARATIONS(VertexShader, Shader)
@@ -27,7 +30,7 @@ namespace Library
 			CreateInputLayout(device, T::InputElements, releaseCompiledShader);
 		}
 
-		void CreateInputLayout(gsl::not_null<ID3D11Device*> device, const gsl::span<const D3D11_INPUT_ELEMENT_DESC>& inputElementDescriptions, bool releaseCompiledShader = false);
+		void CreateInputLayout(gsl::not_null<ID3D11Device*> device, const gsl::span<const VertexAttribute>& inputElementDescriptions, bool releaseCompiledShader = false);
 
 	private:
 		friend class VertexShaderReader;

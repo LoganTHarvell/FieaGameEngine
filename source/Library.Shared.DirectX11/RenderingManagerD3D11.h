@@ -47,11 +47,12 @@ namespace Library
 		virtual RenderContext* CreateRenderContext() override;
 
 		/**
-		 * @brief Creates an index buffer for a given mesh and returns it.
-		 * @param mesh Mesh used to create the index buffer.
-		 * @return Pointer to the Buffer that was created.
+		 * @brief Creates a buffer from a descriptor and initial data
+		 * @param desc Descriptor for the buffer to be created
+		 * @param initialData Data used to initialize the buffer
+		 * @return Pointer to the created buffer
 		*/
-		virtual Buffer* CreateMeshIndexBuffer(const Mesh& mesh) override;
+		virtual Buffer* CreateBuffer(const BufferDesc& desc, const void* initialData) override;
 
 		/**
 		 * @brief Sets the primitive topology of the render device context.

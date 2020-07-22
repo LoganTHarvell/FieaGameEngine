@@ -31,8 +31,10 @@ namespace Library
 		DirectX::XMFLOAT4X4 mWorldMatrix{ MatrixHelper::Identity };
 		float mScale;
 		std::shared_ptr<SkyboxMaterial> mMaterial;
-		winrt::com_ptr<ID3D11Buffer> mVertexBuffer;
-		Buffer* mIndexBuffer;
+		
+		Buffer* mVertexBuffer{ nullptr };
+		Buffer* mIndexBuffer{ nullptr };
+
 		std::uint32_t mIndexCount{ 0 };
 		bool mUpdateMaterial{ true };
 	};

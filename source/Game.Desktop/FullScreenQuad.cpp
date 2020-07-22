@@ -24,15 +24,14 @@ namespace Library
 	{
 		const VertexPositionTexture sourceVertices[] =
 		{
-			VertexPositionTexture(XMFLOAT4(-1.0f, -1.0f, 0.0f, 1.0f), XMFLOAT2(0.0f, 1.0f)),
-			VertexPositionTexture(XMFLOAT4(-1.0f, 1.0f, 0.0f, 1.0f), XMFLOAT2(0.0f, 0.0f)),
-			VertexPositionTexture(XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f), XMFLOAT2(1.0f, 0.0f)),
-			VertexPositionTexture(XMFLOAT4(1.0f, -1.0f, 0.0f, 1.0f), XMFLOAT2(1.0f, 1.0f)),
+			VertexPositionTexture(glm::vec4(-1.0f, -1.0f, 0.0f, 1.0f), glm::vec2(0.0f, 1.0f)),
+			VertexPositionTexture(glm::vec4(-1.0f, 1.0f, 0.0f, 1.0f), glm::vec2(0.0f, 0.0f)),
+			VertexPositionTexture(glm::vec4(1.0f, 1.0f, 0.0f, 1.0f), glm::vec2(1.0f, 0.0f)),
+			VertexPositionTexture(glm::vec4(1.0f, -1.0f, 0.0f, 1.0f), glm::vec2(1.0f, 1.0f)),
 		};
 
-		auto direct3DDevice = mGame->Direct3DDevice();
 		const span<const VertexPositionTexture> vertices{ sourceVertices };
-		VertexPositionTexture::CreateVertexBuffer(direct3DDevice, vertices, not_null<ID3D11Buffer**>(mVertexBuffer.put()));
+		mVertexBuffer = VertexPositionTexture::CreateVertexBuffer(mGame->GetWorldState().RenderingManager, vertices);
 
 		const uint16_t sourceIndices[] =
 		{
@@ -42,7 +41,8 @@ namespace Library
 
 		const span<const uint16_t> indices{ sourceIndices };
 		mIndexCount = narrow_cast<uint32_t>(indices.size());
-		CreateIndexBuffer(direct3DDevice, indices, not_null<ID3D11Buffer**>(mIndexBuffer.put()));
+
+		mIndexBuffer = mGame->GetWorldState().RenderingManager->CreateIndexBuffer(indices);
 
 		mMaterial = make_shared<FullScreenQuadMaterial>(*mGame->GetWorldState().ContentManager, *mGame->GetWorldState().RenderingManager);
 		mMaterial->Initialize();
@@ -50,6 +50,7 @@ namespace Library
 
 	void FullScreenQuad::Draw(const GameTime&)
 	{
-		mMaterial->DrawIndexed(not_null<ID3D11Buffer*>(mVertexBuffer.get()), not_null<ID3D11Buffer*>(mIndexBuffer.get()), mIndexCount, DXGI_FORMAT_R16_UINT);
+		// TODO: make draw indexed method in RenderingManager
+		mMaterial->DrawIndexed(not_null<ID3D11Buffer*>(static_cast<BufferD3D11*>(mVertexBuffer)->Native()), not_null<ID3D11Buffer*>(static_cast<BufferD3D11*>(mIndexBuffer)->Native()), mIndexCount, DXGI_FORMAT_R16_UINT);
 	}
 }

@@ -116,11 +116,10 @@ namespace Library
 		assert(corners.size() == vertices.size());
 		for (uint32_t i = 0; i < FrustumVertexCount; ++i)
 		{
-			vertices[i].Position = XMFLOAT4(corners[i].x, corners[i].y, corners[i].z, 1.0f);
+			vertices[i].Position = glm::vec4(corners[i].x, corners[i].y, corners[i].z, 1.0f);
 		}
 
-		mVertexBuffer = nullptr;
-		VertexPosition::CreateVertexBuffer(mGame->Direct3DDevice(), vertices, not_null<ID3D11Buffer**>(mVertexBuffer.put()));
+		mVertexBuffer = VertexPosition::CreateVertexBuffer(mGame->GetWorldState().RenderingManager, vertices);
 	}
 
     void RenderableFrustum::Initialize()
@@ -133,8 +132,7 @@ namespace Library
 		mCamera->AddViewMatrixUpdatedCallback(updateMaterialFunc);
 		mCamera->AddProjectionMatrixUpdatedCallback(updateMaterialFunc);
 
-		mIndexBuffer = nullptr;
-		CreateIndexBuffer(mGame->Direct3DDevice(), FrustumIndices, not_null<ID3D11Buffer**>(mIndexBuffer.put()));
+		mIndexBuffer = mGame->GetWorldState().RenderingManager->CreateIndexBuffer(FrustumIndices);
 	}
 
 	void RenderableFrustum::Update(const GameTime&)
@@ -163,6 +161,6 @@ namespace Library
 			mUpdateMaterial = false;
 		}
 
-		mMaterial.DrawIndexed(not_null<ID3D11Buffer*>(mVertexBuffer.get()), not_null<ID3D11Buffer*>(mIndexBuffer.get()), FrustumIndexCount, DXGI_FORMAT_R16_UINT);
+		mMaterial.DrawIndexed(not_null<ID3D11Buffer*>(static_cast<BufferD3D11*>(mVertexBuffer)->Native()), not_null<ID3D11Buffer*>(static_cast<BufferD3D11*>(mIndexBuffer)->Native()), FrustumIndexCount, DXGI_FORMAT_R16_UINT);
 	}
 }

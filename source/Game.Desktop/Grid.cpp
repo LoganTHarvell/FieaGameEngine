@@ -109,12 +109,12 @@ namespace Library
             float position = maxPosition - (i * adjustedScale);
 
             // Vertical line
-			vertices[j] = VertexPosition(XMFLOAT4(position, 0.0f, maxPosition, 1.0f));
-            vertices[j + 1] = VertexPosition(XMFLOAT4(position, 0.0f, -maxPosition, 1.0f));
+			vertices[j] = VertexPosition(glm::vec4(position, 0.0f, maxPosition, 1.0f));
+            vertices[j + 1] = VertexPosition(glm::vec4(position, 0.0f, -maxPosition, 1.0f));
 
             // Horizontal line
-            vertices[j + 2] = VertexPosition(XMFLOAT4(maxPosition, 0.0f, position, 1.0f));
-            vertices[j + 3] = VertexPosition(XMFLOAT4(-maxPosition, 0.0f, position, 1.0f));
+            vertices[j + 2] = VertexPosition(glm::vec4(maxPosition, 0.0f, position, 1.0f));
+            vertices[j + 3] = VertexPosition(glm::vec4(-maxPosition, 0.0f, position, 1.0f));
         }
 
 		D3D11_BUFFER_DESC vertexBufferDesc{ 0 };

@@ -2,18 +2,18 @@
 
 #pragma region Includes
 // Third Party
-#include <cstdint>
-#include <d3d11.h>
-#include <d3d11_2.h>
-#include <DirectXMath.h>
-#include <dxgidebug.h>
-#include <gsl/gsl>
+#include "d3dcommon.h"
+#include "dxgi1_6.h"
+#include "dxgidebug.h"
 #include "winrt/base.h"
+
+// TODO: Remove this with CreateBuffer methods
+#include "d3d11.h"
 
 // First Party
 #include "GameException.h"
 #include "HashMap.h"
-#include "RenderingTypes.h"
+#include "Resource.h"
 #pragma endregion Includes
 
 // TODO: Rework under Library::Direct3D namespace
@@ -131,125 +131,120 @@ namespace Library
 		/**
 		 * @brief Mapping from abstracted PrimitiveTopology type to native Direct3D type.
 		*/
-		const HashMap<ResourceDataFormat, DXGI_FORMAT> ResourceDataFormatMap =
+		const HashMap<Format, DXGI_FORMAT> FormatMap =
 		{
-			{ ResourceDataFormat::Unknown, DXGI_FORMAT_UNKNOWN },
+			{ Format::Unknown, DXGI_FORMAT_UNKNOWN },
 
 			/* --- Alpha channel color formats --- */
-			{ ResourceDataFormat::A8UNorm, DXGI_FORMAT_A8_UNORM },
+			{ Format::A8UNorm, DXGI_FORMAT_A8_UNORM },
 
 			/* --- Red channel color formats --- */
-			{ ResourceDataFormat::R8UNorm, DXGI_FORMAT_R8_UNORM },
-			{ ResourceDataFormat::R8SNorm, DXGI_FORMAT_R8_SNORM },
-			{ ResourceDataFormat::R8UInt, DXGI_FORMAT_R8_UINT },
-			{ ResourceDataFormat::R8SInt, DXGI_FORMAT_R8_SINT },
+			{ Format::R8UNorm, DXGI_FORMAT_R8_UNORM },
+			{ Format::R8SNorm, DXGI_FORMAT_R8_SNORM },
+			{ Format::R8UInt, DXGI_FORMAT_R8_UINT },
+			{ Format::R8SInt, DXGI_FORMAT_R8_SINT },
 
-			{ ResourceDataFormat::R16UNorm, DXGI_FORMAT_R16_UNORM },
-			{ ResourceDataFormat::R16SNorm, DXGI_FORMAT_R16_SNORM },
-			{ ResourceDataFormat::R16UInt, DXGI_FORMAT_R16_UINT },
-			{ ResourceDataFormat::R16SInt, DXGI_FORMAT_R16_SINT },
-			{ ResourceDataFormat::R16Float, DXGI_FORMAT_R16_FLOAT },
+			{ Format::R16UNorm, DXGI_FORMAT_R16_UNORM },
+			{ Format::R16SNorm, DXGI_FORMAT_R16_SNORM },
+			{ Format::R16UInt, DXGI_FORMAT_R16_UINT },
+			{ Format::R16SInt, DXGI_FORMAT_R16_SINT },
+			{ Format::R16Float, DXGI_FORMAT_R16_FLOAT },
 
-			{ ResourceDataFormat::R32UInt, DXGI_FORMAT_R32_UINT },
-			{ ResourceDataFormat::R32SInt, DXGI_FORMAT_R32_SINT },
-			{ ResourceDataFormat::R32Float, DXGI_FORMAT_R32_FLOAT },
+			{ Format::R32UInt, DXGI_FORMAT_R32_UINT },
+			{ Format::R32SInt, DXGI_FORMAT_R32_SINT },
+			{ Format::R32Float, DXGI_FORMAT_R32_FLOAT },
 
-			{ ResourceDataFormat::R64Float, DXGI_FORMAT_UNKNOWN },
+			{ Format::R64Float, DXGI_FORMAT_UNKNOWN },
 
 			/* --- RG color formats --- */
-			{ ResourceDataFormat::RG8UNorm, DXGI_FORMAT_R8G8_UNORM },
-			{ ResourceDataFormat::RG8SNorm, DXGI_FORMAT_R8G8_SNORM },
-			{ ResourceDataFormat::RG8UInt, DXGI_FORMAT_R8G8_UINT },
-			{ ResourceDataFormat::RG8SInt, DXGI_FORMAT_R8G8_SINT },
+			{ Format::RG8UNorm, DXGI_FORMAT_R8G8_UNORM },
+			{ Format::RG8SNorm, DXGI_FORMAT_R8G8_SNORM },
+			{ Format::RG8UInt, DXGI_FORMAT_R8G8_UINT },
+			{ Format::RG8SInt, DXGI_FORMAT_R8G8_SINT },
 
-			{ ResourceDataFormat::RG16UNorm, DXGI_FORMAT_R16G16_UNORM },
-			{ ResourceDataFormat::RG16SNorm, DXGI_FORMAT_R16G16_SNORM },
-			{ ResourceDataFormat::RG16UInt, DXGI_FORMAT_R16G16_UINT },
-			{ ResourceDataFormat::RG16SInt, DXGI_FORMAT_R16G16_SINT },
-			{ ResourceDataFormat::RG16Float, DXGI_FORMAT_R16G16_FLOAT },
+			{ Format::RG16UNorm, DXGI_FORMAT_R16G16_UNORM },
+			{ Format::RG16SNorm, DXGI_FORMAT_R16G16_SNORM },
+			{ Format::RG16UInt, DXGI_FORMAT_R16G16_UINT },
+			{ Format::RG16SInt, DXGI_FORMAT_R16G16_SINT },
+			{ Format::RG16Float, DXGI_FORMAT_R16G16_FLOAT },
 
-			{ ResourceDataFormat::RG32UInt, DXGI_FORMAT_R32G32_UINT },
-			{ ResourceDataFormat::RG32SInt, DXGI_FORMAT_R32G32_SINT },
-			{ ResourceDataFormat::RG32Float, DXGI_FORMAT_R32G32_FLOAT },
+			{ Format::RG32UInt, DXGI_FORMAT_R32G32_UINT },
+			{ Format::RG32SInt, DXGI_FORMAT_R32G32_SINT },
+			{ Format::RG32Float, DXGI_FORMAT_R32G32_FLOAT },
 
-			{ ResourceDataFormat::RG64Float, DXGI_FORMAT_UNKNOWN },
+			{ Format::RG64Float, DXGI_FORMAT_UNKNOWN },
 
 			/* --- RGB color formats --- */
-			{ ResourceDataFormat::RGB8UNorm, DXGI_FORMAT_UNKNOWN },
-			{ ResourceDataFormat::RGB8UNorm_sRGB, DXGI_FORMAT_UNKNOWN },
-			{ ResourceDataFormat::RGB8SNorm, DXGI_FORMAT_UNKNOWN },
-			{ ResourceDataFormat::RGB8UInt, DXGI_FORMAT_UNKNOWN },
-			{ ResourceDataFormat::RGB8SInt, DXGI_FORMAT_UNKNOWN },
+			{ Format::RGB8UNorm, DXGI_FORMAT_UNKNOWN },
+			{ Format::RGB8UNorm_sRGB, DXGI_FORMAT_UNKNOWN },
+			{ Format::RGB8SNorm, DXGI_FORMAT_UNKNOWN },
+			{ Format::RGB8UInt, DXGI_FORMAT_UNKNOWN },
+			{ Format::RGB8SInt, DXGI_FORMAT_UNKNOWN },
 
-			{ ResourceDataFormat::RGB16UNorm, DXGI_FORMAT_UNKNOWN },
-			{ ResourceDataFormat::RGB16SNorm, DXGI_FORMAT_UNKNOWN },
-			{ ResourceDataFormat::RGB16UInt, DXGI_FORMAT_UNKNOWN },
-			{ ResourceDataFormat::RGB16SInt, DXGI_FORMAT_UNKNOWN },
-			{ ResourceDataFormat::RGB16Float, DXGI_FORMAT_UNKNOWN },
+			{ Format::RGB16UNorm, DXGI_FORMAT_UNKNOWN },
+			{ Format::RGB16SNorm, DXGI_FORMAT_UNKNOWN },
+			{ Format::RGB16UInt, DXGI_FORMAT_UNKNOWN },
+			{ Format::RGB16SInt, DXGI_FORMAT_UNKNOWN },
+			{ Format::RGB16Float, DXGI_FORMAT_UNKNOWN },
 
-			{ ResourceDataFormat::RGB32UInt, DXGI_FORMAT_R32G32B32_UINT },
-			{ ResourceDataFormat::RGB32SInt, DXGI_FORMAT_R32G32B32_SINT },
-			{ ResourceDataFormat::RGB32Float, DXGI_FORMAT_R32G32B32_FLOAT },
+			{ Format::RGB32UInt, DXGI_FORMAT_R32G32B32_UINT },
+			{ Format::RGB32SInt, DXGI_FORMAT_R32G32B32_SINT },
+			{ Format::RGB32Float, DXGI_FORMAT_R32G32B32_FLOAT },
 
-			{ ResourceDataFormat::RGB64Float, DXGI_FORMAT_UNKNOWN },
+			{ Format::RGB64Float, DXGI_FORMAT_UNKNOWN },
 
 			/* --- RGBA color formats --- */
-			{ ResourceDataFormat::RGBA8UNorm, DXGI_FORMAT_R8G8B8A8_UNORM },
-			{ ResourceDataFormat::RGBA8UNorm_sRGB, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB },
-			{ ResourceDataFormat::RGBA8SNorm, DXGI_FORMAT_R8G8B8A8_SNORM },
-			{ ResourceDataFormat::RGBA8UInt, DXGI_FORMAT_R8G8B8A8_UINT },
-			{ ResourceDataFormat::RGBA8SInt, DXGI_FORMAT_R8G8B8A8_SINT },
+			{ Format::RGBA8UNorm, DXGI_FORMAT_R8G8B8A8_UNORM },
+			{ Format::RGBA8UNorm_sRGB, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB },
+			{ Format::RGBA8SNorm, DXGI_FORMAT_R8G8B8A8_SNORM },
+			{ Format::RGBA8UInt, DXGI_FORMAT_R8G8B8A8_UINT },
+			{ Format::RGBA8SInt, DXGI_FORMAT_R8G8B8A8_SINT },
 
-			{ ResourceDataFormat::RGBA16UNorm, DXGI_FORMAT_R16G16B16A16_UNORM },
-			{ ResourceDataFormat::RGBA16SNorm, DXGI_FORMAT_R16G16B16A16_SNORM },
-			{ ResourceDataFormat::RGBA16UInt, DXGI_FORMAT_R16G16B16A16_UINT },
-			{ ResourceDataFormat::RGBA16SInt, DXGI_FORMAT_R16G16B16A16_SINT },
-			{ ResourceDataFormat::RGBA16Float, DXGI_FORMAT_R16G16B16A16_FLOAT },
+			{ Format::RGBA16UNorm, DXGI_FORMAT_R16G16B16A16_UNORM },
+			{ Format::RGBA16SNorm, DXGI_FORMAT_R16G16B16A16_SNORM },
+			{ Format::RGBA16UInt, DXGI_FORMAT_R16G16B16A16_UINT },
+			{ Format::RGBA16SInt, DXGI_FORMAT_R16G16B16A16_SINT },
+			{ Format::RGBA16Float, DXGI_FORMAT_R16G16B16A16_FLOAT },
 
-			{ ResourceDataFormat::RGBA32UInt, DXGI_FORMAT_R32G32B32A32_UINT },
-			{ ResourceDataFormat::RGBA32SInt, DXGI_FORMAT_R32G32B32A32_SINT },
-			{ ResourceDataFormat::RGBA32Float, DXGI_FORMAT_R32G32B32A32_FLOAT },
+			{ Format::RGBA32UInt, DXGI_FORMAT_R32G32B32A32_UINT },
+			{ Format::RGBA32SInt, DXGI_FORMAT_R32G32B32A32_SINT },
+			{ Format::RGBA32Float, DXGI_FORMAT_R32G32B32A32_FLOAT },
 
-			{ ResourceDataFormat::RGBA64Float, DXGI_FORMAT_UNKNOWN },
+			{ Format::RGBA64Float, DXGI_FORMAT_UNKNOWN },
 
 			/* --- BGRA color formats --- */
-			{ ResourceDataFormat::BGRA8UNorm, DXGI_FORMAT_B8G8R8A8_UNORM },
-			{ ResourceDataFormat::BGRA8UNorm_sRGB, DXGI_FORMAT_B8G8R8A8_UNORM_SRGB },
-			{ ResourceDataFormat::BGRA8SNorm, DXGI_FORMAT_UNKNOWN },
-			{ ResourceDataFormat::BGRA8UInt, DXGI_FORMAT_UNKNOWN },
-			{ ResourceDataFormat::BGRA8SInt, DXGI_FORMAT_UNKNOWN },
+			{ Format::BGRA8UNorm, DXGI_FORMAT_B8G8R8A8_UNORM },
+			{ Format::BGRA8UNorm_sRGB, DXGI_FORMAT_B8G8R8A8_UNORM_SRGB },
+			{ Format::BGRA8SNorm, DXGI_FORMAT_UNKNOWN },
+			{ Format::BGRA8UInt, DXGI_FORMAT_UNKNOWN },
+			{ Format::BGRA8SInt, DXGI_FORMAT_UNKNOWN },
 
 			/* --- Packed formats --- */
-			{ ResourceDataFormat::RGB10A2UNorm, DXGI_FORMAT_R10G10B10A2_UNORM },
-			{ ResourceDataFormat::RGB10A2UInt, DXGI_FORMAT_R10G10B10A2_UINT },
-			{ ResourceDataFormat::RG11B10Float, DXGI_FORMAT_R11G11B10_FLOAT },
-			{ ResourceDataFormat::RGB9E5Float, DXGI_FORMAT_R9G9B9E5_SHAREDEXP },
+			{ Format::RGB10A2UNorm, DXGI_FORMAT_R10G10B10A2_UNORM },
+			{ Format::RGB10A2UInt, DXGI_FORMAT_R10G10B10A2_UINT },
+			{ Format::RG11B10Float, DXGI_FORMAT_R11G11B10_FLOAT },
+			{ Format::RGB9E5Float, DXGI_FORMAT_R9G9B9E5_SHAREDEXP },
 
 			/* --- Depth-stencil formats --- */
-			{ ResourceDataFormat::D16UNorm, DXGI_FORMAT_R16_TYPELESS },
-			{ ResourceDataFormat::D32Float, DXGI_FORMAT_R32_TYPELESS },
-			{ ResourceDataFormat::D24UNormS8UInt, DXGI_FORMAT_R24G8_TYPELESS },
-			{ ResourceDataFormat::D32FloatS8X24UInt, DXGI_FORMAT_R32G8X24_TYPELESS },
+			{ Format::D16UNorm, DXGI_FORMAT_R16_TYPELESS },
+			{ Format::D32Float, DXGI_FORMAT_R32_TYPELESS },
+			{ Format::D24UNormS8UInt, DXGI_FORMAT_R24G8_TYPELESS },
+			{ Format::D32FloatS8X24UInt, DXGI_FORMAT_R32G8X24_TYPELESS },
 
 			/* --- Block compression (BC) formats --- */
-			{ ResourceDataFormat::BC1UNorm, DXGI_FORMAT_BC1_UNORM },
-			{ ResourceDataFormat::BC1UNorm_sRGB, DXGI_FORMAT_BC1_UNORM_SRGB },
-			{ ResourceDataFormat::BC2UNorm, DXGI_FORMAT_BC2_UNORM },
-			{ ResourceDataFormat::BC2UNorm_sRGB, DXGI_FORMAT_BC2_UNORM_SRGB },
-			{ ResourceDataFormat::BC3UNorm, DXGI_FORMAT_BC3_UNORM },
-			{ ResourceDataFormat::BC3UNorm_sRGB, DXGI_FORMAT_BC3_UNORM_SRGB },
-			{ ResourceDataFormat::BC4UNorm, DXGI_FORMAT_BC4_UNORM },
-			{ ResourceDataFormat::BC4SNorm, DXGI_FORMAT_BC4_SNORM },
-			{ ResourceDataFormat::BC5UNorm, DXGI_FORMAT_BC5_UNORM },
-			{ ResourceDataFormat::BC5SNorm, DXGI_FORMAT_BC5_SNORM },
+			{ Format::BC1UNorm, DXGI_FORMAT_BC1_UNORM },
+			{ Format::BC1UNorm_sRGB, DXGI_FORMAT_BC1_UNORM_SRGB },
+			{ Format::BC2UNorm, DXGI_FORMAT_BC2_UNORM },
+			{ Format::BC2UNorm_sRGB, DXGI_FORMAT_BC2_UNORM_SRGB },
+			{ Format::BC3UNorm, DXGI_FORMAT_BC3_UNORM },
+			{ Format::BC3UNorm_sRGB, DXGI_FORMAT_BC3_UNORM_SRGB },
+			{ Format::BC4UNorm, DXGI_FORMAT_BC4_UNORM },
+			{ Format::BC4SNorm, DXGI_FORMAT_BC4_SNORM },
+			{ Format::BC5UNorm, DXGI_FORMAT_BC5_UNORM },
+			{ Format::BC5SNorm, DXGI_FORMAT_BC5_SNORM },
 		};
 #pragma endregion Abstracted to Native Type Mappings
 	}
-
-	// TODO: Move these functions to RenderingManagerDirect3D11
-	void CreateIndexBuffer(gsl::not_null<ID3D11Device*> device, const gsl::span<const std::uint16_t>& indices, gsl::not_null<ID3D11Buffer**> indexBuffer);
-	void CreateIndexBuffer(gsl::not_null<ID3D11Device*> device, const gsl::span<const std::uint32_t>& indices, gsl::not_null<ID3D11Buffer**> indexBuffer);
-	void CreateConstantBuffer(gsl::not_null<ID3D11Device*> device, std::size_t byteWidth, gsl::not_null<ID3D11Buffer**> constantBuffer);
 
 #pragma region Utility
 	/**
@@ -286,9 +281,7 @@ namespace Library
 
 		return SUCCEEDED(hr);
 	}
-#endif
 
-#if defined(DEBUG) || defined(_DEBUG)
 	/**
 	 * @brief Debug Dump.
 	*/

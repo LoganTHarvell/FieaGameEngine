@@ -126,7 +126,7 @@ namespace Library
 	{
 		const auto model = mGame->Content().Load<Model>(String::ToWideString(mModelFileName));
 		Mesh* mesh = model->Meshes().At(0).get();
-		VertexPosition::CreateVertexBuffer(mGame->Direct3DDevice(), *mesh, not_null<ID3D11Buffer**>(mVertexBuffer.put()));
+		mVertexBuffer = VertexPosition::CreateVertexBuffer(mGame->GetWorldState().RenderingManager, *mesh);
 
 		mIndexBuffer = mGame->GetWorldState().RenderingManager->CreateMeshIndexBuffer(*mesh);
 		mIndexCount = narrow<uint32_t>(mesh->Indices().Size());
@@ -167,12 +167,12 @@ namespace Library
 		if (mDisplayWireframe)
 		{
 			mGame->Direct3DDeviceContext()->RSSetState(RasterizerStates::Wireframe.get());
-			mMaterial.DrawIndexed(not_null<ID3D11Buffer*>(mVertexBuffer.get()), static_cast<BufferD3D11*>(mIndexBuffer)->Native(), mIndexCount);
+			mMaterial.DrawIndexed(not_null<ID3D11Buffer*>(static_cast<BufferD3D11*>(mVertexBuffer)->Native()), static_cast<BufferD3D11*>(mIndexBuffer)->Native(), mIndexCount);
 			mGame->Direct3DDeviceContext()->RSSetState(nullptr);
 		}
 		else
 		{
-			mMaterial.DrawIndexed(not_null<ID3D11Buffer*>(mVertexBuffer.get()), static_cast<BufferD3D11*>(mIndexBuffer)->Native(), mIndexCount);
+			mMaterial.DrawIndexed(not_null<ID3D11Buffer*>(static_cast<BufferD3D11*>(mVertexBuffer)->Native()), static_cast<BufferD3D11*>(mIndexBuffer)->Native(), mIndexCount);
 		}
 	}
 }

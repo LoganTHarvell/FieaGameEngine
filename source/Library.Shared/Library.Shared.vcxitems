@@ -50,12 +50,16 @@
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)ReactionAttributed.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)RenderingManager.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Resource.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)SceneNode.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Transform.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)StreamHelper.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)TypeManager.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Utility.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Scope.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)VertexAttribute.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)VertexDeclarations.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)World.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -103,9 +107,9 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)ModelMaterial.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Reaction.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ReactionAttributed.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)RenderingTypes.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Resource.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)SceneNode.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ShaderSystemValue.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Stack.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)StopWatch.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)StreamHelper.h" />
@@ -116,6 +120,8 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Scope.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)SList.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Vector.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)VertexAttribute.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)VertexDeclarations.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)World.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)WorldState.h" />
   </ItemGroup>
@@ -143,5 +149,6 @@
     <None Include="$(MSBuildThisFileDirectory)TypeManager.inl" />
     <None Include="$(MSBuildThisFileDirectory)Utility.inl" />
     <None Include="$(MSBuildThisFileDirectory)Vector.inl" />
+    <None Include="$(MSBuildThisFileDirectory)VertexDeclarations.inl" />
   </ItemGroup>
 </Project>

@@ -171,9 +171,6 @@
     <ClCompile Include="TextureCube.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="VertexDeclarations.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="VertexShader.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
@@ -403,9 +400,6 @@
     <ClInclude Include="TextureCube.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="VertexDeclarations.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="VertexShader.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -532,9 +526,6 @@
       <Filter>Math</Filter>
     </None>
     <None Include="Texture.inl">
-      <Filter>Graphics</Filter>
-    </None>
-    <None Include="VertexDeclarations.inl">
       <Filter>Graphics</Filter>
     </None>
     <None Include="VectorHelper.inl">

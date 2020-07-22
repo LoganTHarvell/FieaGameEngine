@@ -1,7 +1,6 @@
 #pragma once
 
-#include <winrt\Windows.Foundation.h>
-#include <d3d11.h>
+#include "Buffer.h"
 #include "DrawableGameComponent.h"
 
 namespace Library
@@ -26,8 +25,9 @@ namespace Library
 		virtual void Draw(const GameTime& gameTime) override;
 
 	private:
-		winrt::com_ptr<ID3D11Buffer> mVertexBuffer;
-		winrt::com_ptr<ID3D11Buffer> mIndexBuffer;
+		Buffer* mVertexBuffer;
+		Buffer* mIndexBuffer;
+		
 		std::shared_ptr<FullScreenQuadMaterial> mMaterial;
 		std::uint32_t mIndexCount{ 0 };
 	};

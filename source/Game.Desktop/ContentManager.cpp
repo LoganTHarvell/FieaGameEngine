@@ -31,7 +31,8 @@ namespace Library
 	shared_ptr<RTTI> ContentManager::ReadAsset(const int64_t targetTypeId, const wstring& assetName)
 	{
 		const auto& contentTypeReaders = ContentTypeReaderManager::ContentTypeReaders();
-		auto it = contentTypeReaders.find(targetTypeId);
+		const auto it = contentTypeReaders.find(targetTypeId);
+
 		if (it == contentTypeReaders.end())
 		{
 			throw GameException("Content type reader not registered.");

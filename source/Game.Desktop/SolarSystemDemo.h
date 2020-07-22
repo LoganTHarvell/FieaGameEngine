@@ -1,7 +1,5 @@
 #pragma once
 
-#include <d3d11.h>
-
 #include "DrawableGameComponent.h"
 #include "MatrixHelper.h"
 #include "PointLight.h"
@@ -65,7 +63,7 @@ namespace Demo
 	private:
 		SolarSystem mSolarSystem{ "SolarSystem" };
 		
-		winrt::com_ptr<ID3D11Buffer> mVertexBuffer;
+		Library::Buffer* mVertexBuffer;
 		Library::Buffer* mIndexBuffer;
 		std::uint32_t mIndexCount{ 0 };
 		Library::PointLight mPointLight;

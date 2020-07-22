@@ -236,4 +236,9 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Update="C:\Dev\Personal\FieaGameEngine\source\Library.Shared.DirectX11\BufferWithResourceViewD3D11.inl">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
 </Project>

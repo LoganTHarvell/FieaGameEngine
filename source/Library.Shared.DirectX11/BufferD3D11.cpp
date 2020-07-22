@@ -47,8 +47,8 @@ namespace Library
 		
 		/* Store buffer creation attributes */
 		mSize = descD3D.ByteWidth;
-		mStride = 0;//(desc.VertexAttributesList.IsEmpty() ? 0 : desc.VertexAttributesList.Front().Stride);
-		mFormat = Direct3D::ResourceDataFormatMap[desc.Format];
+		mStride = (desc.VertexAttributesList.IsEmpty() ? 0 : desc.VertexAttributesList.Front().Stride);
+		mFormat = Direct3D::FormatMap[desc.Format];
 		mUsage = descD3D.Usage;
 	}
 #pragma endregion Special Members

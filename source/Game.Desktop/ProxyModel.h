@@ -1,9 +1,8 @@
 #pragma once
 
-#include <winrt\Windows.Foundation.h>
 #include <d3d11.h>
 #include <DirectXMath.h>
-#include <gsl\gsl>
+#include <gsl/gsl>
 #include "DrawableGameComponent.h"
 #include "MatrixHelper.h"
 #include "VectorHelper.h"
@@ -59,8 +58,10 @@ namespace Library
 		BasicMaterial mMaterial;
 		std::string mModelFileName;
 		float mScale;
-		winrt::com_ptr<ID3D11Buffer> mVertexBuffer;
-		Buffer* mIndexBuffer;		
+		
+		Buffer* mVertexBuffer{ nullptr };
+		Buffer* mIndexBuffer{ nullptr };		
+
 		std::uint32_t mIndexCount{ 0 };
 		bool mDisplayWireframe{ true };
 		bool mUpdateWorldMatrix{ true };
