@@ -90,23 +90,28 @@ namespace Library
 			mUpdateMaterial = false;
 		}
 
-		mMaterial.Draw(not_null<ID3D11Buffer*>(mVertexBuffer.get()), (mSize + 1) * 4, 0);
+		if (mVertexBuffer != nullptr)
+		{
+			mMaterial.Draw(*mVertexBuffer, (mSize + 1) * 4, 0);
+		}
 	}
 
 	void Grid::InitializeGrid()
 	{
-		ID3D11Device* direct3DDevice = GetGame()->Direct3DDevice();
-		int length = 4 * (mSize + 1);
-		int size = sizeof(VertexPosition) * length;
+		RenderingManager* renderingManager = GetGame()->GetWorldState().RenderingManager;
+		
+		const int length = 4 * (mSize + 1);
+		const int size = sizeof(VertexPosition) * length;
+		
 		std::unique_ptr<VertexPosition> vertexData(new VertexPosition[length]);		
 		VertexPosition* vertices = vertexData.get();
 
-		float adjustedScale = mScale * 0.1f;
-		float maxPosition = mSize * adjustedScale / 2;
+		const float adjustedScale = mScale * 0.1f;
+		const float maxPosition = mSize * adjustedScale / 2;
 
         for (unsigned int i = 0, j = 0; i < mSize + 1; i++, j = 4 * i)
         {
-            float position = maxPosition - (i * adjustedScale);
+            const float position = maxPosition - (i * adjustedScale);
 
             // Vertical line
 			vertices[j] = VertexPosition(glm::vec4(position, 0.0f, maxPosition, 1.0f));
@@ -117,14 +122,9 @@ namespace Library
             vertices[j + 3] = VertexPosition(glm::vec4(-maxPosition, 0.0f, position, 1.0f));
         }
 
-		D3D11_BUFFER_DESC vertexBufferDesc{ 0 };
-		vertexBufferDesc.Usage = D3D11_USAGE_IMMUTABLE;
-		vertexBufferDesc.ByteWidth = size;
-		vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-
-		D3D11_SUBRESOURCE_DATA vertexSubResourceData{ 0 };
-		vertexSubResourceData.pSysMem = vertices;		
-		
-		ThrowIfFailed(direct3DDevice->CreateBuffer(&vertexBufferDesc, &vertexSubResourceData, mVertexBuffer.put()), "ID3D11Device::CreateMeshIndexBuffer() failed");
+		BufferDesc vertexBufferDesc;
+		vertexBufferDesc.Size = size;
+		vertexBufferDesc.BindFlagsValue.BufferTypeValue = BufferType::Vertex;
+		mVertexBuffer = renderingManager->CreateBuffer(vertexBufferDesc, vertices);
 	}
 }

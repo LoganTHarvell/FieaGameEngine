@@ -14,7 +14,7 @@ namespace Library
 	{
 		BufferDesc indexBufferDesc;
 		indexBufferDesc.Size = gsl::narrow<std::uint32_t>(indices.size_bytes());
-		indexBufferDesc.BindFlags.BufferType = BufferType::Index;
+		indexBufferDesc.BindFlagsValue.BufferTypeValue = BufferType::Index;
 
 		return CreateBuffer(indexBufferDesc, &indices[0]);
 	}
@@ -23,7 +23,7 @@ namespace Library
 	{
 		BufferDesc indexBufferDesc;
 		indexBufferDesc.Size = gsl::narrow<std::uint32_t>(indices.size_bytes());
-		indexBufferDesc.BindFlags.BufferType = BufferType::Index;
+		indexBufferDesc.BindFlagsValue.BufferTypeValue = BufferType::Index;
 
 		return CreateBuffer(indexBufferDesc, &indices[0]);
 	}
@@ -32,7 +32,7 @@ namespace Library
 	{
 		BufferDesc desc;
 		desc.Size = gsl::narrow_cast<uint32_t>(sizeof(uint32_t) * mesh.Indices().Size());
-		desc.BindFlags.BufferType = BufferType::Index;
+		desc.BindFlagsValue.BufferTypeValue = BufferType::Index;
 
 		return CreateBuffer(desc, &mesh.Indices()[0]);
 	}
@@ -41,7 +41,7 @@ namespace Library
 	{
 		BufferDesc constantBufferDesc;
 		constantBufferDesc.Size = gsl::narrow_cast<std::uint32_t>(byteWidth);
-		constantBufferDesc.BindFlags.BufferType = BufferType::Constant;
+		constantBufferDesc.BindFlagsValue.BufferTypeValue = BufferType::Constant;
 		
 		return CreateBuffer(constantBufferDesc, nullptr);
 	}

@@ -1,7 +1,14 @@
 #pragma once
 
+#pragma region Includes
+// Third Party
+#include <d3d11.h>
+
+// First Party
 #include "Buffer.h"
 #include "CoreD3D.h"
+#include <Utility.h>
+#pragma endregion Includes
 
 namespace Library
 {

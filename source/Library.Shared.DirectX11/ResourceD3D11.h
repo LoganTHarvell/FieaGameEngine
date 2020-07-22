@@ -1,5 +1,9 @@
 #pragma once
 
+// Third Party
+#include <d3d11.h>
+
+// First Party
 #include "CoreD3D.h"
 
 namespace Library

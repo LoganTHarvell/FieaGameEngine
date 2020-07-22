@@ -14,7 +14,7 @@ namespace Library
 	*/
 	struct BindFlags
 	{
-		BufferType BufferType{ -1 };
+		BufferType BufferTypeValue{ -1 };
 
 		bool Sampled{ false };
 		bool Storage{ false };

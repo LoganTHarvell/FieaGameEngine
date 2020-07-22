@@ -50,7 +50,9 @@ namespace Library
 
 	void FullScreenQuad::Draw(const GameTime&)
 	{
-		// TODO: make draw indexed method in RenderingManager
-		mMaterial->DrawIndexed(not_null<ID3D11Buffer*>(static_cast<BufferD3D11*>(mVertexBuffer)->Native()), not_null<ID3D11Buffer*>(static_cast<BufferD3D11*>(mIndexBuffer)->Native()), mIndexCount, DXGI_FORMAT_R16_UINT);
+		if (mVertexBuffer != nullptr && mIndexBuffer != nullptr)
+		{
+			mMaterial->DrawIndexed(*mVertexBuffer, *mIndexBuffer, mIndexCount, Format::R16UInt);
+		}
 	}
 }

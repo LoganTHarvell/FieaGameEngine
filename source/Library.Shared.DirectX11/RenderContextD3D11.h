@@ -1,10 +1,14 @@
 #pragma once
 
+#pragma region Includes
+// Third Party
+#include <d3d11.h>
 #include <winrt/base.h>
 
-#include "CoreD3D.h"
+// First Party
 #include "RenderContext.h"
 #include "Factory.h"
+#pragma endregion Includes
 
 namespace Library
 {

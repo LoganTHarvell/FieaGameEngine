@@ -45,7 +45,8 @@ namespace Library
 		void InitializeGrid();
 
 		BasicMaterial mMaterial;
-		winrt::com_ptr<ID3D11Buffer> mVertexBuffer;		
+		Buffer* mVertexBuffer{ nullptr };
+		
 		DirectX::XMFLOAT3 mPosition{ Vector3Helper::Zero };
 		std::uint32_t mSize;
 		std::uint32_t mScale;

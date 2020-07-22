@@ -1,23 +1,26 @@
-#include "Material.h"
+#pragma region Includes
+// Pre-compiled Header
 #include "pch.h"
+
+// Header
 #include "Material.h"
-#include "Game.h"
+
+// First Party
+#include "RenderingManager.h"
+#include "Buffer.h"
 #include "VertexShader.h"
 #include "HullShader.h"
 #include "DomainShader.h"
 #include "GeometryShader.h"
 #include "PixelShader.h"
 #include "ComputeShader.h"
+#pragma endregion Includes
 
-using namespace std;
 using namespace std::placeholders;
-using namespace gsl;
-using namespace winrt;
-using namespace DirectX;
 
 namespace Library
 {
-	const map<ShaderStages, RTTI::IdType> Material::ShaderStageTypeMap
+	const HashMap<ShaderStages, RTTI::IdType> Material::ShaderStageTypeMap
 	{
 		{ ShaderStages::VS, VertexShader::TypeIdClass() },
 		{ ShaderStages::HS, HullShader::TypeIdClass() },
@@ -27,7 +30,7 @@ namespace Library
 		{ ShaderStages::CS, ComputeShader::TypeIdClass() },
 	};
 
-	const map<RTTI::IdType, ShaderStages> Material::TypeShaderStageMap
+	const HashMap<RTTI::IdType, ShaderStages> Material::TypeShaderStageMap
 	{
 		{ VertexShader::TypeIdClass(), ShaderStages::VS },
 		{ HullShader::TypeIdClass(), ShaderStages::HS },
@@ -37,72 +40,72 @@ namespace Library
 		{ ComputeShader::TypeIdClass(), ShaderStages::CS },
 	};
 
-	const map<ShaderStages, Material::ShaderStageCallInfo> Material::ShaderStageCalls
+	const HashMap<ShaderStages, Material::ShaderStageCallInfo> Material::ShaderStageCalls
 	{		
 		{
 			ShaderStages::VS,
 			{
 				SetVSShader,
-				bind(&ID3D11DeviceContext::VSSetConstantBuffers, _1, _2, _3, _4),
-				bind(&ID3D11DeviceContext::VSSetShaderResources, _1, _2, _3, _4),
-				bind(&ID3D11DeviceContext::VSSetSamplers, _1, _2, _3, _4),
+				[](auto&& PH1, auto&& PH2, auto&& PH3, auto&& PH4) { PH1->VSSetConstantBuffers(PH2, PH3, PH4); },
+				[](auto&& PH1, auto&& PH2, auto&& PH3, auto&& PH4) { PH1->VSSetShaderResources(PH2, PH3, PH4); },
+				[](auto&& PH1, auto&& PH2, auto&& PH3, auto&& PH4) { PH1->VSSetSamplers(PH2, PH3, PH4); },
 			}
 		},
 		{
 			ShaderStages::HS,
 			{
 				SetHSShader,
-				bind(&ID3D11DeviceContext::HSSetConstantBuffers, _1, _2, _3, _4),
-				bind(&ID3D11DeviceContext::HSSetShaderResources, _1, _2, _3, _4),
-				bind(&ID3D11DeviceContext::HSSetSamplers, _1, _2, _3, _4),
+				[](auto&& PH1, auto&& PH2, auto&& PH3, auto&& PH4) { PH1->HSSetConstantBuffers(PH2, PH3, PH4); },
+				[](auto&& PH1, auto&& PH2, auto&& PH3, auto&& PH4) { PH1->HSSetShaderResources(PH2, PH3, PH4); },
+				[](auto&& PH1, auto&& PH2, auto&& PH3, auto&& PH4) { PH1->HSSetSamplers(PH2, PH3, PH4); },
 			}
 		},
 		{
 			ShaderStages::DS,
 			{
 				SetDSShader,
-				bind(&ID3D11DeviceContext::DSSetConstantBuffers, _1, _2, _3, _4),
-				bind(&ID3D11DeviceContext::DSSetShaderResources, _1, _2, _3, _4),
-				bind(&ID3D11DeviceContext::DSSetSamplers, _1, _2, _3, _4),
+				[](auto&& PH1, auto&& PH2, auto&& PH3, auto&& PH4) { PH1->DSSetConstantBuffers(PH2, PH3, PH4); },
+				[](auto&& PH1, auto&& PH2, auto&& PH3, auto&& PH4) { PH1->DSSetShaderResources(PH2, PH3, PH4); },
+				[](auto&& PH1, auto&& PH2, auto&& PH3, auto&& PH4) { PH1->DSSetSamplers(PH2, PH3, PH4); },
 			}
 		},
 		{
 			ShaderStages::GS,
 			{
 				SetGSShader,
-				bind(&ID3D11DeviceContext::GSSetConstantBuffers, _1, _2, _3, _4),
-				bind(&ID3D11DeviceContext::GSSetShaderResources, _1, _2, _3, _4),
-				bind(&ID3D11DeviceContext::GSSetSamplers, _1, _2, _3, _4),
+				[](auto&& PH1, auto&& PH2, auto&& PH3, auto&& PH4) { PH1->GSSetConstantBuffers(PH2, PH3, PH4); },
+				[](auto&& PH1, auto&& PH2, auto&& PH3, auto&& PH4) { PH1->GSSetShaderResources(PH2, PH3, PH4); },
+				[](auto&& PH1, auto&& PH2, auto&& PH3, auto&& PH4) { PH1->GSSetSamplers(PH2, PH3, PH4); },
 			}
 		},
 		{
 			ShaderStages::PS,
 			{
 				SetPSShader,
-				bind(&ID3D11DeviceContext::PSSetConstantBuffers, _1, _2, _3, _4),
-				bind(&ID3D11DeviceContext::PSSetShaderResources, _1, _2, _3, _4),
-				bind(&ID3D11DeviceContext::PSSetSamplers, _1, _2, _3, _4),
+				[](auto&& PH1, auto&& PH2, auto&& PH3, auto&& PH4) { PH1->PSSetConstantBuffers(PH2, PH3, PH4); },
+				[](auto&& PH1, auto&& PH2, auto&& PH3, auto&& PH4) { PH1->PSSetShaderResources(PH2, PH3, PH4); },
+				[](auto&& PH1, auto&& PH2, auto&& PH3, auto&& PH4) { PH1->PSSetSamplers(PH2, PH3, PH4); },
 			}
 		},
 		{
 			ShaderStages::CS,
 			{
 				SetCSShader,
-				bind(&ID3D11DeviceContext::CSSetConstantBuffers, _1, _2, _3, _4),
-				bind(&ID3D11DeviceContext::CSSetShaderResources, _1, _2, _3, _4),
-				bind(&ID3D11DeviceContext::CSSetSamplers, _1, _2, _3, _4),
+				[](auto&& PH1, auto&& PH2, auto&& PH3, auto&& PH4) { PH1->CSSetConstantBuffers(PH2, PH3, PH4); },
+				[](auto&& PH1, auto&& PH2, auto&& PH3, auto&& PH4) { PH1->CSSetShaderResources(PH2, PH3, PH4); },
+				[](auto&& PH1, auto&& PH2, auto&& PH3, auto&& PH4) { PH1->CSSetSamplers(PH2, PH3, PH4); },
 			}
 		},
 	};
 
-	std::vector<ID3D11ShaderResourceView*> Material::EmptySRVs;
+	Vector<ID3D11ShaderResourceView*> Material::EmptySRVs;
 
 	Material::Material(ContentManager& contentManager, RenderingManager& renderingManager, const PrimitiveTopology topology) :
 		mContentManager(contentManager), mRenderingManager(renderingManager), mTopology(topology)
 	{
 	}
 
-	shared_ptr<Shader> Material::GetShader(ShaderStages shaderStage)
+	std::shared_ptr<Shader> Material::GetShader(const ShaderStages shaderStage)
 	{
 		assert(ShaderStageIsProgrammable(shaderStage));
 
@@ -110,7 +113,7 @@ namespace Library
 		return (found ? shaderStageData->Shader : nullptr);
 	}
 
-	ID3D11ClassInstance* Material::GetShaderClassInstance(ShaderStages shaderStage)
+	ID3D11ClassInstance* Material::GetShaderClassInstance(const ShaderStages shaderStage)
 	{
 		assert(ShaderStageIsProgrammable(shaderStage));
 
@@ -118,60 +121,60 @@ namespace Library
 		return (found ? shaderStageData->ShaderClassInstance : nullptr);
 	}
 
-	void Material::RemoveConstantBuffer(ShaderStages shaderStage, ID3D11Buffer* constantBuffer)
+	void Material::RemoveConstantBuffer(const ShaderStages shaderStage, ID3D11Buffer* constantBuffer)
 	{
 		auto [found, shaderStageData] = GetDataForShaderStage(shaderStage);
 		if (found)
 		{
 			auto& constantBuffers = shaderStageData->ConstantBuffers;
-			constantBuffers.erase(find(constantBuffers.begin(), constantBuffers.end(), constantBuffer));
+			constantBuffers.Erase(std::find(constantBuffers.begin(), constantBuffers.end(), constantBuffer));
 		}
 	}
 
-	void Material::ClearConstantBuffers(ShaderStages shaderStage)
+	void Material::ClearConstantBuffers(const ShaderStages shaderStage)
 	{
 		auto [found, shaderStageData] = GetDataForShaderStage(shaderStage);
 		if (found)
 		{
-			shaderStageData->ConstantBuffers.clear();
+			shaderStageData->ConstantBuffers.Clear();
 		}
 	}
 
-	void Material::RemoveShaderResource(ShaderStages shaderStage, ID3D11ShaderResourceView* shaderResource)
+	void Material::RemoveShaderResource(const ShaderStages shaderStage, ID3D11ShaderResourceView* shaderResource)
 	{
 		auto [found, shaderStageData] = GetDataForShaderStage(shaderStage);
 		if (found)
 		{
 			auto& shaderResources = shaderStageData->ShaderResources;
-			shaderResources.erase(find(shaderResources.begin(), shaderResources.end(), shaderResource));
+			shaderResources.Erase(std::find(shaderResources.begin(), shaderResources.end(), shaderResource));
 		}
 	}
 
-	void Material::ClearShaderResources(ShaderStages shaderStage)
+	void Material::ClearShaderResources(const ShaderStages shaderStage)
 	{
 		auto [found, shaderStageData] = GetDataForShaderStage(shaderStage);
 		if (found)
 		{
-			shaderStageData->ShaderResources.clear();
+			shaderStageData->ShaderResources.Clear();
 		}
 	}
 
-	void Material::RemoveSamplerState(ShaderStages shaderStage, ID3D11SamplerState* samplerState)
+	void Material::RemoveSamplerState(const ShaderStages shaderStage, ID3D11SamplerState* samplerState)
 	{
 		auto [found, shaderStageData] = GetDataForShaderStage(shaderStage);
 		if (found)
 		{
 			auto& samplerStates = shaderStageData->SamplerStates;
-			samplerStates.erase(find(samplerStates.begin(), samplerStates.end(), samplerState));
+			samplerStates.Erase(std::find(samplerStates.begin(), samplerStates.end(), samplerState));
 		}
 	}
 
-	void Material::ClearSamplerStates(ShaderStages shaderStage)
+	void Material::ClearSamplerStates(const ShaderStages shaderStage)
 	{
 		auto [found, shaderStageData] = GetDataForShaderStage(shaderStage);
 		if (found)
 		{
-			shaderStageData->SamplerStates.clear();
+			shaderStageData->SamplerStates.Clear();
 		}
 	}
 
@@ -191,36 +194,23 @@ namespace Library
 		EndDraw();
 	}
 
-	void Material::Draw(not_null<ID3D11Buffer*> vertexBuffer, uint32_t vertexCount, uint32_t startVertexLocation, uint32_t offset)
+	void Material::Draw(Buffer& vertexBuffer, const uint32_t vertexCount, const uint32_t startVertexLocation)
 	{
-		// TODO: Abstract SetVertexBuffer and Draw
-		auto* direct3DDeviceContext = static_cast<RenderingManagerD3D11&>(mRenderingManager).Context();
-
 		BeginDraw();
 
-		const uint32_t stride = VertexSize();
-		ID3D11Buffer* const vertexBuffers[]{ vertexBuffer };
-		direct3DDeviceContext->IASetVertexBuffers(0, narrow_cast<uint32_t>(size(vertexBuffers)), vertexBuffers, &stride, &offset);
-
-		direct3DDeviceContext->Draw(vertexCount, startVertexLocation);
+		mRenderingManager.SetVertexBuffer(vertexBuffer);
+		mRenderingManager.Draw(vertexCount, startVertexLocation);
 
 		EndDraw();
 	}
 
-	void Material::DrawIndexed(not_null<ID3D11Buffer*> vertexBuffer, not_null<ID3D11Buffer*> indexBuffer, uint32_t indexCount, DXGI_FORMAT format, uint32_t startIndexLocation, uint32_t baseVertexLocation, uint32_t vertexOffset, uint32_t indexOffset)
+	void Material::DrawIndexed(Buffer& vertexBuffer, Buffer& indexBuffer, const std::uint32_t indexCount, const Format& format, const std::uint32_t startIndexLocation, const std::int32_t baseVertexLocation, const std::uint32_t indexOffset)
 	{
-		// TODO: Abstract SetVertexBuffer, SetIndexBuffer, and DrawIndexed
-		auto* direct3DDeviceContext = static_cast<RenderingManagerD3D11&>(mRenderingManager).Context();
-
 		BeginDraw();
 
-		const uint32_t stride = VertexSize();
-		const uint32_t offset = 0;
-		ID3D11Buffer* const vertexBuffers[]{ vertexBuffer };
-		direct3DDeviceContext->IASetVertexBuffers(0, narrow_cast<uint32_t>(size(vertexBuffers)), vertexBuffers, &stride, &vertexOffset);
-		direct3DDeviceContext->IASetIndexBuffer(indexBuffer, format, indexOffset);
-
-		direct3DDeviceContext->DrawIndexed(indexCount, startIndexLocation, baseVertexLocation);
+		mRenderingManager.SetVertexBuffer(vertexBuffer);
+		mRenderingManager.SetIndexBuffer(indexBuffer, format, indexOffset);
+		mRenderingManager.DrawIndexed(indexCount, startIndexLocation, baseVertexLocation);
 
 		EndDraw();
 	}
@@ -232,34 +222,33 @@ namespace Library
 
 	void Material::BeginDraw()
 	{
-		// TODO: Abstract SetVertexBuffer, SetIndexBuffer, and DrawIndexed
-		auto* direct3DDeviceContext = static_cast<RenderingManagerD3D11&>(mRenderingManager).Context();
-
 		mRenderingManager.SetPrimitiveTopology(mTopology);
 
+		auto* context = mRenderingManager.AssertAs<RenderingManagerD3D11>()->Context();
+		
 		assert(mInputLayout != nullptr);
-		direct3DDeviceContext->IASetInputLayout(mInputLayout.get());
+		context->IASetInputLayout(mInputLayout.get());
 
 		for (const auto& entry : mShaderStageData)
 		{
 			const ShaderStageData& shaderStageData = entry.second;
-			auto& shaderStageCallInfo = ShaderStageCalls.at(entry.first);
+			const auto& shaderStageCallInfo = ShaderStageCalls.At(entry.first);
 
-			shaderStageCallInfo.SetShader(*direct3DDeviceContext, shaderStageData);
+			shaderStageCallInfo.SetShader(*context, shaderStageData);
 
-			if (shaderStageData.ConstantBuffers.size() > 0)
+			if (shaderStageData.ConstantBuffers.Size() > 0)
 			{
-				shaderStageCallInfo.SetConstantBuffers(direct3DDeviceContext, 0, narrow_cast<uint32_t>(shaderStageData.ConstantBuffers.size()), shaderStageData.ConstantBuffers.data());
+				shaderStageCallInfo.SetConstantBuffers(context, 0, gsl::narrow_cast<uint32_t>(shaderStageData.ConstantBuffers.Size()), shaderStageData.ConstantBuffers.Data());
 			}
 
-			if (shaderStageData.ShaderResources.size() > 0)
+			if (shaderStageData.ShaderResources.Size() > 0)
 			{
-				shaderStageCallInfo.SetShaderResources(direct3DDeviceContext, 0, narrow_cast<uint32_t>(shaderStageData.ShaderResources.size()), shaderStageData.ShaderResources.data());
+				shaderStageCallInfo.SetShaderResources(context, 0, gsl::narrow_cast<uint32_t>(shaderStageData.ShaderResources.Size()), shaderStageData.ShaderResources.Data());
 			}
 
-			if (shaderStageData.SamplerStates.size() > 0)
+			if (shaderStageData.SamplerStates.Size() > 0)
 			{
-				shaderStageCallInfo.SetSamplers(direct3DDeviceContext, 0, narrow_cast<uint32_t>(shaderStageData.SamplerStates.size()), shaderStageData.SamplerStates.data());
+				shaderStageCallInfo.SetSamplers(context, 0, gsl::narrow_cast<uint32_t>(shaderStageData.SamplerStates.Size()), shaderStageData.SamplerStates.Data());
 			}
 		}
 
@@ -276,95 +265,95 @@ namespace Library
 			for (const auto& entry : mShaderStageData)
 			{
 				const ShaderStageData& shaderStageData = entry.second;
-				auto& shaderStageCallInfo = ShaderStageCalls.at(entry.first);
+				const auto& shaderStageCallInfo = ShaderStageCalls.At(entry.first);
 
-				if (shaderStageData.ShaderResources.size() > 0)
+				if (shaderStageData.ShaderResources.Size() > 0)
 				{
-					assert(EmptySRVs.size() >= shaderStageData.ShaderResources.size());
-					shaderStageCallInfo.SetShaderResources(static_cast<RenderingManagerD3D11&>(mRenderingManager).Context(), 0, narrow_cast<uint32_t>(shaderStageData.ShaderResources.size()), EmptySRVs.data());
+					assert(EmptySRVs.Size() >= shaderStageData.ShaderResources.Size());
+					shaderStageCallInfo.SetShaderResources(static_cast<RenderingManagerD3D11&>(mRenderingManager).Context(), 0, gsl::narrow_cast<uint32_t>(shaderStageData.ShaderResources.Size()), EmptySRVs.Data());
 				}
 			}
 		}
 	}
 
-	pair<bool, Material::ShaderStageData*> Material::GetDataForShaderStage(ShaderStages shaderStage)
+	std::pair<bool, Material::ShaderStageData*> Material::GetDataForShaderStage(const ShaderStages shaderStage)
 	{
-		auto it = mShaderStageData.find(shaderStage);
+		const auto it = mShaderStageData.Find(shaderStage);
 		bool found = (it != mShaderStageData.end());
 		ShaderStageData* shaderStageData = (found ? shaderStageData = &(it->second) : nullptr);
 
-		return make_pair(found, shaderStageData);
+		return std::make_pair(found, shaderStageData);
 	}
 
-	void Material::SetVSShader(ID3D11DeviceContext& direct3DDeviceContext, const ShaderStageData& shaderStageData)
+	void Material::SetVSShader(ID3D11DeviceContext& context, const ShaderStageData& shaderStageData)
 	{
 		assert(shaderStageData.Shader != nullptr);
-		auto vertexShader = static_pointer_cast<VertexShader>(shaderStageData.Shader);
-		direct3DDeviceContext.VSSetShader(vertexShader->Shader().get(), &shaderStageData.ShaderClassInstance, shaderStageData.ShaderClassInstance != nullptr ? 1 : 0);
+		const auto vertexShader = std::static_pointer_cast<VertexShader>(shaderStageData.Shader);
+		context.VSSetShader(vertexShader->Shader().get(), &shaderStageData.ShaderClassInstance, shaderStageData.ShaderClassInstance != nullptr ? 1 : 0);
 	}
 
-	void Material::SetHSShader(ID3D11DeviceContext& direct3DDeviceContext, const ShaderStageData& shaderStageData)
+	void Material::SetHSShader(ID3D11DeviceContext& context, const ShaderStageData& shaderStageData)
 	{
 		if (shaderStageData.Shader != nullptr)
 		{
-			auto hullShader = static_pointer_cast<HullShader>(shaderStageData.Shader);
-			direct3DDeviceContext.HSSetShader(hullShader->Shader().get(), &shaderStageData.ShaderClassInstance, shaderStageData.ShaderClassInstance != nullptr ? 1 : 0);
+			const auto hullShader = std::static_pointer_cast<HullShader>(shaderStageData.Shader);
+			context.HSSetShader(hullShader->Shader().get(), &shaderStageData.ShaderClassInstance, shaderStageData.ShaderClassInstance != nullptr ? 1 : 0);
 		}
 		else
 		{
-			direct3DDeviceContext.HSSetShader(nullptr, nullptr, 0);
+			context.HSSetShader(nullptr, nullptr, 0);
 		}
 	}
 
-	void Material::SetDSShader(ID3D11DeviceContext& direct3DDeviceContext, const ShaderStageData& shaderStageData)
+	void Material::SetDSShader(ID3D11DeviceContext& context, const ShaderStageData& shaderStageData)
 	{
 		if (shaderStageData.Shader != nullptr)
 		{
-			auto domainShader = static_pointer_cast<DomainShader>(shaderStageData.Shader);
-			direct3DDeviceContext.DSSetShader(domainShader->Shader().get(), &shaderStageData.ShaderClassInstance, shaderStageData.ShaderClassInstance != nullptr ? 1 : 0);
+			const auto domainShader = std::static_pointer_cast<DomainShader>(shaderStageData.Shader);
+			context.DSSetShader(domainShader->Shader().get(), &shaderStageData.ShaderClassInstance, shaderStageData.ShaderClassInstance != nullptr ? 1 : 0);
 		}
 		else
 		{
-			direct3DDeviceContext.DSSetShader(nullptr, nullptr, 0);
+			context.DSSetShader(nullptr, nullptr, 0);
 		}
 	}
 
-	void Material::SetGSShader(ID3D11DeviceContext& direct3DDeviceContext, const ShaderStageData& shaderStageData)
+	void Material::SetGSShader(ID3D11DeviceContext& context, const ShaderStageData& shaderStageData)
 	{
 		if (shaderStageData.Shader != nullptr)
 		{
-			auto geometryShader = static_pointer_cast<GeometryShader>(shaderStageData.Shader);
-			direct3DDeviceContext.GSSetShader(geometryShader->Shader().get(), &shaderStageData.ShaderClassInstance, shaderStageData.ShaderClassInstance != nullptr ? 1 : 0);
+			const auto geometryShader = std::static_pointer_cast<GeometryShader>(shaderStageData.Shader);
+			context.GSSetShader(geometryShader->Shader().get(), &shaderStageData.ShaderClassInstance, shaderStageData.ShaderClassInstance != nullptr ? 1 : 0);
 		}
 		else
 		{
-			direct3DDeviceContext.GSSetShader(nullptr, nullptr, 0);
+			context.GSSetShader(nullptr, nullptr, 0);
 		}
 	}
 
-	void Material::SetPSShader(ID3D11DeviceContext& direct3DDeviceContext, const ShaderStageData& shaderStageData)
+	void Material::SetPSShader(ID3D11DeviceContext& context, const ShaderStageData& shaderStageData)
 	{
 		if (shaderStageData.Shader != nullptr)
 		{
-			auto pixelShader = static_pointer_cast<PixelShader>(shaderStageData.Shader);
-			direct3DDeviceContext.PSSetShader(pixelShader->Shader().get(), &shaderStageData.ShaderClassInstance, shaderStageData.ShaderClassInstance != nullptr ? 1 : 0);
+			const auto pixelShader = std::static_pointer_cast<PixelShader>(shaderStageData.Shader);
+			context.PSSetShader(pixelShader->Shader().get(), &shaderStageData.ShaderClassInstance, shaderStageData.ShaderClassInstance != nullptr ? 1 : 0);
 		}
 		else
 		{
-			direct3DDeviceContext.PSSetShader(nullptr, nullptr, 0);
+			context.PSSetShader(nullptr, nullptr, 0);
 		}
 	}
 
-	void Material::SetCSShader(ID3D11DeviceContext& direct3DDeviceContext, const ShaderStageData& shaderStageData)
+	void Material::SetCSShader(ID3D11DeviceContext& context, const ShaderStageData& shaderStageData)
 	{
 		if (shaderStageData.Shader != nullptr)
 		{
-			auto pixelShader = static_pointer_cast<ComputeShader>(shaderStageData.Shader);
-			direct3DDeviceContext.CSSetShader(pixelShader->Shader().get(), &shaderStageData.ShaderClassInstance, shaderStageData.ShaderClassInstance != nullptr ? 1 : 0);
+			const auto pixelShader = std::static_pointer_cast<ComputeShader>(shaderStageData.Shader);
+			context.CSSetShader(pixelShader->Shader().get(), &shaderStageData.ShaderClassInstance, shaderStageData.ShaderClassInstance != nullptr ? 1 : 0);
 		}
 		else
 		{
-			direct3DDeviceContext.CSSetShader(nullptr, nullptr, 0);
+			context.CSSetShader(nullptr, nullptr, 0);
 		}
 	}
 }

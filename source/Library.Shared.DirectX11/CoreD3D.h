@@ -7,9 +7,6 @@
 #include "dxgidebug.h"
 #include "winrt/base.h"
 
-// TODO: Remove this with CreateBuffer methods
-#include "d3d11.h"
-
 // First Party
 #include "GameException.h"
 #include "HashMap.h"
@@ -19,63 +16,6 @@
 // TODO: Rework under Library::Direct3D namespace
 namespace Library
 {
-#pragma region Shaders
-	/**
-	 * @brief Shader stages enumeration.
-	*/
-	enum class ShaderStages
-	{
-		IA,
-		VS,
-		HS,
-		DS,
-		GS,
-		SO,
-		RS,
-		PS,
-		OM,
-
-		CS
-	};
-
-	/**
-	 * @brief Programmable shader stages listing.
-	*/
-	constexpr std::array<ShaderStages, 6> ProgrammableGraphicsShaderStages
-	{
-		ShaderStages::VS,
-		ShaderStages::HS,
-		ShaderStages::DS,
-		ShaderStages::GS,
-		ShaderStages::PS,
-		ShaderStages::CS,
-	};
-
-	/**
-	 * @brief Validates if a shader stage is programmable.
-	 * @param shaderStage Shader stage to be validated.
-	 * @return True, if shader stage is programmable. Otherwise, false.
-	*/
-	inline bool ShaderStageIsProgrammable(const ShaderStages shaderStage)
-	{
-		static const HashMap<ShaderStages, bool> isProgrammableMap
-		{
-			{ ShaderStages::IA, false },
-			{ ShaderStages::VS, true },
-			{ ShaderStages::HS, true },
-			{ ShaderStages::DS, true },
-			{ ShaderStages::GS, true },
-			{ ShaderStages::SO, false },
-			{ ShaderStages::RS, false },
-			{ ShaderStages::PS, true },
-			{ ShaderStages::OM, false },
-			{ ShaderStages::CS, true },
-		};
-
-		return isProgrammableMap.At(shaderStage);
-	}
-#pragma endregion Shaders
-
 	namespace Direct3D
 	{
 #pragma region Abstracted to Native Type Mappings
@@ -260,28 +200,6 @@ namespace Library
 	}
 
 #if defined(DEBUG) || defined(_DEBUG)
-	/**
-	 * @brief Check for SDK Layer support.
-	 * @return True, if SDKLayers for debugging are available. Otherwise, false.
-	*/
-	inline bool SdkLayersAvailable()
-	{
-		const HRESULT hr = D3D11CreateDevice(
-			nullptr,
-			D3D_DRIVER_TYPE_NULL,       // There is no need to create a real hardware device.
-			nullptr,
-			D3D11_CREATE_DEVICE_DEBUG,  // Check for the SDK layers.
-			nullptr,                    // Any feature level will do.
-			0,
-			D3D11_SDK_VERSION,          // Always set this to D3D11_SDK_VERSION for Windows Store apps.
-			nullptr,                    // No need to keep the D3D device reference.
-			nullptr,                    // No need to know the feature level.
-			nullptr                     // No need to keep the D3D device context reference.
-		);
-
-		return SUCCEEDED(hr);
-	}
-
 	/**
 	 * @brief Debug Dump.
 	*/

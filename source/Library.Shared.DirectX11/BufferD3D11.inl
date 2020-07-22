@@ -1,15 +1,15 @@
 #pragma once
 
+// Header
 #include "BufferD3D11.h"
-#include <Utility.h>
 
 namespace Library
 {
 #pragma region Static Methods
 	constexpr UINT BufferD3D11::GetSize(const BufferDesc& desc)
 	{
-		UINT size = static_cast<UINT>(desc.Size);
-		return desc.BindFlags.BufferType == BufferType::Constant ? AlignedSize(size, 16u) : size;
+		const UINT size = static_cast<UINT>(desc.Size);
+		return desc.BindFlagsValue.BufferTypeValue == BufferType::Constant ? AlignedSize(size, 16u) : size;
 	}
 #pragma endregion Static Methods
 	

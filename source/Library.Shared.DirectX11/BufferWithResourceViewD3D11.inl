@@ -21,7 +21,7 @@ namespace Library::Direct3D11
 
 	inline DXGI_FORMAT BufferWithResourceViewD3D11::GetResourceViewFormat(const BufferDesc& desc)
 	{
-		if (desc.IsTypedBuffer())		return Direct3D::FormatMap[desc.Format];
+		if (desc.IsTypedBuffer())		return Direct3D::FormatMap[desc.FormatValue];
 		if (desc.IsByteAddressBuffer()) return DXGI_FORMAT_R32_TYPELESS;
 
 		return DXGI_FORMAT_UNKNOWN;
@@ -29,7 +29,7 @@ namespace Library::Direct3D11
 
 	inline UINT BufferWithResourceViewD3D11::GetFlagsUAV(const BufferDesc& desc)
 	{
-		if (desc.BindFlags.Storage)
+		if (desc.BindFlagsValue.Storage)
 		{
 			if (desc.IsStructuredBuffer())
 			{

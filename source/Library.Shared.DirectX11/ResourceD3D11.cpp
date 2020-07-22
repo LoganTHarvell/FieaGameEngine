@@ -13,7 +13,7 @@ namespace Library::D3D11
 {
 	D3D11_USAGE GetBufferUsage(const BufferDesc& desc)
 	{
-		if (!desc.BindFlags.Storage && desc.MiscFlags.DynamicUsage)
+		if (!desc.BindFlagsValue.Storage && desc.MiscFlags.DynamicUsage)
 		{
 			return D3D11_USAGE_DYNAMIC;
 		}
@@ -25,7 +25,7 @@ namespace Library::D3D11
 	{
 		UINT flags = 0;
 
-		switch (desc.BindFlags.BufferType)
+		switch (desc.BindFlagsValue.BufferTypeValue)
 		{
 		case Buffer::Type::Vertex:
 			flags |= D3D11_BIND_VERTEX_BUFFER;
@@ -47,12 +47,12 @@ namespace Library::D3D11
 			break;
 		}
 
-		if (desc.BindFlags.Sampled || desc.BindFlags.CopySource)
+		if (desc.BindFlagsValue.Sampled || desc.BindFlagsValue.CopySource)
 		{
 			flags |= D3D11_BIND_SHADER_RESOURCE;
 		}
 
-		if (desc.BindFlags.Storage || desc.BindFlags.CopyDestination)
+		if (desc.BindFlagsValue.Storage || desc.BindFlagsValue.CopyDestination)
 		{
 			flags |= D3D11_BIND_UNORDERED_ACCESS;
 		}
@@ -64,7 +64,7 @@ namespace Library::D3D11
 	{
 		UINT flags = 0;
 
-		if (desc.BindFlags.BufferType == BufferType::Indirect)
+		if (desc.BindFlagsValue.BufferTypeValue == BufferType::Indirect)
 		{
 			flags |= D3D11_RESOURCE_MISC_DRAWINDIRECT_ARGS;
 		}
@@ -110,10 +110,10 @@ namespace Library::D3D11
 		return flags;
 	}
 
-	D3D11_USAGE GetCpuAccessBufferUsage(const BufferDesc& desc)
+	enum D3D11_USAGE GetCpuAccessBufferUsage(const BufferDesc& desc)
 	{
-		if (desc.CpuAccessFlags.Read)	return D3D11_USAGE_STAGING;
-		if (desc.CpuAccessFlags.Write)	return D3D11_USAGE_DYNAMIC;
+		if (desc.CpuAccessFlagsValue.Read)	return D3D11_USAGE_STAGING;
+		if (desc.CpuAccessFlagsValue.Write)	return D3D11_USAGE_DYNAMIC;
 
 		return D3D11_USAGE_DEFAULT;
 	}

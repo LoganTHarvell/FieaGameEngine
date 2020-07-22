@@ -497,7 +497,8 @@ namespace Library
 			VertexAttribute("BONEINDICES", 0, Format::RGBA32Float),
 			VertexAttribute("BONEWEIGHTS", 0, Format::RGBA32Float)
 		};
-		
+
+	public:
 		/**
 		 * @brief Handle to the vertex attribute data associated with the vertex declaration
 		*/

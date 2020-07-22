@@ -1,14 +1,19 @@
+#pragma region Includes
+// Pre-compiled Header
 #include "pch.h"
 
+// Header
 #include "BufferD3D11.h"
 
+// First Party
 #include "ResourceD3D11.h"
+#pragma endregion Includes
 
 namespace Library
 {
 #pragma region Special Members
 	BufferD3D11::BufferD3D11(ID3D11Device* device, const BufferDesc& desc, const void* initialData) :
-		Buffer(desc.BindFlags.BufferType)
+		Buffer(desc.BindFlagsValue.BufferTypeValue)
 	{
 		/* Initialize native buffer desc */
 		D3D11_BUFFER_DESC descD3D;
@@ -40,15 +45,15 @@ namespace Library
 		}
 
 		/* Create CPU access buffer (if required) */
-		if (desc.CpuAccessFlags.ReadOrWrite())
+		if (desc.CpuAccessFlagsValue.ReadOrWrite())
 		{
 			CreateCpuAccessBuffer(device, desc);
 		}
 		
 		/* Store buffer creation attributes */
 		mSize = descD3D.ByteWidth;
-		mStride = (desc.VertexAttributesList.IsEmpty() ? 0 : desc.VertexAttributesList.Front().Stride);
-		mFormat = Direct3D::FormatMap[desc.Format];
+		mStride = (desc.VertexAttributes.IsEmpty() ? 0 : desc.Stride);
+		mFormat = Direct3D::FormatMap[desc.FormatValue];
 		mUsage = descD3D.Usage;
 	}
 #pragma endregion Special Members
@@ -60,7 +65,7 @@ namespace Library
 		{
 			descD3D.ByteWidth = static_cast<UINT>(desc.Size);
 			descD3D.Usage = D3D11::GetCpuAccessBufferUsage(desc); 
-			descD3D.CPUAccessFlags = D3D11::GetCpuAccessFlags(desc.CpuAccessFlags);
+			descD3D.CPUAccessFlags = D3D11::GetCpuAccessFlags(desc.CpuAccessFlagsValue);
 			descD3D.MiscFlags = 0;
 			descD3D.StructureByteStride = desc.Stride;
 		}

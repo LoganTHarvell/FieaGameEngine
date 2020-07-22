@@ -9,7 +9,6 @@
 #include "CoreD3D.h"
 #include "BufferD3D11.h"
 #include "BufferWithResourceViewD3D11.h"
-#include "Mesh.h"
 #include "ResourceD3D11.h"
 #pragma endregion Includes
 
@@ -32,11 +31,54 @@ namespace Library
 		return mRenderContexts.emplace(std::forward<std::unique_ptr<RenderContextD3D11>>(std::move(newRenderContext))).first->get();
 	}
 
+	void RenderingManagerD3D11::SetPrimitiveTopology(const PrimitiveTopology& topology)
+	{
+		mContext->IASetPrimitiveTopology(Direct3D::PrimitiveTopologyMap[topology]);
+	}
+
+	void RenderingManagerD3D11::SetVertexBuffer(Buffer& buffer)
+	{
+		BufferD3D11& bufferD3D = *buffer.AssertAs<BufferD3D11>();
+
+		ID3D11Buffer* const buffers[] = { bufferD3D.Native() };
+		UINT stride = bufferD3D.Stride();
+		UINT offset = 0;
+
+		mContext->IASetVertexBuffers(0, 1, buffers, &stride, &offset);
+	}
+
+	void RenderingManagerD3D11::SetIndexBuffer(Buffer& buffer)
+	{
+		BufferD3D11& bufferD3D11 = *buffer.AssertAs<BufferD3D11>();
+		mContext->IASetIndexBuffer(bufferD3D11.Native(), bufferD3D11.Format(), 0);
+	}
+
+	void RenderingManagerD3D11::SetIndexBuffer(Buffer& buffer, const Format& format, const std::uint32_t offset)
+	{
+		BufferD3D11& bufferD3D11 = *buffer.AssertAs<BufferD3D11>();
+		mContext->IASetIndexBuffer(bufferD3D11.Native(), Direct3D::FormatMap[format], offset);
+	}
+
+	void RenderingManagerD3D11::Draw(const std::uint32_t numVertices, const std::uint32_t firstVertex) const
+	{
+		mContext->Draw(numVertices, firstVertex);
+	}
+
+	void RenderingManagerD3D11::DrawIndexed(const std::uint32_t numIndices, const std::uint32_t firstIndex) const
+	{
+		mContext->DrawIndexed(numIndices, firstIndex, 0);
+	}
+
+	void RenderingManagerD3D11::DrawIndexed(const std::uint32_t numIndices, const std::uint32_t firstIndex, const std::int32_t vertexOffset) const
+	{
+		mContext->DrawIndexed(numIndices, firstIndex, vertexOffset);
+	}
+
 	Buffer* RenderingManagerD3D11::CreateBuffer(const BufferDesc& desc, const void* initialData)
 	{
 		std::unique_ptr<BufferD3D11> newBuffer;
 		
-		if (D3D11::RequiresBufferWithRV(desc.BindFlags))
+		if (D3D11::RequiresBufferWithRV(desc.BindFlagsValue))
 		{
 			newBuffer = std::make_unique<Direct3D11::BufferWithResourceViewD3D11>(mDevice.get(), desc, initialData);
 		}
@@ -46,18 +88,6 @@ namespace Library
 		}
 		
 		return mBuffers.emplace(std::forward<std::unique_ptr<BufferD3D11>>(std::move(newBuffer))).first->get();
-	}
-
-	void RenderingManagerD3D11::SetPrimitiveTopology(const PrimitiveTopology& topology)
-	{
-		mContext->IASetPrimitiveTopology(Direct3D::PrimitiveTopologyMap[topology]);
-	}
-
-	void RenderingManagerD3D11::SetIndexBuffer(Buffer& buffer)
-	{
-		assert(buffer.Is(BufferD3D11::TypeIdClass()));
-		BufferD3D11& bufferD3D11 = static_cast<BufferD3D11&>(buffer);
-		mContext->IASetIndexBuffer(bufferD3D11.Native(), bufferD3D11.Format(), 0);
 	}
 #pragma endregion Modifiers
 

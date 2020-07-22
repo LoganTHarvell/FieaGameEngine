@@ -29,7 +29,7 @@ namespace Library
 		using value_type = T;
 
 		/// <summary>
-		/// Reserve strategy functor type used during resize on insertion.
+		/// Reserve strategy functor type used during Resize on insertion.
 		/// </summary>
 		using ReserveFunctor = std::function<std::size_t(const std::size_t, const std::size_t)>;
 		
@@ -806,17 +806,29 @@ namespace Library
 		/// <exception cref="std::runtime_error">ReserveFunctor null.</exception>
 		void PushBack(T&& data);
 
-		/// <summary>
-		/// Inserts elements in the range [first, last) before the given position.
-		/// </summary>
-		/// <param name="position">Iterator at the insertion point for new elements.</param>
-		/// <param name="first">Iterator to the first element to insert.</param>
-		/// <param name="last">Iterator marking the end of the range to insert. Its value is not inserted.</param>
-		/// <returns>
-		/// Iterator pointing to the first element inserted.
-		/// If no elements were inserted, position is returned.
-		/// </returns>
+		/**
+		 * @brief Inserts elements in the range [first, last) before the given position
+		 * @param position Iterator at the insertion point for new elements
+		 * @param first Iterator to the first element to insert
+		 * @param last Iterator marking the end of the range to insert. Its value is not inserted
+		 *
+		 * @return Iterator pointing to the first element inserted
+		 * 		   If no elements were inserted, position is returned
+		*/
 		Iterator Insert(ConstIterator position, ConstIterator first, ConstIterator last);
+		
+		/**
+		 * @brief Inserts elements in the range [first, last) before the given position
+		 * @tparam It Iterator type for the elements to be inserted
+		 * @param position Iterator at the insertion point for new elements
+		 * @param first Iterator to the first element to insert
+		 * @param last Iterator marking the end of the range to insert. Its value is not inserted
+		 * 
+		 * @return Iterator pointing to the first element inserted
+		 * 		   If no elements were inserted, position is returned
+		*/
+		template<typename It>
+		Iterator Insert(ConstIterator position, It first, It last);
 
 		/// <summary>
 		/// Removes the last element from the Vector.
@@ -884,7 +896,7 @@ namespace Library
 		std::shared_ptr<EqualityFunctor> mEqualityFunctor;
 
 		/// <summary>
-		/// Functor for evaluating the capacity reserve strategy during resize during element insert.
+		/// Functor for evaluating the capacity reserve strategy during Resize during element insert.
 		/// </summary>
 		std::shared_ptr<ReserveFunctor> mReserveFunctor;
 #pragma endregion Data Members

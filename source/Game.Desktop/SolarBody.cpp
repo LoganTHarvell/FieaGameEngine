@@ -9,6 +9,9 @@
 #include "SolarSystem.h"
 #include "Texture2D.h"
 #include "Utility.h"
+#include "WorldState.h"
+#include "ContentManager.h"
+#include "GameTime.h"
 #pragma endregion Includes
 
 using namespace std::string_literals;

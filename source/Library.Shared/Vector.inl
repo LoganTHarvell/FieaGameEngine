@@ -857,6 +857,22 @@ namespace Library
 	}
 
 	template<typename T>
+	template<typename It>
+	inline typename Vector<T>::Iterator Vector<T>::Insert(ConstIterator position, It first, It last)
+	{
+		if (position.mOwner != this)		throw std::runtime_error("Invalid position iterator.");
+
+		Vector insert;
+
+		for (auto it = first; it != last; ++it)
+		{
+			insert.EmplaceBack(*it);
+		}
+
+		return Insert(position, insert.cbegin(), insert.cend());
+	}
+
+	template<typename T>
 	inline void Vector<T>::PopBack()
 	{
 		if (mSize > 0)

@@ -138,7 +138,7 @@ namespace Library
 		 *			In particular, depth-stencil formats and compressed formats are not allowed
 		 *			To specify a vertex attribute of a matrix type, multiple attributes with ascending semantic indices must be used
         */
-        Format Format{ Format::RGBA32Float };
+        Format FormatValue{ Format::RGBA32Float };
 
         /**
          * @brief Vertex attribute location (only for OpenGL, Vulkan, Metal) or stream-output number (only for Direct3D)

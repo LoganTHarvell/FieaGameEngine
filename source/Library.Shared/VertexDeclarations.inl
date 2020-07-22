@@ -9,7 +9,9 @@ namespace Library
 
 		BufferDesc vertexBufferDesc;
 		vertexBufferDesc.Size = VertexBufferByteWidth(vertices.size());
-		vertexBufferDesc.BindFlags.BufferType = BufferType::Vertex;
+		vertexBufferDesc.Stride = VertexSize();
+		vertexBufferDesc.VertexAttributes.Insert(vertexBufferDesc.VertexAttributes.cbegin(), T::InputElements.cbegin(), T::InputElements.cend());
+		vertexBufferDesc.BindFlagsValue.BufferTypeValue = BufferType::Vertex;
 
 		return renderingManager->CreateBuffer(vertexBufferDesc, &vertices[0]);
 	}

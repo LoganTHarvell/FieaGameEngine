@@ -72,17 +72,17 @@ namespace Library
          * @see BindFlags::IndexBuffer
          * @see RenderingManager::SetIndexBuffer(Buffer&)
         */
-		Format Format = Format::Unknown;
+		Format FormatValue = Format::Unknown;
 
 		/// <summary> These flags describe to which resource slots the buffer can be bound. By default 0.</summary>
         /// <remarks> When the buffer will be bound to a vertex buffer slot for instance, the BindFlags::VertexBuffer flag is required.</remarks>
         /// <see> BindFlags</see>        
-		BindFlags BindFlags{ BufferType::Undefined };
+		BindFlags BindFlagsValue{ BufferType::Undefined };
 
 		/// <summary> CPU read/write access flags. By default all false.</summary>
         /// <remarks> If false, the buffer cannot be mapped from GPU memory space into CPU memory space and vice versa.</remarks>
         /// <see> CpuAccessFlags</see>
-		CpuAccessFlags CpuAccessFlags;
+		CpuAccessFlags CpuAccessFlagsValue;
 
 		/// <summary> Miscellaneous buffer flags. By default all false.</summary>
         /// <remarks> This can be used as a hint for the renderer how frequently the buffer will be updated.</remarks>
@@ -91,7 +91,7 @@ namespace Library
 
 		/// <summary> Specifies the list of vertex descriptions.</summary>
         /// <remarks> This is only used for vertex buffers and ignored if @c bindFlags does not contain the BindFlags::VertexBuffer bit.</remarks>
-		Vector<VertexAttribute> VertexAttributesList;
+		Vector<VertexAttribute> VertexAttributes;
 
 #pragma region Convenience Methods
 	public:

@@ -14,7 +14,7 @@ namespace Library
         const ShaderSystemValue systemValue)
         :
         Name(name),
-        Format(format),
+        FormatValue(format),
         Location(location),
         SystemValue(systemValue),
         InstanceDivisor(instanceDivisor)
@@ -29,7 +29,7 @@ namespace Library
         std::uint32_t           instanceDivisor)
         :
         Name(semanticName),
-        Format(format),
+        FormatValue(format),
         Location(location),
         SemanticIndex(semanticIndex),
         InstanceDivisor(instanceDivisor)
@@ -60,7 +60,7 @@ namespace Library
         const std::uint32_t     instanceDivisor)
         :
         Name(semanticName),
-        Format(format),
+        FormatValue(format),
         Location(location),
         SemanticIndex(semanticIndex),
         Slot(slot),
@@ -72,7 +72,7 @@ namespace Library
 
     std::uint32_t VertexAttribute::GetSize() const
     {
-        const auto& formatDesc = FormatDescMap[Format];
+        const auto& formatDesc = FormatDescMap[FormatValue];
         return ((formatDesc.Flags & FormatFlags::SupportsVertex) != 0) ? (formatDesc.BitSize / 8) : 0;
     }
 
@@ -80,7 +80,7 @@ namespace Library
     bool VertexAttribute::operator==(const VertexAttribute& rhs) const noexcept
     {
         return  Name == rhs.Name
-    		&&  Format == rhs.Format
+    		&&  FormatValue == rhs.FormatValue
     		&&  Location == rhs.Location
     		&&  SemanticIndex == rhs.SemanticIndex
 			&&  SystemValue == rhs.SystemValue

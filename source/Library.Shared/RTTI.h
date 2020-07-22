@@ -11,36 +11,36 @@
 
 namespace Library
 {
-	/// <summary>
-	/// Abstract base class for accessing runtime type information.
-	/// </summary>
+	/**
+	 * @brief Abstract base class for accessing runtime type information
+	*/
 	class RTTI
 	{
 	public:
-		/// <summary>
-		/// Type identifier.
-		/// </summary>
-		using IdType = std::size_t;
+		using IdType = std::size_t;	//!< Type identifier
 
-		/// <summary>
-		/// Gets the type identifier associated with this class type.
-		/// </summary>
-		/// <returns>Type ID associated with RTTI.</returns>
+		/**
+		 * @brief Gets the type identifier associated with this class type
+		 * @returns Type ID associated with RTTI
+		*/
 		static IdType TypeIdClass() { return 0; }
 
-		/// <summary>
-		/// Virtual constructor.
-		/// Creates a heap allocated instance of the true type.
-		/// </summary>
-		/// <returns>Pointer to the new instance of the true type as an RTTI.</returns>
+		/**
+		 * @brief Virtual constructor
+		 *		  Creates a heap allocated instance of the true type.
+		 * 
+		 * @returns Pointer to the new instance of the true type as an RTTI
+		*/
 		virtual gsl::owner<RTTI*> Create() const
 		{
 			return nullptr;
 		}
 
-		/// <summary>
-		/// Virtual constructor for specifying a return type.
-		/// </summary>
+		/**
+		 * @brief Virtual constructor for specifying a return type
+		 * @tparam T Related type for the created instance to be returned as
+		 * @return Pointer to the created instance as the given type
+		*/
 		template<typename T>
 		gsl::owner<T*> CreateAs()
 		{
@@ -48,71 +48,104 @@ namespace Library
 			return created ? created->As<T>() : nullptr;
 		}
 
-		/// <summary>
-		/// Virtual destructor.
-		/// </summary>
+		/**
+		 * @brief Virtual destructor
+		*/
 		virtual ~RTTI() = default;
 
-		/// <summary>
-		/// Gets the type identifier associated with the true class type of an instance.
-		/// </summary>
-		/// <returns>Type ID associated with the true class type of an instance.</returns>
-		virtual RTTI::IdType TypeIdInstance() const = 0;
+		/**
+		 * @brief Gets the type identifier associated with the true class type of an instance
+		 * 
+		 * @returns Type ID associated with the true class type of an instance
+		*/
+		virtual IdType TypeIdInstance() const = 0;
 
-		/// <summary>
-		/// Gets the current instance cast as an RTTI pointer.
-		/// </summary>
-		/// <returns>If the given type ID matches the instance type ID, a pointer to the instance as an RTTI. Otherwise, nullptr.</returns>
+		/**
+		 * @brief Gets the current instance cast as an RTTI pointer.
+		 * 
+		 * @returns If the given type ID matches the instance type ID, a pointer to the instance as an RTTI. Otherwise, nullptr.
+		*/
 		virtual RTTI* QueryInterface(const IdType)
 		{
 			return nullptr;
 		}
 
-		/// <summary>
-		/// Validates that an instance is related to the type associate with the given IdType value.
-		/// </summary>
-		/// <returns>True, if the given type ID matches with the type ID of this class or any related base/derived class.</returns>
+		/**
+		 * @brief Validates that an instance is related to the type associate with the given IdType value.
+		 * 
+		 * @returns True, if the given type ID matches with the type ID of this class or any related base/derived class.
+		*/
 		virtual bool Is(IdType) const
 		{
 			return false;
 		}
 
-		/// <summary>
-		/// Gets the instance cast as a related class type.
-		/// </summary>
-		/// <typeparam name="T">Type to which this instance is cast.</param>
-		/// <returns>If the type is related, a pointer to the instance as the given type. Otherwise, nullptr.</returns>
+		/**
+		 * @brief Gets the instance cast as a related class type.
+		 *  
+		 * @tparam T Type to which this instance is cast.
+		 * @returns If the type is related, a pointer to the instance as the given type. Otherwise, nullptr.
+		*/
 		template <typename T>
 		T* As()
 		{
-			return (Is(T::TypeIdClass()) ? reinterpret_cast<T*>(const_cast<RTTI*>(this)) : nullptr);
+			return (Is(T::TypeIdClass()) ? static_cast<T*>(this) : nullptr);
 		}
 
-		/// <summary>
-		/// Gets the instance cast as a related class type.
-		/// </summary>
-		/// <typeparam name="T">Type to which this instance is cast.</param>
-		/// <returns>If the type is related, a pointer to the instance as the given type. Otherwise, nullptr.</returns>
+		/**
+		 * @brief Gets the instance cast as a related class type.
+		 *  
+		 * @tparam T Type to which this instance is cast.
+		 * @returns If the type is related, a pointer to the instance as the given type. Otherwise, nullptr.
+		*/
 		template <typename T>
 		const T* As() const
 		{
-			return (Is(T::TypeIdClass()) ? reinterpret_cast<const T*>(this) : nullptr);
+			return (Is(T::TypeIdClass()) ? static_cast<const T*>(this) : nullptr);
 		}
 
-		/// <summary>
-		/// Gets a string representation for the given instance.
-		/// </summary>
-		/// <returns></returns>
+		/**
+		 * @brief Gets the instance cast as a related class type.
+		 *  
+		 * @tparam T Type to which this instance is cast.
+		 * @returns If the type is related, a pointer to the instance as the given type. Otherwise, nullptr.
+		*/
+		template <typename T>
+		T* AssertAs()
+		{
+			assert(Is(T::TypeIdClass()));
+			return static_cast<T*>(this);
+		}
+
+		/**
+		 * @brief Gets the instance cast as a related class type.
+		 *  
+		 * @tparam T Type to which this instance is cast.
+		 * @returns If the type is related, a pointer to the instance as the given type. Otherwise, nullptr.
+		*/
+		template <typename T>
+		const T* AssertAs() const
+		{
+			assert(Is(T::TypeIdClass()));
+			return static_cast<T*>(this);
+		}
+
+		/**
+		 * @brief Gets a string representation for the given instance.
+		 *  
+		 * @returns 
+		*/
 		virtual std::string ToString() const
 		{
 			return "RTTI";
 		}
 
-		/// <summary>
-		/// Equality method for comparing two RTTI derived class instances.
-		/// </summary>
-		/// <param name="rhs">An RTTI derived class to be compared against.</param>
-		/// <returns>True, if the two RTTI derived class instances are equivalent. Otherwise, false.</returns>
+		/**
+		 * @brief Equality method for comparing two RTTI derived class instances.
+		 *  
+		 * @param rhs An RTTI derived class to be compared against.
+		 * @returns True, if the two RTTI derived class instances are equivalent. Otherwise, false.
+		*/
 		virtual bool Equals(const RTTI* rhs) const
 		{
 			return this == rhs;
@@ -120,21 +153,23 @@ namespace Library
 	};
 
 #pragma region RTTI Declarations Convenience Macro
-/// <summary>
-/// RTTI overrides macro which simplifies RTTI derived class declarations. Should be called in derived class declarations.
-/// </summary>
-/// <param name="Type">Type of an RTTI derived class.</param>
-/// <param name="ParentType">Type of the direct parent class from which the given Type is derived.</param>
+/**
+ *  RTTI overrides macro which simplifies RTTI derived class declarations. Should be called in derived class declarations.
+ *  
+ * @param Type Type of an RTTI derived class.
+ * @param ParentType Type of the direct parent class from which the given Type is derived.
+*/
 #define RTTI_DECLARATIONS(Type, ParentType)																								\
 	public:																																\
 		virtual gsl::owner<Library::RTTI*> Create() const override { return new Type(); }												\
 		RTTI_DECLARATIONS_ABSTRACT(Type, ParentType)
 
-/// <summary>
-/// RTTI overrides macro which simplifies RTTI derived abstract class declarations. Should be called in derived class declarations.
-/// </summary>
-/// <param name="Type">Type of an RTTI derived class.</param>
-/// <param name="ParentType">Type of the direct parent class from which the given Type is derived.</param>
+/**
+ *  RTTI overrides macro which simplifies RTTI derived abstract class declarations. Should be called in derived class declarations.
+ *  
+ * @param Type Type of an RTTI derived class.
+ * @param ParentType Type of the direct parent class from which the given Type is derived.
+*/
 #define RTTI_DECLARATIONS_ABSTRACT(Type, ParentType)																					\
 	public:																																\
 		using Base = ParentType;																										\

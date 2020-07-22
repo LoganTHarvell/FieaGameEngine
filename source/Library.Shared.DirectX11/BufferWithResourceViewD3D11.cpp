@@ -18,12 +18,12 @@ namespace Library::Direct3D11
 		const DXGI_FORMAT format = GetResourceViewFormat(desc);
 		const UINT numElements = gsl::narrow_cast<UINT>(desc.Size) / stride;
 
-		if (desc.BindFlags.Sampled)
+		if (desc.BindFlagsValue.Sampled)
 		{
 			CreateSRVHelper(device, format, 0, numElements);
 		}
 
-		if (desc.BindFlags.Storage)
+		if (desc.BindFlagsValue.Storage)
 		{
 			CreateUAVHelper(device, format, 0, numElements);
 		}

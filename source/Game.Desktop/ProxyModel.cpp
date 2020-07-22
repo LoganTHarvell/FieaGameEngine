@@ -2,11 +2,7 @@
 
 #include "ProxyModel.h"
 
-
-#include "BufferD3D11.h"
-#include "RenderingManagerD3D11.h"
 #include "Game.h"
-#include "GameException.h"
 #include "Utility.h"
 #include "Camera.h"
 #include "VertexDeclarations.h"
@@ -167,12 +163,20 @@ namespace Library
 		if (mDisplayWireframe)
 		{
 			mGame->Direct3DDeviceContext()->RSSetState(RasterizerStates::Wireframe.get());
-			mMaterial.DrawIndexed(not_null<ID3D11Buffer*>(static_cast<BufferD3D11*>(mVertexBuffer)->Native()), static_cast<BufferD3D11*>(mIndexBuffer)->Native(), mIndexCount);
+			
+			if (mVertexBuffer != nullptr && mIndexBuffer != nullptr)
+			{
+				mMaterial.DrawIndexed(*mVertexBuffer, *mIndexBuffer, mIndexCount);
+			}
+
 			mGame->Direct3DDeviceContext()->RSSetState(nullptr);
 		}
 		else
 		{
-			mMaterial.DrawIndexed(not_null<ID3D11Buffer*>(static_cast<BufferD3D11*>(mVertexBuffer)->Native()), static_cast<BufferD3D11*>(mIndexBuffer)->Native(), mIndexCount);
+			if (mVertexBuffer != nullptr && mIndexBuffer != nullptr)
+			{
+				mMaterial.DrawIndexed(*mVertexBuffer, *mIndexBuffer, mIndexCount);
+			}
 		}
 	}
 }

@@ -218,7 +218,10 @@ namespace Demo
 					material.UpdateTransforms(wvp, XMMatrixTranspose(worldMatrix));
 				}
 
-				material.DrawIndexed(not_null<ID3D11Buffer*>(static_cast<BufferD3D11*>(mVertexBuffer)->Native()), static_cast<BufferD3D11*>(mIndexBuffer)->Native(), mIndexCount);
+				if (mVertexBuffer != nullptr && mIndexBuffer != nullptr)
+				{
+					material.DrawIndexed(*mVertexBuffer, *mIndexBuffer, mIndexCount);
+				}
 			}
 
 			DrawChildren(entity);

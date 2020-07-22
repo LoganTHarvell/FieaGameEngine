@@ -161,6 +161,9 @@ namespace Library
 			mUpdateMaterial = false;
 		}
 
-		mMaterial.DrawIndexed(not_null<ID3D11Buffer*>(static_cast<BufferD3D11*>(mVertexBuffer)->Native()), not_null<ID3D11Buffer*>(static_cast<BufferD3D11*>(mIndexBuffer)->Native()), FrustumIndexCount, DXGI_FORMAT_R16_UINT);
-	}
+        if (mVertexBuffer != nullptr && mIndexBuffer != nullptr)
+        {
+            mMaterial.DrawIndexed(*mVertexBuffer, *mIndexBuffer, FrustumIndexCount, Format::R16UInt);
+        }
+    }
 }

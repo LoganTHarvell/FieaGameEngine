@@ -1,40 +1,56 @@
 #pragma once
 
-#include <map>
-#include <vector>
+#pragma region Includes
+// Standard
+#include <memory>
 #include <functional>
 
-#include "CoreD3D.h"
-
+// First Party
+#include "Vector.h"
+#include "HashMap.h"
+#include "Resource.h"
 #include "Shader.h"
-#include "Game.h"
+#pragma endregion Includes
+
+// TODO: Remove
+#include "RenderingManagerD3D11.h"
 
 namespace Library
 {
+	// Forward Declarations
+	class RenderingManager;
+	class ContentManager;
+	class Buffer;
+
+	/**
+	 * @brief Managers the visual attributes
+	*/
 	class Material : public RTTI
 	{
 		RTTI_DECLARATIONS_ABSTRACT(Material, RTTI)
 
 	public:
+		using CallbackFunctor = std::function<void()>;
+		
 		struct ShaderStageData
 		{
 			std::shared_ptr<Shader> Shader;
 			ID3D11ClassInstance* ShaderClassInstance{ nullptr };
-			std::vector<ID3D11Buffer*> ConstantBuffers;
-			std::vector<ID3D11ShaderResourceView*> ShaderResources;			
-			std::vector<ID3D11SamplerState*> SamplerStates;
+			Vector<ID3D11Buffer*> ConstantBuffers;
+			Vector<ID3D11ShaderResourceView*> ShaderResources;			
+			Vector<ID3D11SamplerState*> SamplerStates;
 		};
 
-		explicit Material(ContentManager& contentManager, RenderingManager& renderingManager, PrimitiveTopology topology = PrimitiveTopology::TriangleList);
+		explicit Material(ContentManager& contentManager, RenderingManager& renderingManager, const PrimitiveTopology topology = PrimitiveTopology::TriangleList);
 
 		PrimitiveTopology Topology() const;
-		void SetTopology(PrimitiveTopology topology);
+		void SetTopology(const PrimitiveTopology topology);
 
 		winrt::com_ptr<ID3D11InputLayout> InputLayout() const;
 		void SetInputLayout(winrt::com_ptr<ID3D11InputLayout> inputLayout);
 
-		std::shared_ptr<Shader> GetShader(ShaderStages shaderStage);
-		void SetShader(ShaderStages shaderStage, std::shared_ptr<Shader> shader);
+		std::shared_ptr<Shader> GetShader(const ShaderStages shaderStage);
+		void SetShader(const ShaderStages shaderStage, std::shared_ptr<Shader> shader);
 
 		template <typename T>
 		std::shared_ptr<T> GetShader();
@@ -42,47 +58,47 @@ namespace Library
 		template <typename T>
 		void SetShader(std::shared_ptr<T> shader);
 
-		ID3D11ClassInstance* GetShaderClassInstance(ShaderStages shaderStage);
-		void SetShaderClassInstance(ShaderStages shaderStage, ID3D11ClassInstance* classInstance);
+		ID3D11ClassInstance* GetShaderClassInstance(const ShaderStages shaderStage);
+		void SetShaderClassInstance(const ShaderStages shaderStage, ID3D11ClassInstance* classInstance);
 
-		void SetConstantBuffer(ShaderStages shaderStage, ID3D11Buffer* constantBuffer);
-		void AddConstantBuffer(ShaderStages shaderStage, ID3D11Buffer* constantBuffer);
-		void AddConstantBuffers(ShaderStages shaderStage, const gsl::span<ID3D11Buffer*>& constantBuffers);
-		void RemoveConstantBuffer(ShaderStages shaderStage, ID3D11Buffer* constantBuffer);
-		void ClearConstantBuffers(ShaderStages shaderStage);
+		void SetConstantBuffer(const ShaderStages shaderStage, ID3D11Buffer* constantBuffer);
+		void AddConstantBuffer(const ShaderStages shaderStage, ID3D11Buffer* constantBuffer);
+		void AddConstantBuffers(const ShaderStages shaderStage, const gsl::span<ID3D11Buffer*>& constantBuffers);
+		void RemoveConstantBuffer(const ShaderStages shaderStage, ID3D11Buffer* constantBuffer);
+		void ClearConstantBuffers(const ShaderStages shaderStage);
 
-		void SetShaderResource(ShaderStages shaderStage, ID3D11ShaderResourceView* shaderResource);
-		void AddShaderResource(ShaderStages shaderStage, ID3D11ShaderResourceView* shaderResource);
-		void AddShaderResources(ShaderStages shaderStage, const gsl::span<ID3D11ShaderResourceView*>& shaderResources);
-		void RemoveShaderResource(ShaderStages shaderStage, ID3D11ShaderResourceView* shaderResource);
-		void ClearShaderResources(ShaderStages shaderStage);
+		void SetShaderResource(const ShaderStages shaderStage, ID3D11ShaderResourceView* shaderResource);
+		void AddShaderResource(const ShaderStages shaderStage, ID3D11ShaderResourceView* shaderResource);
+		void AddShaderResources(const ShaderStages shaderStage, const gsl::span<ID3D11ShaderResourceView*>& shaderResources);
+		void RemoveShaderResource(const ShaderStages shaderStage, ID3D11ShaderResourceView* shaderResource);
+		void ClearShaderResources(const ShaderStages shaderStage);
 
-		void SetSamplerState(ShaderStages shaderStage, ID3D11SamplerState* samplerState);
-		void AddSamplerState(ShaderStages shaderStage, ID3D11SamplerState* samplerState);
-		void AddSamplerStates(ShaderStages shaderStage, const gsl::span<ID3D11SamplerState*>& samplerStates);
-		void RemoveSamplerState(ShaderStages shaderStage, ID3D11SamplerState* samplerState);
-		void ClearSamplerStates(ShaderStages shaderStage);
+		void SetSamplerState(const ShaderStages shaderStage, ID3D11SamplerState* samplerState);
+		void AddSamplerState(const ShaderStages shaderStage, ID3D11SamplerState* samplerState);
+		void AddSamplerStates(const ShaderStages shaderStage, const gsl::span<ID3D11SamplerState*>& samplerStates);
+		void RemoveSamplerState(const ShaderStages shaderStage, ID3D11SamplerState* samplerState);
+		void ClearSamplerStates(const ShaderStages shaderStage);
 
-		std::function<void()> DrawCallback() const;
-		void SetDrawCallback(std::function<void()> callback);
+		CallbackFunctor DrawCallback() const;
+		void SetDrawCallback(CallbackFunctor callback);
 
-		std::function<void()> UpdateMaterialCallback() const;
-		void SetUpdateMaterialCallback(std::function<void()> callback);
+		CallbackFunctor UpdateMaterialCallback() const;
+		void SetUpdateMaterialCallback(CallbackFunctor callback);
 
-		std::pair<bool, ShaderStageData*> GetDataForShaderStage(ShaderStages shaderStage);
+		std::pair<bool, ShaderStageData*> GetDataForShaderStage(const ShaderStages shaderStage);
 		bool AutoUnbindShaderResourcesEnabled() const;
 		void SetAutoUnbindShaderResourcesEnabled(bool enabled);
 		
 		template <size_t _Count>
-		static void UnbindShaderResources(gsl::not_null<ID3D11DeviceContext*> direct3DDeviceContext, ShaderStages shaderStage, std::uint32_t startSlot = 0);
+		static void UnbindShaderResources(gsl::not_null<ID3D11DeviceContext*> direct3DDeviceContext, const ShaderStages shaderStage, std::uint32_t startSlot = 0);
 
 		template <size_t _Count>
-		void UnbindShaderResources(ShaderStages shaderStage, std::uint32_t startSlot = 0);
+		void UnbindShaderResources(const ShaderStages shaderStage, std::uint32_t startSlot = 0);
 
 		virtual void Initialize();
 		virtual void Draw();
-		virtual void Draw(gsl::not_null<ID3D11Buffer*> vertexBuffer, std::uint32_t vertexCount, std::uint32_t startVertexLocation = 0, std::uint32_t offset = 0);
-		virtual void DrawIndexed(gsl::not_null<ID3D11Buffer*> vertexBuffer, gsl::not_null<ID3D11Buffer*> indexBuffer, std::uint32_t indexCount, DXGI_FORMAT format = DXGI_FORMAT_R32_UINT, std::uint32_t startIndexLocation = 0, std::uint32_t baseVertexLocation = 0, std::uint32_t vertexOffset = 0, std::uint32_t indexOffset = 0);
+		virtual void Draw(Buffer& vertexBuffer, std::uint32_t vertexCount, std::uint32_t startVertexLocation = 0);
+		virtual void DrawIndexed(Buffer& vertexBuffer, Buffer& indexBuffer, const std::uint32_t indexCount, const Format& format = Format::R32UInt, const std::uint32_t startIndexLocation=0, const std::int32_t baseVertexLocation=0, const std::uint32_t indexOffset=0);
 		virtual std::uint32_t VertexSize() const;
 
 	private:
@@ -102,10 +118,10 @@ namespace Library
 		static void SetCSShader(ID3D11DeviceContext& direct3DDeviceContext, const ShaderStageData& shaderStageData);
 
 	protected:
-		static const std::map<ShaderStages, RTTI::IdType> ShaderStageTypeMap;
-		static const std::map<RTTI::IdType, ShaderStages> TypeShaderStageMap;
-		static const std::map<ShaderStages, ShaderStageCallInfo> ShaderStageCalls;
-		static std::vector<ID3D11ShaderResourceView*> EmptySRVs;
+		static const HashMap<ShaderStages, IdType> ShaderStageTypeMap;
+		static const HashMap<IdType, ShaderStages> TypeShaderStageMap;
+		static const HashMap<ShaderStages, ShaderStageCallInfo> ShaderStageCalls;
+		static Vector<ID3D11ShaderResourceView*> EmptySRVs;
 
 		virtual void BeginDraw();
 		virtual void EndDraw();
@@ -113,10 +129,13 @@ namespace Library
 		ContentManager& mContentManager;
 		RenderingManager& mRenderingManager;
 		PrimitiveTopology mTopology;
+		
 		winrt::com_ptr<ID3D11InputLayout> mInputLayout;
-		std::map<ShaderStages, ShaderStageData> mShaderStageData;
-		std::function<void()> mDrawCallback;
-		std::function<void()> mUpdateMaterialCallback;
+
+		HashMap<ShaderStages, ShaderStageData> mShaderStageData;
+		
+		CallbackFunctor mDrawCallback;
+		CallbackFunctor mUpdateMaterialCallback;
 		bool mAutoUnbindShaderResourcesEnabled{ false };
 	};
 }

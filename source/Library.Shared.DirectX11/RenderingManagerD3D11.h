@@ -47,18 +47,16 @@ namespace Library
 		virtual RenderContext* CreateRenderContext() override;
 
 		/**
-		 * @brief Creates a buffer from a descriptor and initial data
-		 * @param desc Descriptor for the buffer to be created
-		 * @param initialData Data used to initialize the buffer
-		 * @return Pointer to the created buffer
-		*/
-		virtual Buffer* CreateBuffer(const BufferDesc& desc, const void* initialData) override;
-
-		/**
 		 * @brief Sets the primitive topology of the render device context.
-		 * @param topology Topology type to be set. 
+		 * @param topology Topology type to be set.
 		*/
 		virtual void SetPrimitiveTopology(const PrimitiveTopology& topology) override;
+
+		/**
+		 * @brief Sets the vertex buffer of the render device context with the given buffer
+		 * @param buffer Vertex buffer to be used.
+		*/
+		virtual void SetVertexBuffer(Buffer& buffer) override;
 
 		/**
 		 * @brief Sets the index buffer of the render device context with the given buffer.
@@ -66,8 +64,43 @@ namespace Library
 		*/
 		virtual void SetIndexBuffer(Buffer& buffer) override;
 
-		// TODO: Set Vertex Buffer method
-		//virtual void SetVertexBuffer(Buffer& buffer) override;
+		/**
+		 * @brief Sets the index buffer of the render device context with the given buffer
+		 * @param buffer Index buffer to be used.
+		 * @param format Resource data format of the buffer
+		 * @param offset Index offset of the buffer
+		*/
+		virtual void SetIndexBuffer(Buffer& buffer, const Format& format, const std::uint32_t offset) override;
+
+		/**
+		 * @brief Draws vertices using the set vertex buffer
+		 * @param numVertices Number of vertices to be drawn
+		 * @param firstVertex Index offset of the first vertex to be drawn
+		*/
+		virtual void Draw(const std::uint32_t numVertices, const std::uint32_t firstVertex) const override;
+
+		/**
+		 * @brief Draws indexed vertices using the set vertex and index buffer
+		 * @param numIndices Number of indices to be drawn
+		 * @param firstIndex Index offset of the first index to be drawn
+		*/
+		virtual void DrawIndexed(const std::uint32_t numIndices, const std::uint32_t firstIndex) const override;
+
+		/**
+		 * @brief Draws indexed vertices using the set vertex and index buffer
+		 * @param numIndices Number of indices to be drawn
+		 * @param firstIndex Index offset of the first index to be drawn
+		 * @param vertexOffset Value added to each index before reading a vertex from the vertex buffer
+		*/
+		virtual void DrawIndexed(const std::uint32_t numIndices, const std::uint32_t firstIndex, const std::int32_t vertexOffset) const override;
+		
+		/**
+		 * @brief Creates a buffer from a descriptor and initial data
+		 * @param desc Descriptor for the buffer to be created
+		 * @param initialData Data used to initialize the buffer
+		 * @return Pointer to the created buffer
+		*/
+		virtual Buffer* CreateBuffer(const BufferDesc& desc, const void* initialData) override;
 #pragma endregion Modifiers
 
 #pragma region Accessors
@@ -131,4 +164,29 @@ namespace Library
 		std::set<std::unique_ptr<BufferD3D11>> mBuffers;				//!< @brief Set of created resource buffers
 #pragma endregion Data Members
 	};
+
+// TODO: Move to RenderingManagerD3D11.cpp
+#if defined(DEBUG) || defined(_DEBUG)
+/**
+ * @brief Check for SDK Layer support.
+ * @return True, if SDKLayers for debugging are available. Otherwise, false.
+*/
+inline bool SdkLayersAvailable()
+{
+	const HRESULT hr = D3D11CreateDevice(
+		nullptr,
+		D3D_DRIVER_TYPE_NULL,       // There is no need to create a real hardware device.
+		nullptr,
+		D3D11_CREATE_DEVICE_DEBUG,  // Check for the SDK layers.
+		nullptr,                    // Any feature level will do.
+		0,
+		D3D11_SDK_VERSION,          // Always set this to D3D11_SDK_VERSION for Windows Store apps.
+		nullptr,                    // No need to keep the D3D device reference.
+		nullptr,                    // No need to know the feature level.
+		nullptr                     // No need to keep the D3D device context reference.
+	);
+
+	return SUCCEEDED(hr);
+}
+#endif
 }

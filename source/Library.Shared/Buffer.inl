@@ -20,9 +20,9 @@ namespace Library
 	{
 		if (desc.Stride > 0) return desc.Stride;
 
-		if (desc.Format != Format::Unknown)
+		if (desc.FormatValue != Format::Unknown)
 		{
-			return std::max(1u, (FormatDescMap[desc.Format].BitSize / 8u));
+			return std::max(1u, (FormatDescMap[desc.FormatValue].BitSize / 8u));
 		}
 		
 		return 1;
@@ -30,19 +30,19 @@ namespace Library
 
 	inline bool BufferDesc::IsStructuredBuffer() const
 	{
-		return Stride > 0 && (BindFlags.Sampled || BindFlags.Storage);
+		return Stride > 0 && (BindFlagsValue.Sampled || BindFlagsValue.Storage);
 	}
 
 	inline bool BufferDesc::IsTypedBuffer() const
 	{
-		return Stride == 0 && Format != Format::Unknown
-			&& (BindFlags.Sampled || BindFlags.Storage);
+		return Stride == 0 && FormatValue != Format::Unknown
+			&& (BindFlagsValue.Sampled || BindFlagsValue.Storage);
 	}
 
 	inline bool BufferDesc::IsByteAddressBuffer() const
 	{
-		return Stride == 0 && Format == Format::Unknown
-			&& (BindFlags.Sampled || BindFlags.Storage);
+		return Stride == 0 && FormatValue == Format::Unknown
+			&& (BindFlagsValue.Sampled || BindFlagsValue.Storage);
 	}
 #pragma endregion Accessors
 }

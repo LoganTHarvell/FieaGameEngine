@@ -1090,6 +1090,41 @@ namespace ContainerTests
 			Assert::ExpectException<std::runtime_error>([&fooVector] { fooVector.PushBack(Foo(10)); });
 		}
 
+		TEST_METHOD(Insert)
+		{
+			const Vector intVector = { 1, 2, 3 };
+			const Vector doubleVector = { 1.0, 2.0, 3.0 };
+			const Vector fooVector = { Foo(1), Foo(2), Foo(3) };
+
+			Vector<int> insertInt;
+			insertInt.Insert(insertInt.cbegin(), intVector.cbegin(), intVector.cend());
+			Assert::AreEqual(intVector, insertInt);
+
+			Vector<double> insertDouble;
+			insertDouble.Insert(insertDouble.cbegin(), doubleVector.cbegin(), doubleVector.cend());
+			Assert::AreEqual(doubleVector, insertDouble);
+
+			Vector<Foo> insertFoo;
+			insertFoo.Insert(insertFoo.cbegin(), fooVector.cbegin(), fooVector.cend());
+			Assert::AreEqual(fooVector, insertFoo);
+
+			const gsl::span<const int> integers = gsl::make_span(intVector.Data(), intVector.Size());
+			const gsl::span<const double> doubles = gsl::make_span(doubleVector.Data(), doubleVector.Size());
+			const gsl::span<const Foo> foos = gsl::make_span(fooVector.Data(), fooVector.Size());
+
+			insertInt.Clear();
+			insertInt.Insert(insertInt.cbegin(), integers.cbegin(), integers.cend());
+			Assert::AreEqual(intVector, insertInt);
+
+			insertDouble.Clear();
+			insertDouble.Insert(insertDouble.cbegin(), doubleVector.cbegin(), doubleVector.cend());
+			Assert::AreEqual(doubleVector, insertDouble);
+
+			insertFoo.Clear();
+			insertFoo.Insert(insertFoo.cbegin(), fooVector.cbegin(), fooVector.cend());
+			Assert::AreEqual(fooVector, insertFoo);
+		}
+
 		TEST_METHOD(PopBack)
 		{
 			Vector<int> intVector = { 10, 20, 30 };

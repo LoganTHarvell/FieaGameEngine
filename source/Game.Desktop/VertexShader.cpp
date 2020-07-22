@@ -48,7 +48,7 @@ namespace Library
 			{
 				va.Name.c_str(),
 				va.SemanticIndex,
-				Direct3D::FormatMap[va.Format],
+				Direct3D::FormatMap[va.FormatValue],
 				va.Slot,
 				D3D11_APPEND_ALIGNED_ELEMENT,
 				D3D11_INPUT_PER_VERTEX_DATA,
