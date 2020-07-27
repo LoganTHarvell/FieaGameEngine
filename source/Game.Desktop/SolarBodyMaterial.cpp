@@ -16,6 +16,7 @@ namespace Demo
 	{
 	}
 
+#pragma region Accessors
 	Sampler* SolarBodyMaterial::SamplerState() const
 	{
 		return mSamplerState;
@@ -124,16 +125,18 @@ namespace Demo
 	{
 		return sizeof(VertexPositionTextureNormal);
 	}
+#pragma endregion Accessors
 
+#pragma region Modifiers
 	void SolarBodyMaterial::Initialize()
 	{
 		Material::Initialize();
 
 		auto vertexShader = mContentManager.Load<VertexShader>(L"Shaders\\PointLightDemoVS.cso"s);
+		vertexShader->CreateInputLayout<VertexPositionTextureNormal>(mRenderingManager);
 		SetShader(vertexShader);
 
 		const auto pixelShader = mContentManager.Load<PixelShader>(L"Shaders\\PointLightDemoPS.cso");
-		vertexShader->CreateInputLayout<VertexPositionTextureNormal>(mRenderingManager);
 		SetShader(pixelShader);
 
 		mVertexCBufferPerFrame = mRenderingManager.CreateConstantBuffer(sizeof(VertexCBufferPerFrame));
@@ -177,6 +180,7 @@ namespace Demo
 		assert(mVertexCBufferPerObject);
 		mRenderingManager.UpdateBuffer(*mVertexCBufferPerObject, &mVertexCBufferPerObjectData, sizeof(VertexCBufferPerObject));
 	}
+#pragma endregion Modifiers
 
 	void SolarBodyMaterial::BeginDraw()
 	{

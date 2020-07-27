@@ -21,7 +21,7 @@ namespace Library
 		inline static winrt::com_ptr<ID3D11SamplerState> ShadowMap;
 		inline static winrt::com_ptr<ID3D11SamplerState> PcfShadowMap;
 
-		static const HashMap<Sampler::Type, std::shared_ptr<SamplerD3D11>> TypeSamplerMap;
+		static HashMap<Sampler::Type, std::shared_ptr<SamplerD3D11>> TypeSamplerMap;
 
 		static DirectX::XMVECTORF32 BorderColor;
 		static DirectX::XMVECTORF32 ShadowMapBorderColor;

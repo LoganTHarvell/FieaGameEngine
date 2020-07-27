@@ -16,6 +16,7 @@ namespace Demo
 	{
 		RTTI_DECLARATIONS_ABSTRACT(SolarBodyMaterial, Library::Material)
 
+#pragma region Special Members
 	public:
 		SolarBodyMaterial(Library::ContentManager& contentManager, Library::RenderingManager& renderingManager, std::shared_ptr<Library::Texture2D> colormap, std::shared_ptr<Library::Texture2D> specularMap);
 		SolarBodyMaterial(const SolarBodyMaterial&) = default;
@@ -23,7 +24,10 @@ namespace Demo
 		SolarBodyMaterial(SolarBodyMaterial&&) = default;
 		SolarBodyMaterial& operator=(SolarBodyMaterial&&) = default;
 		virtual ~SolarBodyMaterial() = default;
+#pragma endregion Special Members
 
+#pragma region Accessors
+	public:
 		Library::Sampler* SamplerState() const;
 		void SetSamplerState(gsl::not_null<Library::Sampler*> samplerState);
 
@@ -50,12 +54,17 @@ namespace Demo
 
 		float SpecularPower() const;
 		void SetSpecularPower(float power);
-
+		
 		virtual std::uint32_t VertexSize() const override;
+#pragma endregion Accessors
+
+#pragma region Modifiers
+	public:
 		virtual void Initialize() override;
 
 		void UpdateCameraPosition(const DirectX::XMFLOAT3& position);
 		void UpdateTransforms(DirectX::FXMMATRIX worldViewProjectionMatrix, DirectX::CXMMATRIX worldMatrix);
+#pragma endregion Modifiers
 		
 	private:
 		struct VertexCBufferPerFrame
@@ -103,6 +112,7 @@ namespace Demo
 		bool mVertexCBufferPerFrameDataDirty{ true };
 		bool mPixelCBufferPerFrameDataDirty{ true };
 		bool mPixelCBufferPerObjectDataDirty{ true };
+		
 		std::shared_ptr<Library::Texture2D> mColorMap;
 		std::shared_ptr<Library::Texture2D> mSpecularMap;
 		Library::Sampler* mSamplerState;

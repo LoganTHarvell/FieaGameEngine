@@ -7,6 +7,7 @@
 
 // First Party
 #include "RenderingManager.h"
+#include "Shader.h"
 #pragma endregion Includes
 
 namespace Library

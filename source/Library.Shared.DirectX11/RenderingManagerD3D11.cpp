@@ -325,7 +325,7 @@ namespace Library
 
 	Sampler* RenderingManagerD3D11::GetSamplerState(const Sampler::Type samplerType) const
 	{
-		return SamplerStatesD3D11::TypeSamplerMap[samplerType].get();
+		return SamplerStatesD3D11::TypeSamplerMap.At(samplerType).get();
 	}
 
 	winrt::com_ptr<ID3D11Device> RenderingManagerD3D11::DeviceComPtr() const

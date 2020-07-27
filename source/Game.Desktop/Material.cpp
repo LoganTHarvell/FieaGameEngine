@@ -128,7 +128,6 @@ namespace Library
 
 			for (const auto& resourceList : shaderStageData.Resources)
 			{
-				// TODO: Might need 0 check?
 				mRenderingManager.SetShaderResources(entry.first, resourceList.first, resourceList.second);
 			}
 		}

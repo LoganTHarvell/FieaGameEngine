@@ -12,7 +12,7 @@
 
 namespace Library
 {
-	const HashMap<Sampler::Type, std::shared_ptr<SamplerD3D11>> SamplerStatesD3D11::TypeSamplerMap
+	HashMap <Sampler::Type, std::shared_ptr<SamplerD3D11>> SamplerStatesD3D11::TypeSamplerMap
 	{
 		{ Sampler::Type::TrilinearWrap,		std::make_shared<SamplerD3D11>(TrilinearWrap)	},
 		{ Sampler::Type::TrilinearMirror,	std::make_shared<SamplerD3D11>(TrilinearMirror) },
@@ -23,7 +23,7 @@ namespace Library
 		{ Sampler::Type::ShadowMap,			std::make_shared<SamplerD3D11>(ShadowMap)		},
 		{ Sampler::Type::PcfShadowMap,		std::make_shared<SamplerD3D11>(PcfShadowMap)	}
 	};
-
+	
 	DirectX::XMVECTORF32 SamplerStatesD3D11::BorderColor{ DirectX::Colors::White };
 	DirectX::XMVECTORF32 SamplerStatesD3D11::ShadowMapBorderColor{ DirectX::Colors::White };
 
@@ -88,6 +88,18 @@ namespace Library
 		samplerStateDesc.ComparisonFunc = D3D11_COMPARISON_LESS_EQUAL;
 		memcpy(samplerStateDesc.BorderColor, ShadowMapBorderColor.f, sizeof(FLOAT) * 4);
 		ThrowIfFailed(direct3DDevice->CreateSamplerState(&samplerStateDesc, PcfShadowMap.put()), "ID3D11Device::CreateSamplerState() failed.");
+
+		SamplerStatesD3D11::TypeSamplerMap =
+		{
+			{ Sampler::Type::TrilinearWrap,		std::make_shared<SamplerD3D11>(TrilinearWrap)	},
+			{ Sampler::Type::TrilinearMirror,	std::make_shared<SamplerD3D11>(TrilinearMirror) },
+			{ Sampler::Type::TrilinearClamp,	std::make_shared<SamplerD3D11>(TrilinearClamp)	},
+			{ Sampler::Type::TrilinearBorder,	std::make_shared<SamplerD3D11>(TrilinearBorder)	},
+			{ Sampler::Type::PointClamp,		std::make_shared<SamplerD3D11>(PointClamp)		},
+			{ Sampler::Type::DepthMap,			std::make_shared<SamplerD3D11>(DepthMap)		},
+			{ Sampler::Type::ShadowMap,			std::make_shared<SamplerD3D11>(ShadowMap)		},
+			{ Sampler::Type::PcfShadowMap,		std::make_shared<SamplerD3D11>(PcfShadowMap)	}
+		};
 	}
 
 	void SamplerStatesD3D11::Shutdown()
@@ -100,5 +112,17 @@ namespace Library
 		DepthMap = nullptr;
 		ShadowMap = nullptr;
 		PcfShadowMap = nullptr;
+
+		SamplerStatesD3D11::TypeSamplerMap =
+		{
+			{ Sampler::Type::TrilinearWrap,		std::make_shared<SamplerD3D11>(TrilinearWrap)	},
+			{ Sampler::Type::TrilinearMirror,	std::make_shared<SamplerD3D11>(TrilinearMirror) },
+			{ Sampler::Type::TrilinearClamp,	std::make_shared<SamplerD3D11>(TrilinearClamp)	},
+			{ Sampler::Type::TrilinearBorder,	std::make_shared<SamplerD3D11>(TrilinearBorder)	},
+			{ Sampler::Type::PointClamp,		std::make_shared<SamplerD3D11>(PointClamp)		},
+			{ Sampler::Type::DepthMap,			std::make_shared<SamplerD3D11>(DepthMap)		},
+			{ Sampler::Type::ShadowMap,			std::make_shared<SamplerD3D11>(ShadowMap)		},
+			{ Sampler::Type::PcfShadowMap,		std::make_shared<SamplerD3D11>(PcfShadowMap)	}
+		};
 	}
 }

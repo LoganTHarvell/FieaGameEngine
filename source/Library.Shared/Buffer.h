@@ -164,9 +164,9 @@ namespace Library
 		Type BufferType() const;
 
 		/**
-		 * @brief Gets the 
-		 * @param desc 
-		 * @return 
+		 * @brief Gets the storage buffer byte width
+		 * @param desc Descriptor for the buffer
+		 * @return Size of the storage buffer in bytes
 		*/
 		std::uint32_t GetStorageBufferStride(const BufferDesc& desc) const;
 #pragma endregion Accessors
