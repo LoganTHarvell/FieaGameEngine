@@ -99,25 +99,16 @@
     <ClCompile Include="Ray.cpp">
       <Filter>Math</Filter>
     </ClCompile>
-    <ClCompile Include="Rectangle.cpp">
-      <Filter>Math</Filter>
-    </ClCompile>
     <ClCompile Include="BlendStates.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Bloom.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="ComputeShader.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="DepthMap.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="DepthStencilStates.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="DomainShader.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="FullScreenQuad.cpp">
@@ -129,20 +120,8 @@
     <ClCompile Include="GaussianBlur.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="GeometryShader.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="HullShader.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="PerspectiveCamera.cpp">
       <Filter>Cameras</Filter>
-    </ClCompile>
-    <ClCompile Include="PixelShader.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Point.cpp">
-      <Filter>Math</Filter>
     </ClCompile>
     <ClCompile Include="RasterizerStates.cpp">
       <Filter>Graphics</Filter>
@@ -153,25 +132,7 @@
     <ClCompile Include="RenderTarget.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="SamplerStates.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Shader.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="Skybox.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Texture.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Texture2D.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="TextureCube.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="VertexShader.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="SolarBody.cpp">
@@ -325,13 +286,7 @@
     <ClInclude Include="Frustum.h">
       <Filter>Math</Filter>
     </ClInclude>
-    <ClInclude Include="Point.h">
-      <Filter>Math</Filter>
-    </ClInclude>
     <ClInclude Include="Ray.h">
-      <Filter>Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Rectangle.h">
       <Filter>Math</Filter>
     </ClInclude>
     <ClInclude Include="BlendStates.h">
@@ -340,16 +295,10 @@
     <ClInclude Include="Bloom.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="ComputeShader.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="DepthMap.h">
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="DepthStencilStates.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="DomainShader.h">
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="FullScreenQuad.h">
@@ -361,17 +310,8 @@
     <ClInclude Include="GaussianBlur.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="GeometryShader.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="HullShader.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="PerspectiveCamera.h">
       <Filter>Cameras</Filter>
-    </ClInclude>
-    <ClInclude Include="PixelShader.h">
-      <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="RasterizerStates.h">
       <Filter>Graphics</Filter>
@@ -382,25 +322,7 @@
     <ClInclude Include="RenderTarget.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="SamplerStates.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Skybox.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture2D.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureCube.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="VertexShader.h">
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="SolarBody.h">
@@ -518,15 +440,6 @@
     </None>
     <None Include="Material.inl">
       <Filter>Materials</Filter>
-    </None>
-    <None Include="Point.inl">
-      <Filter>Math</Filter>
-    </None>
-    <None Include="Rectangle.inl">
-      <Filter>Math</Filter>
-    </None>
-    <None Include="Texture.inl">
-      <Filter>Graphics</Filter>
     </None>
     <None Include="VectorHelper.inl">
       <Filter>Helpers</Filter>

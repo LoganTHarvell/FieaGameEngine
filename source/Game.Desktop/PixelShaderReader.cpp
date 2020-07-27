@@ -3,6 +3,10 @@
 #include "Game.h"
 #include "GameException.h"
 #include "Utility.h"
+
+// TODO: Remove dependency through render manager create call
+#include "ShaderD3D11.h"
+
 namespace Library
 {
 	PixelShaderReader::PixelShaderReader(Game& game) :
@@ -17,7 +21,7 @@ namespace Library
 		File::LoadBinary(String::ToString(assetName), compiledPixelShader);
 		ThrowIfFailed(mGame->Direct3DDevice()->CreatePixelShader(&compiledPixelShader[0], compiledPixelShader.Size(), nullptr, pixelShader.put()), "ID3D11Device::CreatedPixelShader() failed.");
 		
-		return std::make_shared<PixelShader>(std::move(pixelShader));
+		return std::make_shared<PixelShaderD3D11>(std::move(pixelShader));
 	}
 
 	PixelShaderWithClassLinkageReader::PixelShaderWithClassLinkageReader(Game& game, winrt::com_ptr<ID3D11ClassLinkage> classLinkage) :
@@ -34,6 +38,6 @@ namespace Library
 		File::LoadBinary(String::ToString(assetName), compiledPixelShader);
 		ThrowIfFailed(mGame->Direct3DDevice()->CreatePixelShader(&compiledPixelShader[0], compiledPixelShader.Size(), mClassLinkage.get(), pixelShader.put()), "ID3D11Device::CreatedPixelShader() failed.");
 
-		return std::make_shared<PixelShader>(std::move(pixelShader));
+		return std::make_shared<PixelShaderD3D11>(std::move(pixelShader));
 	}
 }

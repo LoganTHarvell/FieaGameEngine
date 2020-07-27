@@ -4,6 +4,9 @@
 #include "GameException.h"
 #include "Utility.h"
 
+// TODO: Remove dependency through render manager create call
+#include "ShaderD3D11.h"
+
 namespace Library
 {
 	VertexShaderReader::VertexShaderReader(Game& game) :
@@ -13,11 +16,12 @@ namespace Library
 
 	std::shared_ptr<VertexShader> VertexShaderReader::_Read(const std::wstring& assetName)
 	{
+		// TODO: RenderingManager CreateShader call
 		winrt::com_ptr<ID3D11VertexShader> vertexShader;
 		Vector<char> compiledVertexShader;
 		File::LoadBinary(String::ToString(assetName), compiledVertexShader);
 		ThrowIfFailed(mGame->Direct3DDevice()->CreateVertexShader(&compiledVertexShader[0], compiledVertexShader.Size(), nullptr, vertexShader.put()), "ID3D11Device::CreatedVertexShader() failed.");
 		
-		return std::shared_ptr<VertexShader>(new VertexShader(std::move(compiledVertexShader), std::move(vertexShader)));
+		return std::shared_ptr<VertexShader>(new VertexShaderD3D11(std::move(compiledVertexShader), std::move(vertexShader)));
 	}
 }

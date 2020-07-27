@@ -5,6 +5,9 @@
 #include "StringHelper.h"
 #include "TextureHelper.h"
 
+// TODO: Remove dependencies using RenderingManager
+#include "TextureD3D11.h"
+
 namespace Library
 {
 	Texture2DReader::Texture2DReader(Game& game) :
@@ -28,6 +31,6 @@ namespace Library
 		const winrt::com_ptr<ID3D11Texture2D> texture = resource.as<ID3D11Texture2D>();
 		Point textureSize = TextureHelper::GetTextureSize(gsl::not_null<ID3D11Texture2D*>(texture.get()));
 
-		return std::make_shared<Texture2D>(std::move(shaderResourceView), textureSize.X, textureSize.Y);
+		return std::make_shared<Texture2DD3D11>(std::move(shaderResourceView), textureSize.X, textureSize.Y);
 	}
 }

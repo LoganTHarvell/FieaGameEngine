@@ -58,6 +58,51 @@ namespace Library
 	}
 #pragma endregion Special Members
 
+#pragma region Modifiers
+	void BufferD3D11::UpdateSubresource(ID3D11DeviceContext* context, const void* data, const UINT dataSize, const UINT offset)
+	{
+		/* Validate parameters */
+		assert(dataSize + offset <= Size());
+
+		if (mUsage == D3D11_USAGE_DYNAMIC)
+		{
+			/* Discard previous content if the entire resource will be updated */
+			const auto writeDiscard = (offset == 0 && dataSize == Size()) ? D3D11_MAP_WRITE_DISCARD : D3D11_MAP_WRITE;
+
+			/* Update partial subresource by mapping buffer from GPU into CPU memory space */
+			D3D11_MAPPED_SUBRESOURCE subresource;
+			context->Map(mBuffer.get(), 0, writeDiscard, 0, &subresource);
+			{
+				std::memcpy(static_cast<char*>(subresource.pData) + offset, data, dataSize);
+			}
+			
+			context->Unmap(Native(), 0);
+		}
+		else
+		{
+			if (BufferType() == BufferType::Constant)
+			{
+				/* Update entire subresource */
+				if (dataSize == Size())
+					context->UpdateSubresource(Native(), 0, nullptr, data, 0, 0);
+				else
+					throw std::out_of_range("cannot update D3D11 buffer partially when it is created with static usage");
+			}
+			else
+			{
+				/* Update sub region of buffer */
+				const D3D11_BOX dstBox{ offset, 0, 0, offset + dataSize, 1, 1 };
+				context->UpdateSubresource(Native(), 0, &dstBox, data, 0, 0);
+			}
+		}
+	}
+
+	void BufferD3D11::UpdateSubresource(ID3D11DeviceContext* context, const void* data)
+	{
+		context->UpdateSubresource(Native(), 0, nullptr, data, 0, 0);
+	}
+#pragma endregion Modifiers
+
 #pragma region Helper Methods
 	void BufferD3D11::CreateCpuAccessBuffer(ID3D11Device* device, const BufferDesc& desc)
 	{

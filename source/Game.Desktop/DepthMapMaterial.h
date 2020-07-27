@@ -24,6 +24,6 @@ namespace Library
 	private:
 		void SetSurfaceColor(const float* color);
 
-		winrt::com_ptr<ID3D11Buffer> mVSConstantBuffer;
+		Buffer* mVSConstantBuffer{ nullptr };
 	};
 }

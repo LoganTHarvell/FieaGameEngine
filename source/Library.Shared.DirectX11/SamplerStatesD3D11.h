@@ -1,13 +1,15 @@
 #pragma once
 
-#include <winrt\Windows.Foundation.h>
+#include <winrt/Windows.Foundation.h>
 #include <d3d11.h>
 #include <DirectXMath.h>
-#include <gsl\gsl>
+#include <gsl/gsl>
+
+#include "SamplerD3D11.h"
 
 namespace Library
 {
-	class SamplerStates final
+	class SamplerStatesD3D11 final
 	{
 	public:
 		inline static winrt::com_ptr<ID3D11SamplerState> TrilinearWrap;
@@ -19,17 +21,19 @@ namespace Library
 		inline static winrt::com_ptr<ID3D11SamplerState> ShadowMap;
 		inline static winrt::com_ptr<ID3D11SamplerState> PcfShadowMap;
 
+		static const HashMap<Sampler::Type, std::shared_ptr<SamplerD3D11>> TypeSamplerMap;
+
 		static DirectX::XMVECTORF32 BorderColor;
 		static DirectX::XMVECTORF32 ShadowMapBorderColor;
 
 		static void Initialize(gsl::not_null<ID3D11Device*> direct3DDevice);
 		static void Shutdown();
 
-		SamplerStates() = delete;
-		SamplerStates(const SamplerStates&) = delete;
-		SamplerStates& operator=(const SamplerStates&) = delete;
-		SamplerStates(SamplerStates&&) = delete;
-		SamplerStates& operator=(SamplerStates&&) = delete;
-		~SamplerStates() = default;
+		SamplerStatesD3D11() = delete;
+		SamplerStatesD3D11(const SamplerStatesD3D11&) = delete;
+		SamplerStatesD3D11& operator=(const SamplerStatesD3D11&) = delete;
+		SamplerStatesD3D11(SamplerStatesD3D11&&) = delete;
+		SamplerStatesD3D11& operator=(SamplerStatesD3D11&&) = delete;
+		~SamplerStatesD3D11() = default;
 	};
 }

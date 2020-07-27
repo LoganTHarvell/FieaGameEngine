@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ContentTypeReader.h"
-#include "TextureCube.h"
+#include "Texture.h"
 
 namespace Library
 {

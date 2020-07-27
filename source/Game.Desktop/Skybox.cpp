@@ -4,14 +4,13 @@
 
 #include "Skybox.h"
 
-#include "BufferD3D11.h"
 #include "Game.h"
 #include "FirstPersonCamera.h"
 #include "Model.h"
 #include "Mesh.h"
 #include "SkyboxMaterial.h"
 #include "VertexDeclarations.h"
-#include "TextureCube.h"
+#include "Texture.h"
 
 using namespace std;
 using namespace gsl;

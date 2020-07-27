@@ -297,7 +297,6 @@
     <ClCompile Include="Bloom.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ColorHelper.cpp" />
-    <ClCompile Include="ComputeShader.cpp" />
     <ClCompile Include="ComputeShaderReader.cpp" />
     <ClCompile Include="ContentManager.cpp" />
     <ClCompile Include="ContentTypeReader.cpp" />
@@ -306,7 +305,6 @@
     <ClCompile Include="DepthMapMaterial.cpp" />
     <ClCompile Include="DepthStencilStates.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
-    <ClCompile Include="DomainShader.cpp" />
     <ClCompile Include="DomainShaderReader.cpp" />
     <ClCompile Include="DrawableGameComponent.cpp" />
     <ClCompile Include="FirstPersonCamera.cpp" />
@@ -319,10 +317,8 @@
     <ClCompile Include="GameComponent.cpp" />
     <ClCompile Include="GamePadComponent.cpp" />
     <ClCompile Include="GaussianBlur.cpp" />
-    <ClCompile Include="GeometryShader.cpp" />
     <ClCompile Include="GeometryShaderReader.cpp" />
     <ClCompile Include="Grid.cpp" />
-    <ClCompile Include="HullShader.cpp" />
     <ClCompile Include="HullShaderReader.cpp" />
     <ClCompile Include="ImGuiComponent.cpp" />
     <ClCompile Include="imgui_impl_dx11.cpp">
@@ -352,9 +348,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-Linux|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="PerspectiveCamera.cpp" />
-    <ClCompile Include="PixelShader.cpp" />
     <ClCompile Include="PixelShaderReader.cpp" />
-    <ClCompile Include="Point.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="SolarSystemDemo.cpp" />
     <ClCompile Include="SolarBodyMaterial.cpp" />
@@ -362,30 +356,23 @@
     <ClCompile Include="ProxyModel.cpp" />
     <ClCompile Include="RasterizerStates.cpp" />
     <ClCompile Include="Ray.cpp" />
-    <ClCompile Include="Rectangle.cpp" />
     <ClCompile Include="RenderableFrustum.cpp" />
     <ClCompile Include="RenderingGame.cpp" />
     <ClCompile Include="RenderStateHelper.cpp" />
     <ClCompile Include="RenderTarget.cpp" />
-    <ClCompile Include="SamplerStates.cpp" />
     <ClCompile Include="ServiceContainer.cpp" />
-    <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="SkyboxMaterial.cpp" />
     <ClCompile Include="SolarBody.cpp" />
     <ClCompile Include="SolarSystem.cpp" />
     <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="StringHelper.cpp" />
-    <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="Texture2DReader.cpp" />
-    <ClCompile Include="TextureCube.cpp" />
     <ClCompile Include="TextureCubeReader.cpp" />
     <ClCompile Include="TexturedModelMaterial.cpp" />
     <ClCompile Include="TextureHelper.cpp" />
     <ClCompile Include="UtilityWin32.cpp" />
     <ClCompile Include="VectorHelper.cpp" />
-    <ClCompile Include="VertexShader.cpp" />
     <ClCompile Include="VertexShaderReader.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -394,7 +381,6 @@
     <ClInclude Include="Bloom.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ColorHelper.h" />
-    <ClInclude Include="ComputeShader.h" />
     <ClInclude Include="ComputeShaderReader.h" />
     <ClInclude Include="ContentManager.h" />
     <ClInclude Include="ContentTypeReader.h" />
@@ -403,7 +389,6 @@
     <ClInclude Include="DepthMapMaterial.h" />
     <ClInclude Include="DepthStencilStates.h" />
     <ClInclude Include="DirectionalLight.h" />
-    <ClInclude Include="DomainShader.h" />
     <ClInclude Include="DomainShaderReader.h" />
     <ClInclude Include="DrawableGameComponent.h" />
     <ClInclude Include="FirstPersonCamera.h" />
@@ -416,10 +401,8 @@
     <ClInclude Include="GameComponent.h" />
     <ClInclude Include="GamePadComponent.h" />
     <ClInclude Include="GaussianBlur.h" />
-    <ClInclude Include="GeometryShader.h" />
     <ClInclude Include="GeometryShaderReader.h" />
     <ClInclude Include="Grid.h" />
-    <ClInclude Include="HullShader.h" />
     <ClInclude Include="HullShaderReader.h" />
     <ClInclude Include="ImGuiComponent.h" />
     <ClInclude Include="imgui_impl_dx11.h" />
@@ -432,39 +415,30 @@
     <ClInclude Include="OrthographicCamera.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="PerspectiveCamera.h" />
-    <ClInclude Include="PixelShader.h" />
     <ClInclude Include="PixelShaderReader.h" />
-    <ClInclude Include="Point.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="SolarSystemDemo.h" />
     <ClInclude Include="SolarBodyMaterial.h" />
     <ClInclude Include="ProxyModel.h" />
     <ClInclude Include="RasterizerStates.h" />
     <ClInclude Include="Ray.h" />
-    <ClInclude Include="Rectangle.h" />
     <ClInclude Include="RenderableFrustum.h" />
     <ClInclude Include="RenderingGame.h" />
     <ClInclude Include="RenderStateHelper.h" />
     <ClInclude Include="RenderTarget.h" />
-    <ClInclude Include="SamplerStates.h" />
     <ClInclude Include="ServiceContainer.h" />
-    <ClInclude Include="Shader.h" />
     <ClInclude Include="Skybox.h" />
     <ClInclude Include="SkyboxMaterial.h" />
     <ClInclude Include="SolarBody.h" />
     <ClInclude Include="SolarSystem.h" />
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="StringHelper.h" />
-    <ClInclude Include="Texture.h" />
-    <ClInclude Include="Texture2D.h" />
     <ClInclude Include="Texture2DReader.h" />
-    <ClInclude Include="TextureCube.h" />
     <ClInclude Include="TextureCubeReader.h" />
     <ClInclude Include="TexturedModelMaterial.h" />
     <ClInclude Include="TextureHelper.h" />
     <ClInclude Include="UtilityWin32.h" />
     <ClInclude Include="VectorHelper.h" />
-    <ClInclude Include="VertexShader.h" />
     <ClInclude Include="VertexShaderReader.h" />
   </ItemGroup>
   <ItemGroup>
@@ -476,9 +450,6 @@
     <None Include="Light.inl" />
     <None Include="Material.inl" />
     <None Include="packages.config" />
-    <None Include="Point.inl" />
-    <None Include="Rectangle.inl" />
-    <None Include="Texture.inl" />
     <None Include="VectorHelper.inl" />
   </ItemGroup>
   <ItemGroup>

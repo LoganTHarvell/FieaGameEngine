@@ -2,17 +2,25 @@
 
 #pragma region Includes
 // First Party
+#include "Resource.h"
 #include "RTTI.h"
+#include "Sampler.h"
 #pragma endregion Includes
 
 namespace Library
 {
 	// Forward Declarations
+	template<typename T> class Vector;
+	template<typename TKey, typename TData> class HashMap;
 	class RenderContext;
 	struct BufferDesc;
-	class Buffer;
-	class Mesh;
 	enum class PrimitiveTopology;
+	class Resource;
+	class Buffer;
+	class Shader;
+	enum class ShaderStages;
+	class VertexShader;
+	class Mesh;
 	enum class Format;
 
 	/**
@@ -92,6 +100,29 @@ namespace Library
 		virtual void SetIndexBuffer(Buffer& buffer, const Format& format, const std::uint32_t offset) = 0;
 
 		/**
+		 * @brief Sets the shader to be used by the render device context
+		 * @param shader Shader instance to be used
+		*/
+		virtual void SetShader(Shader* shader) const = 0;
+
+		/**
+		 * @brief Sets the shader resources for specific shader stages
+		 * @param stage Stage for the resources should be set for
+		 * @param resources Mapping of shader stages to their new resource data
+		 * @param startSlot Starting slot for the resources to be overwritten
+		*/
+		virtual void SetShaderResources(const ShaderStages stage, const Resource::Type, const Vector<Resource*>& resources, const std::uint32_t startSlot=0) const = 0;
+
+		/**
+		 * @brief Updates sub-resource data for a Buffer
+		 * @param buffer Buffer to be updated
+		 * @param offset Offset into the buffer to update
+		 * @param data Data used to update the buffer
+		 * @param dataSize Size of the data in bytes
+		*/
+		virtual void UpdateBuffer(Buffer& buffer, const void* data, const std::uint16_t dataSize, const std::uint64_t offset=0) = 0;
+		
+		/**
 		 * @brief Draws vertices using the set vertex buffer
 		 * @param numVertices Number of vertices to be drawn
 		 * @param firstVertex Index offset of the first vertex to be drawn
@@ -165,6 +196,13 @@ namespace Library
 		 * @return Window callback functor.
 		*/
 		const WindowCallback& GetWindowCallback() const;
+
+		/**
+		 * @brief Gets one of a number of sampler states based on the type
+		 * @param samplerType Sampler state type to get
+		 * @return Pointer to a Sampler wrapping the native sampler state
+		*/
+		virtual Sampler* GetSamplerState(const Sampler::Type samplerType) const = 0;
 #pragma endregion Accessors
 
 #pragma region Data Members

@@ -7,7 +7,7 @@
 
 // First Party
 #include "SolarSystem.h"
-#include "Texture2D.h"
+#include "Texture.h"
 #include "Utility.h"
 #include "WorldState.h"
 #include "ContentManager.h"

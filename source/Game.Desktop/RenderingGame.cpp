@@ -8,7 +8,7 @@
 #include "SolarSystemDemo.h"
 #include "Grid.h"
 #include "FirstPersonCamera.h"
-#include "SamplerStates.h"
+#include "SamplerStatesD3D11.h"
 #include "RasterizerStates.h"
 #include "VectorHelper.h"
 #include "ImGuiComponent.h"
@@ -31,7 +31,7 @@ namespace Demo
 
 	void RenderingGame::Initialize()
 	{
-		SamplerStates::Initialize(Direct3DDevice()); 
+		SamplerStatesD3D11::Initialize(Direct3DDevice()); 
 		RasterizerStates::Initialize(Direct3DDevice());
 
 		mKeyboard = make_shared<KeyboardComponent>(*this);
@@ -257,7 +257,7 @@ namespace Demo
 		mFpsComponent = nullptr;
 		mSolarSystemDemo = nullptr;
 		RasterizerStates::Shutdown();
-		SamplerStates::Shutdown();
+		SamplerStatesD3D11::Shutdown();
 		Game::Shutdown();		
 	}
 

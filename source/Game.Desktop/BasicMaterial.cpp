@@ -3,8 +3,7 @@
 #include "Game.h"
 #include "GameException.h"
 #include "VertexDeclarations.h"
-#include "VertexShader.h"
-#include "PixelShader.h"
+#include "Shader.h"
 
 using namespace std;
 using namespace gsl;
@@ -32,35 +31,33 @@ namespace Library
 		Material::Initialize();
 
 		auto vertexShader = mContentManager.Load<VertexShader>(L"Shaders\\BasicVS.cso");
+		vertexShader->CreateInputLayout<VertexPosition>(mRenderingManager);
 		SetShader(vertexShader);
 
-		auto pixelShader = mContentManager.Load<PixelShader>(L"Shaders\\BasicPS.cso");
+		const auto pixelShader = mContentManager.Load<PixelShader>(L"Shaders\\BasicPS.cso");
 		SetShader(pixelShader);
 
-		auto* direct3DDevice = static_cast<RenderingManagerD3D11&>(mRenderingManager).Device();
-		vertexShader->CreateInputLayout<VertexPosition>(direct3DDevice);
-		SetInputLayout(vertexShader->InputLayout());
+		mVSConstantBuffer = mRenderingManager.CreateConstantBuffer(sizeof(XMFLOAT4X4));
+		mPSConstantBuffer = mRenderingManager.CreateConstantBuffer(sizeof(XMFLOAT4));
 
-		D3D11_BUFFER_DESC constantBufferDesc{ 0 };
-		constantBufferDesc.ByteWidth = sizeof(XMFLOAT4X4);
-		constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		ThrowIfFailed(direct3DDevice->CreateBuffer(&constantBufferDesc, nullptr, mVSConstantBuffer.put()), "ID3D11Device::CreateMeshIndexBuffer() failed.");
-		AddConstantBuffer(ShaderStages::VS, mVSConstantBuffer.get());
+		assert(mVSConstantBuffer);
+		assert(mPSConstantBuffer);
 
-		constantBufferDesc.ByteWidth = sizeof(XMFLOAT4);		
-		ThrowIfFailed(direct3DDevice->CreateBuffer(&constantBufferDesc, nullptr, mPSConstantBuffer.put()), "ID3D11Device::CreateMeshIndexBuffer() failed.");
-		AddConstantBuffer(ShaderStages::PS, mPSConstantBuffer.get());
+		AddShaderResource(ShaderStages::VS, *mVSConstantBuffer);
+		AddShaderResource(ShaderStages::PS, *mPSConstantBuffer);
 
 		SetSurfaceColor(Colors::White.f);
 	}
 
 	void BasicMaterial::UpdateTransform(CXMMATRIX worldViewProjectionMatrix)
 	{
-		static_cast<RenderingManagerD3D11&>(mRenderingManager).Context()->UpdateSubresource(mVSConstantBuffer.get(), 0, nullptr, worldViewProjectionMatrix.r, 0, 0);
+		assert(mVSConstantBuffer);
+		mRenderingManager.UpdateBuffer(*mVSConstantBuffer, &worldViewProjectionMatrix.r, sizeof(CXMMATRIX));
 	}
 
 	void BasicMaterial::SetSurfaceColor(const float* color)
 	{
-		static_cast<RenderingManagerD3D11&>(mRenderingManager).Context()->UpdateSubresource(mPSConstantBuffer.get(), 0, nullptr, color, 0, 0);
+		assert(mPSConstantBuffer);
+		mRenderingManager.UpdateBuffer(*mPSConstantBuffer, color, sizeof(XMVECTORF32));
 	}
 }

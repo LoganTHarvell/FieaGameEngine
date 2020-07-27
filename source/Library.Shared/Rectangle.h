@@ -2,6 +2,8 @@
 
 #include "Point.h"
 
+// TODO: Documentation
+
 namespace Library
 {
 	class Rectangle final

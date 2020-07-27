@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Material.h"
-#include "SamplerStates.h"
-#include <vector>
+#include "SamplerStatesD3D11.h"
+#include "Texture.h"
 
 namespace Library
 {
@@ -11,24 +11,24 @@ namespace Library
 		RTTI_DECLARATIONS_ABSTRACT(FullScreenQuadMaterial, Material)
 
 	public:
-		explicit FullScreenQuadMaterial(ContentManager& contentManager, RenderingManager& renderingManager, const winrt::com_ptr<ID3D11SamplerState>& samplerState = SamplerStates::TrilinearClamp);
+		explicit FullScreenQuadMaterial(ContentManager& contentManager, RenderingManager& renderingManager, const Sampler::Type samplerType = Sampler::Type::TrilinearClamp);
 		FullScreenQuadMaterial(const FullScreenQuadMaterial&) = default;
 		FullScreenQuadMaterial& operator=(const FullScreenQuadMaterial&) = default;
 		FullScreenQuadMaterial(FullScreenQuadMaterial&&) = default;
 		FullScreenQuadMaterial& operator=(FullScreenQuadMaterial&&) = default;
 		virtual ~FullScreenQuadMaterial() = default;
 
-		winrt::com_ptr<ID3D11SamplerState> SamplerState() const;
-		void SetSamplerState(const winrt::com_ptr<ID3D11SamplerState>& samplerState);
+		Sampler* SamplerState() const;
+		void SetSamplerState(const gsl::not_null<Sampler*> samplerState);
 
-		void SetTexture(ID3D11ShaderResourceView* texture);
-		void SetTextures(gsl::span<ID3D11ShaderResourceView*> textures);
+		void SetTexture(gsl::not_null<Texture*> texture);
+		void SetTextures(gsl::span<gsl::not_null<Texture*>> textures);
 
 		virtual std::uint32_t VertexSize() const override;
 		virtual void Initialize() override;
 
 	private:
-		std::vector<ID3D11ShaderResourceView*> mTextures;
-		winrt::com_ptr<ID3D11SamplerState> mSamplerState;
+		Vector<gsl::not_null<Resource*>> mTextures;
+		Sampler* mSamplerState{ nullptr };
 	};
 }

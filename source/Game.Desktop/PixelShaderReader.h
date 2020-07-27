@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ContentTypeReader.h"
-#include "PixelShader.h"
+#include "Shader.h"
 
 namespace Library
 {

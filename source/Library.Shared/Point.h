@@ -2,6 +2,8 @@
 
 #include <cstdint>
 
+// TODO: Documentation
+
 namespace Library
 {
 	class Point final

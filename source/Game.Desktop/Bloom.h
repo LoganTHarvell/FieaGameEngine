@@ -105,7 +105,7 @@ namespace Library
 		FullScreenRenderTarget mRenderTarget;
 		GaussianBlur mGaussianBlur;
 		winrt::com_ptr<ID3D11ShaderResourceView> mSceneTexture;
-		winrt::com_ptr<ID3D11Buffer> mPixelCBufferPerObject;
+		Buffer* mPixelCBufferPerObject{ nullptr };
 		PixelCBufferPerObject mPixelCBufferPerObjectData;
 		BloomDrawModes mDrawMode{ BloomDrawModes::Normal };
 		std::map<BloomDrawModes, std::function<void(const GameTime& gameTime)>> mDrawFunctions;

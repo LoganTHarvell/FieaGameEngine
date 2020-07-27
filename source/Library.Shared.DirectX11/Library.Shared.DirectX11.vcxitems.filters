@@ -11,6 +11,9 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)BufferWithResourceViewD3D11.cpp">
       <Filter>Buffer</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)ShaderD3D11.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)TextureD3D11.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)SamplerStatesD3D11.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)RenderingManagerD3D11.h" />
@@ -24,6 +27,10 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)BufferWithResourceViewD3D11.h">
       <Filter>Buffer</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)ShaderD3D11.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)TextureD3D11.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)SamplerStatesD3D11.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)SamplerD3D11.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Buffer">
@@ -37,5 +44,7 @@
     <None Include="$(MSBuildThisFileDirectory)BufferWithResourceViewD3D11.inl">
       <Filter>Buffer</Filter>
     </None>
+    <None Include="$(MSBuildThisFileDirectory)ShaderD3D11.inl" />
+    <None Include="$(MSBuildThisFileDirectory)TextureD3D11.inl" />
   </ItemGroup>
 </Project>

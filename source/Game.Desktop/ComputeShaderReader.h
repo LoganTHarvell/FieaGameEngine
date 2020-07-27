@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ContentTypeReader.h"
-#include "ComputeShader.h"
+#include "Shader.h"
 
 namespace Library
 {
@@ -10,7 +10,7 @@ namespace Library
 		RTTI_DECLARATIONS_ABSTRACT(ComputeShaderReader, AbstractContentTypeReader)
 
 	public:
-		ComputeShaderReader(Game& game);
+		explicit ComputeShaderReader(Game& game);
 		ComputeShaderReader(const ComputeShaderReader&) = default;
 		ComputeShaderReader& operator=(const ComputeShaderReader&) = default;
 		ComputeShaderReader(ComputeShaderReader&&) = default;

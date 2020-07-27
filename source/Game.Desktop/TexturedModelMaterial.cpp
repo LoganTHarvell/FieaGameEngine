@@ -1,11 +1,9 @@
 #include "pch.h"
 #include "TexturedModelMaterial.h"
 #include "Game.h"
-#include "GameException.h"
 #include "VertexDeclarations.h"
-#include "VertexShader.h"
-#include "PixelShader.h"
-#include "Texture2D.h"
+#include "Shader.h"
+#include "Texture.h"
 
 using namespace std;
 using namespace gsl;
@@ -15,24 +13,24 @@ using namespace DirectX;
 namespace Library
 {
 	TexturedModelMaterial::TexturedModelMaterial(ContentManager& contentManager, RenderingManager& renderingManager, shared_ptr<Texture2D> texture) :
-		Material(contentManager, renderingManager), mTexture(move(texture))
+		Material(contentManager, renderingManager), mTexture(move(texture)), mSamplerState(renderingManager.GetSamplerState(Sampler::Type::TrilinearClamp))
 	{
 		if (mTexture != nullptr)
 		{
-			AddShaderResource(ShaderStages::PS, mTexture->ShaderResourceView().get());
+			AddShaderResource(ShaderStages::PS, *mTexture);
 		}
 	}
 
-	com_ptr<ID3D11SamplerState> TexturedModelMaterial::SamplerState() const
+	Sampler* TexturedModelMaterial::SamplerState() const
 	{
 		return mSamplerState;
 	}
 
-	void TexturedModelMaterial::SetSamplerState(com_ptr<ID3D11SamplerState> samplerState)
+	void TexturedModelMaterial::SetSamplerState(const gsl::not_null<Sampler*> samplerState)
 	{
 		assert(samplerState != nullptr);
 		mSamplerState = move(samplerState);
-		Material::SetSamplerState(ShaderStages::PS, mSamplerState.get());
+		SetShaderResource(ShaderStages::PS, *mSamplerState);
 	}
 
 	shared_ptr<Texture2D> TexturedModelMaterial::Texture() const
@@ -44,9 +42,10 @@ namespace Library
 	{
 		mTexture = move(texture);
 		ClearShaderResources(ShaderStages::PS);
+		
 		if (mTexture != nullptr)
 		{
-			AddShaderResource(ShaderStages::PS, mTexture->ShaderResourceView().get());
+			AddShaderResource(ShaderStages::PS, *mTexture);
 		}
 	}
 
@@ -62,24 +61,23 @@ namespace Library
 		auto vertexShader = mContentManager.Load<VertexShader>(L"Shaders\\TexturedModelVS.cso");
 		SetShader(vertexShader);
 
-		auto pixelShader = mContentManager.Load<PixelShader>(L"Shaders\\TexturedModelPS.cso");
+		const auto pixelShader = mContentManager.Load<PixelShader>(L"Shaders\\TexturedModelPS.cso");
 		SetShader(pixelShader);
 
-		auto* direct3DDevice = static_cast<RenderingManagerD3D11&>(mRenderingManager).Device();
-		vertexShader->CreateInputLayout<VertexPositionTexture>(direct3DDevice);
-		SetInputLayout(vertexShader->InputLayout());
+		vertexShader->CreateInputLayout<VertexPositionTexture>(mRenderingManager);
 
-		D3D11_BUFFER_DESC constantBufferDesc{ 0 };
-		constantBufferDesc.ByteWidth = sizeof(XMFLOAT4X4);
-		constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		ThrowIfFailed(direct3DDevice->CreateBuffer(&constantBufferDesc, nullptr, mVertexCBufferPerObject.put()), "ID3D11Device::CreateMeshIndexBuffer() failed.");
-		AddConstantBuffer(ShaderStages::VS, mVertexCBufferPerObject.get());
+		mVertexCBufferPerObject = mRenderingManager.CreateConstantBuffer(sizeof(XMFLOAT4X4));
 
-		AddSamplerState(ShaderStages::PS, mSamplerState.get());
+		assert(mVertexCBufferPerObject);
+		assert(mSamplerState);
+		
+		AddShaderResource(ShaderStages::VS, *mVertexCBufferPerObject);
+		AddShaderResource(ShaderStages::PS, *mSamplerState);
 	}
 
 	void TexturedModelMaterial::UpdateTransform(CXMMATRIX worldViewProjectionMatrix)
 	{
-		static_cast<RenderingManagerD3D11&>(mRenderingManager).Context()->UpdateSubresource(mVertexCBufferPerObject.get(), 0, nullptr, worldViewProjectionMatrix.r, 0, 0);
+		assert(mVertexCBufferPerObject);
+		mRenderingManager.UpdateBuffer(*mVertexCBufferPerObject, worldViewProjectionMatrix.r, sizeof(CXMMATRIX));
 	}
 }

@@ -127,7 +127,7 @@ namespace Library
 		const T* AssertAs() const
 		{
 			assert(Is(T::TypeIdClass()));
-			return static_cast<T*>(this);
+			return static_cast<const T*>(this);
 		}
 
 		/**

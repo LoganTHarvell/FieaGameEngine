@@ -4,7 +4,6 @@
 #include "Material.h"
 #include "VectorHelper.h"
 #include "MatrixHelper.h"
-#include "SamplerStates.h"
 
 namespace Library
 {
@@ -25,8 +24,8 @@ namespace Demo
 		SolarBodyMaterial& operator=(SolarBodyMaterial&&) = default;
 		virtual ~SolarBodyMaterial() = default;
 
-		winrt::com_ptr<ID3D11SamplerState> SamplerState() const;
-		void SetSamplerState(winrt::com_ptr<ID3D11SamplerState> samplerState);
+		Library::Sampler* SamplerState() const;
+		void SetSamplerState(gsl::not_null<Library::Sampler*> samplerState);
 
 		std::shared_ptr<Library::Texture2D> ColorMap() const;
 		void SetColorMap(std::shared_ptr<Library::Texture2D> texture);
@@ -49,7 +48,7 @@ namespace Demo
 		const DirectX::XMFLOAT3& SpecularColor() const;
 		void SetSpecularColor(const DirectX::XMFLOAT3& color);
 
-		const float SpecularPower() const;
+		float SpecularPower() const;
 		void SetSpecularPower(float power);
 
 		virtual std::uint32_t VertexSize() const override;
@@ -91,19 +90,21 @@ namespace Demo
 
 		void ResetPixelShaderResources();
 
-		winrt::com_ptr<ID3D11Buffer> mVertexCBufferPerFrame;
-		winrt::com_ptr<ID3D11Buffer> mVertexCBufferPerObject;
-		winrt::com_ptr<ID3D11Buffer> mPixelCBufferPerFrame;
-		winrt::com_ptr<ID3D11Buffer> mPixelCBufferPerObject;
+		Library::Buffer* mVertexCBufferPerFrame{ nullptr };
+		Library::Buffer* mVertexCBufferPerObject{ nullptr };
+		Library::Buffer* mPixelCBufferPerFrame{ nullptr };
+		Library::Buffer* mPixelCBufferPerObject{ nullptr };
+		
 		VertexCBufferPerFrame mVertexCBufferPerFrameData;
 		VertexCBufferPerObject mVertexCBufferPerObjectData;
 		PixelCBufferPerFrame mPixelCBufferPerFrameData;
 		PixelCBufferPerObject mPixelCBufferPerObjectData;
+		
 		bool mVertexCBufferPerFrameDataDirty{ true };
 		bool mPixelCBufferPerFrameDataDirty{ true };
 		bool mPixelCBufferPerObjectDataDirty{ true };
 		std::shared_ptr<Library::Texture2D> mColorMap;
 		std::shared_ptr<Library::Texture2D> mSpecularMap;
-		winrt::com_ptr<ID3D11SamplerState> mSamplerState{ Library::SamplerStates::TrilinearClamp };
+		Library::Sampler* mSamplerState;
 	};
 }

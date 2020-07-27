@@ -1,10 +1,8 @@
 #include "pch.h"
 #include "DepthMapMaterial.h"
 #include "Game.h"
-#include "GameException.h"
 #include "VertexDeclarations.h"
-#include "VertexShader.h"
-#include "PixelShader.h"
+#include "Shader.h"
 
 using namespace std;
 using namespace gsl;
@@ -27,22 +25,18 @@ namespace Library
 		Material::Initialize();
 
 		auto vertexShader = mContentManager.Load<VertexShader>(L"Shaders\\DepthMapVS.cso");
+		vertexShader->CreateInputLayout<VertexPosition>(mRenderingManager);
 		SetShader(vertexShader);
 		SetShader<PixelShader>(nullptr);
 		
-		auto* direct3DDevice = static_cast<RenderingManagerD3D11&>(mRenderingManager).Device();
-		vertexShader->CreateInputLayout<VertexPosition>(direct3DDevice);
-		SetInputLayout(vertexShader->InputLayout());
-
-		D3D11_BUFFER_DESC constantBufferDesc{ 0 };
-		constantBufferDesc.ByteWidth = sizeof(XMFLOAT4X4);
-		constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		ThrowIfFailed(direct3DDevice->CreateBuffer(&constantBufferDesc, nullptr, mVSConstantBuffer.put()), "ID3D11Device::CreateMeshIndexBuffer() failed.");
-		AddConstantBuffer(ShaderStages::VS, mVSConstantBuffer.get());
+		mVSConstantBuffer = mRenderingManager.CreateConstantBuffer(sizeof(XMFLOAT4X4));
+		assert(mVSConstantBuffer);
+		AddShaderResource(ShaderStages::VS, *mVSConstantBuffer);
 	}
 
 	void DepthMapMaterial::UpdateTransform(CXMMATRIX worldLightViewProjectionMatrix)
 	{
-		static_cast<RenderingManagerD3D11&>(mRenderingManager).Context()->UpdateSubresource(mVSConstantBuffer.get(), 0, nullptr, worldLightViewProjectionMatrix.r, 0, 0);
+		assert(mVSConstantBuffer);
+		mRenderingManager.UpdateBuffer(*mVSConstantBuffer, &worldLightViewProjectionMatrix.r, sizeof(CXMMATRIX));
 	}
 }

@@ -22,7 +22,7 @@ namespace Library
 	class RenderingManagerD3D11 final : public RenderingManager
 	{
 		RTTI_DECLARATIONS(RenderingManagerD3D11, RenderingManager)
-
+		
 #pragma region Special Members
 	public:
 		/**
@@ -73,6 +73,36 @@ namespace Library
 		virtual void SetIndexBuffer(Buffer& buffer, const Format& format, const std::uint32_t offset) override;
 
 		/**
+		 * @brief Sets the shader to be used by the render device context
+		 * @param shader Shader instance to be used
+		*/
+		virtual void SetShader(Shader* shader) const override;
+
+		/**
+		 * @brief Sets the shader to be used by the render device context
+		 * @param shader Shader instance to be used
+		 * @param classInstances Span of class instances uses to set the shader
+		*/
+		void SetShader(Shader* shader, const gsl::span<ID3D11ClassInstance*>& classInstances) const;
+
+		/**
+		 * @brief Sets the shader resources for specific shader stages
+		 * @param stage Stage for the resources should be set for
+		 * @param resources Mapping of shader stages to their new resource data
+		 * @param startSlot Starting slot for the resources to be overwritten
+		*/
+		virtual void SetShaderResources(const ShaderStages stage, const Resource::Type, const Vector<Resource*>& resources, const std::uint32_t startSlot=0) const override;
+
+		/**
+		 * @brief Updates sub-resource data for a Buffer
+		 * @param buffer Buffer to be updated
+		 * @param offset Offset into the buffer to update
+		 * @param data Data used to update the buffer
+		 * @param dataSize Size of the data in bytes
+		*/
+		virtual void UpdateBuffer(Buffer& buffer, const void* data, const std::uint16_t dataSize, const std::uint64_t offset=0) override;
+		
+		/**
 		 * @brief Draws vertices using the set vertex buffer
 		 * @param numVertices Number of vertices to be drawn
 		 * @param firstVertex Index offset of the first vertex to be drawn
@@ -101,6 +131,12 @@ namespace Library
 		 * @return Pointer to the created buffer
 		*/
 		virtual Buffer* CreateBuffer(const BufferDesc& desc, const void* initialData) override;
+
+		/**
+		 * @brief Creates a class linkage for use when creating a @c Shader
+		 * @return Newly created class linkage instance
+		*/
+		winrt::com_ptr<ID3D11ClassLinkage> CreateClassLinkage() const;
 #pragma endregion Modifiers
 
 #pragma region Accessors
@@ -116,6 +152,13 @@ namespace Library
 		 * @return Pointer to the render device context object.
 		*/
 		ID3D11DeviceContext* Context() const;
+
+		/**
+		 * @brief Gets one of a number of sampler states based on the type
+		 * @param samplerType Sampler state type to get
+		 * @return Pointer to a Sampler wrapping the native sampler state
+		*/
+		virtual Sampler* GetSamplerState(const Sampler::Type samplerType) const override;		
 
 		// TODO: Remove the com ptr getters since only the rendering manager should handle them
 		
@@ -165,7 +208,7 @@ namespace Library
 #pragma endregion Data Members
 	};
 
-// TODO: Move to RenderingManagerD3D11.cpp
+
 #if defined(DEBUG) || defined(_DEBUG)
 /**
  * @brief Check for SDK Layer support.

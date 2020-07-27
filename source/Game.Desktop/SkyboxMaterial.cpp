@@ -1,48 +1,42 @@
 #include "pch.h"
 #include "SkyboxMaterial.h"
-#include "Game.h"
-#include "GameException.h"
-#include "VertexShader.h"
-#include "PixelShader.h"
-#include "VertexDeclarations.h"
-#include "TextureCube.h"
-#include "RasterizerStates.h"
 
-using namespace std;
-using namespace gsl;
-using namespace DirectX;
-using namespace winrt;
+#include <utility>
+#include "Game.h"
+#include "Shader.h"
+#include "VertexDeclarations.h"
+#include "Texture.h"
+#include "RasterizerStates.h"
 
 namespace Library
 {
-	SkyboxMaterial::SkyboxMaterial(ContentManager& contentManager, RenderingManager& renderingManager, const shared_ptr<TextureCube>& texture, const com_ptr<ID3D11SamplerState>& samplerState) :
+	SkyboxMaterial::SkyboxMaterial(ContentManager& contentManager, RenderingManager& renderingManager, std::shared_ptr<TextureCube> texture, const Sampler::Type samplerType) :
 		Material(contentManager, renderingManager),
-		mTexture(texture), mSamplerState(samplerState)
+		mTexture(std::move(texture)), mSamplerState(renderingManager.GetSamplerState(samplerType))
 	{
 	}
 
-	com_ptr<ID3D11SamplerState> SkyboxMaterial::SamplerState() const
+	Sampler* SkyboxMaterial::SamplerState() const
 	{
 		return mSamplerState;
 	}
 
-	void SkyboxMaterial::SetSamplerState(const com_ptr<ID3D11SamplerState>& samplerState)
+	void SkyboxMaterial::SetSamplerState(const gsl::not_null<Sampler*> samplerState)
 	{
-		assert(samplerState != nullptr);
 		mSamplerState = samplerState;
-		Material::SetSamplerState(ShaderStages::PS, mSamplerState.get());
+		SetShaderResource(ShaderStages::PS, *mSamplerState);
 	}
 
-	shared_ptr<TextureCube> SkyboxMaterial::Texture() const
+	std::shared_ptr<TextureCube> SkyboxMaterial::Texture() const
 	{
 		return mTexture;
 	}
 
-	void SkyboxMaterial::SetTexture(shared_ptr<TextureCube> texture)
+	void SkyboxMaterial::SetTexture(std::shared_ptr<TextureCube> texture)
 	{
 		assert(texture != nullptr);
 		mTexture = move(texture);
-		Material::SetShaderResource(ShaderStages::PS, mTexture->ShaderResourceView().get());
+		SetShaderResource(ShaderStages::PS, *mTexture);
 	}
 
 	uint32_t SkyboxMaterial::VertexSize() const
@@ -57,21 +51,19 @@ namespace Library
 		auto vertexShader = mContentManager.Load<VertexShader>(L"Shaders\\SkyboxVS.cso");
 		SetShader(vertexShader);
 
-		auto pixelShader = mContentManager.Load<PixelShader>(L"Shaders\\SkyboxPS.cso");
+		const auto pixelShader = mContentManager.Load<PixelShader>(L"Shaders\\SkyboxPS.cso");
+		vertexShader->CreateInputLayout<VertexPosition>(mRenderingManager);
 		SetShader(pixelShader);
 
-		auto* direct3DDevice = static_cast<RenderingManagerD3D11&>(mRenderingManager).Device();
-		vertexShader->CreateInputLayout<VertexPosition>(direct3DDevice);
-		SetInputLayout(vertexShader->InputLayout());
+		mConstantBuffer = mRenderingManager.CreateConstantBuffer(sizeof(DirectX::XMFLOAT4X4));
+		assert(mConstantBuffer);
+		AddShaderResource(ShaderStages::VS, *mConstantBuffer);
 
-		D3D11_BUFFER_DESC constantBufferDesc{ 0 };
-		constantBufferDesc.ByteWidth = sizeof(XMFLOAT4X4);
-		constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		ThrowIfFailed(static_cast<RenderingManagerD3D11&>(mRenderingManager).Device()->CreateBuffer(&constantBufferDesc, nullptr, mConstantBuffer.put()), "ID3D11Device::CreateMeshIndexBuffer() failed.");
-		AddConstantBuffer(ShaderStages::VS, mConstantBuffer.get());
-
-		AddShaderResource(ShaderStages::PS, mTexture->ShaderResourceView().get());
-		AddSamplerState(ShaderStages::PS, mSamplerState.get());
+		assert(mTexture);
+		assert(mSamplerState);
+		
+		AddShaderResource(ShaderStages::PS, *mTexture);
+		AddShaderResource(ShaderStages::PS, *mSamplerState);
 	}
 
 	void SkyboxMaterial::BeginDraw()
@@ -88,8 +80,9 @@ namespace Library
 		static_cast<RenderingManagerD3D11&>(mRenderingManager).Context()->RSSetState(nullptr);
 	}
 
-	void SkyboxMaterial::UpdateTransforms(CXMMATRIX worldViewProjectionMatrix)
+	void SkyboxMaterial::UpdateTransforms(DirectX::CXMMATRIX worldViewProjectionMatrix)
 	{
-		static_cast<RenderingManagerD3D11&>(mRenderingManager).Context()->UpdateSubresource(mConstantBuffer.get(), 0, nullptr, worldViewProjectionMatrix.r, 0, 0);
+		assert(mConstantBuffer);
+		mRenderingManager.UpdateBuffer(*mConstantBuffer, &worldViewProjectionMatrix.r, sizeof(DirectX::CXMMATRIX));
 	}
 }

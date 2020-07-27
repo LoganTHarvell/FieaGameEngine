@@ -49,10 +49,14 @@
       <ExcludedFromBuild>false</ExcludedFromBuild>
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Point.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)ReactionAttributed.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Rectangle.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)RenderingManager.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Resource.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)SceneNode.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Shader.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Texture.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Transform.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)StreamHelper.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)TypeManager.cpp" />
@@ -95,6 +99,8 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)pch.h">
       <ExcludedFromBuild>false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Point.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Rectangle.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)RenderContext.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)RenderingManager.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)JsonParseMaster.h" />
@@ -108,11 +114,14 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Reaction.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ReactionAttributed.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Resource.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Sampler.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)SceneNode.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Shader.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ShaderSystemValue.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Stack.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)StopWatch.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)StreamHelper.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Texture.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Transform.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)TypeManager.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Utility.h" />
@@ -139,12 +148,15 @@
     <None Include="$(MSBuildThisFileDirectory)Factory.inl" />
     <None Include="$(MSBuildThisFileDirectory)HashMap.inl" />
     <None Include="$(MSBuildThisFileDirectory)JsonParseMaster.inl" />
+    <None Include="$(MSBuildThisFileDirectory)Point.inl" />
     <None Include="$(MSBuildThisFileDirectory)Reaction.inl" />
+    <None Include="$(MSBuildThisFileDirectory)Rectangle.inl" />
     <None Include="$(MSBuildThisFileDirectory)RenderingManager.inl" />
     <None Include="$(MSBuildThisFileDirectory)Scope.inl" />
     <None Include="$(MSBuildThisFileDirectory)SList.inl" />
     <None Include="$(MSBuildThisFileDirectory)Stack.inl" />
     <None Include="$(MSBuildThisFileDirectory)StopWatch.inl" />
+    <None Include="$(MSBuildThisFileDirectory)Texture.inl" />
     <None Include="$(MSBuildThisFileDirectory)Transform.inl" />
     <None Include="$(MSBuildThisFileDirectory)TypeManager.inl" />
     <None Include="$(MSBuildThisFileDirectory)Utility.inl" />

@@ -11,7 +11,12 @@ namespace Library
 #pragma endregion Special Members
 
 #pragma region Accessors
-	inline Buffer::Type Buffer::GetType() const
+	inline Resource::Type Buffer::ResourceType() const
+	{
+		return Resource::Type::Buffer;
+	}
+
+	inline Buffer::Type Buffer::BufferType() const
 	{
 		return mType;
 	}

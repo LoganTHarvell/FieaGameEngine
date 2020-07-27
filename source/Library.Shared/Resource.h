@@ -1,6 +1,7 @@
 #pragma once
 
 // First Party
+#include "RTTI.h"
 #include "HashMap.h"
 
 namespace Library
@@ -9,6 +10,33 @@ namespace Library
 	struct BufferDesc;
     enum class BufferType;
 
+    /**
+     * @brief Abstraction for basic resource types
+    */
+    class Resource : public RTTI
+    {
+    	RTTI_DECLARATIONS_ABSTRACT(Resource, RTTI)
+
+    public:
+		/**
+		 * @brief Resource type enumeration
+		*/
+		enum class Type
+		{
+			Undefined = -1,
+			
+			Buffer,
+			Texture,
+			Sampler
+		};
+
+        /**
+         * @brief Gets the resource type of derived resource instance
+         * @return Resource type of the instance
+        */
+        virtual Type ResourceType() const = 0;
+    };
+	
 	/**
 	 * @brief Flags that describe how Buffers and Textures are bound.
 	*/

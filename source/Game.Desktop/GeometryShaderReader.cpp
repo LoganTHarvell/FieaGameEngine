@@ -4,6 +4,9 @@
 #include "GameException.h"
 #include "Utility.h"
 
+// TODO: Remove dependency through render manager create call
+#include "ShaderD3D11.h"
+
 namespace Library
 {
 	GeometryShaderReader::GeometryShaderReader(Game& game) :
@@ -18,6 +21,6 @@ namespace Library
 		File::LoadBinary(String::ToString(assetName), compiledGeometryShader);
 		ThrowIfFailed(mGame->Direct3DDevice()->CreateGeometryShader(&compiledGeometryShader[0], compiledGeometryShader.Size(), nullptr, hullShader.put()), "ID3D11Device::CreatedGeometryShader() failed.");
 		
-		return std::make_shared<GeometryShader>(std::move(hullShader));
+		return std::make_shared<GeometryShaderD3D11>(std::move(hullShader));
 	}
 }

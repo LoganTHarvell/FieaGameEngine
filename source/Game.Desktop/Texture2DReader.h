@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ContentTypeReader.h"
-#include "Texture2D.h"
+#include "Texture.h"
 
 namespace Library
 {

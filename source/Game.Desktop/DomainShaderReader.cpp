@@ -4,6 +4,8 @@
 #include "GameException.h"
 #include "Utility.h"
 
+// TODO: Remove dependency through render manager create call
+#include "ShaderD3D11.h"
 
 namespace Library
 {
@@ -19,6 +21,6 @@ namespace Library
 		File::LoadBinary(String::ToString(assetName), compiledDomainShader);
 		ThrowIfFailed(mGame->Direct3DDevice()->CreateDomainShader(&compiledDomainShader[0], compiledDomainShader.Size(), nullptr, hullShader.put()), "ID3D11Device::CreatedDomainShader() failed.");
 		
-		return std::make_shared<DomainShader>(std::move(hullShader));
+		return std::make_shared<DomainShaderD3D11>(std::move(hullShader));
 	}
 }

@@ -1,15 +1,33 @@
+// Pre-compiled Header
 #include "pch.h"
-#include "SamplerStates.h"
-#include "GameException.h"
 
-using namespace DirectX;
+// Header
+#include "SamplerStatesD3D11.h"
+
+// Third Party
+#include <DirectXColors.h>
+
+// First Party
+#include "GameException.h"
 
 namespace Library
 {
-	XMVECTORF32 SamplerStates::BorderColor{ DirectX::Colors::White };
-	XMVECTORF32 SamplerStates::ShadowMapBorderColor{ DirectX::Colors::White };
+	const HashMap<Sampler::Type, std::shared_ptr<SamplerD3D11>> SamplerStatesD3D11::TypeSamplerMap
+	{
+		{ Sampler::Type::TrilinearWrap,		std::make_shared<SamplerD3D11>(TrilinearWrap)	},
+		{ Sampler::Type::TrilinearMirror,	std::make_shared<SamplerD3D11>(TrilinearMirror) },
+		{ Sampler::Type::TrilinearClamp,	std::make_shared<SamplerD3D11>(TrilinearClamp)	},
+		{ Sampler::Type::TrilinearBorder,	std::make_shared<SamplerD3D11>(TrilinearBorder)	},
+		{ Sampler::Type::PointClamp,		std::make_shared<SamplerD3D11>(PointClamp)		},
+		{ Sampler::Type::DepthMap,			std::make_shared<SamplerD3D11>(DepthMap)		},
+		{ Sampler::Type::ShadowMap,			std::make_shared<SamplerD3D11>(ShadowMap)		},
+		{ Sampler::Type::PcfShadowMap,		std::make_shared<SamplerD3D11>(PcfShadowMap)	}
+	};
 
-	void SamplerStates::Initialize(gsl::not_null<ID3D11Device*> direct3DDevice)
+	DirectX::XMVECTORF32 SamplerStatesD3D11::BorderColor{ DirectX::Colors::White };
+	DirectX::XMVECTORF32 SamplerStatesD3D11::ShadowMapBorderColor{ DirectX::Colors::White };
+
+	void SamplerStatesD3D11::Initialize(gsl::not_null<ID3D11Device*> direct3DDevice)
 	{
 		D3D11_SAMPLER_DESC samplerStateDesc;
 		ZeroMemory(&samplerStateDesc, sizeof(samplerStateDesc));
@@ -72,7 +90,7 @@ namespace Library
 		ThrowIfFailed(direct3DDevice->CreateSamplerState(&samplerStateDesc, PcfShadowMap.put()), "ID3D11Device::CreateSamplerState() failed.");
 	}
 
-	void SamplerStates::Shutdown()
+	void SamplerStatesD3D11::Shutdown()
 	{
 		TrilinearWrap = nullptr;
 		TrilinearMirror = nullptr;

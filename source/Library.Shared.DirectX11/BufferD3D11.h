@@ -89,6 +89,25 @@ namespace Library
 		D3D11_USAGE Usage() const;
 #pragma endregion Accessors
 
+#pragma region Modifiers
+	public:
+		/**
+		 * @brief Updates the sub-resource data
+		 * @param context Pointer to the render context
+		 * @param offset Offset denoting the beginning of the data to be updated
+		 * @param data Data used to update the sub-resource
+		 * @param dataSize Size of the data in bytes
+		*/
+		void UpdateSubresource(ID3D11DeviceContext* context, const void* data, const UINT dataSize, const UINT offset=0);
+
+		/**
+		 * @brief Updates the sub-resource data
+		 * @param context Pointer to the render context
+		 * @param data Data used to update the sub-resource
+		*/
+		void UpdateSubresource(ID3D11DeviceContext* context, const void* data);
+#pragma endregion Modifiers
+		
 #pragma region Helper Methods
 	private:
 		/**

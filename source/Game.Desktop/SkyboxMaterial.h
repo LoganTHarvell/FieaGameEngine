@@ -1,7 +1,8 @@
 #pragma once
 
 #include "Material.h"
-#include "SamplerStates.h"
+#include "Sampler.h"
+#include "SamplerStatesD3D11.h"
 
 namespace Library
 {
@@ -12,15 +13,16 @@ namespace Library
 		RTTI_DECLARATIONS_ABSTRACT(SkyboxMaterial, Material)
 
 	public:
-		SkyboxMaterial(ContentManager& contentManager, RenderingManager& renderingManager, const std::shared_ptr<TextureCube>& texture, const winrt::com_ptr<ID3D11SamplerState>& samplerState = SamplerStates::TrilinearClamp);
+		SkyboxMaterial(ContentManager& contentManager, RenderingManager& renderingManager,
+		               std::shared_ptr<TextureCube> texture, const Sampler::Type samplerType = Sampler::Type::TrilinearClamp);
 		SkyboxMaterial(const SkyboxMaterial&) = default;
 		SkyboxMaterial& operator=(const SkyboxMaterial&) = default;
 		SkyboxMaterial(SkyboxMaterial&&) = default;
 		SkyboxMaterial& operator=(SkyboxMaterial&&) = default;
 		~SkyboxMaterial() = default;
 
-		winrt::com_ptr<ID3D11SamplerState> SamplerState() const;
-		void SetSamplerState(const winrt::com_ptr<ID3D11SamplerState>& samplerState);
+		Sampler* SamplerState() const;
+		void SetSamplerState(gsl::not_null<Sampler*> samplerState);
 
 		std::shared_ptr<TextureCube> Texture() const;
 		void SetTexture(std::shared_ptr<TextureCube> texture);
@@ -34,8 +36,8 @@ namespace Library
 		virtual void BeginDraw() override;
 		virtual void EndDraw() override;
 
-		winrt::com_ptr<ID3D11Buffer> mConstantBuffer;
+		Buffer* mConstantBuffer{ nullptr };
 		std::shared_ptr<TextureCube> mTexture;
-		winrt::com_ptr<ID3D11SamplerState> mSamplerState;
+		Sampler* mSamplerState{ nullptr };
 	};
 }

@@ -424,5 +424,8 @@
     <None Update="C:\Dev\Personal\FieaGameEngine\source\Library.Shared.DirectX11\BufferWithResourceViewD3D11.inl">
       <FileType>Document</FileType>
     </None>
+    <None Update="C:\Dev\Personal\FieaGameEngine\source\Library.Shared.DirectX11\TextureD3D11.inl">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
 </Project>

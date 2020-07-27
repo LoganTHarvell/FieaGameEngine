@@ -21,6 +21,9 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)RenderContextD3D11.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)RenderingManagerD3D11.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)ResourceD3D11.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)SamplerStatesD3D11.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ShaderD3D11.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)TextureD3D11.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)BufferD3D11.h" />
@@ -30,9 +33,15 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)RenderingManagerD3D11.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)CoreD3D.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ResourceD3D11.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)SamplerD3D11.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)SamplerStatesD3D11.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ShaderD3D11.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)TextureD3D11.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)BufferD3D11.inl" />
     <None Include="$(MSBuildThisFileDirectory)BufferWithResourceViewD3D11.inl" />
+    <None Include="$(MSBuildThisFileDirectory)ShaderD3D11.inl" />
+    <None Include="$(MSBuildThisFileDirectory)TextureD3D11.inl" />
   </ItemGroup>
 </Project>

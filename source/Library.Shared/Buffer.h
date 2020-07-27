@@ -119,9 +119,9 @@ namespace Library
     /**
      * @brief Hardware buffer abstraction layer. 
     */
-    class Buffer : public RTTI
+    class Buffer : public Resource
 	{
-		RTTI_DECLARATIONS_ABSTRACT(Buffer, RTTI)
+		RTTI_DECLARATIONS_ABSTRACT(Buffer, Resource)
 
 #pragma region Type Definitions
 	public:
@@ -152,10 +152,16 @@ namespace Library
 #pragma region Accessors
 	public:
 		/**
+		 * @brief Gets the resource type
+		 * @return ResourceType::Buffer enum value
+		*/
+		virtual Resource::Type ResourceType() const override final;
+    	
+		/**
 		 * @brief Gets the type of data represented by the Buffer.
 		 * @return Current BufferType value.
 		*/
-		Type GetType() const;
+		Type BufferType() const;
 
 		/**
 		 * @brief Gets the 

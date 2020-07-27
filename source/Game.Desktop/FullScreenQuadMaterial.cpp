@@ -1,54 +1,52 @@
 #include "pch.h"
 #include "FullScreenQuadMaterial.h"
 #include "Game.h"
-#include "GameException.h"
 #include "VertexDeclarations.h"
-#include "VertexShader.h"
-
-using namespace std;
-using namespace gsl;
-using namespace winrt;
-using namespace DirectX;
+#include "Shader.h"
+#include "Texture.h"
 
 namespace Library
 {
-	FullScreenQuadMaterial::FullScreenQuadMaterial(ContentManager& contentManager, RenderingManager& renderingManager, const winrt::com_ptr<ID3D11SamplerState>& samplerState) :
+	FullScreenQuadMaterial::FullScreenQuadMaterial(ContentManager& contentManager, RenderingManager& renderingManager, const Sampler::Type samplerType) :
 		Material(contentManager, renderingManager),
-		mSamplerState(samplerState)
+		mSamplerState(renderingManager.GetSamplerState(samplerType))
 	{
 	}
 
-	com_ptr<ID3D11SamplerState> FullScreenQuadMaterial::SamplerState() const
+	Sampler* FullScreenQuadMaterial::SamplerState() const
 	{
 		return mSamplerState;
 	}
 
-	void FullScreenQuadMaterial::SetSamplerState(const com_ptr<ID3D11SamplerState>& samplerState)
+	void FullScreenQuadMaterial::SetSamplerState(const gsl::not_null<Sampler*> samplerState)
 	{
 		mSamplerState = samplerState;
-		Material::SetSamplerState(ShaderStages::PS, mSamplerState.get());
+		SetShaderResource(ShaderStages::PS, *mSamplerState);
 	}
 
-	void FullScreenQuadMaterial::SetTexture(ID3D11ShaderResourceView* texture)
+	void FullScreenQuadMaterial::SetTexture(gsl::not_null<Texture*> texture)
 	{
-		if (mTextures.size() > 1 || (!mTextures.empty() && (mTextures.front() != texture)))
+		if (mTextures.Size() > 1 || (!mTextures.IsEmpty() && (mTextures.Front() != texture)))
 		{
-			mTextures.clear();
-			Material::ClearShaderResources(ShaderStages::PS);
+			mTextures.Clear();
+			ClearShaderResources(ShaderStages::PS);
 		}
 
 		if (texture != nullptr)
 		{
-			mTextures.push_back(texture);
-			Material::AddShaderResource(ShaderStages::PS, texture);
+			mTextures.EmplaceBack(texture);
+			AddShaderResource(ShaderStages::PS, *texture);
 		}
 	}
 
-	void FullScreenQuadMaterial::SetTextures(gsl::span<ID3D11ShaderResourceView*> textures)
+	void FullScreenQuadMaterial::SetTextures(const gsl::span<gsl::not_null<Texture*>> textures)
 	{
-		mTextures = move(vector<ID3D11ShaderResourceView*>(textures.begin(), textures.end()));
+		mTextures.Clear();
+		mTextures.Reserve(textures.size());
+		mTextures.Insert(mTextures.begin(), textures.begin(), textures.end());
+
 		ClearShaderResources(ShaderStages::PS);
-		AddShaderResources(ShaderStages::PS, textures);
+		AddShaderResources(ShaderStages::PS, gsl::make_span(mTextures.Data(), mTextures.Size()));
 	}
 
 	uint32_t FullScreenQuadMaterial::VertexSize() const
@@ -61,12 +59,10 @@ namespace Library
 		Material::Initialize();
 
 		auto vertexShader = mContentManager.Load<VertexShader>(L"Shaders\\TexturedQuadPassThroughVS.cso");
+		vertexShader->CreateInputLayout<VertexPositionTexture>(mRenderingManager);
 		SetShader(vertexShader);
 
-		auto* direct3DDevice = static_cast<RenderingManagerD3D11&>(mRenderingManager).Device();
-		vertexShader->CreateInputLayout<VertexPositionTexture>(direct3DDevice);
-		SetInputLayout(vertexShader->InputLayout());
-
-		AddSamplerState(ShaderStages::PS, mSamplerState.get());
+		assert(mSamplerState);
+	AddShaderResource(ShaderStages::PS, *mSamplerState);
 	}
 }

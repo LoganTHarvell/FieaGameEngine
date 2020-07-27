@@ -35,7 +35,7 @@ namespace Library
 
 		if (it == contentTypeReaders.end())
 		{
-			throw GameException("Content type reader not registered.");
+			throw std::runtime_error("Content type reader not registered.");
 		}
 
 		auto& reader = it->second;

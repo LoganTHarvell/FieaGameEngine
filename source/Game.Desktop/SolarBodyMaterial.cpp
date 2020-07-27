@@ -2,79 +2,72 @@
 
 #include "SolarBodyMaterial.h"
 #include "Game.h"
-#include "GameException.h"
 #include "VertexDeclarations.h"
-#include "VertexShader.h"
-#include "PixelShader.h"
-#include "Texture2D.h"
+#include "Shader.h"
+#include "Texture.h"
 
-using namespace std;
 using namespace std::string_literals;
-using namespace gsl;
-using namespace winrt;
-using namespace DirectX;
 using namespace Library;
 
 namespace Demo
 {
-	SolarBodyMaterial::SolarBodyMaterial(ContentManager& contentManager, RenderingManager& renderingManager, shared_ptr<Texture2D> colorMap, shared_ptr<Texture2D> specularMap) :
-		Material(contentManager, renderingManager), mColorMap(move(colorMap)), mSpecularMap(move(specularMap))
+	SolarBodyMaterial::SolarBodyMaterial(ContentManager& contentManager, RenderingManager& renderingManager, std::shared_ptr<Texture2D> colorMap, std::shared_ptr<Texture2D> specularMap) :
+		Material(contentManager, renderingManager), mColorMap(move(colorMap)), mSpecularMap(move(specularMap)), mSamplerState(renderingManager.GetSamplerState(Sampler::Type::TrilinearClamp))
 	{
 	}
 
-	com_ptr<ID3D11SamplerState> SolarBodyMaterial::SamplerState() const
+	Sampler* SolarBodyMaterial::SamplerState() const
 	{
 		return mSamplerState;
 	}
 
-	void SolarBodyMaterial::SetSamplerState(com_ptr<ID3D11SamplerState> samplerState)
+	void SolarBodyMaterial::SetSamplerState(const gsl::not_null<Sampler*> samplerState)
 	{
-		assert(samplerState != nullptr);
 		mSamplerState = samplerState;
-		Material::SetSamplerState(ShaderStages::PS, mSamplerState.get());
+		AddShaderResource(ShaderStages::PS, *mSamplerState);
 	}
 
-	shared_ptr<Texture2D> SolarBodyMaterial::ColorMap() const
+	std::shared_ptr<Texture2D> SolarBodyMaterial::ColorMap() const
 	{
 		return mColorMap;
 	}
 
-	void SolarBodyMaterial::SetColorMap(shared_ptr<Texture2D> texture)
+	void SolarBodyMaterial::SetColorMap(std::shared_ptr<Texture2D> texture)
 	{
 		assert(texture != nullptr);
 		mColorMap = move(texture);
 		ResetPixelShaderResources();
 	}
 
-	shared_ptr<Texture2D> SolarBodyMaterial::SpecularMap() const
+	std::shared_ptr<Texture2D> SolarBodyMaterial::SpecularMap() const
 	{
 		return mSpecularMap;
 	}
 
-	void SolarBodyMaterial::SetSpecularMap(shared_ptr<Texture2D> texture)
+	void SolarBodyMaterial::SetSpecularMap(std::shared_ptr<Texture2D> texture)
 	{
 		assert(texture != nullptr);
 		mSpecularMap = move(texture);
 		ResetPixelShaderResources();
 	}
 
-	const XMFLOAT4& SolarBodyMaterial::AmbientColor() const
+	const DirectX::XMFLOAT4& SolarBodyMaterial::AmbientColor() const
 	{
 		return mPixelCBufferPerFrameData.AmbientColor;
 	}
 
-	void SolarBodyMaterial::SetAmbientColor(const XMFLOAT4& color)
+	void SolarBodyMaterial::SetAmbientColor(const DirectX::XMFLOAT4& color)
 	{
 		mPixelCBufferPerFrameData.AmbientColor = color;
 		mPixelCBufferPerFrameDataDirty = true;
 	}
 
-	const XMFLOAT3& SolarBodyMaterial::LightPosition() const
+	const DirectX::XMFLOAT3& SolarBodyMaterial::LightPosition() const
 	{
 		return mPixelCBufferPerFrameData.LightPosition;
 	}
 
-	void SolarBodyMaterial::SetLightPosition(const XMFLOAT3& position)
+	void SolarBodyMaterial::SetLightPosition(const DirectX::XMFLOAT3& position)
 	{
 		mPixelCBufferPerFrameData.LightPosition = position;
 		mPixelCBufferPerFrameDataDirty = true;
@@ -94,12 +87,12 @@ namespace Demo
 		mVertexCBufferPerFrameDataDirty = true;
 	}
 
-	const XMFLOAT4& SolarBodyMaterial::LightColor() const
+	const DirectX::XMFLOAT4& SolarBodyMaterial::LightColor() const
 	{
 		return mPixelCBufferPerFrameData.LightColor;
 	}
 
-	void SolarBodyMaterial::SetLightColor(const XMFLOAT4& color)
+	void SolarBodyMaterial::SetLightColor(const DirectX::XMFLOAT4& color)
 	{
 		mPixelCBufferPerFrameData.LightColor = color;
 		mPixelCBufferPerFrameDataDirty = true;
@@ -116,12 +109,12 @@ namespace Demo
 		mPixelCBufferPerObjectDataDirty = true;
 	}
 
-	const float SolarBodyMaterial::SpecularPower() const
+	float SolarBodyMaterial::SpecularPower() const
 	{
 		return mPixelCBufferPerObjectData.SpecularPower;
 	}
 
-	void SolarBodyMaterial::SetSpecularPower(float power)
+	void SolarBodyMaterial::SetSpecularPower(const float power)
 	{
 		mPixelCBufferPerObjectData.SpecularPower = power;
 		mPixelCBufferPerObjectDataDirty = true;
@@ -139,83 +132,86 @@ namespace Demo
 		auto vertexShader = mContentManager.Load<VertexShader>(L"Shaders\\PointLightDemoVS.cso"s);
 		SetShader(vertexShader);
 
-		auto pixelShader = mContentManager.Load<PixelShader>(L"Shaders\\PointLightDemoPS.cso");
+		const auto pixelShader = mContentManager.Load<PixelShader>(L"Shaders\\PointLightDemoPS.cso");
+		vertexShader->CreateInputLayout<VertexPositionTextureNormal>(mRenderingManager);
 		SetShader(pixelShader);
 
-		auto* direct3DDevice = static_cast<RenderingManagerD3D11&>(mRenderingManager).Device();
-		vertexShader->CreateInputLayout<VertexPositionTextureNormal>(direct3DDevice);
-		SetInputLayout(vertexShader->InputLayout());
+		mVertexCBufferPerFrame = mRenderingManager.CreateConstantBuffer(sizeof(VertexCBufferPerFrame));
+		mVertexCBufferPerObject = mRenderingManager.CreateConstantBuffer(sizeof(VertexCBufferPerObject));
 
-		D3D11_BUFFER_DESC constantBufferDesc{ 0 };
-		constantBufferDesc.ByteWidth = sizeof(VertexCBufferPerFrame);
-		constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		ThrowIfFailed(direct3DDevice->CreateBuffer(&constantBufferDesc, nullptr, mVertexCBufferPerFrame.put()), "ID3D11Device::CreateMeshIndexBuffer() failed.");
-		AddConstantBuffer(ShaderStages::VS, mVertexCBufferPerFrame.get());
+		assert(mVertexCBufferPerFrame);
+		assert(mVertexCBufferPerObject);
 
-		constantBufferDesc.ByteWidth = sizeof(VertexCBufferPerObject);
-		ThrowIfFailed(direct3DDevice->CreateBuffer(&constantBufferDesc, nullptr, mVertexCBufferPerObject.put()), "ID3D11Device::CreateMeshIndexBuffer() failed.");
-		AddConstantBuffer(ShaderStages::VS, mVertexCBufferPerObject.get());
+		AddShaderResource(ShaderStages::VS, *mVertexCBufferPerFrame);
+		AddShaderResource(ShaderStages::VS, *mVertexCBufferPerObject);
 
-		constantBufferDesc.ByteWidth = sizeof(PixelCBufferPerFrame);
-		ThrowIfFailed(direct3DDevice->CreateBuffer(&constantBufferDesc, nullptr, mPixelCBufferPerFrame.put()), "ID3D11Device::CreateMeshIndexBuffer() failed.");
-		AddConstantBuffer(ShaderStages::PS, mPixelCBufferPerFrame.get());
+		mPixelCBufferPerFrame = mRenderingManager.CreateConstantBuffer(sizeof(PixelCBufferPerFrame));
+		mPixelCBufferPerObject = mRenderingManager.CreateConstantBuffer(sizeof(PixelCBufferPerObject));
 
-		constantBufferDesc.ByteWidth = sizeof(PixelCBufferPerObject);
-		ThrowIfFailed(direct3DDevice->CreateBuffer(&constantBufferDesc, nullptr, mPixelCBufferPerObject.put()), "ID3D11Device::CreateMeshIndexBuffer() failed.");
-		AddConstantBuffer(ShaderStages::PS, mPixelCBufferPerObject.get());
+		assert(mPixelCBufferPerFrame);
+		assert(mPixelCBufferPerObject);
 
-		auto direct3DDeviceContext = static_cast<RenderingManagerD3D11&>(mRenderingManager).Context();
-		direct3DDeviceContext->UpdateSubresource(mVertexCBufferPerFrame.get(), 0, nullptr, &mVertexCBufferPerFrameData, 0, 0);
-		direct3DDeviceContext->UpdateSubresource(mVertexCBufferPerObject.get(), 0, nullptr, &mVertexCBufferPerObjectData, 0, 0);
-		direct3DDeviceContext->UpdateSubresource(mPixelCBufferPerFrame.get(), 0, nullptr, &mPixelCBufferPerFrameData, 0, 0);
-		direct3DDeviceContext->UpdateSubresource(mPixelCBufferPerObject.get(), 0, nullptr, &mPixelCBufferPerObjectData, 0, 0);
+		AddShaderResource(ShaderStages::PS, *mPixelCBufferPerFrame);
+		AddShaderResource(ShaderStages::PS, *mPixelCBufferPerObject);
+
+		mRenderingManager.UpdateBuffer(*mVertexCBufferPerFrame, &mVertexCBufferPerFrame, sizeof(VertexCBufferPerFrame));
+		mRenderingManager.UpdateBuffer(*mVertexCBufferPerObject, &mVertexCBufferPerObject, sizeof(VertexCBufferPerObject));
+		mRenderingManager.UpdateBuffer(*mPixelCBufferPerFrame, &mPixelCBufferPerFrame, sizeof(PixelCBufferPerFrame));
+		mRenderingManager.UpdateBuffer(*mPixelCBufferPerObject, &mPixelCBufferPerObject, sizeof(PixelCBufferPerObject));
 
 		ResetPixelShaderResources();
-		AddSamplerState(ShaderStages::PS, mSamplerState.get());
+		AddShaderResource(ShaderStages::PS, *mSamplerState);
 	}
 
-	void SolarBodyMaterial::UpdateCameraPosition(const XMFLOAT3& position)
+	void SolarBodyMaterial::UpdateCameraPosition(const DirectX::XMFLOAT3& position)
 	{
 		mPixelCBufferPerFrameData.CameraPosition = position;
 		mPixelCBufferPerFrameDataDirty = true;
 	}
 
-	void SolarBodyMaterial::UpdateTransforms(FXMMATRIX worldViewProjectionMatrix, CXMMATRIX worldMatrix)
+	void SolarBodyMaterial::UpdateTransforms(DirectX::FXMMATRIX worldViewProjectionMatrix, DirectX::CXMMATRIX worldMatrix)
 	{
 		XMStoreFloat4x4(&mVertexCBufferPerObjectData.WorldViewProjection, worldViewProjectionMatrix);
 		XMStoreFloat4x4(&mVertexCBufferPerObjectData.World, worldMatrix);
-		static_cast<RenderingManagerD3D11&>(mRenderingManager).Context()->UpdateSubresource(mVertexCBufferPerObject.get(), 0, nullptr, &mVertexCBufferPerObjectData, 0, 0);
+
+		assert(mVertexCBufferPerObject);
+		mRenderingManager.UpdateBuffer(*mVertexCBufferPerObject, &mVertexCBufferPerObjectData, sizeof(VertexCBufferPerObject));
 	}
 
 	void SolarBodyMaterial::BeginDraw()
 	{
 		Material::BeginDraw();
 
-		auto direct3DDeviceContext = static_cast<RenderingManagerD3D11&>(mRenderingManager).Context();
-
 		if (mVertexCBufferPerFrameDataDirty)
 		{
-			direct3DDeviceContext->UpdateSubresource(mVertexCBufferPerFrame.get(), 0, nullptr, &mVertexCBufferPerFrameData, 0, 0);
+			assert(mVertexCBufferPerFrame);
+			mRenderingManager.UpdateBuffer(*mVertexCBufferPerFrame, &mVertexCBufferPerFrameData, sizeof(VertexCBufferPerFrame));
+
 			mVertexCBufferPerFrameDataDirty = false;
 		}
 
 		if (mPixelCBufferPerFrameDataDirty)
 		{
-			direct3DDeviceContext->UpdateSubresource(mPixelCBufferPerFrame.get(), 0, nullptr, &mPixelCBufferPerFrameData, 0, 0);
+			assert(mPixelCBufferPerFrame);
+			mRenderingManager.UpdateBuffer(*mPixelCBufferPerFrame, &mPixelCBufferPerFrameData, sizeof(PixelCBufferPerFrame));
+
 			mPixelCBufferPerFrameDataDirty = false;
 		}
 
 		if (mPixelCBufferPerObjectDataDirty)
 		{
-			direct3DDeviceContext->UpdateSubresource(mPixelCBufferPerObject.get(), 0, nullptr, &mPixelCBufferPerObjectData, 0, 0);
+			assert(mPixelCBufferPerFrame);
+			mRenderingManager.UpdateBuffer(*mPixelCBufferPerObject, &mPixelCBufferPerObjectData, sizeof(PixelCBufferPerObject));
+
 			mPixelCBufferPerObjectDataDirty = false;
 		}
 	}
 
 	void SolarBodyMaterial::ResetPixelShaderResources()
 	{
-		Material::ClearShaderResources(ShaderStages::PS);
-		ID3D11ShaderResourceView* shaderResources[] = { mColorMap->ShaderResourceView().get(), mSpecularMap->ShaderResourceView().get() };
-		Material::AddShaderResources(ShaderStages::PS, shaderResources);
+		ClearShaderResources(ShaderStages::PS);
+
+		gsl::not_null<Resource*> shaderResources[] = { mColorMap.get(), mSpecularMap.get() };
+		AddShaderResources(ShaderStages::PS, shaderResources);
 	}
 }

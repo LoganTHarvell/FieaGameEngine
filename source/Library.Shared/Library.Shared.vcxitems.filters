@@ -131,6 +131,18 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)VertexDeclarations.cpp">
       <Filter>Core\Rendering\Buffer</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Point.cpp">
+      <Filter>Core\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Rectangle.cpp">
+      <Filter>Core\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Texture.cpp">
+      <Filter>Core\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Shader.cpp">
+      <Filter>Core\Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Utility.h">
@@ -308,6 +320,21 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)ShaderSystemValue.h">
       <Filter>Core\Rendering\Buffer</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Shader.h">
+      <Filter>Core\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Point.h">
+      <Filter>Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Rectangle.h">
+      <Filter>Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Texture.h">
+      <Filter>Core\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Sampler.h">
+      <Filter>Core\Rendering</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)DefaultHash.inl">
@@ -381,6 +408,15 @@
     </None>
     <None Include="$(MSBuildThisFileDirectory)VertexDeclarations.inl">
       <Filter>Core\Rendering\Buffer</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Point.inl">
+      <Filter>Core\Math</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Rectangle.inl">
+      <Filter>Core\Math</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Texture.inl">
+      <Filter>Core\Rendering</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

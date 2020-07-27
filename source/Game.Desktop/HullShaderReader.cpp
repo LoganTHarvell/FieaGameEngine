@@ -4,6 +4,9 @@
 #include "GameException.h"
 #include "Utility.h"
 
+// TODO: Remove dependency through render manager create call
+#include "ShaderD3D11.h"
+
 namespace Library
 {
 	HullShaderReader::HullShaderReader(Game& game) :
@@ -18,6 +21,6 @@ namespace Library
 		File::LoadBinary(String::ToString(assetName), compiledHullShader);
 		ThrowIfFailed(mGame->Direct3DDevice()->CreateHullShader(&compiledHullShader[0], compiledHullShader.Size(), nullptr, hullShader.put()), "ID3D11Device::CreatedHullShader() failed.");
 		
-		return std::make_shared<HullShader>(std::move(hullShader));
+		return std::make_shared<HullShaderD3D11>(std::move(hullShader));
 	}
 }
