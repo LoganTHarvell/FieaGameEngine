@@ -140,7 +140,6 @@ namespace Demo
 
 		mGame->GetWorldState().Sector = &mSolarSystem;
 		
-		auto direct3DDevice = mGame->Direct3DDevice();
 		const auto model = mGame->Content().Load<Model>(L"Models\\Sphere.obj.bin"s);
 		Mesh* mesh = model->Meshes().At(0).get();
 		mVertexBuffer = VertexPositionTextureNormal::CreateVertexBuffer(mGame->GetWorldState().RenderingManager, *mesh);
